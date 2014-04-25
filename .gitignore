@@ -1,3 +1,4 @@
+web/git
 /web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
@@ -9,3 +10,12 @@
 /vendor/
 /bin/
 /composer.phar
+.*~
+nbproject/
+*~
+/web/assets/
+/var/spool/
+composer.lock
+/web/media/cache/
+/web/css/
+/web/js/
