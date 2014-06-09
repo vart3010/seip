@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
+            new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
