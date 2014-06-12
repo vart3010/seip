@@ -1,0 +1,45 @@
+lunetics_locale:
+    allowed_locales:
+        - es
+        - en
+    strict_mode: false # defaults to false
+    guessing_order:
+        - query
+        - router
+        - session
+        - cookie
+        - browser
+    switcher:
+        show_current_locale: true
+
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Tecnocreaciones\Bundle\TemplateBundle\Entity\User
+    registration:
+        form:
+            type: tecnocreaciones_vzla_government_user_registration
+    profile:
+        form:
+            type: tecnocreaciones_vzla_government_user_profile
+    
+tecnocreaciones_vzla_government:
+    template:
+        developer:
+            app_title: TU APP
+            menu: Tecnocreaciones\Bundle\TemplateBundle\Menu\Template\Developer\BackendMenuBuilder
+            
+fos_rest:
+    allowed_methods_listener: true
+    routing_loader:
+        default_format: json
+    view:
+        view_response_listener: force
+    access_denied_listener:
+        # all requests using the 'json' format will return a 403 on an access denied violation
+        json: true
+        
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
