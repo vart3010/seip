@@ -1,0 +1,25 @@
+app:
+    backend:
+            menu:
+                sidebar:
+                    home: Inicio
+                    example: 
+                        main: Ejemplo
+                        company: Compañia
+                        technical_reports: Reporte tecnico
+                        other:
+                            main: Otros
+                            admin: Administrador
+                            groups: Grupos
+                    support: Soporte
+                    arrangement:
+                        main: Gestión
+                        objetives:
+                            main: Objetivos
+                            list: Lista
+                        indicators: 
+                            main: Indicadores
+                            list: Lista
+                        arrangement_programs: 
+                            main: Programas de Gestión
+                            list: Lista

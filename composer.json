@@ -19,12 +19,15 @@
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
+        
 	"tecnocreaciones/vzla-government-bundle": "dev-master",
 	"tecnocreaciones/ajax-fos-user-bundle": "dev-master",
 	"tecnocreaciones/install-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle":"@stable",
+        "friendsofsymfony/user-bundle": "v1.3.3",
+        "jms/translation-bundle": "~1.1@dev",
+        "jms/serializer-bundle": "@stable",
         "knplabs/knp-menu-bundle": "~2.0@dev",
-        "friendsofsymfony/rest-bundle":"~1.4@dev",
-        "friendsofsymfony/user-bundle": "~1.3",
         "knplabs/knp-menu": "~2.0@dev"
     },
     "scripts": {

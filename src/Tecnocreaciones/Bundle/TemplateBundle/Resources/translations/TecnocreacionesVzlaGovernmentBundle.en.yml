@@ -1,0 +1,84 @@
+tecnocreaciones_vzla_government:
+                        #Login
+                        sign_in: Sign in
+                        remind_me: Remind me
+                        enable_auto_login: Enable auto-login
+                        login: Login
+                        lost_password: Lost password
+                        username: Username
+                        password: Password
+                        message_remember_password: If you can’t remember your password, fill the input below with your e-mail and we’ll send you instructions to recover
+                        your_email: Your e-mail
+                        send_instructions: Send instructions
+                        register: Register
+                        message_register: New user? Yay! Let us know a little bit about you before you start
+                        your_name: Your name
+                        registration: Register
+                        clear_sorting: Clear sorting
+                        reload: Reload
+                        content: Content
+                        export_to_csv: Export to CVS
+
+                        message_header_center: App Header
+                        message_app_title: Message App Name
+                        message_footer: Message Footer
+
+                        logout: Logout
+                        
+                        login:
+                            validators:
+                                please_fill_in_your_login: Please fill in your login
+                                please_fill_in_your_password: Please fill in your password
+                                checking_credentials: Checking credentials
+                                please_fill_in_your_email: Please fill in your email
+                                please_fill_in_your_name: Please fill in your name
+                                email_is_not_valid: Email is not valid
+                                registering: Registering
+                                sending_instructions: Sending instructions
+                        profile:
+                            profile: Profile
+                            details: Details
+                            username: Username
+                            first_name: First name
+                            last_name: Last name
+                            email: Email
+                            groups: Groups
+                            update_password: Update password
+                            update: Update
+                        
+                        hello: Hello
+                        
+                        #Buttons
+                        edit: Edit
+                        save: Save
+                        cancel: Cancel
+                        
+                        #Roles
+                        role:
+                            client: Client
+                            administrator: Administrator
+                            super_administrator: Super Administrator
+                            
+                        search: Search
+                        show: Show
+                        with_selected: With selected
+                        entries_found: Entries found
+                        go: Go
+                        delete: Delete
+                        move_to_trash: Move to trash
+                        no: No
+                        yes: Yes
+                        selected: Selected 
+                        all: All
+                        search: Search
+                        notify:
+                            one_similar_notification: One similar notification
+                            n_similar_notifications: %d similar notifications
+                            one_more_notification: One more notification
+                            n_more_notifications: %d more notifications
+"Bad credentials": Username or Password invalid
+"User account is disabled.": User account is disabled
+
+form:
+    first_name: First name
+    last_name: Last name
