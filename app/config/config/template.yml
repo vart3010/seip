@@ -16,7 +16,7 @@ lunetics_locale:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: Tecnocreaciones\Bundle\TemplateBundle\Entity\User
+    user_class: Pequiven\SEIPBundle\Entity\User
     registration:
         form:
             type: tecnocreaciones_vzla_government_user_registration
@@ -24,12 +24,7 @@ fos_user:
         form:
             type: tecnocreaciones_vzla_government_user_profile
     
-tecnocreaciones_vzla_government:
-    template:
-        developer:
-            app_title: TU APP
-            menu: Tecnocreaciones\Bundle\TemplateBundle\Menu\Template\Developer\BackendMenuBuilder
-            
+
 fos_rest:
     allowed_methods_listener: true
     routing_loader:

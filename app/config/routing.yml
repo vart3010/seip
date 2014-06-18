@@ -1,3 +1,8 @@
+pequiven_seip:
+    resource: "@PequivenSEIPBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 tecnocreaciones_template:
     resource: "@TecnocreacionesTemplateBundle/Controller/"
     type:     annotation

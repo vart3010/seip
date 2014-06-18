@@ -68,11 +68,13 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
+    
+#Plantilla Configuration    
 tecnocreaciones_vzla_government:
     template:
         developer:
-            menu: Tecnocreaciones\Bundle\TemplateBundle\Menu\Template\Developer\BackendMenuBuilder
             app_title: SEIP
-#    config:
-#        main_route: 'scged_web_appdev'
+            menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
+            
+    config:
+        main_route: 'pequiven_seip_default_index'

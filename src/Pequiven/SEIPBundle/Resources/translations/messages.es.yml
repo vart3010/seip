@@ -1,0 +1,10 @@
+tecnocreaciones_vzla_government:
+                            no: No
+                            yes: Si
+                            step: Paso
+                            back: Atras
+                            next: Siguiente
+                            save: Guardar
+                            save_and_close: Guardar y cerrar
+                            question:
+                                    delete: Desea eliminar este elemento
