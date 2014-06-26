@@ -19,7 +19,7 @@ fos_user:
     user_class: Pequiven\SEIPBundle\Entity\User
     registration:
         form:
-            type: tecnocreaciones_vzla_government_user_registration
+            type: pequiven_seip_user_registration
     profile:
         form:
             type: tecnocreaciones_vzla_government_user_profile

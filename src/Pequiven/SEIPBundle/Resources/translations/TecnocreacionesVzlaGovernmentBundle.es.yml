@@ -22,6 +22,7 @@ tecnocreaciones_vzla_government:
                             reload: Refrescar
                             content: Contenido
                             export_to_csv: Exportar a CVS
+                            your_personal_num: Su número de personal
 
                             message_header_center: Cabecera de la aplicación
                             message_app_title: Nombre de la aplicación
@@ -63,6 +64,7 @@ tecnocreaciones_vzla_government:
                             #Roles
                             role:
                                 client: Cliente
+                                superviser: Supervisor
                                 administrator: Administrador
                                 super_administrator: Super Administrador
                                 

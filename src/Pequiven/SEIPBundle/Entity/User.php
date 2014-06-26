@@ -5,6 +5,7 @@ namespace Pequiven\SEIPBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * User model
@@ -28,6 +29,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * Date created
      * 
      * @var type 
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at",type="datetime",nullable=true)
      */
     private $createdAt;
@@ -36,6 +38,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * Date update
      * 
      * @var type 
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at",type="datetime",nullable=true)
      */
     private $updatedAt;
@@ -51,7 +54,13 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @var type 
      */
     private $lastName;
-
+    
+    /**
+     *@ORM\Column(name="num_personal",type="integer",nullable=true)
+     * @var type 
+     */
+    private $numPersonal;
+    
     /**
      * @var string
      */
@@ -203,5 +212,28 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getLastName()
     {
         return $this->lastName;
+    }
+    
+    /**
+     * Set numPersonal
+     *
+     * @param integer $numPersonal
+     * @return User
+     */
+    public function setNumPersonal($numPersonal)
+    {
+        $this->numPersonal = $numPersonal;
+
+        return $this;
+    }
+
+    /**
+     * Get numPersonal
+     *
+     * @return integer
+     */
+    public function getNumPersonal()
+    {
+        return $this->numPersonal;
     }
 }

@@ -28,8 +28,13 @@ class RegistrationListener implements EventSubscriberInterface {
         $user = $event->getForm()->getData();
         $role = $event->getRequest()->get('role');
 //        var_dump($event->getRequest()->get('role'));
-        if($role == 'client'){
-            $user->addRole('ROLE_CLIENT');
-        }
+        
+        $user->addRole('ROLE_SUPER_ADMIN');
+        //var_dump($user);
+//        if($event->getRequest()->get('role') == 'client'){
+//            $user->addRole('ROLE_SUPERVISER');
+//        }
+        
+        //die();
     }
 }
