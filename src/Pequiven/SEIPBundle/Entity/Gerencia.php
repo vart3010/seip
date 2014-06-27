@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Gerencia
  *
  * @ORM\Table(name="seip_gerencia")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Entity\GerenciaRepository")
  */
 class Gerencia
 {
@@ -46,18 +46,25 @@ class Gerencia
      * @ORM\Column(name="description", type="string", length=100, nullable=true)
      */
     private $description;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fk_complejo", type="integer", nullable=true)
+     */
+    private $fkComplejo;
 
     /** Complejo
      * @var=\Pequiven\SEIPBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $fkComplejo;
+    private $complejo;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="enabled", type="integer")
+     * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
 
@@ -141,6 +148,28 @@ class Gerencia
         return $this->description;
     }
 
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return Gerencia
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = (Boolean) $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 
     /**
      * Set fkComplejo
@@ -164,27 +193,27 @@ class Gerencia
     {
         return $this->fkComplejo;
     }
-
+    
     /**
-     * Set enabled
+     * Set complejo
      *
-     * @param integer $enabled
+     * @param \Pequiven\SEIPBundle\Entity\Complejo $complejo
      * @return Gerencia
      */
-    public function setEnabled($enabled)
+    public function setComplejo(\Pequiven\SEIPBundle\Entity\Complejo $complejo = null)
     {
-        $this->enabled = $enabled;
+        $this->complejo = $complejo;
 
         return $this;
     }
 
     /**
-     * Get enabled
+     * Get complejo
      *
-     * @return integer 
+     * @return \Pequiven\SEIPBundle\Entity\Complejo 
      */
-    public function getEnabled()
+    public function getComplejo()
     {
-        return $this->enabled;
+        return $this->complejo;
     }
 }

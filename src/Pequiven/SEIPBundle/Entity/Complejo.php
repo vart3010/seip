@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Complejo
  *
  * @ORM\Table(name="seip_complejo")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Entity\ComplejoRepository")
  */
 class Complejo
 {
@@ -48,9 +48,9 @@ class Complejo
     private $description;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="enabled", type="integer")
+     * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
 
@@ -166,15 +166,17 @@ class Complejo
         return $this->gerencias;
     }
 
+    
+
     /**
      * Set enabled
      *
-     * @param integer $enabled
+     * @param boolean $enabled
      * @return Complejo
      */
     public function setEnabled($enabled)
     {
-        $this->enabled = $enabled;
+        $this->enabled = (Boolean) $enabled;
 
         return $this;
     }
@@ -182,7 +184,7 @@ class Complejo
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return boolean 
      */
     public function getEnabled()
     {

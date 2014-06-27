@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
  * Cargos
  *
  * @ORM\Table(name="seip_cargo")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Entity\CargoRepository")
  */
 class Cargo
 {
@@ -44,17 +44,24 @@ class Cargo
      */
     private $description;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fk_gerencia", type="integer", nullable=true)
+     */
+    private $fkGerencia;
+    
     /** Gerencia
      * @var=\Pequiven\SEIPBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
-    private $fkGerencia;
+    private $gerencia;
     
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="enabled", type="integer")
+     * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
 
@@ -141,12 +148,12 @@ class Cargo
     /**
      * Set enabled
      *
-     * @param integer $enabled
-     * @return Cargos
+     * @param boolean $enabled
+     * @return Cargo
      */
     public function setEnabled($enabled)
     {
-        $this->enabled = $enabled;
+        $this->enabled = (Boolean) $enabled;
 
         return $this;
     }
@@ -154,13 +161,12 @@ class Cargo
     /**
      * Get enabled
      *
-     * @return integer 
+     * @return boolean 
      */
     public function getEnabled()
     {
         return $this->enabled;
     }
-
 
     /**
      * Set fkGerencia
@@ -183,5 +189,28 @@ class Cargo
     public function getFkGerencia()
     {
         return $this->fkGerencia;
+    }
+
+    /**
+     * Set gerencia
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Gerencia $gerencia
+     * @return Cargo
+     */
+    public function setGerencia(\Pequiven\SEIPBundle\Entity\Gerencia $gerencia = null)
+    {
+        $this->gerencia = $gerencia;
+
+        return $this;
+    }
+
+    /**
+     * Get gerencia
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Gerencia 
+     */
+    public function getGerencia()
+    {
+        return $this->gerencia;
     }
 }
