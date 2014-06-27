@@ -61,6 +61,7 @@ class ComplejoFixture extends AbstractFixture implements OrderedFixtureInterface
     
     public function getOrder(){
         return 1;
+        
     }
     
     public function setContainer(ContainerInterface $container = null) {
