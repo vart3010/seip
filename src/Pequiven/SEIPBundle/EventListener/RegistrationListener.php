@@ -27,14 +27,14 @@ class RegistrationListener implements EventSubscriberInterface {
         /** @var $user \FOS\UserBundle\Model\UserInterface */
         $user = $event->getForm()->getData();
         $role = $event->getRequest()->get('role');
-//        var_dump($event->getRequest()->get('role'));
+        var_dump($role.'<br>');
         
         $user->addRole('ROLE_SUPER_ADMIN');
-        //var_dump($user);
+        var_dump($user);
 //        if($event->getRequest()->get('role') == 'client'){
 //            $user->addRole('ROLE_SUPERVISER');
 //        }
         
-        //die();
+        die();
     }
 }

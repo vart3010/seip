@@ -23,13 +23,37 @@ class ComplejoFixture extends AbstractFixture implements OrderedFixtureInterface
         $complejo = new Complejo();
         $complejo->setDescription('Complejo Petroquímico Moron');
         $complejo->setEnabled(true);
-        $this->addReference('Complejo-01', $complejo);
+        $this->addReference('Complejo-01',$complejo);
             $manager->persist($complejo);
-        
+
         $complejo = new Complejo();
-        $complejo->setDescription('Complejo Petroquímico Ana María Campos');
+        $complejo->setDescription('Complejo Petroquímico Ana Maria Campos');
         $complejo->setEnabled(true);
-        $this->addReference('Complejo-02', $complejo);
+        $this->addReference('Complejo-02',$complejo);
+            $manager->persist($complejo);
+
+        $complejo = new Complejo();
+        $complejo->setDescription(' Complejo Petroquímico GD Jose Antonio Anzoátegui ');
+        $complejo->setEnabled(true);
+        $this->addReference('Complejo-03',$complejo);
+            $manager->persist($complejo);
+
+        $complejo = new Complejo();
+        $complejo->setDescription(' Proyecto Navay');
+        $complejo->setEnabled(true);
+        $this->addReference('Complejo-04',$complejo);
+            $manager->persist($complejo);
+
+        $complejo = new Complejo();
+        $complejo->setDescription(' Proyecto Paraguaná');
+        $complejo->setEnabled(true);
+        $this->addReference('Complejo-05',$complejo);
+            $manager->persist($complejo);
+
+        $complejo = new Complejo();
+        $complejo->setDescription(' Sede Valencia');
+        $complejo->setEnabled(true);
+        $this->addReference('Complejo-06',$complejo);
             $manager->persist($complejo);
             
         $manager->flush();

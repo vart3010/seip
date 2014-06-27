@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  * @ORM\Entity()
- * @ORM\Table(name="user")
+ * @ORM\Table(name="seip_user")
  */
 class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
 {
