@@ -1,0 +1,41 @@
+{% import 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+    <fieldset class="fieldset fields-list">
+        <legend class="legend">{{ 'pequiven_seip.details'|trans }}</legend>
+        <div class="field-block button-height">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.username) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.firstName) }}
+            {{ form_widget(form.firstName,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.firstName) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.lastName) }}
+            {{ form_widget(form.lastName,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.lastName) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.email) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.numPersonal) }}
+            {{ form_widget(form.numPersonal,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.numPersonal) }}
+        </div>
+        <div class="field-drop button-height black-inputs">
+            {{ form_label(form.current_password) }}
+            {{ form_widget(form.current_password,{'attr':{'class':'input' }  }) }}
+            {{ form_errors(form.current_password) }}
+        </div>
+        {{ actions.update() }}
+    </fieldset>
+    {{ form_rest(form) }}
+</form>

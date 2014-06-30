@@ -1,0 +1,51 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+<hgroup id="main-title" class="thin breadcrumb">
+    <h1>
+        <a href="{{ path('fos_user_profile_show') }}">{{ 'pequiven_seip.profile.profile'|trans }}</a>
+    </h1>
+</hgroup>
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.details'|trans }}</legend>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.username'|trans }}</label>
+            {{ user.username }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.first_name'|trans }}</label>
+            {{ user.firstName }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.last_name'|trans }}</label>
+            {{ user.lastName }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.email'|trans }}</label>
+            {{ user.email }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.num_personal'|trans }}</label>
+            {{ user.numPersonal }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.registed_at'|trans }}</label>
+            {{ user.createdAt | date('Y-m-d h:i a') }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.last_login'|trans }}</label>
+            {{ user.lastLogin ? user.lastLogin | date('Y-m-d h:i a') : null }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.profile.groups'|trans }}</label>
+            {% for group in user.groups %}
+                {{ group }}
+            {% endfor %}
+        </p>
+        
+    </fieldset>
+<p class="button-height align-right">
+    {{ buttons.generic(path('fos_user_change_password'),'pequiven_seip.profile.update_password'|trans,'icon-card') }}
+    {{ buttons.edit(path('fos_user_profile_edit')) }}
+</p>

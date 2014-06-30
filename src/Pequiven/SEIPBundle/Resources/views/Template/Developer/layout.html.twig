@@ -1,0 +1,75 @@
+{% extends "PequivenSEIPBundle:Template:Developer/base.html.twig" %}
+
+{% block head_base %}
+    <script>
+    // include angular loader, which allows the files to load in any order
+
+    /*
+     AngularJS v1.2.15
+     (c) 2010-2014 Google, Inc. http://angularjs.org
+     License: MIT
+    */
+    (function(){'use strict';function d(a){return function(){var c=arguments[0],b,c="["+(a?a+":":"")+c+"] http://errors.angularjs.org/1.2.15/"+(a?a+"/":"")+c;for(b=1;b<arguments.length;b++)c=c+(1==b?"?":"&")+"p"+(b-1)+"="+encodeURIComponent("function"==typeof arguments[b]?arguments[b].toString().replace(/ \{[\s\S]*$/,""):"undefined"==typeof arguments[b]?"undefined":"string"!=typeof arguments[b]?JSON.stringify(arguments[b]):arguments[b]);return Error(c)}}(function(a){var c=d("$injector"),b=d("ng");a=a.angular||
+    (a.angular={});a.$$minErr=a.$$minErr||d;return a.module||(a.module=function(){var a={};return function(e,d,f){if("hasOwnProperty"===e)throw b("badname","module");d&&a.hasOwnProperty(e)&&(a[e]=null);return a[e]||(a[e]=function(){function a(c,d,e){return function(){b[e||"push"]([c,d,arguments]);return g}}if(!d)throw c("nomod",e);var b=[],h=[],k=a("$injector","invoke"),g={_invokeQueue:b,_runBlocks:h,requires:d,name:e,provider:a("$provide","provider"),factory:a("$provide","factory"),service:a("$provide",
+    "service"),value:a("$provide","value"),constant:a("$provide","constant","unshift"),animation:a("$animateProvider","register"),filter:a("$filterProvider","register"),controller:a("$controllerProvider","register"),directive:a("$compileProvider","directive"),config:k,run:function(a){h.push(a);return this}};f&&k(f);return g}())}}())})(window)})(window);
+    //# sourceMappingURL={{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-loader.min.js.map') }}
+
+        // include a third-party async loader library
+        /*!
+        * $script.js JS loader & dependency manager
+        * https://github.com/ded/script.js
+        * (c) Dustin Diaz 2014 | License MIT
+        */
+        (function(e,t){typeof module!="undefined"&&module.exports?module.exports=t():typeof define=="function"&&define.amd?define(t):this[e]=t()})("$script",function(){function h(e,t){for(var n=0,i=e.length;n<i;++n)if(!t(e[n]))return r;return 1}function p(e,t){h(e,function(e){return!t(e)})}function d(e,t,n){function g(e){return e.call?e():u[e]}function y(){if(!--m){u[o]=1,s&&s();for(var e in f)h(e.split("|"),g)&&!p(f[e],g)&&(f[e]=[])}}e=e[i]?e:[e];var r=t&&t.call,s=r?t:n,o=r?e.join(""):t,m=e.length;return setTimeout(function(){p(e,function t(e,n){if(e===null)return y();e=!n&&!/^https?:\/\//.test(e)&&c?c+e+".js":e;if(l[e]){o&&(a[o]=1),l[e]==2?y():setTimeout(t.bind(null,e,!0),0);return}l[e]=1,o&&(a[o]=1),v(e,y)})},0),d}function v(n,r){var i=e.createElement("script"),u;i.onload=i.onerror=i[o]=function(){if(i[s]&&!/^c|loade/.test(i[s])||u)return;i.onload=i[o]=null,u=1,l[n]=2,r()},i.async=1,i.src=n,t.insertBefore(i,t.lastChild)}var e=document,t=e.getElementsByTagName("head")[0],n="string",r=!1,i="push",s="readyState",o="onreadystatechange",u={},a={},f={},l={},c;return d.get=v,d.order=function(e,t,n){(function r(i){i=e.shift(),e.length?d(i,r):d(i,t,n)})()},d.path=function(e){c=e},d.ready=function(e,t,n){e=e[i]?e:[e];var r=[];return!p(e,function(e){u[e]||r[i](e)})&&h(e,function(e){return u[e]})?t():!function(e){f[e]=f[e]||[],f[e][i](t),n&&n(r)}(e.join("|")),d},d.done=function(e){d([null],e)},d})
+        // load all of the dependencies asynchronously.
+        var dependencies = [
+          '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
+          '{{ url('bazinga_jstranslation_js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular.min.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-route.min.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-resource.min.js') }}',
+          {# En desarrollo se cargan individuales y en produccion se combinan en uno, hay un bug que da error combinandolos en desarrollo #}
+          {% if app.debug %}
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/sfTranslatorModule.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notifyModule.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/mainApp.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/ng-table/ng-table.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/ng-table-export/0.1.0/ng-table-export.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/tableFormat1Module.js') }}'
+          {% else %}
+                {% javascripts output='js/compiled/angular_modules.js' 
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/sfTranslatorModule.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notifyModule.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/mainApp.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/lib/ng-table/ng-table.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/lib/ng-table-export/0.1.0/ng-table-export.js'
+                    '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/tableFormat1Module.js'
+                %}
+                  '{{ asset_url }}',
+                {% endjavascripts %}
+            {% endif %}
+        ];
+        {# Agrego las dependencias de modulos de angularjs del proyecto #}
+        var myDependencies = {{ templateConfig.getTemplateOption('developer','angular_dependencies')|json_encode()|raw }};
+        dependencies = dependencies.concat(myDependencies);
+        $script(dependencies,'bundle');
+        $script.ready('bundle', function() {
+          // when all is done, execute bootstrap angular application
+            angular.element(document).ready(function() {
+              angular.bootstrap(document, ['mainApp']);
+            });
+        })
+      </script>
+{% endblock head_base %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+    
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/services.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/controllers.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/filters.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/directives.js') }}"></script>
+{% endblock javascripts_base %}

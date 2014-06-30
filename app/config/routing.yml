@@ -8,6 +8,9 @@ tecnocreaciones_template:
     type:     annotation
     prefix:   /
 
+pequiven_seip_home:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/menu.xml"
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -28,4 +31,4 @@ fos_user_change_password:
     prefix: /profile
     
 _bazinga_jstranslation:
-    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
+    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    

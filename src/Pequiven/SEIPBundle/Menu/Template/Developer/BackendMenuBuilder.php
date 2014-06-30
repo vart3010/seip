@@ -46,7 +46,7 @@ class BackendMenuBuilder extends MenuBuilder
         ));
         $section = 'sidebar';
         $menu->addChild('home',array(
-            'route' => self::ROUTE_DEFAULT,//Route
+            'route' => 'pequiven_seip_home',//Route
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         

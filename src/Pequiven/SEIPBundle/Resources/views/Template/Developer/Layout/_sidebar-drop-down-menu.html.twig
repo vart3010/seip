@@ -1,0 +1,57 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set logo = templateConfig.getTemplateOption('developer','logo') %}
+    
+<section id="menu" role="complementary">
+
+    <!-- This wrapper is used by several responsive layouts -->
+    <div id="menu-content">
+
+        <header>
+            {% if app.user.hasRole('ROLE_WORKER_PQV') %}
+                {{ 'pequiven_seip.role.worker_pqv'|trans }}
+            {% elseif app.user.hasRole('ROLE_SUPERVISER') %}
+                {{ 'pequiven_seip.role.superviser'|trans }}
+            {% elseif app.user.hasRole('ROLE_MANAGER_FIRST') %}
+                {{ 'pequiven_seip.role.manager_first'|trans }}
+            {% elseif app.user.hasRole('ROLE_MANAGER_SECOND') %}
+                {{ 'pequiven_seip.role.manager_second'|trans }}
+            {% elseif app.user.hasRole('ROLE_DIRECTIVE') %}
+                {{ 'pequiven_seip.role.directive'|trans }}
+            {% elseif app.user.hasRole('ROLE_ADMIN') %}
+                {{ 'pequiven_seip.role.administrator'|trans }}
+            {% elseif app.user.hasRole('ROLE_SUPER_ADMIN') %}
+                {{ 'pequiven_seip.role.super_administrator'|trans }}
+            {% endif %}
+        </header>
+
+        <div id="profile">
+            <img src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/user.png') }}" width="64" height="64" alt="User name" class="user-icon">
+            {{ 'pequiven_seip.hello' | trans }}
+            <span class="name">{{ app.user.firstName }} <b>{{ app.user.lastName }}</b></span>
+        </div>
+
+        <!-- By default, this section is made for 4 icons, see the doc to learn how to change this, in "basic markup explained" -->
+        <ul id="access" class="children-tooltip">
+            <li><a href title="Messages"><span class="icon-inbox"></span><span class="count">2</span></a></li>
+            <li><a href title="Calendar"><span class="icon-calendar"></span></a></li>
+            <li><a href="{{ path('fos_user_profile_show') }}" title="{{ 'pequiven_seip.profile.profile'|trans }}"><span class="icon-user"></span></a></li>
+            <li><a href="{{ path('fos_user_security_logout') }}" title="{{ 'pequiven_seip.logout'|trans }}"><span class="icon-lock"></span></a></li>
+        </ul>
+
+        <section class="navigable">
+            {{ knp_menu_render('app.menu.backend.sidebar', {'template': 'PequivenSEIPBundle:Template/Developer:menu.html.twig', 'currentClass': 'current navigable-current'}) }}
+        </section>
+        <ul class="unstyled-list">
+            <li class="title-menu">&nbsp;</li>
+            <li style="background-color:white;text-align:center" class="with-padding">
+                <a href="{{ templateConfig.getOption('main_route') != null ? path(templateConfig.getOption('main_route')) : '' }}">
+                    <img src="{{ asset(logo['panel_right']) }}" width="220px" height="80px" />
+                </a>
+            </li>
+    </ul>
+        <div>
+        </div>
+    </div>
+    <!-- End content wrapper -->
+</section>

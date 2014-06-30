@@ -1,6 +1,6 @@
 {% extends "TecnocreacionesVzlaGovernmentBundle:Template:Developer/base.html.twig" %}
 
-{% trans_default_domain 'TecnocreacionesVzlaGovernmentBundle' %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheets %}
         <!-- Additional styles -->
@@ -29,60 +29,60 @@
             {% include 'TecnocreacionesVzlaGovernmentBundle:Block:header.html.twig' %}
             <br />
             <div class="with-padding">
-                <p>{{ 'tecnocreaciones_vzla_government.message_app_title'|trans }}</p>
+                <p>{{ 'pequiven_seip.message_app_title'|trans }}</p>
             </div>
 
             <div id="login-container">
                 <div id="form-wrapper">
                     <div id="form-block" class="scratch-metal">
                         <div id="form-viewport">
-                            <form method="post" action="#" id="form-login" class="input-wrapper blue-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.sign_in'|trans }}">
+                            <form method="post" action="#" id="form-login" class="input-wrapper blue-gradient glossy" title="{{ 'pequiven_seip.sign_in'|trans }}">
                                 <ul class="inputs black-input large">
                                     <!-- The autocomplete="off" attributes is the only way to prevent webkit browsers from filling the inputs with yellow -->
-                                    <li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.username'|trans }}" autocomplete="off"></li>
-                                    <li><span class="icon-lock mid-margin-right"></span><input type="password" name="pass" id="pass" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.password'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.username'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-lock mid-margin-right"></span><input type="password" name="pass" id="pass" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.password'|trans }}" autocomplete="off"></li>
                                 </ul>
 
                                 <p class="button-height">
-                                    <button type="submit" class="button glossy float-right" id="login">{{ 'tecnocreaciones_vzla_government.sign_in'|trans }}</button>
-                                    <input type="checkbox" name="remind" id="remind" value="1" checked="checked" class="switch tiny mid-margin-right with-tooltip" title="{{ 'tecnocreaciones_vzla_government.enable_auto_login'|trans }}">
-                                    <label for="remind">{{ 'tecnocreaciones_vzla_government.remind_me'|trans }}</label>
+                                    <button type="submit" class="button glossy float-right" id="login">{{ 'pequiven_seip.sign_in'|trans }}</button>
+                                    <input type="checkbox" name="remind" id="remind" value="1" checked="checked" class="switch tiny mid-margin-right with-tooltip" title="{{ 'pequiven_seip.enable_auto_login'|trans }}">
+                                    <label for="remind">{{ 'pequiven_seip.remind_me'|trans }}</label>
                                 </p>
                             </form>
 
-                            <form method="post" action="#" id="form-password" class="input-wrapper orange-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.lost_password'|trans }}">
+                            <form method="post" action="#" id="form-password" class="input-wrapper orange-gradient glossy" title="{{ 'pequiven_seip.lost_password'|trans }}">
 
                                 <p class="message">
-                                    {{ 'tecnocreaciones_vzla_government.message_remember_password'|trans }}:
+                                    {{ 'pequiven_seip.message_remember_password'|trans }}:
                                     <span class="block-arrow"><span></span></span>
                                 </p>
 
                                 <ul class="inputs black-input large">
-                                    <li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.your_email'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.your_email'|trans }}" autocomplete="off"></li>
                                 </ul>
 
-                                <button type="submit" class="button glossy full-width" id="send-password">{{ 'tecnocreaciones_vzla_government.send_instructions'|trans }}</button>
+                                <button type="submit" class="button glossy full-width" id="send-password">{{ 'pequiven_seip.send_instructions'|trans }}</button>
 
                             </form>
 
-                            <form method="post" action="#" id="form-register" class="input-wrapper red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.registration'|trans }}">
+                            <form method="post" action="#" id="form-register" class="input-wrapper red-gradient glossy" title="{{ 'pequiven_seip.registration'|trans }}">
 
                                 <p class="message">
-                                    {{ 'tecnocreaciones_vzla_government.message_register'|trans }}:
+                                    {{ 'pequiven_seip.message_register'|trans }}:
                                     <span class="block-arrow"><span></span></span>
                                 </p>
 
                                 <ul class="inputs black-input large">
-                                    <li><span class="icon-card mid-margin-right"></span><input type="text" name="name" id="name-register" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.your_name'|trans }}" autocomplete="off"></li>
-                                    <li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail-register" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.your_email'|trans }}" autocomplete="off"></li>
-                                    <li><span class="icon-card mid-margin-right"></span><input type="text" name="num_personal" id="num_personal-register" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.your_personal_num'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-card mid-margin-right"></span><input type="text" name="name" id="name-register" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.your_name'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-mail mid-margin-right"></span><input type="email" name="mail" id="mail-register" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.your_email'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-card mid-margin-right"></span><input type="text" name="num_personal" id="num_personal-register" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.your_personal_num'|trans }}" autocomplete="off"></li>
                                 </ul>
                                 <ul class="inputs black-input large">
-                                    <li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login-register" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.username'|trans }}" autocomplete="off"></li>
-                                    <li><span class="icon-lock mid-margin-right"></span><input type="password" name="pass" id="pass-register" value="" class="input-unstyled" placeholder="{{ 'tecnocreaciones_vzla_government.password'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-user mid-margin-right"></span><input type="text" name="login" id="login-register" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.username'|trans }}" autocomplete="off"></li>
+                                    <li><span class="icon-lock mid-margin-right"></span><input type="password" name="pass" id="pass-register" value="" class="input-unstyled" placeholder="{{ 'pequiven_seip.password'|trans }}" autocomplete="off"></li>
                                 </ul>
 
-                                <button type="submit" class="button glossy full-width" id="send-register">{{ 'tecnocreaciones_vzla_government.register'|trans }}</button>
+                                <button type="submit" class="button glossy full-width" id="send-register">{{ 'pequiven_seip.register'|trans }}</button>
 
                             </form>
 
@@ -110,9 +110,9 @@
 
 {% block javascript %}
     <script type="text/javascript">
-        $.fn.styleSelect.defaults.allValuesText = '{{ 'tecnocreaciones_vzla_government.all'|trans }}';
-        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'tecnocreaciones_vzla_government.selected'|trans }}';
-        $.fn.styleSelect.defaults.searchText = '{{ 'tecnocreaciones_vzla_government.search'|trans }}';
+        $.fn.styleSelect.defaults.allValuesText = '{{ 'pequiven_seip.all'|trans }}';
+        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'pequiven_seip.selected'|trans }}';
+        $.fn.styleSelect.defaults.searchText = '{{ 'pequiven_seip.search'|trans }}';
     </script>
     <script>
 
@@ -180,16 +180,16 @@
                     if (login.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_login'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_login'|trans }}');
                         return false;
                     }
                     else if (pass.length === 0)
                     {
                         // Remove empty login message if displayed
-                        formWrapper.clearMessages('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_login'|trans }}');
+                        formWrapper.clearMessages('{{ 'pequiven_seip.login.validators.please_fill_in_your_login'|trans }}');
 
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_password'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_password'|trans }}');
                         return false;
                     }
                     else
@@ -198,7 +198,7 @@
                         formWrapper.clearMessages();
 
                         // Show progress
-                        displayLoading('{{ 'tecnocreaciones_vzla_government.login.validators.checking_credentials'|trans }}...');
+                        displayLoading('{{ 'pequiven_seip.login.validators.checking_credentials'|trans }}...');
 
                         var url = '{{ path("fos_user_security_check") }}';
                         //This is where you may do your AJAX call, for instance:
@@ -243,16 +243,16 @@
                     if (mail.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_email'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_email'|trans }}');
                     }
                     // Want more robust mail validation? see http://stackoverflow.com/a/2855946
                     else if (!/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(mail))
                     {
                         // Remove empty email message if displayed
-                        formWrapper.clearMessages('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_email'|trans }}');
+                        formWrapper.clearMessages('{{ 'pequiven_seip.login.validators.please_fill_in_your_email'|trans }}');
 
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.validators.email_is_not_valid'|trans }}');
+                        displayError('{{ 'pequiven_seip.validators.email_is_not_valid'|trans }}');
                         return false;
                     }
                     else
@@ -261,7 +261,7 @@
                         formWrapper.clearMessages();
 
                         // Show progress
-                        displayLoading('{{ 'tecnocreaciones_vzla_government.login.validators.sending_instructions'|trans }}...');
+                        displayLoading('{{ 'pequiven_seip.login.validators.sending_instructions'|trans }}...');
 
                         /*
                          * This is where you may do your AJAX call
@@ -310,37 +310,37 @@
                     if (name.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_name'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_name'|trans }}');
                         return false;
                     }
                     else if (mail.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_email'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_email'|trans }}');
                         return false;
                     }
                     else if (!/^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(mail))
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.validators.email_is_not_valid'|trans }}');
+                        displayError('{{ 'pequiven_seip.validators.email_is_not_valid'|trans }}');
                         return false;
                     }
                     else if (login.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_login'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_login'|trans }}');
                         return false;
                     }
                     else if (pass.length === 0)
                     {
                         // Display message
-                        displayError('{{ 'tecnocreaciones_vzla_government.login.validators.please_fill_in_your_password'|trans }}');
+                        displayError('{{ 'pequiven_seip.login.validators.please_fill_in_your_password'|trans }}');
                         return false;
                     }
                     else
                     {
                         // Show progress
-                        displayLoading('{{ 'tecnocreaciones_vzla_government.login.validators.registering'|trans }}...');
+                        displayLoading('{{ 'pequiven_seip.login.validators.registering'|trans }}...');
 
                         /*
                          * This is where you may do your AJAX call
@@ -357,7 +357,7 @@
                                 'fos_user_registration_form[plainPassword][first]': pass,
                                 'fos_user_registration_form[plainPassword][second]': pass,
                                 'fos_user_registration_form[_token]': '{{ csrf_token_register }}',
-                                'role': ''
+                                'role': 'worker_pqv'
                             },
                             success: function(data)
                             {

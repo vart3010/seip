@@ -39,6 +39,7 @@ class RegistrationListener implements EventSubscriberInterface {
         /** @var $user \FOS\UserBundle\Model\UserInterface */
         $user = $event->getForm()->getData();
         $role = $event->getRequest()->get('role');
+        var_dump($role.'<br>');
         
         $em = $this->container->get('doctrine')->getManager();
         $personal = $em->getRepository('Pequiven\SEIPBundle\Entity\Personal');
@@ -48,12 +49,12 @@ class RegistrationListener implements EventSubscriberInterface {
             foreach($results as $result){
                 var_dump($result->getNomPersonal());
             }
-            var_dump('hola');
+            //var_dump('hola');
         }
         
         //var_dump($user.'<br>');
         
-        $user->addRole('ROLE_SUPER_ADMIN');
+//        $user->addRole('ROLE_SUPER_ADMIN');
 //        if($event->getRequest()->get('role') == 'client'){
 //            $user->addRole('ROLE_SUPERVISER');
 //        }
