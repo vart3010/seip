@@ -19,14 +19,17 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
-            new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
             
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),//Contructor del menu
+            
+            new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
+            new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
+            
             new JMS\SerializerBundle\JMSSerializerBundle(),//Serializador de objetos en json y xml
             new JMS\TranslationBundle\JMSTranslationBundle(),//Traductor optimizado
+            
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
