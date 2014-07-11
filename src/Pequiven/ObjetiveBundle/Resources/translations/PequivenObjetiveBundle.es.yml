@@ -1,0 +1,16 @@
+# Login
+pequiven_objetive:
+                #Registrar
+                objetives: Objetivos
+
+                #Buttons
+                edit: Editar
+                save: Guardar
+                cancel: Cancelar
+
+form:
+    objetive: Objetivo
+    objetive_level: Nivel de objetivo
+    complejo: Complejo
+    parent: Objetivo Padre
+    register: Registrar

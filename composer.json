@@ -22,6 +22,7 @@
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
         
+        "tecnocreaciones/resource-bundle": "dev-master",
 	"tecnocreaciones/vzla-government-bundle": "dev-master",
 	"tecnocreaciones/ajax-fos-user-bundle": "dev-master",
 	"tecnocreaciones/install-bundle": "dev-master",
@@ -30,7 +31,8 @@
         "jms/translation-bundle": "~1.1@dev",
         "jms/serializer-bundle": "@stable",
         "knplabs/knp-menu-bundle": "~2.0@dev",
-        "knplabs/knp-menu": "~2.0@dev"
+        "knplabs/knp-menu": "~2.0@dev",
+        "white-october/pagerfanta-bundle": "1.0.*"
        
 
 

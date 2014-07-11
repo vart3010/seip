@@ -1,0 +1,75 @@
+{#{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/layout.html.twig' %}#}
+{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block body %}
+
+    <form action="{{ path('pequiven_objetive_menu_create') }}" {{ form_enctype(form) }} method="POST" class="pequiven_objetive_menu_create">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description,{'attr':{'class':'input' } }) }}
+                {{ form_errors(form.description) }}
+            </div>
+            <div id="objetiveLevel" class="field-block button-height">
+                {{ form_label(form.objetiveLevel) }}
+                {{ form_widget(form.objetiveLevel,{'attr':{'class':'select.full-width'} }) }}
+                {{ form_errors(form.objetiveLevel) }}
+            </div>
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.complejo) }}
+                {{ form_widget(form.complejo,{'attr':{'class':'select.full-width'} }) }}
+                {{ form_errors(form.complejo) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.parent) }}
+                {{ form_widget(form.parent,{'attr':{'class':'select.full-width'} }) }}
+                {{ form_errors(form.parent) }}
+            </div>
+            <div>
+                {{ form_widget(form.save) }}
+            </div>
+            {#{{ actions.update() }}#}
+        </fieldset>
+    {{ form_rest(form) }}
+    </form>
+    
+    {% block javascript %}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+           $("#complejo").hide();//Escondemos el complejo por defecto
+           //Al cambiar el select de los niveles de objetivos
+           $("#pequiven_objetive_registration_objetiveLevel").change(function() {
+               var data = {
+                   objetiveLevel_id: $.trim($(this).val())
+               };
+               $.ajax({
+                  type: 'post',
+                  url: '{{ path("verify_objetiveLevel") }}',
+                  data: data,
+                  success: function(data) {
+                      if(data[0].verify === "show"){
+                          $("#complejo").show();
+                      } else{
+                          $("#complejo").hide();
+                      }
+                  }
+               });
+           });
+        });
+    </script>
+    {% endblock javascript %}
+{% endblock body %}

@@ -14,6 +14,7 @@ namespace Pequiven\SEIPBundle\Menu\Template\Developer;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Vzla\GovernmentBundle\Menu\MenuBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Main menu builder.
@@ -28,7 +29,13 @@ class BackendMenuBuilder extends MenuBuilder
      */
     private $secondLevelOptions = array('childrenAttributes' => array('class' => 'big-menu'));
     
-    const ROUTE_DEFAULT = '';
+    const ROUTE_DEFAULT = 'pequiven_seip_menu_home';
+    
+    protected $container;
+    
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
     
     /**
      * Builds backend sidebar menu (Construye el menu lateral del layout principal).
@@ -46,23 +53,31 @@ class BackendMenuBuilder extends MenuBuilder
         ));
         $section = 'sidebar';
         $menu->addChild('home',array(
-            'route' => 'pequiven_seip_home',//Route
+            'route' => self::ROUTE_DEFAULT,//Route
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
         $this->addExampleMenu($menu, $section);
-        
+
         $menu->addChild('support', array(
-            'route' => self::ROUTE_DEFAULT,
+            'route' => null,
             'labelAttributes' => array('icon' => 'icon-info'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.support', $section)));
         //Gestión
         $this->addArrangementMenu($menu, $section);//Menú de Gestión
         //Reportes
         $menu->addChild('reports', array(
-            'route' => self::ROUTE_DEFAULT,
+            'route' => null,
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
+        
+    //$menu->setCurrent($this->request->getRequestUri());
         return $menu;
+    }
+    
+    public function createBreadcrumbsMenu(Request $request) {
+    	//
+        $bcmenu = $this->createSidebarMenu($request);
+        return $this->getCurrentMenuItem($bcmenu);
     }
     
     /**
@@ -90,16 +105,23 @@ class BackendMenuBuilder extends MenuBuilder
         
                 $subchild = $this->factory->createItem('arrangement.objetives',
                         $this->getSubLevelOptions(array(
-                        'uri' => null,
+                        'uri' => 'objetive',
                         'labelAttributes' => array('icon' => 'icon-book',),
                         ))
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.main', $section)));
+                
                 $subchild
                         ->addChild('arrangement.objetives.list', array(
-                            'route' => self::ROUTE_DEFAULT,
+                            'route' => null,
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.list', $section)));
+                if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
+                $subchild->addChild('arrangement.objetives.add', array(
+                            'route' => 'pequiven_objetive_menu_create',
+                ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add',$section)));
+                }
             $child->addChild($subchild);
             
             //Sub menú Indicadores
@@ -112,7 +134,7 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.indicators.main', $section)));
                 $subchild
                         ->addChild('arrangement.objetives.list', array(
-                            'route' => self::ROUTE_DEFAULT,
+                            'route' => null,
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.indicators.list', $section)));
             $child->addChild($subchild);
@@ -127,7 +149,7 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.arrangement_programs.main', $section)));
                 $subchild
                         ->addChild('arrangement.objetives.list', array(
-                            'route' => self::ROUTE_DEFAULT,
+                            'route' => null,
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.arrangement_programs.list', $section)));
             $child->addChild($subchild);
@@ -151,12 +173,12 @@ class BackendMenuBuilder extends MenuBuilder
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.main', $section)));
         $child
                 ->addChild('example.company', array(
-                    'route' => '',
+                    'route' => null,
                     ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.company', $section)));
         $child
                 ->addChild('example.technical_reports', array(
-                    'route' => '',
+                    'route' => null,
                     ))
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.technical_reports', $section)));
         
@@ -170,12 +192,12 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.other.main', $section)));
             $subchild
                     ->addChild('example.other.admin', array(
-                        'route' => self::ROUTE_DEFAULT,
+                        'route' => null,
                         ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.other.admin', $section)));
 
             $subchild->addChild('example.other.groups', array(
-                        'route' => self::ROUTE_DEFAULT,
+                        'route' => null,
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.example.other.groups', $section)));
         
@@ -191,4 +213,21 @@ class BackendMenuBuilder extends MenuBuilder
     protected function getSecondLevelOptions(array $parameters = array()) {
         return array_merge($this->secondLevelOptions,$parameters);
     }
+    
+//    public function getCurrentMenuItem($menu)
+//    {
+//        $voter = $this->container->get('pequiven.seip.menu.voter');
+//		
+//        foreach ($menu as $item) {
+//            if ($voter->matchItem($item)) {
+//                return $item;
+//            }
+//			
+//            if ($item->getChildren() && $currentChild = $this->getCurrentMenuItem($item)) {
+//                return $currentChild;
+//            }
+//        }
+//		
+//        return null;
+//    }
 }

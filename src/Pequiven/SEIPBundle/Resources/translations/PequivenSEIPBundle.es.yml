@@ -25,7 +25,7 @@ pequiven_seip:
                 your_personal_num: Su número de personal
 
                 message_header_center: Cabecera de la aplicación
-                message_app_title: Nombre de la aplicación
+                message_app_title: Sistema Estadístico de Información Petroquímica
                 message_footer: Footer de la aplicacion
 
                 logout: Salir

@@ -1,3 +1,13 @@
+pequiven_master:
+    resource: "@PequivenMasterBundle/Controller/"
+    type:     annotation
+    prefix:   /master
+
+pequiven_objetive:
+    resource: "@PequivenObjetiveBundle/Controller/"
+    type:     annotation
+    prefix:   /objetive
+
 pequiven_seip:
     resource: "@PequivenSEIPBundle/Controller/"
     type:     annotation
@@ -8,8 +18,11 @@ tecnocreaciones_template:
     type:     annotation
     prefix:   /
 
-pequiven_seip_home:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/menu.xml"
+pequiven_seip_menu:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/menu.yml"
+    
+pequiven_objetive_route:
+    resource: "@PequivenObjetiveBundle/Resources/config/routing/routing.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

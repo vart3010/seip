@@ -20,7 +20,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             
-            new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
+            
             new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),//Contructor del menu
             
@@ -32,10 +32,13 @@ class AppKernel extends Kernel
             
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             
+            new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
             new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
+            new Pequiven\MasterBundle\PequivenMasterBundle(),
+            new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -36,12 +36,61 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->addRole('ROLE_SUPER_ADMIN');
         $user->setEnabled(true);
             $manager->persist($user);
+        
+        $user = new User();
+        $user->setUsername('directive');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Francisco');
+        $user->setLastName('Mejias');
+        $user->setEmail('franmejias@pequiven.com');
+        $user->addRole('ROLE_DIRECTIVE');
+        $user->setEnabled(true);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_first');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Georgina');
+        $user->setLastName('Olivo');
+        $user->setEmail('geolivo@pequiven.com');
+        $user->addRole('ROLE_MANAGER_FIRST');
+        $user->setEnabled(true);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_second');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('veescalona@pequiven.com');
+        $user->addRole('ROLE_MANAGER_SECOND');
+        $user->setEnabled(true);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('superviser');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Richard');
+        $user->setLastName('Arias');
+        $user->setEmail('riarias@pequiven.com');
+        $user->addRole('ROLE_SUPERVISER');
+        $user->setEnabled(true);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('worker');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Junior');
+        $user->setEmail('junior@gmail.com');
+        $user->addRole('ROLE_WORKER_PQV');
+        $user->setEnabled(true);
+            $manager->persist($user);
             
         $manager->flush();
     }
     
     public function getOrder(){
-        return 4;
+        return 6;
     }
     
     public function setContainer(ContainerInterface $container = null) {

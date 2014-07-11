@@ -16,6 +16,7 @@ app:
                         main: Gestión
                         objetives:
                             main: Objetivos
+                            add: Añadir
                             list: Lista
                         indicators: 
                             main: Indicadores
