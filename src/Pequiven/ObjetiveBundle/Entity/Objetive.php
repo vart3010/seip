@@ -58,10 +58,87 @@ class Objetive extends modelObjetive
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=150)
+     * @ORM\Column(name="description", type="string", length=300)
      */
     private $description;
-
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="weight", type="float", nullable=true)
+     */
+    private $weight;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="goal", type="float", nullable=true)
+     */
+    private $goal;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rank_top", type="float", nullable=true)
+     */
+    private $rankTop;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
+     */
+    private $rankMiddleTop;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
+     */
+    private $rankMiddleBottom;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rank_bottom", type="float", nullable=true)
+     */
+    private $rankBottom;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="eval_objetive", type="boolean")
+     */
+    private $evalObjetive = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="eval_indicator", type="boolean")
+     */
+    private $evalIndicator = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="eval_arrangement_program", type="boolean")
+     */
+    private $evalArrangementProgram = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="eval_simple_average", type="boolean")
+     */
+    private $evalSimpleAverage = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="eval_weighted_average", type="boolean")
+     */
+    private $evalWeightedAverage = false;
+    
     /**
      * @var boolean
      *
@@ -76,6 +153,14 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_objetive_level", referencedColumnName="id")
      */
     private $objetiveLevel;
+    
+    /**
+     * LineStrategic
+     * @var \Pequiven\MasterBundle\Entity\LineStrategic
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic")
+     * @ORM\JoinColumn(name="fk_line_strategic", referencedColumnName="id")
+     */
+    private $lineStrategic;
     
     /**
      * Complejo
@@ -383,5 +468,282 @@ class Objetive extends modelObjetive
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set lineStrategic
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic
+     * @return Objetive
+     */
+    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null)
+    {
+        $this->lineStrategic = $lineStrategic;
+
+        return $this;
+    }
+
+    /**
+     * Get lineStrategic
+     *
+     * @return \Pequiven\MasterBundle\Entity\LineStrategic 
+     */
+    public function getLineStrategic()
+    {
+        return $this->lineStrategic;
+    }
+
+
+    /**
+     * Set weight
+     *
+     * @param float $weight
+     * @return Objetive
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set goal
+     *
+     * @param float $goal
+     * @return Objetive
+     */
+    public function setGoal($goal)
+    {
+        $this->goal = $goal;
+
+        return $this;
+    }
+
+    /**
+     * Get goal
+     *
+     * @return float 
+     */
+    public function getGoal()
+    {
+        return $this->goal;
+    }
+
+    /**
+     * Set rankTop
+     *
+     * @param float $rankTop
+     * @return Objetive
+     */
+    public function setRankTop($rankTop)
+    {
+        $this->rankTop = $rankTop;
+
+        return $this;
+    }
+
+    /**
+     * Get rankTop
+     *
+     * @return float 
+     */
+    public function getRankTop()
+    {
+        return $this->rankTop;
+    }
+
+    /**
+     * Set rankMiddleTop
+     *
+     * @param float $rankMiddleTop
+     * @return Objetive
+     */
+    public function setRankMiddleTop($rankMiddleTop)
+    {
+        $this->rankMiddleTop = $rankMiddleTop;
+
+        return $this;
+    }
+
+    /**
+     * Get rankMiddleTop
+     *
+     * @return float 
+     */
+    public function getRankMiddleTop()
+    {
+        return $this->rankMiddleTop;
+    }
+
+    /**
+     * Set rankMiddleBottom
+     *
+     * @param float $rankMiddleBottom
+     * @return Objetive
+     */
+    public function setRankMiddleBottom($rankMiddleBottom)
+    {
+        $this->rankMiddleBottom = $rankMiddleBottom;
+
+        return $this;
+    }
+
+    /**
+     * Get rankMiddleBottom
+     *
+     * @return float 
+     */
+    public function getRankMiddleBottom()
+    {
+        return $this->rankMiddleBottom;
+    }
+
+    /**
+     * Set rankBottom
+     *
+     * @param float $rankBottom
+     * @return Objetive
+     */
+    public function setRankBottom($rankBottom)
+    {
+        $this->rankBottom = $rankBottom;
+
+        return $this;
+    }
+
+    /**
+     * Get rankBottom
+     *
+     * @return float 
+     */
+    public function getRankBottom()
+    {
+        return $this->rankBottom;
+    }
+
+    /**
+     * Set evalObjetive
+     *
+     * @param boolean $evalObjetive
+     * @return Objetive
+     */
+    public function setEvalObjetive($evalObjetive)
+    {
+        $this->evalObjetive = $evalObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get evalObjetive
+     *
+     * @return boolean 
+     */
+    public function getEvalObjetive()
+    {
+        return $this->evalObjetive;
+    }
+
+    /**
+     * Set evalIndicator
+     *
+     * @param boolean $evalIndicator
+     * @return Objetive
+     */
+    public function setEvalIndicator($evalIndicator)
+    {
+        $this->evalIndicator = $evalIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get evalIndicator
+     *
+     * @return boolean 
+     */
+    public function getEvalIndicator()
+    {
+        return $this->evalIndicator;
+    }
+
+    /**
+     * Set evalArrangementProgram
+     *
+     * @param boolean $evalArrangementProgram
+     * @return Objetive
+     */
+    public function setEvalArrangementProgram($evalArrangementProgram)
+    {
+        $this->evalArrangementProgram = $evalArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get evalArrangementProgram
+     *
+     * @return boolean 
+     */
+    public function getEvalArrangementProgram()
+    {
+        return $this->evalArrangementProgram;
+    }
+
+    /**
+     * Set evalSimpleAverage
+     *
+     * @param boolean $evalSimpleAverage
+     * @return Objetive
+     */
+    public function setEvalSimpleAverage($evalSimpleAverage)
+    {
+        $this->evalSimpleAverage = $evalSimpleAverage;
+
+        return $this;
+    }
+
+    /**
+     * Get evalSimpleAverage
+     *
+     * @return boolean 
+     */
+    public function getEvalSimpleAverage()
+    {
+        return $this->evalSimpleAverage;
+    }
+
+    /**
+     * Set evalWeightedAverage
+     *
+     * @param boolean $evalWeightedAverage
+     * @return Objetive
+     */
+    public function setEvalWeightedAverage($evalWeightedAverage)
+    {
+        $this->evalWeightedAverage = $evalWeightedAverage;
+
+        return $this;
+    }
+
+    /**
+     * Get evalWeightedAverage
+     *
+     * @return boolean 
+     */
+    public function getEvalWeightedAverage()
+    {
+        return $this->evalWeightedAverage;
     }
 }

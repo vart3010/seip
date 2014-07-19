@@ -6,7 +6,19 @@ pequiven_objetive_home:
 pequiven_objetive_list:
     path: /objetive/list
     defaults: {_controller: PequivenObjetiveBundle:Objetive:list}
-    
+
 verify_objetiveLevel:
     path: /arrangement/objetive/verifyObjetiveLevel
     defaults: {_controller: PequivenObjetiveBundle:Objetive:verifyObjetiveLevel}
+    
+verify_objetiveParentLineStrategic:
+    path: /arrangement/objetive/verify_objetiveParentLineStrategic
+    defaults: {_controller: PequivenObjetiveBundle:Objetive:verifyObjetiveParentLineStrategic}
+    
+select_objetiveParentTactic:
+    path: /arrangement/objetive/select_objetiveParentTactic
+    defaults: {_controller: PequivenObjetiveBundle:Objetive:selectObjetiveParentTactic}
+    
+displayWeightObjetive:
+    path: /arrangement/objetive/displayWeightObjetive
+    defaults: {_controller: PequivenObjetiveBundle:Objetive:displayWeightObjetive}

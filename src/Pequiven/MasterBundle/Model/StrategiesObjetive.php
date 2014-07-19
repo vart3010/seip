@@ -6,17 +6,13 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\ObjetiveBundle\Model;
+namespace Pequiven\MasterBundle\Model;
 
 /**
- * Description of Objetive
+ * Description of StrategiesObjetive
  *
  * @author matias
  */
-class Objetive {
-    const PESO = 100;
-    
-    public function create(){
-        
-    }
+class StrategiesObjetive {
+    //put your code here
 }

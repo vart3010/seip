@@ -2,6 +2,7 @@
 pequiven_objetive:
                 #Registrar
                 objetives: Objetivos
+                add: Añadir
 
                 #Buttons
                 edit: Editar
@@ -11,6 +12,23 @@ pequiven_objetive:
 form:
     objetive: Objetivo
     objetive_level: Nivel de objetivo
+    line_strategic: Línea Estratégica
     complejo: Complejo
-    parent: Objetivo Padre
+    gerencia: Gerencia
+    parent_strategic: Objetivo Padre Estratégico
+    parent_tactic: Objetivo Padre Táctico
+    weight: Peso
+    goal: Meta
+    rankTop: Rango Alto
+    rankMiddleTop: Rango Medio Alto
+    rankMiddleBottom: Rango Medio Bajo
+    rankBottom: Rango Bajo
+    rankArrangement: Rango de Gestión
+    typeEvaluation: Tipo de Evaluación
+    evalObjetive: Por Objetivo
+    evalIndicator: Por Indicador
+    evalArrangementProgram: Por Programa de Gestión
+    formEvaluation: Forma de Evaluación
+    evalSimpleAverage: Promedio Simple
+    evalWeightedAverage: Promedio Ponderado
     register: Registrar

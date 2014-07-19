@@ -6,17 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\ObjetiveBundle\Model;
+namespace Pequiven\MasterBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
 /**
- * Description of Objetive
+ * Description of LineStrategicRepository
  *
  * @author matias
  */
-class Objetive {
-    const PESO = 100;
-    
-    public function create(){
-        
-    }
+class LineStrategicRepository extends EntityRepository {
+    //put your code here
 }

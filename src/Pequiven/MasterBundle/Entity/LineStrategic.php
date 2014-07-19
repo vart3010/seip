@@ -1,20 +1,20 @@
 <?php
 
-namespace Pequiven\ObjetiveBundle\Entity;
+namespace Pequiven\MasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\ObjetiveBundle\Model\ObjetiveLevel as modelObjetiveLevel;
+use Pequiven\MasterBundle\Model\LineStrategic as modelLineStrategic;
 
 /**
- * ObjetiveLevel
+ * LineStrategic
  *
- * @ORM\Table(name="seip_objetive_level")
- * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveLevelRepository")
+ * @ORM\Table(name="seip_c_line_strategic")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\LineStrategicRepository")
  */
-class ObjetiveLevel extends modelObjetiveLevel
+class LineStrategic extends modelLineStrategic
 {
     /**
      * @var integer
@@ -37,7 +37,8 @@ class ObjetiveLevel extends modelObjetiveLevel
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    
+    private $updatedAt;
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -53,14 +54,21 @@ class ObjetiveLevel extends modelObjetiveLevel
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
     private $userUpdatedAt;
-
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=100)
+     * @ORM\Column(name="description", type="string", length=150)
      */
     private $description;
-
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="politics", type="string", length=300)
+     */
+    private $politics;
+    
     /**
      * @var string
      *
@@ -74,7 +82,6 @@ class ObjetiveLevel extends modelObjetiveLevel
      * @ORM\Column(name="level", type="integer")
      */
     private $level;
-    
 
     /**
      * @var boolean
@@ -98,7 +105,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ObjetiveLevel
+     * @return LineStrategic
      */
     public function setCreatedAt($createdAt)
     {
@@ -118,10 +125,33 @@ class ObjetiveLevel extends modelObjetiveLevel
     }
 
     /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return LineStrategic
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
-     * @return ObjetiveLevel
+     * @return LineStrategic
      */
     public function setDescription($description)
     {
@@ -141,56 +171,10 @@ class ObjetiveLevel extends modelObjetiveLevel
     }
 
     /**
-     * Set levelName
-     *
-     * @param string $levelName
-     * @return ObjetiveLevel
-     */
-    public function setLevelName($levelName)
-    {
-        $this->levelName = $levelName;
-
-        return $this;
-    }
-
-    /**
-     * Get levelName
-     *
-     * @return string 
-     */
-    public function getLevelName()
-    {
-        return $this->levelName;
-    }
-
-    /**
-     * Set level
-     *
-     * @param integer $level
-     * @return ObjetiveLevel
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * Get level
-     *
-     * @return integer 
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    /**
      * Set enabled
      *
      * @param boolean $enabled
-     * @return ObjetiveLevel
+     * @return LineStrategic
      */
     public function setEnabled($enabled)
     {
@@ -213,7 +197,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return ObjetiveLevel
+     * @return LineStrategic
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -236,7 +220,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return ObjetiveLevel
+     * @return LineStrategic
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -254,22 +238,73 @@ class ObjetiveLevel extends modelObjetiveLevel
     {
         return $this->userUpdatedAt;
     }
-    
+
     /**
-     * Devuelve un objeto de tipo ObjetiveLevel, con el nivel seteado de acuerdo al rol del usuario logueado
-     * @param \Symfony\Component\Security\Core\SecurityContext $security
-     * @param type $options
-     * @return boolean
+     * Set levelName
+     *
+     * @param string $levelName
+     * @return LineStrategic
      */
-    public function typeObjetiveLevel(\Symfony\Component\Security\Core\SecurityContext $security, $options =array()){
-        $levelNameArray = $this->getLevelNameArray();
-        if($security->isGranted(array('ROLE_DIRECTIVE'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_ESTRATEGICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_FIRST'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_TACTICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_SECOND'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_OPERATIVO]));
-        }
-        return true;
+    public function setLevelName($levelName)
+    {
+        $this->levelName = $levelName;
+
+        return $this;
+    }
+
+    /**
+     * Get levelName
+     *
+     * @return string 
+     */
+    public function getLevelName()
+    {
+        return $this->levelName;
+    }
+
+    /**
+     * Set level
+     *
+     * @param integer $level
+     * @return LineStrategic
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return integer 
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * Set politics
+     *
+     * @param string $politics
+     * @return LineStrategic
+     */
+    public function setPolitics($politics)
+    {
+        $this->politics = $politics;
+
+        return $this;
+    }
+
+    /**
+     * Get politics
+     *
+     * @return string 
+     */
+    public function getPolitics()
+    {
+        return $this->politics;
     }
 }

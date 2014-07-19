@@ -15,33 +15,172 @@
 
 {% block body %}
 
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="#">{{ 'pequiven_objetive.objetives'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_objetive.add'|trans }}</span>
+        </h1>
+    </hgroup>
+    
     <form action="{{ path('pequiven_objetive_menu_create') }}" {{ form_enctype(form) }} method="POST" class="pequiven_objetive_menu_create">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
+            <!-- Hidden con el nivel de Objetivo de la Persona que esta logueada -->
+            <div>
+                {{ form_widget(form.objetive_level_name) }}
+            </div>
+            <!-- Descripción -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description,{'attr':{'class':'input' } }) }}
                 {{ form_errors(form.description) }}
             </div>
+            <!-- Nivel del Objetivo a crear -->
             <div id="objetiveLevel" class="field-block button-height">
                 {{ form_label(form.objetiveLevel) }}
-                {{ form_widget(form.objetiveLevel,{'attr':{'class':'select.full-width'} }) }}
+                {{ form_widget(form.objetiveLevel) }}
                 {{ form_errors(form.objetiveLevel) }}
+                {#{{ 'form.objetive_level'|trans }} 
+                {{ object.0.getDescription }}#}
             </div>
+            <!-- Línea Estratégica -->
+            <div id="lineStrategic" class="field-block button-height">
+                {% if (object.getLevelName == 'OBJETIVO_ESTRATEGICO') %}    
+                
+                    {{ form_label(form.lineStrategic) }}
+                    {{ form_widget(form.lineStrategic) }}
+                    {{ form_errors(form.lineStrategic) }}
+                {% else %}
+                    <span class="label">{{ 'form.line_strategic'|trans }}</span>
+                    <span id="label_line_strategic"></span>
+                {% endif %}
+            </div>
+            
+            <!-- Complejo -->
             <div id="complejo" class="field-block button-height">
                 {{ form_label(form.complejo) }}
-                {{ form_widget(form.complejo,{'attr':{'class':'select.full-width'} }) }}
+                {{ form_widget(form.complejo) }}
                 {{ form_errors(form.complejo) }}
             </div>
+            
+            <!-- Gerencia -->
+            {% if (object.getLevelName == 'OBJETIVO_TACTICO') or (object.getLevelName == 'OBJETIVO_OPERATIVO') %}
+                <div id="gerencia" class="field-block button-height">
+                    {{ form_label(form.gerencia) }}
+                    {{ form_widget(form.gerencia) }}
+                    {{ form_errors(form.gerencia) }}
+                </div>
+            {% endif %}
+            
+            <!-- Objetivo Padre Estratégico - ROL GERENTE 1ra LÍNEA -->
+            {% if (object.getLevelName == 'OBJETIVO_TACTICO') %}
+                <div class="field-block button-height">
+                    {{ form_label(form.parent) }}
+                    {{ form_widget(form.parent) }}
+                    {{ form_errors(form.parent) }}
+                </div>
+            {% endif %}
+            
+            <!-- Objetivo Padre Estratégico - ROL GERENTE 2da LÍNEA -->
+            {% if (object.getLevelName == 'OBJETIVO_OPERATIVO') %}
+                <div class="field-block button-height">
+                    {{ form_label(form.parent_strategic) }}
+                    {{ form_widget(form.parent_strategic) }}
+                    {{ form_errors(form.parent_strategic) }}
+                </div>
+                <div class="field-block button-height">
+                    {{ form_label(form.parent) }}
+                    {{ form_widget(form.parent) }}
+                    {{ form_errors(form.parent) }}
+                </div>
+            {% endif %}
+            
+            <!-- Peso del Objetivo -->
+            <div id="weight" class="field-block button-height">
+                {{ form_label(form.weight) }}
+                {{ form_widget(form.weight) }}
+                {{ form_errors(form.weight) }}
+            </div>
+            <!-- Meta del Objetivo -->
             <div class="field-block button-height">
-                {{ form_label(form.parent) }}
-                {{ form_widget(form.parent,{'attr':{'class':'select.full-width'} }) }}
-                {{ form_errors(form.parent) }}
+                    {{ form_label(form.goal) }}
+                    {{ form_widget(form.goal) }}
+                    {{ form_errors(form.goal) }}
             </div>
-            <div>
-                {{ form_widget(form.save) }}
-            </div>
-            {#{{ actions.update() }}#}
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
+
+                <!-- Rango Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankTop) }}
+                        {{ form_widget(form.rankTop) }}
+                        {{ form_errors(form.rankTop) }}
+                </div>
+                <!-- Rango Medio Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleTop) }}
+                        {{ form_widget(form.rankMiddleTop) }}
+                        {{ form_errors(form.rankMiddleTop) }}
+                </div>
+                <!-- Rango Medio Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleBottom) }}
+                        {{ form_widget(form.rankMiddleBottom) }}
+                        {{ form_errors(form.rankMiddleBottom) }}
+                </div>
+                <!-- Rango Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankBottom) }}
+                        {{ form_widget(form.rankBottom) }}
+                        {{ form_errors(form.rankBottom) }}
+                </div>
+            </fieldset>
+                
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.typeEvaluation'|trans }}</legend>
+                
+                <!-- Por Objetivo -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalObjetive) }}
+                    {{ form_widget(form.evalObjetive) }}
+                    {{ form_errors(form.evalObjetive) }}
+                </div>
+                <!-- Por Indicador -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalIndicator) }}
+                    {{ form_widget(form.evalIndicator) }}
+                    {{ form_errors(form.evalIndicator) }}
+                </div>
+                {% if (object.getLevelName != 'OBJETIVO_ESTRATEGICO') %}
+                    <!-- Por Programa de Gestión -->
+                    <div class="field-block button-height">
+                        {{ form_label(form.evalArrangementProgram) }}
+                        {{ form_widget(form.evalArrangementProgram) }}
+                        {{ form_errors(form.evalArrangementProgram) }}
+                    </div>
+                {% endif %}
+            </fieldset>
+            
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.formEvaluation'|trans }}</legend>
+                
+                <!-- Por Promedio Simple -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalSimpleAverage) }}
+                    {{ form_widget(form.evalSimpleAverage) }}
+                    {{ form_errors(form.evalSimpleAverage) }}
+                </div>
+                <!-- Por Promedio Ponderado -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalWeightedAverage) }}
+                    {{ form_widget(form.evalWeightedAverage) }}
+                    {{ form_errors(form.evalWeightedAverage) }}
+                </div>
+            </fieldset>
+            
+            {{ actions.create() }}
+            
         </fieldset>
     {{ form_rest(form) }}
     </form>
@@ -50,12 +189,104 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
-           $("#complejo").hide();//Escondemos el complejo por defecto
+           //$("#complejo").hide();//Escondemos el complejo por defecto
            //Al cambiar el select de los niveles de objetivos
-           $("#pequiven_objetive_registration_objetiveLevel").change(function() {
-               var data = {
-                   objetiveLevel_id: $.trim($(this).val())
-               };
+           change();
+           
+           function change(){
+               //En caso de que el Nivel de Objetivo sea Táctico, es decir para ROLE_MANAGER_FIRST
+               if($("#pequiven_objetive_registration_objetive_level_name").val() === "OBJETIVO_TACTICO"){
+                   $("#pequiven_objetive_registration_parent").select2({
+                       
+                   });
+                   
+                   //Al cambiar el select de Objetivo Padre Estratégico cuando el usuario logueado es ROLE_MANAGER_FIRST
+                   $("#pequiven_objetive_registration_parent").change(function() {
+                      var data = {
+                          objetiveParentStrategic_id: $.trim($(this).val())
+                      };
+                      $.ajax({
+                          type: 'post',
+                          url: '{{ path("verify_objetiveParentLineStrategic") }}',
+                          data: data,
+                          success: function(data) {
+                              $("#label_line_strategic").text(data[0].description);
+                              if(data[0].show_weight === false){
+                                  $("#weight").hide();
+                              } else{
+                                  $("#weight").show();
+                              }
+                          }
+                       });
+                   });
+               } else if($("#pequiven_objetive_registration_objetive_level_name").val() === "OBJETIVO_OPERATIVO"){
+                $("#pequiven_objetive_registration_parent_strategic").select2({
+
+                });
+                $("#pequiven_objetive_registration_parent").select2({
+
+                });
+                $("#pequiven_objetive_registration_parent_strategic").change(function(){
+                    displayWeightObjetive();
+                    displayLineStrategic();
+                    var data = {
+                        objetiveParentStrategic_id: $.trim($(this).val())
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("select_objetiveParentTactic") }}',
+                        data: data,
+                        success: function(data) {
+                            var $objetiveParentTactic_selector = $('#pequiven_objetive_registration_parent');
+
+                            $('#pequiven_objetive_registration_parent option[value]').remove();
+                            $objetiveParentTactic_selector.append('<option value="0">Seleccione el objetivo táctico</option>');
+
+                            for(var i=0, total = data.length; i<total; i++){
+                                $objetiveParentTactic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                            }
+                         }
+                      });
+                    });
+               }
+           }
+           
+           //Obtener la Línea Estratégica, cuando el usario sea ROLE_MANAER_SECOND
+           function displayLineStrategic(){
+                var data = {
+                    objetiveParentStrategic_id: $.trim($("#pequiven_objetive_registration_parent_strategic").val())
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("verify_objetiveParentLineStrategic") }}',
+                    data: data,
+                    success: function(data) {
+                        $("#label_line_strategic").text(data[0].description);
+                        if(data[0].show_weight === false){
+                            $("#weight").hide();
+                        } else{
+                            $("#weight").show();
+                        }
+                    }
+                 });
+           }
+           
+           //Obtener el máximo peso por defecto, cuando el usuario sea ROLE_MANAGER_SECOND
+           function displayWeightObjetive(){
+           var data = {
+               objetiveParentId: $.trim($("#pequiven_objetive_registration_parent").val())
+           };
+           $.ajax({
+               type: 'post',
+               url: {{ path("displayWeightObjetive") }},
+               data: data,
+               success: function(data) {
+                   $("#pequiven_objetive_registration_weight").attr("placeholder",data[0].weight_max);
+               }
+           });
+           }
+           
+           function display(){
                $.ajax({
                   type: 'post',
                   url: '{{ path("verify_objetiveLevel") }}',
@@ -68,7 +299,7 @@
                       }
                   }
                });
-           });
+           }
         });
     </script>
     {% endblock javascript %}

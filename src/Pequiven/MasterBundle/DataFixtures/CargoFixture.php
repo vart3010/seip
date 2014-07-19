@@ -11099,21 +11099,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Evaluador de Negocios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-43'));
-        $this->addReference('Cargo-2198',$cargo);
+        $this->addReference('Cargo-1555',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Negocios de Olefinas y Plásticos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-43'));
-        $this->addReference('Cargo-1555',$cargo);
+        $this->addReference('Cargo-1556',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-43'));
-        $this->addReference('Cargo-1556',$cargo);
+        $this->addReference('Cargo-1557',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 44
@@ -11122,7 +11122,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Contabilidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1557',$cargo);
+        $this->addReference('Cargo-1558',$cargo);
           $manager->persist($cargo);
 
 
@@ -11130,91 +11130,91 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada Gte. Proyectos Pralca');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1558',$cargo);
+        $this->addReference('Cargo-1559',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Gte.RRHH Polinter/As.EEMM Occ.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1559',$cargo);
+        $this->addReference('Cargo-1560',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado a Adm.Serv.al Personal Polinter');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1560',$cargo);
+        $this->addReference('Cargo-1561',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado a Proyectos - Polinter');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1561',$cargo);
+        $this->addReference('Cargo-1562',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gerente General Propilven');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1562',$cargo);
+        $this->addReference('Cargo-1563',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte. General de Pralca');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1563',$cargo);
+        $this->addReference('Cargo-1564',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.(E) de RRHH Pralca');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1564',$cargo);
+        $this->addReference('Cargo-1565',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de Manufactura PEAD/PEBD/PE');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1565',$cargo);
+        $this->addReference('Cargo-1566',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de Petroquímica PNOGO');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1566',$cargo);
+        $this->addReference('Cargo-1567',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Técnico PEAD/PEBD/PELBD');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1567',$cargo);
+        $this->addReference('Cargo-1568',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('ASIGNADO PROYECTO POLINTER');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1568',$cargo);
+        $this->addReference('Cargo-1569',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Spte.de Operaciones PELBD');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1569',$cargo);
+        $this->addReference('Cargo-1570',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('GERENTE DE MERCADEO PROPILVEN');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-44'));
-        $this->addReference('Cargo-1570',$cargo);
+        $this->addReference('Cargo-1571',$cargo);
           $manager->persist($cargo);
 
         //COMPLEJO PETROQUIMICO JOSE ANTONIO ANZOATEGUI
@@ -11225,14 +11225,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Abogado');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-45'));
-        $this->addReference('Cargo-1571',$cargo);
+        $this->addReference('Cargo-1572',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Asuntos Legales CPJAA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-45'));
-        $this->addReference('Cargo-1572',$cargo);
+        $this->addReference('Cargo-1573',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 46
@@ -11241,70 +11241,70 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor SHA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1573',$cargo);
+        $this->addReference('Cargo-1574',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente Administrativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1574',$cargo);
+        $this->addReference('Cargo-1575',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Evaluaciones Económicas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1575',$cargo);
+        $this->addReference('Cargo-1576',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Financiamiento');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1576',$cargo);
+        $this->addReference('Cargo-1577',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1577',$cargo);
+        $this->addReference('Cargo-1578',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1578',$cargo);
+        $this->addReference('Cargo-1579',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder Civil y Urbanismo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1579',$cargo);
+        $this->addReference('Cargo-1580',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder de QA / QC');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1580',$cargo);
+        $this->addReference('Cargo-1581',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder de Sistema Eléctrico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1581',$cargo);
+        $this->addReference('Cargo-1582',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder Sistema Aguas/Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-46'));
-        $this->addReference('Cargo-1582',$cargo);
+        $this->addReference('Cargo-1583',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 47
@@ -11313,105 +11313,105 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.Integral de CAPET');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1583',$cargo);
+        $this->addReference('Cargo-1584',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Organización Comunal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1584',$cargo);
+        $this->addReference('Cargo-1585',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Integral de Capet');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1585',$cargo);
+        $this->addReference('Cargo-1586',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('As.Integral de Planif.y Ctrol.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1586',$cargo);
+        $this->addReference('Cargo-1587',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1587',$cargo);
+        $this->addReference('Cargo-1588',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Planes y Benef.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1588',$cargo);
+        $this->addReference('Cargo-1589',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Serv.Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1589',$cargo);
+        $this->addReference('Cargo-1590',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Co.de CAPET Región Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1590',$cargo);
+        $this->addReference('Cargo-1591',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Recursos Humanos Región Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1591',$cargo);
+        $this->addReference('Cargo-1592',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1592',$cargo);
+        $this->addReference('Cargo-1593',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1593',$cargo);
+        $this->addReference('Cargo-1594',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Relaciones Laborales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1594',$cargo);
+        $this->addReference('Cargo-1595',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Servicios Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1595',$cargo);
+        $this->addReference('Cargo-1596',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Técnico de Planta');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1596',$cargo);
+        $this->addReference('Cargo-1597',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Técnico de Planta en proceso de formación. Gcia SHA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-47'));
-        $this->addReference('Cargo-1597',$cargo);
+        $this->addReference('Cargo-1598',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 48
@@ -11420,14 +11420,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.de Estimación de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-48'));
-        $this->addReference('Cargo-1598',$cargo);
+        $this->addReference('Cargo-1599',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Estimación de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-48'));
-        $this->addReference('Cargo-1599',$cargo);
+        $this->addReference('Cargo-1600',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 49
@@ -11436,84 +11436,84 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Investigaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1600',$cargo);
+        $this->addReference('Cargo-1601',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Tecnología de Protección');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1601',$cargo);
+        $this->addReference('Cargo-1602',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista UNIR');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1602',$cargo);
+        $this->addReference('Cargo-1603',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Protección Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1603',$cargo);
+        $this->addReference('Cargo-1604',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador Cecon');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1604',$cargo);
+        $this->addReference('Cargo-1605',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de P.B.I.P');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1605',$cargo);
+        $this->addReference('Cargo-1606',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Proteccion Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1606',$cargo);
+        $this->addReference('Cargo-1607',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Protección Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1607',$cargo);
+        $this->addReference('Cargo-1608',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('SUPERVISOR AUXILIAR DE TURNO');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1608',$cargo);
+        $this->addReference('Cargo-1609',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Admón.y Cont.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1609',$cargo);
+        $this->addReference('Cargo-1610',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Investigaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1610',$cargo);
+        $this->addReference('Cargo-1611',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Prevención');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-49'));
-        $this->addReference('Cargo-1611',$cargo);
+        $this->addReference('Cargo-1612',$cargo);
           $manager->persist($cargo);
 
 
@@ -11523,21 +11523,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Atención Soporte a Usuarios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-50'));
-        $this->addReference('Cargo-1612',$cargo);
+        $this->addReference('Cargo-1613',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-50'));
-        $this->addReference('Cargo-1613',$cargo);
+        $this->addReference('Cargo-1614',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Ingeniería de Software');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-50'));
-        $this->addReference('Cargo-1614',$cargo);
+        $this->addReference('Cargo-1615',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 51
@@ -11546,56 +11546,56 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Administración y Control');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1615',$cargo);
+        $this->addReference('Cargo-1616',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Comunicaciones Externas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1616',$cargo);
+        $this->addReference('Cargo-1617',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Comunicaciones Internas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1617',$cargo);
+        $this->addReference('Cargo-1618',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Protocolo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1618',$cargo);
+        $this->addReference('Cargo-1619',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Relaciones con la Comunidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1619',$cargo);
+        $this->addReference('Cargo-1620',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Relaciones Institucionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1620',$cargo);
+        $this->addReference('Cargo-1621',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte. Asuntos Públicos CPJAA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1621',$cargo);
+        $this->addReference('Cargo-1622',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Org.de Eventos y Protocolo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-51'));
-        $this->addReference('Cargo-1622',$cargo);
+        $this->addReference('Cargo-1623',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 52
@@ -11604,119 +11604,119 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador Operaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1623',$cargo);
+        $this->addReference('Cargo-1624',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Administrador Unidad de Apoyo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1624',$cargo);
+        $this->addReference('Cargo-1625',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Contabilidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1625',$cargo);
+        $this->addReference('Cargo-1626',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Contrataciones Técnicas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1626',$cargo);
+        $this->addReference('Cargo-1627',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1627',$cargo);
+        $this->addReference('Cargo-1628',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Cuentas por Cobrar');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1628',$cargo);
+        $this->addReference('Cargo-1629',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Facturación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1629',$cargo);
+        $this->addReference('Cargo-1630',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Pagos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1630',$cargo);
+        $this->addReference('Cargo-1631',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Presupuesto');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1631',$cargo);
+        $this->addReference('Cargo-1632',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Seguimiento y Control de Doc.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1632',$cargo);
+        $this->addReference('Cargo-1633',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Finanzas CPJAA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1633',$cargo);
+        $this->addReference('Cargo-1634',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Admón.Integral y Control Interno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1634',$cargo);
+        $this->addReference('Cargo-1635',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Licitación y Evaluación Financiera');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1635',$cargo);
+        $this->addReference('Cargo-1636',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Contabilidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1636',$cargo);
+        $this->addReference('Cargo-1637',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Contrataciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1637',$cargo);
+        $this->addReference('Cargo-1638',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Presupuesto y Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1638',$cargo);
+        $this->addReference('Cargo-1639',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Tesorería y Pagos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-52'));
-        $this->addReference('Cargo-1639',$cargo);
+        $this->addReference('Cargo-1640',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 53
@@ -11725,98 +11725,98 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador de Salud ');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1640',$cargo);
+        $this->addReference('Cargo-1641',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Planes de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1641',$cargo);
+        $this->addReference('Cargo-1642',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Auxiliar de Laboratorio Clínico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1642',$cargo);
+        $this->addReference('Cargo-1643',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Bioanalista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1643',$cargo);
+        $this->addReference('Cargo-1644',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Enfermero Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1644',$cargo);
+        $this->addReference('Cargo-1645',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Médico Emergenciologo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1645',$cargo);
+        $this->addReference('Cargo-1646',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Médico Emergenciólogo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1646',$cargo);
+        $this->addReference('Cargo-1647',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Médico Especialista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1647',$cargo);
+        $this->addReference('Cargo-1648',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Paramédico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1648',$cargo);
+        $this->addReference('Cargo-1649',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Radiólogo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1649',$cargo);
+        $this->addReference('Cargo-1650',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Planificación y Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1650',$cargo);
+        $this->addReference('Cargo-1651',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Salud Integral');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1651',$cargo);
+        $this->addReference('Cargo-1652',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Salud Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1652',$cargo);
+        $this->addReference('Cargo-1653',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Trabajador Social');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-53'));
-        $this->addReference('Cargo-1653',$cargo);
+        $this->addReference('Cargo-1654',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 54
@@ -11825,63 +11825,63 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Bombero');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1654',$cargo);
+        $this->addReference('Cargo-1655',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Seguridad, Higiene y Ambiente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1655',$cargo);
+        $this->addReference('Cargo-1656',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Higienista Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1656',$cargo);
+        $this->addReference('Cargo-1657',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Ambiental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1657',$cargo);
+        $this->addReference('Cargo-1658',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Planifi.y Ctrl.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1658',$cargo);
+        $this->addReference('Cargo-1659',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Riesgos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1659',$cargo);
+        $this->addReference('Cargo-1660',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Spte.Prev.Ctrl.Emerg.y Contingencias');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1660',$cargo);
+        $this->addReference('Cargo-1661',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Auxiliar de Turno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1661',$cargo);
+        $this->addReference('Cargo-1662',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Turno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-54'));
-        $this->addReference('Cargo-1662',$cargo);
+        $this->addReference('Cargo-1663',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 55
@@ -11890,7 +11890,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.Gral.Complejo Petroquímico J.A.A.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-55'));
-        $this->addReference('Cargo-1663',$cargo);
+        $this->addReference('Cargo-1664',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 56
@@ -11899,7 +11899,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Supervisor de Gestión Técnica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-56'));
-        $this->addReference('Cargo-1664',$cargo);
+        $this->addReference('Cargo-1665',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 57
@@ -11908,97 +11908,97 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Contratación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
-        $this->addReference('Cargo-1665',$cargo);
+        $this->addReference('Cargo-1666',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de información y Doc. Técnica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
-        $this->addReference('Cargo-1666',$cargo);
+        $this->addReference('Cargo-1667',$cargo);
           $manager->persist($cargo);
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Laboratorio');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-57'));
-        $this->addReference('Cargo-1667',$cargo);
-          $manager->persist($cargo);
-
-        $cargo= new Cargo();
-        $cargo->setDescription('Especialista en Ing.de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1668',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Gte.Técnico y Proyectos Operacionales');
+        $cargo->setDescription('Especialista en Ing.de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1669',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Ingeniero Civil');
+        $cargo->setDescription('Gte.Técnico y Proyectos Operacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1670',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Ingeniero de Procesos');
+        $cargo->setDescription('Ingeniero Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1671',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Ingeniero Mecánico');
+        $cargo->setDescription('Ingeniero de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1672',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Planificador');
+        $cargo->setDescription('Ingeniero Mecánico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1673',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Spte.de Laboratorio');
+        $cargo->setDescription('Planificador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1674',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Spte.de Servicios Técnicos');
+        $cargo->setDescription('Spte.de Laboratorio');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1675',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Eléctricidad e Instrumentación');
+        $cargo->setDescription('Spte.de Servicios Técnicos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1676',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Mecánica');
+        $cargo->setDescription('Sup.de Eléctricidad e Instrumentación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1677',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Planificación');
+        $cargo->setDescription('Sup.de Mecánica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-57'));
         $this->addReference('Cargo-1678',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Sup.de Planificación');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-57'));
+        $this->addReference('Cargo-1679',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 58
@@ -12007,14 +12007,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor Estandarización SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-58'));
-        $this->addReference('Cargo-1679',$cargo);
+        $this->addReference('Cargo-1680',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coord.SIG Región Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-58'));
-        $this->addReference('Cargo-1680',$cargo);
+        $this->addReference('Cargo-1681',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 59
@@ -12023,7 +12023,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('CONTROL Y SEGUIMIENTO');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1681',$cargo);
+        $this->addReference('Cargo-1682',$cargo);
           $manager->persist($cargo);
 
 
@@ -12031,91 +12031,91 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Electricista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1682',$cargo);
+        $this->addReference('Cargo-1683',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Mantenimiento');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1683',$cargo);
+        $this->addReference('Cargo-1684',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Eléctrico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1684',$cargo);
+        $this->addReference('Cargo-1685',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('INSPECTOR PREDICTIVO');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1685',$cargo);
+        $this->addReference('Cargo-1686',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Instrumentista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1686',$cargo);
+        $this->addReference('Cargo-1687',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Mecánico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1687',$cargo);
+        $this->addReference('Cargo-1688',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador-Equipo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1688',$cargo);
+        $this->addReference('Cargo-1689',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Planificador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1689',$cargo);
+        $this->addReference('Cargo-1690',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Planificador de Contrato');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1690',$cargo);
+        $this->addReference('Cargo-1691',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('PROGRAMADOR');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1691',$cargo);
+        $this->addReference('Cargo-1692',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Instrumentación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1692',$cargo);
+        $this->addReference('Cargo-1693',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Mecánica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1693',$cargo);
+        $this->addReference('Cargo-1694',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Planificación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-59'));
-        $this->addReference('Cargo-1694',$cargo);
+        $this->addReference('Cargo-1695',$cargo);
           $manager->persist($cargo);
         // GERENCIA 60
 
@@ -12123,56 +12123,56 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Almacenista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1695',$cargo);
+        $this->addReference('Cargo-1696',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Catalogador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1696',$cargo);
+        $this->addReference('Cargo-1697',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Comprador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1697',$cargo);
+        $this->addReference('Cargo-1698',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Materiales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1698',$cargo);
+        $this->addReference('Cargo-1699',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Montacarga');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1699',$cargo);
+        $this->addReference('Cargo-1700',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Superintendente de  Procura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1700',$cargo);
+        $this->addReference('Cargo-1701',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Almacen');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1701',$cargo);
+        $this->addReference('Cargo-1702',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Planificación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-60'));
-        $this->addReference('Cargo-1702',$cargo);
+        $this->addReference('Cargo-1703',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 61
@@ -12181,77 +12181,77 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Coordinador de Logística ');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1703',$cargo);
+        $this->addReference('Cargo-1704',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Producción');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1704',$cargo);
+        $this->addReference('Cargo-1705',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Electricista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1705',$cargo);
+        $this->addReference('Cargo-1706',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1706',$cargo);
+        $this->addReference('Cargo-1707',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Planta de Agua');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1707',$cargo);
+        $this->addReference('Cargo-1708',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador Eléctricidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1708',$cargo);
+        $this->addReference('Cargo-1709',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Turno de Operaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1709',$cargo);
+        $this->addReference('Cargo-1710',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Superintendente Muelle');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1710',$cargo);
+        $this->addReference('Cargo-1711',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Superintendente Servicios Industriales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1711',$cargo);
+        $this->addReference('Cargo-1712',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Planta de Agua');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1712',$cargo);
+        $this->addReference('Cargo-1713',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Turno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-61'));
-        $this->addReference('Cargo-1713',$cargo);
+        $this->addReference('Cargo-1714',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 62
@@ -12260,35 +12260,35 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Comedor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1714',$cargo);
+        $this->addReference('Cargo-1715',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Servicios de Apoyo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1715',$cargo);
+        $this->addReference('Cargo-1716',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Inspector Contratación y Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1716',$cargo);
+        $this->addReference('Cargo-1717',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Artes Graficas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1717',$cargo);
+        $this->addReference('Cargo-1718',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Servicio');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1718',$cargo);
+        $this->addReference('Cargo-1719',$cargo);
           $manager->persist($cargo);
 
 
@@ -12296,56 +12296,56 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Operador de Transporte');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1719',$cargo);
+        $this->addReference('Cargo-1720',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Spte.de Infraestructura y Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1720',$cargo);
+        $this->addReference('Cargo-1721',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1721',$cargo);
+        $this->addReference('Cargo-1722',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Obras y Mtto de Infraestructuras');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1722',$cargo);
+        $this->addReference('Cargo-1723',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Comedor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1723',$cargo);
+        $this->addReference('Cargo-1724',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Planificación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1724',$cargo);
+        $this->addReference('Cargo-1725',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Servicios de Apoyo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1725',$cargo);
+        $this->addReference('Cargo-1726',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Transporte');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-62'));
-        $this->addReference('Cargo-1726',$cargo);
+        $this->addReference('Cargo-1727',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 63
@@ -12354,42 +12354,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Mercadeo Oxigenados y Gases');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1727',$cargo);
+        $this->addReference('Cargo-1728',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ejecutivo de Ventas Alcoholes y Glicoles');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1728',$cargo);
+        $this->addReference('Cargo-1729',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente Planta Dist. Terminal Borburata');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1729',$cargo);
+        $this->addReference('Cargo-1730',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Ventas Nacionales y Mercadeo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1730',$cargo);
+        $this->addReference('Cargo-1731',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1731',$cargo);
+        $this->addReference('Cargo-1732',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Gestión y Control');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-63'));
-        $this->addReference('Cargo-1732',$cargo);
+        $this->addReference('Cargo-1733',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 64
@@ -12398,133 +12398,133 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada a Fertinitro /Confiabilidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1733',$cargo);
+        $this->addReference('Cargo-1734',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Gte.Finanzas - Monomeros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1734',$cargo);
+        $this->addReference('Cargo-1735',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada PDVSA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1735',$cargo);
+        $this->addReference('Cargo-1736',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Estimador de Costos -Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1736',$cargo);
+        $this->addReference('Cargo-1737',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Asunt.Legales - Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1737',$cargo);
+        $this->addReference('Cargo-1738',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de Finanzas Supermetanol');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1738',$cargo);
+        $this->addReference('Cargo-1739',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de IT - Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1739',$cargo);
+        $this->addReference('Cargo-1740',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de RRHH - Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1740',$cargo);
+        $this->addReference('Cargo-1741',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de RRHH - SOCA/SUMA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1741',$cargo);
+        $this->addReference('Cargo-1742',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de SHA - Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1742',$cargo);
+        $this->addReference('Cargo-1743',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Finanzas - Metor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1743',$cargo);
+        $this->addReference('Cargo-1744',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.General - Metor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1744',$cargo);
+        $this->addReference('Cargo-1745',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.General - Super Octanos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1745',$cargo);
+        $this->addReference('Cargo-1746',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Predict.y Conf.- Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1746',$cargo);
+        $this->addReference('Cargo-1747',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.de Tesoreria - Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1747',$cargo);
+        $this->addReference('Cargo-1748',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.Desarrollo Org.- Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1748',$cargo);
+        $this->addReference('Cargo-1749',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.Planif.e Ing.de Riesgo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1749',$cargo);
+        $this->addReference('Cargo-1750',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder Sistema Mecánico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1750',$cargo);
+        $this->addReference('Cargo-1751',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-64'));
-        $this->addReference('Cargo-1751',$cargo);
+        $this->addReference('Cargo-1752',$cargo);
           $manager->persist($cargo);
 
         // PROYECTO NAVAY
@@ -12535,7 +12535,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Abogado Proyecto Navay');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-65'));
-        $this->addReference('Cargo-1752',$cargo);
+        $this->addReference('Cargo-1753',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 66
@@ -12544,109 +12544,102 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Desarrollo Social');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1753',$cargo);
+        $this->addReference('Cargo-1754',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente Administrativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1754',$cargo);
+        $this->addReference('Cargo-1755',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Arquitectura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1755',$cargo);
+        $this->addReference('Cargo-1756',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Desarrollo Minas de NAVAY');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1756',$cargo);
+        $this->addReference('Cargo-1757',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.General Proyecto NAVAY');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1757',$cargo);
+        $this->addReference('Cargo-1758',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1758',$cargo);
+        $this->addReference('Cargo-1759',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista de Equipos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1759',$cargo);
+        $this->addReference('Cargo-1760',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1760',$cargo);
+        $this->addReference('Cargo-1761',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista Eléctricista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1761',$cargo);
+        $this->addReference('Cargo-1762',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista Electrónico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1762',$cargo);
+        $this->addReference('Cargo-1763',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista Tuberías');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1763',$cargo);
+        $this->addReference('Cargo-1764',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Especialista Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1764',$cargo);
+        $this->addReference('Cargo-1765',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Especialista Eléctricista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1765',$cargo);
+        $this->addReference('Cargo-1766',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Especialista Mecánica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
-        $this->addReference('Cargo-1766',$cargo);
-          $manager->persist($cargo);
-
-        $cargo= new Cargo();
-        $cargo->setDescription('Insp.TSU Construcción Civil');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1767',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Insp.TSU Geología');
+        $cargo->setDescription('Insp.TSU Construcción Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1768',$cargo);
@@ -12660,73 +12653,80 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Insp.TSU Geología y Minas');
+        $cargo->setDescription('Insp.TSU Geología');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1770',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Insp.TSU Topografía');
+        $cargo->setDescription('Insp.TSU Geología y Minas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1771',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Lider Especialista Geología');
+        $cargo->setDescription('Insp.TSU Topografía');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1772',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Lider Especialista Minas');
+        $cargo->setDescription('Lider Especialista Geología');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1773',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Líder Especialista Planta de Beneficio');
+        $cargo->setDescription('Lider Especialista Minas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1774',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Líder Especialista Serv. Industriales');
+        $cargo->setDescription('Líder Especialista Planta de Beneficio');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1775',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Líder Urbanismo y Edificaciones');
+        $cargo->setDescription('Líder Especialista Serv. Industriales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1776',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Líder Vialidad y Servicios');
+        $cargo->setDescription('Líder Urbanismo y Edificaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1777',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Técnico Especial Servicios Generales');
+        $cargo->setDescription('Líder Vialidad y Servicios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1778',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('TSU Minas');
+        $cargo->setDescription('Técnico Especial Servicios Generales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-66'));
         $this->addReference('Cargo-1779',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('TSU Minas');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-66'));
+        $this->addReference('Cargo-1780',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 67
@@ -12735,14 +12735,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asistente Administrativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-67'));
-        $this->addReference('Cargo-1780',$cargo);
+        $this->addReference('Cargo-1781',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Proyecto Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-67'));
-        $this->addReference('Cargo-1781',$cargo);
+        $this->addReference('Cargo-1782',$cargo);
           $manager->persist($cargo);
 
 
@@ -12750,21 +12750,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Ing.Especialista Tuberías');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-67'));
-        $this->addReference('Cargo-1782',$cargo);
+        $this->addReference('Cargo-1783',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-67'));
-        $this->addReference('Cargo-1783',$cargo);
+        $this->addReference('Cargo-1784',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Líder Plantas SSP y TCP');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-67'));
-        $this->addReference('Cargo-1784',$cargo);
+        $this->addReference('Cargo-1785',$cargo);
           $manager->persist($cargo);
 
         // PROYECTO PARAGUANA
@@ -12775,34 +12775,35 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Administración');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-68'));
-        $this->addReference('Cargo-1785',$cargo);
-          $manager->persist($cargo);
-        $cargo= new Cargo();
-        $cargo->setDescription('Analista de Ambiente');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-68'));
         $this->addReference('Cargo-1786',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Especialista en Ing.Civil');
+        $cargo->setDescription('Analista de Ambiente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-68'));
         $this->addReference('Cargo-1787',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Especialista en Ing.Mecánica');
+        $cargo->setDescription('Especialista en Ing.Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-68'));
         $this->addReference('Cargo-1788',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Especialista en Ing.Procesos Químicos');
+        $cargo->setDescription('Especialista en Ing.Mecánica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-68'));
         $this->addReference('Cargo-1789',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Especialista en Ing.Procesos Químicos');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-68'));
+        $this->addReference('Cargo-1790',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 69
@@ -12811,7 +12812,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Integral Protección Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-69'));
-        $this->addReference('Cargo-1790',$cargo);
+        $this->addReference('Cargo-1791',$cargo);
           $manager->persist($cargo);
 
         // SEDE VALENCIA 
@@ -12822,77 +12823,77 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Abogado');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1791',$cargo);
+        $this->addReference('Cargo-1792',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Abogado Proyecto Jose');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1792',$cargo);
+        $this->addReference('Cargo-1793',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Abogado Valencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1793',$cargo);
+        $this->addReference('Cargo-1794',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Archivo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1794',$cargo);
+        $this->addReference('Cargo-1795',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Consultor Jurídico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1795',$cargo);
+        $this->addReference('Cargo-1796',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Asuntos Legales Internacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1796',$cargo);
+        $this->addReference('Cargo-1797',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Asuntos Legales Nacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1797',$cargo);
+        $this->addReference('Cargo-1798',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Litigios y Reclamos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1798',$cargo);
+        $this->addReference('Cargo-1799',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Oficinista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1799',$cargo);
+        $this->addReference('Cargo-1800',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1800',$cargo);
+        $this->addReference('Cargo-1801',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria Ejecutiva');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-70'));
-        $this->addReference('Cargo-1801',$cargo);
+        $this->addReference('Cargo-1802',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 71
@@ -12901,56 +12902,56 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Abogado Proyecto Pto. Nutrias');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1802',$cargo);
+        $this->addReference('Cargo-1803',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Administrador de Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1803',$cargo);
+        $this->addReference('Cargo-1804',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.Comercial y Logística');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1804',$cargo);
+        $this->addReference('Cargo-1805',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Eval.y Ctrol.Finaciero/Admvo.Proy.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1805',$cargo);
+        $this->addReference('Cargo-1806',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Financiamiento y Pagos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1806',$cargo);
+        $this->addReference('Cargo-1807',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Planifi.y Ctrol.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1807',$cargo);
+        $this->addReference('Cargo-1808',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Relaciones Institucionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1808',$cargo);
+        $this->addReference('Cargo-1809',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Tesoreria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1809',$cargo);
+        $this->addReference('Cargo-1810',$cargo);
           $manager->persist($cargo);
 
 
@@ -12958,21 +12959,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.en Investigación y Nvos.Desarrollos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1810',$cargo);
+        $this->addReference('Cargo-1811',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('As.de Serv.Financiero');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1811',$cargo);
+        $this->addReference('Cargo-1812',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1812',$cargo);
+        $this->addReference('Cargo-1813',$cargo);
           $manager->persist($cargo);
 
 
@@ -12980,42 +12981,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada An.Contrataciones Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1813',$cargo);
+        $this->addReference('Cargo-1814',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Co.Sist.Gest.de Calidad Petroca');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1814',$cargo);
+        $this->addReference('Cargo-1815',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada MPP Ciencia, Tecnologia e Indus');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1815',$cargo);
+        $this->addReference('Cargo-1816',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado As.del Gte.General - PETROCASA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1816',$cargo);
+        $this->addReference('Cargo-1817',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Co.de AIT - CORAMER');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1817',$cargo);
+        $this->addReference('Cargo-1818',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Línea de Puertas-Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1818',$cargo);
+        $this->addReference('Cargo-1819',$cargo);
           $manager->persist($cargo);
 
 
@@ -13023,42 +13024,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignado Gte.Proy.Petrocasa Biruaca');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1819',$cargo);
+        $this->addReference('Cargo-1820',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Proy.Región Occ.Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1820',$cargo);
+        $this->addReference('Cargo-1821',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Proyecto Petrocasa Cumaná');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1821',$cargo);
+        $this->addReference('Cargo-1822',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Proyectos Guacara III');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1822',$cargo);
+        $this->addReference('Cargo-1823',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Líder Civil Costa Afuera en CPM');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1823',$cargo);
+        $this->addReference('Cargo-1824',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Líder Esp.Construcción - Petroc');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1824',$cargo);
+        $this->addReference('Cargo-1825',$cargo);
           $manager->persist($cargo);
 
 
@@ -13066,21 +13067,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asistente Administrativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1825',$cargo);
+        $this->addReference('Cargo-1826',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coord.de Catastro y Gestión Ambiental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1826',$cargo);
+        $this->addReference('Cargo-1827',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coord.Mecánica y Materiales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1827',$cargo);
+        $this->addReference('Cargo-1828',$cargo);
           $manager->persist($cargo);
 
 
@@ -13088,42 +13089,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Coord.Relaciones Públicas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1828',$cargo);
+        $this->addReference('Cargo-1829',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinación Proyecto Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1829',$cargo);
+        $this->addReference('Cargo-1830',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinador Electricidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1830',$cargo);
+        $this->addReference('Cargo-1831',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinador Especialista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1831',$cargo);
+        $this->addReference('Cargo-1832',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinador Proyecto Occidente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1832',$cargo);
+        $this->addReference('Cargo-1833',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Esp.Ingeniería Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1833',$cargo);
+        $this->addReference('Cargo-1834',$cargo);
           $manager->persist($cargo);
 
 
@@ -13131,42 +13132,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Esp.Ingeniería Eléctrica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1834',$cargo);
+        $this->addReference('Cargo-1835',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing. Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1835',$cargo);
+        $this->addReference('Cargo-1836',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.Ambiente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1836',$cargo);
+        $this->addReference('Cargo-1837',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1837',$cargo);
+        $this->addReference('Cargo-1838',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.Eléctrica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1838',$cargo);
+        $this->addReference('Cargo-1839',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.Instrumentación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1839',$cargo);
+        $this->addReference('Cargo-1840',$cargo);
           $manager->persist($cargo);
 
 
@@ -13174,21 +13175,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Especialista en Ing.Mecánica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1840',$cargo);
+        $this->addReference('Cargo-1841',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Ing.Química');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1841',$cargo);
+        $this->addReference('Cargo-1842',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente (E) Planificación y Nuevos Desarrollos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1842',$cargo);
+        $this->addReference('Cargo-1843',$cargo);
           $manager->persist($cargo);
 
 
@@ -13196,21 +13197,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gerente (E) Relaciones Institucionales y Logística');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1843',$cargo);
+        $this->addReference('Cargo-1844',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Ingeniería y Construcción');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1844',$cargo);
+        $this->addReference('Cargo-1845',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Proyecto Terminal Maritimo CPM');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1845',$cargo);
+        $this->addReference('Cargo-1846',$cargo);
           $manager->persist($cargo);
 
 
@@ -13218,21 +13219,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.de Aseguramiento Contr.de la Calidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1846',$cargo);
+        $this->addReference('Cargo-1847',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Ingenieria Proy.Internacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1847',$cargo);
+        $this->addReference('Cargo-1848',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Gral.de Proy.Internacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1848',$cargo);
+        $this->addReference('Cargo-1849',$cargo);
           $manager->persist($cargo);
 
 
@@ -13240,63 +13241,63 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.Seg.y Ctrol.Financiero/Admvo.Proy.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1849',$cargo);
+        $this->addReference('Cargo-1850',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Servicios Financieros Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1850',$cargo);
+        $this->addReference('Cargo-1851',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1851',$cargo);
+        $this->addReference('Cargo-1852',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Químico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1852',$cargo);
+        $this->addReference('Cargo-1853',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Lider Agua Demineralizada Potable');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1853',$cargo);
+        $this->addReference('Cargo-1854',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Planificador/Controlador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1854',$cargo);
+        $this->addReference('Cargo-1855',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1855',$cargo);
+        $this->addReference('Cargo-1856',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Ctrol.Gestión Admin.Reg.Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1856',$cargo);
+        $this->addReference('Cargo-1857',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Ctrol.Gestión Admin.Reg.Occidente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1857',$cargo);
+        $this->addReference('Cargo-1858',$cargo);
           $manager->persist($cargo);
 
 
@@ -13304,21 +13305,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.de Planifi.y Ctrol.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1858',$cargo);
+        $this->addReference('Cargo-1859',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Relaci.Comerciales y Logística');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1859',$cargo);
+        $this->addReference('Cargo-1860',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Tesoreria Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1860',$cargo);
+        $this->addReference('Cargo-1861',$cargo);
           $manager->persist($cargo);
 
 
@@ -13326,21 +13327,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Enlace con Desarrollo Social');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1861',$cargo);
+        $this->addReference('Cargo-1862',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Planif.y Ctrol.Gestión Reg.Occidente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1862',$cargo);
+        $this->addReference('Cargo-1863',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Planif.y Ctrol.Gestión Reg.Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1863',$cargo);
+        $this->addReference('Cargo-1864',$cargo);
           $manager->persist($cargo);
 
 
@@ -13348,21 +13349,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Servicios Financieros Reg.Centro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1864',$cargo);
+        $this->addReference('Cargo-1865',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Servicios Financieros Reg.Occidente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1865',$cargo);
+        $this->addReference('Cargo-1866',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Servicios Financieros Reg.Oriente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-71'));
-        $this->addReference('Cargo-1866',$cargo);
+        $this->addReference('Cargo-1867',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 72
@@ -13371,28 +13372,28 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador de Nómina');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1867',$cargo);
+        $this->addReference('Cargo-1868',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Administrador y Ctrol.de Estudios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1868',$cargo);
+        $this->addReference('Cargo-1869',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Archivo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1869',$cargo);
+        $this->addReference('Cargo-1870',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.de Nómina');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1870',$cargo);
+        $this->addReference('Cargo-1871',$cargo);
           $manager->persist($cargo);
 
 
@@ -13400,14 +13401,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.Integral de CAPET');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1871',$cargo);
+        $this->addReference('Cargo-1872',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('An.Integral de Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1872',$cargo);
+        $this->addReference('Cargo-1873',$cargo);
           $manager->persist($cargo);
 
 
@@ -13415,14 +13416,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.Integral de Serv.Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1873',$cargo);
+        $this->addReference('Cargo-1874',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1874',$cargo);
+        $this->addReference('Cargo-1875',$cargo);
           $manager->persist($cargo);
 
 
@@ -13430,14 +13431,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista Integral de Nómina');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1875',$cargo);
+        $this->addReference('Cargo-1876',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('As.Integral de Planif.y Ctrol.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1876',$cargo);
+        $this->addReference('Cargo-1877',$cargo);
           $manager->persist($cargo);
 
 
@@ -13445,14 +13446,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor Integral de Atención al Jubilado');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1877',$cargo);
+        $this->addReference('Cargo-1878',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1878',$cargo);
+        $this->addReference('Cargo-1879',$cargo);
           $manager->persist($cargo);
 
 
@@ -13460,14 +13461,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor Integral de Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1879',$cargo);
+        $this->addReference('Cargo-1880',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Relaciones Laborales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1880',$cargo);
+        $this->addReference('Cargo-1881',$cargo);
           $manager->persist($cargo);
 
 
@@ -13475,14 +13476,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor Integral de Serv.Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1881',$cargo);
+        $this->addReference('Cargo-1882',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada An.de Reclut.y Selec. Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1882',$cargo);
+        $this->addReference('Cargo-1883',$cargo);
           $manager->persist($cargo);
 
 
@@ -13490,14 +13491,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada An.Nómina - Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1883',$cargo);
+        $this->addReference('Cargo-1884',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada An.RRHH-Proy.Petrocasa Maracaib');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1884',$cargo);
+        $this->addReference('Cargo-1885',$cargo);
           $manager->persist($cargo);
 
 
@@ -13505,14 +13506,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada Co.Planificación Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1885',$cargo);
+        $this->addReference('Cargo-1886',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Viceministra MPP de la Mujer');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1886',$cargo);
+        $this->addReference('Cargo-1887',$cargo);
           $manager->persist($cargo);
 
 
@@ -13520,14 +13521,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignado Co.de RRHH - Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1887',$cargo);
+        $this->addReference('Cargo-1888',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Cté.Transición Quimica Venoco');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1888',$cargo);
+        $this->addReference('Cargo-1889',$cargo);
           $manager->persist($cargo);
 
 
@@ -13535,14 +13536,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignado Gte.RRHH Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1889',$cargo);
+        $this->addReference('Cargo-1890',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Co.de CAPET Sede Valencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1890',$cargo);
+        $this->addReference('Cargo-1891',$cargo);
           $manager->persist($cargo);
 
 
@@ -13550,14 +13551,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Directora Ejecutiva de Recursos Humanos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1891',$cargo);
+        $this->addReference('Cargo-1892',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Esp.Diseño Instruccional y Convenios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1892',$cargo);
+        $this->addReference('Cargo-1893',$cargo);
           $manager->persist($cargo);
 
 
@@ -13565,14 +13566,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Esp.en Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1893',$cargo);
+        $this->addReference('Cargo-1894',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Esp.en Planif.y Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1894',$cargo);
+        $this->addReference('Cargo-1895',$cargo);
           $manager->persist($cargo);
 
 
@@ -13580,14 +13581,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Esp.en Planif.y Ctrol.de la Formación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1895',$cargo);
+        $this->addReference('Cargo-1896',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Esp.en Relaciones Laborales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1896',$cargo);
+        $this->addReference('Cargo-1897',$cargo);
           $manager->persist($cargo);
 
 
@@ -13595,14 +13596,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Esp.en Servicios Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1897',$cargo);
+        $this->addReference('Cargo-1898',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Esp.Tecnologia Educativa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1898',$cargo);
+        $this->addReference('Cargo-1899',$cargo);
           $manager->persist($cargo);
 
 
@@ -13610,14 +13611,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.de Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1899',$cargo);
+        $this->addReference('Cargo-1900',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de CAPET');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1900',$cargo);
+        $this->addReference('Cargo-1901',$cargo);
           $manager->persist($cargo);
 
 
@@ -13625,14 +13626,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.de Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1901',$cargo);
+        $this->addReference('Cargo-1902',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Recursos Humanos Sede Principal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1902',$cargo);
+        $this->addReference('Cargo-1903',$cargo);
           $manager->persist($cargo);
 
 
@@ -13640,14 +13641,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.de Relaciones Laborales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1903',$cargo);
+        $this->addReference('Cargo-1904',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Planificación y Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1904',$cargo);
+        $this->addReference('Cargo-1905',$cargo);
           $manager->persist($cargo);
 
 
@@ -13655,14 +13656,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Gte.Servicios Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1905',$cargo);
+        $this->addReference('Cargo-1906',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Oficinista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1906',$cargo);
+        $this->addReference('Cargo-1907',$cargo);
           $manager->persist($cargo);
 
 
@@ -13670,14 +13671,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1907',$cargo);
+        $this->addReference('Cargo-1908',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Relaciones Laborales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1908',$cargo);
+        $this->addReference('Cargo-1909',$cargo);
           $manager->persist($cargo);
 
 
@@ -13685,14 +13686,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.de Servicios Organizacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1909',$cargo);
+        $this->addReference('Cargo-1910',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Recursos Humanos Proy.Navay');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1910',$cargo);
+        $this->addReference('Cargo-1911',$cargo);
           $manager->persist($cargo);
 
 
@@ -13700,7 +13701,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Recursos Humanos Proy.Paraguaná');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-72'));
-        $this->addReference('Cargo-1911',$cargo);
+        $this->addReference('Cargo-1912',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 73
@@ -13709,7 +13710,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Comercialización y Desarrollo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-73'));
-        $this->addReference('Cargo-1912',$cargo);
+        $this->addReference('Cargo-1913',$cargo);
           $manager->persist($cargo);
 
 
@@ -13717,14 +13718,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Información y Entorno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-73'));
-        $this->addReference('Cargo-1913',$cargo);
+        $this->addReference('Cargo-1914',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Producción y Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-73'));
-        $this->addReference('Cargo-1914',$cargo);
+        $this->addReference('Cargo-1915',$cargo);
           $manager->persist($cargo);
 
 
@@ -13732,14 +13733,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Soporte Tecnológico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-73'));
-        $this->addReference('Cargo-1915',$cargo);
+        $this->addReference('Cargo-1916',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Ctrol.de Gestión Ofic.Presidencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-73'));
-        $this->addReference('Cargo-1916',$cargo);
+        $this->addReference('Cargo-1917',$cargo);
           $manager->persist($cargo);
 
         //  GERENCIA 74
@@ -13748,112 +13749,112 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador de Comedores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1917',$cargo);
+        $this->addReference('Cargo-1918',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1918',$cargo);
+        $this->addReference('Cargo-1919',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Administración');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1919',$cargo);
+        $this->addReference('Cargo-1920',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Bienes Patrimoniales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1920',$cargo);
+        $this->addReference('Cargo-1921',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Reproducción y Artes Gráfica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1921',$cargo);
+        $this->addReference('Cargo-1922',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Transporte');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1922',$cargo);
+        $this->addReference('Cargo-1923',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista/Coordinador Agenciamiento');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1923',$cargo);
+        $this->addReference('Cargo-1924',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Arquitecto');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1924',$cargo);
+        $this->addReference('Cargo-1925',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada An.Seguim.y Control Corp.Petroc');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1925',$cargo);
+        $this->addReference('Cargo-1926',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Asesor Estm.de Costo-Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1926',$cargo);
+        $this->addReference('Cargo-1927',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado An.de Inventario Corp.Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1927',$cargo);
+        $this->addReference('Cargo-1928',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1928',$cargo);
+        $this->addReference('Cargo-1929',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente de Agenciamiento');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1929',$cargo);
+        $this->addReference('Cargo-1930',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente Técnico de Mantenimiento Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1930',$cargo);
+        $this->addReference('Cargo-1931',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('COMISION DE SERVICIO EN FUNDATRABAJO');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1931',$cargo);
+        $this->addReference('Cargo-1932',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Conductor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1932',$cargo);
+        $this->addReference('Cargo-1933',$cargo);
           $manager->persist($cargo);
 
 
@@ -13861,97 +13862,98 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Conductor Ejecutivo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1933',$cargo);
+        $this->addReference('Cargo-1934',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Fiscal de Obras');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1934',$cargo);
+        $this->addReference('Cargo-1935',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Apoyo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1935',$cargo);
+        $this->addReference('Cargo-1936',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1936',$cargo);
+        $this->addReference('Cargo-1937',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1937',$cargo);
+        $this->addReference('Cargo-1938',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Inspector');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1938',$cargo);
+        $this->addReference('Cargo-1939',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Mensajero');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1939',$cargo);
+        $this->addReference('Cargo-1940',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Motorizado');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1940',$cargo);
-          $manager->persist($cargo);
-        $cargo= new Cargo();
-        $cargo->setDescription('Oficinista');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1941',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Operador de Mantenimiento Infraestructur');
+        $cargo->setDescription('Oficinista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1942',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('PRESIDENTE CONSEJO DIRECTIVO DEL IVEC');
+        $cargo->setDescription('Operador de Mantenimiento Infraestructur');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1943',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Secretaria');
+        $cargo->setDescription('PRESIDENTE CONSEJO DIRECTIVO DEL IVEC');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1944',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Agenciamiento');
+        $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1945',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Correspondencia');
+        $cargo->setDescription('Sup.de Agenciamiento');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
         $this->addReference('Cargo-1946',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Sup.de Correspondencia');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-74'));
+        $this->addReference('Cargo-1947',$cargo);
           $manager->persist($cargo);
 
 
@@ -13959,42 +13961,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.de Mtto.Infraestructura(Ccas)');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1947',$cargo);
+        $this->addReference('Cargo-1948',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Reproducción y Artes Gráficas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1948',$cargo);
+        $this->addReference('Cargo-1949',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Bienes Patrimoniales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1949',$cargo);
+        $this->addReference('Cargo-1950',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Administración');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1950',$cargo);
+        $this->addReference('Cargo-1951',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Mtto.Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1951',$cargo);
+        $this->addReference('Cargo-1952',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Obras');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1952',$cargo);
+        $this->addReference('Cargo-1953',$cargo);
           $manager->persist($cargo);
 
 
@@ -14002,28 +14004,28 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Supervisor de Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1953',$cargo);
+        $this->addReference('Cargo-1954',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Transporte');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1954',$cargo);
+        $this->addReference('Cargo-1955',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Técnico de Mantenimiento Infraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1955',$cargo);
+        $this->addReference('Cargo-1956',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Técnico/Operador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-74'));
-        $this->addReference('Cargo-1956',$cargo);
+        $this->addReference('Cargo-1957',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 75
@@ -14032,21 +14034,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Archivologo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1957',$cargo);
+        $this->addReference('Cargo-1958',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Especialista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1958',$cargo);
+        $this->addReference('Cargo-1959',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Director Ejecutivo(E)-Gob.Carab');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1959',$cargo);
+        $this->addReference('Cargo-1960',$cargo);
           $manager->persist($cargo);
 
 
@@ -14054,77 +14056,77 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Auditor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1960',$cargo);
+        $this->addReference('Cargo-1961',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Auditor Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1961',$cargo);
+        $this->addReference('Cargo-1962',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente Corp.de Auditoría Interna');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1962',$cargo);
+        $this->addReference('Cargo-1963',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Auditoría de Prod.Ind.y Proc.Corp.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1963',$cargo);
+        $this->addReference('Cargo-1964',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Auditoría de Fertilizante');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1964',$cargo);
+        $this->addReference('Cargo-1965',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Auditoría de Olefinas y Plásticos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1965',$cargo);
+        $this->addReference('Cargo-1966',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Auditoría de Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1966',$cargo);
+        $this->addReference('Cargo-1967',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Determinación de Responsabilidades');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1967',$cargo);
+        $this->addReference('Cargo-1968',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1968',$cargo);
+        $this->addReference('Cargo-1969',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Auditoría de Fertilizante');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1969',$cargo);
+        $this->addReference('Cargo-1970',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Auditoría de Prod.Ind.y Proc.Corp');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1970',$cargo);
+        $this->addReference('Cargo-1971',$cargo);
           $manager->persist($cargo);
 
 
@@ -14132,7 +14134,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.de Auditoría de Proyectos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-75'));
-        $this->addReference('Cargo-1971',$cargo);
+        $this->addReference('Cargo-1972',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 76
@@ -14141,7 +14143,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Almacenista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
-        $this->addReference('Cargo-1972',$cargo);
+        $this->addReference('Cargo-1973',$cargo);
           $manager->persist($cargo);
 
 
@@ -14149,7 +14151,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.de Planif.y Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
-        $this->addReference('Cargo-1973',$cargo);
+        $this->addReference('Cargo-1974',$cargo);
           $manager->persist($cargo);
 
 
@@ -14157,19 +14159,11 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Comisiones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
-        $this->addReference('Cargo-1974',$cargo);
+        $this->addReference('Cargo-1975',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Compras Internacionales');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-76'));
-        $this->addReference('Cargo-1975',$cargo);
-          $manager->persist($cargo);
-
-
-        $cargo= new Cargo();
-        $cargo->setDescription('Analista de Compras Nacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1976',$cargo);
@@ -14177,22 +14171,22 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
 
 
         $cargo= new Cargo();
-        $cargo->setDescription('Analista de Contratos Alto Nivel');
+        $cargo->setDescription('Analista de Compras Nacionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1977',$cargo);
           $manager->persist($cargo);
 
+
         $cargo= new Cargo();
-        $cargo->setDescription('Analista de Contratos Mayores');
+        $cargo->setDescription('Analista de Contratos Alto Nivel');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1978',$cargo);
           $manager->persist($cargo);
 
-
         $cargo= new Cargo();
-        $cargo->setDescription('Analista de Contratos Menores');
+        $cargo->setDescription('Analista de Contratos Mayores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1979',$cargo);
@@ -14200,22 +14194,22 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
 
 
         $cargo= new Cargo();
-        $cargo->setDescription('Asignada An.Rel.Institucionales CORAMER');
+        $cargo->setDescription('Analista de Contratos Menores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1980',$cargo);
           $manager->persist($cargo);
 
+
         $cargo= new Cargo();
-        $cargo->setDescription('Gte.de Contrataciones Sede Valencia');
+        $cargo->setDescription('Asignada An.Rel.Institucionales CORAMER');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1981',$cargo);
           $manager->persist($cargo);
 
-
         $cargo= new Cargo();
-        $cargo->setDescription('Sup. de Control de Inventario. asignada a PDVSA YAGUA');
+        $cargo->setDescription('Gte.de Contrataciones Sede Valencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1982',$cargo);
@@ -14223,24 +14217,32 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
 
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Almacén');
+        $cargo->setDescription('Sup. de Control de Inventario. asignada a PDVSA YAGUA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1983',$cargo);
           $manager->persist($cargo);
 
+
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Contratos Mayores');
+        $cargo->setDescription('Supervisor de Almacén');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1984',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Contratos Menores');
+        $cargo->setDescription('Supervisor de Contratos Mayores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-76'));
         $this->addReference('Cargo-1985',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Supervisor de Contratos Menores');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-76'));
+        $this->addReference('Cargo-1986',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 77
@@ -14249,42 +14251,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Ingenieria de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1986',$cargo);
+        $this->addReference('Cargo-1987',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinación Civil');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1987',$cargo);
+        $this->addReference('Cargo-1988',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Estimación de Costos OP');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1988',$cargo);
+        $this->addReference('Cargo-1989',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Estimación de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1989',$cargo);
+        $this->addReference('Cargo-1990',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Estimación de Costos de Inversión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1990',$cargo);
+        $this->addReference('Cargo-1991',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Estimación de Costos OP');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-77'));
-        $this->addReference('Cargo-1991',$cargo);
+        $this->addReference('Cargo-1992',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 78
@@ -14293,224 +14295,224 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Sist.Integral de Gest.Calidad');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1992',$cargo);
+        $this->addReference('Cargo-1993',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Tecnologia de Protección');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1993',$cargo);
+        $this->addReference('Cargo-1994',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integ.de Admón.y Control Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1994',$cargo);
+        $this->addReference('Cargo-1995',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Investigaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1995',$cargo);
+        $this->addReference('Cargo-1996',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Prevención');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1996',$cargo);
+        $this->addReference('Cargo-1997',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral de Protec.Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1997',$cargo);
+        $this->addReference('Cargo-1998',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor UNIR');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1998',$cargo);
+        $this->addReference('Cargo-1999',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Asesor Legal - Petrocasa Constr');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-1999',$cargo);
+        $this->addReference('Cargo-2000',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Gte.Ctrol.de Gestión - CORAMER');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2000',$cargo);
+        $this->addReference('Cargo-2001',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado a Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2001',$cargo);
+        $this->addReference('Cargo-2002',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Asesor Protección');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2002',$cargo);
+        $this->addReference('Cargo-2003',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Asist.Administrativo Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2003',$cargo);
+        $this->addReference('Cargo-2004',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.General-Petrocasa Construcc');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2004',$cargo);
+        $this->addReference('Cargo-2005',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Planif.y Control Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2005',$cargo);
+        $this->addReference('Cargo-2006',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.de Almacén');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2006',$cargo);
+        $this->addReference('Cargo-2007',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Prevención');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2007',$cargo);
+        $this->addReference('Cargo-2008',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Oficinista de Cerrajeria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2008',$cargo);
+        $this->addReference('Cargo-2009',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador Cecon');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2009',$cargo);
+        $this->addReference('Cargo-2010',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Inteligencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2010',$cargo);
+        $this->addReference('Cargo-2011',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Protección Ejecutiva');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2011',$cargo);
+        $this->addReference('Cargo-2012',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Operador de Protección Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2012',$cargo);
+        $this->addReference('Cargo-2013',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Recepcionista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2013',$cargo);
+        $this->addReference('Cargo-2014',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2014',$cargo);
+        $this->addReference('Cargo-2015',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Integral Protección Empresarial');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2015',$cargo);
+        $this->addReference('Cargo-2016',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Protección Empresarial ');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2016',$cargo);
+        $this->addReference('Cargo-2017',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral Coramer');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2017',$cargo);
+        $this->addReference('Cargo-2018',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral Fertinitro');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2018',$cargo);
+        $this->addReference('Cargo-2019',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral METOR');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2019',$cargo);
+        $this->addReference('Cargo-2020',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral Petrocasa I');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2020',$cargo);
+        $this->addReference('Cargo-2021',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral Petroconstrucción');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2021',$cargo);
+        $this->addReference('Cargo-2022',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Integral Super Octanos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2022',$cargo);
+        $this->addReference('Cargo-2023',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Verificador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-78'));
-        $this->addReference('Cargo-2023',$cargo);
+        $this->addReference('Cargo-2024',$cargo);
           $manager->persist($cargo);
 
 
@@ -14520,161 +14522,161 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador de Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2024',$cargo);
+        $this->addReference('Cargo-2025',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Biblioteca Digital');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2025',$cargo);
+        $this->addReference('Cargo-2026',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Indicadores de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2026',$cargo);
+        $this->addReference('Cargo-2027',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Informes y Tendencias');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2027',$cargo);
+        $this->addReference('Cargo-2028',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Documental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2028',$cargo);
+        $this->addReference('Cargo-2029',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Sala Situacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2029',$cargo);
+        $this->addReference('Cargo-2030',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Estandarización SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2030',$cargo);
+        $this->addReference('Cargo-2031',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignación Gcia.Planificación O y P');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2031',$cargo);
+        $this->addReference('Cargo-2032',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Empresa Alimentos Aragua Social');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2032',$cargo);
+        $this->addReference('Cargo-2033',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coord.de Informes y Tendencias');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2033',$cargo);
+        $this->addReference('Cargo-2034',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista de Evaluación Económica');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2034',$cargo);
+        $this->addReference('Cargo-2035',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista de Planif.y Nvos.Desarrollo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2035',$cargo);
+        $this->addReference('Cargo-2036',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista Ing.de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2036',$cargo);
+        $this->addReference('Cargo-2037',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Ingeniería (E)');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2037',$cargo);
+        $this->addReference('Cargo-2038',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte. Estadistica e Informacion');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2038',$cargo);
+        $this->addReference('Cargo-2039',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Planificación');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2039',$cargo);
+        $this->addReference('Cargo-2040',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Esp.Configuración de Planes');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2040',$cargo);
+        $this->addReference('Cargo-2041',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Esp.Fertilizantes');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2041',$cargo);
+        $this->addReference('Cargo-2042',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Esp.Olefinas,Poliolefi.Polietileno');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2042',$cargo);
+        $this->addReference('Cargo-2043',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ing.Especialista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2043',$cargo);
+        $this->addReference('Cargo-2044',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Especialista Configuración de Planes');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2044',$cargo);
+        $this->addReference('Cargo-2045',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2045',$cargo);
+        $this->addReference('Cargo-2046',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Gestión Documental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-79'));
-        $this->addReference('Cargo-2046',$cargo);
+        $this->addReference('Cargo-2047',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 80
@@ -14683,84 +14685,84 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor Integral de Planes y Beneficios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2047',$cargo);
+        $this->addReference('Cargo-2048',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Coordinador de Gestión Ambiental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2048',$cargo);
+        $this->addReference('Cargo-2049',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Ambiente, Higiene Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2049',$cargo);
+        $this->addReference('Cargo-2050',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Prev.Cont.de Emerg.y Contingencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2050',$cargo);
+        $this->addReference('Cargo-2051',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Relaciones Institucionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2051',$cargo);
+        $this->addReference('Cargo-2052',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero Ambiental');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2052',$cargo);
+        $this->addReference('Cargo-2053',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Planif.y Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2053',$cargo);
+        $this->addReference('Cargo-2054',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Ingeniero de Riesgo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2054',$cargo);
+        $this->addReference('Cargo-2055',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2055',$cargo);
+        $this->addReference('Cargo-2056',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Spte. de SHA Navay');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2056',$cargo);
+        $this->addReference('Cargo-2057',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Spte.de Ingeniería de Riesgos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2057',$cargo);
+        $this->addReference('Cargo-2058',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Spte.Planifi.y Ctrl.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-80'));
-        $this->addReference('Cargo-2058',$cargo);
+        $this->addReference('Cargo-2059',$cargo);
           $manager->persist($cargo);
 
 
@@ -14770,210 +14772,210 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Administración de Acceso');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2059',$cargo);
+        $this->addReference('Cargo-2060',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Control y Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2060',$cargo);
+        $this->addReference('Cargo-2061',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Escritorio de Servicios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2061',$cargo);
+        $this->addReference('Cargo-2062',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Gestión de la Plataforma');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2062',$cargo);
+        $this->addReference('Cargo-2063',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Infraestructura y Telecom.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2063',$cargo);
+        $this->addReference('Cargo-2064',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Ingeniería de Software');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2064',$cargo);
+        $this->addReference('Cargo-2065',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Mejoras Cont.de Sist.Aplic.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2065',$cargo);
+        $this->addReference('Cargo-2066',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Operaciones de Sistemas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2066',$cargo);
+        $this->addReference('Cargo-2067',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Radiocomunicaciones y Enlace');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2067',$cargo);
+        $this->addReference('Cargo-2068',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Redes de Telecomunicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2068',$cargo);
+        $this->addReference('Cargo-2069',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Soporte Espec.de Operaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2069',$cargo);
+        $this->addReference('Cargo-2070',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Planif.y Gestión de Procesos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2070',$cargo);
+        $this->addReference('Cargo-2071',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Ctrl.y Gestión de la Seg.Inf.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2071',$cargo);
+        $this->addReference('Cargo-2072',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado a la Gobernación del Estado Carabobo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2072',$cargo);
+        $this->addReference('Cargo-2073',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado a la Secretaria de Insfraestructura');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2073',$cargo);
+        $this->addReference('Cargo-2074',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Asesor en PDVSA Región Occident');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2074',$cargo);
+        $this->addReference('Cargo-2075',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Secretario de Infraestructura(E');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2075',$cargo);
+        $this->addReference('Cargo-2076',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asistente Administrativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2076',$cargo);
+        $this->addReference('Cargo-2077',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Director Gral.de Obras Zona Naguanagua');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2077',$cargo);
+        $this->addReference('Cargo-2078',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista de Integrac.de Aplicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2078',$cargo);
+        $this->addReference('Cargo-2079',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Corporativo A.I.T.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2079',$cargo);
+        $this->addReference('Cargo-2080',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.de Planificación y Control Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2080',$cargo);
+        $this->addReference('Cargo-2081',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Soporte Espec.de Operaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2081',$cargo);
+        $this->addReference('Cargo-2082',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.Mejoras Continuas de Sist y Aplic.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2082',$cargo);
+        $this->addReference('Cargo-2083',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.y Radiocomunicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2083',$cargo);
+        $this->addReference('Cargo-2084',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Administración de Acceso');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2084',$cargo);
+        $this->addReference('Cargo-2085',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Gestión de la Plataforma');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2085',$cargo);
+        $this->addReference('Cargo-2086',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Ingeniería de Software');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2086',$cargo);
+        $this->addReference('Cargo-2087',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Operac.Sistemas Corporativo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2087',$cargo);
+        $this->addReference('Cargo-2088',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor Redes de Telecomunicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-81'));
-        $this->addReference('Cargo-2088',$cargo);
+        $this->addReference('Cargo-2089',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 82
@@ -14982,126 +14984,126 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Administración y Control');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2089',$cargo);
+        $this->addReference('Cargo-2090',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Comunicaciones Externas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2090',$cargo);
+        $this->addReference('Cargo-2091',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Diseño Gráfico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2091',$cargo);
+        $this->addReference('Cargo-2092',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Invest.y Arquitectura de TI');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2092',$cargo);
+        $this->addReference('Cargo-2093',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Protocolo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2093',$cargo);
+        $this->addReference('Cargo-2094',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Relaciones Institucionales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2094',$cargo);
+        $this->addReference('Cargo-2095',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Publicidad y Mercadeo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2095',$cargo);
+        $this->addReference('Cargo-2096',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Co.Asuntos Internacionales Petr');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2096',$cargo);
+        $this->addReference('Cargo-2097',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Camarógrafo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2097',$cargo);
+        $this->addReference('Cargo-2098',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Comunicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2098',$cargo);
+        $this->addReference('Cargo-2099',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Relaciones Públicas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2099',$cargo);
+        $this->addReference('Cargo-2100',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2100',$cargo);
+        $this->addReference('Cargo-2101',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Comunicaciones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2101',$cargo);
+        $this->addReference('Cargo-2102',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Medios Audiovisuales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2102',$cargo);
+        $this->addReference('Cargo-2103',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Organización de Eventos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2103',$cargo);
+        $this->addReference('Cargo-2104',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Publicidad y Mercadeo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2104',$cargo);
+        $this->addReference('Cargo-2105',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Supervisor de Relaciones Públicas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2105',$cargo);
+        $this->addReference('Cargo-2106',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Técnico de Edición');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-82'));
-        $this->addReference('Cargo-2106',$cargo);
+        $this->addReference('Cargo-2107',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 83
@@ -15110,308 +15112,309 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Administracion de Contratos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2107',$cargo);
+        $this->addReference('Cargo-2108',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Administración de Contratos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2108',$cargo);
+        $this->addReference('Cargo-2109',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Atención a Proveedores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2109',$cargo);
+        $this->addReference('Cargo-2110',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Cobranzas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2110',$cargo);
+        $this->addReference('Cargo-2111',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Contabilidad y Pagos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2111',$cargo);
+        $this->addReference('Cargo-2112',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Control de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2112',$cargo);
+        $this->addReference('Cargo-2113',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Cuentas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2113',$cargo);
+        $this->addReference('Cargo-2114',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Estados Financieros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2114',$cargo);
+        $this->addReference('Cargo-2115',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Operaciones Fiscales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2115',$cargo);
+        $this->addReference('Cargo-2116',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Planificación Fiscal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2116',$cargo);
+        $this->addReference('Cargo-2117',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Procesos Contables');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2117',$cargo);
+        $this->addReference('Cargo-2118',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Procesos Externos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2118',$cargo);
+        $this->addReference('Cargo-2119',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Riesgo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2119',$cargo);
+        $this->addReference('Cargo-2120',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Seguros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2120',$cargo);
+        $this->addReference('Cargo-2121',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Evaluación de Créditos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2121',$cargo);
+        $this->addReference('Cargo-2122',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Operaciones Financieras');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2122',$cargo);
+        $this->addReference('Cargo-2123',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista Pptos.de Inversiones');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2123',$cargo);
+        $this->addReference('Cargo-2124',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Gestion de Empresas Mixtas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2124',$cargo);
+        $this->addReference('Cargo-2125',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integ.de Contrat.y Pagos a Terc.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2125',$cargo);
+        $this->addReference('Cargo-2126',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor Integral Pagos al Personal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2126',$cargo);
+        $this->addReference('Cargo-2127',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte. de Finanzas - PRALCA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2127',$cargo);
+        $this->addReference('Cargo-2128',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.Finanzas - Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2128',$cargo);
+        $this->addReference('Cargo-2129',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Auditor');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2129',$cargo);
+        $this->addReference('Cargo-2130',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Co.(A) Administración - Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2130',$cargo);
+        $this->addReference('Cargo-2131',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Custodio de Valores');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2131',$cargo);
+        $this->addReference('Cargo-2132',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Contraloría Financiera');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2132',$cargo);
+        $this->addReference('Cargo-2133',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Presupuestos y Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2133',$cargo);
+        $this->addReference('Cargo-2134',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Servicios Financieros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2134',$cargo);
+        $this->addReference('Cargo-2135',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Tesorería');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2135',$cargo);
+        $this->addReference('Cargo-2136',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente Tributario');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2136',$cargo);
+        $this->addReference('Cargo-2137',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.(E)Corporativo de Finanzas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2137',$cargo);
+        $this->addReference('Cargo-2138',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2138',$cargo);
+        $this->addReference('Cargo-2139',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Sup.de Admón.Contrat.Admón.y Servicios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
-        $this->addReference('Cargo-2139',$cargo);
-          $manager->persist($cargo);
-
-        $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Presupuestos de Operaciones/Inv.');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2140',$cargo);
           $manager->persist($cargo);
 
+
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Riesgo y Seguros');
+        $cargo->setDescription('Sup.de Presupuestos de Operaciones/Inv.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2141',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Administración Integral');
+        $cargo->setDescription('Sup.de Riesgo y Seguros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2142',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Cobranzas');
+        $cargo->setDescription('Supervisor de Administración Integral');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2143',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Contabilidad y Pagos');
+        $cargo->setDescription('Supervisor de Cobranzas');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2144',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Control de Costos');
+        $cargo->setDescription('Supervisor de Contabilidad y Pagos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2145',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Estados Financieros');
+        $cargo->setDescription('Supervisor de Control de Costos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2146',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Evaluación de Crédito');
+        $cargo->setDescription('Supervisor de Estados Financieros');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2147',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Operaciones Financieras');
+        $cargo->setDescription('Supervisor de Evaluación de Crédito');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2148',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor de Procesos Contables');
+        $cargo->setDescription('Supervisor de Operaciones Financieras');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2149',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Supervisor Tributario');
+        $cargo->setDescription('Supervisor de Procesos Contables');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-83'));
         $this->addReference('Cargo-2150',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Supervisor Tributario');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-83'));
+        $this->addReference('Cargo-2151',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 84
@@ -15420,111 +15423,112 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administrador de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2151',$cargo);
+        $this->addReference('Cargo-2152',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Archivo de Planes de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2152',$cargo);
+        $this->addReference('Cargo-2153',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Archivo Médico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2153',$cargo);
+        $this->addReference('Cargo-2154',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Planes de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2154',$cargo);
+        $this->addReference('Cargo-2155',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Co.de Enfermera');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2155',$cargo);
+        $this->addReference('Cargo-2156',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Enfermera Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2156',$cargo);
+        $this->addReference('Cargo-2157',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Especialista en Calidad de Vida');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
-        $this->addReference('Cargo-2157',$cargo);
-          $manager->persist($cargo);
-        $cargo= new Cargo();
-        $cargo->setDescription('Gte.Corporativo de Salud');
-        $cargo->setEnabled(1);
-        $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2158',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Gte.de Planificación y Ctrol.de Gestión');
+        $cargo->setDescription('Gte.Corporativo de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2159',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Instructor del Ctro.Educ.Física y Rehab.');
+        $cargo->setDescription('Gte.de Planificación y Ctrol.de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2160',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Médico Asesor Planes de Salud');
+        $cargo->setDescription('Instructor del Ctro.Educ.Física y Rehab.');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2161',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Secretaria');
+        $cargo->setDescription('Médico Asesor Planes de Salud');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2162',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.(E)de Control de Gestión');
+        $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2163',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Salud Integral');
+        $cargo->setDescription('Sup.(E)de Control de Gestión');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2164',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Sup.de Salud Ocupacional');
+        $cargo->setDescription('Sup.de Salud Integral');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2165',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
-        $cargo->setDescription('Trabajador Social');
+        $cargo->setDescription('Sup.de Salud Ocupacional');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-84'));
         $this->addReference('Cargo-2166',$cargo);
+          $manager->persist($cargo);
+
+        $cargo= new Cargo();
+        $cargo->setDescription('Trabajador Social');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-84'));
+        $this->addReference('Cargo-2167',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 85
@@ -15533,56 +15537,56 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista de Organización Comunal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2167',$cargo);
+        $this->addReference('Cargo-2168',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Analista de Proyectos Sociocomunitarios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2168',$cargo);
+        $this->addReference('Cargo-2169',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada DENNDD-PDVSA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2169',$cargo);
+        $this->addReference('Cargo-2170',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Desarrollo Social - PETROCASA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2170',$cargo);
+        $this->addReference('Cargo-2171',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Región Central - PALMICHAL');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2171',$cargo);
+        $this->addReference('Cargo-2172',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.Región Oriente - PALMICHAL');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2172',$cargo);
+        $this->addReference('Cargo-2173',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sup.de Gestión - PETROCASA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2173',$cargo);
+        $this->addReference('Cargo-2174',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte.Desarrollo Social Oficina Principal');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-85'));
-        $this->addReference('Cargo-2174',$cargo);
+        $this->addReference('Cargo-2175',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 86
@@ -15591,42 +15595,42 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asesor de Estandarización SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2175',$cargo);
+        $this->addReference('Cargo-2176',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asesor de Mantenimiento SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2176',$cargo);
+        $this->addReference('Cargo-2177',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente Corporativo SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2177',$cargo);
+        $this->addReference('Cargo-2178',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gerente de Mantenimiento SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2178',$cargo);
+        $this->addReference('Cargo-2179',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Gte. de Estandarización SIG');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2179',$cargo);
+        $this->addReference('Cargo-2180',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-86'));
-        $this->addReference('Cargo-2180',$cargo);
+        $this->addReference('Cargo-2181',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 87
@@ -15635,21 +15639,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asistente');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-87'));
-        $this->addReference('Cargo-2181',$cargo);
+        $this->addReference('Cargo-2182',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Mecánico');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-87'));
-        $this->addReference('Cargo-2182',$cargo);
+        $this->addReference('Cargo-2183',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Planificador');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-87'));
-        $this->addReference('Cargo-2183',$cargo);
+        $this->addReference('Cargo-2184',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 88
@@ -15658,14 +15662,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Director');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-88'));
-        $this->addReference('Cargo-2184',$cargo);
+        $this->addReference('Cargo-2185',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('GERENTE GENERAL MCV');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-88'));
-        $this->addReference('Cargo-2185',$cargo);
+        $this->addReference('Cargo-2186',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 89
@@ -15674,28 +15678,28 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Analista');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2186',$cargo);
+        $this->addReference('Cargo-2187',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Gte.de Operac.Planif.Petrocasa');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2187',$cargo);
+        $this->addReference('Cargo-2188',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignado Sub-Comisión Informática CEMEX');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2188',$cargo);
+        $this->addReference('Cargo-2189',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Chef');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2189',$cargo);
+        $this->addReference('Cargo-2190',$cargo);
           $manager->persist($cargo);
 
 
@@ -15703,14 +15707,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Chef/Coordinador de Cocina');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2190',$cargo);
+        $this->addReference('Cargo-2191',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Limpiador de Primera');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2191',$cargo);
+        $this->addReference('Cargo-2192',$cargo);
           $manager->persist($cargo);
 
 
@@ -15718,14 +15722,14 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Mayordomo');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2192',$cargo);
+        $this->addReference('Cargo-2193',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Secretaria Ejecutiva');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2193',$cargo);
+        $this->addReference('Cargo-2194',$cargo);
           $manager->persist($cargo);
 
 
@@ -15733,7 +15737,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Secretaria Ejecutiva de Presidencia');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-89'));
-        $this->addReference('Cargo-2194',$cargo);
+        $this->addReference('Cargo-2195',$cargo);
           $manager->persist($cargo);
 
         // GERENCIA 90
@@ -15742,21 +15746,21 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Asignada An.Comercialización - Polinter');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-90'));
-        $this->addReference('Cargo-2195',$cargo);
+        $this->addReference('Cargo-2196',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('Asignada Especialista Proyecto Agropatria');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-90'));
-        $this->addReference('Cargo-2196',$cargo);
+        $this->addReference('Cargo-2197',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
         $cargo->setDescription('COORDINADOR PROYECTO AGROPATRIA');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-90'));
-        $this->addReference('Cargo-2197',$cargo);
+        $this->addReference('Cargo-2198',$cargo);
           $manager->persist($cargo);
           
         $manager->flush();

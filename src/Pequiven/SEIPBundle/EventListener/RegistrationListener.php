@@ -52,8 +52,9 @@ class RegistrationListener implements EventSubscriberInterface {
         //Consultamos si el usuario registrado se encuentra en la tabla maestra "personal"
         if(is_array($results = $personal->getByNumPersonal($num_personal)) && count($results) > 0){
             foreach($results as $result){
+                $user->addRole($rol->rol_name[Rol::ROLE_MANAGER_SECOND]);
                 //TODO: Hacer llamado a función (por crear) para determinar el rol del usuario registrado automáticamente
-                var_dump($result->getNomPersonal());
+                //var_dump($result->getNomPersonal());
             }
         } else{
             $user->addRole($rol->rol_name[Rol::ROLE_DEFAULT]);//Asignamos el Rol por defecto

@@ -20,13 +20,5 @@ class ObjetiveLevelRepository extends EntityRepository {
     //put your code here
     
     
-    public function getByUser(){
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                    ->select('ol')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel', 'ol')
-                    ->where('p.numPersonal = ' . $num_personal)
-                    ->getQuery();
-        return $query->getResult();
-    }
+    
 }

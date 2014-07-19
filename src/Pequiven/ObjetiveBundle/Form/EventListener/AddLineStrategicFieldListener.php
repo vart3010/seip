@@ -11,16 +11,16 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Doctrine\ORM\EntityRepository;
+
 /**
- * Description of AddObjetiveLevelFieldListener
+ * Description of AddComplejoFieldListener
  *
  * @author matias
  */
-class AddObjetiveLevelFieldListener implements EventSubscriberInterface {
+class AddLineStrategicFieldListener implements EventSubscriberInterface {
     //put your code here
     
     public static function getSubscribedEvents() {
@@ -35,46 +35,34 @@ class AddObjetiveLevelFieldListener implements EventSubscriberInterface {
         $form = $event->getForm();
         
         if(null === $object){
-            return $this->addObjetiveLevelForm($form, $object);
+            return $this->addLineStrategicForm($form, $object);
         }
         
-        $this->addObjetiveLevelForm($form, $object);
+        $this->addLineStrategicForm($form, $object);
     }
     
     public function preSubmit(FormEvent $event){
         $form = $event->getForm();
-        $this->addObjetiveLevelForm($form);
+        $this->addLineStrategicForm($form);
     }
-    
-    private function addObjetiveLevelForm($form, $objetiveLevel = null){
+    //$builder->add('complejo2', 'entity', array('label' => 'form.complejo', 'translation_domain' => 'PequivenObjetiveBundle','class' => 'PequivenMasterBundle:Complejo', 'property' => 'description','empty_value' => 'Todo','expanded' => true));
+    public function addLineStrategicForm($form, $lineStrategic = null){
         $container = PequivenObjetiveBundle::getContainer();
         $user = $container->get('security.context')->getToken()->getUser();
-        $em = $container->get('doctrine')->getManager();
-        $objLevel = new ObjetiveLevel();
-        $object = $objLevel->typeObjetiveLevel($container->get('security.context'),array('em' => $em));
-        $objLevelId = $object->getId();
-
+        $type = 'entity';
         $formOptions = array(
-            'class' => 'PequivenObjetiveBundle:ObjetiveLevel',
-            'empty_value' => 'Seleccione el nivel del objetivo',
-            'label' => 'form.objetive_level',
+            'class' => 'PequivenMasterBundle:LineStrategic',
+            'label' => 'form.line_strategic',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'choices' => $object->getLevel(),
-            'query_builder' => function(EntityRepository $er) use ($objLevelId) {
-                $qb = $er->createQueryBuilder('objlevel')
-                         ->where('objlevel.id = :objLevelId')
-                         ->setParameter('objLevelId', $objLevelId)
-                            ;
-                return $qb;
-          }
+            'empty_value' => 'Seleccione la línea estratégica'
         );
         $formOptions['attr'] = array('class' => 'select red-gradient check-list replacement', 'style' => 'width:300px');
-        if($object){
-            $formOptions['data'] = $object;
+        if($lineStrategic){
+            $formOptions['data'] = $lineStrategic;
         }
         
-        $form->add('objetiveLevel','entity',$formOptions);
+        $form->add('lineStrategic','entity',$formOptions);
     }
 }

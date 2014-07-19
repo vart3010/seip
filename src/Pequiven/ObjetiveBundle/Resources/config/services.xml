@@ -25,6 +25,17 @@
         
         <service id="pequiven_objetive.registration.form.type" class="Pequiven\ObjetiveBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_objetive_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <!-- Servicio necesario para el RegistrationListener -->
+        <service id="pequiven_objetive.form.complejo.listener.registration" class="Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
     </services>
 </container>
