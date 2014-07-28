@@ -59,7 +59,8 @@ class ObjetiveController extends Controller{
         if($form->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_registration");
-            
+            var_dump($data);
+            die();
             $object->setWeight(bcadd($data['weight'],'0',3));
             $object->setGoal(bcadd($data['goal'],'0',3));
             $object->setRankTop(bcadd($data['rankTop'],'0',3));
@@ -74,7 +75,7 @@ class ObjetiveController extends Controller{
             $securityContext = $this->container->get('security.context');
             $user = $securityContext->getToken()->getUser();;
             $object->setUserCreatedAt($user);
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE'))){
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 for($i = 0; $i < count($data['complejo']); $i++){
                     ${$nameObject.$i} = clone $object;
                     $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
@@ -94,8 +95,6 @@ class ObjetiveController extends Controller{
             }
             
             return $this->redirect($this->generateUrl('pequiven_seip_menu_home'));
-            //var_dump($data['complejo'][1]);
-            //die();
             //$em = $this->getDoctrine()->getManager();
             //$em->persist($object);
             //var_dump($object->getFkObjetiveLevel()->getId());
@@ -169,6 +168,12 @@ class ObjetiveController extends Controller{
         //var_dump($response[0]);
         //var_dump(new JsonResponse($objetiveChildrenTactic));
         //die();
+        return $response;
+    }
+    
+    public function displayRefObjetiveAction(Request $request){
+        $response = new JsonResponse();
+        
         return $response;
     }
     

@@ -37,6 +37,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-01-01', $objetive);
             $manager->persist($objetive);
             
@@ -49,6 +50,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-02-02', $objetive);
             $manager->persist($objetive);
             
@@ -61,6 +63,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-03-03', $objetive);
             $manager->persist($objetive);
         
@@ -73,6 +76,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-04-04', $objetive);
             $manager->persist($objetive);
             
@@ -85,6 +89,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-05-05', $objetive);
             $manager->persist($objetive);
             
@@ -97,6 +102,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.1.');
         $this->addReference('OBJ-EST-06-06', $objetive);
             $manager->persist($objetive);
 
@@ -109,6 +115,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-07-01', $objetive);
             $manager->persist($objetive);
             
@@ -120,6 +127,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-08-02', $objetive);
             $manager->persist($objetive);
             
@@ -131,6 +139,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-09-03', $objetive);
             $manager->persist($objetive);
             
@@ -142,6 +151,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-10-04', $objetive);
             $manager->persist($objetive);
             
@@ -153,6 +163,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-11-05', $objetive);
             $manager->persist($objetive);
             
@@ -164,6 +175,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_EFICIENCIA_CALIDAD]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('1.2.');
         $this->addReference('OBJ-EST-12-06', $objetive);
             $manager->persist($objetive);
             
@@ -176,6 +188,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-13-01', $objetive);
             $manager->persist($objetive);
             
@@ -187,6 +200,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-14-02', $objetive);
             $manager->persist($objetive);
             
@@ -198,6 +212,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-15-03', $objetive);
             $manager->persist($objetive);
             
@@ -209,6 +224,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-16-04', $objetive);
             $manager->persist($objetive);
             
@@ -220,6 +236,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-17-05', $objetive);
             $manager->persist($objetive);
             
@@ -231,6 +248,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.1.');
         $this->addReference('OBJ-EST-18-06', $objetive);
             $manager->persist($objetive);
             
@@ -243,6 +261,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-19-01', $objetive);
             $manager->persist($objetive);
             
@@ -254,6 +273,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-20-02', $objetive);
             $manager->persist($objetive);
             
@@ -265,6 +285,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-21-03', $objetive);
             $manager->persist($objetive);
             
@@ -276,6 +297,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-22-04', $objetive);
             $manager->persist($objetive);
             
@@ -287,6 +309,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-23-05', $objetive);
             $manager->persist($objetive);
             
@@ -298,6 +321,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SOST_FINANCIERA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('2.2.');
         $this->addReference('OBJ-EST-24-06', $objetive);
             $manager->persist($objetive);
             
@@ -311,6 +335,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-25-01', $objetive);
             $manager->persist($objetive);
             
@@ -323,6 +348,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-26-02', $objetive);
             $manager->persist($objetive);
             
@@ -335,6 +361,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-27-03', $objetive);
             $manager->persist($objetive);
             
@@ -347,6 +374,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-28-04', $objetive);
             $manager->persist($objetive);
             
@@ -359,6 +387,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-29-05', $objetive);
             $manager->persist($objetive);
             
@@ -371,6 +400,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.1.');
         $this->addReference('OBJ-EST-30-06', $objetive);
             $manager->persist($objetive);
             
@@ -384,6 +414,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-31-01', $objetive);
             $manager->persist($objetive);
             
@@ -396,6 +427,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-32-02', $objetive);
             $manager->persist($objetive);
             
@@ -408,6 +440,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-33-03', $objetive);
             $manager->persist($objetive);
             
@@ -420,6 +453,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-34-04', $objetive);
             $manager->persist($objetive);
             
@@ -432,6 +466,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-35-05', $objetive);
             $manager->persist($objetive);
             
@@ -444,6 +479,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.2.');
         $this->addReference('OBJ-EST-36-06', $objetive);
             $manager->persist($objetive);
             
@@ -455,6 +491,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-37-01', $objetive);
             $manager->persist($objetive);
             
@@ -465,6 +502,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-38-02', $objetive);
             $manager->persist($objetive);
             
@@ -475,6 +513,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-39-03', $objetive);
             $manager->persist($objetive);
             
@@ -485,6 +524,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-40-04', $objetive);
             $manager->persist($objetive);
             
@@ -495,6 +535,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-41-05', $objetive);
             $manager->persist($objetive);
             
@@ -505,6 +546,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_COMERCIALIZACION]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('3.3.');
         $this->addReference('OBJ-EST-42-06', $objetive);
             $manager->persist($objetive);
             
@@ -518,6 +560,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-43-01', $objetive);
             $manager->persist($objetive);
             
@@ -530,6 +573,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-44-02', $objetive);
             $manager->persist($objetive);
             
@@ -542,6 +586,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-45-03', $objetive);
             $manager->persist($objetive);
             
@@ -554,6 +599,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-46-04', $objetive);
             $manager->persist($objetive);
             
@@ -566,6 +612,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-47-05', $objetive);
             $manager->persist($objetive);
             
@@ -578,6 +625,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.1.');
         $this->addReference('OBJ-EST-48-06', $objetive);
             $manager->persist($objetive);
             
@@ -591,6 +639,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-49-01', $objetive);
             $manager->persist($objetive);
             
@@ -603,6 +652,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-50-02', $objetive);
             $manager->persist($objetive);
             
@@ -615,6 +665,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-51-03', $objetive);
             $manager->persist($objetive);
             
@@ -627,6 +678,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-52-04', $objetive);
             $manager->persist($objetive);
             
@@ -639,6 +691,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-53-05', $objetive);
             $manager->persist($objetive);
             
@@ -651,6 +704,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_CRECIMIENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('4.2.');
         $this->addReference('OBJ-EST-54-06', $objetive);
             $manager->persist($objetive);
             
@@ -664,6 +718,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-55-01', $objetive);
             $manager->persist($objetive);
             
@@ -676,6 +731,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-56-02', $objetive);
             $manager->persist($objetive);
             
@@ -688,6 +744,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-57-03', $objetive);
             $manager->persist($objetive);
             
@@ -700,6 +757,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-58-04', $objetive);
             $manager->persist($objetive);
             
@@ -712,6 +770,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-59-05', $objetive);
             $manager->persist($objetive);
             
@@ -724,6 +783,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.1.');
         $this->addReference('OBJ-EST-60-06', $objetive);
             $manager->persist($objetive);
             
@@ -737,6 +797,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-61-01', $objetive);
             $manager->persist($objetive);
             
@@ -749,6 +810,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-62-02', $objetive);
             $manager->persist($objetive);
             
@@ -761,6 +823,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-63-03', $objetive);
             $manager->persist($objetive);
             
@@ -773,6 +836,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-64-04', $objetive);
             $manager->persist($objetive);
             
@@ -785,6 +849,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-65-05', $objetive);
             $manager->persist($objetive);
             
@@ -797,6 +862,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.2.');
         $this->addReference('OBJ-EST-66-06', $objetive);
             $manager->persist($objetive);
             
@@ -809,6 +875,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-67-01', $objetive);
             $manager->persist($objetive);
             
@@ -820,6 +887,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-68-02', $objetive);
             $manager->persist($objetive);
             
@@ -831,6 +899,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-69-03', $objetive);
             $manager->persist($objetive);
             
@@ -842,6 +911,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-70-04', $objetive);
             $manager->persist($objetive);
             
@@ -853,6 +923,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-71-05', $objetive);
             $manager->persist($objetive);
             
@@ -864,6 +935,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_SHA]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('5.3.');
         $this->addReference('OBJ-EST-72-06', $objetive);
             $manager->persist($objetive);
             
@@ -876,6 +948,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-73-01', $objetive);
             $manager->persist($objetive);
             
@@ -887,6 +960,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-74-02', $objetive);
             $manager->persist($objetive);
             
@@ -898,6 +972,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-75-03', $objetive);
             $manager->persist($objetive);
             
@@ -909,6 +984,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-76-04', $objetive);
             $manager->persist($objetive);
             
@@ -920,6 +996,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-77-05', $objetive);
             $manager->persist($objetive);
             
@@ -931,6 +1008,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.1.');
         $this->addReference('OBJ-EST-78-06', $objetive);
             $manager->persist($objetive);
             
@@ -943,6 +1021,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-79-01', $objetive);
             $manager->persist($objetive);
             
@@ -954,6 +1033,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2');
         $this->addReference('OBJ-EST-80-02', $objetive);
             $manager->persist($objetive);
             
@@ -965,6 +1045,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-81-03', $objetive);
             $manager->persist($objetive);
             
@@ -976,6 +1057,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-82-04', $objetive);
             $manager->persist($objetive);
             
@@ -987,6 +1069,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-83-05', $objetive);
             $manager->persist($objetive);
             
@@ -998,6 +1081,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-84-06', $objetive);
             $manager->persist($objetive);
             
@@ -1011,6 +1095,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-85-01', $objetive);
             $manager->persist($objetive);
             
@@ -1023,6 +1108,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-86-02', $objetive);
             $manager->persist($objetive);
             
@@ -1035,6 +1121,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-87-03', $objetive);
             $manager->persist($objetive);
             
@@ -1047,6 +1134,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-88-04', $objetive);
             $manager->persist($objetive);
             
@@ -1059,6 +1147,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-89-05', $objetive);
             $manager->persist($objetive);
             
@@ -1071,6 +1160,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.1.');
         $this->addReference('OBJ-EST-90-06', $objetive);
             $manager->persist($objetive);
             
@@ -1083,6 +1173,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-91-01', $objetive);
             $manager->persist($objetive);
             
@@ -1094,6 +1185,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-92-02', $objetive);
             $manager->persist($objetive);
             
@@ -1105,6 +1197,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-93-03', $objetive);
             $manager->persist($objetive);
             
@@ -1116,6 +1209,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-94-04', $objetive);
             $manager->persist($objetive);
             
@@ -1127,6 +1221,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-95-05', $objetive);
             $manager->persist($objetive);
             
@@ -1138,6 +1233,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_RESP_SOCIAL]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive'));
+        $objetive->setRef('7.2.');
         $this->addReference('OBJ-EST-96-06', $objetive);
             $manager->persist($objetive);
           

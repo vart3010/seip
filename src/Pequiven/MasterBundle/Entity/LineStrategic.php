@@ -16,6 +16,8 @@ use Pequiven\MasterBundle\Model\LineStrategic as modelLineStrategic;
  */
 class LineStrategic extends modelLineStrategic
 {
+    protected $descriptionSelect;
+    
     /**
      * @var integer
      *
@@ -61,6 +63,13 @@ class LineStrategic extends modelLineStrategic
      * @ORM\Column(name="description", type="string", length=150)
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=15, nullable=true)
+     */
+    private $ref;
     
     /**
      * @var string
@@ -306,5 +315,38 @@ class LineStrategic extends modelLineStrategic
     public function getPolitics()
     {
         return $this->politics;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return LineStrategic
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+    
+    /**
+     * Get descriptionSelect
+     * 
+     * @return string
+     */
+    public function getDescriptionSelect (){
+        $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
+        return $this->descriptionSelect;
     }
 }

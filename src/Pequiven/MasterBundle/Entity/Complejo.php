@@ -61,6 +61,13 @@ class Complejo extends modelComplejo
      * @ORM\Column(name="description", type="string", length=100)
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="complejo_name", type="string", length=50)
+     */
+    private $complejoName;
 
     /**
      * @var boolean
@@ -216,5 +223,28 @@ class Complejo extends modelComplejo
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
+    }
+
+    /**
+     * Set complejoName
+     *
+     * @param string $complejoName
+     * @return Complejo
+     */
+    public function setComplejoName($complejoName)
+    {
+        $this->complejoName = $complejoName;
+
+        return $this;
+    }
+
+    /**
+     * Get complejoName
+     *
+     * @return string 
+     */
+    public function getComplejoName()
+    {
+        return $this->complejoName;
     }
 }

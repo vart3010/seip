@@ -18,7 +18,33 @@ verify_objetiveParentLineStrategic:
 select_objetiveParentTactic:
     path: /arrangement/objetive/select_objetiveParentTactic
     defaults: {_controller: PequivenObjetiveBundle:Objetive:selectObjetiveParentTactic}
+
+#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
+select_objetiveStrategicFromLineStrategic:
+    path: /arrangement/objetive/select_objetiveStrategicFromLineStrategic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectObjetiveStrategicFromLineStrategic}
+    
+#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
+select_complejoFromObjetiveStrategic:
+    path: /arrangement/objetive/select_complejoFromObjetiveStrategic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectComplejoFromObjetiveStrategic}
     
 displayWeightObjetive:
     path: /arrangement/objetive/displayWeightObjetive
     defaults: {_controller: PequivenObjetiveBundle:Objetive:displayWeightObjetive}
+    
+displayRefObjetiveStrategic:
+    path: /arrangement/objetive/displayRefObjetiveStrategic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:displayRefObjetive}
+    
+displayRefObjetiveTactic:
+    path: /arrangement/objetive/displayRefObjetiveTactic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:displayRefObjetive}
+    
+displayRefObjetiveOperative:
+    path: /arrangement/objetive/displayRefObjetiveOperative
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:displayRefObjetive}
+    
+testComplejo:
+    path: /arrangement/objetive/testComplejo
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:testComplejo}

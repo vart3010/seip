@@ -14,9 +14,16 @@ namespace Pequiven\ObjetiveBundle\Model;
  * @author matias
  */
 class Objetive {
-    const PESO = 100;
     
     public function create(){
+        
+    }
+    
+    /**
+     * Devuelve el valor de referencia del objetivo
+     * @param type $options
+     */
+    public function setNewRef($options = array()){
         
     }
 }

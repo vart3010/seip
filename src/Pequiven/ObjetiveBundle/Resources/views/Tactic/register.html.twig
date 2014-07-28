@@ -1,0 +1,376 @@
+{#{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/layout.html.twig' %}#}
+{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block body %}
+
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="#">{{ 'pequiven_objetive.objetives'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_objetive.add'|trans }}</span>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_objetive.tactic'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+    <form action="{{ path('pequiven_objetive_menu_add_tactic') }}" {{ form_enctype(form) }} method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
+            <!-- Hidden con "ComplejoName" de la persona que esta logueada -->
+            <div>
+                {{ form_widget(form.complejo_name) }}
+            </div>
+            
+            <!-- Hidden con el Nivel de Objetivo de la Persona que esta logueada -->
+            <div>
+                {{ form_widget(form.objetive_level_name) }}
+            </div>
+            
+            <!-- Ref -->
+            <div id="ref" class="field-block button-height">
+                {{ form_label(form.ref) }}
+                {{ form_widget(form.ref,{'attr':{'class':'input' } }) }}
+                {{ form_errors(form.ref) }}
+                <span id="ref_info" class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Descripción -->
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Nivel del Objetivo a crear -->
+            <div id="objetiveLevel" class="field-block button-height">
+                {{ form_label(form.objetiveLevel) }}
+                {{ form_widget(form.objetiveLevel) }}
+                {{ form_errors(form.objetiveLevel) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.objetiveLevel_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Línea Estratégica -->
+            <div id="lineStrategic" class="field-block button-height">
+                {{ form_label(form.lineStrategic) }}
+                {{ form_widget(form.lineStrategic) }}
+                {{ form_errors(form.lineStrategic) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Objetivo Estratégico (Padre) -->
+            <div class="field-block button-height">
+                {{ form_label(form.parent) }}
+                {{ form_widget(form.parent) }}
+                {{ form_errors(form.parent) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.parent_strategic_info'|trans }}</span>
+                </span>
+            </div>
+            
+            <!-- Complejo -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.complejo) }}
+                {{ form_widget(form.complejo) }}
+                {{ form_errors(form.complejo) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
+                </span>
+            </div>
+            
+            <!-- Gerencia -->
+            <div id="gerencia" class="field-block button-height">
+                {{ form_label(form.gerencia) }}
+                {{ form_widget(form.gerencia) }}
+                {{ form_errors(form.gerencia) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
+                </span>
+            </div>
+            
+            <!-- Peso del Objetivo -->
+            <div id="weight" class="field-block button-height">
+                {{ form_label(form.weight) }}
+                {{ form_widget(form.weight) }}
+                {{ form_errors(form.weight) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.weight_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Meta del Objetivo -->
+            <div class="field-block button-height">
+                    {{ form_label(form.goal) }}
+                    {{ form_widget(form.goal) }}
+                    {{ form_errors(form.goal) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
+                    </span>
+            </div>
+
+            <!-- Rango de Gestión -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
+
+                <!-- Rango Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankTop) }}
+                        {{ form_widget(form.rankTop) }}
+                        {{ form_errors(form.rankTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Medio Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleTop) }}
+                        {{ form_widget(form.rankMiddleTop) }}
+                        {{ form_errors(form.rankMiddleTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Medio Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleBottom) }}
+                        {{ form_widget(form.rankMiddleBottom) }}
+                        {{ form_errors(form.rankMiddleBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankBottom) }}
+                        {{ form_widget(form.rankBottom) }}
+                        {{ form_errors(form.rankBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
+                        </span>
+                </div>
+            </fieldset>
+                
+            <!-- Tipo de Evaluación -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.typeEvaluation'|trans }}</legend>
+                
+                <!-- Por Objetivo -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalObjetive) }}
+                    {{ form_widget(form.evalObjetive) }}
+                    {{ form_errors(form.evalObjetive) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalObjetive_info'|trans }}</span>
+                    </span>
+                </div>
+                    
+                <!-- Por Indicador -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalIndicator) }}
+                    {{ form_widget(form.evalIndicator) }}
+                    {{ form_errors(form.evalIndicator) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
+                    </span>
+                </div>
+                    
+                <!-- Por Programa de Gestión -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalArrangementProgram) }}
+                    {{ form_widget(form.evalArrangementProgram) }}
+                    {{ form_errors(form.evalArrangementProgram) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalArrangementProgram_info'|trans }}</span>
+                    </span>
+                </div>
+            </fieldset>
+            
+            <!-- Forma de Evaluación -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.formEvaluation'|trans }}</legend>
+                
+                <!-- Por Promedio Simple -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalSimpleAverage) }}
+                    {{ form_widget(form.evalSimpleAverage) }}
+                    {{ form_errors(form.evalSimpleAverage) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalSimpleAverage_info'|trans }}</span>
+                    </span>
+                </div>
+                    
+                <!-- Por Promedio Ponderado -->
+                <div class="field-block button-height">
+                    {{ form_label(form.evalWeightedAverage) }}
+                    {{ form_widget(form.evalWeightedAverage) }}
+                    {{ form_errors(form.evalWeightedAverage) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalWeightedAverage_info'|trans }}</span>
+                    </span>
+                </div>
+            </fieldset>
+            
+            {{ actions.create() }}
+        </fieldset>
+    {{ form_rest(form) }}
+    </form>
+    
+    {% block javascript %}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+           //Llamado de la función que carga los valores por defecto de la vista
+           change();
+           
+           function change(){
+               //Inicializamos el select2 de Línea Estratégica
+               $("#pequiven_objetive_tactic_registration_lineStrategic").select2({
+                   
+               });
+               
+               //Inicializamos el select2 de Objetivo Estratégico
+               $("#pequiven_objetive_tactic_registration_parent").select2({
+                   
+               });
+               
+               if($("#pequiven_objetive_tactic_registration_complejo_name").val() === 'ZIV'){   
+                    //Inicializamos el select2 de Complejo
+                    //$("#pequiven_objetive_tactic_registration_complejo").select2({
+
+                    //});
+               }
+               
+               //Incializamos el formato numerico para el input de Peso
+               $("#pequiven_objetive_tactic_registration_weight").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Meta
+               $("#pequiven_objetive_tactic_registration_goal").number(true,3,',','.');
+               
+                //Incializamos el formato numerico para el input de Rango Alto
+               $("#pequiven_objetive_tactic_registration_rankTop").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Medio Alto
+               $("#pequiven_objetive_tactic_registration_rankMiddleTop").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Medio Bajo
+               $("#pequiven_objetive_tactic_registration_rankMiddleBottom").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Bajo
+               $("#pequiven_objetive_tactic_registration_rankBottom").number(true,3,',','.');
+           }
+           
+           //Al cambiar el select de Línea Estratégica
+            $("#pequiven_objetive_tactic_registration_lineStrategic").change(function() {
+               var data = {
+                   lineStrategicId: $.trim($(this).val()),
+               };
+               $.ajax({
+                   type: 'post',
+                   url: '{{ path("select_objetiveStrategicFromLineStrategic") }}',
+                   data: data,
+                   success: function(data) {
+                       var $objetiveStrategic_selector = $('#pequiven_objetive_tactic_registration_parent');
+
+                        $('#pequiven_objetive_tactic_registration_parent option[value]').remove();
+                        $objetiveStrategic_selector.append('<option value="0">Seleccione el objetivo estratégico</option>');
+
+                        for(var i=0, total = data.length; i<total; i++){
+                            $objetiveStrategic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                        }
+                   }
+                });
+            });
+            
+            //Al cambiar el select de Objetivo Estratégico
+            $("#pequiven_objetive_tactic_registration_parent").change(function() {
+                displayObjetiveRef();
+                if($("#pequiven_objetive_tactic_registration_complejo_name").val() === 'ZIV'){
+                   //displaySelectComplejoFromObjetiveStrategic();
+                }
+            });
+            
+            //Función que actualiza el select de complejos en caso de que el usuario logueado sea de Sede Corporativa
+            function displaySelectComplejoFromObjetiveStrategic(){
+                var data = {
+                    objetiveStrategicId: $.trim($("#pequiven_objetive_tactic_registration_parent").val()),
+                    lineStrategicId: $.trim($("#pequiven_objetive_tactic_registration_lineStrategic").val()),
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("select_complejoFromObjetiveStrategic") }}',
+                    data: data,
+                    success: function(data) {
+                        console.log(data);
+                        var $complejo_selector = $("#pequiven_objetive_tactic_registration_complejo");
+                        
+                        
+                        $("#pequiven_objetive_tactic_registration_complejo option[value]").remove();
+                        
+                        //Actualizamos el select de complejos
+                        for(var i=0, total = data.length; i<total; i++){
+                            $complejo_selector.append('<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>');
+                        }
+                    }
+                });
+            }
+            
+            function displayObjetiveRef(){
+            var data = {
+                objetiveStrategicId: $.trim($("#pequiven_objetive_tactic_registration_parent").val())
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("displayRefObjetiveTactic") }}',
+                data: data,
+                success: function(data) {
+                    $("#pequiven_objetive_tactic_registration_ref").val(data[0].ref);
+                }
+             });
+            }
+           
+           
+        });
+    </script>
+    {% endblock javascript %}
+{% endblock body %}

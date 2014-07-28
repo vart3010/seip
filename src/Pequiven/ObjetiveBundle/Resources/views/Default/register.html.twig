@@ -3,7 +3,7 @@
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 
-{% import 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block javascripts_base %}
     {{ parent() }}
@@ -30,30 +30,55 @@
             <div>
                 {{ form_widget(form.objetive_level_name) }}
             </div>
+            
+            <!-- Ref -->
+            <div id="ref" class="field-block button-height">
+                <span class="label">{{ 'form.ref'|trans }}</span>
+                <span id="label_ref"></span>
+                <span id="ref_info" class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
+                </span>
+            </div>
             <!-- Descripción -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description,{'attr':{'class':'input' } }) }}
                 {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                </span>
             </div>
             <!-- Nivel del Objetivo a crear -->
             <div id="objetiveLevel" class="field-block button-height">
                 {{ form_label(form.objetiveLevel) }}
                 {{ form_widget(form.objetiveLevel) }}
                 {{ form_errors(form.objetiveLevel) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.objetiveLevel_info'|trans }}</span>
+                </span>
                 {#{{ 'form.objetive_level'|trans }} 
                 {{ object.0.getDescription }}#}
             </div>
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
-                {% if (object.getLevelName == 'OBJETIVO_ESTRATEGICO') %}    
-                
+                {% if (object.getLevelName == 'OBJETIVO_ESTRATEGICO') %}
                     {{ form_label(form.lineStrategic) }}
                     {{ form_widget(form.lineStrategic) }}
                     {{ form_errors(form.lineStrategic) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
+                    </span>
                 {% else %}
                     <span class="label">{{ 'form.line_strategic'|trans }}</span>
                     <span id="label_line_strategic"></span>
+                    <span id="line_strategic_info" class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
+                    </span>
                 {% endif %}
             </div>
             
@@ -62,6 +87,10 @@
                 {{ form_label(form.complejo) }}
                 {{ form_widget(form.complejo) }}
                 {{ form_errors(form.complejo) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
+                </span>
             </div>
             
             <!-- Gerencia -->
@@ -70,6 +99,10 @@
                     {{ form_label(form.gerencia) }}
                     {{ form_widget(form.gerencia) }}
                     {{ form_errors(form.gerencia) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
+                    </span>
                 </div>
             {% endif %}
             
@@ -79,6 +112,10 @@
                     {{ form_label(form.parent) }}
                     {{ form_widget(form.parent) }}
                     {{ form_errors(form.parent) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.parent_strategic_info'|trans }}</span>
+                    </span>
                 </div>
             {% endif %}
             
@@ -88,11 +125,19 @@
                     {{ form_label(form.parent_strategic) }}
                     {{ form_widget(form.parent_strategic) }}
                     {{ form_errors(form.parent_strategic) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.parent_strategic_info'|trans }}</span>
+                    </span>
                 </div>
                 <div class="field-block button-height">
                     {{ form_label(form.parent) }}
                     {{ form_widget(form.parent) }}
                     {{ form_errors(form.parent) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.parent_tactic_info'|trans }}</span>
+                    </span>
                 </div>
             {% endif %}
             
@@ -101,12 +146,20 @@
                 {{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.weight_info'|trans }}</span>
+                </span>
             </div>
             <!-- Meta del Objetivo -->
             <div class="field-block button-height">
                     {{ form_label(form.goal) }}
                     {{ form_widget(form.goal) }}
                     {{ form_errors(form.goal) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
+                    </span>
             </div>
             <fieldset class="fieldset">
                 <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
@@ -116,24 +169,40 @@
                         {{ form_label(form.rankTop) }}
                         {{ form_widget(form.rankTop) }}
                         {{ form_errors(form.rankTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
+                        </span>
                 </div>
                 <!-- Rango Medio Alto del Objetivo -->
                 <div class="field-block button-height">
                         {{ form_label(form.rankMiddleTop) }}
                         {{ form_widget(form.rankMiddleTop) }}
                         {{ form_errors(form.rankMiddleTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
+                        </span>
                 </div>
                 <!-- Rango Medio Bajo del Objetivo -->
                 <div class="field-block button-height">
                         {{ form_label(form.rankMiddleBottom) }}
                         {{ form_widget(form.rankMiddleBottom) }}
                         {{ form_errors(form.rankMiddleBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
+                        </span>
                 </div>
                 <!-- Rango Bajo del Objetivo -->
                 <div class="field-block button-height">
                         {{ form_label(form.rankBottom) }}
                         {{ form_widget(form.rankBottom) }}
                         {{ form_errors(form.rankBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
+                        </span>
                 </div>
             </fieldset>
                 
@@ -145,12 +214,20 @@
                     {{ form_label(form.evalObjetive) }}
                     {{ form_widget(form.evalObjetive) }}
                     {{ form_errors(form.evalObjetive) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalObjetive_info'|trans }}</span>
+                    </span>
                 </div>
                 <!-- Por Indicador -->
                 <div class="field-block button-height">
                     {{ form_label(form.evalIndicator) }}
                     {{ form_widget(form.evalIndicator) }}
                     {{ form_errors(form.evalIndicator) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
+                    </span>
                 </div>
                 {% if (object.getLevelName != 'OBJETIVO_ESTRATEGICO') %}
                     <!-- Por Programa de Gestión -->
@@ -158,6 +235,10 @@
                         {{ form_label(form.evalArrangementProgram) }}
                         {{ form_widget(form.evalArrangementProgram) }}
                         {{ form_errors(form.evalArrangementProgram) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.evalArrangementProgram_info'|trans }}</span>
+                        </span>
                     </div>
                 {% endif %}
             </fieldset>
@@ -170,16 +251,26 @@
                     {{ form_label(form.evalSimpleAverage) }}
                     {{ form_widget(form.evalSimpleAverage) }}
                     {{ form_errors(form.evalSimpleAverage) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalSimpleAverage_info'|trans }}</span>
+                    </span>
                 </div>
                 <!-- Por Promedio Ponderado -->
                 <div class="field-block button-height">
                     {{ form_label(form.evalWeightedAverage) }}
                     {{ form_widget(form.evalWeightedAverage) }}
                     {{ form_errors(form.evalWeightedAverage) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.evalWeightedAverage_info'|trans }}</span>
+                    </span>
                 </div>
             </fieldset>
             
             {{ actions.create() }}
+            
+            {#{ actions.create_modal(path('pequiven_objetive_menu_create'),'pequiven_seip.register',{'content':'hola'}) }#}
             
         </fieldset>
     {{ form_rest(form) }}
@@ -189,13 +280,31 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
+            $("#line_strategic_info").hide();
+            
            //$("#complejo").hide();//Escondemos el complejo por defecto
            //Al cambiar el select de los niveles de objetivos
            change();
            
            function change(){
+               if($("#pequiven_objetive_registration_objetive_level_name").val() === "OBJETIVO_ESTRATEGICO"){
+                   //Inicializamos el select de Línea Estratégica
+                   $("#pequiven_objetive_registration_lineStrategic").select2({
+
+                   });
+                   $("#pequiven_objetive_registration_lineStrategic").change(function() {
+                       $("#label_ref").text('hola');
+                   });
+               }
+               
+               //Inicializamos el select de Complejo
+               $("#pequiven_objetive_registration_complejo").select2({
+                   
+               });
+               
                //En caso de que el Nivel de Objetivo sea Táctico, es decir para ROLE_MANAGER_FIRST
                if($("#pequiven_objetive_registration_objetive_level_name").val() === "OBJETIVO_TACTICO"){
+                   //Inicializamos el select de Objetivo Estratégico
                    $("#pequiven_objetive_registration_parent").select2({
                        
                    });
@@ -213,21 +322,25 @@
                               $("#label_line_strategic").text(data[0].description);
                               if(data[0].show_weight === false){
                                   $("#weight").hide();
+                                  $("#line_strategic_info").hide();
                               } else{
                                   $("#weight").show();
+                                  $("#line_strategic_info").show();
                               }
                           }
                        });
                    });
                } else if($("#pequiven_objetive_registration_objetive_level_name").val() === "OBJETIVO_OPERATIVO"){
+                //Inicializamos el select de Objetivo Estratégico
                 $("#pequiven_objetive_registration_parent_strategic").select2({
 
                 });
+                //Inicializamos el select de Objetivo Táctico
                 $("#pequiven_objetive_registration_parent").select2({
 
                 });
                 $("#pequiven_objetive_registration_parent_strategic").change(function(){
-                    displayWeightObjetive();
+                    //displayWeightObjetive();
                     displayLineStrategic();
                     var data = {
                         objetiveParentStrategic_id: $.trim($(this).val())
@@ -264,8 +377,10 @@
                         $("#label_line_strategic").text(data[0].description);
                         if(data[0].show_weight === false){
                             $("#weight").hide();
+                            $("#line_strategic_info").hide();
                         } else{
                             $("#weight").show();
+                            $("#line_strategic_info").show();
                         }
                     }
                  });

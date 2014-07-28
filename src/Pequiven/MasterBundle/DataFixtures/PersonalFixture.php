@@ -1489,7 +1489,7 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $personal->setNomPersonal('TORRES , GINA DEL C');
         $personal->setNumPersonal('10025434');
         $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo1857-'));
+        $personal->setCargo($this->getReference('Cargo-1857'));
         $this->addReference('Personal-10025434', $personal);
             $manager->persist($personal);
 
@@ -6523,6 +6523,15 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $personal->setEnabled(true);
         $personal->setCargo($this->getReference('Cargo-2198'));
         $this->addReference('Personal-10017366', $personal);
+            $manager->persist($personal);
+            
+        $personal = new Personal();
+        $personal->setCedula('9819303');
+        $personal->setNomPersonal('MENDEZ L , JONIEL J');
+        $personal->setNumPersonal('10016029');
+        $personal->setEnabled(true);
+        $personal->setCargo($this->getReference('Cargo-148'));
+        $this->addReference('Personal-10016029', $personal);
             $manager->persist($personal);
 
         $manager->flush();

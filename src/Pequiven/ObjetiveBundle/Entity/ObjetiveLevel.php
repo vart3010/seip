@@ -263,13 +263,14 @@ class ObjetiveLevel extends modelObjetiveLevel
      */
     public function typeObjetiveLevel(\Symfony\Component\Security\Core\SecurityContext $security, $options =array()){
         $levelNameArray = $this->getLevelNameArray();
-        if($security->isGranted(array('ROLE_DIRECTIVE'))){
+        if($security->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_ESTRATEGICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_FIRST'))){
+        } elseif($security->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_TACTICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_SECOND'))){
+        } elseif($security->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_OPERATIVO]));
         }
         return true;
     }
 }
+        

@@ -41,23 +41,29 @@ class RegistrationFormType extends AbstractType {
 //            $builder->add('complejo2', 'entity', array('label' => 'form.complejo', 'translation_domain' => 'PequivenObjetiveBundle','class' => 'PequivenMasterBundle:Complejo', 'property' => 'description','empty_value' => 'Todo','expanded' => true));
 //        } else{
 //            $builder->add('complejo2', 'entity', array('label' => 'form.complejo', 'translation_domain' => 'PequivenObjetiveBundle','class' => 'PequivenMasterBundle:Complejo', 'property' => 'description','empty_value' => ''));
-//        } 
+//        }
+//        
+        //Nivel del objetivo a crear
         $builder->addEventSubscriber(new AddObjetiveLevelFieldListener());
         
-        if($securityContext->isGranted(array('ROLE_DIRECTIVE'))){
+        //Línea estratégica del objetivo a crear
+        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             $builder->addEventSubscriber(new AddLineStrategicFieldListener());
         }
         
+        //Complejo(s) donde impactará(n) el objetivo a crear
         $builder->addEventSubscriber(new AddComplejoFieldListener());
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_SECOND'))){
+        //Gerencia donde impactará el objetivo a crear
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $builder->addEventSubscriber(new AddGerenciaFieldListener());
         }
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST'))){
+        //Objetivo Estratégico y Táctico, dependiendo del Rol del Usuario Gerente 1ra Línea o 2da Línea respectivamente
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener());
             //$builder->add('parent','entity',array('label' => 'form.parent_strategic', 'translation_domain' => 'PequivenObjetiveBundle', 'class' => 'PequivenObjetiveBundle:Objetive', 'property' => 'description', 'empty_value' => ''));
-        }elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND'))){
+        }elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener());
             $builder->addEventSubscriber(new AddObjetiveParentTacticFieldListener());
         }
@@ -82,8 +88,10 @@ class RegistrationFormType extends AbstractType {
             $builder->add('evalObjetive','checkbox',array('label' => 'form.evalObjetive','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
             //Evaluar por Indicador
             $builder->add('evalIndicator','checkbox',array('label' => 'form.evalIndicator','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
-            //Evaluar por Programa de Gestión
-            $builder->add('evalArrangementProgram','checkbox',array('label' => 'form.evalArrangementProgram','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
+            if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                //Evaluar por Programa de Gestión
+                $builder->add('evalArrangementProgram','checkbox',array('label' => 'form.evalArrangementProgram','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
+            }
         
          //Forma de Evaluación   
             //Evaluar por Promedio Simple

@@ -16,7 +16,11 @@ app:
                         main: Gestión
                         objetives:
                             main: Objetivos
-                            add: Añadir
+                            add:
+                                main: Añadir
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                             list: Lista
                         indicators: 
                             main: Indicadores

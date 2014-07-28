@@ -1264,7 +1264,7 @@ class StrategiesObjetiveFixture extends AbstractFixture implements OrderedFixtur
         $strategiesObjetive->setDescription('Establecer mecanismos para generar alertas y '
                 . 'corregir desviaciones relacionadas a gastos y costos directos y/o '
                 . 'indirectos de los procesos de producción y compras.');
-        $strategiesObjetive->setObjetive($this->getReference('OBJ-EST-20-01'));
+        $strategiesObjetive->setObjetive($this->getReference('OBJ-EST-20-02'));
         $strategiesObjetive->setUserCreatedAt($this->getReference('directive'));
         $strategiesObjetive->setEnabled(true);
         $this->addReference('EST-128-02', $strategiesObjetive);

@@ -16,6 +16,10 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  */
 class Objetive extends modelObjetive
 {
+    //Texto a mostrar en los select
+    protected $descriptionSelect;
+
+
     /**
      * @var integer
      *
@@ -61,6 +65,13 @@ class Objetive extends modelObjetive
      * @ORM\Column(name="description", type="string", length=300)
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=15, nullable=true)
+     */
+    private $ref;
     
     /**
      * @var float
@@ -745,5 +756,77 @@ class Objetive extends modelObjetive
     public function getEvalWeightedAverage()
     {
         return $this->evalWeightedAverage;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return Objetive
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+    
+    /**
+     * Get descriptionSelect
+     * 
+     * @return string
+     */
+    public function getDescriptionSelect(){
+        $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
+        return $this->getDescriptionSelect();
+    }
+    
+    /**
+     * Devuelve el valor referencial del objetivo
+     * <b> x.x Estratégico </b>
+     * <b> x.x.x Táctico </b>
+     * <b> x.x.x.x Operativo </b>
+     * @param type $options
+     * @return boolean
+     */
+    public function setNewRef($options = array()){
+        $container = \Pequiven\ObjetiveBundle\PequivenObjetiveBundle::getContainer();
+        $securityContext = $container->get('security.context');
+        $em = $container->get('doctrine')->getManager();
+        
+        if($options['type'] == 'STRATEGIC'){
+            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $refLineStrategic = $lineStrategic->getRef();
+            $total = count($results);
+            if(is_array($results) && $total > 0){
+                $ref = $refLineStrategic.($total+1).'.';
+            } else{
+                $ref = $refLineStrategic.'1.';
+            }
+        } elseif($options['type'] == 'TACTIC'){
+            $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
+            $refObjetiveStrategic = $objetiveStrategic->getRef();
+            $options['type'] = null;
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $total = count($results);
+            if(is_array($results) && $total > 0){
+                $ref = $refObjetiveStrategic.($total+1).'.';
+            } else{
+                $ref = $refObjetiveStrategic.'1.';
+            }
+        }
+        
+        return $ref;
     }
 }

@@ -26,7 +26,6 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     public function load(ObjectManager $manager){
         
         //USUARIO ADMINISTRADOR POR DEFECTO
-
         $user = new User();
         $user->setUsername('admin');
         $user->setPlainPassword('12345');
@@ -57,6 +56,19 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10019081);
         $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
+        $this->addReference('manager_first-10019081', $user);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_first_moron');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Joniel');
+        $user->setLastName('Mendez');
+        $user->setEmail('joniel@pequiven.com');
+        $user->setNumPersonal(10016029);
+        $user->addRole('ROLE_MANAGER_FIRST');
+        $user->setEnabled(true);
+        $this->addReference('manager_first-10016029', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -68,6 +80,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10016012);
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
+        $this->addReference('manager_second-10016012', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -98,6 +111,42 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10003393);
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_first_aux_adilia');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Adilia');
+        $user->setLastName('Guararima');
+        $user->setEmail('adguararima@pequiven.com');
+        $user->setNumPersonal(10003393);
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('manager_first-10019081'));
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_second_aux_norwis');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Norwis');
+        $user->setLastName('Guedez');
+        $user->setEmail('norwisgue@pequiven.com');
+        $user->setNumPersonal(10017701);
+        $user->addRole('ROLE_MANAGER_SECOND_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('manager_second-10016012'));
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_second_aux_david');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('David');
+        $user->setLastName('Alvarado');
+        $user->setEmail('davidalv@pequiven.com');
+        $user->setNumPersonal(10021906);
+        $user->addRole('ROLE_MANAGER_SECOND_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('manager_second-10016012'));
             $manager->persist($user);
             
         $manager->flush();

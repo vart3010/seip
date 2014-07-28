@@ -56,7 +56,8 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         
         
         $container = PequivenObjetiveBundle::getContainer();
-        $user = $container->get('security.context')->getToken()->getUser();
+        $securityContext = $container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
         
         $formOptions = array(
             'class' => 'PequivenObjetiveBundle:Objetive',
@@ -71,7 +72,12 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         $objetiveLevel = new ObjetiveLevel();
         $objetiveLevelName = $objetiveLevel->getLevelNameArray();
         $em = $container->get('doctrine')->getManager();
-        $personal = $em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $user->getNumPersonal()));
+        if($securityContext->isGranted(array('ROLE_MANAGER_SECOND_AUX'))){
+            $realUser = $em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $user->getParent()->getId()));
+            $personal = $em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $realUser->getNumPersonal()));
+        } else{
+            $personal = $em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $user->getNumPersonal()));
+        }
         $cargo = $em->getRepository('PequivenMasterBundle:Cargo')->findOneBy(array('id' => $personal->getCargo()->getId()));
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $cargo->getGerencia()->getId()));
         $complejoId = $gerencia->getComplejo()->getId();

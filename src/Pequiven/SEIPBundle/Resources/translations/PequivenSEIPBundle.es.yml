@@ -26,7 +26,7 @@ pequiven_seip:
 
                 message_header_center: Cabecera de la aplicación
                 message_app_title: Sistema Estadístico de Información Petroquímica
-                message_footer: Footer de la aplicacion
+                message_footer: Sistema Estadístico de Información Petroquímica (SEIP)
 
                 logout: Salir
 
@@ -64,14 +64,17 @@ pequiven_seip:
 
                 #Roles
                 role:
-                    worker_pqv: Personal PQV
-                    superviser: Supervisor
-                    manager_first: Gerente 1ra Línea
-                    manager_second: Gerente 2da Línea
-                    directive: Ejecutivo
-                    administrator: Administrador
                     super_administrator: Super Administrador
-
+                    administrator: Administrador
+                    directive: Ejecutivo
+                    directive_aux: Ejecutivo (Asignado)
+                    manager_first: Gerente 1ra Línea
+                    manager_first_aux: Gerente 1ra Línea (Asignado)
+                    manager_second: Gerente 2da Línea
+                    manager_second_aux: Gerente 2da Línea (Asignado)
+                    superviser: Supervisor
+                    worker_pqv: Personal PQV
+                    
                 search: Buscar
                 show: Mostrar
                 with_selected: Seleccionados 

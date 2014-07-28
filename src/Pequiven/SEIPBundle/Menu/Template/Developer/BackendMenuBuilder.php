@@ -116,11 +116,34 @@ class BackendMenuBuilder extends MenuBuilder
                             'route' => null,
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.list', $section)));
+
                 if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
-                $subchild->addChild('arrangement.objetives.add', array(
-                            'route' => 'pequiven_objetive_menu_create',
-                ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add',$section)));
+                    $thirdchild = $this->factory->createItem('arrangement.objetives.add',
+                            $this->getSubLevelOptions(array(
+                                'uri' => 'add',
+                                'labelAttributes' => array('icon' => 'icon-book'),
+                            ))
+                        )
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.main',$section)));
+                    
+                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                        $thirdchild->addChild('arrangement.objetives.add.strategic', array(
+                            'route' => 'pequiven_objetive_menu_add_strategic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.strategic', $section)));
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                        $thirdchild->addChild('arrangement.objetives.add.tactic', array(
+                            'route' => 'pequiven_objetive_menu_add_tactic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.tactic', $section)));
+                    }
+                    
+                    $subchild->addChild($thirdchild);
+                    
+//                $subchild->addChild('arrangement.objetives.add', array(
+//                            'route' => 'pequiven_objetive_menu_create',
+//                ))
+//                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add',$section)));
                 }
             $child->addChild($subchild);
             

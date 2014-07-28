@@ -1,0 +1,18 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="columns" class="vzla-header" style="height: 54px">
+    <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px">
+        <img class="resize-img-140" src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/logotipo-gobierno-venezuela-2.png') }}" width="180px" />
+    </div>
+    <div class="four-columns four-columns-tablet six-columns-mobile" style="text-align: left;margin-bottom: 0;margin-top: 0;">
+        <!--<div class="vzla-header-column-2">-->
+            <img src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/logomenpet.gif') }}" height="50px" width="200px" />
+            {#{ 'tecnocreaciones_vzla_government.message_header_center'|trans|raw }#}
+        <!--</div>-->
+    </div>
+    <div class="four-columns tree-columns-tablet hide-768" style="text-align: right;float: right;margin-bottom: 0px;">
+        <img class="resize-img-140" src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/venezuela-ahora-es-todos.png') }}" width="80px" />
+    </div>
+</div>
+<hr class="hr-line-vzla-red" style="margin-top:0px;margin-bottom: 4px;" />
+{#{ locale_switcher(null,null,'TecnocreacionesVzlaGovernmentBundle:Template/Developer/Switcher:switcher_links.html.twig') }#}

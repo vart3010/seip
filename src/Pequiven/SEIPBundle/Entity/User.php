@@ -67,6 +67,17 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     protected $username;
     
     /**
+     * @ORM\OneToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User", mappedBy="parent")
+     */
+    private $children;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -235,5 +246,69 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getNumPersonal()
     {
         return $this->numPersonal;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add children
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $children
+     * @return User
+     */
+    public function addChild(\Pequiven\SEIPBundle\Entity\User $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $children
+     */
+    public function removeChild(\Pequiven\SEIPBundle\Entity\User $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $parent
+     * @return User
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\User $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
