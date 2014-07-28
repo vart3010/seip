@@ -44,7 +44,3 @@ displayRefObjetiveTactic:
 displayRefObjetiveOperative:
     path: /arrangement/objetive/displayRefObjetiveOperative
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:displayRefObjetive}
-    
-testComplejo:
-    path: /arrangement/objetive/testComplejo
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:testComplejo}
