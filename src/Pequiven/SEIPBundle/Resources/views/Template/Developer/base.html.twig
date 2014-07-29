@@ -121,6 +121,7 @@
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
             {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
             <div  class="content-container">
+                {% block before_body '' %}
                 {% block body %}
                     {% block mainTitle %}
 
@@ -131,6 +132,7 @@
                     {% endblock %}
                     Contenido (Sobrescribir el bloque "body")
                 {% endblock %}
+                {% block after_body '' %}
             </div>
             {% include 'PequivenSEIPBundle:Block:footer.html.twig' %}
         </section>
@@ -175,10 +177,10 @@
         {# Bloque para escribir javascript #}    
         {% block javascript '' %}
         <script>
-            window.notify.defaults.textOneSimilar = '{{ 'pequiven_seip.notify.one_similar_notification'|trans }}';
-            window.notify.defaults.textSeveralSimilars = '{{ 'pequiven_seip.notify.n_similar_notifications'|trans }}';
-            window.notify.defaults.textOneMore = '{{ 'pequiven_seip.notify.one_more_notification'|trans }}';
-            window.notify.defaults.textSeveralMore = '{{ 'pequiven_seip.notify.n_more_notifications'|trans }}';
+            window.notify.defaults.textOneSimilar = '{{ 'tecnocreaciones_vzla_government.notify.one_similar_notification'|trans }}';
+            window.notify.defaults.textSeveralSimilars = '{{ 'tecnocreaciones_vzla_government.notify.n_similar_notifications'|trans }}';
+            window.notify.defaults.textOneMore = '{{ 'tecnocreaciones_vzla_government.notify.one_more_notification'|trans }}';
+            window.notify.defaults.textSeveralMore = '{{ 'tecnocreaciones_vzla_government.notify.n_more_notifications'|trans }}';
             // Call template init (optional, but faster if called manually)
             $.template.init();
             // If the browser support the Notification API, ask user for permission (with a little delay)
@@ -211,7 +213,7 @@
                     // Gather options
                     notify('{{ message }}','', {
                             system:		false,   
-                            autoClose:		4000,
+                            autoClose:		7000,
                             icon:               '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-'~ type ~'.png') }}',
                             iconOutside:        false,
                             closeButton:        true,
