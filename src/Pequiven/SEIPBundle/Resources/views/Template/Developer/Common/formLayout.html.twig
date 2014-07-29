@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
     <!-- jQuery Form Validation -->
-    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">
-    
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">    
 {% endblock %}
 
 {% block javascripts_base %}
@@ -18,10 +17,15 @@
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
 {% endblock javascripts_base %}
 {% block javascript %}
+    {{ parent() }}
     <script type="text/javascript">
-        $.fn.styleSelect.defaults.allValuesText = '{{ 'tecnocreaciones_vzla_government.all'|trans }}';
-        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'tecnocreaciones_vzla_government.selected'|trans }}';
-        $.fn.styleSelect.defaults.searchText = '{{ 'tecnocreaciones_vzla_government.search'|trans }}';
+        $(document).ready(function(){
+            // Form validation
+            $('form').validationEngine();
+        });
+        $.fn.styleSelect.defaults.allValuesText = '{{ 'pequiven_seip.all'|trans }}';
+        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'pequiven_seip.selected'|trans }}';
+        $.fn.styleSelect.defaults.searchText = '{{ 'pequiven_seip.search'|trans }}';
     </script>
 {% endblock %}
 {% block javascripts %}

@@ -1,0 +1,25 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        {% for type, messages in app.session.flashBag.all %}
+            {% for message in messages %}
+                {% if type == 'fos_user_success' %}
+                    {% set type = 'success' %}
+                {% else %}
+                    {% set type = 'error' %}
+                {% endif %}
+                    // Gather options
+                    notify('{{ message|trans({}, 'FOSUserBundle') }}','', {
+                            system:		false,   
+                            autoClose:		4000,
+                            icon:               '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-'~ type ~'.png') }}',
+                            iconOutside:        false,
+                            closeButton:        true,
+                            showCloseOnHover:	false,
+                            groupSimilar:	true
+                    });
+            {% endfor %}
+        {% endfor %}
+    </script>
+{% endblock javascript %}
