@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/select2/select2.css') }}">
+    <!-- Additional styles -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+    <!-- jQuery Form Validation -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">
+    
+{% endblock %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+{% block javascript %}
+    <script type="text/javascript">
+        $.fn.styleSelect.defaults.allValuesText = '{{ 'tecnocreaciones_vzla_government.all'|trans }}';
+        $.fn.styleSelect.defaults.multipleValuesText = '%d {{ 'tecnocreaciones_vzla_government.selected'|trans }}';
+        $.fn.styleSelect.defaults.searchText = '{{ 'tecnocreaciones_vzla_government.search'|trans }}';
+    </script>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2/select2.js') }}"></script>
+    <script src="{{ asset('bundles/pequivenseip/select2/select2.min.js') }}"></script>
+    <!-- jQuery Form Validation -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+    <!-- JqueryMaskPlugin -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-mask-plugin/jquery.mask.js') }}"></script>
+    <script src="{{ asset('bundles/pequivenseip/jquery-mask-plugin/jquery.mask.min.js') }}"></script>
+    <!-- Jquery Number Format -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-number-master/jquery.number.js') }}"></script>
+    <script src="{{ asset('bundles/pequivenseip/jquery-number-master/jquery.number.min.js') }}"></script>
+    
+{% endblock javascripts %}
