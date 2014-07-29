@@ -70,8 +70,8 @@ class ObjetiveTacticController extends Controller{
         if($form->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
-            var_dump($data);
-            die();
+            //var_dump($data);
+            //die();
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
