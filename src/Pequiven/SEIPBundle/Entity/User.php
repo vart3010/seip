@@ -77,6 +77,30 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     private $parent;
     
+    /** 
+     * Complejo
+     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
+     */
+    private $Complejo;
+    
+    /**
+     * Gerencia
+     * @var=\Pequiven\MasterBundle\Entity\Gerencia
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
+     * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
+     */
+    private $Gerencia;
+    
+    /**
+     * Cargo
+     * @var \Pequiven\MasterBundle\Entity\Cargo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
+     * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
+     */
+    private $Cargo;
+    
     /**
      * Get id
      *
@@ -310,5 +334,74 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set Complejo
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
+     * @return User
+     */
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
+    {
+        $this->Complejo = $complejo;
+
+        return $this;
+    }
+
+    /**
+     * Get Complejo
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejo()
+    {
+        return $this->Complejo;
+    }
+
+    /**
+     * Set Gerencia
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
+     * @return User
+     */
+    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
+    {
+        $this->Gerencia = $gerencia;
+
+        return $this;
+    }
+
+    /**
+     * Get Gerencia
+     *
+     * @return \Pequiven\MasterBundle\Entity\Gerencia 
+     */
+    public function getGerencia()
+    {
+        return $this->Gerencia;
+    }
+
+    /**
+     * Set Cargo
+     *
+     * @param \Pequiven\MasterBundle\Entity\Cargo $cargo
+     * @return User
+     */
+    public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
+    {
+        $this->Cargo = $cargo;
+
+        return $this;
+    }
+
+    /**
+     * Get Cargo
+     *
+     * @return \Pequiven\MasterBundle\Entity\Cargo 
+     */
+    public function getCargo()
+    {
+        return $this->Cargo;
     }
 }

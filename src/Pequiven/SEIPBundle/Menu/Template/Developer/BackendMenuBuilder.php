@@ -136,6 +136,15 @@ class BackendMenuBuilder extends MenuBuilder
                             'route' => 'pequiven_objetive_menu_add_tactic',
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.tactic', $section)));
+                        $thirdchild->addChild('arrangement.objetives.add.operative', array(
+                            'route' => 'pequiven_objetive_menu_add_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.operative', $section)));
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                        $thirdchild->addChild('arrangement.objetives.add.operative', array(
+                            'route' => 'pequiven_objetive_menu_add_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.operative', $section)));
                     }
                     
                     $subchild->addChild($thirdchild);

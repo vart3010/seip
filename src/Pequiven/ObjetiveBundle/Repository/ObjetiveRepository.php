@@ -33,10 +33,10 @@ class ObjetiveRepository extends EntityRepository {
                     ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
                     ->groupBy('o.ref');
         if(isset($options['type'])){//Para los select
-            if($options['type'] === 'TACTIC_ZIV'){
+            if($options['type'] === 'TACTIC_ZIV' || $options['type'] === 'OPERATIVE_ZIV'){
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId'])
                       ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId']);
-            } elseif($options['type'] === 'TACTIC'){
+            } elseif($options['type'] === 'TACTIC' || $options['type'] === 'OPERATIVE'){
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId'])
                       ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId'])
                       ->andWhere('o.complejo = ' . $options['complejoId']);
@@ -46,8 +46,28 @@ class ObjetiveRepository extends EntityRepository {
                 $query->where('o.lineStrategic = ' . $options['lineStrategicId']);
             } elseif($options['type_ref'] === 'TACTIC_REF'){
                 $query->andWhere('o.parent = ' . $options['objetiveStrategicId']);
+            } elseif($options['type_ref'] === 'OPERATIVE_REF'){
+                $query->andWhere('o.parent = ' . $options['objetiveTacticId']);
             }
         }
+        
+        $q = $query->getQuery();
+        //var_dump($q->getSQL());
+        //die();
+        return $q->getResult();
+    }
+    
+    /**
+     * Devuelve un grupo de resultados del objetivo para cuando se va a calcular el número de referencia para un objetivo operativo
+     */
+    public function getToCalculateRefFromObjetiveOperative($options = array()){
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                    ->select('o')
+                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                    ->groupBy('o.ref');
+        $query->andWhere($query);
+        
         
         $q = $query->getQuery();
         //var_dump($q->getSQL());

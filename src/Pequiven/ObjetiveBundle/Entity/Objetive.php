@@ -14,11 +14,10 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository")
  * @ORM\Table(name="seip_objetive")
  */
-class Objetive extends modelObjetive
-{
+class Objetive extends modelObjetive {
+
     //Texto a mostrar en los select
     protected $descriptionSelect;
-
 
     /**
      * @var integer
@@ -42,7 +41,7 @@ class Objetive extends modelObjetive
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -50,7 +49,7 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -65,98 +64,98 @@ class Objetive extends modelObjetive
      * @ORM\Column(name="description", type="string", length=300)
      */
     private $description;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="ref", type="string", length=15, nullable=true)
      */
     private $ref;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="weight", type="float", nullable=true)
      */
     private $weight;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="goal", type="float", nullable=true)
      */
     private $goal;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="rank_top", type="float", nullable=true)
      */
     private $rankTop;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
      */
     private $rankMiddleTop;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
      */
     private $rankMiddleBottom;
-    
+
     /**
      * @var float
      * 
      * @ORM\Column(name="rank_bottom", type="float", nullable=true)
      */
     private $rankBottom;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="eval_objetive", type="boolean")
      */
     private $evalObjetive = false;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="eval_indicator", type="boolean")
      */
     private $evalIndicator = false;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="eval_arrangement_program", type="boolean")
      */
     private $evalArrangementProgram = false;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="eval_simple_average", type="boolean")
      */
     private $evalSimpleAverage = false;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="eval_weighted_average", type="boolean")
      */
     private $evalWeightedAverage = false;
-    
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-    
+
     /**
      * ObjetiveLevel
      * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel
@@ -164,7 +163,7 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_objetive_level", referencedColumnName="id")
      */
     private $objetiveLevel;
-    
+
     /**
      * LineStrategic
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
@@ -172,7 +171,7 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_line_strategic", referencedColumnName="id")
      */
     private $lineStrategic;
-    
+
     /**
      * Complejo
      * @var \Pequiven\MasterBundle\Entity\Complejo
@@ -180,7 +179,7 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
-    
+
     /**
      * Gerencia
      * @var \Pequiven\MasterBundle\Entity\Gerencia
@@ -188,12 +187,12 @@ class Objetive extends modelObjetive
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parent")
      */
     private $children;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
@@ -203,8 +202,7 @@ class Objetive extends modelObjetive
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -213,8 +211,7 @@ class Objetive extends modelObjetive
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -224,8 +221,7 @@ class Objetive extends modelObjetive
      * @param \DateTime $createdAt
      * @return Objetive
      */
-    public function setCreatedAt($createdAt)
-    {
+    public function setCreatedAt($createdAt) {
         $this->createdAt = $createdAt;
 
         return $this;
@@ -236,8 +232,7 @@ class Objetive extends modelObjetive
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -247,8 +242,7 @@ class Objetive extends modelObjetive
      * @param \DateTime $updatedAt
      * @return Objetive
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -259,8 +253,7 @@ class Objetive extends modelObjetive
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -270,8 +263,7 @@ class Objetive extends modelObjetive
      * @param string $description
      * @return Objetive
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
 
         return $this;
@@ -282,8 +274,7 @@ class Objetive extends modelObjetive
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -293,8 +284,7 @@ class Objetive extends modelObjetive
      * @param boolean $enabled
      * @return Objetive
      */
-    public function setEnabled($enabled)
-    {
+    public function setEnabled($enabled) {
         $this->enabled = $enabled;
 
         return $this;
@@ -305,8 +295,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEnabled()
-    {
+    public function getEnabled() {
         return $this->enabled;
     }
 
@@ -316,8 +305,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
      * @return Objetive
      */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null) {
         $this->userCreatedAt = $userCreatedAt;
 
         return $this;
@@ -328,8 +316,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserCreatedAt()
-    {
+    public function getUserCreatedAt() {
         return $this->userCreatedAt;
     }
 
@@ -339,8 +326,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
      * @return Objetive
      */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null) {
         $this->userUpdatedAt = $userUpdatedAt;
 
         return $this;
@@ -351,8 +337,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\SEIPBundle\Entity\User 
      */
-    public function getUserUpdatedAt()
-    {
+    public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
     }
 
@@ -362,8 +347,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel
      * @return Objetive
      */
-    public function setObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel = null)
-    {
+    public function setObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel = null) {
         $this->objetiveLevel = $objetiveLevel;
 
         return $this;
@@ -374,8 +358,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel 
      */
-    public function getObjetiveLevel()
-    {
+    public function getObjetiveLevel() {
         return $this->objetiveLevel;
     }
 
@@ -385,8 +368,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
      * @return Objetive
      */
-    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
-    {
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null) {
         $this->complejo = $complejo;
 
         return $this;
@@ -397,8 +379,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\MasterBundle\Entity\Complejo 
      */
-    public function getComplejo()
-    {
+    public function getComplejo() {
         return $this->complejo;
     }
 
@@ -408,8 +389,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return Objetive
      */
-    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
-    {
+    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null) {
         $this->gerencia = $gerencia;
 
         return $this;
@@ -420,8 +400,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\MasterBundle\Entity\Gerencia 
      */
-    public function getGerencia()
-    {
+    public function getGerencia() {
         return $this->gerencia;
     }
 
@@ -431,8 +410,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
      * @return Objetive
      */
-    public function addChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children)
-    {
+    public function addChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
         $this->children[] = $children;
 
         return $this;
@@ -443,8 +421,7 @@ class Objetive extends modelObjetive
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
      */
-    public function removeChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children)
-    {
+    public function removeChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
         $this->children->removeElement($children);
     }
 
@@ -453,8 +430,7 @@ class Objetive extends modelObjetive
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getChildren()
-    {
+    public function getChildren() {
         return $this->children;
     }
 
@@ -464,8 +440,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parent
      * @return Objetive
      */
-    public function setParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parent = null)
-    {
+    public function setParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parent = null) {
         $this->parent = $parent;
 
         return $this;
@@ -476,8 +451,7 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->parent;
     }
 
@@ -487,8 +461,7 @@ class Objetive extends modelObjetive
      * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic
      * @return Objetive
      */
-    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null)
-    {
+    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null) {
         $this->lineStrategic = $lineStrategic;
 
         return $this;
@@ -499,11 +472,9 @@ class Objetive extends modelObjetive
      *
      * @return \Pequiven\MasterBundle\Entity\LineStrategic 
      */
-    public function getLineStrategic()
-    {
+    public function getLineStrategic() {
         return $this->lineStrategic;
     }
-
 
     /**
      * Set weight
@@ -511,8 +482,7 @@ class Objetive extends modelObjetive
      * @param float $weight
      * @return Objetive
      */
-    public function setWeight($weight)
-    {
+    public function setWeight($weight) {
         $this->weight = $weight;
 
         return $this;
@@ -523,8 +493,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getWeight()
-    {
+    public function getWeight() {
         return $this->weight;
     }
 
@@ -534,8 +503,7 @@ class Objetive extends modelObjetive
      * @param float $goal
      * @return Objetive
      */
-    public function setGoal($goal)
-    {
+    public function setGoal($goal) {
         $this->goal = $goal;
 
         return $this;
@@ -546,8 +514,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getGoal()
-    {
+    public function getGoal() {
         return $this->goal;
     }
 
@@ -557,8 +524,7 @@ class Objetive extends modelObjetive
      * @param float $rankTop
      * @return Objetive
      */
-    public function setRankTop($rankTop)
-    {
+    public function setRankTop($rankTop) {
         $this->rankTop = $rankTop;
 
         return $this;
@@ -569,8 +535,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getRankTop()
-    {
+    public function getRankTop() {
         return $this->rankTop;
     }
 
@@ -580,8 +545,7 @@ class Objetive extends modelObjetive
      * @param float $rankMiddleTop
      * @return Objetive
      */
-    public function setRankMiddleTop($rankMiddleTop)
-    {
+    public function setRankMiddleTop($rankMiddleTop) {
         $this->rankMiddleTop = $rankMiddleTop;
 
         return $this;
@@ -592,8 +556,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getRankMiddleTop()
-    {
+    public function getRankMiddleTop() {
         return $this->rankMiddleTop;
     }
 
@@ -603,8 +566,7 @@ class Objetive extends modelObjetive
      * @param float $rankMiddleBottom
      * @return Objetive
      */
-    public function setRankMiddleBottom($rankMiddleBottom)
-    {
+    public function setRankMiddleBottom($rankMiddleBottom) {
         $this->rankMiddleBottom = $rankMiddleBottom;
 
         return $this;
@@ -615,8 +577,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getRankMiddleBottom()
-    {
+    public function getRankMiddleBottom() {
         return $this->rankMiddleBottom;
     }
 
@@ -626,8 +587,7 @@ class Objetive extends modelObjetive
      * @param float $rankBottom
      * @return Objetive
      */
-    public function setRankBottom($rankBottom)
-    {
+    public function setRankBottom($rankBottom) {
         $this->rankBottom = $rankBottom;
 
         return $this;
@@ -638,8 +598,7 @@ class Objetive extends modelObjetive
      *
      * @return float 
      */
-    public function getRankBottom()
-    {
+    public function getRankBottom() {
         return $this->rankBottom;
     }
 
@@ -649,8 +608,7 @@ class Objetive extends modelObjetive
      * @param boolean $evalObjetive
      * @return Objetive
      */
-    public function setEvalObjetive($evalObjetive)
-    {
+    public function setEvalObjetive($evalObjetive) {
         $this->evalObjetive = $evalObjetive;
 
         return $this;
@@ -661,8 +619,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEvalObjetive()
-    {
+    public function getEvalObjetive() {
         return $this->evalObjetive;
     }
 
@@ -672,8 +629,7 @@ class Objetive extends modelObjetive
      * @param boolean $evalIndicator
      * @return Objetive
      */
-    public function setEvalIndicator($evalIndicator)
-    {
+    public function setEvalIndicator($evalIndicator) {
         $this->evalIndicator = $evalIndicator;
 
         return $this;
@@ -684,8 +640,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEvalIndicator()
-    {
+    public function getEvalIndicator() {
         return $this->evalIndicator;
     }
 
@@ -695,8 +650,7 @@ class Objetive extends modelObjetive
      * @param boolean $evalArrangementProgram
      * @return Objetive
      */
-    public function setEvalArrangementProgram($evalArrangementProgram)
-    {
+    public function setEvalArrangementProgram($evalArrangementProgram) {
         $this->evalArrangementProgram = $evalArrangementProgram;
 
         return $this;
@@ -707,8 +661,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEvalArrangementProgram()
-    {
+    public function getEvalArrangementProgram() {
         return $this->evalArrangementProgram;
     }
 
@@ -718,8 +671,7 @@ class Objetive extends modelObjetive
      * @param boolean $evalSimpleAverage
      * @return Objetive
      */
-    public function setEvalSimpleAverage($evalSimpleAverage)
-    {
+    public function setEvalSimpleAverage($evalSimpleAverage) {
         $this->evalSimpleAverage = $evalSimpleAverage;
 
         return $this;
@@ -730,8 +682,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEvalSimpleAverage()
-    {
+    public function getEvalSimpleAverage() {
         return $this->evalSimpleAverage;
     }
 
@@ -741,8 +692,7 @@ class Objetive extends modelObjetive
      * @param boolean $evalWeightedAverage
      * @return Objetive
      */
-    public function setEvalWeightedAverage($evalWeightedAverage)
-    {
+    public function setEvalWeightedAverage($evalWeightedAverage) {
         $this->evalWeightedAverage = $evalWeightedAverage;
 
         return $this;
@@ -753,8 +703,7 @@ class Objetive extends modelObjetive
      *
      * @return boolean 
      */
-    public function getEvalWeightedAverage()
-    {
+    public function getEvalWeightedAverage() {
         return $this->evalWeightedAverage;
     }
 
@@ -764,8 +713,7 @@ class Objetive extends modelObjetive
      * @param string $ref
      * @return Objetive
      */
-    public function setRef($ref)
-    {
+    public function setRef($ref) {
         $this->ref = $ref;
 
         return $this;
@@ -776,21 +724,20 @@ class Objetive extends modelObjetive
      *
      * @return string 
      */
-    public function getRef()
-    {
+    public function getRef() {
         return $this->ref;
     }
-    
+
     /**
      * Get descriptionSelect
      * 
      * @return string
      */
-    public function getDescriptionSelect(){
+    public function getDescriptionSelect() {
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
         return $this->getDescriptionSelect();
     }
-    
+
     /**
      * Devuelve el valor referencial del objetivo
      * <b> x.x Estratégico </b>
@@ -799,34 +746,46 @@ class Objetive extends modelObjetive
      * @param type $options
      * @return boolean
      */
-    public function setNewRef($options = array()){
+    public function setNewRef($options = array()) {
         $container = \Pequiven\ObjetiveBundle\PequivenObjetiveBundle::getContainer();
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
-        
-        if($options['type'] == 'STRATEGIC'){
+
+        if ($options['type'] == 'STRATEGIC') {
             $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
             $refLineStrategic = $lineStrategic->getRef();
             $total = count($results);
-            if(is_array($results) && $total > 0){
-                $ref = $refLineStrategic.($total+1).'.';
-            } else{
-                $ref = $refLineStrategic.'1.';
+            if (is_array($results) && $total > 0) {
+                $ref = $refLineStrategic . ($total + 1) . '.';
+            } else {
+                $ref = $refLineStrategic . '1.';
             }
-        } elseif($options['type'] == 'TACTIC'){
+        } elseif ($options['type'] == 'TACTIC') {
             $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
             $refObjetiveStrategic = $objetiveStrategic->getRef();
             $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
             $total = count($results);
-            if(is_array($results) && $total > 0){
-                $ref = $refObjetiveStrategic.($total+1).'.';
-            } else{
-                $ref = $refObjetiveStrategic.'1.';
+            if (is_array($results) && $total > 0) {
+                $ref = $refObjetiveStrategic . ($total + 1) . '.';
+            } else {
+                $ref = $refObjetiveStrategic . '1.';
+            }
+        } elseif ($options['type'] == 'OPERATIVE') {
+            $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
+            $refObjetiveTactic = $objetiveTactic->getRef();
+            $options['type'] = null;
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $total = count($results);
+            if (is_array($results) && $total > 0) {
+                $ref = $refObjetiveTactic . ($total + 1) . '.';
+            } else {
+                $ref = $refObjetiveTactic . '1.';
             }
         }
-        
+
         return $ref;
     }
+
 }

@@ -42,9 +42,12 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setFirstName('Francisco');
         $user->setLastName('Mejias');
         $user->setEmail('franmejias@pequiven.com');
+        $user->setNumPersonal(10019742);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-88'));
         $user->addRole('ROLE_DIRECTIVE');
         $user->setEnabled(true);
-        $this->addReference('directive', $user);
+        $this->addReference('directive-10019742', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -54,6 +57,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Olivo');
         $user->setEmail('geolivo@pequiven.com');
         $user->setNumPersonal(10019081);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-84'));
         $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
         $this->addReference('manager_first-10019081', $user);
@@ -66,9 +71,25 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Mendez');
         $user->setEmail('joniel@pequiven.com');
         $user->setNumPersonal(10016029);
+        $user->setComplejo($this->getReference('Complejo-01'));
+        $user->setGerencia($this->getReference('Gerencia-08'));
         $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
         $this->addReference('manager_first-10016029', $user);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('manager_first_aux_victor');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('veescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('directive-10019742'));
             $manager->persist($user);
             
         $user = new User();
@@ -78,6 +99,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('veescalona@pequiven.com');
         $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-79'));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
         $this->addReference('manager_second-10016012', $user);
@@ -109,6 +132,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Guararima');
         $user->setEmail('adguararima@pequiven.com');
         $user->setNumPersonal(10003393);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-84'));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
             $manager->persist($user);
@@ -120,6 +145,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Guararima');
         $user->setEmail('adguararima@pequiven.com');
         $user->setNumPersonal(10003393);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-84'));
         $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
         $user->setParent($this->getReference('manager_first-10019081'));
@@ -132,6 +159,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Guedez');
         $user->setEmail('norwisgue@pequiven.com');
         $user->setNumPersonal(10017701);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-79'));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
         $user->setParent($this->getReference('manager_second-10016012'));
@@ -144,6 +173,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Alvarado');
         $user->setEmail('davidalv@pequiven.com');
         $user->setNumPersonal(10021906);
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-79'));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
         $user->setParent($this->getReference('manager_second-10016012'));

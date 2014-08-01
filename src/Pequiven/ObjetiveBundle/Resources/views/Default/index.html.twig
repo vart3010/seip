@@ -1,7 +1,31 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    Plantilla developer implementada en Symfony2
     <p>{{ 'pequiven_seip.seip'|trans }}</p>
+    
+    <input type="hidden" id="notification" name="notification" value="{{ notification }}" >
+    
+    <div id="top-notifications">
+        <ul id="notifications-top-center">
+            <li class="notification" style="display: list-item;">
+                <div>
+                    <h3>{{ message }}</h3>
+                </div>
+                <span class="close show">x</span>
+            </li>
+        </ul>
+    </div>
 {% endblock body %}
-Hello {{ name }}!
+{% block javascript %}
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+        console.log($("#message").val());
+        if($("#notification").val() == 1){
+            $("#top-notifications").show();
+        } else{
+            $("#top-notifications").hide();
+        }
+    });
+    </script>
+{% endblock javascript %}

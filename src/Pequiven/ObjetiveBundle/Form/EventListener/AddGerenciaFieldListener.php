@@ -26,13 +26,8 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     protected $user;
     protected $em;
     
-    protected $realUser;
-    protected $personal;
-    
     protected $complejoObject;
     protected $complejoNameArray = array();
-    protected $cargo;
-    protected $gerencia;
     
     public static function getSubscribedEvents() {
         return array(
@@ -49,21 +44,6 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
-    }
-    
-    /**
-     * Función que define el cargo y gerencia dea cuerdo al tipo de persona que este logueada
-     * @param type $roles
-     */
-    public function getTypePersonal($roles = array()){
-        if($this->securityContext->isGranted($roles)){
-            $this->realUser = $this->em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $this->user->getParent()->getId()));
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->realUser->getNumPersonal()));
-        } else{
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->user->getNumPersonal()));
-        }
-        $this->cargo = $this->em->getRepository('PequivenMasterBundle:Cargo')->findOneBy(array('id' => $this->personal->getCargo()->getId()));
-        $this->gerencia = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $this->cargo->getGerencia()->getId()));
     }
     
     public function preSetData(FormEvent $event){
@@ -83,9 +63,9 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     }
     
     public function addGerenciaForm($form,$gerencia = null){
-        $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        $gerenciaId = $this->cargo->getGerencia()->getId();
-        $gerencia = $gerencia == null ? $this->cargo->getGerencia() : $gerencia;
+        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+        $gerenciaId = $this->user->getGerencia()->getId();
+        $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
         
         $formOptions = array(
             'class' => 'PequivenMasterBundle:Gerencia',

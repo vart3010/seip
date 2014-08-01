@@ -25,9 +25,9 @@ class MenuController extends Controller {
      * Redirecciona
      * 
      */
-    public function showHome(){
-        var_dump($this->container->get('ruta'));
-        die();
+    public function showHomeAction(){
+        //var_dump($this->container->get('ruta'));
+        //die();
         return $this->container->get('templating')->renderResponse('PequivenSEIPBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'));
     }
 }

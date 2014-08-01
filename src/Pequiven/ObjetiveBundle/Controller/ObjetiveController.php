@@ -16,6 +16,7 @@ use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\ObjetiveBundle\Form\Type\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 /**
@@ -37,6 +38,34 @@ class ObjetiveController extends Controller{
     
     public function listAction(){
         return array();
+    }
+    
+    public function showHomeAction($type){
+        if($type == 'strategic'){
+            $message = "Objetivo Estratégico creado exitosamente";
+        } elseif ($type == 'tactic'){
+            $message = "Objetivo Táctico creado exitosamente";
+        } elseif ($type == 'operative'){
+            $message = "Objetivo Operativo creado exitosamente";
+        }
+        
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
+        array('message' => $message,
+            'notification' => true
+            ));
+
+    }
+    
+    /**
+     * Función que redirecciona
+     * @param type $message
+     * @return type
+     */
+    public function redirectObjetiveAction($message = ''){
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
+                array('message' => $message,
+                    'notification' => true
+                    ));
     }
     
     public function createAction(Request $request){

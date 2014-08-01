@@ -34,14 +34,9 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
     protected $user;
     protected $em;
     
-    protected $realUser;
-    protected $personal;
-    
     protected $complejoObject;
     protected $complejoNameArray = array();
-    protected $cargo;
-    protected $gerencia;
-    protected $complejo;
+    protected $typeOperative = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -50,7 +45,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         );
     }
     
-    public function __construct() {
+    public function __construct($options = array()) {
         $this->container = PequivenObjetiveBundle::getContainer();
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
@@ -58,24 +53,11 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        if(isset($options['typeOperative'])){
+            $this->typeOperative = true;
+        }
     }
     
-    /**
-     * Función que define el cargo y gerencia dea cuerdo al tipo de persona que este logueada
-     * @param type $roles
-     */
-    public function getTypePersonal($roles = array()){
-        if($this->securityContext->isGranted($roles)){
-            $this->realUser = $this->em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $this->user->getParent()->getId()));
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->realUser->getNumPersonal()));
-        } else{
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->user->getNumPersonal()));
-        }
-        $this->cargo = $this->em->getRepository('PequivenMasterBundle:Cargo')->findOneBy(array('id' => $this->personal->getCargo()->getId()));
-        $this->gerencia = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $this->cargo->getGerencia()->getId()));
-        $this->complejo = $this->gerencia->getComplejo();
-    }
-
     public function preSetData(FormEvent $event) {
         $object = $event->getData();
         $form = $event->getForm();
@@ -97,7 +79,6 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
     }
 
     private function addObjetiveParentStrategicForm($form,$lineStrategicId,$objetiveParent = null) {
-        
         $formOptions = array(
             'class' => 'PequivenObjetiveBundle:Objetive',
             'empty_value' => 'Seleccione el objetivo estratégico',
@@ -105,14 +86,11 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen red-gradient','style' => 'width:50%')
+            'attr' => array('class' => 'populate select2-offscreen red-gradient','style' => 'width:400px')
         );
         
-        $objetiveLevel = new ObjetiveLevel();
-        $objetiveLevelName = $objetiveLevel->getLevelNameArray();
-        
-        $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        if($this->complejo->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
             $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId){
             $qb = $er->createQueryBuilder('objetive')
                      ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId')
@@ -125,7 +103,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             return $qb;
             };
         } else{
-            $complejoId = $this->complejo->getId();
+            $complejoId = $this->user->getComplejo()->getId();
             $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId,$complejoId){
             $qb = $er->createQueryBuilder('objetive')
                      ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId AND objetive.complejo = :complejoId')
@@ -146,8 +124,14 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         }
         
         if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            return $form->add('parent', 'entity', $formOptions);
+            if($this->typeOperative){
+                $formOptions['mapped'] = false;
+                return $form->add('parent_strategic', 'entity', $formOptions);
+            } else{
+                return $form->add('parent', 'entity', $formOptions);
+            }
         } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $formOptions['mapped'] = false;
             return $form->add('parent_strategic', 'entity', $formOptions);
         }
     }

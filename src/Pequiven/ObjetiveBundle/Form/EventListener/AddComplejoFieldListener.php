@@ -28,13 +28,9 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
     protected $user;
     protected $em;
     
-    protected $realUser;
-    protected $personal;
-    
     protected $complejoObject;
     protected $complejoNameArray = array();
-    protected $cargo;
-    protected $gerencia;
+    protected $typeOperative = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -43,7 +39,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 );
     }
     
-    public function __construct() {
+    public function __construct($options = array()) {
         $this->container = PequivenObjetiveBundle::getContainer();
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
@@ -51,21 +47,9 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
-    }
-    
-    /**
-     * Función que define el cargo y gerencia dea cuerdo al tipo de persona que este logueada
-     * @param type $roles
-     */
-    public function getTypePersonal($roles = array()){
-        if($this->securityContext->isGranted($roles)){
-            $this->realUser = $this->em->getRepository('PequivenSEIPBundle:User')->findOneBy(array('id' => $this->user->getParent()->getId()));
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->realUser->getNumPersonal()));
-        } else{
-            $this->personal = $this->em->getRepository('PequivenMasterBundle:Personal')->findOneBy(array('numPersonal' => $this->user->getNumPersonal()));
+        if(isset($options['typeOperative'])){
+            $this->typeOperative = true;
         }
-        $this->cargo = $this->em->getRepository('PequivenMasterBundle:Cargo')->findOneBy(array('id' => $this->personal->getCargo()->getId()));
-        $this->gerencia = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $this->cargo->getGerencia()->getId()));
     }
     
     public function preSetData(FormEvent $event){
@@ -77,10 +61,11 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             return $this->addComplejoForm($form,$objetiveStrategicId, $object);
         }
         
-        $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        if($this->gerencia->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+//        $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
             $objetiveStrategicId = array_key_exists('parent', $object) ? $object['parent'] : null;
         }
+        
         $this->addComplejoForm($form,$objetiveStrategicId, $object);
     }
     
@@ -89,14 +74,15 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $object = $event->getData();
         
         $objetiveStrategicId = null;
-        if($this->gerencia->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
             $objetiveStrategicId = array_key_exists('parent', $object) ? $object['parent'] : null;
         }
+  
         $this->addComplejoForm($form,$objetiveStrategicId);
     }
     
     public function addComplejoForm($form,$objetiveStrategicId = null, $complejo = null){
-        
+
         $type = 'entity';
         $formOptions = array(
             'class' => 'PequivenMasterBundle:Complejo',
@@ -114,23 +100,31 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             //$formOptions['attr'] = array('class' => 'selectMultiple multiple white-gradient easy-multiple-selection check-list replacement');
         } else{
             $formOptions['empty_value'] = 'Seleccione su Complejo';
-            $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+            //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
 
-            $complejo = $complejo == null ? $this->gerencia->getComplejo() : $complejo;
-            $complejoId = $this->gerencia->getComplejo()->getId();
+            $complejo = $complejo == null ? $this->user->getComplejo() : $complejo;
+            $complejoId = $this->user->getComplejo()->getId();
             
-            if($this->gerencia->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+            if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
                 $formOptions['empty_value'] = 'Todo';
                 $formOptions['multiple'] = true;
                 //$formOptions['expanded'] = true;
                 $formOptions['mapped'] = false;
-                $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                //$formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
                 //$formOptions['attr'] = array('class' => 'checkbox mid-margin-left replacement','style' => 'width:800px');
                 //$formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
                 
                 //TODO: Optimizar este proceso de carga de los complejos en caso de que el usuario pertenezca a la Sede Corporativa
-                $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));
                 
+                
+                if($this->typeOperative){
+                  //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
+                    $results = array();
+                    $formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
+                } else{
+                  $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                  $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));
+                }
                 $complejo = $results;
             } else{
                 $formOptions['query_builder'] = function(EntityRepository $er) use ($complejoId){

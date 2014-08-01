@@ -22,12 +22,28 @@ use Doctrine\ORM\EntityRepository;
  */
 class AddObjetiveLevelFieldListener implements EventSubscriberInterface {
     //put your code here
+    protected $container;
+    protected $securityContext;
+    protected $user;
+    protected $em;
+       
+    protected $object;
     
     public static function getSubscribedEvents() {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
             FormEvents::PRE_SUBMIT => 'preSubmit'
                 );
+    }
+    
+    public function __construct($options = array()) {
+        $this->container = PequivenObjetiveBundle::getContainer();
+        $this->securityContext = $this->container->get('security.context');
+        $this->user = $this->securityContext->getToken()->getUser();
+        $this->em = $this->container->get('doctrine')->getManager();
+        
+        $objLevel = new ObjetiveLevel();
+        $this->object = $this->em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => $options['level']));
     }
     
     public function preSetData(FormEvent $event){
@@ -47,12 +63,9 @@ class AddObjetiveLevelFieldListener implements EventSubscriberInterface {
     }
     
     private function addObjetiveLevelForm($form, $objetiveLevel = null){
-        $container = PequivenObjetiveBundle::getContainer();
-        $user = $container->get('security.context')->getToken()->getUser();
-        $em = $container->get('doctrine')->getManager();
-        $objLevel = new ObjetiveLevel();
-        $object = $objLevel->typeObjetiveLevel($container->get('security.context'),array('em' => $em));
-        $objLevelId = $object->getId();
+//        $objLevel = new ObjetiveLevel();
+//        $object = $objLevel->typeObjetiveLevel($this->securityContext,array('em' => $this->em));
+//        $objLevelId = $object->getId();
 
         $formOptions = array(
             'class' => 'PequivenObjetiveBundle:ObjetiveLevel',
@@ -61,18 +74,17 @@ class AddObjetiveLevelFieldListener implements EventSubscriberInterface {
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'choices' => $object->getLevel(),
-            'query_builder' => function(EntityRepository $er) use ($objLevelId) {
+            'query_builder' => function(EntityRepository $er) {
                 $qb = $er->createQueryBuilder('objlevel')
                          ->where('objlevel.id = :objLevelId')
-                         ->setParameter('objLevelId', $objLevelId)
+                         ->setParameter('objLevelId', $this->object->getId())
                             ;
                 return $qb;
           }
         );
         $formOptions['attr'] = array('class' => 'select red-gradient check-list replacement', 'style' => 'width:300px');
-        if($object){
-            $formOptions['data'] = $object;
+        if($this->object){
+            $formOptions['data'] = $this->object;
         }
         
         $form->add('objetiveLevel','entity',$formOptions);
