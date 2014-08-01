@@ -1033,7 +1033,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
         $objetive->setUserCreatedAt($this->getReference('directive-10019742'));
-        $objetive->setRef('6.2');
+        $objetive->setRef('6.2.');
         $this->addReference('OBJ-EST-80-02', $objetive);
             $manager->persist($objetive);
             
