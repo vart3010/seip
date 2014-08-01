@@ -753,9 +753,10 @@ class Objetive extends modelObjetive {
 
         if ($options['type'] == 'STRATEGIC') {
             $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
+            $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
             $refLineStrategic = $lineStrategic->getRef();
-            $total = count($results);
+            $total = count($results);            
             if (is_array($results) && $total > 0) {
                 $ref = $refLineStrategic . ($total + 1) . '.';
             } else {

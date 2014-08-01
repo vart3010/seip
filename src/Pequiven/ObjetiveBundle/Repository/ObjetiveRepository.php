@@ -43,7 +43,8 @@ class ObjetiveRepository extends EntityRepository {
             }
         } else{//Para el campo referencia
             if(isset($options['lineStrategicId'])){
-                $query->where('o.lineStrategic = ' . $options['lineStrategicId']);
+                $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId']);
+                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO);
             } elseif($options['type_ref'] === 'TACTIC_REF'){
                 $query->andWhere('o.parent = ' . $options['objetiveStrategicId']);
             } elseif($options['type_ref'] === 'OPERATIVE_REF'){
