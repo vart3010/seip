@@ -24,9 +24,9 @@ pequiven_seip:
                 export_to_csv: Exportar a CVS
                 your_personal_num: Su número de personal
 
-                message_header_center: Cabecera de la aplicación
+                message_header_center: Sistema Estadístico de Información Petroquímica
                 message_app_title: Sistema Estadístico de Información Petroquímica
-                message_footer: Sistema Estadístico de Información Petroquímica (SEIP)
+                message_footer: Desarrollado por la Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
 
                 logout: Salir
 

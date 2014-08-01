@@ -37,7 +37,7 @@ class RegistrationFormType extends AbstractType {
         
         $builder->add('description', 'textarea', array('label' => 'form.objetive', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Nivel del objetivo a crear
-        $builder->addEventSubscriber(new AddObjetiveLevelFieldListener());
+        $builder->addEventSubscriber(new AddObjetiveLevelFieldListener(array('level' => ObjetiveLevel::LEVEL_OPERATIVO)));
         
         //Línea estratégica del objetivo a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener());

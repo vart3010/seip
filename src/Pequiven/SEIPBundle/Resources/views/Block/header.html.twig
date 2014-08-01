@@ -4,11 +4,12 @@
     <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px; margin-top: 4px" >
         <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/header_left_seip.png') }}" width="180px" height="40px" />
     </div>
-    <div class="six-columns four-columns-tablet six-columns-mobile" style="text-align: center;margin-bottom: 0;margin-top: 0;">
+    <div class="six-columns four-columns-tablet six-columns-mobile" style="text-align: center;margin-bottom: 0;margin-top: 10px;">
         <!--<div class="vzla-header-column-2">-->
-            <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/header_center_seip3.png') }}" height="50px" width="500px" />
+            <!-- <img src="{#{ asset('bundles/pequivenseip/logotipos-pqv/header_center_seip3.png') }#}" height="50px" width="500px" /> -->
             {#{ 'tecnocreaciones_vzla_government.message_header_center'|trans|raw }#}
         <!--</div>-->
+        <span class="header-seip">{{ 'pequiven_seip.message_header_center'|trans|raw }}</span>
     </div>
     <div class="two-columns tree-columns-tablet hide-768" style="text-align: right;float: right;margin-bottom: 0px;">
         <img class="resize-img-140" src="{{ asset('bundles/tecnocreacionesvzlagovernment/logotipos-vzla/venezuela-ahora-es-todos.png') }}" width="80px" />

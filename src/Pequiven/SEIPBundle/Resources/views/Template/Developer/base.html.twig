@@ -61,6 +61,7 @@
             {% endstylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/modal3860.css') }}?v=1" />
         <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/login/fonts/header.css') }}" />
         {% block stylesheets '' %}
 
         <!-- JavaScript at bottom except for Modernizr -->
@@ -104,14 +105,14 @@
         
         <!-- Title bar -->
             <header role="banner" id="title-bar" class="hidden-on-desktop">
-                <h2>{% block appTitle %}{{ templateConfig.getTemplateOption('developer','app_title') }}{% endblock %}</h2>
+                <h2 style="font-family: 'Neuropol';">{% block appTitle %}{{ templateConfig.getTemplateOption('developer','app_title') }}{% endblock %}</h2>
             </header>
         <!-- Button to open/hide menu -->
         <a href="javascript:void(0);" id="open-menu"><span>Menu</span></a>
         
         <!-- Button to open/hide shortcuts -->
         <div class="hidden-on-desktop">
-            <img class="logo-menu-mobile" src="{{ asset(templateConfig.getTemplateOption('developer','logo')['icon_png']) }}" height="24px" width="24px" />
+            <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
         </div>
         <div class="message-loading [[ notificationBarService.getLoadStatus().error_class ]]" ng-show="notificationBarService.getLoadStatus().showStatus">
                 <span ng-hide="true" >Cargando...</span>
