@@ -71,7 +71,6 @@ class ObjetiveStrategicController extends Controller {
                 $em->persist(${$nameObject.$i});
             }
             
-            //
             try{
                 $em->flush();
                 $em->getConnection()->commit();
@@ -80,7 +79,7 @@ class ObjetiveStrategicController extends Controller {
                 throw $e;
             }
             
-            return $this->redirect($this->generateUrl('pequiven_seip_menu_home'));
+            return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'strategic')));
         }
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
