@@ -57,14 +57,16 @@ class BackendMenuBuilder extends MenuBuilder
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
-        $this->addExampleMenu($menu, $section);
+        //$this->addExampleMenu($menu, $section);
 
-        $menu->addChild('support', array(
-            'route' => null,
-            'labelAttributes' => array('icon' => 'icon-info'),
-        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.support', $section)));
-        //Gestión
-        $this->addArrangementMenu($menu, $section);//Menú de Gestión
+//        $menu->addChild('support', array(
+//            'route' => null,
+//            'labelAttributes' => array('icon' => 'icon-info'),
+//        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.support', $section)));
+        //Gestión Estratégica
+        $this->addArrangementStrategicMenu($menu, $section);//Menú de Gestión Estratégica
+        //Programas de Gestión
+        $this->addArrangementProgramsMenu($menu, $section);//Menú de Programas de Gestión
         //Reportes
         $menu->addChild('reports', array(
             'route' => null,
@@ -81,20 +83,20 @@ class BackendMenuBuilder extends MenuBuilder
     }
     
     /**
-     * Construye el menu de Gestión
+     * Construye el menu de Gestión Estratégica
      * 
      * @param \Knp\Menu\ItemInterface $menu
      * @param type $section
      */
     
-    function addArrangementMenu(ItemInterface $menu, $section) {
-        $child = $this->factory->createItem('arrangement',
+    function addArrangementStrategicMenu(ItemInterface $menu, $section) {
+        $child = $this->factory->createItem('arrangement_strategic',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
                     'labelAttributes' => array('icon' => 'icon-book',),
                 ))
                 )
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.main', $section)));
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.main', $section)));
 
             //Sub menú Objetivos
 //        $child
@@ -103,48 +105,59 @@ class BackendMenuBuilder extends MenuBuilder
 //                    ))
 //                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives', $section)));
         
-                $subchild = $this->factory->createItem('arrangement.objetives',
+                $subchild = $this->factory->createItem('arrangement_strategic.objetives',
                         $this->getSubLevelOptions(array(
                         'uri' => 'objetive',
                         'labelAttributes' => array('icon' => 'icon-book',),
                         ))
                     )
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.main', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.main', $section)));
                 
                 $subchild
-                        ->addChild('arrangement.objetives.list', array(
+                        ->addChild('arrangement_strategic.objetives.list', array(
                             'route' => null,
                             ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.list', $section)));
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list', $section)));
 
                 if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
-                    $thirdchild = $this->factory->createItem('arrangement.objetives.add',
+                    $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
                                 'labelAttributes' => array('icon' => 'icon-book'),
                             ))
                         )
-                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.main',$section)));
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.main',$section)));
                     
+                    //Si el usuario logueado es Rol Ejecutivo o Ejecutivo Asignado
                     if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                        $thirdchild->addChild('arrangement.objetives.add.strategic', array(
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.strategic', array(
                             'route' => 'pequiven_objetive_menu_add_strategic',
                         ))
-                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.strategic', $section)));
-                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-                        $thirdchild->addChild('arrangement.objetives.add.tactic', array(
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.strategic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.tactic', array(
                             'route' => 'pequiven_objetive_menu_add_tactic',
                         ))
-                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.tactic', $section)));
-                        $thirdchild->addChild('arrangement.objetives.add.operative', array(
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.tactic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.operative', array(
                             'route' => 'pequiven_objetive_menu_add_operative',
                         ))
-                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.operative', $section)));
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.operative', $section)));
+                    //Si el usuario logueado es Rol Gerente Primera Línea o Gerente Primera Línea Asignado
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.tactic', array(
+                            'route' => 'pequiven_objetive_menu_add_tactic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.tactic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.operative', array(
+                            'route' => 'pequiven_objetive_menu_add_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.operative', $section)));
+                    //Si el usuario logueado es Rol Gerente Segunda Línea o Gerente Segunda Línea Asignado
                     } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                        $thirdchild->addChild('arrangement.objetives.add.operative', array(
+                        $thirdchild->addChild('arrangement_strategic.objetives.add.operative', array(
                             'route' => 'pequiven_objetive_menu_add_operative',
                         ))
-                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add.operative', $section)));
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.operative', $section)));
                     }
                     
                     $subchild->addChild($thirdchild);
@@ -157,36 +170,48 @@ class BackendMenuBuilder extends MenuBuilder
             $child->addChild($subchild);
             
             //Sub menú Indicadores
-                $subchild = $this->factory->createItem('arrangement.indicators',
+                $subchild = $this->factory->createItem('arrangement_strategic.indicators',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
                         'labelAttributes' => array('icon' => 'icon-book',),
                         ))
                     )
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.indicators.main', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.main', $section)));
                 $subchild
-                        ->addChild('arrangement.objetives.list', array(
+                        ->addChild('arrangement_strategic.objetives.list', array(
                             'route' => null,
                             ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.indicators.list', $section)));
-            $child->addChild($subchild);
-            
-            //Sub menú Programas de Gestión
-                $subchild = $this->factory->createItem('arrangement.arrangement_programs',
-                        $this->getSubLevelOptions(array(
-                        'uri' => null,
-                        'labelAttributes' => array('icon' => 'icon-book',),
-                        ))
-                    )
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.arrangement_programs.main', $section)));
-                $subchild
-                        ->addChild('arrangement.objetives.list', array(
-                            'route' => null,
-                            ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.arrangement_programs.list', $section)));
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list', $section)));
             $child->addChild($subchild);
         
         $menu->addChild($child);
+    }
+    
+    /**
+     * Construye el menu de Programa de Gestión
+     * 
+     * @param \Knp\Menu\ItemInterface $menu
+     * @param type $section
+     */
+    
+    function addArrangementProgramsMenu(ItemInterface $menu, $section) {
+        if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
+            $child = $this->factory->createItem('arrangement_programs',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                    ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.main', $section)));
+
+            $child
+                ->addChild('arrangement_programs.list', array(
+                'route' => null,
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.list', $section)));
+
+            $menu->addChild($child);
+        }
     }
     
     /**

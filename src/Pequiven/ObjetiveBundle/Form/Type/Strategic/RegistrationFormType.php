@@ -28,35 +28,32 @@ class RegistrationFormType extends AbstractType {
         $container = PequivenObjetiveBundle::getContainer();
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
-        $objetiveLevel = new ObjetiveLevel();
-        $objectObjLevel = $objetiveLevel->typeObjetiveLevel($securityContext,array('em' => $em));
-        
-        $builder->add('objetive_level_name','hidden',array('data' => $objectObjLevel->getLevelName(),'mapped' => false));
-        
-        $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true,'attr' => array('class' => 'input')));
-        
-        $builder->add('description', 'textarea', array('label' => 'form.objetive', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
-        //Nivel del objetivo a crear
-        $builder->addEventSubscriber(new AddObjetiveLevelFieldListener(array('level' => ObjetiveLevel::LEVEL_OPERATIVO)));
         
         //Línea estratégica del objetivo a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener());
         
+        $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true, 'attr' => array('class' => 'input','size' => 5)));
+        
+        $builder->add('description', 'textarea', array('label' => 'form.objetive', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
+
+        //Nivel del objetivo a crear
+        //$builder->addEventSubscriber(new AddObjetiveLevelFieldListener(array('level' => ObjetiveLevel::LEVEL_OPERATIVO)));
+        
         //Complejo(s) donde impactará(n) el objetivo a crear
-        $builder->addEventSubscriber(new AddComplejoFieldListener());
+//        $builder->addEventSubscriber(new AddComplejoFieldListener());
         
         //Meta del Objetivo
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000")));
         
         //Rango de Gestión
             //Rango Alto del Objetivo
-            $builder->add('rankTop','percent',array('label' => 'form.rankTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000")));
+            $builder->add('rankTop','percent',array('label' => 'form.rankTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
             //Rango Medio Alto del Objetivo
-            $builder->add('rankMiddleTop','percent',array('label' => 'form.rankMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000")));
+            $builder->add('rankMiddleTop','percent',array('label' => 'form.rankMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
             //Rango Medio Bajo del Objetivo
-            $builder->add('rankMiddleBottom','percent',array('label' => 'form.rankMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000")));
+            $builder->add('rankMiddleBottom','percent',array('label' => 'form.rankMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
             //Rango Bajo del Objetivo
-            $builder->add('rankBottom','percent',array('label' => 'form.rankBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000")));
+            $builder->add('rankBottom','percent',array('label' => 'form.rankBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
         
         //Tipo de Evaluación    
             //Evaluar por Objetivo
@@ -66,9 +63,10 @@ class RegistrationFormType extends AbstractType {
         
          //Forma de Evaluación   
             //Evaluar por Promedio Simple
-            $builder->add('evalSimpleAverage','checkbox',array('label' => 'form.evalSimpleAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
+//            $builder->add('evalSimpleAverage','checkbox',array('label' => 'form.evalSimpleAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
+            
             //Evaluar por Promedio Ponderado
-            $builder->add('evalWeightedAverage','checkbox',array('label' => 'form.evalWeightedAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
+//            $builder->add('evalWeightedAverage','checkbox',array('label' => 'form.evalWeightedAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
     }
     
     public function getName(){

@@ -9,13 +9,13 @@ pequiven_objetive_menu_create:
     defaults: {_controller: PequivenObjetiveBundle:Objetive:create}
     
 pequiven_objetive_menu_add_strategic:
-    path: /arrangement/objetive/strategic/add
+    path: /arrangement_strategic/objetive/strategic/add
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:create}
     
 pequiven_objetive_menu_add_tactic:
-    path: /arrangement/objetive/tactic/add
+    path: /arrangement_strategic/objetive/tactic/add
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:create}
     
 pequiven_objetive_menu_add_operative:
-    path: /arrangement/objetive/operative/add
+    path: /arrangement_strategic/objetive/operative/add
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:create}

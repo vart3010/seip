@@ -33,44 +33,6 @@
                 {{ form_widget(form.complejo_name) }}
             </div>
             
-            <!-- Hidden con el Nivel de Objetivo de la Persona que esta logueada -->
-            <div>
-                {{ form_widget(form.objetive_level_name) }}
-            </div>
-            
-            <!-- Ref -->
-            <div id="ref" class="field-block button-height">
-                {{ form_label(form.ref) }}
-                {{ form_widget(form.ref,{'attr':{'class':'input' } }) }}
-                {{ form_errors(form.ref) }}
-                <span id="ref_info" class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
-                </span>
-            </div>
-                
-            <!-- Descripción -->
-            <div class="field-block button-height">
-                {{ form_label(form.description) }}
-                {{ form_widget(form.description) }}
-                {{ form_errors(form.description) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
-                </span>
-            </div>
-                
-            <!-- Nivel del Objetivo a crear -->
-            <div id="objetiveLevel" class="field-block button-height">
-                {{ form_label(form.objetiveLevel) }}
-                {{ form_widget(form.objetiveLevel) }}
-                {{ form_errors(form.objetiveLevel) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.objetiveLevel_info'|trans }}</span>
-                </span>
-            </div>
-                
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
                 {{ form_label(form.lineStrategic) }}
@@ -112,6 +74,28 @@
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Descripción -->
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Ref -->
+            <div id="ref" class="field-block button-height">
+                {{ form_label(form.ref) }}
+                {{ form_widget(form.ref) }}
+                {{ form_errors(form.ref) }}
+                <span id="ref_info" class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
                 </span>
             </div>
             
@@ -224,33 +208,6 @@
                 </div>
             </fieldset>
             
-            <!-- Forma de Evaluación -->
-            <fieldset class="fieldset">
-                <legend class="legend">{{ 'form.formEvaluation'|trans }}</legend>
-                
-                <!-- Por Promedio Simple -->
-                <div class="field-block button-height">
-                    {{ form_label(form.evalSimpleAverage) }}
-                    {{ form_widget(form.evalSimpleAverage) }}
-                    {{ form_errors(form.evalSimpleAverage) }}
-                    <span class="info-spot">
-                        <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalSimpleAverage_info'|trans }}</span>
-                    </span>
-                </div>
-                    
-                <!-- Por Promedio Ponderado -->
-                <div class="field-block button-height">
-                    {{ form_label(form.evalWeightedAverage) }}
-                    {{ form_widget(form.evalWeightedAverage) }}
-                    {{ form_errors(form.evalWeightedAverage) }}
-                    <span class="info-spot">
-                        <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalWeightedAverage_info'|trans }}</span>
-                    </span>
-                </div>
-            </fieldset>
-            
             {{ actions.create() }}
         </fieldset>
     {{ form_rest(form) }}
@@ -274,7 +231,7 @@
                    
                });
                
-               if($("#pequiven_objetive_tactic_registration_complejo_name").val() === 'ZIV'){   
+               if($("#pequiven_objetive_tactic_registration_complejo_name").val() === 'ZIV'){
                     //Inicializamos el select2 de Complejo
                     //$("#pequiven_objetive_tactic_registration_complejo").select2({
 
@@ -310,6 +267,12 @@
                    url: '{{ path("select_objetiveStrategicFromLineStrategic") }}',
                    data: data,
                    success: function(data) {
+                       
+                      // $("#pequiven_objetive_tactic_registration_parent").select2({
+                      //     initSelection : function (data, callback) {
+                      //         var data = {id: data.val(), text: data.val()};
+                      //         callback(data);
+                      //});
                        var $objetiveStrategic_selector = $('#pequiven_objetive_tactic_registration_parent');
 
                         $('#pequiven_objetive_tactic_registration_parent option[value]').remove();
@@ -318,6 +281,8 @@
                         for(var i=0, total = data.length; i<total; i++){
                             $objetiveStrategic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
                         }
+                        $("#pequiven_objetive_tactic_registration_parent").select2({
+                        });
                    }
                 });
             });

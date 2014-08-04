@@ -1,6 +1,6 @@
 ## YAML Template.
 pequiven_objetive_home:
-    path: /arrangement/objetive/{type}
+    path: /arrangement_strategic/objetive/{type}
     defaults: {_controller: PequivenObjetiveBundle:Objetive:showHome}
     methods: [GET]
 
@@ -9,57 +9,57 @@ pequiven_objetive_list:
     defaults: {_controller: PequivenObjetiveBundle:Objetive:list}
 
 verify_objetiveLevel:
-    path: /arrangement/objetive/verifyObjetiveLevel
+    path: /arrangement_strategic/objetive/verifyObjetiveLevel
     defaults: {_controller: PequivenObjetiveBundle:Objetive:verifyObjetiveLevel}
     
 verify_objetiveParentLineStrategic:
-    path: /arrangement/objetive/verify_objetiveParentLineStrategic
+    path: /arrangement_strategic/objetive/verify_objetiveParentLineStrategic
     defaults: {_controller: PequivenObjetiveBundle:Objetive:verifyObjetiveParentLineStrategic}
     
 select_objetiveParentTactic:
-    path: /arrangement/objetive/select_objetiveParentTactic
+    path: /arrangement_strategic/objetive/select_objetiveParentTactic
     defaults: {_controller: PequivenObjetiveBundle:Objetive:selectObjetiveParentTactic}
 
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_objetiveStrategicFromLineStrategic:
-    path: /arrangement/objetive/select_objetiveStrategicFromLineStrategic
+    path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectObjetiveStrategicFromLineStrategic}
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_objetiveStrategicFromLineStrategicOperative:
-    path: /arrangement/objetive/select_objetiveStrategicFromLineStrategicOperative
+    path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategicOperative
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveStrategicFromLineStrategicOperative}
     
 #Select que devuelve los Objetivos Tácticos de acuerdo al Objetivo Estratégico seleccionado
 select_objetiveTacticFromObjetiveStrategic:
-    path: /arrangement/objetive/select_objetiveTacticFromObjetiveStrategic
+    path: /arrangement_strategic/objetive/select_objetiveTacticFromObjetiveStrategic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveTacticFromObjetiveStrategic}
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_complejoFromObjetiveStrategic:
-    path: /arrangement/objetive/select_complejoFromObjetiveStrategic
+    path: /arrangement_strategic/objetive/select_complejoFromObjetiveStrategic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectComplejoFromObjetiveStrategic}
     
 #Select que devuelve los Complejos en los cuales impacta el Objetivo Táctico seleccionado
 select_complejoFromObjetiveTactic:
-    path: /arrangement/objetive/select_complejoFromObjetiveTactic
+    path: /arrangement_strategic/objetive/select_complejoFromObjetiveTactic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectComplejoFromObjetiveTactic}
     
 displayWeightObjetive:
-    path: /arrangement/objetive/displayWeightObjetive
+    path: /arrangement_strategic/objetive/displayWeightObjetive
     defaults: {_controller: PequivenObjetiveBundle:Objetive:displayWeightObjetive}
 
 #Muestra el Número de Referencia del objetivo estratégico a crear
 displayRefObjetiveStrategic:
-    path: /arrangement/objetive/displayRefObjetiveStrategic
+    path: /arrangement_strategic/objetive/displayRefObjetiveStrategic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:displayRefObjetive}
 
 #Muestra el Número de Referencia del objetivo táctico a crear
 displayRefObjetiveTactic:
-    path: /arrangement/objetive/displayRefObjetiveTactic
+    path: /arrangement_strategic/objetive/displayRefObjetiveTactic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:displayRefObjetive}
 
 #Muestra el Número de Referencia del objetivo operativo a crear
 displayRefObjetiveOperative:
-    path: /arrangement/objetive/displayRefObjetiveOperative
+    path: /arrangement_strategic/objetive/displayRefObjetiveOperative
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:displayRefObjetive}

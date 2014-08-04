@@ -57,7 +57,7 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
             'property' => 'descriptionSelect',
             'empty_value' => 'Seleccione la línea estratégica'
         );
-        $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen red-gradient', 'style' => 'width:300px');
+        $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen', 'style' => 'width:300px');
         if($lineStrategic){
             $formOptions['data'] = $lineStrategic;
         }

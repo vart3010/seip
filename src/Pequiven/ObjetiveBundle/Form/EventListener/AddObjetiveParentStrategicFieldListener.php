@@ -86,7 +86,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen red-gradient','style' => 'width:400px')
+            'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
         );
         
         //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
@@ -123,7 +123,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             $formOptions['data'] = $objetiveParent;
         }
         
-        if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             if($this->typeOperative){
                 $formOptions['mapped'] = false;
                 return $form->add('parent_strategic', 'entity', $formOptions);

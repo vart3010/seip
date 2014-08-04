@@ -77,7 +77,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen red-gradient','style' => 'width:400px')
+            'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
         );
         
         if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){

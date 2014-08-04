@@ -33,11 +33,8 @@ class ObjetiveOperativeController extends Controller {
         $nameObject = 'object';
         
         $em = $this->getDoctrine()->getManager();
-        $objetiveLevel = new ObjetiveLevel();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        //Obtenemos el valor del nivel del objetivo
-        $objectObjLevel = $objetiveLevel->typeObjetiveLevel($securityContext,array('em' => $em));
 
         $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
         $complejoNameArray = $complejoObject->getComplejoNameArray();
@@ -53,6 +50,10 @@ class ObjetiveOperativeController extends Controller {
             $object->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
             $object->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
             $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
+            
+            //Obtenemos y Seteamos el nivel del objetivo
+            $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_OPERATIVO));
+            $object->setObjetiveLevel($objetiveLevel);
 
             $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
@@ -83,7 +84,6 @@ class ObjetiveOperativeController extends Controller {
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Operative:register.html.'.$this->container->getParameter('fos_user.template.engine'),
             array('form' => $form->createView(),
-                'object' => $objectObjLevel
                 ));
     }
     

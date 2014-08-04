@@ -72,8 +72,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             'label' => 'form.gerencia',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
-            'property' => 'description',
-            'empty_value' => 'Seleccione su Gerencia',
+            'property' => 'description',            
             'query_builder' => function (EntityRepository $er) use ($gerenciaId){
                 $qb = $er->createQueryBuilder('gerencia')
                          ->where('gerencia.id = :gerenciaId')
@@ -82,7 +81,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
                 return $qb;
             }
         );
-        $formOptions['attr'] = array('class' => 'select red-gradient check-list replacement', 'style' => 'width:300px');
+        $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
         if($gerencia){
             $formOptions['data'] = $gerencia;
         }

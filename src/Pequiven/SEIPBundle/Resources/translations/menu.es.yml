@@ -3,7 +3,7 @@ app:
             menu:
                 sidebar:
                     home: Inicio
-                    example: 
+                    example:
                         main: Ejemplo
                         company: Compañia
                         technical_reports: Reporte tecnico
@@ -12,8 +12,8 @@ app:
                             admin: Administrador
                             groups: Grupos
                     support: Soporte
-                    arrangement:
-                        main: Gestión
+                    arrangement_strategic:
+                        main: Gestión Estratégica
                         objetives:
                             main: Objetivos
                             add:
@@ -22,10 +22,10 @@ app:
                                 tactic: Táctico
                                 operative: Operativo
                             list: Lista
-                        indicators: 
+                        indicators:
                             main: Indicadores
                             list: Lista
-                        arrangement_programs: 
-                            main: Programas de Gestión
-                            list: Lista
+                    arrangement_programs:
+                        main: Programas de Gestión
+                        list: Lista
                     reports: Reportes

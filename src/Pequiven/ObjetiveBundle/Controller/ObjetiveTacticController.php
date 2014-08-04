@@ -47,11 +47,11 @@ class ObjetiveTacticController extends Controller{
         $nameObject = 'object';
         
         $em = $this->getDoctrine()->getManager();
-        $objetiveLevel = new ObjetiveLevel();
+        
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         //Obtenemos el valor del nivel del objetivo
-        $objectObjLevel = $objetiveLevel->typeObjetiveLevel($securityContext,array('em' => $em));
+        
         
         $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
         $complejoNameArray = $complejoObject->getComplejoNameArray();
@@ -60,16 +60,17 @@ class ObjetiveTacticController extends Controller{
         if($form->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
-            //var_dump($data);
-            //die();
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
             $object->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
             $object->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
             $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
+            
+            //Obtenemos y Seteamos el nivel del objetivo
+            $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_TACTICO));
+            $object->setObjetiveLevel($objetiveLevel);
 
-            $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
             if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
@@ -106,7 +107,6 @@ class ObjetiveTacticController extends Controller{
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
             array('form' => $form->createView(),
-                'object' => $objectObjLevel
                 ));
     }
     

@@ -29,19 +29,14 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
             
-            <!-- Hidden con el nivel de Objetivo de la Persona que esta logueada -->
-            <div>
-                {{ form_widget(form.objetive_level_name) }}
-            </div>
-            
-            <!-- Ref -->
-            <div id="ref" class="field-block button-height">
-                {{ form_label(form.ref) }}
-                {{ form_widget(form.ref,{'attr':{'class':'input' } }) }}
-                {{ form_errors(form.ref) }}
-                <span id="ref_info" class="info-spot">
+            <!-- Línea Estratégica -->
+            <div id="lineStrategic" class="field-block button-height">                
+                {{ form_label(form.lineStrategic) }}
+                {{ form_widget(form.lineStrategic) }}
+                {{ form_errors(form.lineStrategic) }}
+                <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
                 </span>
             </div>
                 
@@ -56,36 +51,14 @@
                 </span>
             </div>
                 
-            <!-- Nivel del Objetivo a crear -->
-            <div id="objetiveLevel" class="field-block button-height">
-                {{ form_label(form.objetiveLevel) }}
-                {{ form_widget(form.objetiveLevel) }}
-                {{ form_errors(form.objetiveLevel) }}
-                <span class="info-spot">
+            <!-- Ref -->
+            <div id="ref" class="field-block button-height">
+                {{ form_label(form.ref) }}
+                {{ form_widget(form.ref) }}
+                {{ form_errors(form.ref) }}
+                <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.objetiveLevel_info'|trans }}</span>
-                </span>
-            </div>
-                
-            <!-- Línea Estratégica -->
-            <div id="lineStrategic" class="field-block button-height">                
-                {{ form_label(form.lineStrategic) }}
-                {{ form_widget(form.lineStrategic) }}
-                {{ form_errors(form.lineStrategic) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
-                </span>
-            </div>
-            
-            <!-- Complejo -->
-            <div id="complejo" class="field-block button-height">
-                {{ form_label(form.complejo) }}
-                {{ form_widget(form.complejo) }}
-                {{ form_errors(form.complejo) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
                 </span>
             </div>
                 
@@ -166,31 +139,6 @@
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
                         <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
-                    </span>
-                </div>
-            </fieldset>
-            
-            <!-- Forma de Evaluación -->
-            <fieldset class="fieldset">
-                <legend class="legend">{{ 'form.formEvaluation'|trans }}</legend>
-                <!-- Por Promedio Simple -->
-                <div class="field-block button-height">
-                    {{ form_label(form.evalSimpleAverage) }}
-                    {{ form_widget(form.evalSimpleAverage) }}
-                    {{ form_errors(form.evalSimpleAverage) }}
-                    <span class="info-spot">
-                        <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalSimpleAverage_info'|trans }}</span>
-                    </span>
-                </div>
-                <!-- Por Promedio Ponderado -->
-                <div class="field-block button-height">
-                    {{ form_label(form.evalWeightedAverage) }}
-                    {{ form_widget(form.evalWeightedAverage) }}
-                    {{ form_errors(form.evalWeightedAverage) }}
-                    <span class="info-spot">
-                        <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalWeightedAverage_info'|trans }}</span>
                     </span>
                 </div>
             </fieldset>

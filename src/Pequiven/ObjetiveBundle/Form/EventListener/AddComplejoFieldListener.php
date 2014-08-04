@@ -93,20 +93,29 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         );
         
         if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-            $formOptions['empty_value'] =  'Todo';
+//            $formOptions['empty_value'] =  'Todo';
             $formOptions['multiple'] = true;
             $formOptions['mapped'] = false;
-            $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
             //$formOptions['attr'] = array('class' => 'selectMultiple multiple white-gradient easy-multiple-selection check-list replacement');
+            if($this->typeOperative){
+              //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
+                $results = array();
+                $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
+                //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
+            } else{
+                $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
+            }
+            $complejo = $results;
         } else{
-            $formOptions['empty_value'] = 'Seleccione su Complejo';
+//            $formOptions['empty_value'] = 'Seleccione su Complejo';
             //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
 
             $complejo = $complejo == null ? $this->user->getComplejo() : $complejo;
             $complejoId = $this->user->getComplejo()->getId();
             
             if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
-                $formOptions['empty_value'] = 'Todo';
+//                $formOptions['empty_value'] = 'Todo';
                 $formOptions['multiple'] = true;
                 //$formOptions['expanded'] = true;
                 $formOptions['mapped'] = false;
@@ -123,7 +132,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                     $formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
                 } else{
                   $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
-                  $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));
+                  $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
                 }
                 $complejo = $results;
             } else{

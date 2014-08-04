@@ -48,8 +48,8 @@ class ObjetiveStrategicController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();;
-        $objetiveLevel = new ObjetiveLevel();
-        $objectObjLevel = $objetiveLevel->typeObjetiveLevel($this->container->get('security.context'),array('em' => $em));
+        //$objetiveLevel = new ObjetiveLevel();
+        //$objectObjLevel = $objetiveLevel->typeObjetiveLevel($this->container->get('security.context'),array('em' => $em));
         
         $em->getConnection()->beginTransaction();
         if($form->isValid()){
@@ -63,13 +63,30 @@ class ObjetiveStrategicController extends Controller {
             $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
             $object->setUserCreatedAt($user);
             
-            //Recorremos el select de los complejos
-            for($i = 0; $i < count($data['complejo']); $i++){
-                ${$nameObject.$i} = clone $object;
-                $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                ${$nameObject.$i}->setComplejo($complejo);
-                $em->persist(${$nameObject.$i});
+            //Obtenemos y Seteamos el nivel del objetivo
+            $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_ESTRATEGICO));
+            $object->setObjetiveLevel($objetiveLevel);
+            
+            //Obtenemos y Seteamos todos los complejos que esten activos respectivamente
+            $results = $em->getRepository('PequivenMasterBundle:Complejo')->findBy(array('enabled' => true));
+            $total = count($results);            
+            if(is_array($results) && $total > 0){
+                $i = 0;
+                foreach ($results as $result){
+                    ${$nameObject.$i} = clone $object;
+                    ${$nameObject.$i}->setComplejo($result);
+                    $em->persist(${$nameObject.$i});
+                    $i++;
+                }
             }
+            
+            //Recorremos el select de los complejos
+//            for($i = 0; $i < count($data['complejo']); $i++){
+//                ${$nameObject.$i} = clone $object;
+//                $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
+//                ${$nameObject.$i}->setComplejo($complejo);
+//                $em->persist(${$nameObject.$i});
+//            }
             
             try{
                 $em->flush();
@@ -84,7 +101,6 @@ class ObjetiveStrategicController extends Controller {
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
             array('form' => $form->createView(),
-                'object' => $objectObjLevel
                 ));
     }
     
