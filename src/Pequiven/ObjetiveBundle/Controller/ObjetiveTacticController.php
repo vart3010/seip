@@ -72,7 +72,8 @@ class ObjetiveTacticController extends Controller{
 
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                $object->setGerencia($user->getGerencia());
                 for($i = 0; $i < count($data['complejo']); $i++){
                     ${$nameObject.$i} = clone $object;
                     $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
@@ -81,7 +82,7 @@ class ObjetiveTacticController extends Controller{
                     ${$nameObject.$i}->setParent($parent);
                     $em->persist(${$nameObject.$i});
                 }
-            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
+            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 if(!isset($data['check_gerencia'])){//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                     for($i = 0; $i < count($data['gerencia']); $i++){
                         ${$nameObject.$i} = clone $object;
