@@ -7,6 +7,10 @@ pequiven_seip_menu_home:
 pequiven_objetive_menu_create:
     path: /arrangement/objetive/create
     defaults: {_controller: PequivenObjetiveBundle:Objetive:create}
+
+pequiven_objetive_menu_list:
+    path: /arrangement_strategic/objetive/list
+    defaults: {_controller: PequivenObjetiveBundle:Objetive:list}
     
 pequiven_objetive_menu_add_strategic:
     path: /arrangement_strategic/objetive/strategic/add

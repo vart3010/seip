@@ -67,7 +67,7 @@ class Gerencia extends modelGerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $Complejo;
+    private $complejo;
 
     /**
      * @var boolean
@@ -233,7 +233,7 @@ class Gerencia extends modelGerencia
      */
     public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
     {
-        $this->Complejo = $complejo;
+        $this->complejo = $complejo;
 
         return $this;
     }
@@ -245,6 +245,6 @@ class Gerencia extends modelGerencia
      */
     public function getComplejo()
     {
-        return $this->Complejo;
+        return $this->complejo;
     }
 }

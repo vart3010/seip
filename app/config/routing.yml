@@ -1,3 +1,8 @@
+pequiven_indicator:
+    resource: "@PequivenIndicatorBundle/Controller/"
+    type:     annotation
+    prefix:   /indicator
+
 pequiven_master:
     resource: "@PequivenMasterBundle/Controller/"
     type:     annotation

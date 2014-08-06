@@ -36,8 +36,12 @@ class ObjetiveController extends Controller{
         return array('name' => $name);
     }
     
+    
     public function listAction(){
-        return array();
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Default:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+
+            ));
     }
     
     public function showHomeAction($type){

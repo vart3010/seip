@@ -115,7 +115,8 @@ class BackendMenuBuilder extends MenuBuilder
                 
                 $subchild
                         ->addChild('arrangement_strategic.objetives.list', array(
-                            'route' => null,
+                            'uri' => 'list',
+                            'route' => 'pequiven_objetive_menu_list',
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list', $section)));
 

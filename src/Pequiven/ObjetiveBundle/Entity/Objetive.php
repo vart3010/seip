@@ -765,6 +765,21 @@ class Objetive extends modelObjetive {
         } elseif ($options['type'] == 'TACTIC') {
             $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
             $refObjetiveStrategic = $objetiveStrategic->getRef();
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                $options['type_directive'] = true;
+                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveStrategic));
+                $totalParents = count($objetivesParent);
+                $contParents = 1;
+                $options['array_parent'] = '';
+                foreach($objetivesParent as $objetiveParent){
+                    if($contParents == $totalParents){
+                        $options['array_parent'].= $objetiveParent->getId();
+                    } else{
+                        $options['array_parent'].= $objetiveParent->getId().',';
+                    }
+                    $contParents++;
+                }
+            }
             $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
             $total = count($results);
@@ -776,6 +791,21 @@ class Objetive extends modelObjetive {
         } elseif ($options['type'] == 'OPERATIVE') {
             $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
             $refObjetiveTactic = $objetiveTactic->getRef();
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                $options['type_directive'] = true;
+                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveTactic));
+                $totalParents = count($objetivesParent);
+                $contParents = 1;
+                $options['array_parent'] = '';
+                foreach($objetivesParent as $objetiveParent){
+                    if($contParents == $totalParents){
+                        $options['array_parent'].= $objetiveParent->getId();
+                    } else{
+                        $options['array_parent'].= $objetiveParent->getId().',';
+                    }
+                    $contParents++;
+                }
+            }
             $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
             $total = count($results);

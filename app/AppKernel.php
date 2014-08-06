@@ -39,6 +39,7 @@ class AppKernel extends Kernel
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),
+            new Pequiven\IndicatorBundle\PequivenIndicatorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -34,6 +34,11 @@ select_objetiveStrategicFromLineStrategicOperative:
 select_objetiveTacticFromObjetiveStrategic:
     path: /arrangement_strategic/objetive/select_objetiveTacticFromObjetiveStrategic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveTacticFromObjetiveStrategic}
+
+#Select que devuelve los Objetivos Estratégicos de acuerdo al Objetivo Táctico seleccionado
+select_objetiveStrategicFromObjetiveTactic:
+    path: /arrangement_strategic/objetive/select_objetiveStrategicFromObjetiveTactic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveStrategicFromObjetiveTactic}
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_complejoFromObjetiveStrategic:
@@ -44,6 +49,16 @@ select_complejoFromObjetiveStrategic:
 select_complejoFromObjetiveTactic:
     path: /arrangement_strategic/objetive/select_complejoFromObjetiveTactic
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectComplejoFromObjetiveTactic}
+    
+#Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
+select_gerenciaFromComplejoTactic:
+    path: /arrangement_strategic/objetive/select_gerenciaFromComplejoTactic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectGerenciaFromComplejo}
+
+#Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
+select_gerenciaFromComplejoOperative:
+    path: /arrangement_strategic/objetive/select_gerenciaFromComplejoOperative
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectGerenciaFromComplejo}
     
 displayWeightObjetive:
     path: /arrangement_strategic/objetive/displayWeightObjetive

@@ -103,7 +103,8 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
                 //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
             } else{
-                $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                //$formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                $formOptions['attr'] = array('class' => 'select2-container select2-container-multi','multiple' => 'multiple', 'style' => 'width:300px');
                 $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
             }
             $complejo = $results;
@@ -129,7 +130,10 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 if($this->typeOperative){
                   //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
                     $results = array();
-                    $formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
+                    //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
+                    if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                        $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple', 'style' => 'width:300px');
+                    }
                 } else{
                   $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
                   $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));

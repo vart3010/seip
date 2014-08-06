@@ -50,9 +50,8 @@ class ObjetiveTacticController extends Controller{
         
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
+        $role = $user->getRoles();
         //Obtenemos el valor del nivel del objetivo
-        
-        
         $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
         $complejoNameArray = $complejoObject->getComplejoNameArray();
         
@@ -73,7 +72,7 @@ class ObjetiveTacticController extends Controller{
 
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
                 for($i = 0; $i < count($data['complejo']); $i++){
                     ${$nameObject.$i} = clone $object;
                     $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
@@ -81,6 +80,35 @@ class ObjetiveTacticController extends Controller{
                     ${$nameObject.$i}->setComplejo($complejo);
                     ${$nameObject.$i}->setParent($parent);
                     $em->persist(${$nameObject.$i});
+                }
+            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
+                if(!isset($data['check_gerencia'])){//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
+                    for($i = 0; $i < count($data['gerencia']); $i++){
+                        ${$nameObject.$i} = clone $object;
+                        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
+                        $complejo = $gerencia->getComplejo();
+                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
+                        ${$nameObject.$i}->setGerencia($gerencia);
+                        ${$nameObject.$i}->setComplejo($complejo);
+                        ${$nameObject.$i}->setParent($parent);
+                        $em->persist(${$nameObject.$i});
+                    }
+                } else{//En caso de que las gerencias a impactar, sean todas la de los complejos seleccionados
+                    $j = 0;
+                    for($i=0;$i<count($data['complejo']);$i++){//Recorremos todos los complejos seleccionados
+                        $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
+                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
+                        //Obtenemos todas las gerencias 
+                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
+                        foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
+                            ${$nameObject.$j} = clone $object;
+                            ${$nameObject.$j}->setGerencia($gerencia);
+                            ${$nameObject.$j}->setComplejo($complejo);
+                            ${$nameObject.$j}->setParent($parent);
+                            $em->persist(${$nameObject.$j});
+                            $j++;
+                        }
+                    }
                 }
             } else{
                 $em->persist($object);
@@ -107,6 +135,7 @@ class ObjetiveTacticController extends Controller{
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
             array('form' => $form->createView(),
+                'role_name' => $role[0]
                 ));
     }
     
@@ -165,6 +194,35 @@ class ObjetiveTacticController extends Controller{
         
         $response->setData($complejoChildren);
                 
+        return $response;
+    }
+    
+    /**
+     * Devuelve las Gerencias de acuerdo a los Complejos seleccionados
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaFromComplejoAction(Request $request){
+        $response = new JsonResponse();
+        $dataGerencia = array();
+        $complejos = $request->request->get('complejos');
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
+        $data = '';
+        foreach($results as $result){
+            //var_dump($result);
+            foreach($result as $gerencia){
+                $dataGerencia[] = array(
+                    'idComplejo' => $gerencia->getComplejo()->getId(),
+                    'optGroup' => $gerencia->getComplejo()->getDescription(),
+                    'id' => $gerencia->getId(),
+                    'description' => $gerencia->getDescription()
+                    );
+            }
+        }
+        
+        $response->setData($dataGerencia);
+        
         return $response;
     }
     

@@ -55,4 +55,5 @@ form:
     evalArrangementProgram_info: Seleccione si el objetivo será evaluado por programas de gestión.
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
-    
+    question:
+        allGerencias: ¿Todas las Gerencias de los complejos seleccionados?

@@ -64,7 +64,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         $object = $event->getData();
         
         $objetiveParentStrategicId = array_key_exists('parent_strategic', $object) ? $object['parent_strategic'] : null;
-        
+
         $this->addObjetiveParentTacticForm($form,$objetiveParentStrategicId);
     }
 
@@ -82,13 +82,13 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         
         if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
             $formOptions['query_builder'] = function (EntityRepository $er) use ($objetiveParentStrategicId){
-                $qb = $er->createQueryBuilder('objetive')
+                        $qb = $er->createQueryBuilder('objetive')
                          ->where('objetive.parent = :parentId')
                          ->setParameter('parentId', $objetiveParentStrategicId)
-                        ;
-                return $qb;
-            };
-        } else{
+                                ;
+                        return $qb;
+                    };
+                } else{
             $complejoId = $this->user->getComplejo()->getId();            
             $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId,$objetiveParentStrategicId){
                 $qb = $er->createQueryBuilder('objetive')

@@ -12,4 +12,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class GerenciaRepository extends EntityRepository
 {
+    public function getGerenciaOptions($options = array()){
+        $data = array();
+        
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                        ->select('g')
+                        ->from('\Pequiven\MasterBundle\Entity\Gerencia', 'g')
+                        ->andWhere('g.enabled = ' . 1);
+        
+        if(isset($options['complejoArray'])){
+            $search = '';
+            $total = count($options['complejoArray']);
+            for($i=0;$i<$total;$i++){
+                if($i == ($total-1)){
+                    $search .= $options['complejoArray'][$i];
+                } else{
+                    $search .= $options['complejoArray'][$i].',';
+                }
+            }
+            $query->andWhere('g.complejo IN (' . $search .')');
+        } elseif(isset($options['complejos'])){
+            $query->andWhere('g.complejo IN (' . $options['complejos'] .')');
+        }
+        
+        $gerencias = $query->getQuery()
+                           ->getResult();
+        
+        foreach($gerencias as $gerencia){
+            if(!$gerencia->getComplejo()){
+                continue;
+            } 
+            if(!array_key_exists($gerencia->getComplejo()->getDescription(), $data)){
+                $data[$gerencia->getComplejo()->getDescription()] = array();
+            }
+            
+            $data[$gerencia->getComplejo()->getDescription()][$gerencia->getId()] = $gerencia;
+        }
+        
+        return $data;
+    }
 }

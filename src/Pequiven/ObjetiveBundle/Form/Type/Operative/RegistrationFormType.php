@@ -36,6 +36,10 @@ class RegistrationFormType extends AbstractType {
         //Nombre del Complejo del usuario que esta logueado
         $builder->add('complejo_name','hidden',array('data' => $user->getComplejo()->getComplejoName(),'mapped' => false));
         
+        //Rol del usuario que esta logueado
+        $array = $user->getRoles();
+        $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
+        
         //Línea estratégica del objetivo a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener());
         
@@ -50,6 +54,9 @@ class RegistrationFormType extends AbstractType {
         
         //Gerencia donde impactará el objetivo a crear
         $builder->addEventSubscriber(new AddGerenciaFieldListener());
+        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerencias','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
+        }
         
         //Nombre del objetivo a crear
         $builder->add('description', 'textarea', array('label' => 'form.objetive', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
