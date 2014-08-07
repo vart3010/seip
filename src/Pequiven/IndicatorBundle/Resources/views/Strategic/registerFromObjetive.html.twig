@@ -1,0 +1,145 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutModal.html.twig' %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block body %}
+
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="#">{{ 'pequiven_indicator.indicators'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_indicator.add'|trans }}</span>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_indicator.strategic'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+    <form action="{{ path('pequiven_indicator_add_strategic_from_objetive') }}" {{ form_enctype(form) }} method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
+                
+            <!-- Descripción -->
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                </span>
+            </div>
+            
+            <!-- Peso del Objetivo -->
+            <div id="weight" class="field-block button-height">
+                {{ form_label(form.weight) }}
+                {{ form_widget(form.weight) }}
+                {{ form_errors(form.weight) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.weight_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Meta del Objetivo -->
+            <div class="field-block button-height">
+                    {{ form_label(form.goal) }}
+                    {{ form_widget(form.goal) }}
+                    {{ form_errors(form.goal) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
+                    </span>
+            </div>
+
+            <!-- Rango de Gestión -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
+
+                <!-- Rango Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankTop) }}
+                        {{ form_widget(form.rankTop) }}
+                        {{ form_errors(form.rankTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Medio Alto del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleTop) }}
+                        {{ form_widget(form.rankMiddleTop) }}
+                        {{ form_errors(form.rankMiddleTop) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Medio Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankMiddleBottom) }}
+                        {{ form_widget(form.rankMiddleBottom) }}
+                        {{ form_errors(form.rankMiddleBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
+                        </span>
+                </div>
+                        
+                <!-- Rango Bajo del Objetivo -->
+                <div class="field-block button-height">
+                        {{ form_label(form.rankBottom) }}
+                        {{ form_widget(form.rankBottom) }}
+                        {{ form_errors(form.rankBottom) }}
+                        <span class="info-spot">
+                            <span class="icon-info-round"></span>
+                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
+                        </span>
+                </div>
+            </fieldset>
+            
+            {{ actions.create() }}
+        </fieldset>
+    {{ form_rest(form) }}
+    </form>
+    {% block javascript %}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+           charge();
+           
+           function charge(){
+               //Incializamos el formato numerico para el input de Meta
+               $("#pequiven_indicator_strategic_registration_goal").number(true,3,',','.');
+               
+                //Inicializamos el formato numerico para el input de Rango Alto
+               $("#pequiven_indicator_strategic_registration_rankTop").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Medio Alto
+               $("#pequiven_indicator_strategic_registration_rankMiddleTop").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Medio Bajo
+               $("#pequiven_indicator_strategic_registration_rankMiddleBottom").number(true,3,',','.');
+               
+               //Incializamos el formato numerico para el input de Rango Bajo
+               $("#pequiven_indicator_strategic_registration_rankBottom").number(true,3,',','.');
+               
+           }
+           
+        });
+    </script>
+    {% endblock javascript %}
+    
+{% endblock body %}

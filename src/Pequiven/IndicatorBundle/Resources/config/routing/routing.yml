@@ -1,0 +1,4 @@
+## YAML Template.
+pequiven_indicator_add_strategic_from_objetive:
+    path: /arrangement_strategic/indicator/strategic/addFromObjetive
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:createFromObjetive}

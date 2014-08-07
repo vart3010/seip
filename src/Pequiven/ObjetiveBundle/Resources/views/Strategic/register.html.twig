@@ -12,7 +12,7 @@
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
 {% endblock javascripts_base %}
-
+    
 {% block body %}
 
     <hgroup id="main-title" class="thin breadcrumb">
@@ -140,6 +140,9 @@
                         <span class="icon-info-round"></span>
                         <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
                     </span>
+                    <span id="button_add_indicator">
+                        <button type="button" class="button red-gradient glossy" onclick="openAlert()">{{ 'pequiven_objetive.addIndicator'|trans }}</button
+                    </span>
                 </div>
             </fieldset>
             
@@ -152,12 +155,38 @@
     </form>
     
     {% block javascript %}
-        <script type="text/javascript">
+    <script>
+
+        function openAlert(){
+            $.modal({
+                title: 'Iframe content',
+                url: '{{ path("pequiven_indicator_add_strategic_from_objetive") }}' ,
+                useIframe: true,
+                height: '800',
+                width: '600',
+            });
+        
+            /**
+            $.modal.alert('Indicador',{
+                    buttons: {
+                        'Cerrar': {
+                            classes:	'red-gradient glossy full-width',
+                            click:      function(win) { win.closeModal(); }
+                        }
+                    }
+                });
+            **/
+        };
+    </script>
+        
+    <script type="text/javascript">
         $(document).ready(function()
         {
            charge();
            
            function charge(){
+               $("#button_add_indicator").hide();
+               
                //Inicializamos el select de Complejo
                $("#pequiven_objetive_strategic_registration_lineStrategic").select2({
                    
@@ -199,6 +228,15 @@
                     });
                 });
            }
+           
+           $("#pequiven_objetive_strategic_registration_evalIndicator").click(function() {
+                if($("#pequiven_objetive_strategic_registration_evalIndicator").is(':checked')){
+                    $("#button_add_indicator").show();
+                } else{
+                    $("#button_add_indicator").hide();
+                }
+           });
+           
         });
     </script>
     {% endblock javascript %}

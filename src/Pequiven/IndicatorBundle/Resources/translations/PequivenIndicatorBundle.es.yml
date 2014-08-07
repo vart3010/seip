@@ -1,12 +1,10 @@
-# Login
-pequiven_objetive:
+pequiven_indicator:
                 #Registrar
-                objetives: Objetivos
+                indicators: Indicadores
                 add: Añadir
                 strategic: Estratégico
                 tactic: Táctico
                 operative: Operativo
-                addIndicator: Añadir Indicador
 
                 #Buttons
                 edit: Editar
@@ -15,13 +13,11 @@ pequiven_objetive:
 
 form:
     ref: Nro. de Referencia
-    objetive: Objetivo
-    objetive_level: Nivel de objetivo
+    indicator: Indicador
+    indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     complejo: Complejo
     gerencia: Gerencia
-    parent_strategic: Objetivo Estratégico
-    parent_tactic: Objetivo Táctico
     weight: Peso
     goal: Meta
     rankArrangement: Rango de Gestión
@@ -30,31 +26,21 @@ form:
     rankMiddleBottom: Rango Medio Bajo
     rankBottom: Rango Bajo    
     typeEvaluation: Tipo de Evaluación
-    evalObjetive: Por Objetivo
-    evalIndicator: Por Indicador
-    evalArrangementProgram: Por Programa de Gestión
     formEvaluation: Forma de Evaluación
     evalSimpleAverage: Promedio Simple
     evalWeightedAverage: Promedio Ponderado
     register: Registrar
-    ref_info: Nro. de Referencia del objetivo
-    description_info: Nombre del objetivo
-    objetiveLevel_info: Nivel del objetivo (Estratégico, Táctico u Operativo)
-    lineStrategic_info: Línea Estratégica del Objetivo
-    complejo_info: Complejo dónde tendrá impacto el objetivo
-    gerencia_info: Gerencia dónde tendrá impacto el objetivo 
-    parent_strategic_info: Objetivo Estratégico que impactará el objetivo a crear
-    parent_tactic_info: Objetivo Táctico que impactará el objetivo a crear
-    weight_info: Peso del objetivo. El valor decimal es ".".
-    goal_info: Meta del objetivo. El valor decimal es ".".
+    ref_info: Nro. de Referencia del indicador
+    description_info: Nombre del indicador
+    indicatorLevel_info: Nivel del indicador (Estratégico, Táctico u Operativo)
+    lineStrategic_info: Línea Estratégica del Indicador
+    complejo_info: Complejo dónde tendrá impacto el indicador
+    gerencia_info: Gerencia dónde tendrá impacto el indicador
+    weight_info: Peso del indicador. El valor decimal es ".".
+    goal_info: Meta del indicador. El valor decimal es ".".
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
     rankBottom_info: Valor bajo del semáforo de evaluación de gestión. El valor decimal es ".".
-    evalObjetive_info: Seleccione si el objetivo será evaluado por sub-objetivos.
-    evalIndicator_info: Seleccione si el objetivo será evaluado por indicadores.
-    evalArrangementProgram_info: Seleccione si el objetivo será evaluado por programas de gestión.
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
-    question:
-        allGerencias: ¿Todas las Gerencias de los complejos seleccionados?

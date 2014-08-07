@@ -1,21 +1,28 @@
 <?php
 
-namespace Pequiven\ObjetiveBundle\Entity;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace Pequiven\IndicatorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\ObjetiveBundle\Model\ObjetiveLevel as modelObjetiveLevel;
+use Pequiven\IndicatorBundle\Model\IndicatorLevel as modelIndicatorLevel;
 
 /**
- * ObjetiveLevel
+ * IndicatorLevel
  *
- * @ORM\Table(name="seip_objetive_level")
- * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveLevelRepository")
+ * @ORM\Table(name="seip_indicator_level")
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorLevelRepository")
+ * @author matias
  */
-class ObjetiveLevel extends modelObjetiveLevel
-{
+class IndicatorLevel extends modelIndicatorLevel {
+    
     /**
      * @var integer
      *
@@ -84,7 +91,6 @@ class ObjetiveLevel extends modelObjetiveLevel
      */
     private $enabled;
 
-
     /**
      * Get id
      *
@@ -99,7 +105,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setCreatedAt($createdAt)
     {
@@ -119,10 +125,33 @@ class ObjetiveLevel extends modelObjetiveLevel
     }
 
     /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return IndicatorLevel
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setDescription($description)
     {
@@ -145,7 +174,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set levelName
      *
      * @param string $levelName
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setLevelName($levelName)
     {
@@ -168,7 +197,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set level
      *
      * @param integer $level
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setLevel($level)
     {
@@ -191,7 +220,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set enabled
      *
      * @param boolean $enabled
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setEnabled($enabled)
     {
@@ -214,7 +243,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -237,7 +266,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return ObjetiveLevel
+     * @return IndicatorLevel
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -254,46 +283,5 @@ class ObjetiveLevel extends modelObjetiveLevel
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
-    }
-    
-    /**
-     * Devuelve un objeto de tipo ObjetiveLevel, con el nivel seteado de acuerdo al rol del usuario logueado
-     * @param \Symfony\Component\Security\Core\SecurityContext $security
-     * @param type $options
-     * @return boolean
-     */
-    public function typeObjetiveLevel(\Symfony\Component\Security\Core\SecurityContext $security, $options =array()){
-        $levelNameArray = $this->getLevelNameArray();
-        if($security->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_ESTRATEGICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_TACTICO]));
-        } elseif($security->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-            return $this->fetchOneBy($options['em'], array('levelName' => $levelNameArray[self::LEVEL_OPERATIVO]));
-        }
-        return true;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return ObjetiveLevel
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 }
