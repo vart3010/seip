@@ -20,11 +20,11 @@
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_indicator.add'|trans }}</span>
             <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_indicator.strategic'|trans }}</span>
+            <span class="thin">{{ 'pequiven_indicator.operative'|trans }}</span>
         </h1>
     </hgroup>
     
-    <form action="{{ path('pequiven_indicator_add_strategic_from_objetive') }}" {{ form_enctype(form) }} method="POST">
+    <form action="{{ path('pequiven_indicator_add_operative_from_objetive') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
@@ -150,41 +150,41 @@
            
            function charge(){
                //Inicializamos el select2 de Línea Estratégica
-               $("#pequiven_indicator_strategicfo_registration_lineStrategic").select2({
+               $("#pequiven_indicator_operativefo_registration_lineStrategic").select2({
                    
                });
                //Incializamos el formato numerico para el input de Meta
-               $("#pequiven_indicator_strategicfo_registration_goal").number(true,3,',','.');
+               $("#pequiven_indicator_operativefo_registration_goal").number(true,3,',','.');
                
                 //Inicializamos el formato numerico para el input de Rango Alto
-               $("#pequiven_indicator_strategicfo_registration_rankTop").number(true,3,',','.');
+               $("#pequiven_indicator_operativefo_registration_rankTop").number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Rango Medio Alto
-               $("#pequiven_indicator_strategicfo_registration_rankMiddleTop").number(true,3,',','.');
+               $("#pequiven_indicator_operativefo_registration_rankMiddleTop").number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Rango Medio Bajo
-               $("#pequiven_indicator_strategicfo_registration_rankMiddleBottom").number(true,3,',','.');
+               $("#pequiven_indicator_operativefo_registration_rankMiddleBottom").number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Rango Bajo
-               $("#pequiven_indicator_strategicfo_registration_rankBottom").number(true,3,',','.');
+               $("#pequiven_indicator_operativefo_registration_rankBottom").number(true,3,',','.');
                
            }
            
-           $("#pequiven_indicator_strategicfo_registration_lineStrategic").change(function() {
+           $("#pequiven_indicator_operativefo_registration_lineStrategic").change(function() {
                displayIndicatorRef();
            });
            
            //Función que muestra el Número de Referencia del indicador a crear, de acuerdo a la línea estratégica seleccionada
            function displayIndicatorRef(){
                 var data = {
-                    lineStrategicId: $.trim($("#pequiven_indicator_strategicfo_registration_lineStrategic").val())
+                    lineStrategicId: $.trim($("#pequiven_indicator_operativefo_registration_lineStrategic").val())
                 };
                 $.ajax({
                     type: 'post',
-                    url: '{{ path("displayRefIndicatorStrategic") }}',
+                    url: '{{ path("displayRefIndicatorOperative") }}',
                     data: data,
                     success: function(data) {
-                        $("#pequiven_indicator_strategicfo_registration_ref").val(data[0].ref);
+                        $("#pequiven_indicator_operativefo_registration_ref").val(data[0].ref);
                     }
                  });
            }

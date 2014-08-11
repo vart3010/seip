@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
 use Pequiven\ObjetiveBundle\Form\Type\Tactic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -45,7 +46,7 @@ class ObjetiveTacticController extends Controller{
         $form = $this->createForm(new BaseFormType());
         $form->handleRequest($request);
         $nameObject = 'object';
-        
+        $lastId = '';
         $em = $this->getDoctrine()->getManager();
         
         $securityContext = $this->container->get('security.context');
@@ -117,11 +118,16 @@ class ObjetiveTacticController extends Controller{
             
             try{
             $em->flush();
+            $lastId = $em->getConnection()->lastInsertId();
             $em->getConnection()->commit();
             } catch (Exception $e){
                 $em->getConnection()->rollback();
                 throw $e;
             }
+            
+            $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
+            $this->createObjetiveIndicator($objetives,$data['indicators']);
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'tactic')));
 //                    $this->forward('PequivenObjetiveBundle:Objetive:redirectObjetive', array(
@@ -138,6 +144,43 @@ class ObjetiveTacticController extends Controller{
             array('form' => $form->createView(),
                 'role_name' => $role[0]
                 ));
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia los indicadores asignados al objetivo creado
+     * @param type $objetives
+     * @param type $indicators
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function createObjetiveIndicator($objetives = array(),$indicators = array()){
+        $totalObjetives = count($objetives);
+        $totalIndicators = count($indicators);
+        $objetiveIndicator = new ObjetiveIndicator();
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        if($totalObjetives > 0){
+            foreach($objetives as $objetive){
+                $objetiveIndicator->setObjetive($objetive);
+                if($totalIndicators > 0){
+                    for($i = 0; $i < $totalIndicators; $i++){
+                        $objectObjetiveIndicator = clone $objetiveIndicator;
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
+                        $objectObjetiveIndicator->setIndicator($indicator);
+                        $em->persist($objectObjetiveIndicator);
+                    }
+                }
+            }
+        }
+        
+        try{
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e){
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
     }
     
     /**

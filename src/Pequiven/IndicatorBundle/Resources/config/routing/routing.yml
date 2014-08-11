@@ -2,3 +2,45 @@
 pequiven_indicator_add_strategic_from_objetive:
     path: /arrangement_strategic/indicator/strategic/addFromObjetive
     defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:createFromObjetive}
+    
+pequiven_indicator_add_tactic_from_objetive:
+    path: /arrangement_strategic/indicator/tactic/addFromObjetive
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:createFromObjetive}
+
+pequiven_indicator_add_operative_from_objetive:
+    path: /arrangement_strategic/indicator/oeprative/addFromObjetive
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:createFromObjetive}
+
+pequiven_indicator_register_redirect:
+    path: /arrangement_strategic/indicator/registerRedirect
+    defaults: {_controller: PequivenIndicatorBundle:Indicator:registerRedirect}
+    
+#Muestra el Número de Referencia del indicador estratégico a crear
+displayRefIndicatorStrategic:
+    path: /arrangement_strategic/indicator/displayRefIndicatorStrategic
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:displayRefIndicator}
+
+#Muestra el Número de Referencia del indicador táctico a crear
+displayRefIndicatorTactic:
+    path: /arrangement_strategic/indicator/displayRefIndicatorTactic
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:displayRefIndicator}
+
+#Muestra el Número de Referencia del indicador operativo a crear
+displayRefIndicatorOperative:
+    path: /arrangement_strategic/indicator/displayRefIndicatorOperative
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:displayRefIndicator}
+    
+#Select que devuelve los Indicadores Estratégicos de acuerdo a la Línea Estratégica seleccionada
+select_indicatorStrategicFromLineStrategic:
+    path: /arrangement_strategic/indicator/select_indicatorStrategicFromLineStrategic
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:selectIndicatorStrategicFromLineStrategic}
+    
+#Select que devuelve los Indicadores Tácticos de acuerdo a la Línea Estratégica seleccionada
+select_indicatorTacticFromLineStrategic:
+    path: /arrangement_strategic/indicator/select_indicatorTacticFromLineStrategic
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:selectIndicatorTacticFromLineStrategic}
+    
+#Select que devuelve los Indicadores Operativos de acuerdo a la Línea Estratégica seleccionada
+select_indicatorOperativeFromLineStrategic:
+    path: /arrangement_strategic/indicator/select_indicatorOperativeFromLineStrategic
+    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:selectIndicatorOperativeFromLineStrategic}

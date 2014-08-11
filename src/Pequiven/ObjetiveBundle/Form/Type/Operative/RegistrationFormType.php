@@ -20,6 +20,8 @@ use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldLi
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentTacticFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaFieldListener;
+
+use Pequiven\ObjetiveBundle\Form\EventListener\AddIndicatorStrategicFieldListener;
 /**
  * Description of RegistrationFormType
  *
@@ -86,6 +88,9 @@ class RegistrationFormType extends AbstractType {
             //Evaluar por Programa de Gestión
             $builder->add('evalArrangementProgram','checkbox',array('label' => 'form.evalArrangementProgram','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
         
+            //Indicadores asociados al objetivo a crear
+            $builder->addEventSubscriber(new AddIndicatorStrategicFieldListener());
+            
          //Forma de Evaluación   
             //Evaluar por Promedio Simple
             //$builder->add('evalSimpleAverage','checkbox',array('label' => 'form.evalSimpleAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));

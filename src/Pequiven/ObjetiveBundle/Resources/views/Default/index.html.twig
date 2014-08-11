@@ -1,7 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <p>{{ 'pequiven_seip.seip'|trans }}</p>
+    <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px; margin-top: 4px"     
+        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />
+    </div>
     
     <input type="hidden" id="notification" name="notification" value="{{ notification }}" >
     

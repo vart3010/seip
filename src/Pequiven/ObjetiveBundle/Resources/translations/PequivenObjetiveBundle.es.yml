@@ -6,7 +6,7 @@ pequiven_objetive:
                 strategic: Estratégico
                 tactic: Táctico
                 operative: Operativo
-                addIndicator: Añadir Indicador
+                registerIndicator: Registrar Indicador
 
                 #Buttons
                 edit: Editar
@@ -36,6 +36,8 @@ form:
     formEvaluation: Forma de Evaluación
     evalSimpleAverage: Promedio Simple
     evalWeightedAverage: Promedio Ponderado
+    indicators: Indicadores
+    addIndicators: Añadir Indicadores
     register: Registrar
     ref_info: Nro. de Referencia del objetivo
     description_info: Nombre del objetivo
@@ -56,5 +58,6 @@ form:
     evalArrangementProgram_info: Seleccione si el objetivo será evaluado por programas de gestión.
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
+    indicators_info: Indicadores que serán parte de la evaluación del objetivo a crear
     question:
         allGerencias: ¿Todas las Gerencias de los complejos seleccionados?

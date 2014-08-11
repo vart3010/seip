@@ -11,6 +11,10 @@ pequiven_objetive_menu_create:
 pequiven_objetive_menu_list:
     path: /arrangement_strategic/objetive/list
     defaults: {_controller: PequivenObjetiveBundle:Objetive:list}
+#Prueba    
+pequiven_indicator_menu_list:
+    path: /arrangement_strategic/indicator/list
+    defaults: {_controller: PequivenIndicatorBundle:Indicator:list}
     
 pequiven_objetive_menu_add_strategic:
     path: /arrangement_strategic/objetive/strategic/add

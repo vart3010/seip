@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\IndicatorBundle\Form\Type\Strategic;
+namespace Pequiven\IndicatorBundle\Form\Type\Tactic;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -50,7 +50,7 @@ class RegistrationFormType extends AbstractType {
     }
     
     public function getName(){
-        return 'pequiven_indicator_strategicfo_registration';
+        return 'pequiven_indicator_tacticfo_registration';
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver){

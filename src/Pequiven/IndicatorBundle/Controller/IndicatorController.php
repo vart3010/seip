@@ -8,11 +8,40 @@
 
 namespace Pequiven\IndicatorBundle\Controller;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Description of IndicatorController
  *
  * @author matias
  */
-class IndicatorController {
+class IndicatorController extends Controller {
     //put your code here
+    public function listAction(){
+        return $this->container->get('templating')->renderResponse('PequivenIndicatorBundle:Default:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+                'action' => 'view',
+            ));
+    }
+    
+    public function registerRedirectAction(){
+        
+        return $this->container->get('templating')->renderResponse('PequivenIndicatorBundle:Default:redirect.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+                'action' => 'view',
+            ));
+    }
+    
+    public function redirectRegisterAction(){
+        
+    }
 }

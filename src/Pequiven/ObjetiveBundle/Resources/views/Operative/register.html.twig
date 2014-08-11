@@ -205,6 +205,9 @@
                         <span class="icon-info-round"></span>
                         <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
                     </span>
+                    <span id="button_add_indicator">
+                        <button type="button" class="button red-gradient glossy" onclick="openAlert()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button
+                    </span>
                 </div>
                     
                 <!-- Por Programa de Gestión -->
@@ -218,6 +221,21 @@
                     </span>
                 </div>
             </fieldset>
+                    
+            <!-- Añadir Indicadores -->
+            <fieldset id="indicators" class="fieldset">
+                <legend class="legend">{{ 'form.addIndicators'|trans }}</legend>
+                <!-- Añadir Indicadores -->
+                <div class="field-block button-height">
+                    {{ form_label(form.indicators) }}
+                    {{ form_widget(form.indicators) }}
+                    {{ form_errors(form.indicators) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.indicators_info'|trans }}</span>
+                    </span>
+                </div>
+            </fieldset>                    
             
             {{ actions.create() }}
         </fieldset>
@@ -232,6 +250,12 @@
            change();
            
            function change(){
+                //Escondemos por defecto el boton de registrar indicadores
+                $("#button_add_indicator").hide();
+                
+                //Escondemos por defecto la sección de sumar indicadores al objetivo
+                $("#indicators").hide();
+               
                //Inicializamos el select2 de Línea Estratégica
                $("#pequiven_objetive_operative_registration_lineStrategic").select2({
                    
@@ -245,6 +269,9 @@
                 //Inicializamos el select2 de Objetivo Táctico
                $("#pequiven_objetive_operative_registration_parent").select2({
                });
+               
+                //Inicializamos el select de Indicadores
+                chargeSelectIndicatorFromLineStrategic();
                
                if($("#pequiven_objetive_operative_registration_complejo_name").val() === 'ZIV' && ($("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND' && $("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND_AUX')){
                     //Inicializamos el select2 de Complejo
@@ -287,6 +314,7 @@
            
            //Al cambiar el select de Línea Estratégica
             $("#pequiven_objetive_operative_registration_lineStrategic").change(function() {
+                chargeSelectIndicatorFromLineStrategic();
                var data = {
                    lineStrategicId: $.trim($(this).val()),
                };
@@ -318,6 +346,17 @@
                         $("#view_check_gerencia").hide();
                    }
                 });
+            });
+            
+            $("#pequiven_objetive_operative_registration_evalIndicator").click(function() {
+                if($("#pequiven_objetive_operative_registration_evalIndicator").is(':checked')){
+                    $("#button_add_indicator").show();
+                    chargeSelectIndicatorFromLineStrategic();
+                    $("#indicators").show();
+                } else{
+                    $("#button_add_indicator").hide();
+                    $("#indicators").hide();
+                }
             });
             
             //Al cambiar el select de Objetivo Estratégico
@@ -522,7 +561,85 @@
                 }
             }
             
+            //Agarrar este select como ejemplo para los demás select2
+            //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
+            function chargeSelectIndicatorFromLineStrategic(){
+                var data = {
+                    lineStrategicId: $.trim($("#pequiven_objetive_operative_registration_lineStrategic").val())
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("select_indicatorOperativeFromLineStrategic") }}',
+                    data: data,
+                    success: function(data) {
+                        var $indicators_selector = $("#pequiven_objetive_operative_registration_indicators");
+                        $('#pequiven_objetive_operative_registration_indicators option[value]').remove();
+                        $('#pequiven_objetive_operative_registration_indicators').select2("val",'');
+                        
+                        if(typeof data[0].empty === 'undefined'){
+                            for(var i=0, total = data.length; i<total; i++){
+                                $indicators_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                            }
+                            chargeSelect2Indicators("full");
+                        } else{
+                            chargeSelect2Indicators("empty");
+                        }
+                    }
+                });
+            }
+           
+           //Función que carga el select2 de Indicadores
+           function chargeSelect2Indicators(type){
+                $("#pequiven_objetive_operative_registration_indicators").select2({
+                    placeholder: '{{ 'form.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                        } else{
+                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                        }
+                    }
+                });
+           }
+            
         });
     </script>
+    
+    <script>
+        
+        function indicatorsRegisterSuccessful(){
+            $("#modals").remove();
+            //document.scripts.chargeSelectIndicatorFromLineStrategic();
+            document.chargeSelectIndicatorFromLineStrategic();
+        }
+
+        function openAlert(){
+            $.modal({
+                title: '{{ 'pequiven_indicator.titleFrameAddOperative'|trans ({}, 'PequivenIndicatorBundle') }}',
+                url: '{{ path("pequiven_indicator_add_operative_from_objetive") }}' ,
+                useIframe: true,
+                height: '800',
+                width: '600',
+                buttons: {
+                        'Cerrar': {
+                            classes:	'red-gradient glossy full-width',
+                            click:      function(win) { win.closeModal(); }
+                        }
+                    }
+            });
+        
+            /**
+            $.modal.alert('Indicador',{
+                    buttons: {
+                        'Cerrar': {
+                            classes:	'red-gradient glossy full-width',
+                            click:      function(win) { win.closeModal(); }
+                        }
+                    }
+                });
+            **/
+        };
+        
+    </script>    
     {% endblock javascript %}
 {% endblock body %}

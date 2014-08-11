@@ -5,6 +5,9 @@ pequiven_indicator:
                 strategic: Estratégico
                 tactic: Táctico
                 operative: Operativo
+                titleFrameAddStrategic: Registro de Indicador Estratégico
+                titleFrameAddTactic: Registro de Indicador Táctico
+                titleFrameAddOperative: Registro de Indicador Operativo
 
                 #Buttons
                 edit: Editar
@@ -44,3 +47,6 @@ form:
     rankBottom_info: Valor bajo del semáforo de evaluación de gestión. El valor decimal es ".".
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
+    selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
+    selectIndicatorFormatNoResult: No hay indicadores registrados para la línea estratégica seleccionada
+    selectIndicatorPlaceholder: Seleccione un Indicador

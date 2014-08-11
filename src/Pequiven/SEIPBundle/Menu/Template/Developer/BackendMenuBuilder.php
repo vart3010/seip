@@ -180,7 +180,7 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.main', $section)));
                 $subchild
                         ->addChild('arrangement_strategic.objetives.list', array(
-                            'route' => null,
+                            'route' => 'pequiven_indicator_menu_list',
                             ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list', $section)));
             $child->addChild($subchild);

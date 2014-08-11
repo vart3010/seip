@@ -9,6 +9,7 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveLevelFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddIndicatorStrategicFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -61,6 +62,9 @@ class RegistrationFormType extends AbstractType {
             //Evaluar por Indicador
             $builder->add('evalIndicator','checkbox',array('label' => 'form.evalIndicator','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
         
+            //Indicadores asociados al objetivo a crear
+            $builder->addEventSubscriber(new AddIndicatorStrategicFieldListener());
+            
          //Forma de Evaluación   
             //Evaluar por Promedio Simple
 //            $builder->add('evalSimpleAverage','checkbox',array('label' => 'form.evalSimpleAverage','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));

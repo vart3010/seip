@@ -106,6 +106,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 //$formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
                 $formOptions['attr'] = array('class' => 'select2-container select2-container-multi','multiple' => 'multiple', 'style' => 'width:300px');
                 $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
+                $results = array();
             }
             $complejo = $results;
         } else{
@@ -117,7 +118,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             
             if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
 //                $formOptions['empty_value'] = 'Todo';
-                $formOptions['multiple'] = true;
+                //$formOptions['multiple'] = true;
                 //$formOptions['expanded'] = true;
                 $formOptions['mapped'] = false;
                 //$formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
@@ -135,8 +136,9 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                         $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple', 'style' => 'width:300px');
                     }
                 } else{
-                  $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
-                  $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
+                  $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
+                  //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
+                  $results = array();
                 }
                 $complejo = $results;
             } else{
