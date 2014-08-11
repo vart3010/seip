@@ -36,7 +36,19 @@ class ObjetiveStrategicController extends Controller {
     }
     
     public function listAction(){
-        return array();
+        //Primero obtenemos todos los objetivos estratégicos
+        $em = $this->getDoctrine()->getManager();
+        $objectView = array();
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('objetiveLevel' => ObjetiveLevel::LEVEL_ESTRATEGICO,'complejo' => \Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV));
+        
+        foreach($objetives as $objetive){
+            
+        }
+        
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+
+            ));
     }
     
     public function createAction(Request $request){

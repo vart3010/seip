@@ -53,6 +53,13 @@ class IndicatorTacticController extends Controller {
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
             $object->setIndicatorLevel($indicatorLevel);
+            
+            //En caso de que el Indicador tenga Fórmula se obtiene y se setea respectivamente
+            if(isset($data['formula'])){
+                $formula = $em->getRepository('PequivenMasterBundle:Formula')->findOneBy(array('id' => $data['formula']));
+                $object->setFormula($formula);
+            }
+            
             $em->persist($object);
             
             try{
@@ -67,8 +74,8 @@ class IndicatorTacticController extends Controller {
         }
         
         return $this->container->get('templating')->renderResponse('PequivenIndicatorBundle:Tactic:registerFromObjetive.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                ));
+                array('form' => $form->createView(),
+                    ));
     }
     
     /**

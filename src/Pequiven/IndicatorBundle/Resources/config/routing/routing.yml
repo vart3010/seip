@@ -29,7 +29,7 @@ displayRefIndicatorTactic:
 displayRefIndicatorOperative:
     path: /arrangement_strategic/indicator/displayRefIndicatorOperative
     defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:displayRefIndicator}
-    
+
 #Select que devuelve los Indicadores Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_indicatorStrategicFromLineStrategic:
     path: /arrangement_strategic/indicator/select_indicatorStrategicFromLineStrategic

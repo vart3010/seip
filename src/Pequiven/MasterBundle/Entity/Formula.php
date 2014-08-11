@@ -75,6 +75,13 @@ class Formula extends modelFormula {
      * @ORM\Column(name="equation", type="string", length=300)
      */
     private $equation;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enabled", type="boolean")
+     */
+    private $enabled = true;
 
     /**
      * Get id
@@ -222,5 +229,28 @@ class Formula extends modelFormula {
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return Formula
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 }

@@ -27,6 +27,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ObjetiveOperativeController extends Controller {
     //put your code here
     
+    public function listAction(){
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Operative:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+
+            ));
+    }
+    
     public function createAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());

@@ -113,12 +113,29 @@ class BackendMenuBuilder extends MenuBuilder
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.main', $section)));
                 
-                $subchild
-                        ->addChild('arrangement_strategic.objetives.list', array(
-                            'uri' => 'list',
-                            'route' => 'pequiven_objetive_menu_list',
+                
+                $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.list',
+                            $this->getSubLevelOptions(array(
+                                'uri' => 'list',
+                                'labelAttributes' => array('icon' => 'icon-book'),
                             ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list', $section)));
+                        )
+                            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.main',$section)));
+                
+                $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
+                            'route' => 'pequiven_objetive_menu_list_strategic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.strategic', $section)));
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.tactic', array(
+                            'route' => 'pequiven_objetive_menu_list_tactic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.tactic', $section)));
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.operative', array(
+                            'route' => 'pequiven_objetive_menu_list_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
+                    
+                $subchild->addChild($thirdchild);
 
                 if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',

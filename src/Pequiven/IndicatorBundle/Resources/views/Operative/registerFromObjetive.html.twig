@@ -82,6 +82,17 @@
                         <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
                     </span>
             </div>
+                    
+            <!-- Fórmula -->
+            <div id="formula" class="field-block button-height">
+                {{ form_label(form.formula) }}
+                {{ form_widget(form.formula) }}
+                {{ form_errors(form.formula) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.formula_info'|trans }}</span>
+                </span>
+            </div>                    
 
             <!-- Rango de Gestión -->
             <fieldset class="fieldset">
@@ -152,6 +163,10 @@
                //Inicializamos el select2 de Línea Estratégica
                $("#pequiven_indicator_operativefo_registration_lineStrategic").select2({
                    
+               });
+                //Inicializamos el select2 de Fórmula
+               $("#pequiven_indicator_operativefo_registration_formula").select2({
+                   placeholder: '{{ 'form.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                });
                //Incializamos el formato numerico para el input de Meta
                $("#pequiven_indicator_operativefo_registration_goal").number(true,3,',','.');

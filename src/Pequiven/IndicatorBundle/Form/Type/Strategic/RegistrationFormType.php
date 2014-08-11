@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
+use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
 /**
  * Description of RegistrationFormType
  *
@@ -26,7 +27,7 @@ class RegistrationFormType extends AbstractType {
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         
-        //Línea estratégica del objetivo a crear
+        //Línea estratégica del indicador a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener());
         //Nombre del indicador a crear
         $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
@@ -37,6 +38,8 @@ class RegistrationFormType extends AbstractType {
         $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
         //Meta del Objetivo
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000")));
+        //Fórmula del indicador a crear
+        $builder->addEventSubscriber(new AddFormulaFieldListener());
         
         //Rango de Gestión
             //Rango Alto del Indicador

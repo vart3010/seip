@@ -23,6 +23,7 @@ form:
     gerencia: Gerencia
     weight: Peso
     goal: Meta
+    formula: Fórmula
     rankArrangement: Rango de Gestión
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
@@ -41,6 +42,7 @@ form:
     gerencia_info: Gerencia dónde tendrá impacto el indicador
     weight_info: Peso del indicador. El valor decimal es ".".
     goal_info: Meta del indicador. El valor decimal es ".".
+    formula_info: Fórmula de evaluación del indicador.
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
@@ -50,3 +52,4 @@ form:
     selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
     selectIndicatorFormatNoResult: No hay indicadores registrados para la línea estratégica seleccionada
     selectIndicatorPlaceholder: Seleccione un Indicador
+    selectFormulaPlaceholder: Seleccione una Fórmula de Evaluación

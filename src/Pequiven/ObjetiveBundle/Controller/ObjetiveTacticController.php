@@ -38,7 +38,10 @@ class ObjetiveTacticController extends Controller{
     }
     
     public function listAction(){
-        return array();
+        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+            array(
+
+            ));
     }
     
     public function createAction(Request $request){

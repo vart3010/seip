@@ -21,7 +21,11 @@ app:
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
-                            list: Lista
+                            list:
+                                main: Lista
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                         indicators:
                             main: Indicadores
                             list: Lista
