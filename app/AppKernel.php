@@ -32,10 +32,15 @@ class AppKernel extends Kernel
             
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            
+            new \Ext\DirectBundle\ExtDirectBundle(),
+            
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
             new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
+            new Tecnocreaciones\Bundle\ToolsBundle\TecnocreacionesToolsBundle(),
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),

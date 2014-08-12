@@ -53,3 +53,6 @@ fos_user_change_password:
     
 _bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    
+    
+ext_direct:
+    resource: "@ExtDirectBundle/Resources/config/routing.yml"

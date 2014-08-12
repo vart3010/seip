@@ -106,3 +106,6 @@ tecnocreaciones_vzla_government:
             
     config:
         main_route: 'pequiven_seip_default_index'
+
+ext_direct:
+    resource: "%kernel.root_dir%/config/extdirect_routing.yml"
