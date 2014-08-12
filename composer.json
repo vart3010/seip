@@ -26,6 +26,7 @@
 	"tecnocreaciones/vzla-government-bundle": "dev-master",
 	"tecnocreaciones/ajax-fos-user-bundle": "dev-master",
 	"tecnocreaciones/install-bundle": "dev-master",
+        "tecnocreaciones/tools-bundle": "dev-master",
         "friendsofsymfony/rest-bundle":"@stable",
         "friendsofsymfony/user-bundle": "v1.3.3",
         "jms/translation-bundle": "~1.1@dev",

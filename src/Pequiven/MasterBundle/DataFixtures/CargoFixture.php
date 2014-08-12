@@ -2433,7 +2433,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Subsec.Soldadura Nitrogenado');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-14'));
-        $this->addReference('Cargo-3339',$cargo);
+        $this->addReference('Cargo-339',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
@@ -2447,7 +2447,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Sup.Subsec.Soldadura Servicios Generales');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-14'));
-        $this->addReference('Cargo341-',$cargo);
+        $this->addReference('Cargo-341',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
@@ -5744,7 +5744,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('An.de Despacho Prod.Aromáticos');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-21'));
-        $this->addReference('Cargo804-',$cargo);
+        $this->addReference('Cargo-804',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
@@ -9235,7 +9235,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Operador de Carga/Bascula');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-39'));
-        $this->addReference('Cargo-',$cargo);
+        $this->addReference('Cargo-2200',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
@@ -10597,7 +10597,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setDescription('Administración Acuerdos-Convenios');
         $cargo->setEnabled(1);
         $cargo->setGerencia($this->getReference('Gerencia-41'));
-        $this->addReference('Cargo1484-',$cargo);
+        $this->addReference('Cargo-1484',$cargo);
           $manager->persist($cargo);
 
         $cargo= new Cargo();
@@ -15762,6 +15762,13 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
         $cargo->setGerencia($this->getReference('Gerencia-90'));
         $this->addReference('Cargo-2198',$cargo);
           $manager->persist($cargo);
+          
+        $cargo= new Cargo();
+        $cargo->setDescription('Asesor Permisos y Gestiones de Aduanas');
+        $cargo->setEnabled(1);
+        $cargo->setGerencia($this->getReference('Gerencia-20'));
+        $this->addReference('Cargo-2199',$cargo);
+            $manager->persist($cargo);
           
         $manager->flush();
     }
