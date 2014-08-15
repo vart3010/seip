@@ -104,34 +104,6 @@ class Indicator extends modelIndicator {
      * @ORM\Column(name="goal", type="float", nullable=true)
      */
     private $goal;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_top", type="float", nullable=true)
-     */
-    private $rankTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
-     */
-    private $rankMiddleTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleBottom;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom", type="float", nullable=true)
-     */
-    private $rankBottom;
     
     /**
      * @var boolean
@@ -593,6 +565,51 @@ class Indicator extends modelIndicator {
                 $ref = $refLineStrategic . '1.';
             }
         } 
+        
+        return $ref;
+    }
+    
+    /**
+     * Devuelve el valor de referencia del indicador creado a partir del formulario de objetivo
+     * <b> x.x Estratégico </b>
+     * <b> x.x.x Táctico </b>
+     * <b> x.x.x.x Operativo </b>
+     * @param type $options
+     * @return boolean
+     */
+    public function setNewRefFromObjetive($options = array()){
+        $container = \Pequiven\IndicatorBundle\PequivenIndicatorBundle::getContainer();
+        $securityContext = $container->get('security.context');
+        $em = $container->get('doctrine')->getManager();
+        
+        if ($options['type'] == 'STRATEGIC') {
+            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRefParent($options);
+            $refIndicator = 'IE-'.$options['refParent'];
+            $total = count($results);
+            if (is_array($results) && $total > 0) {
+                $ref = $refIndicator . ($total + 1) . '.';
+            } else {
+                $ref = $refIndicator . '1.';
+            }
+        } elseif($options['type'] == 'TACTIC'){
+            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRefParent($options);
+            $refIndicator = 'IT-'.$options['refParent'];
+            $total = count($results);
+            if (is_array($results) && $total > 0) {
+                $ref = $refIndicator . ($total + 1) . '.';
+            } else {
+                $ref = $refIndicator . '1.';
+            }
+        } elseif($options['type'] == 'OPERATIVE'){
+            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRefParent($options);
+            $refIndicator = 'IO-'.$options['refParent'];
+            $total = count($results);
+            if (is_array($results) && $total > 0) {
+                $ref = $refIndicator . ($total + 1) . '.';
+            } else {
+                $ref = $refIndicator . '1.';
+            }
+        }
         
         return $ref;
     }

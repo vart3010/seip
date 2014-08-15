@@ -30,7 +30,7 @@
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
 
             <!-- Línea Estratégica -->
-            <a name="lineStrategic"></a>
+            <a name="lineStrategicq"></a>
             <div id="lineStrategic" class="field-block button-height">
                 {{ form_label(form.lineStrategic) }}
                 {{ form_widget(form.lineStrategic) }}
@@ -77,46 +77,6 @@
             <!-- Rango de Gestión -->
             <fieldset class="fieldset">
                 <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
-                <!-- Rango Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankTop) }}
-                        {{ form_widget(form.rankTop) }}
-                        {{ form_errors(form.rankTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
-                        </span>
-                </div>
-                <!-- Rango Medio Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleTop) }}
-                        {{ form_widget(form.rankMiddleTop) }}
-                        {{ form_errors(form.rankMiddleTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
-                        </span>
-                </div>
-                <!-- Rango Medio Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleBottom) }}
-                        {{ form_widget(form.rankMiddleBottom) }}
-                        {{ form_errors(form.rankMiddleBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
-                        </span>
-                </div>
-                <!-- Rango Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankBottom) }}
-                        {{ form_widget(form.rankBottom) }}
-                        {{ form_errors(form.rankBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
-                        </span>
-                </div>
             </fieldset>
                 
             <!-- Tipo de Evaluación -->
@@ -208,27 +168,16 @@
                 });
                
                 //Inicializamos el select de Indicadores
-                chargeSelectIndicatorFromLineStrategic();
+                chargeSelectIndicator();
                
                 //Incializamos el formato numerico para el input de Meta
                 inputGoal.number(true,3,',','.');
                
-                //Incializamos el formato numerico para el input de Rango Alto
-                $("#pequiven_objetive_strategic_registration_rankTop").number(true,3,',','.');
-               
-                //Incializamos el formato numerico para el input de Rango Medio Alto
-                $("#pequiven_objetive_strategic_registration_rankMiddleTop").number(true,3,',','.');
-               
-                //Incializamos el formato numerico para el input de Rango Medio Bajo
-                $("#pequiven_objetive_strategic_registration_rankMiddleBottom").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Bajo
-               $("#pequiven_objetive_strategic_registration_rankBottom").number(true,3,',','.');
             }
            
             //Al seleccionar alguna opción en el select de Línea Estratégica
             selectLineStrategic.on("select2-selecting", function(e) {
-                chargeSelectIndicatorFromLineStrategic();
+                chargeSelectIndicator();
                 displayObjetiveRef(e);//Actualizamos la Referencia del Objetivo a Crear
             })
             
@@ -254,7 +203,7 @@
                         messageCheckIndicator.show();
                     } else{
                         buttonAddIndicator.show();
-                        chargeSelectIndicatorFromLineStrategic();
+                        chargeSelectIndicator();
                         sectionIndicators.show();
                     }
                 } else{
@@ -266,13 +215,13 @@
            
             //Agarrar este select como ejemplo para los demás select2
             //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
-            function chargeSelectIndicatorFromLineStrategic(){
+            function chargeSelectIndicator(){
                 var data = {
-                    lineStrategicId: $.trim(selectLineStrategic.val())
+                    refParentId: $.trim(inputRef.val())
                 };
                 $.ajax({
                     type: 'post',
-                    url: '{{ path("select_indicatorStrategicFromLineStrategic") }}',
+                    url: '{{ path("select_indicatorStrategicFromRefParent") }}',
                     data: data,
                     success: function(data) {
                         //var $indicators_selector = $("#pequiven_objetive_strategic_registration_indicators");
@@ -311,9 +260,9 @@
                     placeholder: '{{ 'form.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                     formatNoMatches: function(term) {
                         if(type == 'full'){
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategicq'>{{ 'form.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         } else{
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategicq'>{{ 'form.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         }
                     }
                 });
@@ -326,8 +275,8 @@
         
         function indicatorsRegisterSuccessful(){
             $("#modals").remove();
-            //document.scripts.chargeSelectIndicatorFromLineStrategic();
-            document.chargeSelectIndicatorFromLineStrategic();
+            //document.scripts.chargeSelectIndicator();
+            document.chargeSelectIndicator();
         }
 
         function openFormIndicator(){

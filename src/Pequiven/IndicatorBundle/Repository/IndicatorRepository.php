@@ -44,4 +44,30 @@ class IndicatorRepository extends EntityRepository {
         //die();
         return $q->getResult();
     }
+    
+    public function getByOptionRefParent($options = array()){
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                    ->select('i')
+                    ->from('\Pequiven\IndicatorBundle\Entity\Indicator', 'i')
+                    ->groupBy('i.refParent')
+                    ->andWhere('i.tmp = :tmpStatus')
+                    ->andWhere('i.refParent = :refParentId')
+                    ->setParameter('tmpStatus', true)
+                    ->setParameter('refParentId', $options['refParent'])
+                ;
+        
+        if($options['type'] === 'STRATEGIC'){
+            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_ESTRATEGICO);
+        } elseif($options['type'] === 'TACTIC'){
+            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_TACTICO);
+        } elseif($options['type'] === 'OPERATIVE'){
+            $query->andWhere('i.indicatorLevel = ' . IndicatorLevel::LEVEL_OPERATIVO);
+        }
+        
+        $q = $query->getQuery();
+        //var_dump($q->getSQL());
+        //die();
+        return $q->getResult();
+    }
 }

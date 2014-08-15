@@ -28,15 +28,9 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
-            <!-- Línea Estratégica -->
-            <div id="lineStrategic" class="field-block button-height">
-                {{ form_label(form.lineStrategic) }}
-                {{ form_widget(form.lineStrategic) }}
-                {{ form_errors(form.lineStrategic) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
-                </span>
+            <!-- Hidden con la Referencia del Objetivo que se esta creando -->
+            <div>
+                {{ form_widget(form.refObjetive) }}
             </div>
             
             <!-- Descripción -->
@@ -159,19 +153,29 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
+            var selectFormula = $("#pequiven_indicator_operativefo_registration_formula"),//Select de Fórmula
+                inputRef = $("#pequiven_indicator_operativefo_registration_ref"),//Input de Ref
+                inputGoal = $("#pequiven_indicator_operativefo_registration_goal"),//Input de Meta
+                inputHiddenRefParent = $("#pequiven_indicator_operativefo_registration_refObjetive"),//Input Hidden de la Referencia del Objetivo
+                inputRefParent = $("#pequiven_objetive_operative_registration_ref",window.parent.document)//Input de Referencia de la ventana Padre del Objetivo
+            ;
+            
            charge();
            
            function charge(){
-               //Inicializamos el select2 de Línea Estratégica
-               $("#pequiven_indicator_operativefo_registration_lineStrategic").select2({
-                   
-               });
+               
                 //Inicializamos el select2 de Fórmula
-               $("#pequiven_indicator_operativefo_registration_formula").select2({
+               selectFormula.select2({
                    placeholder: '{{ 'form.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                });
                //Incializamos el formato numerico para el input de Meta
-               $("#pequiven_indicator_operativefo_registration_goal").number(true,3,',','.');
+               inputGoal.number(true,3,',','.');
+               
+                              //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
+               inputHiddenRefParent.val(inputRefParent.val());
+               
+               //Actualizamos la referencia del indicador a crear
+               displayIndicatorRef();
                
                 //Inicializamos el formato numerico para el input de Rango Alto
                $("#pequiven_indicator_operativefo_registration_rankTop").number(true,3,',','.');
@@ -186,22 +190,18 @@
                $("#pequiven_indicator_operativefo_registration_rankBottom").number(true,3,',','.');
                
            }
-           
-           $("#pequiven_indicator_operativefo_registration_lineStrategic").change(function() {
-               displayIndicatorRef();
-           });
-           
+
            //Función que muestra el Número de Referencia del indicador a crear, de acuerdo a la línea estratégica seleccionada
            function displayIndicatorRef(){
                 var data = {
-                    lineStrategicId: $.trim($("#pequiven_indicator_operativefo_registration_lineStrategic").val())
+                    refParentId: $.trim(inputHiddenRefParent.val())
                 };
                 $.ajax({
                     type: 'post',
-                    url: '{{ path("displayRefIndicatorOperative") }}',
+                    url: '{{ path("displayRefIndicatorOperativeFromObjetive") }}',
                     data: data,
                     success: function(data) {
-                        $("#pequiven_indicator_operativefo_registration_ref").val(data[0].ref);
+                        inputRef.val(data[0].ref);
                     }
                  });
            }

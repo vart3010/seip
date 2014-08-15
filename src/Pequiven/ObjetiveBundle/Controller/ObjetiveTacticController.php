@@ -64,12 +64,7 @@ class ObjetiveTacticController extends Controller{
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
-            $object->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
-            $object->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
-            $object->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
-            $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
-            
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));            
             //Obtenemos y Seteamos el nivel del objetivo
             $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_TACTICO));
             $object->setObjetiveLevel($objetiveLevel);

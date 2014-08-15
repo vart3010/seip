@@ -136,49 +136,6 @@
             <fieldset class="fieldset">
                 <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
 
-                <!-- Rango Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankTop) }}
-                        {{ form_widget(form.rankTop) }}
-                        {{ form_errors(form.rankTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Medio Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleTop) }}
-                        {{ form_widget(form.rankMiddleTop) }}
-                        {{ form_errors(form.rankMiddleTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Medio Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleBottom) }}
-                        {{ form_widget(form.rankMiddleBottom) }}
-                        {{ form_errors(form.rankMiddleBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankBottom) }}
-                        {{ form_widget(form.rankBottom) }}
-                        {{ form_errors(form.rankBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
-                        </span>
-                </div>
             </fieldset>
                 
             <!-- Tipo de Evaluación -->
@@ -290,7 +247,7 @@
                chargeSelect2ObjetiveStrategic();
                
                 //Inicializamos el select de Indicadores
-                chargeSelectIndicatorFromLineStrategic();
+                chargeSelectIndicator();
                
                if(inputHiddenComplejoName.val() === 'ZIV' && (inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX')){
                     //Inicializamos el select2 de Complejo
@@ -308,24 +265,12 @@
                inputWeight.number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Meta
-               inputGoal.number(true,3,',','.');
-               
-                //Incializamos el formato numerico para el input de Rango Alto
-               $("#pequiven_objetive_tactic_registration_rankTop").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Medio Alto
-               $("#pequiven_objetive_tactic_registration_rankMiddleTop").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Medio Bajo
-               $("#pequiven_objetive_tactic_registration_rankMiddleBottom").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Bajo
-               $("#pequiven_objetive_tactic_registration_rankBottom").number(true,3,',','.');
+               inputGoal.number(true,3,',','.');               
            }
            
            //Al seleccionar alguna opción en el select de Línea Estratégica
             selectLineStrategic.on("select2-selecting", function(e) {
-                chargeSelectIndicatorFromLineStrategic();
+                chargeSelectIndicator();
                 displayObjetiveStrategicFromLineStrategic(e);//Actualizamos los Objetivos Estratégicos
             })
             selectLineStrategic.change(function() {
@@ -357,7 +302,7 @@
                 if(checkIndicator.is(':checked')){
                     if(selectLineStrategic.val() !== '' && selectObjetiveStrategic.val() !== ''){
                         buttonAddIndicator.show();
-                        chargeSelectIndicatorFromLineStrategic();
+                        chargeSelectIndicator();
                         sectionIndicators.show();
                     } else{
                         if(selectLineStrategic.val() === ''){
@@ -497,22 +442,21 @@
         
             //Agarrar este select como ejemplo para los demás select2
             //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
-            function chargeSelectIndicatorFromLineStrategic(){
+            function chargeSelectIndicator(){
                 var data = {
-                    lineStrategicId: $.trim($("#pequiven_objetive_tactic_registration_lineStrategic").val())
+                    refParentId: $.trim(inputRef.val())
                 };
                 $.ajax({
                     type: 'post',
-                    url: '{{ path("select_indicatorTacticFromLineStrategic") }}',
+                    url: '{{ path("select_indicatorTacticFromRefParent") }}',
                     data: data,
                     success: function(data) {
-                        var $indicators_selector = $("#pequiven_objetive_tactic_registration_indicators");
                         $('#pequiven_objetive_tactic_registration_indicators option[value]').remove();
                         $('#pequiven_objetive_tactic_registration_indicators').select2("val",'');
                         
                         if(typeof data[0].empty === 'undefined'){
                             for(var i=0, total = data.length; i<total; i++){
-                                $indicators_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                                selectIndicators.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
                             }
                             chargeSelect2Indicators("full");
                         } else{
@@ -574,8 +518,8 @@
         
         function indicatorsRegisterSuccessful(){
             $("#modals").remove();
-            //document.scripts.chargeSelectIndicatorFromLineStrategic();
-            document.chargeSelectIndicatorFromLineStrategic();
+            //document.scripts.chargeSelectIndicator();
+            document.chargeSelectIndicator();
         }
 
         function openFormIndicator(){

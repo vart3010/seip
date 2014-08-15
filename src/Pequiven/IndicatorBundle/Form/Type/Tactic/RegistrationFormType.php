@@ -27,8 +27,8 @@ class RegistrationFormType extends AbstractType {
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         
-        //Línea estratégica del objetivo a crear
-        $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+        //Referencia del Objetivo Táctico al cual se le podrían añadir los indicadores creados
+        $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
         //Nombre del indicador a crear
         $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Referencia del indicador a crear
@@ -43,13 +43,13 @@ class RegistrationFormType extends AbstractType {
         
         //Rango de Gestión
             //Rango Alto del Indicador
-            $builder->add('rankTop','percent',array('label' => 'form.rankTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-            //Rango Medio Alto del indicador
-            $builder->add('rankMiddleTop','percent',array('label' => 'form.rankMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-            //Rango Medio Bajo del Indicador
-            $builder->add('rankMiddleBottom','percent',array('label' => 'form.rankMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-            //Rango Bajo del Indicador
-            $builder->add('rankBottom','percent',array('label' => 'form.rankBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
+//            $builder->add('rankTop','percent',array('label' => 'form.rankTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
+//            //Rango Medio Alto del indicador
+//            $builder->add('rankMiddleTop','percent',array('label' => 'form.rankMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
+//            //Rango Medio Bajo del Indicador
+//            $builder->add('rankMiddleBottom','percent',array('label' => 'form.rankMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
+//            //Rango Bajo del Indicador
+//            $builder->add('rankBottom','percent',array('label' => 'form.rankBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
     }
     
     public function getName(){

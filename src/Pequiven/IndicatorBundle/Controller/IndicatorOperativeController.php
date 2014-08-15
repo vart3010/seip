@@ -41,13 +41,11 @@ class IndicatorOperativeController extends Controller {
         if($form->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_operativefo_registration");
-            
-            $object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
+
+            $object->setRefParent($data['refObjetive']);
+            $object->setTmp(true);
+            //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
-            $object->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
-            $object->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
-            $object->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
-            $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
             $object->setUserCreatedAt($user);
             
             //Obtenemos y seteamos el nivel del indicador
@@ -83,7 +81,7 @@ class IndicatorOperativeController extends Controller {
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function selectIndicatorOperativeFromLineStrategicAction(Request $request){
+    public function selectIndicatorOperativeFromRefParentAction(Request $request){
         $response = new JsonResponse();
         
         $indicatorsStrategic = array();
@@ -91,10 +89,10 @@ class IndicatorOperativeController extends Controller {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $lineStrategicId = $request->request->get('lineStrategicId');
+        $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_OPERATIVO;
         
-        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('lineStrategic' => $lineStrategicId, 'indicatorLevel' => $indicatorLevelId));
+        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
         $totalResults = count($results);
         
         if(is_array($results) && $totalResults > 0){
@@ -125,6 +123,27 @@ class IndicatorOperativeController extends Controller {
         $options['lineStrategicId'] = $lineStrategicId;
         $options['type'] = 'OPERATIVE';
         $ref = $indicator->setNewRef($options);
+        
+        $data[] = array('ref' => $ref);
+        $response->setData($data);
+        return $response;
+    }
+    
+    /**
+     * Devuelve la Referencia del Indicador, de acuerdo a la cantidad que ya se encuentren registrados para el objetivo operativo que se esta creando
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function displayRefIndicatorFromObjetiveAction(Request $request){
+        $response = new JsonResponse();
+        $indicator = new Indicator();
+        $data = array();
+        $options = array();
+        
+        $refParent =  $request->request->get('refParentId');
+        $options['refParent'] = $refParent;
+        $options['type'] = 'OPERATIVE';
+        $ref = $indicator->setNewRefFromObjetive($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);

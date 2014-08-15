@@ -24,11 +24,23 @@ form:
     weight: Peso
     goal: Meta
     formula: Fórmula
-    rankArrangement: Rango de Gestión
+    
+    arrangementRangeType: Tipo de Rango
+    
+    rankArrangementTop: Rango de Gestión Alto
+    rankArrangementMiddle: Rango de Gestión Medio
+    rankArrangementBottom: Rango de Gestión Bajo
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
     rankMiddleBottom: Rango Medio Bajo
-    rankBottom: Rango Bajo    
+    rankBottom: Rango Bajo
+    rankTopTop: Rango Alto-Alto
+    rankTopBottom: Rango Alto-Bajo
+    rankMiddleTopCompound: Rango Medio-Alto
+    rankMiddleBottomCompound: Rango Medio-Bajo
+    rankBottomTop: Rango Bajo-Alto
+    rankBottomBottom: Rango Bajo-Bajo
+    
     typeEvaluation: Tipo de Evaluación
     formEvaluation: Forma de Evaluación
     evalSimpleAverage: Promedio Simple
@@ -43,13 +55,26 @@ form:
     weight_info: Peso del indicador. El valor decimal es ".".
     goal_info: Meta del indicador. El valor decimal es ".".
     formula_info: Fórmula de evaluación del indicador.
+    
+    arrangementRangeType_info: Seleccione el tipo de rango
+    
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
     rankBottom_info: Valor bajo del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankTopTop_info: Rango alto-alto del semáforo de evaluación de gestión. 
+    rankTopBottom_info: Rango alto-bajo del semáforo de evaluación de gestión. 
+    rankMiddleTopCompound_info: Rango medio-alto del semáforo de evaluación de gestión. 
+    rankMiddleBottomCompound_info: Rango medio-bajo del semáforo de evaluación de gestión. 
+    rankBottomTop_info: Rango bajo-alto del semáforo de evaluación de gestión. 
+    rankBottomBottom_info: Rango bajo-bajo del semáforo de evaluación de gestión. 
+    
+    
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
+    
+    
     selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
-    selectIndicatorFormatNoResult: No hay indicadores registrados para la línea estratégica seleccionada
+    selectIndicatorFormatNoResult: No hay indicadores registrados para este objetivo
     selectIndicatorPlaceholder: Seleccione un Indicador
     selectFormulaPlaceholder: Seleccione una Fórmula de Evaluación

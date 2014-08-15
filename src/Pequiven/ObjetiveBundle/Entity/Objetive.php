@@ -87,34 +87,6 @@ class Objetive extends modelObjetive {
     private $goal;
 
     /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_top", type="float", nullable=true)
-     */
-    private $rankTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
-     */
-    private $rankMiddleTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleBottom;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom", type="float", nullable=true)
-     */
-    private $rankBottom;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="eval_objetive", type="boolean")
