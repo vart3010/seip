@@ -26,6 +26,7 @@ form:
     goal: Meta
     
     arrangementRangeType: Tipo de Rango
+    textResObj: Res. Obj.
     
     rankArrangementTop: Rango de Gestión Alto
     rankArrangementMiddle: Rango de Gestión Medio

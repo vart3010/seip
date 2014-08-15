@@ -26,6 +26,7 @@ form:
     formula: Fórmula
     
     arrangementRangeType: Tipo de Rango
+    textResInd: Res. Ind.
     
     rankArrangementTop: Rango de Gestión Alto
     rankArrangementMiddle: Rango de Gestión Medio
