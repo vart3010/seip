@@ -123,7 +123,9 @@ class ObjetiveOperativeController extends Controller {
             
             $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
             $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            $this->createObjetiveIndicator($objetives,$data['indicators']);
+            if(isset($data['indicators'])){
+                $this->createObjetiveIndicator($objetives,$data['indicators']);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'operative')));
         }
@@ -189,13 +191,23 @@ class ObjetiveOperativeController extends Controller {
         $lineStrategicId = $request->request->get('lineStrategicId');
         $objetiveLevelId = ObjetiveLevel::LEVEL_ESTRATEGICO;
         
-        if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'OPERATIVE_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
+        if(is_numeric($lineStrategicId)){
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'OPERATIVE_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
+            } else{
+                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'OPERATIVE','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
+            }
+
+            $totalResults = count($results);
+            if(is_array($results) && $totalResults > 0){
+                foreach ($results as $result){
+                    $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else{
+                $objetiveChildrenStrategic[] = array("empty" => true);
+            }
         } else{
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'OPERATIVE','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
-        }
-        foreach ($results as $result){
-            $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+            $objetiveChildrenStrategic[] = array("empty" => true, "initial" => true);
         }
         
         $response->setData($objetiveChildrenStrategic);
@@ -220,36 +232,47 @@ class ObjetiveOperativeController extends Controller {
         
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
         
-        if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId));
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
-            $contParents = 1;
-            $totalParents = count($objetives);
-            $parents = '';
-            foreach($objetives as $objetiveParent){
-                if($contParents == $totalParents){
-                    $parents.= $objetiveParent->getId();
-                } else{
-                    $parents.= $objetiveParent->getId().',';
+        if(is_numeric($objetiveStrategicId)){
+            
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId));
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+                $contParents = 1;
+                $totalParents = count($objetives);
+                $parents = '';
+                foreach($objetives as $objetiveParent){
+                    if($contParents == $totalParents){
+                        $parents.= $objetiveParent->getId();
+                    } else{
+                        $parents.= $objetiveParent->getId().',';
+                    }
+                    $contParents++;
                 }
-                $contParents++;
+                $query = $em->createQueryBuilder()
+                        ->select('o')
+                        ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                        ->andWhere("o.parent IN (".$parents.")")
+                        ->groupBy('o.ref');
+                if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                    //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $parents));
+                    $query->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
+                }
+                $q = $query->getQuery();
+                $results = $q->getResult();
+            } else{
+                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $objetiveStrategicId, 'complejo' => $user->getComplejo()->getId(), 'gerencia' => $user->getGerencia()->getId()));
             }
-            $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->andWhere("o.parent IN (".$parents.")")
-                    ->groupBy('o.ref');
-            if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-                //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $parents));
-                $query->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
+
+            $totalResults = count($results);
+            if (is_array($results) && $totalResults > 0){
+                foreach ($results as $result){
+                    $objetiveChildrenTactic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else{
+                $objetiveChildrenTactic[] = array("empty" => true);
             }
-            $q = $query->getQuery();
-            $results = $q->getResult();
         } else{
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $objetiveStrategicId, 'complejo' => $user->getComplejo()->getId(), 'gerencia' => $user->getGerencia()->getId()));
-        }
-        foreach ($results as $result){
-            $objetiveChildrenTactic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+            $objetiveChildrenTactic[] = array("empty" => true, "initial" => true);
         }
         
         $response->setData($objetiveChildrenTactic);

@@ -68,7 +68,7 @@ class Cargo extends modelCargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
-    private $Gerencia;
+    private $gerencia;
     
     /**
      * @var boolean
@@ -234,7 +234,7 @@ class Cargo extends modelCargo
      */
     public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
     {
-        $this->Gerencia = $gerencia;
+        $this->gerencia = $gerencia;
 
         return $this;
     }
@@ -246,6 +246,6 @@ class Cargo extends modelCargo
      */
     public function getGerencia()
     {
-        return $this->Gerencia;
+        return $this->gerencia;
     }
 }

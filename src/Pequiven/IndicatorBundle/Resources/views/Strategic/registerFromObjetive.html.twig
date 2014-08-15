@@ -28,6 +28,11 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
+            <!-- Hidden con la Referencia del Objetivo que se esta creando -->
+            <div>
+                {{ form_widget(form.refObjetive) }}
+            </div>
+            
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
                 {{ form_label(form.lineStrategic) }}
@@ -62,15 +67,17 @@
             </div>
             
             <!-- Peso del Objetivo -->
+            <!--
             <div id="weight" class="field-block button-height">
-                {{ form_label(form.weight) }}
+                {#{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.weight_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.weight_info'|trans }#}</span>
                 </span>
             </div>
+            -->
                 
             <!-- Meta del Objetivo -->
             <div class="field-block button-height">

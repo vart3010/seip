@@ -1,21 +1,28 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace Pequiven\MasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\MasterBundle\Model\Personal as modelPersonal;
+use Pequiven\MasterBundle\Model\Tendency as modelTendency;
 
 /**
- * Personal
+ * Tendency
  *
- * @ORM\Table(name="seip_c_personal")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\PersonalRepository")
+ * @ORM\Table(name="seip_c_tendency")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\TendencyRepository")
+ * @author matias
  */
-class Personal extends modelPersonal
-{
+class Tendency extends modelTendency {
+    //put your code here
     /**
      * @var integer
      *
@@ -23,7 +30,7 @@ class Personal extends modelPersonal
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
@@ -38,7 +45,7 @@ class Personal extends modelPersonal
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -46,7 +53,7 @@ class Personal extends modelPersonal
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-    
+
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -54,43 +61,27 @@ class Personal extends modelPersonal
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
     private $userUpdatedAt;
-    
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cedula", type="integer")
-     */
-    private $cedula;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_personal", type="string", length=100)
+     * @ORM\Column(name="description", type="string", length=80)
      */
-    private $nomPersonal;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="num_personal", type="integer")
-     */
-    private $numPersonal;
+    private $description;
     
     /**
-     * Cargo
-     * @var \Pequiven\MasterBundle\Entity\Cargo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
-     * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=30, nullable=true)
      */
-    private $cargo;
-
+    private $ref;
+    
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
-    
+    private $enabled = true;    
 
     /**
      * Get id
@@ -106,7 +97,7 @@ class Personal extends modelPersonal
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Personal
+     * @return Tendency
      */
     public function setCreatedAt($createdAt)
     {
@@ -129,7 +120,7 @@ class Personal extends modelPersonal
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Personal
+     * @return Tendency
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -149,79 +140,56 @@ class Personal extends modelPersonal
     }
 
     /**
-     * Set cedula
+     * Set description
      *
-     * @param integer $cedula
-     * @return Personal
+     * @param string $description
+     * @return Tendency
      */
-    public function setCedula($cedula)
+    public function setDescription($description)
     {
-        $this->cedula = $cedula;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get cedula
-     *
-     * @return integer 
-     */
-    public function getCedula()
-    {
-        return $this->cedula;
-    }
-
-    /**
-     * Set nomPersonal
-     *
-     * @param string $nomPersonal
-     * @return Personal
-     */
-    public function setNomPersonal($nomPersonal)
-    {
-        $this->nomPersonal = $nomPersonal;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPersonal
+     * Get description
      *
      * @return string 
      */
-    public function getNomPersonal()
+    public function getDescription()
     {
-        return $this->nomPersonal;
+        return $this->description;
     }
 
     /**
-     * Set numPersonal
+     * Set ref
      *
-     * @param integer $numPersonal
-     * @return Personal
+     * @param string $ref
+     * @return Tendency
      */
-    public function setNumPersonal($numPersonal)
+    public function setRef($ref)
     {
-        $this->numPersonal = $numPersonal;
+        $this->ref = $ref;
 
         return $this;
     }
 
     /**
-     * Get numPersonal
+     * Get ref
      *
-     * @return integer 
+     * @return string 
      */
-    public function getNumPersonal()
+    public function getRef()
     {
-        return $this->numPersonal;
+        return $this->ref;
     }
 
     /**
      * Set enabled
      *
      * @param boolean $enabled
-     * @return Personal
+     * @return Tendency
      */
     public function setEnabled($enabled)
     {
@@ -244,7 +212,7 @@ class Personal extends modelPersonal
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return Personal
+     * @return Tendency
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -267,7 +235,7 @@ class Personal extends modelPersonal
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return Personal
+     * @return Tendency
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -284,28 +252,5 @@ class Personal extends modelPersonal
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
-    }
-
-    /**
-     * Set Cargo
-     *
-     * @param \Pequiven\MasterBundle\Entity\Cargo $cargo
-     * @return Personal
-     */
-    public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
-    {
-        $this->cargo = $cargo;
-
-        return $this;
-    }
-
-    /**
-     * Get Cargo
-     *
-     * @return \Pequiven\MasterBundle\Entity\Cargo 
-     */
-    public function getCargo()
-    {
-        return $this->cargo;
     }
 }

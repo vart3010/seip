@@ -130,7 +130,9 @@ class ObjetiveTacticController extends Controller{
             
             $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
             $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            $this->createObjetiveIndicator($objetives,$data['indicators']);
+            if(isset($data['indicators'])){
+                $this->createObjetiveIndicator($objetives,$data['indicators']);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'tactic')));
 //                    $this->forward('PequivenObjetiveBundle:Objetive:redirectObjetive', array(
@@ -204,15 +206,24 @@ class ObjetiveTacticController extends Controller{
         $lineStrategicId = $request->request->get('lineStrategicId');
         $objetiveLevelId = ObjetiveLevel::LEVEL_ESTRATEGICO;
         
-        if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
+        if(is_numeric($lineStrategicId)){
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
+            } else{
+                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
+            }
+
+            $totalResults = count($results);
+            if(is_array($results) && $totalResults > 0){
+                foreach ($results as $result){
+                    $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else{
+                $objetiveChildrenStrategic[] = array("empty" => true);
+            }
         } else{
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
+            $objetiveChildrenStrategic[] = array("empty" => true,"initial" => true);
         }
-        foreach ($results as $result){
-            $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
-        }
-        
         $response->setData($objetiveChildrenStrategic);
         
         return $response;

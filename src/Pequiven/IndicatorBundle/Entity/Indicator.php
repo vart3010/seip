@@ -77,6 +77,13 @@ class Indicator extends modelIndicator {
     private $ref;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="refParent", type="string", length=15, nullable=true)
+     */
+    private $refParent;
+    
+    /**
      * LineStrategic
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic")
@@ -134,6 +141,13 @@ class Indicator extends modelIndicator {
     private $enabled = true;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tmp", type="boolean")
+     */
+    private $tmp = false;
+    
+    /**
      * IndicatorLevel
      * @var \Pequiven\IndicatorBundle\Entity\IndicatorLevel
      * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\IndicatorLevel")
@@ -148,6 +162,14 @@ class Indicator extends modelIndicator {
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id")
      */
     private $formula;
+    
+    /**
+     * Tendency
+     * @var \Pequiven\MasterBundle\Entity\Tendency
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Tendency")
+     * @ORM\JoinColumn(name="fk_tendency", referencedColumnName="id")
+     */
+    private $tendency;
 
     /**
      * Get id
@@ -573,5 +595,74 @@ class Indicator extends modelIndicator {
         } 
         
         return $ref;
+    }
+
+    /**
+     * Set tendency
+     *
+     * @param \Pequiven\MasterBundle\Entity\Tendency $tendency
+     * @return Indicator
+     */
+    public function setTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency = null)
+    {
+        $this->tendency = $tendency;
+
+        return $this;
+    }
+
+    /**
+     * Get tendency
+     *
+     * @return \Pequiven\MasterBundle\Entity\Tendency 
+     */
+    public function getTendency()
+    {
+        return $this->tendency;
+    }
+
+    /**
+     * Set tmp
+     *
+     * @param boolean $tmp
+     * @return Indicator
+     */
+    public function setTmp($tmp)
+    {
+        $this->tmp = $tmp;
+
+        return $this;
+    }
+
+    /**
+     * Get tmp
+     *
+     * @return boolean 
+     */
+    public function getTmp()
+    {
+        return $this->tmp;
+    }
+
+    /**
+     * Set refParent
+     *
+     * @param string $refParent
+     * @return Indicator
+     */
+    public function setRefParent($refParent)
+    {
+        $this->refParent = $refParent;
+
+        return $this;
+    }
+
+    /**
+     * Get refParent
+     *
+     * @return string 
+     */
+    public function getRefParent()
+    {
+        return $this->refParent;
     }
 }

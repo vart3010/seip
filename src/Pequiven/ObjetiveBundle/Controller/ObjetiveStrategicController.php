@@ -112,7 +112,9 @@ class ObjetiveStrategicController extends Controller {
             
             $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
             $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            $this->createObjetiveIndicator($objetives,$data['indicators']);
+            if(isset($data['indicators'])){
+                $this->createObjetiveIndicator($objetives,$data['indicators']);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'strategic')));
         }

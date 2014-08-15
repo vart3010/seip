@@ -206,7 +206,16 @@
                         <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
                     </span>
                     <span id="button_add_indicator">
-                        <button type="button" class="button red-gradient glossy" onclick="openAlert()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button
+                        <button type="button" class="button red-gradient glossy" onclick="openAlert()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
+                    </span>
+                    <span id="choice_line_strategic">
+                        {{ 'form.messages.pleaseChoiceALineStrategic'|trans }}
+                    </span>
+                    <span id="choice_objetive_strategic">
+                        {{ 'form.messages.pleaseChoiceAObjetiveStrategic'|trans }}
+                    </span>
+                    <span id="choice_objetive_tactic">
+                        {{ 'form.messages.pleaseChoiceAObjetiveTactic'|trans }}
                     </span>
                 </div>
                     
@@ -246,54 +255,74 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
+            
+            var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
+                messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
+                messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
+                messageObjetiveTacticCheckIndicator = $('#choice_objetive_tactic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Táctico
+                sectionCheckGerencia = $("#view_check_gerencia"),//Sección dónde está el check para seleccionar las gerencias de los complejos que esten seleccionados
+                sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
+                selectLineStrategic = $("#pequiven_objetive_operative_registration_lineStrategic"),//Select de Línea Estratégica
+                selectObjetiveStrategic = $("#pequiven_objetive_operative_registration_parent_strategic"),//Select de Objetivo Estratégico
+                selectObjetiveTactic = $("#pequiven_objetive_operative_registration_parent"),//Select de Objetivo Táctico
+                selectComplejo = $("#pequiven_objetive_operative_registration_complejo"),//Select Complejo
+                selectGerencia = $("#pequiven_objetive_operative_registration_gerencia"),//Select de Gerencia
+                selectIndicators = $("#pequiven_objetive_operative_registration_indicators"),//Select de Indicadores
+                inputRef = $("#pequiven_objetive_operative_registration_ref"),//Input de Ref
+                inputGoal = $("#pequiven_objetive_operative_registration_goal"),//Input de Meta
+                inputWeight = $("#pequiven_objetive_operative_registration_weight"),//Input de Peso
+                inputHiddenComplejoName = $("#pequiven_objetive_operative_registration_complejo_name"),//Input Hidden del Nombre del Complejo del usuario logueado
+                inputHiddenRoleName = $("#pequiven_objetive_operative_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+                checkIndicator = $("#pequiven_objetive_operative_registration_evalIndicator"),//Check de Evaluar por Indicador
+                checkGerencia = $("#pequiven_objetive_operative_registration_check_gerencia")//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
+                ;            
            //Llamado de la función que carga los valores por defecto de la vista
            change();
            
            function change(){
                 //Escondemos por defecto el boton de registrar indicadores
-                $("#button_add_indicator").hide();
+                buttonAddIndicator.hide();
                 
                 //Escondemos por defecto la sección de sumar indicadores al objetivo
-                $("#indicators").hide();
+                sectionIndicators.hide();
                
                //Inicializamos el select2 de Línea Estratégica
-               $("#pequiven_objetive_operative_registration_lineStrategic").select2({
-                   
-               });
+               chargeSelect2LineStrategic();
                
                //Inicializamos el select2 de Objetivo Estratégico
-               $("#pequiven_objetive_operative_registration_parent_strategic").select2({
-                   
-               });
+               chargeSelect2ObjetiveStrategic();
                
-                //Inicializamos el select2 de Objetivo Táctico
-               $("#pequiven_objetive_operative_registration_parent").select2({
-               });
+               //Inicializamos el select2 de Objetivo Táctico
+               chargeSelect2ObjetiveTactic();
+               
+               messageLineStrategicCheckIndicator.hide();
+               messageObjetiveStrategicCheckIndicator.hide();
+               messageObjetiveTacticCheckIndicator.hide();
                
                 //Inicializamos el select de Indicadores
                 chargeSelectIndicatorFromLineStrategic();
                
-               if($("#pequiven_objetive_operative_registration_complejo_name").val() === 'ZIV' && ($("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND' && $("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND_AUX')){
+               if(inputHiddenComplejoName.val() === 'ZIV' && (inputHiddenRoleName.val() != 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() != 'ROLE_MANAGER_SECOND_AUX')){
                     //Inicializamos el select2 de Complejo
-                    $("#pequiven_objetive_operative_registration_complejo").select2({
+                    selectComplejo.select2({
                         
                     });
-                    $("#pequiven_objetive_operative_registration_complejo").select2("enable",false);
+                    selectComplejo.select2("enable",false);
                     
-                    if($("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE' || $("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE_AUX'){
-                        $("#pequiven_objetive_operative_registration_gerencia").select2({
+                    if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                        selectGerencia.select2({
                         
                         });
-                        $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
-                        $("#view_check_gerencia").hide();
+                        selectGerencia.select2("enable",false);
+                        sectionCheckGerencia.hide();
                     }
                }
                
                //Incializamos el formato numerico para el input de Peso
-               $("#pequiven_objetive_operative_registration_weight").number(true,3,',','.');
+               inputWeight.number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Meta
-               $("#pequiven_objetive_operative_registration_goal").number(true,3,',','.');
+               inputGoal.number(true,3,',','.');
                
                 //Incializamos el formato numerico para el input de Rango Alto
                $("#pequiven_objetive_operative_registration_rankTop").number(true,3,',','.');
@@ -308,109 +337,165 @@
                $("#pequiven_objetive_operative_registration_rankBottom").number(true,3,',','.');
            }
            
-           $("#pequiven_objetive_operative_registration_check_gerencia").click(function() {
+           //Al seleccionar alguna opción en el select de Línea Estratégica
+            selectLineStrategic.on("select2-selecting", function(e) {
+                chargeSelectIndicatorFromLineStrategic();
+                displayObjetiveStrategicFromLineStrategic(e);//Actualizamos los Objetivos Estratégicos
+            })
+           //Al cambiar el select de Línea Estratégica
+            selectLineStrategic.change(function() {
+                chargeSelectIndicatorFromLineStrategic();
+                //Reiniciamos el Input de Referencia del Objetivo
+                inputRef.val("");
+            });
+            //Al seleccionar alguna opción en el select de Objetivo Estratégico
+            selectObjetiveStrategic.on("select2-selecting", function(e) {
+                displayObjetiveTacticFromObjetiveStrategic(e);
+            })
+            //Al cambiar el select de Objetivo Estratégico
+            selectObjetiveStrategic.change(function() {
+                inputRef.val("");
+            });
+            //Al seleccionar alguna opción en el select de Objetivo Táctico
+            selectObjetiveTactic.on("select2-selecting", function(e) {
+                displayObjetiveRef(e);
+                if(inputHiddenComplejoName.val() === 'ZIV' && (inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX')){
+                    displaySelectComplejoFromObjetiveTactic(e);
+                    //$("#pequiven_objetive_operative_registration_complejo").show();
+                }
+            })
+            
+            //Al cambiar el select de Complejo
+            selectComplejo.change(function() {
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                    displaySelectGerenciaFromComplejo();
+                }
+            });
+           
+           //Al hacer click sobre el check de gerencias
+           checkGerencia.click(function() {
                checkAllGerencias();
            });
            
-           //Al cambiar el select de Línea Estratégica
-            $("#pequiven_objetive_operative_registration_lineStrategic").change(function() {
-                chargeSelectIndicatorFromLineStrategic();
-               var data = {
-                   lineStrategicId: $.trim($(this).val()),
+           //Al hacer click sobre el check de evaluar por indicador
+            checkIndicator.click(function() {
+                if(checkIndicator.is(':checked')){
+                    if(selectLineStrategic.val() !== '' && selectObjetiveStrategic.val() !== '' && selectObjetiveTactic.val() !== ''){
+                        buttonAddIndicator.show();
+                        chargeSelectIndicatorFromLineStrategic();
+                        sectionIndicators.show();
+                    } else{
+                        if(selectLineStrategic.val() === ''){
+                            messageLineStrategicCheckIndicator.show();
+                        } else if(selectObjetiveStrategic.val() === ''){
+                            messageObjetiveStrategicCheckIndicator.show();
+                        } else if(selectObjetiveTactic.val() === ''){
+                            messageObjetiveTacticCheckIndicator.show();
+                        }
+                    }
+                } else{
+                    buttonAddIndicator.hide();
+                    sectionIndicators.hide();
+                    messageLineStrategicCheckIndicator.hide();
+                    messageObjetiveStrategicCheckIndicator.hide();
+                    messageObjetiveTacticCheckIndicator.hide();
+                }
+            });
+           
+            
+            //Función que carga los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
+            function displayObjetiveStrategicFromLineStrategic(e){
+                var data = {
+                   lineStrategicId: $.trim(e.val),
                };
                $.ajax({
                    type: 'post',
                    url: '{{ path("select_objetiveStrategicFromLineStrategicOperative") }}',
                    data: data,
                    success: function(data) {
-                       var $objetiveStrategic_selector = $('#pequiven_objetive_operative_registration_parent_strategic');
-
                         $('#pequiven_objetive_operative_registration_parent_strategic option[value]').remove();
-                        $objetiveStrategic_selector.append('<option value="0">Seleccione el objetivo estratégico</option>');
-
-                        for(var i=0, total = data.length; i<total; i++){
-                            $objetiveStrategic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                        $('#pequiven_objetive_operative_registration_parent_strategic option').remove();
+                        selectObjetiveStrategic.append('<option></option>');
+                        
+                        if(typeof data[0].empty === 'undefined'){
+                            for(var i=0, total = data.length; i<total; i++){
+                                selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                            }
+                            $("#pequiven_objetive_operative_registration_parent_strategic").select2("val", "");
+                            //Reiniciamos el select2 de Objetivo Táctico
+                            $('#pequiven_objetive_operative_registration_parent option[value]').remove();
+                            $('#pequiven_objetive_operative_registration_parent option').remove();
+                            selectObjetiveTactic.append('<option></option>');
+                            chargeSelect2ObjetiveTactic();
+                            //Reiniciamos el select de Complejo y desactivamos respectivamente
+                            $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
+                            selectComplejo.select2("val","");
+                            selectComplejo.select2("enable",false);
+                            //Reiniciamos el select de Gerencia y desactivamos respectivamente
+                            $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
+                            $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
+                            $("#pequiven_objetive_operative_registration_gerencia").select2("val","");
+                            $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
+                            //Escondemos la sección del check de seleccionar las gerencias de los complejos seleccionados
+                            sectionCheckGerencia.hide();
+                            chargeSelect2ObjetiveStrategic("full");
+                        } else{
+                            if(typeof data[0].initial === 'undefined'){
+                                chargeSelect2ObjetiveStrategic("empty");
+                            } else{
+                                chargeSelect2ObjetiveStrategic("initial");
+                            }
                         }
-                        $("#pequiven_objetive_operative_registration_parent_strategic").select2("val", "");
-                        $('#pequiven_objetive_operative_registration_parent option[value]').remove();
-                        $("#pequiven_objetive_operative_registration_parent").append('<option value="0">Seleccione el objetivo táctico</option>');
-                        $("#pequiven_objetive_operative_registration_parent").select2("val", "");
-                        $("#pequiven_objetive_operative_registration_ref").val("");
-                        $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
-                        $("#pequiven_objetive_operative_registration_complejo").select2("val","");
-                        $("#pequiven_objetive_operative_registration_complejo").select2("enable",false);
-                        $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
-                        $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
-                        $("#pequiven_objetive_operative_registration_gerencia").select2("val","");
-                        $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
-                        $("#view_check_gerencia").hide();
                    }
                 });
-            });
+            }
             
-            $("#pequiven_objetive_operative_registration_evalIndicator").click(function() {
-                if($("#pequiven_objetive_operative_registration_evalIndicator").is(':checked')){
-                    $("#button_add_indicator").show();
-                    chargeSelectIndicatorFromLineStrategic();
-                    $("#indicators").show();
-                } else{
-                    $("#button_add_indicator").hide();
-                    $("#indicators").hide();
-                }
-            });
-            
-            //Al cambiar el select de Objetivo Estratégico
-            $("#pequiven_objetive_operative_registration_parent_strategic").change(function() {
-               var data = {
-                   objetiveStrategicId: $.trim($(this).val()),
+            //Función que carga los objetivos tácticos de acuerdo al objetivo estratégico seleccionado
+            function displayObjetiveTacticFromObjetiveStrategic(e){
+                var data = {
+                   objetiveStrategicId: $.trim(e.val),
                };
                $.ajax({
                    type: 'post',
                    url: '{{ path("select_objetiveTacticFromObjetiveStrategic") }}',
                    data: data,
                    success: function(data) {
-                       var $objetiveTactic_selector = $('#pequiven_objetive_operative_registration_parent');
-
                         $('#pequiven_objetive_operative_registration_parent option[value]').remove();
-                        $objetiveTactic_selector.append('<option value="0">Seleccione el objetivo táctico</option>');
-
-                        for(var i=0, total = data.length; i<total; i++){
-                            $objetiveTactic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                        $('#pequiven_objetive_operative_registration_parent option').remove();
+                        selectObjetiveTactic.append('<option></option>');
+                        
+                        if(typeof data[0].empty === 'undefined'){
+                            for(var i=0, total = data.length; i<total; i++){
+                                selectObjetiveTactic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                            }
+                            selectObjetiveTactic.select2("val", "");
+                            inputRef.val("");
+                            //Reiniciamos el select de Complejo y desactivamos respectivamente
+                            $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
+                            selectComplejo.select2("val","");
+                            selectComplejo.select2("enable",false);
+                            //Reiniciamos el select de Gerencia y desactivamos respectivamente
+                            $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
+                            $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
+                            selectGerencia.select2("val","");
+                            selectGerencia.select2("enable",false);
+                            sectionCheckGerencia.hide();
+                            chargeSelect2ObjetiveTactic("full");
+                        } else{
+                            if(typeof data[0].initial === 'undefined'){
+                                chargeSelect2ObjetiveTactic("empty");
+                            } else{
+                                chargeSelect2ObjetiveTactic("initial");
+                            }
                         }
-                        $("#pequiven_objetive_operative_registration_parent").select2("val", "");
-                        $("#pequiven_objetive_operative_registration_ref").val("");
-                        $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
-                        $("#pequiven_objetive_operative_registration_complejo").select2("val","");
-                        $("#pequiven_objetive_operative_registration_complejo").select2("enable",false);
-                        $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
-                        $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
-                        $("#pequiven_objetive_operative_registration_gerencia").select2("val","");
-                        $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
-                        $("#view_check_gerencia").hide();
                    }
                 });
-            });
-            
-            //Al cambiar el select de Objetivo Táctico
-            $("#pequiven_objetive_operative_registration_parent").change(function() {
-                displayObjetiveRef();
-                if($("#pequiven_objetive_operative_registration_complejo_name").val() === 'ZIV' && ($("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND' && $("#pequiven_objetive_operative_registration_role_name").val() != 'ROLE_MANAGER_SECOND_AUX')){
-                    displaySelectComplejoFromObjetiveTactic();
-                    //$("#pequiven_objetive_operative_registration_complejo").show();
-                }
-            });
-            
-            //Al cambiar el select de Complejo
-            $("#pequiven_objetive_operative_registration_complejo").change(function() {
-                if($("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE' || $("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE_AUX'){
-                    displaySelectGerenciaFromComplejo();
-                }
-            });
+            }
             
             //Función que actualiza el select de complejos en caso de que el usuario logueado sea de Sede Corporativa
-            function displaySelectComplejoFromObjetiveTactic(){
+            function displaySelectComplejoFromObjetiveTactic(e){
                 var data = {
-                    objetiveTacticId: $.trim($("#pequiven_objetive_operative_registration_parent").val()),
+                    objetiveTacticId: $.trim(e.val),
                 };
                 $.ajax({
                     type: 'post',
@@ -427,17 +512,17 @@
                             complejos[i] = data[i].id;
                         }
                         
-                        if($("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE' || $("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_DIRECTIVE_AUX'){
+                        if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                             displaySelectGerenciaFromComplejo(complejos);
                             displaySelectObjetiveStrategicFromObjetiveTactic();
-                        } else if($("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_MANAGER_FIRST' || $("#pequiven_objetive_operative_registration_role_name").val() === 'ROLE_MANAGER_FIRST_AUX'){
+                        } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                             displaySelectObjetiveStrategicFromObjetiveTactic();
                         }
                        // $("#pequiven_objetive_operative_registration_complejo").select2("val",array(1,6));
-                       $("#pequiven_objetive_operative_registration_complejo").select2({
+                       selectComplejo.select2({
                         });
-                        $("#pequiven_objetive_operative_registration_complejo").select2("enable",true);
-                        $("#view_check_gerencia").show();
+                        selectComplejo.select2("enable",true);
+                        sectionCheckGerencia.show();
                     }
                 });
             }
@@ -445,31 +530,29 @@
             //Función que actualiza el select de objetivos estratégicos de acuerdo al objetivo táctico seleccionado
             function displaySelectObjetiveStrategicFromObjetiveTactic(){
                 var data = {
-                    objetiveTacticId: $.trim($("#pequiven_objetive_operative_registration_parent").val()),
-                    lineStrategicId: $.trim($("#pequiven_objetive_operative_registration_lineStrategic").val()),
+                    objetiveTacticId: $.trim(selectObjetiveTactic.val()),
+                    lineStrategicId: $.trim(selectLineStrategic.val()),
                 };
                 $.ajax({
                     type: 'post',
                     url: '{{ path("select_objetiveStrategicFromObjetiveTactic") }}',
                     data: data,
-                    success: function(data) {
-                        var $objetiveStrategic_selector = $("#pequiven_objetive_operative_registration_parent_strategic");
-                        
+                    success: function(data) {                        
                         $("#pequiven_objetive_operative_registration_parent_strategic option[value]").remove();
-                        $("#pequiven_objetive_operative_registration_parent_strategic").select2("val",'');
+                        selectObjetiveStrategic.select2("val",'');
                         //Actualizamos el select de objetivo estratégico
                         for(var i=0, total = data.length; i<total; i++){
                             if(data[i].selected == 'YES'){
-                                $objetiveStrategic_selector.append('<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>');
+                                selectObjetiveStrategic.append('<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>');
                             } else{
-                                $objetiveStrategic_selector.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                                selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
                             }
                         }
-                        $("#pequiven_objetive_operative_registration_parent_strategic").select2({
+                        selectObjetiveStrategic.select2({
                         });
                         for(var i=0, total = data.length; i<total; i++){
                             if(data[i].selected == 'YES'){
-                                $("#pequiven_objetive_operative_registration_parent_strategic").select2("val",data[i].id);
+                                selectObjetiveStrategic.select2("val",data[i].id);
                             }
                         }
                     }
@@ -494,7 +577,7 @@
                     };
                 } else{
                     data = {
-                        complejos: $.trim($("#pequiven_objetive_operative_registration_complejo").val()),
+                        complejos: $.trim(selectComplejo.val()),
                     };
                 }
                 $.ajax({
@@ -527,37 +610,37 @@
                                  //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option>');
                              }
                          }
-                         $gerencia_selector.append(text);
-                         $("#pequiven_objetive_operative_registration_gerencia").select2({
+                         selectGerencia.append(text);
+                         selectGerencia.select2({
                          });
-                         $("#pequiven_objetive_operative_registration_gerencia").select2("enable",true);
-                         $("#view_check_gerencia").show();
+                         selectGerencia.select2("enable",true);
+                         sectionCheckGerencia.show();
                     }
                  });
             }
                         
             //Función que muestra el Número de Referencia del objetivo a crear, de acuerdo al táctico seleccionado
-            function displayObjetiveRef(){
+            function displayObjetiveRef(e){
                 var data = {
-                    objetiveTacticId: $.trim($("#pequiven_objetive_operative_registration_parent").val())
+                    objetiveTacticId: $.trim(e.val)
                 };
                 $.ajax({
                     type: 'post',
                     url: '{{ path("displayRefObjetiveOperative") }}',
                     data: data,
                     success: function(data) {
-                        $("#pequiven_objetive_operative_registration_ref").val(data[0].ref);
+                        inputRef.val(data[0].ref);
                     }
                  });
             }
             
             //Función que "marca" todas las gerencias de los complejos seleccionados
             function checkAllGerencias(){
-                if($("#pequiven_objetive_operative_registration_check_gerencia").is(':checked')){
-                    $('#pequiven_objetive_operative_registration_gerencia').select2("val",'');
-                    $('#pequiven_objetive_operative_registration_gerencia').select2("enable",false);
+                if(checkGerencia.is(':checked')){
+                    selectGerencia.select2("val",'');
+                    selectGerencia.select2("enable",false);
                 } else{
-                    $('#pequiven_objetive_operative_registration_gerencia').select2("enable",true);
+                    selectGerencia.select2("enable",true);
                 }
             }
             
@@ -587,10 +670,56 @@
                     }
                 });
             }
+            
+           //Función que carga el select2 de Línea Estratégica
+            function chargeSelect2LineStrategic(type){
+                selectLineStrategic.select2({
+                    placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "{{ 'form.messages.selectLineStrategicFormatNoMatcher'|trans }}";
+                        } else{
+                            return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
+                        }
+                    }
+                });
+            }
+            
+            //Función que carga el select2 de Objetivo Estratégico
+            function chargeSelect2ObjetiveStrategic(type){
+                selectObjetiveStrategic.select2({
+                    placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                        } else if (type == 'empty'){
+                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
+                        } else {
+                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                        }
+                    }
+                });
+            }
+            
+            //Función que carga el select2 de Objetivo Táctico
+            function chargeSelect2ObjetiveTactic(type){
+                selectObjetiveTactic.select2({
+                    placeholder: '{{ 'form.messages.selectObjetiveTacticPlaceholder'|trans }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "{{ 'form.messages.selectObjetiveTacticFormatNoMatcher'|trans }}";
+                        } else if (type == 'empty'){
+                            return "{{ 'form.messages.selectObjetiveTacticFormatNoResult'|trans }}";
+                        } else {
+                            return "{{ 'form.messages.selectObjetiveTacticFormatNoMatcher'|trans }}";
+                        }
+                    }
+                });
+            }
            
            //Función que carga el select2 de Indicadores
            function chargeSelect2Indicators(type){
-                $("#pequiven_objetive_operative_registration_indicators").select2({
+                selectIndicators.select2({
                     placeholder: '{{ 'form.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                     formatNoMatches: function(term) {
                         if(type == 'full'){

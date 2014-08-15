@@ -83,7 +83,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $Complejo;
+    private $complejo;
     
     /**
      * Gerencia
@@ -91,7 +91,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
-    private $Gerencia;
+    private $gerencia;
     
     /**
      * Cargo
@@ -99,7 +99,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
      */
-    private $Cargo;
+    private $cargo;
     
     /**
      * Get id
@@ -344,7 +344,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
     {
-        $this->Complejo = $complejo;
+        $this->complejo = $complejo;
 
         return $this;
     }
@@ -356,7 +356,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getComplejo()
     {
-        return $this->Complejo;
+        return $this->complejo;
     }
 
     /**
@@ -367,7 +367,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
     {
-        $this->Gerencia = $gerencia;
+        $this->gerencia = $gerencia;
 
         return $this;
     }
@@ -379,7 +379,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getGerencia()
     {
-        return $this->Gerencia;
+        return $this->gerencia;
     }
 
     /**
@@ -390,7 +390,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
     {
-        $this->Cargo = $cargo;
+        $this->cargo = $cargo;
 
         return $this;
     }
@@ -402,6 +402,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getCargo()
     {
-        return $this->Cargo;
+        return $this->cargo;
     }
 }

@@ -81,7 +81,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
     private function addObjetiveParentStrategicForm($form,$lineStrategicId,$objetiveParent = null) {
         $formOptions = array(
             'class' => 'PequivenObjetiveBundle:Objetive',
-            'empty_value' => 'Seleccione el objetivo estratégico',
+            'empty_value' => '',
             'label' => 'form.parent_strategic',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',

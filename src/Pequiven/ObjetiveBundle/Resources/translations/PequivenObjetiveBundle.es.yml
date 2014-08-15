@@ -61,3 +61,16 @@ form:
     indicators_info: Indicadores que serán parte de la evaluación del objetivo a crear
     question:
         allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
+    messages:
+        pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
+        pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico
+        pleaseChoiceAObjetiveTactic: Seleccione un Objetivo Táctico
+        selectLineStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectLineStrategicFormatNoResult: No hay líneas estratégicas registradas
+        selectLineStrategicPlaceholder: Seleccione una línea estratégica
+        selectObjetiveStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectObjetiveStrategicFormatNoResult: No hay objetivos estratégicos registrados para la línea estratégica seleccionada
+        selectObjetiveStrategicPlaceholder: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoMatcher: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoResult: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
+        selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico

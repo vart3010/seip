@@ -72,7 +72,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         
         $formOptions = array(
             'class' => 'PequivenObjetiveBundle:Objetive',
-            'empty_value' => 'Seleccione el objetivo táctico',
+            'empty_value' => '',
             'label' => 'form.parent_tactic',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',

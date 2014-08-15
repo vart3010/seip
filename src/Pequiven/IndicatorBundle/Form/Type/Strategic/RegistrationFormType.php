@@ -27,6 +27,9 @@ class RegistrationFormType extends AbstractType {
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         
+        //Nombre del Complejo del usuario que esta logueado
+        $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
+        
         //Línea estratégica del indicador a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener());
         //Nombre del indicador a crear
@@ -35,7 +38,7 @@ class RegistrationFormType extends AbstractType {
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 7)));
         
         //Peso del Objetivo
-        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
+        //$builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
         //Meta del Objetivo
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000")));
         //Fórmula del indicador a crear
