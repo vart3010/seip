@@ -24,11 +24,23 @@ form:
     parent_tactic: Objetivo Táctico
     weight: Peso
     goal: Meta
-    rankArrangement: Rango de Gestión
+    
+    arrangementRangeType: Tipo de Rango
+    
+    rankArrangementTop: Rango de Gestión Alto
+    rankArrangementMiddle: Rango de Gestión Medio
+    rankArrangementBottom: Rango de Gestión Bajo
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
     rankMiddleBottom: Rango Medio Bajo
-    rankBottom: Rango Bajo    
+    rankBottom: Rango Bajo
+    rankTopTop: Rango Alto-Alto
+    rankTopBottom: Rango Alto-Bajo
+    rankMiddleTopCompound: Rango Medio-Alto
+    rankMiddleBottomCompound: Rango Medio-Bajo
+    rankBottomTop: Rango Bajo-Alto
+    rankBottomBottom: Rango Bajo-Bajo
+    
     typeEvaluation: Tipo de Evaluación
     evalObjetive: Por Objetivo
     evalIndicator: Por Indicador
@@ -49,10 +61,20 @@ form:
     parent_tactic_info: Objetivo Táctico que impactará el objetivo a crear
     weight_info: Peso del objetivo. El valor decimal es ".".
     goal_info: Meta del objetivo. El valor decimal es ".".
+    
+    arrangementRangeType_info: Seleccione el tipo de rango
+    
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
     rankBottom_info: Valor bajo del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankTopTop_info: Rango alto-alto del semáforo de evaluación de gestión. 
+    rankTopBottom_info: Rango alto-bajo del semáforo de evaluación de gestión. 
+    rankMiddleTopCompound_info: Rango medio-alto del semáforo de evaluación de gestión. 
+    rankMiddleBottomCompound_info: Rango medio-bajo del semáforo de evaluación de gestión. 
+    rankBottomTop_info: Rango bajo-alto del semáforo de evaluación de gestión. 
+    rankBottomBottom_info: Rango bajo-bajo del semáforo de evaluación de gestión. 
+    
     evalObjetive_info: Seleccione si el objetivo será evaluado por sub-objetivos.
     evalIndicator_info: Seleccione si el objetivo será evaluado por indicadores.
     evalArrangementProgram_info: Seleccione si el objetivo será evaluado por programas de gestión.
