@@ -15,8 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
-use Pequiven\MasterBundle\Entity\Operator;
-use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

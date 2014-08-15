@@ -12,6 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
+use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
 use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
@@ -40,6 +41,71 @@ class RegistrationFormType extends AbstractType {
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000")));
         //Fórmula del indicador a crear
         $builder->addEventSubscriber(new AddFormulaFieldListener());
+        
+        $objectArrangementRangeType = new ArrangementRangeType();
+        $rangeTypeNameArray = $objectArrangementRangeType->getRangeTypeNameArray();
+        //Rango de Gestión Alto
+        $selectRangeTypeTop = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_COMPOUND])));
+        $builder->add('arrangementRangeTypeTop','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeTop,'mapped' => false));
+        $builder->add('typeArrangementRangeTypeTop','hidden',array('data' => '','mapped' => false));
+        //Rango Alto Básico
+            $builder->add('rankTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+            $builder->add('opRankTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            
+        //Rango Alto Compuesto
+            //Rango Alto-Alto
+                $builder->add('rankTopTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankTopTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankTopTopBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankTopTopBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Alto-Bajo
+                $builder->add('rankTopBottomTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankTopBottomTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankTopBottomBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankTopBottomBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                
+        //Rango de Gestión Medio
+        $selectRangeTypeMiddle = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_COMPOUND])));
+        $builder->add('arrangementRangeTypeMiddle','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeMiddle,'mapped' => false));
+        $builder->add('typeArrangementRangeTypeMiddle','hidden',array('data' => '','mapped' => false));
+        //Rango Medio Básico
+            $builder->add('rankMiddleTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+            $builder->add('opRankMiddleTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            $builder->add('rankMiddleBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+            $builder->add('opRankMiddleBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            
+        //Rango Medio Compuesto
+            //Rango Medio-Alto
+                $builder->add('rankMiddleTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleTopBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleTopBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Medio-Bajo
+                $builder->add('rankMiddleBottomTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleBottomTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleBottomBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleBottomBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                
+        //Rango de Gestión Bajo
+        $selectRangeTypeBottom = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_COMPOUND])));
+        $builder->add('arrangementRangeTypeBottom','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeBottom,'mapped' => false));
+        $builder->add('typeArrangementRangeTypeBottom','hidden',array('data' => '','mapped' => false,'mapped' => false));
+        //Rango Bajo Básico
+            $builder->add('rankBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+            $builder->add('opRankBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            
+        //Rango Bajo Compuesto
+            //Rango Bajo-Alto
+                $builder->add('rankBottomTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankBottomTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankBottomTopBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankBottomTopBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Bajo-Bajo
+                $builder->add('rankBottomBottomTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankBottomBottomTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankBottomBottomBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankBottomBottomBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+        
         
         //Rango de Gestión
             //Rango Alto del Indicador

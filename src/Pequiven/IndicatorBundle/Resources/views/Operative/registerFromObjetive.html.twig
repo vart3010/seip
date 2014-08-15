@@ -90,55 +90,83 @@
                 </span>
             </div>                    
 
-            <!-- Rango de Gestión -->
+            <!-- Rango de Gestión Alto -->
             <fieldset class="fieldset">
-                <legend class="legend">{{ 'form.rankArrangement'|trans }}</legend>
-
-                <!-- Rango Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankTop) }}
-                        {{ form_widget(form.rankTop) }}
-                        {{ form_errors(form.rankTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankTop_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Medio Alto del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleTop) }}
-                        {{ form_widget(form.rankMiddleTop) }}
-                        {{ form_errors(form.rankMiddleTop) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleTop_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Medio Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankMiddleBottom) }}
-                        {{ form_widget(form.rankMiddleBottom) }}
-                        {{ form_errors(form.rankMiddleBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankMiddleBottom_info'|trans }}</span>
-                        </span>
-                </div>
-                        
-                <!-- Rango Bajo del Objetivo -->
-                <div class="field-block button-height">
-                        {{ form_label(form.rankBottom) }}
-                        {{ form_widget(form.rankBottom) }}
-                        {{ form_errors(form.rankBottom) }}
-                        <span class="info-spot">
-                            <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.rankBottom_info'|trans }}</span>
-                        </span>
-                </div>
+                <legend class="legend">{{ 'form.rankArrangementTop'|trans }}</legend>
+                {{ form_widget(form.typeArrangementRangeTypeTop) }}
+                {{ form_label(form.arrangementRangeTypeTop) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                </span>
+                {{ form_widget(form.arrangementRangeTypeTop) }}
+                
+                <span id="sectionTopBasic">
+                    Res. Ind.{{ form_widget(form.opRankTop) }} {{ form_widget(form.rankTop) }}
+                </span>
+                <span id="sectionTopCompound">
+                    <div id="rangeTopTop">
+                        {{ 'form.rankTopTop_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankTopTopTop) }} {{ form_widget(form.rankTopTopTop) }} y Res. Ind.{{ form_widget(form.opRankTopTopBottom) }} {{ form_widget(form.rankTopTopBottom) }}
+                    </div>
+                    <div id="rangeTopBottom">
+                        {{ 'form.rankTopBottom_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankTopBottomTop) }} {{ form_widget(form.rankTopBottomTop) }} y Res. Ind.{{ form_widget(form.opRankTopBottomBottom) }} {{ form_widget(form.rankTopBottomBottom) }}
+                    </div>
+                </span>
             </fieldset>
+                    
+            <!-- Rango de Gestión Medio -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangementMiddle'|trans }}</legend>
+                {{ form_widget(form.typeArrangementRangeTypeMiddle) }}
+                {{ form_label(form.arrangementRangeTypeMiddle) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                </span>
+                {{ form_widget(form.arrangementRangeTypeMiddle) }}
+                
+                <span id="sectionMiddleBasic">
+                    Res. Ind.{{ form_widget(form.opRankMiddleTop) }} {{ form_widget(form.rankMiddleTop) }} y Res. Ind.{{ form_widget(form.opRankMiddleBottom) }} {{ form_widget(form.rankMiddleBottom) }}
+                </span>
+                <span id="sectionMiddleCompound">
+                    <div id="rangeMiddleTop">
+                        {{ 'form.rankMiddleTop_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankMiddleTopTop) }} {{ form_widget(form.rankMiddleTopTop) }} y Res. Ind.{{ form_widget(form.opRankMiddleTopBottom) }} {{ form_widget(form.rankMiddleTopBottom) }}
+                    </div>
+                    <div id="rangeMiddleBottom">
+                        {{ 'form.rankMiddleBottom_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankMiddleBottomTop) }} {{ form_widget(form.rankMiddleBottomTop) }} y Res. Ind.{{ form_widget(form.opRankMiddleBottomBottom) }} {{ form_widget(form.rankMiddleBottomBottom) }}
+                    </div>
+                </span>
+            </fieldset>                    
             
+            <!-- Rango de Gestión Bajo -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangementBottom'|trans }}</legend>
+                {{ form_widget(form.typeArrangementRangeTypeBottom) }}
+                {{ form_label(form.arrangementRangeTypeBottom) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                </span>
+                {{ form_widget(form.arrangementRangeTypeBottom) }}
+                
+                <span id="sectionBottomBasic">
+                    Res. Ind.{{ form_widget(form.opRankBottom) }} {{ form_widget(form.rankBottom) }}
+                </span>
+                <span id="sectionBottomCompound">
+                    <div id="rangeBottomTop">
+                        {{ 'form.rankBottomTop_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankBottomTopTop) }} {{ form_widget(form.rankBottomTopTop) }} y Res. Ind.{{ form_widget(form.opRankBottomTopBottom) }} {{ form_widget(form.rankBottomTopBottom) }}
+                    </div>
+                    <div id="rangeBottomBottom">
+                        {{ 'form.rankBottomBottom_info'|trans }}</br>
+                        Res. Ind.{{ form_widget(form.opRankBottomBottomTop) }} {{ form_widget(form.rankBottomBottomTop) }} y Res. Ind.{{ form_widget(form.opRankBottomBottomBottom) }} {{ form_widget(form.rankBottomBottomBottom) }}
+                    </div>
+                </span>
+            </fieldset>            
             {{ actions.create_formModal() }}
         </fieldset>
     {{ form_rest(form) }}
@@ -156,8 +184,36 @@
             var selectFormula = $("#pequiven_indicator_operativefo_registration_formula"),//Select de Fórmula
                 inputRef = $("#pequiven_indicator_operativefo_registration_ref"),//Input de Ref
                 inputGoal = $("#pequiven_indicator_operativefo_registration_goal"),//Input de Meta
+                selectArrangementRangeTypeTop = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
+                selectArrangementRangeTypeMiddle = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeMiddle"),//Select de Tipo de Rango Medio
+                selectArrangementRangeTypeBottom = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Bajo
                 inputHiddenRefParent = $("#pequiven_indicator_operativefo_registration_refObjetive"),//Input Hidden de la Referencia del Objetivo
-                inputRefParent = $("#pequiven_objetive_operative_registration_ref",window.parent.document)//Input de Referencia de la ventana Padre del Objetivo
+                sectionTopBasic = $("#sectionTopBasic"),//Input Hidden de la Referencia del Objetivo
+                sectionTopCompound = $("#sectionTopCompound"),//Input Hidden de la Referencia del Objetivo
+                sectionMiddleBasic = $("#sectionMiddleBasic"),//Input Hidden de la Referencia del Objetivo
+                sectionMiddleCompound = $("#sectionMiddleCompound"),//Input Hidden de la Referencia del Objetivo
+                sectionBottomBasic = $("#sectionBottomBasic"),//Input Hidden de la Referencia del Objetivo
+                sectionBottomCompound = $("#sectionBottomCompound"),//Input Hidden de la Referencia del Objetivo
+                inputRefParent = $("#pequiven_objetive_operative_registration_ref",window.parent.document),//Input de Referencia de la ventana Padre del Objetivo
+                inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
+                inputHiddenTypeArrangementRangeMiddle = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeMiddle"),//Input Hidden del tipo de rango de gestión medio
+                inputHiddenTypeArrangementRangeBottom = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
+                inputRankTop = $("#pequiven_indicator_operativefo_registration_rankTop"),//Input de rankTop
+                inputRankTopTopTop = $("#pequiven_indicator_operativefo_registration_rankTopTopTop"),//Input de rankTopTopTop
+                inputRankTopTopBottom = $("#pequiven_indicator_operativefo_registration_rankTopTopBottom"),//Input de rankTopTopBottom
+                inputRankTopBottomTop = $("#pequiven_indicator_operativefo_registration_rankTopBottomTop"),//Input de rankTopBottomTop
+                inputRankTopBottomBottom = $("#pequiven_indicator_operativefo_registration_rankTopBottomBottom"),//Input de rankTopBottomBottom
+                inputRankMiddleTop = $("#pequiven_indicator_operativefo_registration_rankMiddleTop"),//Input de rankMiddleTop
+                inputRankMiddleBottom = $("#pequiven_indicator_operativefo_registration_rankMiddleBottom"),//Input de rankMiddleBottom
+                inputRankMiddleTopTop = $("#pequiven_indicator_operativefo_registration_rankMiddleTopTop"),//Input de rankMiddleTopTop
+                inputRankMiddleTopBottom = $("#pequiven_indicator_operativefo_registration_rankMiddleTopBottom"),//Input de rankMiddleTopBottom
+                inputRankMiddleBottomTop = $("#pequiven_indicator_operativefo_registration_rankMiddleBottomTop"),//Input de rankMiddleBottomTop
+                inputRankMiddleBottomBottom = $("#pequiven_indicator_operativefo_registration_rankMiddleBottomBottom"),//Input de rankMiddleBottomBottom
+                inputRankBottom = $("#pequiven_indicator_operativefo_registration_rankBottom"),//Input de rankBottom
+                inputRankBottomTopTop = $("#pequiven_indicator_operativefo_registration_rankBottomTopTop"),//Input de rankBottomTopTop
+                inputRankBottomTopBottom = $("#pequiven_indicator_operativefo_registration_rankBottomTopBottom"),//Input de rankBottomTopBottom
+                inputRankBottomBottomTop = $("#pequiven_indicator_operativefo_registration_rankBottomBottomTop"),//Input de rankBottomBottomTop
+                inputRankBottomBottomBottom = $("#pequiven_indicator_operativefo_registration_rankBottomBottomBottom")//Input de rankBottomBottomBottom
             ;
             
            charge();
@@ -177,19 +233,70 @@
                //Actualizamos la referencia del indicador a crear
                displayIndicatorRef();
                
-                //Inicializamos el formato numerico para el input de Rango Alto
-               $("#pequiven_indicator_operativefo_registration_rankTop").number(true,3,',','.');
+               //Inicializamos el formato numerico para el input de Rango Alto
+               inputRankTop.number(true,3,',','.');
+               inputRankTopTopTop.number(true,3,',','.');
+               inputRankTopTopBottom.number(true,3,',','.');
+               inputRankTopBottomTop.number(true,3,',','.');
+               inputRankTopBottomBottom.number(true,3,',','.');
+               inputRankMiddleTop.number(true,3,',','.');
+               inputRankMiddleBottom.number(true,3,',','.');
+               inputRankMiddleTopTop.number(true,3,',','.');
+               inputRankMiddleTopBottom.number(true,3,',','.');
+               inputRankMiddleBottomTop.number(true,3,',','.');
+               inputRankMiddleBottomBottom.number(true,3,',','.');
+               inputRankBottom.number(true,3,',','.');
+               inputRankBottomTopTop.number(true,3,',','.');
+               inputRankBottomTopBottom.number(true,3,',','.');
+               inputRankBottomBottomTop.number(true,3,',','.');
+               inputRankBottomBottomBottom.number(true,3,',','.');
                
-               //Incializamos el formato numerico para el input de Rango Medio Alto
-               $("#pequiven_indicator_operativefo_registration_rankMiddleTop").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Medio Bajo
-               $("#pequiven_indicator_operativefo_registration_rankMiddleBottom").number(true,3,',','.');
-               
-               //Incializamos el formato numerico para el input de Rango Bajo
-               $("#pequiven_indicator_operativefo_registration_rankBottom").number(true,3,',','.');
-               
+               sectionTopBasic.hide();
+               sectionTopCompound.hide();
+               sectionMiddleBasic.hide();
+               sectionMiddleCompound.hide();
+               sectionBottomBasic.hide();
+               sectionBottomCompound.hide();               
            }
+           selectArrangementRangeTypeTop.click(function() {
+                if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeTop_1']").is(':checked')) {
+                    sectionTopBasic.show();
+                    sectionTopCompound.hide();
+                    inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
+                 }
+                 else {
+                    sectionTopBasic.hide();
+                    sectionTopCompound.show();
+                    inputHiddenTypeArrangementRangeTop.val("TOP_COMPOUND");
+                 }
+           });
+           
+           selectArrangementRangeTypeMiddle.click(function() {
+                if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddle_2']").is(':checked')) {
+                    sectionMiddleBasic.show();
+                    sectionMiddleCompound.hide();
+                    inputHiddenTypeArrangementRangeMiddle.val("MIDDLE_BASIC");
+                 }
+                 else {
+                    sectionMiddleBasic.hide();
+                    sectionMiddleCompound.show();
+                    inputHiddenTypeArrangementRangeMiddle.val("MIDDLE_COMPOUND");
+                 }
+           });
+           
+           selectArrangementRangeTypeBottom.click(function() {
+                if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeBottom_3']").is(':checked')) {
+                    sectionBottomBasic.show();
+                    sectionBottomCompound.hide();
+                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
+                 }
+                 else {
+                    sectionBottomBasic.hide();
+                    sectionBottomCompound.show();
+                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_COMPOUND");
+                 }
+           });
+
 
            //Función que muestra el Número de Referencia del indicador a crear, de acuerdo a la línea estratégica seleccionada
            function displayIndicatorRef(){
