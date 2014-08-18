@@ -1,0 +1,20 @@
+## YAML Template.
+---
+getCustomers:
+    defaults: { _controller: AcmeDemoBundle:Demo:getCustomers, params: true }
+    reader: { root: root }
+
+getCountries:
+    defaults: { _controller: AcmeDemoBundle:Demo:getCountries }
+
+getRoles:
+    defaults: { _controller: AcmeDemoBundle:Demo:getRoles }
+
+updateCustomer:
+    defaults: { _controller: AcmeDemoBundle:Demo:updateCustomer, params: true }
+
+createCustomer:
+    defaults: { _controller: AcmeDemoBundle:Demo:createCustomer, params: true, form: true }
+
+chat:
+    defaults: { _controller: chat_service:chat, params: true, form: true }

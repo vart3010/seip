@@ -78,3 +78,7 @@ displayRefObjetiveTactic:
 displayRefObjetiveOperative:
     path: /arrangement_strategic/objetive/displayRefObjetiveOperative
     defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:displayRefObjetive}
+    
+objetiveTacticList:
+    path: /arrangement_strategic_objetive/list/tactic
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:objetiveList}

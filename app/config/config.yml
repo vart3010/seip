@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: config/template.yml }
+    - { resource: config/template.yml }    
 
 framework:
     #esi:             ~
@@ -108,4 +108,4 @@ tecnocreaciones_vzla_government:
         main_route: 'pequiven_seip_default_index'
 
 ext_direct:
-    resource: "%kernel.root_dir%/config/extdirect_routing.yml"
+    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"

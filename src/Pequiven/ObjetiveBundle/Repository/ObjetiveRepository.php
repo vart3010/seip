@@ -95,5 +95,22 @@ class ObjetiveRepository extends EntityRepository {
                     ->getQuery();
         return $query->getResult();
     }
+    
+    /**
+     * 
+     * @param type $type
+     * @return type
+     */
+    public function getByLevel($type = \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                    ->select('o')
+                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                    ->andWhere('o.objetiveLevel = ' . $type)
+                ;
+        
+        $q = $query->getQuery();
+        return $q->getArrayResult();
+    }
 
 }

@@ -45,6 +45,19 @@ class ObjetiveTacticController extends Controller{
             ));
     }
     
+    public function objetiveListAction(){
+        $response = new JsonResponse();
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
+
+        $response->setData($objetives);
+        
+        return $response;
+    }
+    
     public function createAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());

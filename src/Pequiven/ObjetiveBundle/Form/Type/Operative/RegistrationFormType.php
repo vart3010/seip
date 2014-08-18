@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveLevelFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
