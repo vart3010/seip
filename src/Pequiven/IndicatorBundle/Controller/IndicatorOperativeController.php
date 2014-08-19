@@ -18,6 +18,7 @@ use Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType as BaseFor
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 /**
  * Description of IndicatorOperativeController
  *

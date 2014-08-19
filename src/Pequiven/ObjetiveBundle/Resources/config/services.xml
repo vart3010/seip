@@ -35,7 +35,22 @@
             <tag name="kernel.event_subscriber" />
         </service>
         
+        <!-- Servicio del objetivo estratégico -->
+        <service id="pequiven.repository.objetivestrategic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        <!-- Servicio del objetivo táctico -->
         <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        <!-- Servicio del objetivo operativo -->
+        <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

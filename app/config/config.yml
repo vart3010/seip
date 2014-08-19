@@ -112,10 +112,24 @@ ext_direct:
     
 sylius_resource:
     resources:
+        pequiven.objetivestrategic:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Strategic:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveStrategicController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
         pequiven.objetivetactic:
             driver: doctrine/orm
             templates: PequivenObjetiveBundle:Tactic:list.html.twig
             classes:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        pequiven.objetiveoperative:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Operative:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository

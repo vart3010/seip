@@ -39,7 +39,7 @@ class ObjetiveTacticController extends baseController{
     }
     
     /**
-     * 
+     * Función que devuelve el paginador con los objetivos tácticos
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -62,12 +62,12 @@ class ObjetiveTacticController extends baseController{
         $repository = $this->getRepository();
         
         //$criteria['user'] = $user->getId();
-        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_TACTICO;
         
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByClient',
+                'createPaginatorByLevel',
                 array($criteria, $sorting)
             );
             
@@ -99,7 +99,7 @@ class ObjetiveTacticController extends baseController{
             $formatData = $request->get('_formatData','default');
 //            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
 //            die();
-            $view->setData($resources->toArray($this->config->getRedirectRoute('objetiveTacticList'),array(),$formatData));
+            $view->setData($resources->toArray('',array(),$formatData));
         }
         return $this->handleView($view);
     }

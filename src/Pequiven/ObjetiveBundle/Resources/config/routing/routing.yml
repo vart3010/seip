@@ -23,42 +23,50 @@ select_objetiveParentTactic:
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_objetiveStrategicFromLineStrategic:
     path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectObjetiveStrategicFromLineStrategic}
+    defaults:
+        _controller: pequiven.controller.objetivetactic:selectObjetiveStrategicFromLineStrategicAction
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_objetiveStrategicFromLineStrategicOperative:
     path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategicOperative
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveStrategicFromLineStrategicOperative}
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectObjetiveStrategicFromLineStrategicOperativeAction
     
 #Select que devuelve los Objetivos Tácticos de acuerdo al Objetivo Estratégico seleccionado
 select_objetiveTacticFromObjetiveStrategic:
     path: /arrangement_strategic/objetive/select_objetiveTacticFromObjetiveStrategic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveTacticFromObjetiveStrategic}
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectObjetiveTacticFromObjetiveStrategicAction
 
 #Select que devuelve los Objetivos Estratégicos de acuerdo al Objetivo Táctico seleccionado
 select_objetiveStrategicFromObjetiveTactic:
     path: /arrangement_strategic/objetive/select_objetiveStrategicFromObjetiveTactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectObjetiveStrategicFromObjetiveTactic}
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectObjetiveStrategicFromObjetiveTacticAction
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_complejoFromObjetiveStrategic:
     path: /arrangement_strategic/objetive/select_complejoFromObjetiveStrategic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectComplejoFromObjetiveStrategic}
+    defaults:
+        _controller: pequiven.controller.objetivetactic:selectComplejoFromObjetiveStrategicAction
     
 #Select que devuelve los Complejos en los cuales impacta el Objetivo Táctico seleccionado
 select_complejoFromObjetiveTactic:
     path: /arrangement_strategic/objetive/select_complejoFromObjetiveTactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectComplejoFromObjetiveTactic}
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectComplejoFromObjetiveTacticAction
     
 #Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
 select_gerenciaFromComplejoTactic:
     path: /arrangement_strategic/objetive/select_gerenciaFromComplejoTactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:selectGerenciaFromComplejo}
+    defaults:
+        _controller: pequiven.controller.objetivetactic:selectGerenciaFromComplejoAction
 
 #Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
 select_gerenciaFromComplejoOperative:
     path: /arrangement_strategic/objetive/select_gerenciaFromComplejoOperative
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:selectGerenciaFromComplejo}
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectGerenciaFromComplejoAction
     
 displayWeightObjetive:
     path: /arrangement_strategic/objetive/displayWeightObjetive
@@ -67,21 +75,41 @@ displayWeightObjetive:
 #Muestra el Número de Referencia del objetivo estratégico a crear
 displayRefObjetiveStrategic:
     path: /arrangement_strategic/objetive/displayRefObjetiveStrategic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:displayRefObjetive}
+    defaults:
+        _controller: pequiven.controller.objetivestrategic:displayRefObjetiveAction
 
 #Muestra el Número de Referencia del objetivo táctico a crear
 displayRefObjetiveTactic:
     path: /arrangement_strategic/objetive/displayRefObjetiveTactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:displayRefObjetive}
+    defaults:
+        _controller: pequiven.controller.objetivetactic:displayRefObjetiveAction
 
 #Muestra el Número de Referencia del objetivo operativo a crear
 displayRefObjetiveOperative:
     path: /arrangement_strategic/objetive/displayRefObjetiveOperative
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:displayRefObjetive}
-    
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:displayRefObjetiveAction
+
+#Devuelve el paginador con la data de los objetivos estratégicos    
+objetiveStrategicList:
+    path: /arrangement_strategic_objetive/list/strategic
+    defaults: 
+        _controller: pequiven.controller.objetivestrategic:objetiveListAction
+        _sylius:
+            method: createPaginatorByLevel
+
+#Devuelve el paginador con la data de los objetivos tácticos
 objetiveTacticList:
     path: /arrangement_strategic_objetive/list/tactic
     defaults: 
         _controller: pequiven.controller.objetivetactic:objetiveListAction
+        _sylius:
+            method: createPaginatorByLevel
+            
+#Devuelve el paginador con la data de los objetivos operativos
+objetiveOperativeList:
+    path: /arrangement_strategic_objetive/list/operative
+    defaults: 
+        _controller: pequiven.controller.objetiveoperative:objetiveListAction
         _sylius:
             method: createPaginatorByLevel

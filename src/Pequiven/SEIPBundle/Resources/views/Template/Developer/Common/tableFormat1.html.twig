@@ -55,19 +55,19 @@
                 <script type="text/ng-template" id="custom/header">
                     <tr>
                     <td colspan="[[ $columns.length ]]">
-            <div class="table-header button-height">
+            <div class="table-header button-height anthracite-gradient">
                 <div class="float-right ng-cloak ng-table-pager">
                     {{ 'tecnocreaciones_vzla_government.search'|trans }}&nbsp;<input ng-model="tableParams.search" type="text" name="table_search" id="table_search" value="" class="input mid-margin-left">
                 </div>
                     {{ 'tecnocreaciones_vzla_government.show'|trans }}&nbsp;
-                    <select name="range"  class="select blue-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
+                    <select name="range"  class="select red-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
                             <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="[[count]]">
                                 <span ng-bind="count">[[count]]</span>
                             </option>
                     </select>
-                    <button ng-click="tableParams.reload()" class="button pull-right icon-refresh icon-size2 blue-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" ></button>
-                    <button ng-click="tableParams.sorting({})" class="button pull-right icon-cross-round icon-size2 blue-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.clear_sorting'|trans }}"></button>
-                    <a ng-href="[[ csv.link() ]]"  class="button pull-right icon-download icon-size2 blue-gradient glossy" ng-mousedown="csv.generate()" download="{{ 'tecnocreaciones_vzla_government.content'|trans }}.csv" title="{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}">{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}</a>
+                    <button ng-click="tableParams.reload()" class="button pull-right icon-refresh icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" ></button>
+                    <button ng-click="tableParams.sorting({})" class="button pull-right icon-cross-round icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.clear_sorting'|trans }}"></button>
+                    <a ng-href="[[ csv.link() ]]"  class="button pull-right icon-download icon-size2 red-gradient glossy" ng-mousedown="csv.generate()" download="{{ 'tecnocreaciones_vzla_government.content'|trans }}.csv" title="{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}">{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}</a>
                 </div>
         </td>
         </tr>
@@ -95,7 +95,7 @@
             </tr>
                 </script>
                 <script type="text/ng-template" id="custom/pager">
-                    <form method="post" action="#" class="table-footer button-height ng-cloak ng-table-pager">
+                    <form method="post" action="#" class="table-footer button-height ng-cloak ng-table-pager anthracite-gradient">
                     <div class="float-right pagination ng-table-pagination">
                         <div class="button-group">
                             <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','prev'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button blue-gradient glossy">

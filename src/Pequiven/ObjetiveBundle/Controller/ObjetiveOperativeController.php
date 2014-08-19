@@ -20,12 +20,13 @@ use Pequiven\ObjetiveBundle\Form\Type\Operative\RegistrationFormType as BaseForm
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
  * Description of ObjetiveOperativeController
  *
  * @author matias
  */
-class ObjetiveOperativeController extends Controller {
+class ObjetiveOperativeController extends baseController {
     //put your code here
     
     public function listAction(){
@@ -34,6 +35,72 @@ class ObjetiveOperativeController extends Controller {
 
             ));
     }
+    
+    /**
+     * Función que devuelve el paginador con los objetivos operativos
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function objetiveListAction(Request $request){
+//        var_dump('hola');
+//        die();
+//        $response = new JsonResponse();
+//        $data = array();
+//        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
+//
+//        $response->setData($objetives);
+//        
+//        return $response;
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        
+        //$criteria['user'] = $user->getId();
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_OPERATIVO;
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByLevel',
+                array($criteria, $sorting)
+            );
+            
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
+//            die();
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }    
     
     public function createAction(Request $request){
 

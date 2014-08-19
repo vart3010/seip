@@ -125,11 +125,12 @@ class ObjetiveRepository extends baseEntityRepository {
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
 
-//        if(isset($criteria['name'])){
-//            $name = $criteria['name'];
-//            unset($criteria['name']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.name', "'%".$name."%'"));
-//        }
+        if(isset($criteria['description'])){
+            $name = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$name."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$name."%'"));
+        }
 //        if(isset($criteria['rif'])){
 //            $rif = $criteria['rif'];
 //            unset($criteria['rif']);
@@ -138,10 +139,11 @@ class ObjetiveRepository extends baseEntityRepository {
         if(isset($criteria['objetiveLevel'])){
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
-        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.id');
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
-
+        
         return $this->getPaginator($queryBuilder);
     }
 

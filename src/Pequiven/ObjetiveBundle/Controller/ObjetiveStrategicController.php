@@ -20,31 +20,16 @@ use Pequiven\ObjetiveBundle\Form\Type\Strategic\RegistrationFormType as BaseForm
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
  * Description of ObjetiveStrategicController
  *
  * @author matias
  */
-class ObjetiveStrategicController extends Controller {
-    //put your code here
-    /**
-     * @Route("/")
-     * @Template()
-     */
-    public function indexAction($name)
-    {
-        return array('name' => $name);
-    }
+class ObjetiveStrategicController extends baseController {
+    
     
     public function listAction(){
-        //Primero obtenemos todos los objetivos estratégicos
-        $em = $this->getDoctrine()->getManager();
-        $objectView = array();
-        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('objetiveLevel' => ObjetiveLevel::LEVEL_ESTRATEGICO,'complejo' => \Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV));
-        
-        foreach($objetives as $objetive){
-            
-        }
         
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
             array(
@@ -52,6 +37,78 @@ class ObjetiveStrategicController extends Controller {
             ));
     }
     
+    /**
+     * Función que devuelve el paginador con los objetivos estratégicos
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function objetiveListAction(Request $request){
+//        var_dump('hola');
+//        die();
+//        $response = new JsonResponse();
+//        $data = array();
+//        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
+//
+//        $response->setData($objetives);
+//        
+//        return $response;
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        
+        //$criteria['user'] = $user->getId();
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByLevel',
+                array($criteria, $sorting)
+            );
+            
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
+//            die();
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
     public function createAction(Request $request){
         
         $form = $this->createForm(new BaseFormType());
@@ -123,7 +180,7 @@ class ObjetiveStrategicController extends Controller {
     }
     
      /**
-      * 
+      * Función que guarda en la tabla intermedia el rango de gestión del objetivo creado
       * @param type $objetives
       * @param type $data
       * @return boolean
