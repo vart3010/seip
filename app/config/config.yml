@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: config/template.yml }    
+    - { resource: config/template.yml }
 
 framework:
     #esi:             ~
@@ -109,3 +109,13 @@ tecnocreaciones_vzla_government:
 
 ext_direct:
     resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+    
+sylius_resource:
+    resources:
+        pequiven.objetivetactic:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Tactic:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository

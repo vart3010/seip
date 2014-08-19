@@ -21,22 +21,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
  * Description of ObjetiveController
  *
  * @author matias
  */
-class ObjetiveTacticController extends Controller{
+class ObjetiveTacticController extends baseController{
     //put your code here
     
-    /**
-     * @Route("/")
-     * @Template()
-     */
-    public function indexAction($name)
-    {
-        return array('name' => $name);
-    }
     
     public function listAction(){
         return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
@@ -45,17 +38,70 @@ class ObjetiveTacticController extends Controller{
             ));
     }
     
-    public function objetiveListAction(){
-        $response = new JsonResponse();
-        $data = array();
-        $em = $this->getDoctrine()->getManager();
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function objetiveListAction(Request $request){
+//        var_dump('hola');
+//        die();
+//        $response = new JsonResponse();
+//        $data = array();
+//        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
-
-        $response->setData($objetives);
+//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
+//
+//        $response->setData($objetives);
+//        
+//        return $response;
         
-        return $response;
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        
+        //$criteria['user'] = $user->getId();
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByClient',
+                array($criteria, $sorting)
+            );
+            
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','dataTables');
+//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
+//            die();
+            $view->setData($resources->toArray($this->config->getRedirectRoute('objetiveTacticList'),array(),$formatData));
+        }
+        return $this->handleView($view);
     }
     
     public function createAction(Request $request){

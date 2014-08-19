@@ -81,4 +81,7 @@ displayRefObjetiveOperative:
     
 objetiveTacticList:
     path: /arrangement_strategic_objetive/list/tactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:objetiveList}
+    defaults: 
+        _controller: pequiven.controller.objetivetactic:objetiveListAction
+        _sylius:
+            method: createPaginatorByLevel

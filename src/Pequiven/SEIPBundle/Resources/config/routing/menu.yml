@@ -14,11 +14,12 @@ pequiven_objetive_menu_list:
     
 pequiven_objetive_menu_list_strategic:
     path: /arrangement_strategic/objetive/list/strategic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:list}    
+    defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:list}
     
 pequiven_objetive_menu_list_tactic:
     path: /arrangement_strategic/objetive/list/tactic
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:list}
+    defaults:
+        _controller: pequiven.controller.objetivetactic:listAction
     
 pequiven_objetive_menu_list_operative:
     path: /arrangement_strategic/objetive/list/operative

@@ -27,11 +27,12 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
             new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
             
-            new JMS\SerializerBundle\JMSSerializerBundle(),//Serializador de objetos en json y xml
+            new JMS\SerializerBundle\JMSSerializerBundle($this),//Serializador de objetos en json y xml
             new JMS\TranslationBundle\JMSTranslationBundle(),//Traductor optimizado
             
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             
             new \Ext\DirectBundle\ExtDirectBundle(),

@@ -9,12 +9,14 @@
 namespace Pequiven\ObjetiveBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as silyusEntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 /**
  * Description of ObjetiveRepository
  *
  * @author matias
  */
-class ObjetiveRepository extends EntityRepository {
+class ObjetiveRepository extends baseEntityRepository {
     //put your code here
     public function getByUser(){
         
@@ -101,16 +103,44 @@ class ObjetiveRepository extends EntityRepository {
      * @param type $type
      * @return type
      */
-    public function getByLevel($type = \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+    public function getByLevelStrategic(){
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                     ->select('o')
                     ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->andWhere('o.objetiveLevel = ' . $type)
+                    ->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO)
                 ;
         
         $q = $query->getQuery();
-        return $q->getArrayResult();
+        return $q->getResult();
     }
+    
+    /**
+     * Crea un paginador para el cliente
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+
+//        if(isset($criteria['name'])){
+//            $name = $criteria['name'];
+//            unset($criteria['name']);
+//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.name', "'%".$name."%'"));
+//        }
+//        if(isset($criteria['rif'])){
+//            $rif = $criteria['rif'];
+//            unset($criteria['rif']);
+//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
+//        }
+        
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+
+        return $this->getPaginator($queryBuilder);
+    }
+
 
 }
