@@ -34,5 +34,12 @@
         <service id="pequiven_objetive.form.complejo.listener.registration" class="Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener">
             <tag name="kernel.event_subscriber" />
         </service>
+        
+        <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
     </services>
 </container>

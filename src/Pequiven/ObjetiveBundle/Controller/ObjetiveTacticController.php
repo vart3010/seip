@@ -96,7 +96,7 @@ class ObjetiveTacticController extends baseController{
         if($request->get('_format') == 'html'){
             $view->setData($resources);
         }else{
-            $formatData = $request->get('_formatData','dataTables');
+            $formatData = $request->get('_formatData','default');
 //            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
 //            die();
             $view->setData($resources->toArray($this->config->getRedirectRoute('objetiveTacticList'),array(),$formatData));

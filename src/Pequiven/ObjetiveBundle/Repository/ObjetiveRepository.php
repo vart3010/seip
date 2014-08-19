@@ -135,6 +135,9 @@ class ObjetiveRepository extends baseEntityRepository {
 //            unset($criteria['rif']);
 //            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
 //        }
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
         
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
