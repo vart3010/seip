@@ -132,7 +132,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                   //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
                     $results = array();
                     //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
-                    if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                    if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
                         $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple', 'style' => 'width:300px');
                     }
                 } else{

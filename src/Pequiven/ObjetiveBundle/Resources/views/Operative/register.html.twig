@@ -365,7 +365,7 @@
                 //Inicializamos el select de Indicadores
                 chargeSelectIndicator();
                
-               if(inputHiddenComplejoName.val() === 'ZIV' && (inputHiddenRoleName.val() != 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() != 'ROLE_MANAGER_SECOND_AUX')){
+               if(inputHiddenComplejoName.val() === 'ZIV'){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
                         
@@ -474,7 +474,7 @@
             //Al seleccionar alguna opción en el select de Objetivo Táctico
             selectObjetiveTactic.on("select2-selecting", function(e) {
                 displayObjetiveRef(e);
-                if(inputHiddenComplejoName.val() === 'ZIV' && (inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX')){
+                if(inputHiddenComplejoName.val() === 'ZIV'){
                     displaySelectComplejoFromObjetiveTactic(e);
                     //$("#pequiven_objetive_operative_registration_complejo").show();
                 }

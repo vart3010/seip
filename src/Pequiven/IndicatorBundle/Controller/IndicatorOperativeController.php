@@ -27,6 +27,12 @@ use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 class IndicatorOperativeController extends Controller {
     //put your code here
     
+    /**
+     * Función que llama el formulario de registro de un indicador operativo a partir del registro de un objetivo operativo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
     public function createFromObjetiveAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());
