@@ -98,13 +98,13 @@
                     <form method="post" action="#" class="table-footer button-height ng-cloak ng-table-pager anthracite-gradient">
                     <div class="float-right pagination ng-table-pagination">
                         <div class="button-group">
-                            <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','prev'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button blue-gradient glossy">
+                            <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','prev'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
                                 <span ng-switch-when="first" class="icon-previous"></span>
                                 <span ng-switch-when="prev" class="icon-backward"></span>
                             </a>
                         </div>
                         <div class="button-group">
-                        <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','page','more','last'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button blue-gradient glossy">
+                        <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','page','more','last'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
                             <span ng-switch-when="first" ng-bind="page.number"></span>
                             <span ng-switch-when="page" ng-bind="page.number"></span>
                             <span ng-switch-when="more">&#8230;</span>
@@ -112,7 +112,7 @@
                         </a>
                         </div>
                         <div class="button-group">
-                        <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['last','next'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button blue-gradient glossy">
+                        <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['last','next'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
                         <span ng-switch-when="last" <span class="icon-next"></span>
                         <span ng-switch-when="next" <span class="icon-forward"></span>
                         </a>
@@ -120,11 +120,11 @@
                     </div>
                     {#
                         {{ 'tecnocreaciones_vzla_government.with_selected'|trans }}:
-                        <select name="select90" class="select blue-gradient glossy mid-margin-left" style="width:128px">
+                        <select name="select90" class="select red-gradient glossy mid-margin-left" style="width:128px">
                         <option value="0">{{ 'tecnocreaciones_vzla_government.delete'|trans }}</option>
                         <option value="1">{{ 'tecnocreaciones_vzla_government.move_to_trash'|trans }}</option>
                         </select>
-                        <button type="submit" class="button blue-gradient glossy">{{ 'tecnocreaciones_vzla_government.go'|trans }}</button>
+                        <button type="submit" class="button red-gradient glossy">{{ 'tecnocreaciones_vzla_government.go'|trans }}</button>
                         &nbsp;&nbsp;&nbsp; 
                     #}
                     [[ params.settings().total ]] {{ 'tecnocreaciones_vzla_government.entries_found'|trans }}

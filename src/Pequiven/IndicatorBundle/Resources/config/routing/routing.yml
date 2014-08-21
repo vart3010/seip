@@ -45,7 +45,7 @@ displayRefIndicatorOperativeFromObjetive:
     path: /arrangement_strategic/indicator/displayRefIndicatorOperativeFromObjetive
     defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:displayRefIndicatorFromObjetive}
 
-#Select que devuelve los Indicadores Estratégicos de acuerdo a la Línea Estratégica seleccionada
+#Select que devuelve los Indicadores Estratégicos de acuerdo a la Referencia del Objetivo que se esta creando
 select_indicatorStrategicFromRefParent:
     path: /arrangement_strategic/indicator/select_indicatorStrategicFromRefParent
     defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:selectIndicatorStrategicFromRefParent}

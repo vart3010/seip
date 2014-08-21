@@ -1,0 +1,53 @@
+# Login
+pequiven_master:
+                #Legend
+                gerencia_second: Gerencia 2da Línea
+                add: Añadir
+                registerIndicator: Registrar Indicador
+
+form:
+    #Botones formulario
+    edit: Editar
+    save: Guardar
+    cancel: Cancelar
+    
+    #Campos formulario
+    complejo: Complejo
+    gerencia_first: Gerencia 1ra Línea
+    gerencia_second: Gerencia de 2da Línea
+    cargo: Cargo
+    
+    #Info campos formulario
+    complejo_info: Complejo
+    gerencia_first_info: Gerencia 1ra Línea
+    gerencia_second_info: Gerencia 2da Línea
+    cargo_info: Cargo
+    
+    #Preguntas formulario
+    question:
+        allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
+        
+    #Mensajes a usar en los campos del formulario
+    messages:
+        pleaseChoiceAComplejo: Seleccione una Línea Estratégica
+        pleaseChoiceAGerenciaFirst: Seleccione una Gerencia de 1ra Línea
+        pleaseChoiceAGerenciaSecond: Seleccione una Gerencia de 2da Línea
+        pleaseChoiceACargo: Seleccione un Cargo
+        selectComplejoFormatNoMatcher: Seleccione un complejo
+        selectComplejoFormatNoResult: No hay complejos registrados
+        selectComplejoPlaceholder: Seleccione un complejo
+        selectGerenciaFirstFormatNoMatcher: Seleccione un complejo
+        selectGerenciaFirstFormatNoResult: No hay gerencias de 1ra línea registradas para el complejo seleccionado
+        selectGerenciaFirstPlaceholder: Seleccione una gerencia de 1ra línea
+        selectGerenciaSecondFormatNoMatcher: Seleccione una gerencia de 1ra línea
+        selectGerenciaSecondFormatNoResult: No hay gerencias de 2da línea registradas para la gerencia de 1ra línea seleccionada
+        selectGerenciaSecondPlaceholder: Seleccione una gerencia de 2da línea
+        selectCargoFormatNoMatcher: Seleccione una gerencia
+        selectCargoFormatNoResult: No hay cargos registrados para la gerencia seleccionada
+        selectCargoPlaceholder: Seleccione un cargo
+        
+action:
+    registerComplejoSuccessfull: Complejo registrado exitosamente
+    registerGerenciaFirstSuccessfull: Gerencia de 1ra Línea registrada exitosamente
+    registerGerenciaSecondSuccessfull: Gerencia de 2da Línea registrada exitosamente
+    registerCargoSuccessfull: Cargo registrado exitosamente

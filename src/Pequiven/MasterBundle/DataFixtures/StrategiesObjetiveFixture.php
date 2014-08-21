@@ -4825,7 +4825,7 @@ class StrategiesObjetiveFixture extends AbstractFixture implements OrderedFixtur
     }
     
     public function getOrder(){
-        return 10;
+        return 11;
     }
     
     public function setContainer(ContainerInterface $container = null) {

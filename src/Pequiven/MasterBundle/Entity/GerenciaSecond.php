@@ -1,21 +1,28 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace Pequiven\MasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\MasterBundle\Model\Personal as modelPersonal;
+use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
 
 /**
- * Personal
+ * Gerencia
  *
- * @ORM\Table(name="seip_c_personal")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\PersonalRepository")
+ * @ORM\Table(name="seip_c_gerencia_second")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
+ * @author matias
  */
-class Personal extends modelPersonal
-{
+class GerenciaSecond extends modelGerenciaSecond {
+    
     /**
      * @var integer
      *
@@ -54,67 +61,27 @@ class Personal extends modelPersonal
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
     private $userUpdatedAt;
-    
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cedula", type="integer")
-     */
-    private $cedula;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom_personal", type="string", length=100)
+     * @ORM\Column(name="description", type="string", length=100)
      */
-    private $nomPersonal;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="num_personal", type="integer")
-     */
-    private $numPersonal;
+    private $description;
     
-    /** 
-     * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
-     * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
-     */
-    private $complejo;
-    
-    /**
-     * Gerencia
+    /** Gerencia
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
-    
-    /**
-     * GerenciaSecond
-     * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
-     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
-     */
-    private $gerenciaSecond;
-    
-    /**
-     * Cargo
-     * @var \Pequiven\MasterBundle\Entity\Cargo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
-     * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
-     */
-    private $cargo;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
-    
+    private $enabled = true;
 
     /**
      * Get id
@@ -130,7 +97,7 @@ class Personal extends modelPersonal
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setCreatedAt($createdAt)
     {
@@ -153,7 +120,7 @@ class Personal extends modelPersonal
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -173,79 +140,33 @@ class Personal extends modelPersonal
     }
 
     /**
-     * Set cedula
+     * Set description
      *
-     * @param integer $cedula
-     * @return Personal
+     * @param string $description
+     * @return GerenciaSecond
      */
-    public function setCedula($cedula)
+    public function setDescription($description)
     {
-        $this->cedula = $cedula;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get cedula
-     *
-     * @return integer 
-     */
-    public function getCedula()
-    {
-        return $this->cedula;
-    }
-
-    /**
-     * Set nomPersonal
-     *
-     * @param string $nomPersonal
-     * @return Personal
-     */
-    public function setNomPersonal($nomPersonal)
-    {
-        $this->nomPersonal = $nomPersonal;
-
-        return $this;
-    }
-
-    /**
-     * Get nomPersonal
+     * Get description
      *
      * @return string 
      */
-    public function getNomPersonal()
+    public function getDescription()
     {
-        return $this->nomPersonal;
-    }
-
-    /**
-     * Set numPersonal
-     *
-     * @param integer $numPersonal
-     * @return Personal
-     */
-    public function setNumPersonal($numPersonal)
-    {
-        $this->numPersonal = $numPersonal;
-
-        return $this;
-    }
-
-    /**
-     * Get numPersonal
-     *
-     * @return integer 
-     */
-    public function getNumPersonal()
-    {
-        return $this->numPersonal;
+        return $this->description;
     }
 
     /**
      * Set enabled
      *
      * @param boolean $enabled
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setEnabled($enabled)
     {
@@ -268,7 +189,7 @@ class Personal extends modelPersonal
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -291,7 +212,7 @@ class Personal extends modelPersonal
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -311,56 +232,10 @@ class Personal extends modelPersonal
     }
 
     /**
-     * Set Cargo
-     *
-     * @param \Pequiven\MasterBundle\Entity\Cargo $cargo
-     * @return Personal
-     */
-    public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
-    {
-        $this->cargo = $cargo;
-
-        return $this;
-    }
-
-    /**
-     * Get Cargo
-     *
-     * @return \Pequiven\MasterBundle\Entity\Cargo 
-     */
-    public function getCargo()
-    {
-        return $this->cargo;
-    }
-
-    /**
-     * Set complejo
-     *
-     * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
-     * @return Personal
-     */
-    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
-    {
-        $this->complejo = $complejo;
-
-        return $this;
-    }
-
-    /**
-     * Get complejo
-     *
-     * @return \Pequiven\MasterBundle\Entity\Complejo 
-     */
-    public function getComplejo()
-    {
-        return $this->complejo;
-    }
-
-    /**
      * Set gerencia
      *
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
-     * @return Personal
+     * @return GerenciaSecond
      */
     public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
     {
@@ -377,28 +252,5 @@ class Personal extends modelPersonal
     public function getGerencia()
     {
         return $this->gerencia;
-    }
-
-    /**
-     * Set gerenciaSecond
-     *
-     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
-     * @return Personal
-     */
-    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
-    {
-        $this->gerenciaSecond = $gerenciaSecond;
-
-        return $this;
-    }
-
-    /**
-     * Get gerenciaSecond
-     *
-     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
-     */
-    public function getGerenciaSecond()
-    {
-        return $this->gerenciaSecond;
     }
 }

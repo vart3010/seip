@@ -66,7 +66,7 @@ class OperatorFixture extends AbstractFixture implements OrderedFixtureInterface
     }
     
     public function getOrder(){
-        return 14;
+        return 15;
     }
     
     public function setContainer(ContainerInterface $container = null) {

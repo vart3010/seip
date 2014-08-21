@@ -1,0 +1,18 @@
+## YAML Template.
+pequiven_master_home:
+    path: /adminMaster/{type}/{action}
+    defaults: {_controller: PequivenMasterBundle:Master:showHome}
+    methods: [GET]
+
+select_gerenciaFromComplejo:
+    path: /adminMaster/select_gerenciaFromComplejo
+    defaults:
+        _controller: PequivenMasterBundle:Master:selectGerenciaFirstFromComplejo
+        
+#Devuelve el paginador con la data de las gerencias de 2da línea
+gerenciaSecondList:
+    path: /adminMaster_list/gerenciaSecond
+    defaults: 
+        _controller: pequiven.controller.gerenciasecond:gerenciaSecondListAction
+        _sylius:
+            method: createPaginatorGerenciaSecond

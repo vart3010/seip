@@ -663,6 +663,13 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Gerencia-90',$gerencia);
             $manager->persist($gerencia);
             
+        $gerencia = new Gerencia();
+        $gerencia->setDescription('Proyecto Terminal Marítimo');
+        $gerencia->setEnabled(1);
+        $gerencia->setComplejo($this->getReference('Complejo-06'));
+        $this->addReference('Gerencia-91',$gerencia);
+            $manager->persist($gerencia);
+            
         $manager->flush();
     }
     

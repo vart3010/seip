@@ -73,7 +73,7 @@ class ArrangementRangeTypeFixture extends AbstractFixture implements OrderedFixt
     }
     
     public function getOrder(){
-        return 15;
+        return 16;
     }
     
     public function setContainer(ContainerInterface $container = null) {

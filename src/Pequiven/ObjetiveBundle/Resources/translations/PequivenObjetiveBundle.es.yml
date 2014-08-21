@@ -7,6 +7,9 @@ pequiven_objetive:
                 tactic: Táctico
                 operative: Operativo
                 registerIndicator: Registrar Indicador
+                objetive_strategic: Objetivo Estratégico
+                objetive_tactic: Objetivo Táctico
+                objetive_operative: Objetivo Operativo
 
                 #Buttons
                 edit: Editar
@@ -20,6 +23,8 @@ form:
     line_strategic: Línea Estratégica
     complejo: Complejo
     gerencia: Gerencia
+    gerencia_first: Gerencia 1ra Línea
+    gerencia_second: Gerencia 2da Línea
     parent_strategic: Objetivo Estratégico
     parent_tactic: Objetivo Táctico
     weight: Peso
@@ -58,6 +63,8 @@ form:
     lineStrategic_info: Línea Estratégica del Objetivo
     complejo_info: Complejo dónde tendrá impacto el objetivo
     gerencia_info: Gerencia dónde tendrá impacto el objetivo 
+    gerencia_first_info: Gerencia de 1ra Línea dónde tendrá impacto el objetivo 
+    gerencia_second_info: Gerencia de 2da Línea dónde tendrá impacto el objetivo 
     parent_strategic_info: Objetivo Estratégico que impactará el objetivo a crear
     parent_tactic_info: Objetivo Táctico que impactará el objetivo a crear
     weight_info: Peso del objetivo. El valor decimal es ".".
@@ -84,6 +91,7 @@ form:
     indicators_info: Indicadores que serán parte de la evaluación del objetivo a crear
     question:
         allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
+        allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
     messages:
         pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
         pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico

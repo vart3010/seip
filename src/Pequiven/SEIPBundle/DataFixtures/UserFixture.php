@@ -65,7 +65,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('manager_first_moron');
+        $user->setUsername('manager_ait_moron');
         $user->setPlainPassword('12345');
         $user->setFirstName('Joniel');
         $user->setLastName('Mendez');
@@ -73,7 +73,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10016029);
         $user->setComplejo($this->getReference('Complejo-01'));
         $user->setGerencia($this->getReference('Gerencia-08'));
-        $user->addRole('ROLE_MANAGER_FIRST');
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-05'));
+        $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
         $this->addReference('manager_first-10016029', $user);
             $manager->persist($user);
@@ -115,6 +116,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10016012);
         $user->setComplejo($this->getReference('Complejo-06'));
         $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
         $this->addReference('manager_second-10016012', $user);
@@ -126,6 +128,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setFirstName('Richard');
         $user->setLastName('Arias');
         $user->setEmail('riarias@pequiven.com');
+        $user->setComplejo($this->getReference('Complejo-06'));
+        $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
         $user->addRole('ROLE_SUPERVISER');
         $user->setEnabled(true);
             $manager->persist($user);
@@ -148,6 +153,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10003393);
         $user->setComplejo($this->getReference('Complejo-06'));
         $user->setGerencia($this->getReference('Gerencia-84'));
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-95'));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
             $manager->persist($user);
@@ -175,6 +181,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10017701);
         $user->setComplejo($this->getReference('Complejo-06'));
         $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
         $user->setParent($this->getReference('manager_second-10016012'));
@@ -189,6 +196,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setNumPersonal(10021906);
         $user->setComplejo($this->getReference('Complejo-06'));
         $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
         $user->setParent($this->getReference('manager_second-10016012'));
@@ -198,7 +206,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     }
     
     public function getOrder(){
-        return 6;
+        return 7;
     }
     
     public function setContainer(ContainerInterface $container = null) {

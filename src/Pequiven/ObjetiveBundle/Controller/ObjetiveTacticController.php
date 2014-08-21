@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
@@ -104,6 +105,12 @@ class ObjetiveTacticController extends baseController{
         return $this->handleView($view);
     }
     
+    /**
+     * Registro de un objetivo táctico
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
     public function createAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());
@@ -115,8 +122,8 @@ class ObjetiveTacticController extends baseController{
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $role = $user->getRoles();
-        //Obtenemos el valor del nivel del objetivo
-        $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
+        //Obtenemos el valor del nivel del complejo
+        $complejoObject = new Complejo();
         $complejoNameArray = $complejoObject->getComplejoNameArray();
         
         $em->getConnection()->beginTransaction();

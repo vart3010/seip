@@ -112,6 +112,7 @@ ext_direct:
     
 sylius_resource:
     resources:
+        #Objetivo estratégico
         pequiven.objetivestrategic:
             driver: doctrine/orm
             templates: PequivenObjetiveBundle:Strategic:list.html.twig
@@ -119,6 +120,7 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveStrategicController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Objetivo táctico
         pequiven.objetivetactic:
             driver: doctrine/orm
             templates: PequivenObjetiveBundle:Tactic:list.html.twig
@@ -126,6 +128,7 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Objetivo operativo
         pequiven.objetiveoperative:
             driver: doctrine/orm
             templates: PequivenObjetiveBundle:Operative:list.html.twig
@@ -133,3 +136,11 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Maestro gerencia 2da línea
+        pequiven.gerenciasecond:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:GerenciaSecond:list.html.twig
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository

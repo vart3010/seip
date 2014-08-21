@@ -63,11 +63,14 @@ class BackendMenuBuilder extends MenuBuilder
 //            'route' => null,
 //            'labelAttributes' => array('icon' => 'icon-info'),
 //        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.support', $section)));
-        //Gestión Estratégica
-        $this->addArrangementStrategicMenu($menu, $section);//Menú de Gestión Estratégica
-        //Programas de Gestión
-        $this->addArrangementProgramsMenu($menu, $section);//Menú de Programas de Gestión
-        //Reportes
+        
+        //Menú Administración
+        $this->addAdministrationMenu($menu, $section);
+        //Menú Gestión Estratégica
+        $this->addArrangementStrategicMenu($menu, $section);
+        //Menú Programas de Gestión
+        $this->addArrangementProgramsMenu($menu, $section);
+        //Menú Reportes
         $menu->addChild('reports', array(
             'route' => null,
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
@@ -80,6 +83,42 @@ class BackendMenuBuilder extends MenuBuilder
     	//
         $bcmenu = $this->createSidebarMenu($request);
         return $this->getCurrentMenuItem($bcmenu);
+    }
+    
+    /**
+     * Construye el menú de Administración
+     * @param \Knp\Menu\ItemInterface $menu
+     * @param type $section
+     */
+    function addAdministrationMenu(ItemInterface $menu, $section){
+        $child = $this->factory->createItem('admin',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'icon-book',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main', $section)));
+        
+                $subchild = $this->factory->createItem('admin.gerencia_second',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'gerencia_second',
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_second.main', $section)));
+                
+                $subchild->addChild('admin.gerencia_second.list', array(
+                            'route' => 'pequiven_master_menu_list_gerenciaSecond',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_second.list', $section)));
+                $subchild->addChild('admin.gerencia_second.add', array(
+                            'route' => 'pequiven_master_menu_add_gerenciaSecond',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_second.add', $section)));
+                
+                $child->addChild($subchild);
+                
+        $menu->addChild($child);
     }
     
     /**
@@ -179,11 +218,6 @@ class BackendMenuBuilder extends MenuBuilder
                     }
                     
                     $subchild->addChild($thirdchild);
-                    
-//                $subchild->addChild('arrangement.objetives.add', array(
-//                            'route' => 'pequiven_objetive_menu_create',
-//                ))
-//                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives.add',$section)));
                 }
             $child->addChild($subchild);
             

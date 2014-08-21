@@ -33,3 +33,25 @@ app:
                         main: Programas de Gestión
                         list: Lista
                     reports: Reportes
+                    admin:
+                        main: Administración
+                        complejo:
+                            main: Complejos
+                            list: Lista
+                            add: Añadir
+                        gerencia_first:
+                            main: Gerencia 1ra Línea
+                            list: Lista
+                            add: Añadir
+                        gerencia_second:
+                            main: Gerencia 2da Línea
+                            list: Lista
+                            add: Añadir
+                        cargo:
+                            main: Cargos
+                            list: Lista
+                            add: Añadir
+                        personal:
+                            main: Personal PQV
+                            list: Lista
+                            add: Añadir

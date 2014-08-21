@@ -53,7 +53,7 @@ class ObjetiveLevelFixture extends AbstractFixture implements OrderedFixtureInte
     }
     
     public function getOrder(){
-        return 7;
+        return 8;
     }
     
     public function setContainer(ContainerInterface $container = null) {

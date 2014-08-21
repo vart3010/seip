@@ -119,7 +119,7 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
     }
     
     public function getOrder(){
-        return 5;
+        return 6;
     }
     
     public function setContainer(ContainerInterface $container = null) {

@@ -94,6 +94,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $gerencia;
     
     /**
+     * GerenciaSecond
+     * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
+     */
+    private $gerenciaSecond;
+    
+    /**
      * Cargo
      * @var \Pequiven\MasterBundle\Entity\Cargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
@@ -403,5 +411,28 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getCargo()
     {
         return $this->cargo;
+    }
+
+    /**
+     * Set gerenciaSecond
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
+     * @return User
+     */
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
+    {
+        $this->gerenciaSecond = $gerenciaSecond;
+
+        return $this;
+    }
+
+    /**
+     * Get gerenciaSecond
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
+     */
+    public function getGerenciaSecond()
+    {
+        return $this->gerenciaSecond;
     }
 }

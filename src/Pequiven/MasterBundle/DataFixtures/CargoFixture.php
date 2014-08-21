@@ -15774,7 +15774,7 @@ class CargoFixture extends AbstractFixture implements OrderedFixtureInterface, C
     }
     
     public function getOrder(){
-        return 3;
+        return 4;
     }
     
     public function setContainer(ContainerInterface $container = null) {

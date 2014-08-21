@@ -44,6 +44,11 @@ class ObjetiveController extends Controller{
             ));
     }
     
+    /**
+     * Función que muestra la página inicial de los objetivos
+     * @param type $type
+     * @return type
+     */
     public function showHomeAction($type){
         if($type == 'strategic'){
             $message = "Objetivo Estratégico creado exitosamente";
@@ -57,7 +62,6 @@ class ObjetiveController extends Controller{
         array('message' => $message,
             'notification' => true
             ));
-
     }
     
     /**

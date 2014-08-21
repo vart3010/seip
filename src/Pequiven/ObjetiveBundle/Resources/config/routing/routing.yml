@@ -20,13 +20,13 @@ select_objetiveParentTactic:
     path: /arrangement_strategic/objetive/select_objetiveParentTactic
     defaults: {_controller: PequivenObjetiveBundle:Objetive:selectObjetiveParentTactic}
 
-#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
+#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada (Nivel Táctico)
 select_objetiveStrategicFromLineStrategic:
     path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategic
     defaults:
         _controller: pequiven.controller.objetivetactic:selectObjetiveStrategicFromLineStrategicAction
     
-#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
+#Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada (Nivel Operativo)
 select_objetiveStrategicFromLineStrategicOperative:
     path: /arrangement_strategic/objetive/select_objetiveStrategicFromLineStrategicOperative
     defaults:

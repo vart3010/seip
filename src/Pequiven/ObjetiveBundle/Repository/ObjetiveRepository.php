@@ -116,7 +116,7 @@ class ObjetiveRepository extends baseEntityRepository {
     }
     
     /**
-     * Crea un paginador para el cliente
+     * Crea un paginador para los objetivos de acuerdo al nivel del mismo
      * 
      * @param array $criteria
      * @param array $orderBy
@@ -126,10 +126,10 @@ class ObjetiveRepository extends baseEntityRepository {
         $queryBuilder = $this->getCollectionQueryBuilder();
 
         if(isset($criteria['description'])){
-            $name = $criteria['description'];
+            $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$name."%'"));
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$name."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
         }
 //        if(isset($criteria['rif'])){
 //            $rif = $criteria['rif'];

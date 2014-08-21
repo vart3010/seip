@@ -8,10 +8,6 @@ pequiven_objetive_menu_create:
     path: /arrangement/objetive/create
     defaults: {_controller: PequivenObjetiveBundle:Objetive:create}
 
-pequiven_objetive_menu_list:
-    path: /arrangement_strategic/objetive/list
-    defaults: {_controller: PequivenObjetiveBundle:Objetive:list}
-
 #Lista de objetivos estratégicos
 pequiven_objetive_menu_list_strategic:
     path: /arrangement_strategic/objetive/list/strategic
@@ -27,22 +23,33 @@ pequiven_objetive_menu_list_operative:
     path: /arrangement_strategic/objetive/list/operative
     defaults:
         _controller: pequiven.controller.objetiveoperative:listAction
-#Prueba    
+#Lista de gerencias de 2da línea
+pequiven_master_menu_list_gerenciaSecond:
+    path: /adminMaster/list/gerenciaSecond
+    defaults:
+        _controller: pequiven.controller.gerenciasecond:listAction
+#Eliminar al crear las rutas para la vista de los indicadores por los distintos niveles
 pequiven_indicator_menu_list:
     path: /arrangement_strategic/indicator/list
     defaults: {_controller: PequivenIndicatorBundle:Indicator:list}
-    
+#Registro de objetivos  estratégicos    
 pequiven_objetive_menu_add_strategic:
     path: /arrangement_strategic/objetive/strategic/add
     defaults:
         _controller: pequiven.controller.objetivestrategic:createAction
-    
+#Registro de objetivos tácticos    
 pequiven_objetive_menu_add_tactic:
     path: /arrangement_strategic/objetive/tactic/add
     defaults:
         _controller: pequiven.controller.objetivetactic:createAction
-    
+#Registro de objetivos operativos
 pequiven_objetive_menu_add_operative:
     path: /arrangement_strategic/objetive/operative/add
     defaults:
         _controller: pequiven.controller.objetiveoperative:createAction
+        
+#Registro de gerencias de 2da línea
+pequiven_master_menu_add_gerenciaSecond:
+    path: /adminMaster/gerenciaSecond/add
+    defaults:
+        _controller: pequiven.controller.gerenciasecond:createAction

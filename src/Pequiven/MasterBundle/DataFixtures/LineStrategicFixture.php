@@ -119,7 +119,7 @@ class LineStrategicFixture extends AbstractFixture implements OrderedFixtureInte
     }
     
     public function getOrder(){
-        return 8;
+        return 9;
     }
     
     public function setContainer(ContainerInterface $container = null) {
