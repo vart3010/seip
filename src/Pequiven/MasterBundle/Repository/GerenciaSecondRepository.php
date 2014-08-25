@@ -18,6 +18,39 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseE
 class GerenciaSecondRepository extends baseEntityRepository {
     //put your code here
     
+    
+    public function getGerenciaSecondOptions($options = array()){
+        $data = array();
+        
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                        ->select('gs')
+                        ->from('\Pequiven\MasterBundle\Entity\GerenciaSecond', 'gs')
+                        ->andWhere('gs.enabled = ' . 1);
+
+        //En caso de que se conozca las
+        if(isset($options['gerencias']) && $options['gerencias'] != 0) {
+            $query->andWhere("gs.gerencia IN (" . implode(',',$options['gerencias']) . ')');
+        }
+
+        $gerencias = $query->getQuery()
+                           ->getResult();
+        
+        foreach($gerencias as $gerencia){
+            if(!$gerencia->getGerencia()->getComplejo() && !$gerencia->getGerencia()){
+                continue;
+            }
+            if(!array_key_exists($gerencia->getGerencia()->getComplejo()->getDescription().'-'.$gerencia->getGerencia()->getDescription(), $data)){
+                $data[$gerencia->getGerencia()->getComplejo()->getDescription().'-'.$gerencia->getGerencia()->getDescription()] = array();
+            }
+            
+            $data[$gerencia->getGerencia()->getComplejo()->getDescription().'-'.$gerencia->getGerencia()->getDescription()][$gerencia->getId()] = $gerencia;
+        }
+
+        return $data;
+    }
+    
+    
      /**
      * Crea un paginador para las gerencias de 2da línea
      * 

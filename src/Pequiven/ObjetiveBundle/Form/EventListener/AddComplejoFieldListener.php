@@ -139,6 +139,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                   $formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
                   //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
                   $results = array();
+                  $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Complejo')->getByGerencia();
                 }
                 $complejo = $results;
             } else{

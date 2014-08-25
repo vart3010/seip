@@ -75,6 +75,13 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=70, nullable=true)
+     */
+    private $ref;
 
     /**
      * @var boolean
@@ -252,5 +259,28 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getGerencia()
     {
         return $this->gerencia;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return GerenciaSecond
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
     }
 }

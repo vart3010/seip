@@ -764,6 +764,13 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $this->addReference('GerenciaSecond-106', $gerenciaSecond);
             $manager->persist($gerenciaSecond);
             
+        $gerenciaSecond = new GerenciaSecond();
+        $gerenciaSecond->setDescription('Control Estadístico e Información');
+        $gerenciaSecond->setEnabled(1);
+        $gerenciaSecond->setGerencia($this->getReference('Gerencia-27'));
+        $this->addReference('GerenciaSecond-107', $gerenciaSecond);
+            $manager->persist($gerenciaSecond);
+            
         $manager->flush();
     }
     

@@ -67,6 +67,18 @@ select_gerenciaFromComplejoOperative:
     path: /arrangement_strategic/objetive/select_gerenciaFromComplejoOperative
     defaults:
         _controller: pequiven.controller.objetiveoperative:selectGerenciaFromComplejoAction
+        
+#Select que devuelve las Gerencias de 1ra Línea en las cuales impactara el objetivo a crear de acuerdo al Objetivo Táctico seleccionado
+select_gerenciaFirstFromComplejoOperative:
+    path: /arrangement_strategic/objetive/select_gerenciaFirstFromComplejoOperative
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectGerenciaFirstFromComplejoAction
+        
+#Select que devuelve las Gerencias de 2da Línea en las cuales impacta el objetivo a crear de acuerdo al Objetivo Táctico seleccionado
+select_gerenciaSecondFromGerenciaFirstOperative:
+   path: /arrangement_strategic/objetive/select_gerenciaSecondFromGerenciaFirstOperative
+   defaults:
+       _controller: pequiven.controller.objetiveoperative:selectGerenciaSecondFromGerenciaFirstAction
     
 displayWeightObjetive:
     path: /arrangement_strategic/objetive/displayWeightObjetive

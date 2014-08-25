@@ -159,6 +159,14 @@ class Objetive extends modelObjetive {
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
+    
+    /**
+     * GerenciaSecond
+     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
+     */
+    private $gerenciaSecond;
 
     /**
      * @ORM\OneToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parent")
@@ -791,4 +799,27 @@ class Objetive extends modelObjetive {
         return $ref;
     }
 
+
+    /**
+     * Set gerenciaSecond
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
+     * @return Objetive
+     */
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
+    {
+        $this->gerenciaSecond = $gerenciaSecond;
+
+        return $this;
+    }
+
+    /**
+     * Get gerenciaSecond
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
+     */
+    public function getGerenciaSecond()
+    {
+        return $this->gerenciaSecond;
+    }
 }

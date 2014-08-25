@@ -81,7 +81,7 @@
                     <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
                 </span>
                 {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
-                <span>
+                <span id="view_check_gerencia">
                     {{ 'form.question.allGerencias'|trans }}
                     {{ form_widget(form.check_gerencia) }}
                 </span>
@@ -291,6 +291,7 @@
                 messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
                 messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
                 sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
+                sectionCheckGerencia = $("#view_check_gerencia"),//Sección dónde está el check para seleccionar las gerencias de los complejos que esten seleccionados
                 selectLineStrategic = $("#pequiven_objetive_tactic_registration_lineStrategic"),//Select de Línea Estratégica
                 selectObjetiveStrategic = $("#pequiven_objetive_tactic_registration_parent"),//Select de Objetivo Estratégico
                 selectComplejo = $("#pequiven_objetive_tactic_registration_complejo"),//Select Complejo
@@ -365,6 +366,9 @@
                     selectGerencia.select2({
 
                     });
+                    selectGerencia.select2("enable",false);
+                    sectionCheckGerencia.hide();
+                    
                }
                
                //Inicializamos el formato numerico para el input de Peso
@@ -450,6 +454,7 @@
             //Al seleccionar alguna opción en el select de Objetivo Estratégico
             selectObjetiveStrategic.on("select2-selecting", function(e) {
                 displayObjetiveRef(e);
+                chargeSelectIndicator();
                 if(inputHiddenComplejoName.val() === 'ZIV'){
                    //displaySelectComplejoFromObjetiveStrategic();
                 }
@@ -458,8 +463,6 @@
             //Al cambiar el select de Complejo
             selectComplejo.change(function() {
                 displayGerenciaFromComplejo();
-                //$("#pequiven_objetive_tactic_registration_complejo option:selected").each(function() {
-                //});
             });
             
             //Al seleccionar el check de Todas las Gerencias
@@ -540,23 +543,23 @@
                             text = text + '<optgroup label="' + data[0].optGroup + '">';
                             //$gerencia_selector.append('<optgroup label="' + data[0].optGroup + '">');
                              for(var i=0, total = data.length; i<total; i++){
-                                 if(i == 0){
-                                     text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                     //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option>');
-                                 } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
-                                     text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">';
-                                     //$gerencia_selector.append('</optgroup> <optgroup label="' + data[i].optGroup + '">');
-                                 } else if ((i+1) == cantidad){
-                                     text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                                     //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>');
-                                 } else{
-                                     text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                     //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option>');
-                                 }
-                             }
+                                if(i == 0){
+                                    text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                } else if ((i+1) == cantidad){
+                                    text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                } else{
+                                    text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                }
+                            }
                              selectGerencia.append(text);
                              selectGerencia.select2({
                              });
+                            selectGerencia.select2("enable",true);
+                            sectionCheckGerencia.show();
                         }
                      });
                 }

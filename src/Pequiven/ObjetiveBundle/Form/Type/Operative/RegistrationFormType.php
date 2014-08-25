@@ -21,6 +21,7 @@ use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldLi
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentTacticFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaSecondFieldListener;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddIndicatorStrategicFieldListener;
 /**
@@ -57,6 +58,8 @@ class RegistrationFormType extends AbstractType {
         
         //Gerencia donde impactará el objetivo a crear
         $builder->addEventSubscriber(new AddGerenciaFieldListener());
+        
+        $builder->addEventSubscriber(new AddGerenciaSecondFieldListener());
         if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerencias','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
         }

@@ -91,6 +91,17 @@
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
                 </span>
+            </div>
+            
+            <!-- Gerencia 2da Línea -->
+            <div id="gerenciaSecond" class="field-block button-height">
+                {{ form_label(form.gerenciaSecond) }}
+                {{ form_widget(form.gerenciaSecond) }}
+                {{ form_errors(form.gerenciaSecond) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.gerencia_second_info'|trans }}</span>
+                </span>
                 {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
                 <span id="view_check_gerencia">
                     {{ 'form.question.allGerencias'|trans }}
@@ -302,6 +313,7 @@
                 selectObjetiveTactic = $("#pequiven_objetive_operative_registration_parent"),//Select de Objetivo Táctico
                 selectComplejo = $("#pequiven_objetive_operative_registration_complejo"),//Select Complejo
                 selectGerencia = $("#pequiven_objetive_operative_registration_gerencia"),//Select de Gerencia
+                selectGerenciaSecond = $("#pequiven_objetive_operative_registration_gerenciaSecond"),//Select de Gerencia 2da Línea
                 selectIndicators = $("#pequiven_objetive_operative_registration_indicators"),//Select de Indicadores
                 inputRef = $("#pequiven_objetive_operative_registration_ref"),//Input de Ref
                 inputGoal = $("#pequiven_objetive_operative_registration_goal"),//Input de Meta
@@ -376,7 +388,19 @@
                         selectGerencia.select2({
                         
                         });
+                        selectGerenciaSecond.select2({
+                            
+                        });
                         selectGerencia.select2("enable",false);
+                        selectGerenciaSecond.select2("enable",false);
+                        sectionCheckGerencia.hide();
+                    }
+                    
+                    if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                        selectGerenciaSecond.select2({
+                            
+                        });
+                        selectGerenciaSecond.select2("enable",false);
                         sectionCheckGerencia.hide();
                     }
                }
@@ -462,6 +486,12 @@
                 chargeSelectIndicator();
                 //Reiniciamos el Input de Referencia del Objetivo
                 inputRef.val("");
+                selectComplejo.select2("val",'');
+                selectComplejo.select2("enable",false);
+                selectGerencia.select2("val",'');
+                selectGerencia.select2("enable",false);
+                selectGerenciaSecond.select2("val",'');
+                selectGerenciaSecond.select2("enable",false);
             });
             //Al seleccionar alguna opción en el select de Objetivo Estratégico
             selectObjetiveStrategic.on("select2-selecting", function(e) {
@@ -470,6 +500,12 @@
             //Al cambiar el select de Objetivo Estratégico
             selectObjetiveStrategic.change(function() {
                 inputRef.val("");
+                selectComplejo.select2("val",'');
+                selectComplejo.select2("enable",false);
+                selectGerencia.select2("val",'');
+                selectGerencia.select2("enable",false);
+                selectGerenciaSecond.select2("val",'');
+                selectGerenciaSecond.select2("enable",false);
             });
             //Al seleccionar alguna opción en el select de Objetivo Táctico
             selectObjetiveTactic.on("select2-selecting", function(e) {
@@ -483,7 +519,8 @@
             //Al cambiar el select de Complejo
             selectComplejo.change(function() {
                 if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
-                    displaySelectGerenciaFromComplejo();
+                    //displaySelectGerenciaFromComplejo();
+                    displaySelectGerenciaFirstFromComplejo();
                 }
             });
            
@@ -628,10 +665,12 @@
                         }
                         
                         if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
-                            displaySelectGerenciaFromComplejo(complejos);
+                            //displaySelectGerenciaFromComplejo(complejos);
+                            displaySelectGerenciaFirstFromComplejo(complejos);
                             displaySelectObjetiveStrategicFromObjetiveTactic();
                         } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                             displaySelectObjetiveStrategicFromObjetiveTactic();
+                            displaySelectGerenciaSecondFromGerenciaFirst();
                         }
                        // $("#pequiven_objetive_operative_registration_complejo").select2("val",array(1,6));
                        selectComplejo.select2({
@@ -709,26 +748,146 @@
                         var cantidad = data.length;
                         var text = '';
                         text = text + '<optgroup label="' + data[0].optGroup + '">';
-                        //$gerencia_selector.append('<optgroup label="' + data[0].optGroup + '">');
                          for(var i=0, total = data.length; i<total; i++){
                              if(i == 0){
                                  text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                 //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option>');
                              } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
-                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">';
-                                 //$gerencia_selector.append('</optgroup> <optgroup label="' + data[i].optGroup + '">');
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                             } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
                              } else if ((i+1) == cantidad){
                                  text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                                 //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>');
                              } else{
                                  text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                 //$gerencia_selector.append('<option value="' + data[i].id + '" >' + data[i].description + '</option>');
                              }
                          }
                          selectGerencia.append(text);
                          selectGerencia.select2({
                          });
                          selectGerencia.select2("enable",true);
+                         sectionCheckGerencia.show();
+                    }
+                 });
+            }
+            
+            //Función que actualiza el select de gerencia de 1ra línea en caso de que el usuario logueado sea de Sede Corporativa
+            function displaySelectGerenciaFirstFromComplejo(complejos){
+            var data = '';
+                if(complejos instanceof Array){//En caso de que la data provenga al momento de cambiar el select de Objetivo Táctico
+                    var dataComplejo = '';
+                    var totalComplejos = complejos.length;
+                    for(var i=0, total = complejos.length; i<total; i++){
+                        if(i == (totalComplejos - 1)){
+                            dataComplejo = dataComplejo + complejos[i];
+                        } else{
+                            dataComplejo = dataComplejo + complejos[i] + ',';
+                        }
+                    }
+                    data = {
+                        complejos: dataComplejo,
+                        objetiveTacticId: $.trim(selectObjetiveTactic.val()),
+                    };
+                } else{
+                    data = {
+                        complejos: $.trim(selectComplejo.val()),
+                        objetiveTacticId: $.trim(selectObjetiveTactic.val()),
+                    };
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("select_gerenciaFirstFromComplejoOperative") }}',
+                    data: data,
+                    success: function(data) {
+
+                        $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
+                        $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
+
+                        //Actualizamos el select de gerencias
+                        var cantidad = data.length;
+                        var gerencias = [];
+                        
+                        var text = '';
+                        text = text + '<optgroup label="' + data[0].optGroup + '">';
+                        //$gerencia_selector.append('<optgroup label="' + data[0].optGroup + '">');
+                         for(var i=0, total = data.length; i<total; i++){
+                             if(i == 0){
+                                 text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                             } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                             } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
+                             } else if ((i+1) == cantidad){
+                                 text = text +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
+                             } else{
+                                 text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                             }
+                             gerencias[i] = data[i].id;
+                         }
+                         selectGerencia.append(text);
+                         selectGerencia.select2({
+                         });
+                         selectGerencia.select2("enable",true);
+                         sectionCheckGerencia.show();
+                         displaySelectGerenciaSecondFromGerenciaFirst(gerencias);
+                    }
+                 });
+            }
+            
+            //Función que actualiza el select de gerencia de 2da línea en caso de que el usuario logueado sea de Sede Corporativa
+            function displaySelectGerenciaSecondFromGerenciaFirst(gerencias){
+                var data = '';
+                if(gerencias instanceof Array){//En caso de que la data provenga al momento de cambiar el select de Objetivo Táctico
+                    var dataGerencia = '';
+                    var totalGerencias = gerencias.length;
+                    for(var i=0, total = gerencias.length; i<total; i++){
+                        if(i == (totalGerencias - 1)){
+                            dataGerencia = dataGerencia + gerencias[i];
+                        } else{
+                            dataGerencia = dataGerencia + gerencias[i] + ',';
+                        }
+                    }
+                    data = {
+                        gerencias: dataGerencia,
+                        complejos: $.trim(selectComplejo.val()),
+                    };
+                } else{
+                    data = {
+                        gerencias: $.trim(selectGerencia.val()),
+                        complejos: $.trim(selectComplejo.val()),
+                    };
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("select_gerenciaSecondFromGerenciaFirstOperative") }}',
+                    data: data,
+                    success: function(data) {
+
+                        $("#pequiven_objetive_operative_registration_gerenciaSecond optgroup").remove();
+                        $("#pequiven_objetive_operative_registration_gerenciaSecond option[value]").remove();
+
+                        //Actualizamos el select de gerencias
+                        var cantidad = data.length;
+                        
+                        var text = '';
+                        text = text + '<optgroup label="' + data[0].optGroup + '">';
+                        //$gerencia_selector.append('<optgroup label="' + data[0].optGroup + '">');
+                         for(var i=0, total = data.length; i<total; i++){
+                             if(i == 0){
+                                 text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                             } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                             } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
+                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                             } else if ((i+1) == cantidad){
+                                 text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                             } else{
+                                 text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                             }
+                         }
+                         selectGerenciaSecond.append(text);
+                         selectGerenciaSecond.select2({
+                         });
+                         selectGerenciaSecond.select2("enable",true);
                          sectionCheckGerencia.show();
                     }
                  });

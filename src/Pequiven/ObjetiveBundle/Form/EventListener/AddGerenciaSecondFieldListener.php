@@ -46,12 +46,12 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
         $form = $event->getForm();
         
         if(null === $object){
-            return $this->addGerenciaSecondForm($form);
+            return $this->addGerenciaSecondForm($form,$object);
         }
         
         $gerenciaId = array_key_exists('gerencia', $object) ? $object['gerencia'] : null;
         
-        $this->addGerenciaSecondForm($form, $gerenciaId);
+        $this->addGerenciaSecondForm($form, $object);
     }
     
     public function preSubmit(FormEvent $event){
@@ -60,35 +60,55 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
         
         $gerenciaId = array_key_exists('gerencia', $object) ? $object['gerencia'] : null;
         
-        $this->addGerenciaSecondForm($form,$gerenciaId);
+        $this->addGerenciaSecondForm($form);
     }
     
-    public function addGerenciaSecondForm($form,$complejoId = null, $complejo = null){
-
+    public function addGerenciaSecondForm($form,$gerenciaSecond = null){
+        if($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $gerenciaId = $this->user->getGerenciaSecond()->getId();
+        }
+        $gerenciaSecond = $gerenciaSecond == null ? $this->user->getGerenciaSecond() : $gerenciaSecond;
+        
         $formOptions = array(
             'class' => 'PequivenMasterBundle:GerenciaSecond',
             'label' => 'form.gerencia_second',
             'label_attr' => array('class' => 'label'),
-            'translation_domain' => 'PequivenMasterBundle',
+            'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'empty_value' => '',
-            'attr' => array(
-                'class' => 'populate placeholder select2-offscreen select2-allowclear', 'style' => 'width:300px'
-                ),
         );
         
-        $formOptions['query_builder'] = function(EntityRepository $er) use ($complejoId){
-                    $qb = $er->createQueryBuilder('gerencia')
-                             ->where('gerencia.complejo = :complejoId')
-                             ->setParameter('complejoId', $complejoId)
-                            ;
-                    return $qb;
-                };
+        if($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){
+                $qb = $er->createQueryBuilder('gerenciaSecond')
+                         ->where('gerenciaSecond.id = :gerenciaId')
+                         ->setParameter('gerenciaId', $gerenciaId)
+                        ;
+                return $qb;
+            };
+        }
+                
+        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
+            $gerenciaSecond = null;
+            $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
+            $formOptions['multiple'] = true;
+            $formOptions['mapped'] = false;
+            $formOptions['empty_value'] = '';
+        } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
+            $gerenciaSecond = null;
+            $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
+            $formOptions['multiple'] = true;
+            $formOptions['mapped'] = false;
+            $formOptions['empty_value'] = '';
+        }else{
+             $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
+         }
         
-        if($complejo){
-            $formOptions['data'] = $complejo;
+        if($gerenciaSecond){
+            $formOptions['data'] = $gerenciaSecond;
         }
 
-        $form->add('gerencia','entity',$formOptions);
+        $form->add('gerenciaSecond','entity',$formOptions);
     }
 }

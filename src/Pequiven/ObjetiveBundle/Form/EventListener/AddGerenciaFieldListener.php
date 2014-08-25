@@ -28,6 +28,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     
     protected $complejoObject;
     protected $complejoNameArray = array();
+    protected $typeTactic = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -44,6 +45,9 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        if(isset($options['typeTactic'])){
+            $this->typeOperative = true;
+        }
     }
     
     public function preSetData(FormEvent $event){

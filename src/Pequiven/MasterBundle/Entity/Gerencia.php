@@ -68,6 +68,13 @@ class Gerencia extends modelGerencia
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=70, nullable=true)
+     */
+    private $ref;
 
     /**
      * @var boolean
@@ -246,5 +253,28 @@ class Gerencia extends modelGerencia
     public function getComplejo()
     {
         return $this->complejo;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return Gerencia
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
     }
 }

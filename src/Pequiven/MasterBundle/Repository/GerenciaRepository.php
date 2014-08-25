@@ -20,7 +20,10 @@ class GerenciaRepository extends EntityRepository
                         ->select('g')
                         ->from('\Pequiven\MasterBundle\Entity\Gerencia', 'g')
                         ->andWhere('g.enabled = ' . 1);
-        
+//        var_dump($options);
+//        var_dump("<br>");
+//        var_dump(count($options['complejos']));
+//        die();
         if(isset($options['complejoArray'])){
             $search = '';
             $total = count($options['complejoArray']);
@@ -32,9 +35,10 @@ class GerenciaRepository extends EntityRepository
                 }
             }
             $query->andWhere('g.complejo IN (' . $search .')');
-        } elseif(isset($options['complejos'])){
+        } elseif(isset($options['complejos']) && $options['complejos'] != 0){
             $query->andWhere('g.complejo IN (' . $options['complejos'] .')');
         }
+        
         
         $gerencias = $query->getQuery()
                            ->getResult();
