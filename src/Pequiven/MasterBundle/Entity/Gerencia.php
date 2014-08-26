@@ -75,6 +75,20 @@ class Gerencia extends modelGerencia
      * @ORM\Column(name="ref", type="string", length=70, nullable=true)
      */
     private $ref;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="modular", type="boolean", nullable=true)
+     */
+    private $modular = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vinculante", type="boolean", nullable=true)
+     */
+    private $vinculante = false;
 
     /**
      * @var boolean
@@ -276,5 +290,51 @@ class Gerencia extends modelGerencia
     public function getRef()
     {
         return $this->ref;
+    }
+
+    /**
+     * Set modular
+     *
+     * @param boolean $modular
+     * @return Gerencia
+     */
+    public function setModular($modular)
+    {
+        $this->modular = $modular;
+
+        return $this;
+    }
+
+    /**
+     * Get modular
+     *
+     * @return boolean 
+     */
+    public function getModular()
+    {
+        return $this->modular;
+    }
+
+    /**
+     * Set vinculante
+     *
+     * @param boolean $vinculante
+     * @return Gerencia
+     */
+    public function setVinculante($vinculante)
+    {
+        $this->vinculante = $vinculante;
+
+        return $this;
+    }
+
+    /**
+     * Get vinculante
+     *
+     * @return boolean 
+     */
+    public function getVinculante()
+    {
+        return $this->vinculante;
     }
 }

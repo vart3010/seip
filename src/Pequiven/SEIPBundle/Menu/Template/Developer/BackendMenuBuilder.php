@@ -99,6 +99,27 @@ class BackendMenuBuilder extends MenuBuilder
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main', $section)));
         
+                //Gerencia de 1ra Línea
+                $subchild = $this->factory->createItem('admin.gerencia_first',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'gerencia_first',
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_first.main', $section)));
+                
+                $subchild->addChild('admin.gerencia_first.list', array(
+                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_first.list', $section)));
+                $subchild->addChild('admin.gerencia_first.add', array(
+                            'route' => 'pequiven_master_menu_add_gerenciaFirst',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.gerencia_first.add', $section)));
+                
+                $child->addChild($subchild);
+        
+                //Gerencia de 2da Línea
                 $subchild = $this->factory->createItem('admin.gerencia_second',
                         $this->getSubLevelOptions(array(
                         'uri' => 'gerencia_second',

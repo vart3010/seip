@@ -57,6 +57,8 @@ class Gerencia {
     const GERENCIA_REF_PROYECTO_TERMINAL_MARITIMO = 39;
     
     //Tipo de Gerencias (Medular o Vinculante)
+    const GERENCIA_TYPE_MODULAR = 1;//En caso de que sólo exista en complejos y no en Sede Corporativa
+    const GERENCIA_TYPE_VINCULANTE = 2;//En caso de que existe también en Sede Corporativa
     
     public $refName = array();
     

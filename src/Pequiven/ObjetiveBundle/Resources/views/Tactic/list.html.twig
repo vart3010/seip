@@ -3,20 +3,19 @@
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 {% block title %}- {{ 'pequiven_objetive.objetive_tactic'|trans }}{% endblock %}
 
-{% if route_index is not defined %}
-    {% set route_index = 'objetiveTacticList' %}
-{% endif %}
+{% set route_index = 'pequiven_objetive_menu_list_tactic' %}
 {% if allow_create is not defined %}
     {% set allow_create = false %}
 {% endif %}
 
 {% block body %}
-    <!--
+    
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path(route_index) }}">{{ 'sigtec.company'|trans }}</a>
+            <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_tactic'|trans }}</a>
             <span class="icon-forward"></span>
-            <span class="thin">{{ 'sigtec.list'|trans }}</span>
+            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
+            <!--
             {% if allow_create %}
                 <p class="button-height align-right">
                     <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
@@ -25,9 +24,10 @@
                     </a>
                 </p>
             {% endif %}
+            -->
         </h1>
     </hgroup>
-    -->
+    
     <div ng-controller="TableFormatController">
         <!--<div ng-controller="ObjetiveTacticController">-->
                 {% set filterYesNo = [
@@ -39,7 +39,7 @@
                     { 'id':0,'name': ('sigtec.inactive'|trans)},
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path(route_index,{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
                             <td data-title="'{{ 'form.line_strategic'|trans }}'" >
                                 <a href="[[ result._links.self.href ]]">[[result.line_strategic.ref+result.line_strategic.description]]</a>

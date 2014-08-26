@@ -23,6 +23,11 @@ pequiven_objetive_menu_list_operative:
     path: /arrangement_strategic/objetive/list/operative
     defaults:
         _controller: pequiven.controller.objetiveoperative:listAction
+#Lista de gerencias de 1ra línea
+pequiven_master_menu_list_gerenciaFirst:
+    path: /adminMaster/list/gerenciaFirst
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:listAction
 #Lista de gerencias de 2da línea
 pequiven_master_menu_list_gerenciaSecond:
     path: /adminMaster/list/gerenciaSecond
@@ -47,7 +52,12 @@ pequiven_objetive_menu_add_operative:
     path: /arrangement_strategic/objetive/operative/add
     defaults:
         _controller: pequiven.controller.objetiveoperative:createAction
-        
+
+#Registro de gerencias de 1ra línea
+pequiven_master_menu_add_gerenciaFirst:
+    path: /adminMaster/gerenciaFirst/add
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:createAction
 #Registro de gerencias de 2da línea
 pequiven_master_menu_add_gerenciaSecond:
     path: /adminMaster/gerenciaSecond/add

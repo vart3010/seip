@@ -136,6 +136,14 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Maestro gerencia 1ra línea
+        pequiven.gerenciafirst:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Gerencia:list.html.twig
+            classes:
+                model: Pequiven\MasterBundle\Entity\Gerencia
+                controller: Pequiven\MasterBundle\Controller\GerenciaController
+                repository: Pequiven\MasterBundle\Repository\GerenciaRepository
         #Maestro gerencia 2da línea
         pequiven.gerenciasecond:
             driver: doctrine/orm

@@ -1,0 +1,87 @@
+{#{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/layout.html.twig' %}#}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenMasterBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+    
+{% block body %}
+
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="#">{{ 'pequiven_master.gerencia_first'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_master.add'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+    <form action="{{ path('pequiven_master_menu_add_gerenciaFirst') }}" {{ form_enctype(form) }} method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_master.gerencia_first'|trans }}</legend>
+
+            <!-- Complejo -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.complejo) }}
+                {{ form_widget(form.complejo) }}
+                {{ form_errors(form.complejo) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Description Gerencia 2da Línea -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.gerencia_first_info'|trans }}</span>
+                </span>
+            </div>
+                
+            {{ actions.create() }}
+        </fieldset>
+        {{ form_rest(form) }}
+    </form>
+    
+    {% block javascript %}
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                var selectComplejo = $('#pequiven_master_gerenciaFirst_registration_complejo')//Select de Complejo
+                ;
+                
+                charge();
+            
+                function charge(){
+                    chargeSelect2Complejo();
+                }
+                
+                //Función que carga el select2 de Complejo
+                function chargeSelect2Complejo(type){
+                    selectComplejo.select2({
+                        placeholder: '{{ 'form.messages.selectComplejoPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectComplejoFormatNoMatcher'|trans }}";
+                            } else{
+                                return "{{ 'form.messages.selectComplejoFormatNoResult'|trans }}";
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    {% endblock javascript %}
+    
+{% endblock body %}

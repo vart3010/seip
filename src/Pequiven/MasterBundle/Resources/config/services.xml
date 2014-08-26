@@ -19,6 +19,14 @@
     -->
     
     <services>
+        <!-- Servicio de la gerencia de 1ra línea -->
+        <service id="pequiven.repository.gerenciafirst" class="Pequiven\MasterBundle\Repository\GerenciaRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\MasterBundle\Entity\Gerencia" />
+        </service>
+        
         <!-- Servicio de la gerencia de 2da línea -->
         <service id="pequiven.repository.gerenciasecond" class="Pequiven\MasterBundle\Repository\GerenciaSecondRepository">
             <call method="setContainer">

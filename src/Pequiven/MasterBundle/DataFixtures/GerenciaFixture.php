@@ -31,6 +31,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-01',$gerencia);
             $manager->persist($gerencia);
 
@@ -39,6 +40,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_COORD_DESARROLLO_SOCIAL_MORON]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-02',$gerencia);
             $manager->persist($gerencia);
 
@@ -47,6 +49,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-03',$gerencia);
             $manager->persist($gerencia);
 
@@ -55,6 +58,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-04',$gerencia);
             $manager->persist($gerencia);
 
@@ -63,6 +67,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_GENERAL_COMPLEJO_MORON]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-05',$gerencia);
             $manager->persist($gerencia);
 
@@ -71,6 +76,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-06',$gerencia);
             $manager->persist($gerencia);
 
@@ -79,6 +85,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-07',$gerencia);
             $manager->persist($gerencia);
 
@@ -87,6 +94,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-08',$gerencia);
             $manager->persist($gerencia);
 
@@ -95,6 +103,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-09',$gerencia);
             $manager->persist($gerencia);
 
@@ -103,6 +112,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-10',$gerencia);
             $manager->persist($gerencia);
 
@@ -111,6 +121,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-11',$gerencia);
             $manager->persist($gerencia);
 
@@ -119,6 +130,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-12',$gerencia);
             $manager->persist($gerencia);
 
@@ -127,6 +139,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-13',$gerencia);
             $manager->persist($gerencia);
 
@@ -135,6 +148,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MANTENIMIENTO]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-14',$gerencia);
             $manager->persist($gerencia);
 
@@ -143,6 +157,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MATERIALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-15',$gerencia);
             $manager->persist($gerencia);
 
@@ -151,6 +166,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PRODUCCION]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-16',$gerencia);
             $manager->persist($gerencia);
 
@@ -159,6 +175,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SERVICIOS_GENERALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-17',$gerencia);
             $manager->persist($gerencia);
 
@@ -167,6 +184,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SUMINISTRO]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-18',$gerencia);
             $manager->persist($gerencia);
 
@@ -175,6 +193,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_TECNICA]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-19',$gerencia);
             $manager->persist($gerencia);
 
@@ -183,6 +202,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UCFER]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-20',$gerencia);
             $manager->persist($gerencia);
 
@@ -191,6 +211,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UNPI]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-21',$gerencia);
             $manager->persist($gerencia);
 
@@ -199,6 +220,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-22',$gerencia);
             $manager->persist($gerencia);
 
@@ -209,6 +231,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-23',$gerencia);
             $manager->persist($gerencia);
 
@@ -217,6 +240,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-24',$gerencia);
             $manager->persist($gerencia);
 
@@ -225,6 +249,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-25',$gerencia);
             $manager->persist($gerencia);
 
@@ -233,6 +258,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-26',$gerencia);
             $manager->persist($gerencia);
 
@@ -241,6 +267,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-27',$gerencia);
             $manager->persist($gerencia);
 
@@ -249,6 +276,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-28',$gerencia);
             $manager->persist($gerencia);
 
@@ -257,6 +285,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-29',$gerencia);
             $manager->persist($gerencia);
 
@@ -265,6 +294,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-30',$gerencia);
             $manager->persist($gerencia);
 
@@ -273,6 +303,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-31',$gerencia);
             $manager->persist($gerencia);
 
@@ -281,6 +312,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS_OPERACIONALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-32',$gerencia);
             $manager->persist($gerencia);
 
@@ -289,6 +321,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-33',$gerencia);
             $manager->persist($gerencia);
 
@@ -297,6 +330,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_GENERAL_COMPLEJO_AMC]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-34',$gerencia);
             $manager->persist($gerencia);
 
@@ -305,6 +339,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_REG_DESARROLLO_INTEG_COMUNITARIO_AMC]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-35',$gerencia);
             $manager->persist($gerencia);
 
@@ -313,6 +348,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-36',$gerencia);
             $manager->persist($gerencia);
 
@@ -321,6 +357,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MANTENIMIENTO]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-37',$gerencia);
             $manager->persist($gerencia);
 
@@ -329,6 +366,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MATERIALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-38',$gerencia);
             $manager->persist($gerencia);
 
@@ -337,6 +375,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PRODUCCION]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-39',$gerencia);
             $manager->persist($gerencia);
 
@@ -345,6 +384,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SERVICIOS_GENERALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-40',$gerencia);
             $manager->persist($gerencia);
 
@@ -353,6 +393,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SUMINISTRO]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-41',$gerencia);
             $manager->persist($gerencia);
 
@@ -361,6 +402,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_TECNICA]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-42',$gerencia);
             $manager->persist($gerencia);
 
@@ -369,6 +411,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UNOP]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-43',$gerencia);
             $manager->persist($gerencia);
 
@@ -377,6 +420,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-44',$gerencia);
             $manager->persist($gerencia);
 
@@ -387,6 +431,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-45',$gerencia);
             $manager->persist($gerencia);
 
@@ -395,6 +440,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-46',$gerencia);
             $manager->persist($gerencia);
 
@@ -403,6 +449,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-47',$gerencia);
             $manager->persist($gerencia);
 
@@ -411,6 +458,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-48',$gerencia);
             $manager->persist($gerencia);
 
@@ -419,6 +467,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-49',$gerencia);
             $manager->persist($gerencia);
 
@@ -427,6 +476,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-50',$gerencia);
             $manager->persist($gerencia);
 
@@ -435,6 +485,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-51',$gerencia);
             $manager->persist($gerencia);
 
@@ -443,6 +494,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-52',$gerencia);
             $manager->persist($gerencia);
 
@@ -451,6 +503,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-53',$gerencia);
             $manager->persist($gerencia);
 
@@ -459,6 +512,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-54',$gerencia);
             $manager->persist($gerencia);
 
@@ -467,6 +521,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_GENERAL_COMPLEJO_JAA]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-55',$gerencia);
             $manager->persist($gerencia);
             
@@ -475,6 +530,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_REG_DESARROLLO_INTEG_COMUNITARIO_JAA]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-56',$gerencia);
             $manager->persist($gerencia);
 
@@ -483,6 +539,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_TECNICA_PROYECTOS_OPERACIONALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-57',$gerencia);
             $manager->persist($gerencia);
 
@@ -491,6 +548,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-58',$gerencia);
             $manager->persist($gerencia);
 
@@ -499,6 +557,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MANTENIMIENTO]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-59',$gerencia);
             $manager->persist($gerencia);
 
@@ -507,6 +566,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_MATERIALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-60',$gerencia);
             $manager->persist($gerencia);
 
@@ -515,6 +575,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PRODUCCION]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-61',$gerencia);
             $manager->persist($gerencia);
 
@@ -523,6 +584,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SERVICIOS_GENERALES]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-62',$gerencia);
             $manager->persist($gerencia);
 
@@ -531,6 +593,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UNPI]);
+        $gerencia->setModular(true);
         $this->addReference('Gerencia-63',$gerencia);
             $manager->persist($gerencia);
 
@@ -539,6 +602,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-64',$gerencia);
             $manager->persist($gerencia);
 
@@ -549,6 +613,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-65',$gerencia);
             $manager->persist($gerencia);
 
@@ -557,6 +622,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-66',$gerencia);
             $manager->persist($gerencia);
 
@@ -565,6 +631,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-67',$gerencia);
             $manager->persist($gerencia);
 
@@ -575,6 +642,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-05'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-68',$gerencia);
             $manager->persist($gerencia);
 
@@ -583,6 +651,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-05'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-69',$gerencia);
             $manager->persist($gerencia);
 

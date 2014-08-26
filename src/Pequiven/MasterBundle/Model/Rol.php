@@ -39,12 +39,14 @@ class Rol {
         $this->rol_name[self::ROLE_SUPERVISER] = 'ROLE_SUPERVISER';
         $this->rol_name[self::ROLE_MANAGER_SECOND] = 'ROLE_MANAGER_SECOND';
         $this->rol_name[self::ROLE_MANAGER_FIRST] = 'ROLE_MANAGER_FIRST';
+        $this->rol_name[self::ROLE_GENERAL_COMPLEJO] = 'ROLE_GENERAL_COMPLEJO';
         $this->rol_name[self::ROLE_DIRECTIVE] = 'ROLE_DIRECTIVE';
         $this->rol_name[self::ROLE_ADMIN] = 'ROLE_ADMIN';
         $this->rol_name[self::ROLE_SUPER_ADMIN] = 'ROLE_SUPER_ADMIN';
         $this->rol_name[self::ROLE_SUPERVISER_AUX] = 'ROLE_SUPERVISER_AUX';
         $this->rol_name[self::ROLE_MANAGER_SECOND_AUX] = 'ROLE_MANAGER_SECOND_AUXS';
         $this->rol_name[self::ROLE_MANAGER_FIRST_AUX] = 'ROLE_MANAGER_FIRST_AUX';
+        $this->rol_name[self::ROLE_GENERAL_COMPLEJO_AUX] = 'ROLE_GENERAL_COMPLEJO_AUX';
         $this->rol_name[self::ROLE_DIRECTIVE_AUX] = 'ROLE_DIRECTIVE_AUX';
     }
     

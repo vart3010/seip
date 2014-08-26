@@ -3,6 +3,7 @@ pequiven_objetive:
                 #Registrar
                 objetives: Objetivos
                 add: Añadir
+                list: Lista
                 strategic: Estratégico
                 tactic: Táctico
                 operative: Operativo
@@ -10,6 +11,12 @@ pequiven_objetive:
                 objetive_strategic: Objetivo Estratégico
                 objetive_tactic: Objetivo Táctico
                 objetive_operative: Objetivo Operativo
+                
+                popup:
+                    description: Descripción
+                    lineStrategic: Línea Estratégica
+                    created_at: Creado el
+                    updated_at: Actualizado el                    
 
                 #Buttons
                 edit: Editar
