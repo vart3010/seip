@@ -60,8 +60,8 @@ class RegistrationFormType extends AbstractType {
         $builder->addEventSubscriber(new AddGerenciaFieldListener());
         
         $builder->addEventSubscriber(new AddGerenciaSecondFieldListener());
-        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-            $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerencias','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
+        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerenciasSecondFull','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
         }
         
         //Nombre del objetivo a crear

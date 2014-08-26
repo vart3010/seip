@@ -15,6 +15,7 @@ namespace Pequiven\MasterBundle\Model;
  */
 class Gerencia {
     
+    //Referencias de las Gerencias de 1ra Línea
     const GERENCIA_REF_CONSULTORIA_JURIDICA = 1;
     const GERENCIA_REF_PROYECTOS = 2;
     const GERENCIA_REF_RECURSOS_HUMANOS = 3;
@@ -54,6 +55,8 @@ class Gerencia {
     const GERENCIA_REF_JUNTA_DIRECTIVA = 37;
     const GERENCIA_REF_OFICINA_PRESIDENCIA = 38;
     const GERENCIA_REF_PROYECTO_TERMINAL_MARITIMO = 39;
+    
+    //Tipo de Gerencias (Medular o Vinculante)
     
     public $refName = array();
     

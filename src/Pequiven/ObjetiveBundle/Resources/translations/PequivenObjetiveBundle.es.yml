@@ -92,6 +92,7 @@ form:
     question:
         allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
         allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
+        allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y complejos seleccionados?
     messages:
         pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
         pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico

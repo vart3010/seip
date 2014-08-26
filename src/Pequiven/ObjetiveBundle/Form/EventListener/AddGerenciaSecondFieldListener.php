@@ -88,14 +88,14 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
         }
                 
         if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
+            //$formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
             $gerenciaSecond = null;
             $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
             $formOptions['multiple'] = true;
             $formOptions['mapped'] = false;
             $formOptions['empty_value'] = '';
         } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
+            //$formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:GerenciaSecond')->getGerenciaSecondOptions();
             $gerenciaSecond = null;
             $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
             $formOptions['multiple'] = true;

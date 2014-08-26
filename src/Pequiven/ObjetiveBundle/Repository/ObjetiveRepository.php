@@ -59,8 +59,37 @@ class ObjetiveRepository extends baseEntityRepository {
         }
         
         $q = $query->getQuery();
-        //var_dump($q->getSQL());
-        //die();
+//        var_dump($q->getSQL());
+//        die();
+        return $q->getResult();
+    }
+    
+    /**
+     * Función que devuelve los resultados necesarios para obtener la referencia del objetivo que se este creando
+     * @param type $options
+     * @return type
+     */
+    public function getRefNewObjetive($options = array()){
+        $em = $this->getEntityManager();
+        $query = $em->createQueryBuilder()
+                    ->select('o')
+                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                    ->groupBy('o.ref');
+        
+        if($options['type_ref'] === 'STRATEGIC_REF'){
+                $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId']);
+                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO);
+            } elseif($options['type_ref'] === 'TACTIC_REF'){
+                $query->andWhere("o.ref LIKE '".$options['refParent']."%'");
+                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO);
+            } elseif($options['type_ref'] === 'OPERATIVE_REF'){
+                $query->andWhere("o.ref LIKE '".$options['refParent']."%'");
+                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO);
+            }
+        
+        $q = $query->getQuery();
+//        var_dump($q->getSQL());
+//        die();
         return $q->getResult();
     }
     

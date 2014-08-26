@@ -92,8 +92,8 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
             $formOptions['multiple'] = true;
             $formOptions['mapped'] = false;
-        } else{
-             $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
+        } else{            
+            $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
          }
         
         if($gerencia){

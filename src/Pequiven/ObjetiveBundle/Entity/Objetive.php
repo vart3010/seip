@@ -734,7 +734,7 @@ class Objetive extends modelObjetive {
         if ($options['type'] == 'STRATEGIC') {
             $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
             $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
             $refLineStrategic = $lineStrategic->getRef();
             $total = count($results);            
             if (is_array($results) && $total > 0) {
@@ -745,23 +745,24 @@ class Objetive extends modelObjetive {
         } elseif ($options['type'] == 'TACTIC') {
             $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
             $refObjetiveStrategic = $objetiveStrategic->getRef();
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                $options['type_directive'] = true;
-                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveStrategic));
-                $totalParents = count($objetivesParent);
-                $contParents = 1;
-                $options['array_parent'] = '';
-                foreach($objetivesParent as $objetiveParent){
-                    if($contParents == $totalParents){
-                        $options['array_parent'].= $objetiveParent->getId();
-                    } else{
-                        $options['array_parent'].= $objetiveParent->getId().',';
-                    }
-                    $contParents++;
-                }
-            }
+            $options['refParent'] = $refObjetiveStrategic;
+//            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+//                $options['type_directive'] = true;
+//                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveStrategic));
+//                $totalParents = count($objetivesParent);
+//                $contParents = 1;
+//                $options['array_parent'] = '';
+//                foreach($objetivesParent as $objetiveParent){
+//                    if($contParents == $totalParents){
+//                        $options['array_parent'].= $objetiveParent->getId();
+//                    } else{
+//                        $options['array_parent'].= $objetiveParent->getId().',';
+//                    }
+//                    $contParents++;
+//                }
+//            }
             $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
             $total = count($results);
             if (is_array($results) && $total > 0) {
                 $ref = $refObjetiveStrategic . ($total + 1) . '.';
@@ -771,23 +772,25 @@ class Objetive extends modelObjetive {
         } elseif ($options['type'] == 'OPERATIVE') {
             $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
             $refObjetiveTactic = $objetiveTactic->getRef();
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                $options['type_directive'] = true;
-                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveTactic));
-                $totalParents = count($objetivesParent);
-                $contParents = 1;
-                $options['array_parent'] = '';
-                foreach($objetivesParent as $objetiveParent){
-                    if($contParents == $totalParents){
-                        $options['array_parent'].= $objetiveParent->getId();
-                    } else{
-                        $options['array_parent'].= $objetiveParent->getId().',';
-                    }
-                    $contParents++;
-                }
-            }
+            $options['refParent'] = $refObjetiveTactic;            
+            
+//            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+//                $options['type_directive'] = true;
+//                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveTactic));
+//                $totalParents = count($objetivesParent);
+//                $contParents = 1;
+//                $options['array_parent'] = '';
+//                foreach($objetivesParent as $objetiveParent){
+//                    if($contParents == $totalParents){
+//                        $options['array_parent'].= $objetiveParent->getId();
+//                    } else{
+//                        $options['array_parent'].= $objetiveParent->getId().',';
+//                    }
+//                    $contParents++;
+//                }
+//            }
             $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
             $total = count($results);
             if (is_array($results) && $total > 0) {
                 $ref = $refObjetiveTactic . ($total + 1) . '.';

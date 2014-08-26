@@ -133,42 +133,82 @@ class ObjetiveOperativeController extends baseController {
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
                     
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && !$securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){//Si el usuario pertenece a ZIV y su rol es Gerente 2da Línea
                 $object->setGerencia($user->getGerencia());
+                $object->setGerenciaSecond($user->getGerenciaSecond());
                 for($i = 0; $i < count($data['complejo']); $i++){
                     ${$nameObject.$i} = clone $object;
                     $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                    $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('complejo' => $data['complejo'][$i], 'ref' => $objetive->getRef()));
+                    $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('complejo' => $data['complejo'][$i], 'ref' => $objetive->getRef(), 'gerencia' => $user->getGerencia()->getId()));
                     ${$nameObject.$i}->setComplejo($complejo);
                     ${$nameObject.$i}->setParent($parent);
                     $em->persist(${$nameObject.$i});
                 }
-            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                if(!isset($data['check_gerencia'])){//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
-                    for($i = 0; $i < count($data['gerencia']); $i++){
-                        ${$nameObject.$i} = clone $object;
-                        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
-                        $complejo = $gerencia->getComplejo();
-                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
-                        ${$nameObject.$i}->setGerencia($gerencia);
-                        ${$nameObject.$i}->setComplejo($complejo);
-                        ${$nameObject.$i}->setParent($parent);
-                        $em->persist(${$nameObject.$i});
+            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el usuario pertenece a ZIV y su rol es Directivo o Gerente 1ra Línea
+                if(!isset($data['check_gerencia'])){//En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
+                    if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el rol del usuario es Gerente 1ra Línea
+                        for($i = 0; $i < count($data['gerenciaSecond']); $i++){
+                            ${$nameObject.$i} = clone $object;
+                            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
+                            $complejo = $gerenciaSecond->getGerencia()->getComplejo();
+                            $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerenciaSecond->getGerencia()->getId()));
+                            ${$nameObject.$i}->setGerencia($gerenciaSecond->getGerencia());
+                            ${$nameObject.$i}->setGerenciaSecond($gerenciaSecond);
+                            ${$nameObject.$i}->setComplejo($complejo);
+                            ${$nameObject.$i}->setParent($parent);
+                            $em->persist(${$nameObject.$i});
+                        }
+                    } else{//Si el rol del usuario es Directivo
+                        for($i = 0; $i < count($data['gerenciaSecond']); $i++){
+                            ${$nameObject.$i} = clone $object;
+                            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
+                            $complejo = $gerenciaSecond->getGerencia()->getComplejo();
+                            $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerenciaSecond->getGerencia()->getId()));
+                            ${$nameObject.$i}->setGerencia($gerenciaSecond->getGerencia());
+                            ${$nameObject.$i}->setGerenciaSecond($gerenciaSecond);
+                            ${$nameObject.$i}->setComplejo($complejo);
+                            ${$nameObject.$i}->setParent($parent);
+                            $em->persist(${$nameObject.$i});
+                        }
                     }
-                } else{//En caso de que las gerencias a impactar, sean todas la de los complejos seleccionados
-                    $j = 0;
-                    for($i=0;$i<count($data['complejo']);$i++){//Recorremos todos los complejos seleccionados
-                        $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
-                        //Obtenemos todas las gerencias 
-                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
-                        foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
-                            ${$nameObject.$j} = clone $object;
-                            ${$nameObject.$j}->setGerencia($gerencia);
-                            ${$nameObject.$j}->setComplejo($complejo);
-                            ${$nameObject.$j}->setParent($parent);
-                            $em->persist(${$nameObject.$j});
-                            $j++;
+                } else{//En caso de que las gerencias a impactar, sean todas la de las gerencias de 1ra línea de los complejos seleccionados
+                    if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el rol del usuario es Gerente 1ra Línea
+                        $j = 0;
+                        //Obtenemos las gerencias de 1ra línea de los complejos seleccionados y de acuerdo a la referencia de la gerencia del usuario logueado
+                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('ref' => $user->getGerencia()->getRef(), 'complejo' => $data['complejo']));
+                        
+                        foreach ($gerencias as $gerencia){
+                            $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $gerencia->getId()));
+                            $complejo = $gerencia->getComplejo();
+                            $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerencia->getId()));
+                            foreach($gerenciasSecond as $gerenciaSecond){
+                                ${$nameObject.$j} = clone $object;
+                                ${$nameObject.$j}->setGerencia($gerencia);
+                                ${$nameObject.$j}->setGerenciaSecond($gerenciaSecond);
+                                ${$nameObject.$j}->setComplejo($complejo);
+                                ${$nameObject.$j}->setParent($parent);
+                                $em->persist(${$nameObject.$j});
+                                $j++;
+                            }
+                        }
+                    } else{//Si el rol del usuario es Directivo
+                        $j = 0;
+                        //Obtenemos las gerencias de 1ra línea seleccionadas
+                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('id' => $data['gerencia']));
+                        
+                        foreach ($gerencias as $gerencia){
+                            $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $gerencia->getId()));
+                            $complejo = $gerencia->getComplejo();
+                            $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerencia->getId()));
+                            foreach($gerenciasSecond as $gerenciaSecond){
+                                ${$nameObject.$j} = clone $object;
+                                ${$nameObject.$j}->setGerencia($gerencia);
+                                ${$nameObject.$j}->setGerenciaSecond($gerenciaSecond);
+                                ${$nameObject.$j}->setComplejo($complejo);
+                                ${$nameObject.$j}->setParent($parent);
+                                $em->persist(${$nameObject.$j});
+                                $j++;
+                            }
                         }
                     }
                 }
@@ -672,6 +712,8 @@ class ObjetiveOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         
         $objetiveTacticId = $request->request->get('objetiveTacticId');
+        
+        
         $options['objetiveTacticId'] = $objetiveTacticId;
         $options['type'] = 'OPERATIVE';
         $options['type_ref'] = 'OPERATIVE_REF';

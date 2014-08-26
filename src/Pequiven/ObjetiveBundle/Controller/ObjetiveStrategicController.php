@@ -310,6 +310,7 @@ class ObjetiveStrategicController extends baseController {
         $lineStrategicId = $request->request->get('lineStrategicId');
         $options['lineStrategicId'] = $lineStrategicId;
         $options['type'] = 'STRATEGIC';
+        $options['type_ref'] = 'STRATEGIC_REF';
         $ref = $objetive->setNewRef($options);
         
         $data[] = array('ref' => $ref);

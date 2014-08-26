@@ -21,13 +21,15 @@ class Rol {
     const ROLE_SUPERVISER = 2;
     const ROLE_MANAGER_SECOND = 3;
     const ROLE_MANAGER_FIRST = 4;
-    const ROLE_DIRECTIVE = 5;
-    const ROLE_ADMIN = 6;
-    const ROLE_SUPER_ADMIN = 7;
-    const ROLE_SUPERVISER_AUX = 8;
-    const ROLE_MANAGER_SECOND_AUX = 9;
-    const ROLE_MANAGER_FIRST_AUX = 10;
-    const ROLE_DIRECTIVE_AUX = 11;
+    const ROLE_GENERAL_COMPLEJO = 5;
+    const ROLE_DIRECTIVE = 6;
+    const ROLE_ADMIN = 7;
+    const ROLE_SUPER_ADMIN = 8;
+    const ROLE_SUPERVISER_AUX = 9;
+    const ROLE_MANAGER_SECOND_AUX = 10;
+    const ROLE_MANAGER_FIRST_AUX = 11;
+    const ROLE_GENERAL_COMPLEJO_AUX = 12;
+    const ROLE_DIRECTIVE_AUX = 13;
     
     public $rol_name = array();
     
