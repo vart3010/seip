@@ -202,7 +202,6 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UCFER]);
-        $gerencia->setModular(true);
         $this->addReference('Gerencia-20',$gerencia);
             $manager->persist($gerencia);
 
@@ -211,7 +210,6 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UNPI]);
-        $gerencia->setModular(true);
         $this->addReference('Gerencia-21',$gerencia);
             $manager->persist($gerencia);
 
@@ -411,7 +409,6 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_UNOP]);
-        $gerencia->setModular(true);
         $this->addReference('Gerencia-43',$gerencia);
             $manager->persist($gerencia);
 

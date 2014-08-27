@@ -152,3 +152,10 @@ sylius_resource:
                 model: Pequiven\MasterBundle\Entity\GerenciaSecond
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
                 repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        #Nivel de Acceso por Usuario
+        pequiven_seip.userpermission:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\UserPermissionController
+                model: Pequiven\SEIPBundle\Entity\UserPermission
+                repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository

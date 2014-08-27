@@ -28,11 +28,18 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class GerenciaController extends baseController {
     //put your code here
     
+    /**
+     * @Template("PequivenMasterBundle:Gerencia:list.html.twig")
+     * @return type
+     */
     public function listAction(){
-        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array(
-
-            ));
+//        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:list.html.'.$this->container->getParameter('fos_user.template.engine'),
+//            array(
+//
+//            ));
+        return array(
+            
+        );
     }
     
     /**
@@ -40,6 +47,7 @@ class GerenciaController extends baseController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      * @throws \Pequiven\MasterBundle\Controller\Exception
+     * @Template("PequivenMasterBundle:Gerencia:register.html.twig")
      */
     public function createAction(Request $request){
 
@@ -81,12 +89,16 @@ class GerenciaController extends baseController {
                     ));
         }
         
-        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:register.html.'.$this->container->getParameter('fos_user.template.engine'),
+        
+        /*return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:register.html.'.$this->container->getParameter('fos_user.template.engine'),
             array('form' => $form->createView(),
-                ));
+                ));*/
+        return array(
+            'form' => $form->createView(),
+            );
     }
     
-        /**
+     /**
      * Función que devuelve el paginador con las gerencias de 2da Línea
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse

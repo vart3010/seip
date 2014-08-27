@@ -26,15 +26,21 @@ class MasterController extends Controller {
     
     /**
      * Función que muestra la página inicial de los maestros
+     * @Template("PequivenMasterBundle:Deafult:index.html.twig")
      * @param type $type
      * @return type
      */
     public function showHomeAction($type,$action){
-        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
-        array('type' => $type,
+//        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
+//        array('type' => $type,
+//            'notification' => true,
+//            'action' => $action
+//            ));
+        return array(
+            'type' => $type,
             'notification' => true,
             'action' => $action
-            ));
+        );
     }
     
     /**

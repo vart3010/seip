@@ -50,13 +50,21 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setEnabled(true);
         $this->addReference($rol_data->rol_name[Rol::ROLE_MANAGER_SECOND], $rol);
             $manager->persist($rol);
-        //Gerende 1ra Línea    
+        //Gerende 1ra Línea
         $rol = new Rol();
         $rol->setDescription('Gerente 1ra Línea');
         $rol->setLevelName($rol_data->rol_name[Rol::ROLE_MANAGER_FIRST]);
         $rol->setLevel(Rol::ROLE_MANAGER_FIRST);
         $rol->setEnabled(true);
         $this->addReference($rol_data->rol_name[Rol::ROLE_MANAGER_FIRST], $rol);
+            $manager->persist($rol);
+        //Gerente General Complejo
+        $rol = new Rol();
+        $rol->setDescription('Gerente General');
+        $rol->setLevelName($rol_data->rol_name[Rol::ROLE_GENERAL_COMPLEJO]);
+        $rol->setLevel(Rol::ROLE_GENERAL_COMPLEJO);
+        $rol->setEnabled(true);
+        $this->addReference($rol_data->rol_name[Rol::ROLE_GENERAL_COMPLEJO], $rol);
             $manager->persist($rol);
         //Junta Directiva
         $rol = new Rol();
@@ -90,7 +98,7 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setEnabled(true);
         $this->addReference($rol_data->rol_name[Rol::ROLE_SUPERVISER_AUX], $rol);
             $manager->persist($rol);
-        //Gerende 2da Línea Temporal    
+        //Gerende 2da Línea Temporal
         $rol = new Rol();
         $rol->setDescription('Gerente 2da Línea Temporal');
         $rol->setLevelName($rol_data->rol_name[Rol::ROLE_MANAGER_SECOND_AUX]);
@@ -98,13 +106,21 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setEnabled(true);
         $this->addReference($rol_data->rol_name[Rol::ROLE_MANAGER_SECOND_AUX], $rol);
             $manager->persist($rol);
-        //Gerende 1ra Línea Temporal    
+        //Gerende 1ra Línea Temporal
         $rol = new Rol();
         $rol->setDescription('Gerente 1ra Línea Temporal');
         $rol->setLevelName($rol_data->rol_name[Rol::ROLE_MANAGER_FIRST_AUX]);
         $rol->setLevel(Rol::ROLE_MANAGER_FIRST_AUX);
         $rol->setEnabled(true);
         $this->addReference($rol_data->rol_name[Rol::ROLE_MANAGER_FIRST_AUX], $rol);
+            $manager->persist($rol);
+        //Gerende General Complejo Temporal
+        $rol = new Rol();
+        $rol->setDescription('Gerente General Temporal');
+        $rol->setLevelName($rol_data->rol_name[Rol::ROLE_GENERAL_COMPLEJO_AUX]);
+        $rol->setLevel(Rol::ROLE_GENERAL_COMPLEJO_AUX);
+        $rol->setEnabled(true);
+        $this->addReference($rol_data->rol_name[Rol::ROLE_GENERAL_COMPLEJO_AUX], $rol);
             $manager->persist($rol);
         //Junta Directiva Temporal
         $rol = new Rol();

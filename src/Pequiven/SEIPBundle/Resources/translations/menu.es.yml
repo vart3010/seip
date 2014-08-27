@@ -55,3 +55,7 @@ app:
                             main: Personal PQV
                             list: Lista
                             add: Añadir
+                        rol:
+                            main: Roles
+                            list: Lista
+                            add: Añadir

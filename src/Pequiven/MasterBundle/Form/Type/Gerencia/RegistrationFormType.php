@@ -23,9 +23,7 @@ use Pequiven\MasterBundle\Form\EventListener\AddComplejoFieldListener;
 class RegistrationFormType extends AbstractType {
     //put your code here
     
-    function __construct(Gerencia $gerencia,$type = 'CREATE') {
-        ;
-    }
+    
     
     public function buildForm(FormBuilderInterface $builder, array $options){
         $container = PequivenMasterBundle::getContainer();
