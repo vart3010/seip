@@ -177,6 +177,17 @@ class ObjetiveTacticController extends baseController{
                         }
                     }
                 }
+            } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $user->getComplejo()->getId(), 'ref' => $objetive->getRef()));
+                $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('id' => $data['gerencia']));
+                $j = 0;
+                foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
+                    ${$nameObject.$j} = clone $object;
+                    ${$nameObject.$j}->setGerencia($gerencia);                    
+                    ${$nameObject.$j}->setParent($parent);
+                    $em->persist(${$nameObject.$j});
+                    $j++;
+                }
             } else{
                 $em->persist($object);
             }

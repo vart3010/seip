@@ -405,7 +405,14 @@
                         sectionCheckGerencia.hide();
                     }
                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                   
+                   selectGerencia.select2({
+                       
+                   });
+                   selectGerenciaSecond.select2({
+                       
+                   });
+                   selectGerencia.select2("enable",false);
+                   selectGerenciaSecond.select2("enable",false);
                } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                    selectGerenciaSecond.select2({
                        
@@ -503,6 +510,11 @@
                     selectGerencia.select2("enable",false);
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
+                    selectGerencia.select2("val",'');
+                    selectGerencia.select2("enable",false);
+                    selectGerenciaSecond.select2("val",'');
+                    selectGerenciaSecond.select2("enable",false);
                 }
             });
             //Al seleccionar alguna opción en el select de Objetivo Estratégico
@@ -519,6 +531,11 @@
                     selectGerencia.select2("enable",false);
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
+                    selectGerencia.select2("val",'');
+                    selectGerencia.select2("enable",false);
+                    selectGerenciaSecond.select2("val",'');
+                    selectGerenciaSecond.select2("enable",false);
                 }
             });
             //Al seleccionar alguna opción en el select de Objetivo Táctico
@@ -527,6 +544,9 @@
                 if(inputHiddenComplejoName.val() === 'ZIV'){
                     displaySelectComplejoFromObjetiveTactic(e);
                     //$("#pequiven_objetive_operative_registration_complejo").show();
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
+                    console.log('hola');
+                    displaySelectGerenciaFirstFromComplejo();
                 }
                 chargeSelectIndicator();
             })

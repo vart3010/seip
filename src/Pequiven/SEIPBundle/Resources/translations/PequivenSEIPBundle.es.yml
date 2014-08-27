@@ -68,6 +68,8 @@ pequiven_seip:
                     administrator: Administrador
                     directive: Ejecutivo
                     directive_aux: Ejecutivo (Asignado)
+                    general_complejo: Gerente General Complejo
+                    general_complejo_aux: Gerente General Complejo (Asignado)
                     manager_first: Gerente 1ra Línea
                     manager_first_aux: Gerente 1ra Línea (Asignado)
                     manager_second: Gerente 2da Línea

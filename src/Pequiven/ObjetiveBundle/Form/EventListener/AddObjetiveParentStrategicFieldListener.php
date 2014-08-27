@@ -79,30 +79,17 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
     }
 
     private function addObjetiveParentStrategicForm($form,$lineStrategicId,$objetiveParent = null) {
-        $formOptions = array(
-            'class' => 'PequivenObjetiveBundle:Objetive',
-            'empty_value' => '',
-            'label' => 'form.parent_strategic',
-            'label_attr' => array('class' => 'label'),
-            'translation_domain' => 'PequivenObjetiveBundle',
-            'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
-        );
-        
-        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-            $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId){
-            $qb = $er->createQueryBuilder('objetive')
-                     ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId')
-                     ->groupBy('objetive.ref')
-                     ->setParameter('lineStrategicId', $lineStrategicId)
-                     ->setParameter('objetiveLevelId', ObjetiveLevel::LEVEL_ESTRATEGICO)
-                    ;
-//            var_dump($qb->getQuery()->getSQL());
-//            die();
-            return $qb;
-            };
-        } else{
+        if($this->securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            $formOptions = array(
+                'class' => 'PequivenObjetiveBundle:Objetive',
+                'empty_value' => '',
+                'label' => 'form.parent_strategic',
+                'label_attr' => array('class' => 'label'),
+                'translation_domain' => 'PequivenObjetiveBundle',
+                'property' => 'description',
+                'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
+            );
+            
             $complejoId = $this->user->getComplejo()->getId();
             $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId,$complejoId){
             $qb = $er->createQueryBuilder('objetive')
@@ -114,26 +101,75 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
                     ;
             return $qb;
             };
-        }
-        
-        //$complejoId = $gerencia->getComplejo()->getId();
-        //$objetiveLevelId = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('levelName' => $objetiveLevelName[ObjetiveLevel::LEVEL_ESTRATEGICO]))->getId();
-
-        if ($objetiveParent) {
-            $formOptions['data'] = $objetiveParent;
-        }
-        
-        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            
+            if ($objetiveParent) {
+                $formOptions['data'] = $objetiveParent;
+            }
+            
             if($this->typeOperative){
                 $formOptions['mapped'] = false;
                 return $form->add('parent_strategic', 'entity', $formOptions);
             } else{
                 return $form->add('parent', 'entity', $formOptions);
             }
-        } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-            $formOptions['mapped'] = false;
-            return $form->add('parent_strategic', 'entity', $formOptions);
+        } else{
+            $formOptions = array(
+                'class' => 'PequivenObjetiveBundle:Objetive',
+                'empty_value' => '',
+                'label' => 'form.parent_strategic',
+                'label_attr' => array('class' => 'label'),
+                'translation_domain' => 'PequivenObjetiveBundle',
+                'property' => 'description',
+                'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
+            );
+
+            //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+            if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+                $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId){
+                $qb = $er->createQueryBuilder('objetive')
+                         ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId')
+                         ->groupBy('objetive.ref')
+                         ->setParameter('lineStrategicId', $lineStrategicId)
+                         ->setParameter('objetiveLevelId', ObjetiveLevel::LEVEL_ESTRATEGICO)
+                        ;
+    //            var_dump($qb->getQuery()->getSQL());
+    //            die();
+                return $qb;
+                };
+            } else{
+                $complejoId = $this->user->getComplejo()->getId();
+                $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId,$complejoId){
+                $qb = $er->createQueryBuilder('objetive')
+                         ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId AND objetive.complejo = :complejoId')
+                         ->groupBy('objetive.ref')
+                         ->setParameter('lineStrategicId', $lineStrategicId)
+                         ->setParameter('complejoId', $complejoId)
+                         ->setParameter('objetiveLevelId', ObjetiveLevel::LEVEL_ESTRATEGICO)
+                        ;
+                return $qb;
+                };
+            }
+
+            //$complejoId = $gerencia->getComplejo()->getId();
+            //$objetiveLevelId = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('levelName' => $objetiveLevelName[ObjetiveLevel::LEVEL_ESTRATEGICO]))->getId();
+
+            if ($objetiveParent) {
+                $formOptions['data'] = $objetiveParent;
+            }
+
+            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                if($this->typeOperative){
+                    $formOptions['mapped'] = false;
+                    return $form->add('parent_strategic', 'entity', $formOptions);
+                } else{
+                    return $form->add('parent', 'entity', $formOptions);
+                }
+            } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                $formOptions['mapped'] = false;
+                return $form->add('parent_strategic', 'entity', $formOptions);
+            }
         }
+        
     }
 
 }

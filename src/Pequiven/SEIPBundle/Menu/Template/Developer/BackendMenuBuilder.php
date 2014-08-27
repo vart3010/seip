@@ -173,7 +173,7 @@ class BackendMenuBuilder extends MenuBuilder
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.main', $section)));
                 
-                
+                //Lista de Objetivos
                 $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.list',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'list',
@@ -221,7 +221,7 @@ class BackendMenuBuilder extends MenuBuilder
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.operative', $section)));
                     //Si el usuario logueado es Rol Gerente Primera Línea o Gerente Primera Línea Asignado
-                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
                         $thirdchild->addChild('arrangement_strategic.objetives.add.tactic', array(
                             'route' => 'pequiven_objetive_menu_add_tactic',
                         ))
