@@ -377,6 +377,7 @@
                 //Inicializamos el select de Indicadores
                 chargeSelectIndicator();
                
+               //Si el usuario es de ZIV
                if(inputHiddenComplejoName.val() === 'ZIV'){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
@@ -403,6 +404,15 @@
                         selectGerenciaSecond.select2("enable",false);
                         sectionCheckGerencia.hide();
                     }
+               } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
+                   
+               } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                   selectGerenciaSecond.select2({
+                       
+                   });
+                   displaySelectGerenciaSecondFromGerenciaFirst();
+               } else if (inputHiddenRoleName.val() === 'ROLE_MANAGER_SECOND' || inputHiddenRoleName.val() === 'ROLE_MANAGER_SECOND_AUX'){
+                   
                }
                
                //Incializamos el formato numerico para el input de Peso
@@ -486,12 +496,14 @@
                 //chargeSelectIndicator();
                 //Reiniciamos el Input de Referencia del Objetivo
                 inputRef.val("");
-                selectComplejo.select2("val",'');
-                selectComplejo.select2("enable",false);
-                selectGerencia.select2("val",'');
-                selectGerencia.select2("enable",false);
-                selectGerenciaSecond.select2("val",'');
-                selectGerenciaSecond.select2("enable",false);
+                if(inputHiddenComplejoName.val() === 'ZIV'){
+                    selectComplejo.select2("val",'');
+                    selectComplejo.select2("enable",false);
+                    selectGerencia.select2("val",'');
+                    selectGerencia.select2("enable",false);
+                    selectGerenciaSecond.select2("val",'');
+                    selectGerenciaSecond.select2("enable",false);
+                }
             });
             //Al seleccionar alguna opción en el select de Objetivo Estratégico
             selectObjetiveStrategic.on("select2-selecting", function(e) {
@@ -500,12 +512,14 @@
             //Al cambiar el select de Objetivo Estratégico
             selectObjetiveStrategic.change(function() {
                 inputRef.val("");
-                selectComplejo.select2("val",'');
-                selectComplejo.select2("enable",false);
-                selectGerencia.select2("val",'');
-                selectGerencia.select2("enable",false);
-                selectGerenciaSecond.select2("val",'');
-                selectGerenciaSecond.select2("enable",false);
+                if(inputHiddenComplejoName.val() === 'ZIV'){
+                    selectComplejo.select2("val",'');
+                    selectComplejo.select2("enable",false);
+                    selectGerencia.select2("val",'');
+                    selectGerencia.select2("enable",false);
+                    selectGerenciaSecond.select2("val",'');
+                    selectGerenciaSecond.select2("enable",false);
+                }
             });
             //Al seleccionar alguna opción en el select de Objetivo Táctico
             selectObjetiveTactic.on("select2-selecting", function(e) {
@@ -524,6 +538,12 @@
                     displaySelectGerenciaFirstFromComplejo();
                 }
             });
+            
+            selectGerencia.change(function() {
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                    displaySelectGerenciaSecondFromGerenciaFirst();
+                }
+            })
            
            //Al hacer click sobre el check de gerencias
            checkGerencia.click(function() {
@@ -580,17 +600,20 @@
                             $('#pequiven_objetive_operative_registration_parent option').remove();
                             selectObjetiveTactic.append('<option></option>');
                             chargeSelect2ObjetiveTactic();
-                            //Reiniciamos el select de Complejo y desactivamos respectivamente
-                            $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
-                            selectComplejo.select2("val","");
-                            selectComplejo.select2("enable",false);
-                            //Reiniciamos el select de Gerencia y desactivamos respectivamente
-                            $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
-                            $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
-                            $("#pequiven_objetive_operative_registration_gerencia").select2("val","");
-                            $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
-                            //Escondemos la sección del check de seleccionar las gerencias de los complejos seleccionados
-                            sectionCheckGerencia.hide();
+                            
+                            if(inputHiddenComplejoName.val() === 'ZIV'){
+                                //Reiniciamos el select de Complejo y desactivamos respectivamente
+                                $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
+                                selectComplejo.select2("val","");
+                                selectComplejo.select2("enable",false);
+                                //Reiniciamos el select de Gerencia y desactivamos respectivamente
+                                $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
+                                $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
+                                $("#pequiven_objetive_operative_registration_gerencia").select2("val","");
+                                $("#pequiven_objetive_operative_registration_gerencia").select2("enable",false);
+                                //Escondemos la sección del check de seleccionar las gerencias de los complejos seleccionados
+                                sectionCheckGerencia.hide();
+                            }
                             chargeSelect2ObjetiveStrategic("full");
                         } else{
                             if(typeof data[0].initial === 'undefined'){
@@ -623,16 +646,18 @@
                             }
                             selectObjetiveTactic.select2("val", "");
                             inputRef.val("");
-                            //Reiniciamos el select de Complejo y desactivamos respectivamente
-                            $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
-                            selectComplejo.select2("val","");
-                            selectComplejo.select2("enable",false);
-                            //Reiniciamos el select de Gerencia y desactivamos respectivamente
-                            $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
-                            $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
-                            selectGerencia.select2("val","");
-                            selectGerencia.select2("enable",false);
-                            sectionCheckGerencia.hide();
+                            if(inputHiddenComplejoName.val() === 'ZIV'){
+                                //Reiniciamos el select de Complejo y desactivamos respectivamente
+                                $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
+                                selectComplejo.select2("val","");
+                                selectComplejo.select2("enable",false);
+                                //Reiniciamos el select de Gerencia y desactivamos respectivamente
+                                $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
+                                $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
+                                selectGerencia.select2("val","");
+                                selectGerencia.select2("enable",false);
+                                sectionCheckGerencia.hide();
+                            }
                             chargeSelect2ObjetiveTactic("full");
                         } else{
                             if(typeof data[0].initial === 'undefined'){

@@ -27,7 +27,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         // GERENCIA COMPLEJO PETROQUIMICO MORON
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Consultoría Jurídica y Representante Jud');
+        $gerencia->setDescription('Consultoría Jurídica y Representante Jud Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
@@ -45,7 +45,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Proyectos');
+        $gerencia->setDescription('Dirección Ejecutiva de Proyectos Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
@@ -54,7 +54,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos');
+        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
@@ -72,7 +72,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Estimación de Costos');
+        $gerencia->setDescription('Gcia. de Estimación de Costos Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
@@ -81,7 +81,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Prevención y Ctrl.de Perdid');
+        $gerencia->setDescription('Gcia. de Prevención y Ctrl.de Perdid Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
@@ -90,7 +90,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa A.I.T.');
+        $gerencia->setDescription('Gcia A.I.T. Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
@@ -99,7 +99,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Asuntos Públicos');
+        $gerencia->setDescription('Gcia. de Asuntos Públicos Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
@@ -108,7 +108,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Finanzas');
+        $gerencia->setDescription('Gcia. de Finanzas Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
@@ -117,7 +117,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Salud');
+        $gerencia->setDescription('Gcia. de Salud Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
@@ -126,7 +126,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente');
+        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
@@ -135,7 +135,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gerencia Corporativa SIG');
+        $gerencia->setDescription('Gerencia SIG Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
@@ -214,7 +214,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Personal Asignado');
+        $gerencia->setDescription('Personal Asignado Morón');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-01'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
@@ -225,7 +225,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         // GERENCIA COMPLEJO PETROQUIMICO ANA MARIA CAMPOS
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Consultoría Jurídica y Representante Jud');
+        $gerencia->setDescription('Consultoría Jurídica y Representante Jud AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
@@ -234,7 +234,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos');
+        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
@@ -243,7 +243,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Estimación de Costos');
+        $gerencia->setDescription('Gcia. de Estimación de Costos AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
@@ -252,7 +252,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Prevención y Ctrl.de Perdid');
+        $gerencia->setDescription('Gcia. de Prevención y Ctrl.de Perdid AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
@@ -261,7 +261,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.Plani.Estra.y Nvos.Desarrollos');
+        $gerencia->setDescription('Gcia. Plani.Estra.y Nvos.Desarrollos AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]);
@@ -270,7 +270,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa A.I.T.');
+        $gerencia->setDescription('Gcia. A.I.T. AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
@@ -279,7 +279,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Asuntos Públicos');
+        $gerencia->setDescription('Gcia. de Asuntos Públicos AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
@@ -288,7 +288,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Finanzas');
+        $gerencia->setDescription('Gcia. de Finanzas AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
@@ -297,7 +297,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Salud');
+        $gerencia->setDescription('Gcia. de Salud AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
@@ -315,7 +315,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente');
+        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
@@ -337,12 +337,12 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_REG_DESARROLLO_INTEG_COMUNITARIO_AMC]);
-        $gerencia->setModular(true);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-35',$gerencia);
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gerencia Corporativa SIG');
+        $gerencia->setDescription('Gerencia SIG AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
@@ -413,7 +413,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Personal Asignado');
+        $gerencia->setDescription('Personal Asignado AMC');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-02'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
@@ -424,7 +424,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         // GERENCIA COMPLEJO PETROQUIMICO GD JOSE ANTONIO ANZOATEGUI
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Consultoría Jurídica y Representante Jud');
+        $gerencia->setDescription('Consultoría Jurídica y Representante Jud J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
@@ -433,7 +433,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Proyectos');
+        $gerencia->setDescription('Dirección Ejecutiva de Proyectos J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
@@ -442,7 +442,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos');
+        $gerencia->setDescription('Dirección Ejecutiva de Recursos Humanos J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_RECURSOS_HUMANOS]);
@@ -451,7 +451,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Estimación de Costos');
+        $gerencia->setDescription('Gcia. de Estimación de Costos J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ESTIMACION_COSTOS]);
@@ -460,7 +460,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Prevención y Ctrl.de Perdid');
+        $gerencia->setDescription('Gcia. de Prevención y Ctrl.de Perdid J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);
@@ -469,7 +469,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa A.I.T.');
+        $gerencia->setDescription('Gcia. A.I.T. J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_AIT]);
@@ -478,7 +478,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Asuntos Públicos');
+        $gerencia->setDescription('Gcia. de Asuntos Públicos J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_ASUNTOS_PUBLICOS]);
@@ -487,7 +487,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Finanzas');
+        $gerencia->setDescription('Gcia. de Finanzas J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_FINANZAS]);
@@ -496,7 +496,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corporativa de Salud');
+        $gerencia->setDescription('Gcia. de Salud J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SALUD]);
@@ -505,7 +505,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente');
+        $gerencia->setDescription('Gcia.de Seguridad, Higiene y Ambiente J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SHA]);
@@ -527,7 +527,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_REG_DESARROLLO_INTEG_COMUNITARIO_JAA]);
-        $gerencia->setModular(true);
+        $gerencia->setVinculante(true);
         $this->addReference('Gerencia-56',$gerencia);
             $manager->persist($gerencia);
 
@@ -541,7 +541,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gerencia Corporativa SIG');
+        $gerencia->setDescription('Gerencia SIG J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_SIG]);
@@ -595,7 +595,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Personal Asignado');
+        $gerencia->setDescription('Personal Asignado J.A.A.');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-03'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PERSONAL_ASIGNADO]);
@@ -606,7 +606,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         // GERENCIA PROYECTO NAVAY
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Consultoría Jurídica y Representante Jud');
+        $gerencia->setDescription('Consultoría Jurídica y Representante Jud Navay');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_CONSULTORIA_JURIDICA]);
@@ -615,7 +615,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Proyectos');
+        $gerencia->setDescription('Dirección Ejecutiva de Proyectos Navay');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
@@ -624,7 +624,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.Plani.Estra.y Nvos.Desarrollos');
+        $gerencia->setDescription('Gcia. Plani.Estra.y Nvos.Desarrollos Navay');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-04'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]);
@@ -635,7 +635,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
         // GERENCIA PROYECTO PARAGUANA
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Dirección Ejecutiva de Proyectos');
+        $gerencia->setDescription('Dirección Ejecutiva de Proyectos Paraguana');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-05'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PROYECTOS]);
@@ -644,7 +644,7 @@ class GerenciaFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($gerencia);
 
         $gerencia = new Gerencia();
-        $gerencia->setDescription('Gcia.Corp.de Prevención y Ctrl.de Perdid');
+        $gerencia->setDescription('Gcia.de Prevención y Ctrl.de Perdid Paraguana');
         $gerencia->setEnabled(1);
         $gerencia->setComplejo($this->getReference('Complejo-05'));
         $gerencia->setRef($refNameArray[Gerencia::GERENCIA_REF_PCP]);

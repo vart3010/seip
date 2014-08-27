@@ -33,6 +33,7 @@ class ObjetiveRepository extends baseEntityRepository {
         $query = $em->createQueryBuilder()
                     ->select('o')
                     ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                    ->andWhere('o.enabled = 1')
                     ->groupBy('o.ref');
         if(isset($options['type'])){//Para los select
             if($options['type'] === 'TACTIC_ZIV' || $options['type'] === 'OPERATIVE_ZIV'){
@@ -74,6 +75,7 @@ class ObjetiveRepository extends baseEntityRepository {
         $query = $em->createQueryBuilder()
                     ->select('o')
                     ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                    ->andWhere('o.enabled = 1')
                     ->groupBy('o.ref');
         
         if($options['type_ref'] === 'STRATEGIC_REF'){
@@ -153,7 +155,7 @@ class ObjetiveRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-
+        $queryBuilder->andWhere('o.enabled = 1');
         if(isset($criteria['description'])){
             $description = $criteria['description'];
             unset($criteria['description']);
