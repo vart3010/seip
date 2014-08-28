@@ -77,6 +77,19 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setEnabled(true);
         $this->addReference('general_complejo_moron', $user);
             $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('vescalona_ggm');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('victorescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-01'));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('general_complejo_moron'));
+            $manager->persist($user);
         
         $user = new User();
         $user->setUsername('wnavarro');
@@ -90,6 +103,19 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setEnabled(true);
         $this->addReference('general_complejo_amc', $user);
             $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('vescalona_ggamc');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('victorescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-02'));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('general_complejo_amc'));
+            $manager->persist($user);
         
         $user = new User();
         $user->setUsername('mgracia');
@@ -102,6 +128,19 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->addRole('ROLE_GENERAL_COMPLEJO');
         $user->setEnabled(true);
         $this->addReference('general_complejo_jaa', $user);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('vescalona_ggjaa');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('victorescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-03'));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('general_complejo_jaa'));
             $manager->persist($user);
             
         //Usuarios Gerente 1ra Línea
