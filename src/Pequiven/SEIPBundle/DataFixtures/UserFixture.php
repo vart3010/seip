@@ -143,6 +143,32 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setParent($this->getReference('general_complejo_jaa'));
             $manager->persist($user);
             
+        $user = new User();
+        $user->setUsername('fquintero');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Freddy');
+        $user->setLastName('Quintero');
+        $user->setEmail('freddyquintero@pequiven.com');
+        $user->setNumPersonal(10012577);
+        $user->setComplejo($this->getReference('Complejo-04'));
+        $user->addRole('ROLE_GENERAL_COMPLEJO');
+        $user->setEnabled(true);
+        $this->addReference('general_complejo_navay', $user);
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('vescalona_ggnavay');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Victor');
+        $user->setLastName('Escalona');
+        $user->setEmail('victorescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference('Complejo-04'));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('general_complejo_navay'));
+            $manager->persist($user);
+            
         //Usuarios Gerente 1ra Línea
         $user = new User();
         $user->setUsername('manager_first');

@@ -29,11 +29,11 @@ class Complejo {
     
     public function __construct() {
         $this->complejo_name[self::COMPLEJO_DEFAULT] = 'ZIV';
-        $this->complejo_name[self::COMPLEJO_CPMORON] = 'CPMOR';
+        $this->complejo_name[self::COMPLEJO_CPMORON] = 'CPMORON';
         $this->complejo_name[self::COMPLEJO_CPAMC] = 'CPAMC';
         $this->complejo_name[self::COMPLEJO_CPJAA] = 'CPJAA';
-        $this->complejo_name[self::COMPLEJO_PRONAVAY] = 'PRONAV';
-        $this->complejo_name[self::COMPLEJO_PROPARAGUANA] = 'PROPAR';
+        $this->complejo_name[self::COMPLEJO_PRONAVAY] = 'NAVAY';
+        $this->complejo_name[self::COMPLEJO_PROPARAGUANA] = 'PARAGUANA';
         $this->complejo_name[self::COMPLEJO_ZIV] = 'ZIV';
     }
     
