@@ -17,4 +17,24 @@
         </service>
     </services>
     -->
+    <services>
+        <service id="pequiven.repository.indicatorstrategic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+        <service id="pequiven.repository.indicatortactic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+        <service id="pequiven.repository.indicatoroperative" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+    </services>
 </container>

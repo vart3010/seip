@@ -65,9 +65,9 @@ class Complejo extends modelComplejo
     /**
      * @var string
      *
-     * @ORM\Column(name="complejo_name", type="string", length=50)
+     * @ORM\Column(name="ref", type="string", length=50)
      */
-    private $complejoName;
+    private $ref;
 
     /**
      * @var boolean
@@ -226,25 +226,25 @@ class Complejo extends modelComplejo
     }
 
     /**
-     * Set complejoName
+     * Set ref
      *
-     * @param string $complejoName
+     * @param string $ref
      * @return Complejo
      */
-    public function setComplejoName($complejoName)
+    public function setRef($ref)
     {
-        $this->complejoName = $complejoName;
+        $this->ref = $ref;
 
         return $this;
     }
 
     /**
-     * Get complejoName
+     * Get ref
      *
      * @return string 
      */
-    public function getComplejoName()
+    public function getRef()
     {
-        return $this->complejoName;
+        return $this->ref;
     }
 }

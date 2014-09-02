@@ -13,6 +13,7 @@ use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
  *
  * @ORM\Table(name="seip_c_gerencia")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
+ * @author matias
  */
 class Gerencia extends modelGerencia
 {
@@ -56,23 +57,33 @@ class Gerencia extends modelGerencia
     private $userUpdatedAt;
 
     /**
+     * Descripción
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
     private $description;
     
-    /** Complejo
+    /** 
+     * Complejo
      * @var=\Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
     
+    /** 
+     * Dirección
+     * @var=\Pequiven\MasterBundle\Entity\Direction
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
+     * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
+     */
+    private $direction;
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="ref", type="string", length=70, nullable=true)
+     * @ORM\Column(name="ref", type="string", length=100, nullable=true)
      */
     private $ref;
     
@@ -95,7 +106,7 @@ class Gerencia extends modelGerencia
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
+    private $enabled = true;
     
 
     /**
@@ -336,5 +347,28 @@ class Gerencia extends modelGerencia
     public function getVinculante()
     {
         return $this->vinculante;
+    }
+
+    /**
+     * Set direction
+     *
+     * @param \Pequiven\MasterBundle\Entity\Direction $direction
+     * @return Gerencia
+     */
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
+    {
+        $this->direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return \Pequiven\MasterBundle\Entity\Direction 
+     */
+    public function getDirection()
+    {
+        return $this->direction;
     }
 }

@@ -10,13 +10,14 @@ namespace Pequiven\IndicatorBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 
 /**
  * Description of IndicatorRepository
  *
  * @author matias
  */
-class IndicatorRepository extends EntityRepository {
+class IndicatorRepository extends baseEntityRepository {
     //put your code here
     
     public function getByOptionRef($options = array()){
@@ -51,9 +52,7 @@ class IndicatorRepository extends EntityRepository {
                     ->select('i')
                     ->from('\Pequiven\IndicatorBundle\Entity\Indicator', 'i')
                     ->groupBy('i.refParent')
-                    ->andWhere('i.tmp = :tmpStatus')
                     ->andWhere('i.refParent = :refParentId')
-                    ->setParameter('tmpStatus', true)
                     ->setParameter('refParentId', $options['refParent'])
                 ;
         
@@ -69,5 +68,43 @@ class IndicatorRepository extends EntityRepository {
         //var_dump($q->getSQL());
         //die();
         return $q->getResult();
+    }
+    
+    /**
+     * Crea un paginador para los indicadores de acuerdo al nivel del mismo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.tmp = 0');
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
+        }
+//        if(isset($criteria['rif'])){
+//            $rif = $criteria['rif'];
+//            unset($criteria['rif']);
+//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
+//        }
+        if(isset($criteria['indicatorLevel'])){
+            $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
+        }
+        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+        //$queryBuilder->leftJoin('PequivenObjetiveBundle:Objetive', 'ob', \Doctrine\ORM\Query\Expr\Join::WITH, 'ob.ref = o.refParent');
+        //var_dump($queryBuilder->getQuery()->getSQL());
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        //var_dump('<br><br>');
+        //var_dump($queryBuilder->getQuery()->getSQL());
+//        die();
+        return $this->getPaginator($queryBuilder);
     }
 }

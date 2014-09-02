@@ -136,6 +136,28 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Indicador estratégico
+        pequiven.indicatorstrategic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorStrategicController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        #Indicador táctico
+        pequiven.indicatortactic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorTacticController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        #Indicador operativo
+        pequiven.indicatoroperative:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorOperativeController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+                
         #Maestro gerencia 1ra línea
         pequiven.gerenciafirst:
             driver: doctrine/orm

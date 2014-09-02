@@ -29,12 +29,16 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class ObjetiveStrategicController extends baseController {
     
     
+    /**
+     * Función que retorna la vista con la lista de los objetivos estratégicos
+     * @Template("PequivenObjetiveBundle:Strategic:list.html.twig")
+     * @return type
+     */
     public function listAction(){
         
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array(
-
-            ));
+        return array(
+            
+        );
     }
     
     /**
@@ -96,16 +100,17 @@ class ObjetiveStrategicController extends baseController {
             $view->setData($resources);
         }else{
             $formatData = $request->get('_formatData','default');
-//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
-//            die();
+            
             $view->setData($resources->toArray('',array(),$formatData));
+            
         }
         return $this->handleView($view);
     }
     
     /**
-     * 
+     * Función que registra un objetivo estratégico
      * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenObjetiveBundle:Strategic:register.html.twig")
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
@@ -171,16 +176,20 @@ class ObjetiveStrategicController extends baseController {
             }
             $this->createArrangementRange($objetives, $data);
             
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'strategic')));
+            return $this->redirect($this->generateUrl('pequiven_objetive_home', 
+                    array('type' => 'objetiveStrategic',
+                          'action' => 'REGISTER_SUCCESSFULL'
+                        )
+                    ));
         }
         
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Strategic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                ));
+        return array(
+            'form' => $form->createView(),
+            );
     }
     
      /**
-      * Función que guarda en la tabla intermedia el rango de gestión del objetivo creado
+      * Función que guarda en la tabla intermedia el rango de gestión (semáforo) del objetivo creado
       * @param type $objetives
       * @param type $data
       * @return boolean
@@ -278,6 +287,8 @@ class ObjetiveStrategicController extends baseController {
                     for($i = 0; $i < $totalIndicators; $i++){
                         $objectObjetiveIndicator = clone $objetiveIndicator;
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $objectObjetiveIndicator->setIndicator($indicator);
                         $em->persist($objectObjetiveIndicator);
                     }

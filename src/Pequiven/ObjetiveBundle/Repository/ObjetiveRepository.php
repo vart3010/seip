@@ -171,7 +171,7 @@ class ObjetiveRepository extends baseEntityRepository {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
         $queryBuilder->groupBy('o.ref');
-        $queryBuilder->orderBy('o.id');
+        $queryBuilder->orderBy('o.ref');
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
         

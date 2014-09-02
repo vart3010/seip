@@ -2,7 +2,7 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
-
+{% block title %}- {{ 'form.title.addObjetiveOperative'|trans }}{% endblock %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block javascripts_base %}
@@ -545,8 +545,7 @@
                     displaySelectComplejoFromObjetiveTactic(e);
                     //$("#pequiven_objetive_operative_registration_complejo").show();
                 } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                    console.log('hola');
-                    displaySelectGerenciaFirstFromComplejo();
+                    displaySelectGerenciaFirstFromComplejo(null,e);
                 }
                 chargeSelectIndicator();
             })
@@ -816,7 +815,7 @@
             }
             
             //Función que actualiza el select de gerencia de 1ra línea en caso de que el usuario logueado sea de Sede Corporativa
-            function displaySelectGerenciaFirstFromComplejo(complejos){
+            function displaySelectGerenciaFirstFromComplejo(complejos,e){
             var data = '';
                 if(complejos instanceof Array){//En caso de que la data provenga al momento de cambiar el select de Objetivo Táctico
                     var dataComplejo = '';
@@ -835,7 +834,7 @@
                 } else{
                     data = {
                         complejos: $.trim(selectComplejo.val()),
-                        objetiveTacticId: $.trim(selectObjetiveTactic.val()),
+                        objetiveTacticId: $.trim(e.val),
                     };
                 }
                 $.ajax({
@@ -1038,12 +1037,12 @@
            //Función que carga el select2 de Indicadores
            function chargeSelect2Indicators(type){
                 selectIndicators.select2({
-                    placeholder: '{{ 'form.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                     formatNoMatches: function(term) {
                         if(type == 'full'){
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         } else{
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         }
                     }
                 });

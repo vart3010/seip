@@ -28,9 +28,14 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
-            <!-- Hidden con la Referencia del Objetivo que se esta creando -->
+            <!-- Hidden con la Referencia del Objetivo Estratégico que se esta creando -->
             <div>
                 {{ form_widget(form.refObjetive) }}
+            </div>
+            
+            <!-- Hidden con la L+inea Estratégica del Objetivo Estratégico que se esta creando -->
+            <div>
+                {{ form_widget(form.lineStrategicObjetive) }}
             </div>
             
             <!-- Descripción -->
@@ -187,7 +192,8 @@
                 selectArrangementRangeTypeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
                 selectArrangementRangeTypeMiddle = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeMiddle"),//Select de Tipo de Rango Alto
                 selectArrangementRangeTypeBottom = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Alto
-                inputHiddenRefParent = $("#pequiven_indicator_strategicfo_registration_refObjetive"),//Input Hidden de la Referencia del Objetivo
+                inputHiddenRefParent = $("#pequiven_indicator_strategicfo_registration_refObjetive"),//Input Hidden de la Referencia del Objetivo Estratégico
+                inputHiddenLineStrategicParent = $("#pequiven_indicator_strategicfo_registration_lineStrategicObjetive"),//Input Hidden de la Línea Estratégica del Objetivo Estratégico
                 sectionTopBasic = $("#sectionTopBasic"),//Input Hidden de la Referencia del Objetivo
                 sectionTopCompound = $("#sectionTopCompound"),//Input Hidden de la Referencia del Objetivo
                 sectionMiddleBasic = $("#sectionMiddleBasic"),//Input Hidden de la Referencia del Objetivo
@@ -195,6 +201,7 @@
                 sectionBottomBasic = $("#sectionBottomBasic"),//Input Hidden de la Referencia del Objetivo
                 sectionBottomCompound = $("#sectionBottomCompound"),//Input Hidden de la Referencia del Objetivo
                 inputRefParent = $("#pequiven_objetive_strategic_registration_ref",window.parent.document),//Input de Referencia de la ventana Padre del Objetivo
+                inputLineStrategicParent = $("#pequiven_objetive_strategic_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
                 inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
                 inputHiddenTypeArrangementRangeMiddle = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeMiddle"),//Input Hidden del tipo de rango de gestión medio
                 inputHiddenTypeArrangementRangeBottom = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
@@ -219,15 +226,16 @@
            
            function charge(){
                //Inicializamos el select2 de Fórmula
-               selectFormula.select2({
-                   placeholder: '{{ 'form.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
-               });
+                chargeSelect2Formula();
        
                //Incializamos el formato numerico para el input de Meta
                inputGoal.number(true,3,',','.');
                
                //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                inputHiddenRefParent.val(inputRefParent.val());
+               
+                //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
+               inputHiddenLineStrategicParent.val(inputLineStrategicParent.val());
                
                //Actualizamos la referencia del indicador a crear
                displayIndicatorRef();
@@ -311,6 +319,20 @@
                     }
                  });
            }
+           
+           //Función que carga el select2 de Fórmulas
+            function chargeSelect2Formula(type){
+                selectFormula.select2({
+                    placeholder: '{{ 'form.messages.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "{{ 'form.messages.selectFormulaFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}";
+                        } else{
+                            return "{{ 'form.messages.selectFormulaFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}";
+                        }
+                    }
+                });
+            }
            
         });
     </script>

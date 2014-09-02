@@ -2,7 +2,7 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
-
+{% block title %}- {{ 'form.title.addObjetiveTactic'|trans }}{% endblock %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block javascripts_base %}
@@ -676,12 +676,12 @@
            //Función que carga el select2 de Indicadores
            function chargeSelect2Indicators(type){
                 selectIndicators.select2({
-                    placeholder: '{{ 'form.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                     formatNoMatches: function(term) {
                         if(type == 'full'){
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         } else{
-                            return "<a href='#lineStrategic'>{{ 'form.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
                         }
                     }
                 });

@@ -13,9 +13,9 @@
             {% elseif app.user.hasRole('ROLE_SUPERVISER') %}
                 {{ 'pequiven_seip.role.superviser'|trans }}
             {% elseif app.user.hasRole('ROLE_GENERAL_COMPLEJO') %}
-                {{ 'pequiven_seip.role.general_complejo'|trans({ '%complejo%': app.user.complejo.complejoName }) }}
+                {{ 'pequiven_seip.role.general_complejo'|trans({ '%complejo%': app.user.complejo.ref }) }}
             {% elseif app.user.hasRole('ROLE_GENERAL_COMPLEJO_AUX') %}
-                {{ 'pequiven_seip.role.general_complejo_aux'|trans({ '%complejo%': app.user.complejo.complejoName }) }}
+                {{ 'pequiven_seip.role.general_complejo_aux'|trans({ '%complejo%': app.user.complejo.ref }) }}
             {% elseif app.user.hasRole('ROLE_MANAGER_FIRST') %}
                 {{ 'pequiven_seip.role.manager_first'|trans }}
             {% elseif app.user.hasRole('ROLE_MANAGER_FIRST_AUX') %}

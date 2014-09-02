@@ -222,9 +222,7 @@
            function charge(){
                
                //Inicializamos el select2 de Fórmula
-               selectFormula.select2({
-                   placeholder: '{{ 'form.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
-               });
+               chargeSelect2Formula();
        
                //Incializamos el formato numerico para el input de Meta
                inputGoal.number(true,3,',','.');
@@ -313,6 +311,20 @@
                     }
                  });
            }
+           
+           //Función que carga el select2 de Fórmulas
+            function chargeSelect2Formula(type){
+                selectFormula.select2({
+                    placeholder: '{{ 'form.messages.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    formatNoMatches: function(term) {
+                        if(type == 'full'){
+                            return "{{ 'form.messages.selectFormulaFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}";
+                        } else{
+                            return "{{ 'form.messages.selectFormulaFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}";
+                        }
+                    }
+                });
+            }
            
         });
     </script>

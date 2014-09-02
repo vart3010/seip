@@ -69,6 +69,13 @@ class GerenciaSecond extends modelGerenciaSecond {
      */
     private $description;
     
+    /** Complejo
+     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
+     */
+    private $complejo;
+    
     /** Gerencia
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
@@ -79,9 +86,23 @@ class GerenciaSecond extends modelGerenciaSecond {
     /**
      * @var string
      *
-     * @ORM\Column(name="ref", type="string", length=70, nullable=true)
+     * @ORM\Column(name="ref", type="string", length=100, nullable=true)
      */
     private $ref;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="modular", type="boolean", nullable=true)
+     */
+    private $modular = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vinculante", type="boolean", nullable=true)
+     */
+    private $vinculante = false;
 
     /**
      * @var boolean
@@ -282,5 +303,74 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getRef()
     {
         return $this->ref;
+    }
+
+    /**
+     * Set complejo
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
+     * @return GerenciaSecond
+     */
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
+    {
+        $this->complejo = $complejo;
+
+        return $this;
+    }
+
+    /**
+     * Get complejo
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejo()
+    {
+        return $this->complejo;
+    }
+
+    /**
+     * Set modular
+     *
+     * @param boolean $modular
+     * @return GerenciaSecond
+     */
+    public function setModular($modular)
+    {
+        $this->modular = $modular;
+
+        return $this;
+    }
+
+    /**
+     * Get modular
+     *
+     * @return boolean 
+     */
+    public function getModular()
+    {
+        return $this->modular;
+    }
+
+    /**
+     * Set vinculante
+     *
+     * @param boolean $vinculante
+     * @return GerenciaSecond
+     */
+    public function setVinculante($vinculante)
+    {
+        $this->vinculante = $vinculante;
+
+        return $this;
+    }
+
+    /**
+     * Get vinculante
+     *
+     * @return boolean 
+     */
+    public function getVinculante()
+    {
+        return $this->vinculante;
     }
 }

@@ -150,6 +150,7 @@ class BackendMenuBuilder extends MenuBuilder
      */
     
     function addArrangementStrategicMenu(ItemInterface $menu, $section) {
+        //Menú Nivel 1: Gestión Estratégica
         $child = $this->factory->createItem('arrangement_strategic',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
@@ -164,16 +165,16 @@ class BackendMenuBuilder extends MenuBuilder
 //                    'route' => '',
 //                    ))
 //                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement.objetives', $section)));
-        
-                $subchild = $this->factory->createItem('arrangement_strategic.objetives',
-                        $this->getSubLevelOptions(array(
-                        'uri' => 'objetive',
-                        'labelAttributes' => array('icon' => 'icon-book',),
-                        ))
-                    )
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.main', $section)));
+            //Menú Nivel 2: Objetivos
+            $subchild = $this->factory->createItem('arrangement_strategic.objetives',
+                    $this->getSubLevelOptions(array(
+                    'uri' => 'objetive',
+                    'labelAttributes' => array('icon' => 'icon-book',),
+                    ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.main', $section)));
                 
-                //Lista de Objetivos
+                //Menú Nivel 3: Lista de Objetivos
                 $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.list',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'list',
@@ -195,9 +196,10 @@ class BackendMenuBuilder extends MenuBuilder
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                     
-                $subchild->addChild($thirdchild);
-
-                if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
+            $subchild->addChild($thirdchild);
+            
+                //Menú Nivel 3: Registro de Objetivos
+                if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV','ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -220,7 +222,7 @@ class BackendMenuBuilder extends MenuBuilder
                             'route' => 'pequiven_objetive_menu_add_operative',
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.operative', $section)));
-                    //Si el usuario logueado es Rol Gerente Primera Línea o Gerente Primera Línea Asignado
+                    //Si el usuario logueado es Rol Gerente Primera Línea, Gerente Primera Línea Asignado, Gerente General de Complejo o Gerente General de Complejo Asignado
                     } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
                         $thirdchild->addChild('arrangement_strategic.objetives.add.tactic', array(
                             'route' => 'pequiven_objetive_menu_add_tactic',
@@ -242,7 +244,7 @@ class BackendMenuBuilder extends MenuBuilder
                 }
             $child->addChild($subchild);
             
-            //Sub menú Indicadores
+            //Menú Nivel 2: Indicadores
                 $subchild = $this->factory->createItem('arrangement_strategic.indicators',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -250,11 +252,75 @@ class BackendMenuBuilder extends MenuBuilder
                         ))
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.main', $section)));
-                $subchild
-                        ->addChild('arrangement_strategic.objetives.list', array(
-                            'route' => 'pequiven_indicator_menu_list',
+                
+                    //Menú Nivel 3: Lista de Indicadores
+                    $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.list',
+                                $this->getSubLevelOptions(array(
+                                    'uri' => 'list',
+                                    'labelAttributes' => array('icon' => 'icon-book'),
+                                ))
+                            )
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.main',$section)));
+
+                    $thirdchild->addChild('arrangement_strategic.indicators.list.strategic', array(
+                                'route' => 'pequiven_indicator_menu_list_strategic',
                             ))
-                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list', $section)));
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.indicators.list.tactic', array(
+                                'route' => 'pequiven_indicator_menu_list_tactic',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
+                                'route' => 'pequiven_indicator_menu_list_operative',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+
+                $subchild->addChild($thirdchild);
+                
+                    //Menú Nivel 3: Registro de Indicadores
+                    if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV','ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                        $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.add',
+                                $this->getSubLevelOptions(array(
+                                    'uri' => 'add',
+                                    'labelAttributes' => array('icon' => 'icon-book'),
+                                ))
+                            )
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.main',$section)));
+
+                        //Si el usuario logueado es Rol Ejecutivo o Ejecutivo Asignado
+                        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.strategic', array(
+                                'route' => 'pequiven_indicator_menu_add_strategic',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.strategic', $section)));
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.tactic', array(
+                                'route' => '',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
+                                'route' => '',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
+                        //Si el usuario logueado es Rol Gerente Primera Línea, Gerente Primera Línea Asignado, Gerente General de Complejo o Gerente General de Complejo Asignado
+                        } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.tactic', array(
+                                'route' => '',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
+                                'route' => '',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
+                        //Si el usuario logueado es Rol Gerente Segunda Línea o Gerente Segunda Línea Asignado
+                        } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                            $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
+                                'route' => '',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
+                        }
+
+                        $subchild->addChild($thirdchild);
+                    }
             $child->addChild($subchild);
         
         $menu->addChild($child);

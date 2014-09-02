@@ -46,22 +46,17 @@ class ObjetiveController extends Controller{
     
     /**
      * Función que muestra la página inicial de los objetivos
+     * @Template("PequivenObjetiveBundle:Default:index.html.twig")
      * @param type $type
+     * @param type $action
      * @return type
      */
-    public function showHomeAction($type){
-        if($type == 'strategic'){
-            $message = "Objetivo Estratégico creado exitosamente";
-        } elseif ($type == 'tactic'){
-            $message = "Objetivo Táctico creado exitosamente";
-        } elseif ($type == 'operative'){
-            $message = "Objetivo Operativo creado exitosamente";
-        }
-        
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
-        array('message' => $message,
-            'notification' => true
-            ));
+    public function showHomeAction($type,$action){
+        return array(
+            'type' => $type,
+            'notification' => true,
+            'action' => $action
+        );
     }
     
     /**

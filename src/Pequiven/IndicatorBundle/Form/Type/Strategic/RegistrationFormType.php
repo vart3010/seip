@@ -15,6 +15,7 @@ use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldListener;
 use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
 /**
  * Description of RegistrationFormType
@@ -22,14 +23,28 @@ use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
  * @author matias
  */
 class RegistrationFormType extends AbstractType {
+    protected $typeForm;
+    public function __construct($type = 'fromObjetive') {
+        $this->typeForm = $type;
+    }
     
     public function buildForm(FormBuilderInterface $builder, array $options){
         $container = PequivenIndicatorBundle::getContainer();
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         
-        //Referencia del Objetivo Estratégico al cual se le podrían añadir los indicadores creados
-        $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
+        if($this->typeForm == 'regular'){
+            //Línea estratégica del objetivo a crear
+            $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+            //Objetivo Estratégico al cual impactará el indicador a crear
+            $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener(array('registerIndicator' => true)));
+        } elseif($this->typeForm == 'fromObjetive'){
+            //Referencia del Objetivo Estratégico al cual se le podrían añadir el indicador a crear
+            $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
+            
+            //Línea Estratégica del Objetivo Estratégico al cual se le podría añadir el indicador a crear
+            $builder->add('lineStrategicObjetive','hidden',array('data' => '', 'mapped' => false));
+        }
         
         //Nombre del indicador a crear
         $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
@@ -49,11 +64,11 @@ class RegistrationFormType extends AbstractType {
         $selectRangeTypeTop = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_TOP_COMPOUND])));
         $builder->add('arrangementRangeTypeTop','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeTop,'mapped' => false));
         $builder->add('typeArrangementRangeTypeTop','hidden',array('data' => '','mapped' => false));
-        //Rango Alto Básico
-            $builder->add('rankTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
-            $builder->add('opRankTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Alto Básico
+                $builder->add('rankTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
             
-        //Rango Alto Compuesto
+            //Rango Alto Compuesto
             //Rango Alto-Alto
                 $builder->add('rankTopTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
                 $builder->add('opRankTopTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
@@ -69,13 +84,13 @@ class RegistrationFormType extends AbstractType {
         $selectRangeTypeMiddle = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_COMPOUND])));
         $builder->add('arrangementRangeTypeMiddle','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeMiddle,'mapped' => false));
         $builder->add('typeArrangementRangeTypeMiddle','hidden',array('data' => '','mapped' => false));
-        //Rango Medio Básico
-            $builder->add('rankMiddleTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
-            $builder->add('opRankMiddleTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-            $builder->add('rankMiddleBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
-            $builder->add('opRankMiddleBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Medio Básico
+                $builder->add('rankMiddleTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankMiddleBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
             
-        //Rango Medio Compuesto
+            //Rango Medio Compuesto
             //Rango Medio-Alto
                 $builder->add('rankMiddleTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
                 $builder->add('opRankMiddleTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
@@ -91,11 +106,11 @@ class RegistrationFormType extends AbstractType {
         $selectRangeTypeBottom = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_COMPOUND])));
         $builder->add('arrangementRangeTypeBottom','entity',array('label' => 'form.arrangementRangeType','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeBottom,'mapped' => false));
         $builder->add('typeArrangementRangeTypeBottom','hidden',array('data' => '','mapped' => false,'mapped' => false));
-        //Rango Bajo Básico
-            $builder->add('rankBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
-            $builder->add('opRankBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+            //Rango Bajo Básico
+                $builder->add('rankBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
+                $builder->add('opRankBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
             
-        //Rango Bajo Compuesto
+            //Rango Bajo Compuesto
             //Rango Bajo-Alto
                 $builder->add('rankBottomTopTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
                 $builder->add('opRankBottomTopTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
@@ -106,19 +121,14 @@ class RegistrationFormType extends AbstractType {
                 $builder->add('opRankBottomBottomTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
                 $builder->add('rankBottomBottomBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100,000",'size' => '8'), 'required' => false,'mapped' => false));
                 $builder->add('opRankBottomBottomBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-            
-            //Rango Alto del Indicador
-//            $builder->add('rankTop','percent',array('label' => 'form.rankTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-//            //Rango Medio Alto del indicador
-//            $builder->add('rankMiddleTop','percent',array('label' => 'form.rankMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-//            //Rango Medio Bajo del Indicador
-//            $builder->add('rankMiddleBottom','percent',array('label' => 'form.rankMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
-//            //Rango Bajo del Indicador
-//            $builder->add('rankBottom','percent',array('label' => 'form.rankBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100,000"), 'required' => false));
     }
     
     public function getName(){
-        return 'pequiven_indicator_strategicfo_registration';
+        if($this->typeForm == 'fromObjetive'){
+            return 'pequiven_indicator_strategicfo_registration';
+        } elseif($this->typeForm == 'regular'){
+            return 'pequiven_indicator_strategic_registration';
+        }
     }
     
     public function setDefaultOptions(OptionsResolverInterface $resolver){

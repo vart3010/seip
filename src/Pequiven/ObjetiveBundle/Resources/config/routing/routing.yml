@@ -1,6 +1,6 @@
 ## YAML Template.
 pequiven_objetive_home:
-    path: /arrangement_strategic/objetive/{type}
+    path: /arrangement_strategic/objetives/{type}/{action}
     defaults: {_controller: PequivenObjetiveBundle:Objetive:showHome}
     methods: [GET]
 

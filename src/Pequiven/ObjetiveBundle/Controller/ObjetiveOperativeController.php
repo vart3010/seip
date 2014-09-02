@@ -29,11 +29,15 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class ObjetiveOperativeController extends baseController {
     //put your code here
     
+    /**
+     * Función que retorna la vista con la lista de los objetivos operativos
+     * @Template("PequivenObjetiveBundle:Operative:list.html.twig")
+     * @return type
+     */
     public function listAction(){
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Operative:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array(
-
-            ));
+       return array(
+            
+        );
     }
     
     /**
@@ -42,24 +46,15 @@ class ObjetiveOperativeController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function objetiveListAction(Request $request){
-//        var_dump('hola');
-//        die();
-//        $response = new JsonResponse();
-//        $data = array();
+
 //        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
-//
-//        $response->setData($objetives);
-//        
-//        return $response;
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
         
-        //$criteria['user'] = $user->getId();
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_OPERATIVO;
         
         if ($this->config->isPaginated()) {
@@ -102,6 +97,13 @@ class ObjetiveOperativeController extends baseController {
         return $this->handleView($view);
     }    
     
+    /**
+     * Función que registra un objetivo operativo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenObjetiveBundle:Operative:register.html.twig")
+     * @return type
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
     public function createAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());
@@ -132,8 +134,9 @@ class ObjetiveOperativeController extends baseController {
             $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-                    
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){//Si el usuario pertenece a ZIV y su rol es Gerente 2da Línea
+            
+            //Si el usuario pertenece a ZIV y su rol es Gerente 2da Línea
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
                 $object->setGerencia($user->getGerencia());
                 $object->setGerenciaSecond($user->getGerenciaSecond());
                 for($i = 0; $i < count($data['complejo']); $i++){
@@ -144,8 +147,10 @@ class ObjetiveOperativeController extends baseController {
                     ${$nameObject.$i}->setParent($parent);
                     $em->persist(${$nameObject.$i});
                 }
-            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el usuario pertenece a ZIV y su rol es Directivo o Gerente 1ra Línea
-                if(!isset($data['check_gerencia'])){//En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
+                //Si el usuario pertenece a ZIV y su rol es Directivo o Gerente 1ra Línea
+            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                //En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
+                if(!isset($data['check_gerencia'])){
                     if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el rol del usuario es Gerente 1ra Línea
                         for($i = 0; $i < count($data['gerenciaSecond']); $i++){
                             ${$nameObject.$i} = clone $object;
@@ -260,17 +265,21 @@ class ObjetiveOperativeController extends baseController {
             }
             $this->createArrangementRange($objetives, $data);
             
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'operative')));
+            return $this->redirect($this->generateUrl('pequiven_objetive_home', 
+                    array('type' => 'objetiveOperative',
+                          'action' => 'REGISTER_SUCCESSFULL'
+                        )
+                    ));
         }
         
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Operative:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                'role_name' => $role[0]
-                ));
+        return array(
+            'form' => $form->createView(),
+            'role_name' => $role[0]
+                );
     }
     
      /**
-      * 
+      * Función que guarda en la tabla intermedia el rango de gestión (semáforo) del objetivo creado
       * @param type $objetives
       * @param type $data
       * @return boolean
@@ -368,6 +377,8 @@ class ObjetiveOperativeController extends baseController {
                     for($i = 0; $i < $totalIndicators; $i++){
                         $objectObjetiveIndicator = clone $objetiveIndicator;
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $objectObjetiveIndicator->setIndicator($indicator);
                         $em->persist($objectObjetiveIndicator);
                     }
@@ -384,7 +395,7 @@ class ObjetiveOperativeController extends baseController {
         }
         
         return true;
-    }    
+    }
     
     /**
      * Devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada

@@ -12,15 +12,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\MasterBundle\Model\StrategiesObjetive as modelStrategiesObjetive;
+use Pequiven\MasterBundle\Model\Direction as modelDirection;
+
 /**
- * LineStrategic
+ * Gerencia
  *
- * @ORM\Table(name="seip_c_strategies_objetive")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\StrategiesObjetiveRepository")
+ * @ORM\Table(name="seip_c_direction")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\DirectionRepository")
+ * @author matias
  */
-class StrategiesObjetive extends modelStrategiesObjetive {
-    //put your code here
+class Direction extends modelDirection {
+    
     /**
      * @var integer
      *
@@ -43,7 +45,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -59,26 +61,25 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
      */
     private $userUpdatedAt;
-    
+
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="string", length=100)
      */
     private $description;
     
-    /**
-     * Objetive
-     * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive")
-     * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
+    /** Complejo
+     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $objetive;
+    private $complejo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ref", type="string", length=15, nullable=true)
+     * @ORM\Column(name="ref", type="string", length=70, nullable=true)
      */
     private $ref;
 
@@ -87,7 +88,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * Get id
@@ -103,7 +104,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setCreatedAt($createdAt)
     {
@@ -126,7 +127,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -149,7 +150,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * Set description
      *
      * @param string $description
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setDescription($description)
     {
@@ -169,10 +170,33 @@ class StrategiesObjetive extends modelStrategiesObjetive {
     }
 
     /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return Direction
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
      * Set enabled
      *
      * @param boolean $enabled
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setEnabled($enabled)
     {
@@ -195,7 +219,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -218,7 +242,7 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return StrategiesObjetive
+     * @return Direction
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -238,48 +262,25 @@ class StrategiesObjetive extends modelStrategiesObjetive {
     }
 
     /**
-     * Set objetive
+     * Set complejo
      *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
-     * @return StrategiesObjetive
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
+     * @return Direction
      */
-    public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
     {
-        $this->objetive = $objetive;
+        $this->complejo = $complejo;
 
         return $this;
     }
 
     /**
-     * Get objetive
+     * Get complejo
      *
-     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
      */
-    public function getObjetive()
+    public function getComplejo()
     {
-        return $this->objetive;
-    }
-
-    /**
-     * Set ref
-     *
-     * @param string $ref
-     * @return StrategiesObjetive
-     */
-    public function setRef($ref)
-    {
-        $this->ref = $ref;
-
-        return $this;
-    }
-
-    /**
-     * Get ref
-     *
-     * @return string 
-     */
-    public function getRef()
-    {
-        return $this->ref;
+        return $this->complejo;
     }
 }

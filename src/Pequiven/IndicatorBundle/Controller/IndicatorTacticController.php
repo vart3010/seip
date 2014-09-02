@@ -19,14 +19,90 @@ use Pequiven\IndicatorBundle\Form\Type\Tactic\RegistrationFormType as BaseFormTy
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+
 /**
  * Description of IndicatorTacticController
  *
  * @author matias
  */
-class IndicatorTacticController extends Controller {
+class IndicatorTacticController extends baseController {
     //put your code here
     
+    /**
+     * @Template("PequivenIndicatorBundle:Tactic:list.html.twig")
+     * @return type
+     */
+    public function listAction(){
+        
+        return array(
+            
+        );
+    }
+    
+    /**
+     * Función que devuelve el paginador con los indicadores tácticos
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function indicatorListAction(Request $request){
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        
+        $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_TACTICO;
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByLevel',
+                array($criteria, $sorting)
+            );
+            
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            
+            $view->setData($resources->toArray('',array(),$formatData));
+            
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Función que registra un indicador táctico a partir del registro de un objetivo táctico
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenIndicatorBundle:Tactic:registerFromObjetive.html.twig")
+     * @return type
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
     public function createFromObjetiveAction(Request $request){
 
         $form = $this->createForm(new BaseFormType());
@@ -77,9 +153,9 @@ class IndicatorTacticController extends Controller {
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
         }
         
-        return $this->container->get('templating')->renderResponse('PequivenIndicatorBundle:Tactic:registerFromObjetive.html.'.$this->container->getParameter('fos_user.template.engine'),
-                array('form' => $form->createView(),
-                    ));
+        return array(
+            'form' => $form->createView(),
+            );
     }
     
     /**

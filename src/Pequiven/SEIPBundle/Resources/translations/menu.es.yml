@@ -28,7 +28,16 @@ app:
                                 operative: Operativo
                         indicators:
                             main: Indicadores
-                            list: Lista
+                            add:
+                                main: Añadir
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
+                            list:
+                                main: Lista
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                     arrangement_programs:
                         main: Programas de Gestión
                         list: Lista

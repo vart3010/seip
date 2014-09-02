@@ -1,9 +1,9 @@
 {#% extends "::base.html.twig" %#}
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
-{% trans_default_domain 'PequivenObjetiveBundle' %}
-{% block title %}- {{ 'pequiven_objetive.objetive_strategic'|trans }}{% endblock %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% block title %}- {{ 'pequiven_indicator.indicator_strategic'|trans }}{% endblock %}
 
-{% set route_index = 'pequiven_objetive_menu_list_strategic' %}
+{% set route_index = 'pequiven_indicator_menu_list_strategic' %}
 {% if allow_create is not defined %}
     {% set allow_create = false %}
 {% endif %}
@@ -12,9 +12,9 @@
     
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_strategic'|trans }}</a>
+            <a href="{{ path(route_index) }}">{{ 'pequiven_indicator.indicator_strategic'|trans }}</a>
             <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
+            <span class="thin">{{ 'pequiven_indicator.list'|trans }}</span>
             <!--
             {% if allow_create %}
                 <p class="button-height align-right">
@@ -39,12 +39,12 @@
                     { 'id':0,'name': ('sigtec.inactive'|trans)},
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('indicatorStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
                             <td data-title="'{{ 'form.line_strategic'|trans }}'" >
                                 <a href="[[ result._links.self.href ]]">[[result.line_strategic.ref+result.line_strategic.description]]</a>
                             </td>
-                            <td data-title="'{{ 'form.objetive'|trans }}'" sortable="'ref'">
+                            <td data-title="'{{ 'form.indicator'|trans }}'" sortable="'ref'">
                                 <a href="[[ result._links.self.href ]]">[[result.ref+result.description]]</a>
                             </td>
                         </tr>
@@ -60,8 +60,9 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-                response =  '<strong>{{ 'pequiven_objetive.popup.description'|trans }}:</strong> ' + data.description + '<br>' +
-                            '<strong>{{ 'pequiven_objetive.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.description + '<br>'
+                response =  '<strong>{{ 'pequiven_indicator.popup.description'|trans }}:</strong> ' + data.description + '<br>' +
+                            '<strong>{{ 'pequiven_indicator.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.description + '<br>' +
+                            '<strong>{{ 'pequiven_indicator.popup.formula' |trans }}:</strong> ' + data.formula.equation + '<br>'
                             ;
                         
                 return response;

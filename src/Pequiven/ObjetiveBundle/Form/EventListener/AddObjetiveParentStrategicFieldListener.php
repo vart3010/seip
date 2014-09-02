@@ -37,6 +37,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
     protected $complejoObject;
     protected $complejoNameArray = array();
     protected $typeOperative = false;
+    protected $registerIndicator = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -55,6 +56,9 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
         if(isset($options['typeOperative'])){
             $this->typeOperative = true;
+        }
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
         }
     }
     
@@ -160,12 +164,22 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
                 if($this->typeOperative){
                     $formOptions['mapped'] = false;
+                    if($this->registerIndicator){
+                        $formOptions['required'] = false;
+                    }
                     return $form->add('parent_strategic', 'entity', $formOptions);
                 } else{
+                    if($this->registerIndicator){
+                        $formOptions['mapped'] =false;
+                        $formOptions['required'] = false;
+                    }
                     return $form->add('parent', 'entity', $formOptions);
                 }
             } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
                 $formOptions['mapped'] = false;
+                if($this->registerIndicator){
+                        $formOptions['required'] = false;
+                    }
                 return $form->add('parent_strategic', 'entity', $formOptions);
             }
         }

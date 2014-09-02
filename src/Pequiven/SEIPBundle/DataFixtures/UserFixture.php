@@ -11,6 +11,9 @@ namespace Pequiven\SEIPBundle\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Pequiven\MasterBundle\Entity\Complejo;
+use Pequiven\MasterBundle\Entity\Gerencia;
+use Pequiven\MasterBundle\Entity\GerenciaSecond;
 use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -25,6 +28,15 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
     protected $container;
     public function load(ObjectManager $manager){
         
+        $complejo_data = new Complejo();
+        $complejoNameArray = $complejo_data->getRefNameArray();
+        
+        $gerencia_data = new Gerencia();
+        $gerenciaNameArray = $gerencia_data->getRefNameArray();
+        
+        $gerenciaSecond_data = new GerenciaSecond();
+        $gerenciaSecondNameArray = $gerenciaSecond_data->getRefNameArray();
+        
         //USUARIO ADMINISTRADOR POR DEFECTO
         $user = new User();
         $user->setUsername('admin');
@@ -34,6 +46,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setEmail('matei249@gmail.com');
         $user->addRole('ROLE_SUPER_ADMIN');
         $user->setEnabled(true);
+        $this->addReference('SUPER_ADMIN', $user);
             $manager->persist($user);
         //Usuarios Directivo
         $user = new User();
@@ -43,11 +56,10 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Mejias');
         $user->setEmail('franmejias@pequiven.com');
         $user->setNumPersonal(10019742);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-88'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
         $user->addRole('ROLE_DIRECTIVE');
         $user->setEnabled(true);
-        $this->addReference('directive-10019742', $user);
+        $this->addReference('d-10019742', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -57,14 +69,13 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('veescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
         $user->addRole('ROLE_DIRECTIVE_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('directive-10019742'));
+        $user->setParent($this->getReference('d-10019742'));
             $manager->persist($user);
             
-        //Usuarios Gerente General Complejo
+        //Usuarios Gerente 1ra Línea
         $user = new User();
         $user->setUsername('vandrades');
         $user->setPlainPassword('12345');
@@ -72,10 +83,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Andrades');
         $user->setEmail('victorandrades@pequiven.com');
         $user->setNumPersonal(10015700);
-        $user->setComplejo($this->getReference('Complejo-01'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
+        $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('general_complejo_moron', $user);
+        $this->addReference('mf-10015700', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -85,10 +97,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('victorescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-01'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('general_complejo_moron'));
+        $user->setParent($this->getReference('mf-10015700'));
             $manager->persist($user);
         
         $user = new User();
@@ -98,10 +111,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Navarro');
         $user->setEmail('wilfredonavarro@pequiven.com');
         $user->setNumPersonal(10018009);
-        $user->setComplejo($this->getReference('Complejo-02'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
+        $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('general_complejo_amc', $user);
+        $this->addReference('mf-10018009', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -111,10 +125,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('victorescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-02'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('general_complejo_amc'));
+        $user->setParent($this->getReference('mf-10018009'));
             $manager->persist($user);
         
         $user = new User();
@@ -124,10 +139,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Garcia');
         $user->setEmail('manuelgarcia@pequiven.com');
         $user->setNumPersonal(10017367);
-        $user->setComplejo($this->getReference('Complejo-03'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
+        $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('general_complejo_jaa', $user);
+        $this->addReference('mf-10017367', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -137,10 +153,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('victorescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-03'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('general_complejo_jaa'));
+        $user->setParent($this->getReference('mf-10017367'));
             $manager->persist($user);
             
         $user = new User();
@@ -150,10 +167,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Quintero');
         $user->setEmail('freddyquintero@pequiven.com');
         $user->setNumPersonal(10012577);
-        $user->setComplejo($this->getReference('Complejo-04'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_PRONAVAY]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_NAVAY]));
+        $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('general_complejo_navay', $user);
+        $this->addReference('mf-10012577', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -163,25 +181,25 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('victorescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-04'));
-        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_PRONAVAY]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_NAVAY]));
+        $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('general_complejo_navay'));
+        $user->setParent($this->getReference('mf-10012577'));
             $manager->persist($user);
             
-        //Usuarios Gerente 1ra Línea
         $user = new User();
-        $user->setUsername('manager_first');
+        $user->setUsername('golivo');
         $user->setPlainPassword('12345');
         $user->setFirstName('Georgina');
         $user->setLastName('Olivo');
         $user->setEmail('geolivo@pequiven.com');
         $user->setNumPersonal(10019081);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-84'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]));
         $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('manager_first-10019081', $user);
+        $this->addReference('mf-10019081', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -191,25 +209,25 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('veescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
         $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('directive-10019742'));
+        $user->setParent($this->getReference('d-10019742'));
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('manager_first_aux_adilia');
+        $user->setUsername('aguararima_mf');
         $user->setPlainPassword('12345');
         $user->setFirstName('Adilia');
         $user->setLastName('Guararima');
         $user->setEmail('adguararima@pequiven.com');
         $user->setNumPersonal(10003393);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-84'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]));
         $user->addRole('ROLE_MANAGER_FIRST_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('manager_first-10019081'));
+        $user->setParent($this->getReference('mf-10019081'));
             $manager->persist($user);
             
         $user = new User();
@@ -219,27 +237,27 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Zapata');
         $user->setEmail('fidelzapata@pequiven.com');
         $user->setNumPersonal(10016450);
-        $user->setComplejo($this->getReference('Complejo-01'));
-        $user->setGerencia($this->getReference('Gerencia-20'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_UNFER]));
         $user->addRole('ROLE_MANAGER_FIRST');
         $user->setEnabled(true);
-        $this->addReference('mf_moron_ucfer', $user);
+        $this->addReference('mf_10016450', $user);
             $manager->persist($user);
             
         //Usuarios Gerente 2da Línea
         $user = new User();
-        $user->setUsername('manager_ait_moron');
+        $user->setUsername('jmendez');
         $user->setPlainPassword('12345');
         $user->setFirstName('Joniel');
         $user->setLastName('Mendez');
         $user->setEmail('joniel@pequiven.com');
         $user->setNumPersonal(10016029);
-        $user->setComplejo($this->getReference('Complejo-01'));
-        $user->setGerencia($this->getReference('Gerencia-08'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-05'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_AUTOMATIZACION_INFORMATICA_Y_TELECOMUNICACIONES]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_AIT_CPM]));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
-        $this->addReference('manager_first-10016029', $user);
+        $this->addReference('ms-10016029', $user);
             $manager->persist($user);
             
         $user = new User();
@@ -249,68 +267,70 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setLastName('Escalona');
         $user->setEmail('veescalona@pequiven.com');
         $user->setNumPersonal(10016012);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
-        $this->addReference('manager_second-10016012', $user);
+        $this->addReference('ms-10016012', $user);
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('manager_second_adilia');
+        $user->setUsername('aguararima');
         $user->setPlainPassword('12345');
         $user->setFirstName('Adilia');
         $user->setLastName('Guararima');
         $user->setEmail('adguararima@pequiven.com');
         $user->setNumPersonal(10003393);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-84'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-95'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_PLANIFICACION_Y_GESTION_SALUD_ZIV]));
         $user->addRole('ROLE_MANAGER_SECOND');
         $user->setEnabled(true);
+        $this->addReference('ms-10003393', $user);
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('manager_second_aux_norwis');
+        $user->setUsername('nguedez_ms');
         $user->setPlainPassword('12345');
         $user->setFirstName('Norwis');
         $user->setLastName('Guedez');
         $user->setEmail('norwisgue@pequiven.com');
         $user->setNumPersonal(10017701);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('manager_second-10016012'));
+        $user->setParent($this->getReference('ms-10016012'));
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('manager_second_aux_david');
+        $user->setUsername('cchavez_ms');
         $user->setPlainPassword('12345');
-        $user->setFirstName('David');
-        $user->setLastName('Alvarado');
-        $user->setEmail('davidalv@pequiven.com');
-        $user->setNumPersonal(10021906);
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
+        $user->setFirstName('Carmen');
+        $user->setLastName('Chavez');
+        $user->setEmail('riarias@pequiven.com');
+        $user->setNumPersonal(10021125);
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]));
         $user->addRole('ROLE_MANAGER_SECOND_AUX');
         $user->setEnabled(true);
-        $user->setParent($this->getReference('manager_second-10016012'));
+        $user->setParent($this->getReference('ms-10016012'));
             $manager->persist($user);
             
         //Usuarios Supervisor, Coordinador o Superintendente
         $user = new User();
-        $user->setUsername('superviser');
+        $user->setUsername('rarias');
         $user->setPlainPassword('12345');
         $user->setFirstName('Richard');
         $user->setLastName('Arias');
         $user->setEmail('riarias@pequiven.com');
-        $user->setComplejo($this->getReference('Complejo-06'));
-        $user->setGerencia($this->getReference('Gerencia-79'));
-        $user->setGerenciaSecond($this->getReference('GerenciaSecond-01'));
+        $user->setNumPersonal(10019618);
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $user->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]));
         $user->addRole('ROLE_SUPERVISER');
         $user->setEnabled(true);
             $manager->persist($user);

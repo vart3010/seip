@@ -31,12 +31,15 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class ObjetiveTacticController extends baseController{
     //put your code here
     
-    
+    /**
+     * Función que retorna la vista con la lista de los objetivos tácticos
+     * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
+     * @return type
+     */
     public function listAction(){
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array(
-
-            ));
+        return array(
+            
+        );
     }
     
     /**
@@ -45,24 +48,15 @@ class ObjetiveTacticController extends baseController{
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function objetiveListAction(Request $request){
-//        var_dump('hola');
-//        die();
-//        $response = new JsonResponse();
-//        $data = array();
+
 //        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
-//
-//        $response->setData($objetives);
-//        
-//        return $response;
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
         
-        //$criteria['user'] = $user->getId();
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_TACTICO;
         
         if ($this->config->isPaginated()) {
@@ -106,8 +100,9 @@ class ObjetiveTacticController extends baseController{
     }
     
     /**
-     * Registro de un objetivo táctico
+     * Función que registra un objetivo táctico
      * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenObjetiveBundle:Tactic:register.html.twig")
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
@@ -138,7 +133,8 @@ class ObjetiveTacticController extends baseController{
 
             $object->setUserCreatedAt($user);
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){//Si el usuario pertenece a ZIV y su rol es Gerente 1ra Línea
+            //Si el usuario pertenece a ZIV y su rol es Gerente 1ra Línea
+            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
                 $object->setGerencia($user->getGerencia());
                 for($i = 0; $i < count($data['complejo']); $i++){
                     ${$nameObject.$i} = clone $object;
@@ -148,8 +144,10 @@ class ObjetiveTacticController extends baseController{
                     ${$nameObject.$i}->setParent($parent);
                     $em->persist(${$nameObject.$i});
                 }
-            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){//Si el usuario pertenece a ZIV y su rol es Directivo
-                if(!isset($data['check_gerencia'])){//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
+                //Si el usuario pertenece a ZIV y su rol es Directivo
+            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
+                if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerencia']); $i++){
                         ${$nameObject.$i} = clone $object;
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
@@ -177,6 +175,7 @@ class ObjetiveTacticController extends baseController{
                         }
                     }
                 }
+                //Si el usuario tiene rol de Greente General de Complejo
             } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
                 $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $user->getComplejo()->getId(), 'ref' => $objetive->getRef()));
                 $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('id' => $data['gerencia']));
@@ -188,6 +187,7 @@ class ObjetiveTacticController extends baseController{
                     $em->persist(${$nameObject.$j});
                     $j++;
                 }
+                //Si el usuario es gerente de 2da línea
             } else{
                 $em->persist($object);
             }
@@ -208,25 +208,21 @@ class ObjetiveTacticController extends baseController{
             }
             $this->createArrangementRange($objetives, $data);
             
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'tactic')));
-//                    $this->forward('PequivenObjetiveBundle:Objetive:redirectObjetive', array(
-//               'message' => 'Objetivo Táctico creado exitosamente'
-//            ));
-//            return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-//                array('form' => $form->createView(),
-//                    'object' => $objectObjLevel,
-//                    'action' => 'successful'
-//                    ));
+            return $this->redirect($this->generateUrl('pequiven_objetive_home', 
+                    array('type' => 'objetiveTactic',
+                          'action' => 'REGISTER_SUCCESSFULL'
+                        )
+                    ));
         }
         
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                'role_name' => $role[0]
-                ));
+        return array(
+            'form' => $form->createView(),
+            'role_name' => $role[0]
+                );
     }
     
      /**
-      * 
+      * Función que guarda en la tabla intermedia el rango de gestión (semáforo) del objetivo creado
       * @param type $objetives
       * @param type $data
       * @return boolean
@@ -324,6 +320,8 @@ class ObjetiveTacticController extends baseController{
                     for($i = 0; $i < $totalIndicators; $i++){
                         $objectObjetiveIndicator = clone $objetiveIndicator;
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $objectObjetiveIndicator->setIndicator($indicator);
                         $em->persist($objectObjetiveIndicator);
                     }
@@ -422,7 +420,6 @@ class ObjetiveTacticController extends baseController{
         $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
         $data = '';
         foreach($results as $result){
-            //var_dump($result);
             foreach($result as $gerencia){
                 $dataGerencia[] = array(
                     'idComplejo' => $gerencia->getComplejo()->getId(),

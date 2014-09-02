@@ -31,11 +31,6 @@ class MasterController extends Controller {
      * @return type
      */
     public function showHomeAction($type,$action){
-//        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Default:index.html.'.$this->container->getParameter('fos_user.template.engine'),
-//        array('type' => $type,
-//            'notification' => true,
-//            'action' => $action
-//            ));
         return array(
             'type' => $type,
             'notification' => true,

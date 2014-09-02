@@ -2,12 +2,23 @@ pequiven_indicator:
                 #Registrar
                 indicators: Indicadores
                 add: Añadir
+                list: Lista
                 strategic: Estratégico
                 tactic: Táctico
                 operative: Operativo
                 titleFrameAddStrategic: Registro de Indicador Estratégico
                 titleFrameAddTactic: Registro de Indicador Táctico
                 titleFrameAddOperative: Registro de Indicador Operativo
+                indicator_strategic: Indicador Estratégico
+                indicator_tactic: Indicador Táctico
+                indicator_operative: Indicador Operativo
+                
+                popup:
+                    description: Descripción
+                    lineStrategic: Línea Estratégica
+                    formula: Fórmula
+                    created_at: Creado el
+                    updated_at: Actualizado el
 
                 #Buttons
                 edit: Editar
@@ -74,8 +85,32 @@ form:
     evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
     
-    
-    selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
-    selectIndicatorFormatNoResult: No hay indicadores registrados para este objetivo
-    selectIndicatorPlaceholder: Seleccione un Indicador
-    selectFormulaPlaceholder: Seleccione una Fórmula de Evaluación
+    messages:
+        pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
+        pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico
+        pleaseChoiceAObjetiveTactic: Seleccione un Objetivo Táctico
+        selectLineStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectLineStrategicFormatNoResult: No hay líneas estratégicas registradas
+        selectLineStrategicPlaceholder: Seleccione una línea estratégica
+        selectObjetiveStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectObjetiveStrategicFormatNoResult: No hay objetivos estratégicos registrados para la línea estratégica seleccionada
+        selectObjetiveStrategicPlaceholder: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoMatcher: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoResult: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
+        selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico
+        selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
+        selectIndicatorFormatNoResult: No hay indicadores registrados para este objetivo
+        selectIndicatorPlaceholder: Seleccione un Indicador
+        selectFormulaFormatNoMatcher: Seleccione una fórmula de evaluación
+        selectFormulaFormatNoResult: No hay fórmulas registradas
+        selectFormulaPlaceholder: Seleccione una fórmula de evaluación
+        
+    title:
+        addIndicatorStrategic: Registro Indicador Estratégico
+        addIndicatorTactic: Registro Indicador Táctico
+        addIndicatorOperative: Registro Indicador Operativo
+
+action:
+    registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
+    registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
+    registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente

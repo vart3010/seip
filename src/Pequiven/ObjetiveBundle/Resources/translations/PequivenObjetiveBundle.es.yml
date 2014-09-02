@@ -16,7 +16,7 @@ pequiven_objetive:
                     description: Descripción
                     lineStrategic: Línea Estratégica
                     created_at: Creado el
-                    updated_at: Actualizado el                    
+                    updated_at: Actualizado el
 
                 #Buttons
                 edit: Editar
@@ -100,6 +100,11 @@ form:
         allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
         allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
         allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y complejos seleccionados?
+    title:
+        addObjetiveStrategic: Registro Objetivo Estratégico
+        addObjetiveTactic: Registro Objetivo Táctico
+        addObjetiveOperative: Registro Objetivo Operativo
+         
     messages:
         pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
         pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico
@@ -113,3 +118,8 @@ form:
         selectObjetiveTacticFormatNoMatcher: Seleccione un objetivo estratégico
         selectObjetiveTacticFormatNoResult: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
         selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico
+        
+action:
+    registerObjetiveStrategicSuccessfull: Objetivo Estratégico registrado exitosamente
+    registerObjetiveTacticSuccessfull: Objetivo Táctico registrado exitosamente
+    registerObjetiveOperativeSuccessfull: Objetivo Operativo registrado exitosamente

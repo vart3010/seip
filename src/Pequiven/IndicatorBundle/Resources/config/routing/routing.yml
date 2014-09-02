@@ -1,16 +1,28 @@
 ## YAML Template.
+pequiven_indicator_home:
+    path: /arrangement_strategic/indicators/{type}/{action}
+    defaults: {_controller: PequivenIndicatorBundle:Indicator:showHome}
+    methods: [GET]
+    
+#Registro de un indicador estratégico a partir del registro de un objetivo estratégico
 pequiven_indicator_add_strategic_from_objetive:
     path: /arrangement_strategic/indicator/strategic/addFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:createFromObjetive}
-    
+    defaults:
+        _controller: pequiven.controller.indicatorstrategic:createFromObjetiveAction
+        
+#Registro de un indicador táctico a partir del registro de un objetivo táctico
 pequiven_indicator_add_tactic_from_objetive:
     path: /arrangement_strategic/indicator/tactic/addFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:createFromObjetive}
-
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:createFromObjetiveAction
+        
+#Registro de un indicador operativo a partir del registro de un objetivo operativo
 pequiven_indicator_add_operative_from_objetive:
     path: /arrangement_strategic/indicator/oeprative/addFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:createFromObjetive}
-
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:createFromObjetiveAction
+        
+#Redirección al registrar un indicador a partir del registro de un objetivo
 pequiven_indicator_register_redirect:
     path: /arrangement_strategic/indicator/registerRedirect
     defaults: {_controller: PequivenIndicatorBundle:Indicator:registerRedirect}
@@ -18,44 +30,69 @@ pequiven_indicator_register_redirect:
 #Muestra el Número de Referencia del indicador estratégico a crear
 displayRefIndicatorStrategic:
     path: /arrangement_strategic/indicator/displayRefIndicatorStrategic
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:displayRefIndicator}
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:displayRefIndicatorAction
     
-#Muestra el Número de Referencia del indicador estratégico a crear a partir de un objetivo estratégico
+#Muestra el Número de Referencia del indicador estratégico a crear a partir de un objetivo estratégico (IFRAME)
 displayRefIndicatorStrategicFromObjetive:
     path: /arrangement_strategic/indicator/displayRefIndicatorStrategicFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:displayRefIndicatorFromObjetive}
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:displayRefIndicatorFromObjetiveAction
 
 #Muestra el Número de Referencia del indicador táctico a crear
 displayRefIndicatorTactic:
     path: /arrangement_strategic/indicator/displayRefIndicatorTactic
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:displayRefIndicator}
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:displayRefIndicatorAction
     
 #Muestra el Número de Referencia del indicador estratégico a crear a partir de un objetivo táctico
 displayRefIndicatorTacticFromObjetive:
     path: /arrangement_strategic/indicator/displayRefIndicatorTacticFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:displayRefIndicatorFromObjetive}
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:displayRefIndicatorFromObjetiveAction
 
 #Muestra el Número de Referencia del indicador operativo a crear
 displayRefIndicatorOperative:
     path: /arrangement_strategic/indicator/displayRefIndicatorOperative
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:displayRefIndicator}
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:displayRefIndicatorAction
     
 #Muestra el Número de Referencia del indicador estratégico a crear a partir de un objetivo operativo
 displayRefIndicatorOperativeFromObjetive:
     path: /arrangement_strategic/indicator/displayRefIndicatorOperativeFromObjetive
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:displayRefIndicatorFromObjetive}
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:displayRefIndicatorFromObjetiveAction
 
 #Select que devuelve los Indicadores Estratégicos de acuerdo a la Referencia del Objetivo que se esta creando
 select_indicatorStrategicFromRefParent:
     path: /arrangement_strategic/indicator/select_indicatorStrategicFromRefParent
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorStrategic:selectIndicatorStrategicFromRefParent}
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:selectIndicatorStrategicFromRefParentAction
     
 #Select que devuelve los Indicadores Tácticos de acuerdo a la Línea Estratégica seleccionada
 select_indicatorTacticFromRefParent:
     path: /arrangement_strategic/indicator/select_indicatorTacticFromRefParent
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorTactic:selectIndicatorTacticFromRefParent}
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:selectIndicatorTacticFromRefParentAction
     
 #Select que devuelve los Indicadores Operativos de acuerdo a la Línea Estratégica seleccionada
 select_indicatorOperativeFromRefParent:
     path: /arrangement_strategic/indicator/select_indicatorOperativeFromRefParent
-    defaults: {_controller: PequivenIndicatorBundle:IndicatorOperative:selectIndicatorOperativeFromRefParent}
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:selectIndicatorOperativeFromRefParentAction
+        
+#Devuelve el paginador con la data de los indicadores estratégicos
+indicatorStrategicList:
+    path: /arrangement_strategic_indicator/list/strategic
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:indicatorListAction
+        _sylius:
+            method: createPaginatorByLevel
+            
+#Devuelve el paginador con la data de los indicadores tácticos
+indicatorTacticList:
+    path: /arrangement_strategic_indicator/list/tactic
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:indicatorListAction
+        _sylius:
+            method: createPaginatorByLevel

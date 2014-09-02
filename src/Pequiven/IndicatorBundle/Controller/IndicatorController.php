@@ -33,6 +33,20 @@ class IndicatorController extends Controller {
             ));
     }
     
+    /**
+     * Función que muestra la página inicial de los indicadores
+     * @Template("PequivenIndicatorBundle:Default:index.html.twig")
+     * @param type $type
+     * @return type
+     */
+    public function showHomeAction($type,$action){
+        return array(
+            'type' => $type,
+            'notification' => true,
+            'action' => $action
+        );
+    }
+    
     public function registerRedirectAction(){
         
         return $this->container->get('templating')->renderResponse('PequivenIndicatorBundle:Default:redirect.html.'.$this->container->getParameter('fos_user.template.engine'),

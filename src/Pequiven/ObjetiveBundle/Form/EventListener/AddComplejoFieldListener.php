@@ -46,7 +46,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $this->em = $this->container->get('doctrine')->getManager();
         
         $this->complejoObject = new Complejo();
-        $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        $this->complejoNameArray = $this->complejoObject->getRefNameArray();
         if(isset($options['typeOperative'])){
             $this->typeOperative = true;
         }
