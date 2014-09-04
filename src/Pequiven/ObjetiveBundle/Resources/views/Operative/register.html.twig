@@ -409,6 +409,7 @@
                     sectionCheckGerencia.hide();
                     //Si el usuario tiene rol Gerencia General Complejo
                 } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                    
                    selectGerenciaSecond.select2({
                        
                    });
@@ -416,17 +417,10 @@
                    selectGerenciaSecond.select2("enable",false);
                    sectionCheckGerencia.hide();
                    //Si el usuario tiene rol Gerencia 1ra Línea
-               } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
-                    selectGerenciaSecond.select2({
-
-                    });
-                    selectGerenciaSecond.select2("enable",false);
-                    sectionCheckGerencia.hide();
-                    displaySelectGerenciaSecondFromGerenciaFirst();
                }
                
                //Incializamos el formato numerico para el input de Peso
-               inputWeight.number(true,0,',','.');
+               inputWeight.number(true,3,',','.');
                
                //Incializamos el formato numerico para el input de Meta
                inputGoal.number(true,0,',','.');

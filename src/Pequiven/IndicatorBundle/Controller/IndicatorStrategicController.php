@@ -302,7 +302,7 @@ class IndicatorStrategicController extends baseController {
     }
     
     /**
-     * Función que guarda en la tabla intermedia el indicadore creado al objetivo estratégico seleccionado
+     * Función que guarda en la tabla intermedia el indicador creado al objetivo estratégico seleccionado
      * @param type $objetives
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
      * @return boolean
