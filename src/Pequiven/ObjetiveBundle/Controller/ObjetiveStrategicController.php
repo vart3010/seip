@@ -47,24 +47,14 @@ class ObjetiveStrategicController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function objetiveListAction(Request $request){
-//        var_dump('hola');
-//        die();
-//        $response = new JsonResponse();
-//        $data = array();
-//        $em = $this->getDoctrine()->getManager();
+
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-//        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLevel();
-//
-//        $response->setData($objetives);
-//        
-//        return $response;
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
         
-        //$criteria['user'] = $user->getId();
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
         
         if ($this->config->isPaginated()) {
@@ -139,26 +129,7 @@ class ObjetiveStrategicController extends baseController {
             $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_ESTRATEGICO));
             $object->setObjetiveLevel($objetiveLevel);
             
-            //Obtenemos y Seteamos todos los complejos que esten activos respectivamente
-            $results = $em->getRepository('PequivenMasterBundle:Complejo')->findBy(array('enabled' => true));
-            $total = count($results);            
-            if(is_array($results) && $total > 0){
-                $i = 0;
-                foreach ($results as $result){
-                    ${$nameObject.$i} = clone $object;
-                    ${$nameObject.$i}->setComplejo($result);
-                    $em->persist(${$nameObject.$i});
-                    $i++;
-                }
-            }
-            
-            //Recorremos el select de los complejos
-//            for($i = 0; $i < count($data['complejo']); $i++){
-//                ${$nameObject.$i} = clone $object;
-//                $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-//                ${$nameObject.$i}->setComplejo($complejo);
-//                $em->persist(${$nameObject.$i});
-//            }
+            $em->persist($object);
             
             try{
                 $em->flush();

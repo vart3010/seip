@@ -64,25 +64,25 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_SERV_GENERALES_CPM], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Gerencia SHA CPM');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPM]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPM], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Gerencia SHA CPM');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPM]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPM], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Coordinación de Desarrollo Social CPM');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_DESARROLLO_SOCIAL_CPM]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_DESARROLLO_SOCIAL_CPM], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Coordinación de Desarrollo Social CPM');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_DESARROLLO_SOCIAL_CPM]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_DESARROLLO_SOCIAL_CPM], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
             
         $gerenciaSecond = new GerenciaSecond();
         $gerenciaSecond->setDescription('Gerencia Técnica');
@@ -351,25 +351,25 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_SUMINISTRO_CPAMC], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Gerencia SHA CPAMC');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPAMC]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPAMC], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Gerencia SHA CPAMC');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPAMC]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPAMC], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Gerencia Regional Desarrollo Integral Comunitario CPAMC');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Gerencia Regional Desarrollo Integral Comunitario CPAMC');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
             
         $gerenciaSecond = new GerenciaSecond();
         $gerenciaSecond->setDescription('Gerencia de Proyectos Operacionales');
@@ -461,25 +461,25 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MATERIALES_CPJAA], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Gerencia SHA CPJAA');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPJAA]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPJAA], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Gerencia SHA CPJAA');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPJAA]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_SHA_CPJAA], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
             
-        $gerenciaSecond = new GerenciaSecond();
-        $gerenciaSecond->setDescription('Gerencia Regional Desarrollo Integral Comunitario CPJAA');
-        $gerenciaSecond->setEnabled(1);
-        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
-        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
-        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA]);
-        $gerenciaSecond->setModular(true);
-        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA], $gerenciaSecond);
-            $manager->persist($gerenciaSecond);
+//        $gerenciaSecond = new GerenciaSecond();
+//        $gerenciaSecond->setDescription('Gerencia Regional Desarrollo Integral Comunitario CPJAA');
+//        $gerenciaSecond->setEnabled(1);
+//        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+//        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
+//        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA]);
+//        $gerenciaSecond->setModular(true);
+//        $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_MODULAR_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA], $gerenciaSecond);
+//            $manager->persist($gerenciaSecond);
                 
         //Navay-Gerencia General
         $gerenciaSecond = new GerenciaSecond();
@@ -1288,6 +1288,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_DESARROLLO_SOCIAL]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_DESARROLLO_SOCIAL_CPM]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_DESARROLLO_SOCIAL_CPM], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
@@ -1298,6 +1299,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_DESARROLLO_SOCIAL]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPAMC], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
@@ -1308,6 +1310,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_DESARROLLO_SOCIAL]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_REGIONAL_DESARROLLO_INTEGRAL_COMUNITARIO_CPJAA], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
@@ -1364,6 +1367,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPM]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPM], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
@@ -1374,6 +1378,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPAMC]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPAMC], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
@@ -1384,6 +1389,7 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
         $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE]));
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPJAA]);
+        $gerenciaSecond->setModular(true);
         $gerenciaSecond->setVinculante(true);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_SHA_CPJAA], $gerenciaSecond);
             $manager->persist($gerenciaSecond);

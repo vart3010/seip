@@ -45,7 +45,7 @@
                 {{ form_errors(form.lineStrategic) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.lineStrategic'|trans }}</span>
                 </span>
             </div>
                 
@@ -56,7 +56,7 @@
                 {{ form_errors(form.parent_strategic) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.parent_strategic_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.objetiveStrategic'|trans }}</span>
                 </span>
             </div>
                 
@@ -67,68 +67,82 @@
                 {{ form_errors(form.parent) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.parent_tactic_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.objetiveTactic'|trans }}</span>
                 </span>
             </div>
             
-            <!-- Complejo -->
+            <!-- Localidad -->
             <div id="complejo" class="field-block button-height">
-                {{ form_label(form.complejo) }}
-                {{ form_widget(form.complejo) }}
-                {{ form_errors(form.complejo) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
-                </span>
+                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                    {{ form_label(form.complejo) }}
+                    {{ form_widget(form.complejo) }}
+                    {{ form_errors(form.complejo) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.location'|trans }}</span>
+                    </span>
+                {% else %}
+                    <label class="label" id="labelLocation">{{ 'form.location'|trans }}</label>
+                    <span>{{ app.user.complejo.description }}</span>
+                {% endif %}
             </div>
-            
-            <!-- Gerencia -->
+                
+            <!-- Gerencia 1ra línea -->
             <div id="gerencia" class="field-block button-height">
-                {{ form_label(form.gerencia) }}
-                {{ form_widget(form.gerencia) }}
-                {{ form_errors(form.gerencia) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.gerencia_info'|trans }}</span>
-                </span>
+                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                    {{ form_label(form.gerencia) }}
+                    {{ form_widget(form.gerencia) }}
+                    {{ form_errors(form.gerencia) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.gerenciaFirst'|trans }}</span>
+                    </span>
+                {% else %}
+                    <label class="label" id="labelGerenciaFirst">{{ 'form.gerenciaFirst'|trans }}</label>
+                    <span>{{ app.user.gerencia.description }}</span>
+                {% endif %}
             </div>
             
             <!-- Gerencia 2da Línea -->
             <div id="gerenciaSecond" class="field-block button-height">
-                {{ form_label(form.gerenciaSecond) }}
-                {{ form_widget(form.gerenciaSecond) }}
-                {{ form_errors(form.gerenciaSecond) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.gerencia_second_info'|trans }}</span>
-                </span>
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') or (role_name == 'ROLE_MANAGER_FIRST') or (role_name == 'ROLE_MANAGER_FIRST_AUX') %}
-                <span id="view_check_gerencia">
-                    {{ 'form.question.allGerenciasSecondFull'|trans }}
-                    {{ form_widget(form.check_gerencia) }}
-                </span>
+                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') or (role_name == 'ROLE_GENERAL_COMPLEJO') or (role_name == 'ROLE_GENERAL_COMPLEJO_AUX') or (role_name == 'ROLE_MANAGER_FIRST') or (role_name == 'ROLE_MANAGER_FIRST_AUX') %}
+                    {{ form_label(form.gerenciaSecond) }}
+                    {{ form_widget(form.gerenciaSecond) }}
+                    {{ form_errors(form.gerenciaSecond) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.gerenciaSecond'|trans }}</span>
+                    </span>
+
+                    <span id="view_check_gerencia">
+                        {{ 'form.question.allGerenciasSecondFull'|trans }}
+                        {{ form_widget(form.check_gerencia) }}
+                    </span>
+                {% else %}
+                    <label class="label" id="labelGerenciaSecond">{{ 'form.gerenciaSecond'|trans }}</label>
+                    <span>{{ app.user.gerenciaSecond.description }}</span>
                 {% endif %}
             </div>
                 
-            <!-- Descripción -->
+            <!-- Descripción del objetivo -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
                 </span>
             </div>
                 
-            <!-- Ref -->
+            <!-- Referencia del objetivo -->
             <div id="ref" class="field-block button-height">
                 {{ form_label(form.ref) }}
                 {{ form_widget(form.ref) }}
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
                 </span>
             </div>
             
@@ -139,7 +153,7 @@
                 {{ form_errors(form.weight) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.weight_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
             </div>
                 
@@ -150,7 +164,7 @@
                     {{ form_errors(form.goal) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
                     </span>
             </div>
 
@@ -162,7 +176,7 @@
                     {{ form_label(form.arrangementRangeTypeTop) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeTop) }}
 
@@ -171,11 +185,11 @@
                     </span>
                     <span id="sectionTopCompound">
                         <div id="rangeTopTop">
-                            {{ 'form.rankTopTop_info'|trans }}</br>
+                            {{ 'form.info.rankTopTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopTop) }} {{ form_widget(form.rankTopTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopBottom) }} {{ form_widget(form.rankTopTopBottom) }}
                         </div>
                         <div id="rangeTopBottom">
-                            {{ 'form.rankTopBottom_info'|trans }}</br>
+                            {{ 'form.info.rankTopBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomTop) }} {{ form_widget(form.rankTopBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomBottom) }} {{ form_widget(form.rankTopBottomBottom) }}
                         </div>
                     </span>
@@ -190,7 +204,7 @@
                     {{ form_label(form.arrangementRangeTypeMiddle) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeMiddle) }}
 
@@ -199,17 +213,17 @@
                     </span>
                     <span id="sectionMiddleCompound">
                         <div id="rangeMiddleTop">
-                            {{ 'form.rankMiddleTop_info'|trans }}</br>
+                            {{ 'form.info.rankMiddleTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopTop) }} {{ form_widget(form.rankMiddleTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopBottom) }} {{ form_widget(form.rankMiddleTopBottom) }}
                         </div>
                         <div id="rangeMiddleBottom">
-                            {{ 'form.rankMiddleBottom_info'|trans }}</br>
+                            {{ 'form.info.rankMiddleBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomTop) }} {{ form_widget(form.rankMiddleBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomBottom) }} {{ form_widget(form.rankMiddleBottomBottom) }}
                         </div>
                     </span>
                 </div>
-            </fieldset>                    
-            
+            </fieldset>
+
             <!-- Rango de Gestión Bajo -->
             <fieldset class="fieldset">
                 <legend class="legend">{{ 'form.rankArrangementBottom'|trans }}</legend>
@@ -218,7 +232,7 @@
                     {{ form_label(form.arrangementRangeTypeBottom) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeBottom) }}
 
@@ -227,11 +241,11 @@
                     </span>
                     <span id="sectionBottomCompound">
                         <div id="rangeBottomTop">
-                            {{ 'form.rankBottomTop_info'|trans }}</br>
+                            {{ 'form.info.rankBottomTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopTop) }} {{ form_widget(form.rankBottomTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopBottom) }} {{ form_widget(form.rankBottomTopBottom) }}
                         </div>
                         <div id="rangeBottomBottom">
-                            {{ 'form.rankBottomBottom_info'|trans }}</br>
+                            {{ 'form.info.rankBottomBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomTop) }} {{ form_widget(form.rankBottomBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomBottom) }} {{ form_widget(form.rankBottomBottomBottom) }}
                         </div>
                     </span>
@@ -249,7 +263,7 @@
                     {{ form_errors(form.evalIndicator) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
                     </span>
                     <span id="button_add_indicator">
                         <button type="button" class="button red-gradient glossy" onclick="openAlert()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
@@ -272,7 +286,7 @@
                     {{ form_errors(form.evalArrangementProgram) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalArrangementProgram_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.evalArrangementProgram'|trans }}</span>
                     </span>
                 </div>
             </fieldset>
@@ -287,10 +301,10 @@
                     {{ form_errors(form.indicators) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.indicators_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.indicators'|trans }}</span>
                     </span>
                 </div>
-            </fieldset>                    
+            </fieldset>
             
             {{ actions.create() }}
         </fieldset>
@@ -377,74 +391,63 @@
                 //Inicializamos el select de Indicadores
                 chargeSelectIndicator();
                
-               //Si el usuario es de ZIV
-               if(inputHiddenComplejoName.val() === 'ZIV'){
+               //Si el usuario tiene rol directivo
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
-                        
+
                     });
                     selectComplejo.select2("enable",false);
-                    
-                    if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
-                        selectGerencia.select2({
-                        
-                        });
-                        selectGerenciaSecond.select2({
-                            
-                        });
-                        selectGerencia.select2("enable",false);
-                        selectGerenciaSecond.select2("enable",false);
-                        sectionCheckGerencia.hide();
-                    }
-                    
-                    if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
-                        selectGerenciaSecond.select2({
-                            
-                        });
-                        selectGerenciaSecond.select2("enable",false);
-                        sectionCheckGerencia.hide();
-                    }
-               } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                   selectGerencia.select2({
-                       
-                   });
+                    selectGerencia.select2({
+
+                    });
+                    selectGerenciaSecond.select2({
+
+                    });
+                    selectGerencia.select2("enable",false);
+                    selectGerenciaSecond.select2("enable",false);
+                    sectionCheckGerencia.hide();
+                    //Si el usuario tiene rol Gerencia General Complejo
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                    selectGerenciaSecond.select2({
                        
                    });
                    selectGerencia.select2("enable",false);
                    selectGerenciaSecond.select2("enable",false);
+                   sectionCheckGerencia.hide();
+                   //Si el usuario tiene rol Gerencia 1ra Línea
                } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
-                   selectGerenciaSecond.select2({
-                       
-                   });
-                   displaySelectGerenciaSecondFromGerenciaFirst();
-               } else if (inputHiddenRoleName.val() === 'ROLE_MANAGER_SECOND' || inputHiddenRoleName.val() === 'ROLE_MANAGER_SECOND_AUX'){
-                   
+                    selectGerenciaSecond.select2({
+
+                    });
+                    selectGerenciaSecond.select2("enable",false);
+                    sectionCheckGerencia.hide();
+                    displaySelectGerenciaSecondFromGerenciaFirst();
                }
                
                //Incializamos el formato numerico para el input de Peso
-               inputWeight.number(true,3,',','.');
+               inputWeight.number(true,0,',','.');
                
                //Incializamos el formato numerico para el input de Meta
-               inputGoal.number(true,3,',','.');
+               inputGoal.number(true,0,',','.');
                
                //Inicializamos el formato numerico para el input de Rango Alto
-               inputRankTop.number(true,3,',','.');
-               inputRankTopTopTop.number(true,3,',','.');
-               inputRankTopTopBottom.number(true,3,',','.');
-               inputRankTopBottomTop.number(true,3,',','.');
-               inputRankTopBottomBottom.number(true,3,',','.');
-               inputRankMiddleTop.number(true,3,',','.');
-               inputRankMiddleBottom.number(true,3,',','.');
-               inputRankMiddleTopTop.number(true,3,',','.');
-               inputRankMiddleTopBottom.number(true,3,',','.');
-               inputRankMiddleBottomTop.number(true,3,',','.');
-               inputRankMiddleBottomBottom.number(true,3,',','.');
-               inputRankBottom.number(true,3,',','.');
-               inputRankBottomTopTop.number(true,3,',','.');
-               inputRankBottomTopBottom.number(true,3,',','.');
-               inputRankBottomBottomTop.number(true,3,',','.');
-               inputRankBottomBottomBottom.number(true,3,',','.');
+               inputRankTop.number(true,0,',','.');
+               inputRankTopTopTop.number(true,0,',','.');
+               inputRankTopTopBottom.number(true,0,',','.');
+               inputRankTopBottomTop.number(true,0,',','.');
+               inputRankTopBottomBottom.number(true,0,',','.');
+               inputRankMiddleTop.number(true,0,',','.');
+               inputRankMiddleBottom.number(true,0,',','.');
+               inputRankMiddleTopTop.number(true,0,',','.');
+               inputRankMiddleTopBottom.number(true,0,',','.');
+               inputRankMiddleBottomTop.number(true,0,',','.');
+               inputRankMiddleBottomBottom.number(true,0,',','.');
+               inputRankBottom.number(true,0,',','.');
+               inputRankBottomTopTop.number(true,0,',','.');
+               inputRankBottomTopBottom.number(true,0,',','.');
+               inputRankBottomBottomTop.number(true,0,',','.');
+               inputRankBottomBottomBottom.number(true,0,',','.');
                
                sectionTopBasic.hide();
                sectionTopCompound.hide();
@@ -503,16 +506,14 @@
                 //chargeSelectIndicator();
                 //Reiniciamos el Input de Referencia del Objetivo
                 inputRef.val("");
-                if(inputHiddenComplejoName.val() === 'ZIV'){
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                     selectComplejo.select2("val",'');
                     selectComplejo.select2("enable",false);
                     selectGerencia.select2("val",'');
                     selectGerencia.select2("enable",false);
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
-                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                    selectGerencia.select2("val",'');
-                    selectGerencia.select2("enable",false);
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
                 }
@@ -524,16 +525,14 @@
             //Al cambiar el select de Objetivo Estratégico
             selectObjetiveStrategic.change(function() {
                 inputRef.val("");
-                if(inputHiddenComplejoName.val() === 'ZIV'){
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                     selectComplejo.select2("val",'');
                     selectComplejo.select2("enable",false);
                     selectGerencia.select2("val",'');
                     selectGerencia.select2("enable",false);
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
-                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                    selectGerencia.select2("val",'');
-                    selectGerencia.select2("enable",false);
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                     selectGerenciaSecond.select2("val",'');
                     selectGerenciaSecond.select2("enable",false);
                 }
@@ -541,11 +540,11 @@
             //Al seleccionar alguna opción en el select de Objetivo Táctico
             selectObjetiveTactic.on("select2-selecting", function(e) {
                 displayObjetiveRef(e);
-                if(inputHiddenComplejoName.val() === 'ZIV'){
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                     displaySelectComplejoFromObjetiveTactic(e);
                     //$("#pequiven_objetive_operative_registration_complejo").show();
-                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX'){
-                    displaySelectGerenciaFirstFromComplejo(null,e);
+                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                    displaySelectGerenciaSecondFromGerenciaFirst();
                 }
                 chargeSelectIndicator();
             })
@@ -620,7 +619,7 @@
                             selectObjetiveTactic.append('<option></option>');
                             chargeSelect2ObjetiveTactic();
                             
-                            if(inputHiddenComplejoName.val() === 'ZIV'){
+                            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                                 //Reiniciamos el select de Complejo y desactivamos respectivamente
                                 $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
                                 selectComplejo.select2("val","");
@@ -665,7 +664,7 @@
                             }
                             selectObjetiveTactic.select2("val", "");
                             inputRef.val("");
-                            if(inputHiddenComplejoName.val() === 'ZIV'){
+                            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                                 //Reiniciamos el select de Complejo y desactivamos respectivamente
                                 $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
                                 selectComplejo.select2("val","");
@@ -715,7 +714,7 @@
                         } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
                             displaySelectGerenciaSecondFromGerenciaFirst();
                         }
-                        displaySelectObjetiveStrategicFromObjetiveTactic();
+                        //displaySelectObjetiveStrategicFromObjetiveTactic();
                        // $("#pequiven_objetive_operative_registration_complejo").select2("val",array(1,6));
                        selectComplejo.select2({
                         });
@@ -723,95 +722,6 @@
                         sectionCheckGerencia.show();
                     }
                 });
-            }
-            
-            //Función que actualiza el select de objetivos estratégicos de acuerdo al objetivo táctico seleccionado
-            function displaySelectObjetiveStrategicFromObjetiveTactic(){
-                var data = {
-                    objetiveTacticId: $.trim(selectObjetiveTactic.val()),
-                    lineStrategicId: $.trim(selectLineStrategic.val()),
-                };
-                $.ajax({
-                    type: 'post',
-                    url: '{{ path("select_objetiveStrategicFromObjetiveTactic") }}',
-                    data: data,
-                    success: function(data) {                        
-                        $("#pequiven_objetive_operative_registration_parent_strategic option[value]").remove();
-                        selectObjetiveStrategic.select2("val",'');
-                        //Actualizamos el select de objetivo estratégico
-                        for(var i=0, total = data.length; i<total; i++){
-                            if(data[i].selected == 'YES'){
-                                selectObjetiveStrategic.append('<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>');
-                            } else{
-                                selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
-                            }
-                        }
-                        selectObjetiveStrategic.select2({
-                        });
-                        for(var i=0, total = data.length; i<total; i++){
-                            if(data[i].selected == 'YES'){
-                                selectObjetiveStrategic.select2("val",data[i].id);
-                            }
-                        }
-                    }
-                });
-            }
-            
-            //Función que actualiza el select de gerencia en caso de que el usuario logueado sea de Sede Corporativa
-            function displaySelectGerenciaFromComplejo(complejos){
-            var data = '';
-                if(complejos instanceof Array){//En caso de que la data provenga al momento de cambiar el select de Objetivo Táctico
-                    var dataComplejo = '';
-                    var totalComplejos = complejos.length;
-                    for(var i=0, total = complejos.length; i<total; i++){
-                        if(i == (totalComplejos - 1)){
-                            dataComplejo = dataComplejo + complejos[i];
-                        } else{
-                            dataComplejo = dataComplejo + complejos[i] + ',';
-                        }
-                    }
-                    data = {
-                        complejos: dataComplejo,
-                    };
-                } else{
-                    data = {
-                        complejos: $.trim(selectComplejo.val()),
-                    };
-                }
-                $.ajax({
-                    type: 'post',
-                    url: '{{ path("select_gerenciaFromComplejoOperative") }}',
-                    data: data,
-                    success: function(data) {
-                        var $gerencia_selector = $("#pequiven_objetive_operative_registration_gerencia");
-
-                        $("#pequiven_objetive_operative_registration_gerencia optgroup").remove();
-                        $("#pequiven_objetive_operative_registration_gerencia option[value]").remove();
-
-                        //Actualizamos el select de gerencias
-                        var cantidad = data.length;
-                        var text = '';
-                        text = text + '<optgroup label="' + data[0].optGroup + '">';
-                         for(var i=0, total = data.length; i<total; i++){
-                             if(i == 0){
-                                 text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                             } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
-                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                             } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
-                                 text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                             } else if ((i+1) == cantidad){
-                                 text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                             } else{
-                                 text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                             }
-                         }
-                         selectGerencia.append(text);
-                         selectGerencia.select2({
-                         });
-                         selectGerencia.select2("enable",true);
-                         sectionCheckGerencia.show();
-                    }
-                 });
             }
             
             //Función que actualiza el select de gerencia de 1ra línea en caso de que el usuario logueado sea de Sede Corporativa
@@ -896,8 +806,7 @@
                     };
                 } else{
                     data = {
-                        gerencias: $.trim(selectGerencia.val()),
-                        complejos: $.trim(selectComplejo.val()),
+                        value: '',
                     };
                 }
                 $.ajax({

@@ -74,7 +74,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $object = $event->getData();
         
         $objetiveStrategicId = null;
-        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+        if($this->user->getComplejo()->getRef() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
             $objetiveStrategicId = array_key_exists('parent', $object) ? $object['parent'] : null;
         }
   
@@ -86,12 +86,12 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $type = 'entity';
         $formOptions = array(
             'class' => 'PequivenMasterBundle:Complejo',
-            'label' => 'form.complejo',
+            'label' => 'form.location',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description'
         );
-        
+
         if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
 //            $formOptions['empty_value'] =  'Todo';
             $formOptions['multiple'] = true;
@@ -111,7 +111,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             $complejo = $results;
         } else{
 //            $formOptions['empty_value'] = 'Seleccione su Complejo';
-            //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
+//            $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
 
             $complejo = $complejo == null ? $this->user->getComplejo() : $complejo;
             $complejoId = $this->user->getComplejo()->getId();

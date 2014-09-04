@@ -27,9 +27,14 @@ form:
     ref: Nro. de Referencia
     objetive: Objetivo
     objetive_level: Nivel de objetivo
-    line_strategic: Línea Estratégica
+    lineStrategic: Línea estratégica
+    location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    gerenciaFirst: Gerencia 1ra línea
+    gerenciaSecond: Gerencia 2da línea
+    objetiveStrategic: Objetivo estratégico
+    objetiveTactic: Objetivo táctico
     gerencia_first: Gerencia 1ra Línea
     gerencia_second: Gerencia 2da Línea
     parent_strategic: Objetivo Estratégico
@@ -79,6 +84,34 @@ form:
     
     arrangementRangeType_info: Seleccione el tipo de rango
     
+    info:
+        lineStrategic: Línea estratégica que seguirá el objetivo
+        objetiveStrategic: Objetivo estratégico que seguirá el objetivo
+        objetiveTactic: Objetivo táctico que seguirá el objetivo
+        location: Localidad dónde tendrá impacto el objetivo
+        gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
+        gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
+        description: Nombre del objetivo
+        ref: Nro. de referencia del objetivo
+        weight: Peso del objetivo
+        goal: Meta del objetivo
+        arrangementRangeType: Seleccione el tipo de rango
+        rankTop: Valor alto del semáforo de evaluación de gestión
+        rankMiddleTop: Valor medio alto del semáforo de evaluación de gestión
+        rankMiddleBottom: Valor medio bajo del semáforo de evaluación de gestión
+        rankBottom: Valor bajo del semáforo de evaluación de gestión
+        rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
+        rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
+        rankMiddleTopCompound: Rango medio-alto del semáforo de evaluación de gestión
+        rankMiddleBottomCompound: Rango medio-bajo del semáforo de evaluación de gestión
+        rankBottomTop: Rango bajo-alto del semáforo de evaluación de gestión
+        rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
+        evalObjetive: Seleccione si el objetivo será evaluado por sub-objetivos
+        evalIndicator: Seleccione si el objetivo será evaluado por indicadores
+        evalArrangementProgram: Seleccione si el objetivo será evaluado por programas de gestión
+        evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
+        evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
+        indicators: Indicadores que serán parte de la evaluación del objetivo a crear
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
@@ -97,9 +130,9 @@ form:
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
     indicators_info: Indicadores que serán parte de la evaluación del objetivo a crear
     question:
-        allGerencias: ¿Todas las Gerencias de los complejos seleccionados?
+        allGerencias: ¿Todas las Gerencias de las localidades seleccionados?
         allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
-        allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y complejos seleccionados?
+        allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y localidades seleccionadas?
     title:
         addObjetiveStrategic: Registro Objetivo Estratégico
         addObjetiveTactic: Registro Objetivo Táctico

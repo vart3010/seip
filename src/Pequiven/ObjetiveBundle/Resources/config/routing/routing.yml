@@ -37,12 +37,6 @@ select_objetiveTacticFromObjetiveStrategic:
     path: /arrangement_strategic/objetive/select_objetiveTacticFromObjetiveStrategic
     defaults:
         _controller: pequiven.controller.objetiveoperative:selectObjetiveTacticFromObjetiveStrategicAction
-
-#Select que devuelve los Objetivos Estratégicos de acuerdo al Objetivo Táctico seleccionado
-select_objetiveStrategicFromObjetiveTactic:
-    path: /arrangement_strategic/objetive/select_objetiveStrategicFromObjetiveTactic
-    defaults:
-        _controller: pequiven.controller.objetiveoperative:selectObjetiveStrategicFromObjetiveTacticAction
     
 #Select que devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
 select_complejoFromObjetiveStrategic:

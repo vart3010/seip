@@ -37,29 +37,29 @@
                 {{ form_errors(form.lineStrategic) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.lineStrategic_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.lineStrategic'|trans }}</span>
                 </span>
             </div>
                 
-            <!-- Descripción -->
+            <!-- Descripción del objetivo -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description,{'attr':{'class':'input' } }) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.description_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
                 </span>
             </div>
                 
-            <!-- Ref -->
+            <!-- Referencia del objetivo -->
             <div id="ref" class="field-block button-height">
                 {{ form_label(form.ref) }}
                 {{ form_widget(form.ref) }}
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.ref_info'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
                 </span>
             </div>
                 
@@ -70,7 +70,7 @@
                     {{ form_errors(form.goal) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
                     </span>
             </div>
                     
@@ -82,7 +82,7 @@
                     {{ form_label(form.arrangementRangeTypeTop) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeTop) }}
 
@@ -91,11 +91,11 @@
                     </span>
                     <span id="sectionTopCompound">
                         <div id="rangeTopTop">
-                            {{ 'form.rankTopTop_info'|trans }}</br>
+                            {{ 'form.info.rankTopTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopTop) }} {{ form_widget(form.rankTopTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopBottom) }} {{ form_widget(form.rankTopTopBottom) }}
                         </div>
                         <div id="rangeTopBottom">
-                            {{ 'form.rankTopBottom_info'|trans }}</br>
+                            {{ 'form.info.rankTopBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomTop) }} {{ form_widget(form.rankTopBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomBottom) }} {{ form_widget(form.rankTopBottomBottom) }}
                         </div>
                     </span>
@@ -110,7 +110,7 @@
                     {{ form_label(form.arrangementRangeTypeMiddle) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeMiddle) }}
 
@@ -119,16 +119,16 @@
                     </span>
                     <span id="sectionMiddleCompound">
                         <div id="rangeMiddleTop">
-                            {{ 'form.rankMiddleTop_info'|trans }}</br>
+                            {{ 'form.info.rankMiddleTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopTop) }} {{ form_widget(form.rankMiddleTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopBottom) }} {{ form_widget(form.rankMiddleTopBottom) }}
                         </div>
                         <div id="rangeMiddleBottom">
-                            {{ 'form.rankMiddleBottom_info'|trans }}</br>
+                            {{ 'form.info.rankMiddleBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomTop) }} {{ form_widget(form.rankMiddleBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomBottom) }} {{ form_widget(form.rankMiddleBottomBottom) }}
                         </div>
                     </span>
                 </div>
-            </fieldset>                    
+            </fieldset>
             
             <!-- Rango de Gestión Bajo -->
             <fieldset class="fieldset">
@@ -138,7 +138,7 @@
                     {{ form_label(form.arrangementRangeTypeBottom) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.arrangementRangeType_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeBottom) }}
 
@@ -147,11 +147,11 @@
                     </span>
                     <span id="sectionBottomCompound">
                         <div id="rangeBottomTop">
-                            {{ 'form.rankBottomTop_info'|trans }}</br>
+                            {{ 'form.info.rankBottomTop'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopTop) }} {{ form_widget(form.rankBottomTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopBottom) }} {{ form_widget(form.rankBottomTopBottom) }}
                         </div>
                         <div id="rangeBottomBottom">
-                            {{ 'form.rankBottomBottom_info'|trans }}</br>
+                            {{ 'form.info.rankBottomBottom'|trans }}</br>
                             {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomTop) }} {{ form_widget(form.rankBottomBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomBottom) }} {{ form_widget(form.rankBottomBottomBottom) }}
                         </div>
                     </span>
@@ -168,7 +168,7 @@
                     {{ form_errors(form.evalObjetive) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalObjetive_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.evalObjetive'|trans }}</span>
                     </span>
                 </div>
                 <!-- Por Indicador -->
@@ -178,7 +178,7 @@
                     {{ form_errors(form.evalIndicator) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.evalIndicator_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
                     </span>
                     <span id="button_add_indicator">
                         <button type="button" class="button red-gradient glossy" onclick="openFormIndicator()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
@@ -199,7 +199,7 @@
                     {{ form_errors(form.indicators) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.indicators_info'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.indicators'|trans }}</span>
                     </span>
                 </div>
             </fieldset>
@@ -276,25 +276,25 @@
                 chargeSelectIndicator();
                
                 //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true,3,',','.');
+                inputGoal.number(true,0,',','.');
              
                 //Inicializamos el formato numerico para el input de Rango Alto
-               inputRankTop.number(true,3,',','.');
-               inputRankTopTopTop.number(true,3,',','.');
-               inputRankTopTopBottom.number(true,3,',','.');
-               inputRankTopBottomTop.number(true,3,',','.');
-               inputRankTopBottomBottom.number(true,3,',','.');
-               inputRankMiddleTop.number(true,3,',','.');
-               inputRankMiddleBottom.number(true,3,',','.');
-               inputRankMiddleTopTop.number(true,3,',','.');
-               inputRankMiddleTopBottom.number(true,3,',','.');
-               inputRankMiddleBottomTop.number(true,3,',','.');
-               inputRankMiddleBottomBottom.number(true,3,',','.');
-               inputRankBottom.number(true,3,',','.');
-               inputRankBottomTopTop.number(true,3,',','.');
-               inputRankBottomTopBottom.number(true,3,',','.');
-               inputRankBottomBottomTop.number(true,3,',','.');
-               inputRankBottomBottomBottom.number(true,3,',','.');
+               inputRankTop.number(true,0,',','.');
+               inputRankTopTopTop.number(true,0,',','.');
+               inputRankTopTopBottom.number(true,0,',','.');
+               inputRankTopBottomTop.number(true,0,',','.');
+               inputRankTopBottomBottom.number(true,0,',','.');
+               inputRankMiddleTop.number(true,0,',','.');
+               inputRankMiddleBottom.number(true,0,',','.');
+               inputRankMiddleTopTop.number(true,0,',','.');
+               inputRankMiddleTopBottom.number(true,0,',','.');
+               inputRankMiddleBottomTop.number(true,0,',','.');
+               inputRankMiddleBottomBottom.number(true,0,',','.');
+               inputRankBottom.number(true,0,',','.');
+               inputRankBottomTopTop.number(true,0,',','.');
+               inputRankBottomTopBottom.number(true,0,',','.');
+               inputRankBottomBottomTop.number(true,0,',','.');
+               inputRankBottomBottomBottom.number(true,0,',','.');
                
                sectionTopBasic.hide();
                sectionTopCompound.hide();

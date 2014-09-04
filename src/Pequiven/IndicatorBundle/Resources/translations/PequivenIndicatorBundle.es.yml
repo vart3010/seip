@@ -30,6 +30,8 @@ form:
     indicator: Indicador
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
+    lineStrategic: Línea Estratégica
+    location: Localidad
     complejo: Complejo
     gerencia: Gerencia
     weight: Peso
@@ -58,6 +60,27 @@ form:
     evalSimpleAverage: Promedio Simple
     evalWeightedAverage: Promedio Ponderado
     register: Registrar
+    
+    info:
+        description: Nombre del indicador
+        ref: Nro. de referencia del indicador
+        weight: Peso del indicador
+        goal: Meta del indicador
+        formula: Fórmula de evaluación del indicador
+        arrangementRangeType: Seleccione el tipo de rango
+        rankTop: Valor alto del semáforo de evaluación de gestión
+        rankMiddleTop: Valor medio alto del semáforo de evaluación de gestión
+        rankMiddleBottom: Valor medio bajo del semáforo de evaluación de gestión
+        rankBottom: Valor bajo del semáforo de evaluación de gestión
+        rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
+        rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
+        rankMiddleTopCompound: Rango medio-alto del semáforo de evaluación de gestión
+        rankMiddleBottomCompound: Rango medio-bajo del semáforo de evaluación de gestión
+        rankBottomTop: Rango bajo-alto del semáforo de evaluación de gestión
+        rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
+        evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
+        evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
+    
     ref_info: Nro. de Referencia del indicador
     description_info: Nombre del indicador
     indicatorLevel_info: Nivel del indicador (Estratégico, Táctico u Operativo)

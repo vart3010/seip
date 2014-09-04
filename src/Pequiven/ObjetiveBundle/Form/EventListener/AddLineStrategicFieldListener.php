@@ -51,7 +51,7 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
         
         $formOptions = array(
             'class' => 'PequivenMasterBundle:LineStrategic',
-            'label' => 'form.line_strategic',
+            'label' => 'form.lineStrategic',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'descriptionSelect',

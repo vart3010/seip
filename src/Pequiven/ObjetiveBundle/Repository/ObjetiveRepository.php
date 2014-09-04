@@ -178,5 +178,4 @@ class ObjetiveRepository extends baseEntityRepository {
         return $this->getPaginator($queryBuilder);
     }
 
-
 }

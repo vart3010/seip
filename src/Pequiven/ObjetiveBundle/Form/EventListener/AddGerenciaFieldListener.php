@@ -44,7 +44,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         $this->em = $this->container->get('doctrine')->getManager();
         
         $this->complejoObject = new Complejo();
-        $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        $this->complejoNameArray = $this->complejoObject->getRefNameArray();
         if(isset($options['typeTactic'])){
             $this->typeOperative = true;
         }
@@ -71,7 +71,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             $complejoId = $this->user->getComplejo()->getId();
             $formOptions = array(
                 'class' => 'PequivenMasterBundle:Gerencia',
-                'label' => 'form.gerencia',
+                'label' => 'form.gerenciaFirst',
                 'label_attr' => array('class' => 'label'),
                 'translation_domain' => 'PequivenObjetiveBundle',
                 'property' => 'description',            
@@ -85,6 +85,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
                     return $qb;
                 }
             );
+            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $complejoId,'modular' => true));
             $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
             $formOptions['multiple'] = true;
             $formOptions['mapped'] = false;
@@ -95,22 +96,14 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             $form->add('gerencia','entity',$formOptions);
         } else{
             //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-            $gerenciaId = $this->user->getGerencia()->getId();
             $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
 
             $formOptions = array(
                 'class' => 'PequivenMasterBundle:Gerencia',
-                'label' => 'form.gerencia',
+                'label' => 'form.gerenciaFirst',
                 'label_attr' => array('class' => 'label'),
                 'translation_domain' => 'PequivenObjetiveBundle',
-                'property' => 'description',            
-                'query_builder' => function (EntityRepository $er) use ($gerenciaId){
-                    $qb = $er->createQueryBuilder('gerencia')
-                             ->where('gerencia.id = :gerenciaId')
-                             ->setParameter('gerenciaId', $gerenciaId)
-                            ;
-                    return $qb;
-                }
+                'property' => 'description'
             );
 
             if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
@@ -119,7 +112,15 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
                 $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
                 $formOptions['multiple'] = true;
                 $formOptions['mapped'] = false;
-            } else{            
+            } else{
+                $gerenciaId = $this->user->getGerencia()->getId();
+                $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){
+                    $qb = $er->createQueryBuilder('gerencia')
+                             ->where('gerencia.id = :gerenciaId')
+                             ->setParameter('gerenciaId', $gerenciaId)
+                            ;
+                    return $qb;
+                };
                 $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
              }
 

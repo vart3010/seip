@@ -45,7 +45,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         $this->em = $this->container->get('doctrine')->getManager();
         
         $this->complejoObject = new Complejo();
-        $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        $this->complejoNameArray = $this->complejoObject->getRefNameArray();
     }
 
     public function preSetData(FormEvent $event) {
@@ -80,7 +80,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
             'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
         );
         
-        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+//        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
             $formOptions['query_builder'] = function (EntityRepository $er) use ($objetiveParentStrategicId){
                         $qb = $er->createQueryBuilder('objetive')
                          ->where('objetive.parent = :parentId')
@@ -88,17 +88,18 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
                                 ;
                         return $qb;
                     };
-                } else{
-            $complejoId = $this->user->getComplejo()->getId();            
-            $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId,$objetiveParentStrategicId){
-                $qb = $er->createQueryBuilder('objetive')
-                         ->where('objetive.complejo = :complejoId AND objetive.parent = :parentId')
-                         ->setParameter('complejoId', $complejoId)
-                         ->setParameter('parentId', $objetiveParentStrategicId)
-                        ;
-                return $qb;
-            };
-        }
+//        } 
+//        else{
+//            $complejoId = $this->user->getComplejo()->getId();            
+//            $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId,$objetiveParentStrategicId){
+//                $qb = $er->createQueryBuilder('objetive')
+//                         ->where('objetive.complejo = :complejoId AND objetive.parent = :parentId')
+//                         ->setParameter('complejoId', $complejoId)
+//                         ->setParameter('parentId', $objetiveParentStrategicId)
+//                        ;
+//                return $qb;
+//            };
+//        }
         
 
         if ($objetiveParent) {

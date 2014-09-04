@@ -720,9 +720,9 @@ class Objetive extends modelObjetive {
 
     /**
      * Devuelve el valor referencial del objetivo
-     * <b> x.x Estratégico </b>
-     * <b> x.x.x Táctico </b>
-     * <b> x.x.x.x Operativo </b>
+     * <b> x.x. Estratégico </b>
+     * <b> x.x.x. Táctico </b>
+     * <b> x.x.x.x. Operativo </b>
      * @param type $options
      * @return boolean
      */

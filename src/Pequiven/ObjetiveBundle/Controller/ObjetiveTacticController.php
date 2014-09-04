@@ -117,9 +117,10 @@ class ObjetiveTacticController extends baseController{
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $role = $user->getRoles();
-        //Obtenemos el valor del nivel del complejo
+
+        //Obtenemos el valor de referencia del complejo
         $complejoObject = new Complejo();
-        $complejoNameArray = $complejoObject->getComplejoNameArray();
+        $complejoNameArray = $complejoObject->getRefNameArray();
         
         $em->getConnection()->beginTransaction();
         if($form->isValid()){
@@ -132,62 +133,39 @@ class ObjetiveTacticController extends baseController{
             $object->setObjetiveLevel($objetiveLevel);
 
             $object->setUserCreatedAt($user);
+            //Obtenemos el objetivo estratégico al cual pertenecerá el objetivo táctico a crear
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            //Si el usuario pertenece a ZIV y su rol es Gerente 1ra Línea
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-                $object->setGerencia($user->getGerencia());
-                for($i = 0; $i < count($data['complejo']); $i++){
-                    ${$nameObject.$i} = clone $object;
-                    $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                    $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $data['complejo'][$i], 'ref' => $objetive->getRef()));
-                    ${$nameObject.$i}->setComplejo($complejo);
-                    ${$nameObject.$i}->setParent($parent);
-                    $em->persist(${$nameObject.$i});
-                }
-                //Si el usuario pertenece a ZIV y su rol es Directivo
-            } elseif($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV] && $securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            
+            //Si el usuario tiene rol Directivo
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                 if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerencia']); $i++){
                         ${$nameObject.$i} = clone $object;
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
-                        $complejo = $gerencia->getComplejo();
-                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
                         ${$nameObject.$i}->setGerencia($gerencia);
-                        ${$nameObject.$i}->setComplejo($complejo);
-                        ${$nameObject.$i}->setParent($parent);
+                        ${$nameObject.$i}->setParent($objetive);
                         $em->persist(${$nameObject.$i});
                     }
-                } else{//En caso de que las gerencias a impactar, sean todas la de los complejos seleccionados
+                } else{//En caso de que las gerencias a impactar, sean todas la de las localidades seleccionadas
                     $j = 0;
-                    for($i=0;$i<count($data['complejo']);$i++){//Recorremos todos los complejos seleccionados
-                        $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                        $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef()));
-                        //Obtenemos todas las gerencias 
+                    for($i=0;$i<count($data['complejo']);$i++){//Recorremos todas las localidades seleccionadas
+                        //Obtenemos todas las gerencias de 1ra línea de las localidades seleccionadas
                         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
                         foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
                             ${$nameObject.$j} = clone $object;
                             ${$nameObject.$j}->setGerencia($gerencia);
-                            ${$nameObject.$j}->setComplejo($complejo);
-                            ${$nameObject.$j}->setParent($parent);
+                            ${$nameObject.$j}->setParent($objetive);
                             $em->persist(${$nameObject.$j});
                             $j++;
                         }
                     }
                 }
-                //Si el usuario tiene rol de Greente General de Complejo
-            } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-                $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $user->getComplejo()->getId(), 'ref' => $objetive->getRef()));
-                $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('id' => $data['gerencia']));
-                $j = 0;
-                foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
-                    ${$nameObject.$j} = clone $object;
-                    ${$nameObject.$j}->setGerencia($gerencia);                    
-                    ${$nameObject.$j}->setParent($parent);
-                    $em->persist(${$nameObject.$j});
-                    $j++;
-                }
-                //Si el usuario es gerente de 2da línea
+                //Si el usuario tiene rol Gerente General de Complejo o Gerente 1ra línea
+            } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                $object->setGerencia($user->getGerencia());
+                $object->setParent($objetive);
+                $em->persist($object);
             } else{
                 $em->persist($object);
             }
@@ -214,7 +192,7 @@ class ObjetiveTacticController extends baseController{
                         )
                     ));
         }
-        
+      
         return array(
             'form' => $form->createView(),
             'role_name' => $role[0]
@@ -350,21 +328,13 @@ class ObjetiveTacticController extends baseController{
         $data = array();
         $objetiveChildrenStrategic = array();
         $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
-        $complejoNameArray = $complejoObject->getComplejoNameArray();
         
         $lineStrategicId = $request->request->get('lineStrategicId');
         $objetiveLevelId = ObjetiveLevel::LEVEL_ESTRATEGICO;
         
+        //En caso de que la variable de línea estratégica sea un número
         if(is_numeric($lineStrategicId)){
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
-            } else{
-                $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
-            }
-
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategic' => $lineStrategicId,'objetiveLevel' => $objetiveLevelId));
             $totalResults = count($results);
             if(is_array($results) && $totalResults > 0){
                 foreach ($results as $result){
@@ -382,33 +352,7 @@ class ObjetiveTacticController extends baseController{
     }
     
     /**
-     * Devuelve los Complejos de acuerdo al Objetivo Estratégico seleccionado
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function selectComplejoFromObjetiveStrategicAction(Request $request){
-        $response = new JsonResponse();
-        $complejoChildren = array();
-        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        
-        $lineStrategicId = $request->request->get('lineStrategicId');
-        $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $objetiveObject = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id'=>$objetiveStrategicId));
-        
-        $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetiveObject->getRef(), 'lineStrategic' => $lineStrategicId));
-        foreach ($results as $result){
-            $complejoChildren[] = array("id" => $result->getComplejo()->getId(), "description" => $result->getComplejo()->getDescription());
-        }
-        
-        $response->setData($complejoChildren);
-                
-        return $response;
-    }
-    
-    /**
-     * Devuelve las Gerencias de acuerdo a los Complejos seleccionados
+     * Devuelve las Gerencias de acuerdo a los Complejos seleccionados (Sólo para el caso de que el usuario sea rol directivo)
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -435,17 +379,7 @@ class ObjetiveTacticController extends baseController{
         return $response;
     }
     
-    public function testComplejoAction(){
-        $response = new JsonResponse();
-        $complejoChildren = array();
-        
-        for($i = 1; $i<=6; $i++){
-            $complejoChildren[] = array("id" => $i, "description" => 'Complejo '.$i);
-        }
-        
-        $response->setData($complejoChildren);
-        return $response;
-    }
+    
     
     /**
      * Devuelve la Referencia del Objetivo, de acuerdo a la cantidad que ya se encuentren registrados
