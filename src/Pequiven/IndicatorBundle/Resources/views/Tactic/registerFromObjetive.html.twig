@@ -33,7 +33,7 @@
                 {{ form_widget(form.refObjetive) }}
             </div>
             
-            <!-- Descripción -->
+            <!-- Descripción del indicador -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
@@ -44,7 +44,7 @@
                 </span>
             </div>
                 
-            <!-- Ref -->
+            <!-- Referencia del indicador -->
             <div id="ref" class="field-block button-height">
                 {{ form_label(form.ref) }}
                 {{ form_widget(form.ref) }}
@@ -68,7 +68,7 @@
             </div>
             -->
                 
-            <!-- Meta del Objetivo -->
+            <!-- Meta del indicador -->
             <div class="field-block button-height">
                     {{ form_label(form.goal) }}
                     {{ form_widget(form.goal) }}
@@ -225,7 +225,7 @@
                chargeSelect2Formula();
        
                //Incializamos el formato numerico para el input de Meta
-               inputGoal.number(true,3,',','.');
+               inputGoal.number(true,0,',','.');
                
                //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                inputHiddenRefParent.val(inputRefParent.val());
@@ -234,22 +234,22 @@
                displayIndicatorRef();
                
                //Inicializamos el formato numerico para el input de Rango Alto
-               inputRankTop.number(true,3,',','.');
-               inputRankTopTopTop.number(true,3,',','.');
-               inputRankTopTopBottom.number(true,3,',','.');
-               inputRankTopBottomTop.number(true,3,',','.');
-               inputRankTopBottomBottom.number(true,3,',','.');
-               inputRankMiddleTop.number(true,3,',','.');
-               inputRankMiddleBottom.number(true,3,',','.');
-               inputRankMiddleTopTop.number(true,3,',','.');
-               inputRankMiddleTopBottom.number(true,3,',','.');
-               inputRankMiddleBottomTop.number(true,3,',','.');
-               inputRankMiddleBottomBottom.number(true,3,',','.');
-               inputRankBottom.number(true,3,',','.');
-               inputRankBottomTopTop.number(true,3,',','.');
-               inputRankBottomTopBottom.number(true,3,',','.');
-               inputRankBottomBottomTop.number(true,3,',','.');
-               inputRankBottomBottomBottom.number(true,3,',','.');
+               inputRankTop.number(true,0,',','.');
+               inputRankTopTopTop.number(true,0,',','.');
+               inputRankTopTopBottom.number(true,0,',','.');
+               inputRankTopBottomTop.number(true,0,',','.');
+               inputRankTopBottomBottom.number(true,0,',','.');
+               inputRankMiddleTop.number(true,0,',','.');
+               inputRankMiddleBottom.number(true,0,',','.');
+               inputRankMiddleTopTop.number(true,0,',','.');
+               inputRankMiddleTopBottom.number(true,0,',','.');
+               inputRankMiddleBottomTop.number(true,0,',','.');
+               inputRankMiddleBottomBottom.number(true,0,',','.');
+               inputRankBottom.number(true,0,',','.');
+               inputRankBottomTopTop.number(true,0,',','.');
+               inputRankBottomTopBottom.number(true,0,',','.');
+               inputRankBottomBottomTop.number(true,0,',','.');
+               inputRankBottomBottomBottom.number(true,0,',','.');
                
                sectionTopBasic.hide();
                sectionTopCompound.hide();
@@ -297,6 +297,7 @@
                     inputHiddenTypeArrangementRangeBottom.val("BOTTOM_COMPOUND");
                  }
            });
+           
            //Función que muestra el Número de Referencia del indicador a crear, de acuerdo a la línea estratégica seleccionada
            function displayIndicatorRef(){
                 var data = {

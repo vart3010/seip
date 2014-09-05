@@ -178,12 +178,25 @@ class Objetive extends modelObjetive {
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives")
+     * @ORM\JoinTable(name="seip_objetives_indicators")
+     */
+    private $indicators;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="\Pequiven\ArrangementBundle\Entity\ArrangementRange", mappedBy="objetive")
+     */
+    private $arrangementRange;
+    
 
     /**
      * Constructor
      */
     public function __construct() {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -499,90 +512,6 @@ class Objetive extends modelObjetive {
     }
 
     /**
-     * Set rankTop
-     *
-     * @param float $rankTop
-     * @return Objetive
-     */
-    public function setRankTop($rankTop) {
-        $this->rankTop = $rankTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankTop
-     *
-     * @return float 
-     */
-    public function getRankTop() {
-        return $this->rankTop;
-    }
-
-    /**
-     * Set rankMiddleTop
-     *
-     * @param float $rankMiddleTop
-     * @return Objetive
-     */
-    public function setRankMiddleTop($rankMiddleTop) {
-        $this->rankMiddleTop = $rankMiddleTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleTop
-     *
-     * @return float 
-     */
-    public function getRankMiddleTop() {
-        return $this->rankMiddleTop;
-    }
-
-    /**
-     * Set rankMiddleBottom
-     *
-     * @param float $rankMiddleBottom
-     * @return Objetive
-     */
-    public function setRankMiddleBottom($rankMiddleBottom) {
-        $this->rankMiddleBottom = $rankMiddleBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleBottom
-     *
-     * @return float 
-     */
-    public function getRankMiddleBottom() {
-        return $this->rankMiddleBottom;
-    }
-
-    /**
-     * Set rankBottom
-     *
-     * @param float $rankBottom
-     * @return Objetive
-     */
-    public function setRankBottom($rankBottom) {
-        $this->rankBottom = $rankBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottom
-     *
-     * @return float 
-     */
-    public function getRankBottom() {
-        return $this->rankBottom;
-    }
-
-    /**
      * Set evalObjetive
      *
      * @param boolean $evalObjetive
@@ -746,21 +675,6 @@ class Objetive extends modelObjetive {
             $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
             $refObjetiveStrategic = $objetiveStrategic->getRef();
             $options['refParent'] = $refObjetiveStrategic;
-//            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-//                $options['type_directive'] = true;
-//                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveStrategic));
-//                $totalParents = count($objetivesParent);
-//                $contParents = 1;
-//                $options['array_parent'] = '';
-//                foreach($objetivesParent as $objetiveParent){
-//                    if($contParents == $totalParents){
-//                        $options['array_parent'].= $objetiveParent->getId();
-//                    } else{
-//                        $options['array_parent'].= $objetiveParent->getId().',';
-//                    }
-//                    $contParents++;
-//                }
-//            }
             $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
             $total = count($results);
@@ -772,23 +686,7 @@ class Objetive extends modelObjetive {
         } elseif ($options['type'] == 'OPERATIVE') {
             $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
             $refObjetiveTactic = $objetiveTactic->getRef();
-            $options['refParent'] = $refObjetiveTactic;            
-            
-//            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-//                $options['type_directive'] = true;
-//                $objetivesParent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $refObjetiveTactic));
-//                $totalParents = count($objetivesParent);
-//                $contParents = 1;
-//                $options['array_parent'] = '';
-//                foreach($objetivesParent as $objetiveParent){
-//                    if($contParents == $totalParents){
-//                        $options['array_parent'].= $objetiveParent->getId();
-//                    } else{
-//                        $options['array_parent'].= $objetiveParent->getId().',';
-//                    }
-//                    $contParents++;
-//                }
-//            }
+            $options['refParent'] = $refObjetiveTactic;
             $options['type'] = null;
             $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
             $total = count($results);
@@ -824,5 +722,62 @@ class Objetive extends modelObjetive {
     public function getGerenciaSecond()
     {
         return $this->gerenciaSecond;
+    }
+
+    /**
+     * Add indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     * @return Objetive
+     */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $indicators->addObjetive($this);
+        $this->indicators[] = $indicators;
+
+        return $this;
+    }
+
+    /**
+     * Remove indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     */
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+     * Get indicators
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicators()
+    {
+        return $this->indicators;
+    }
+
+    /**
+     * Set arrangementRange
+     *
+     * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
+     * @return Objetive
+     */
+    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null)
+    {
+        $this->arrangementRange = $arrangementRange;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementRange
+     *
+     * @return \Pequiven\ArrangementBundle\Entity\ArrangementRange 
+     */
+    public function getArrangementRange()
+    {
+        return $this->arrangementRange;
     }
 }

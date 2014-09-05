@@ -142,6 +142,11 @@ class Indicator extends modelIndicator {
      * @ORM\JoinColumn(name="fk_tendency", referencedColumnName="id")
      */
     private $tendency;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="indicators")
+     */
+    private $objetives;
 
     /**
      * Get id
@@ -681,5 +686,45 @@ class Indicator extends modelIndicator {
     public function getRefParent()
     {
         return $this->refParent;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add objetives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+     * @return Indicator
+     */
+    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives[] = $objetives;
+
+        return $this;
+    }
+
+    /**
+     * Remove objetives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+     */
+    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives->removeElement($objetives);
+    }
+
+    /**
+     * Get objetives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjetives()
+    {
+        return $this->objetives;
     }
 }

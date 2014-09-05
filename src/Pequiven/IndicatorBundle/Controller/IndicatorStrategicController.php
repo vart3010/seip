@@ -16,7 +16,6 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -212,8 +211,8 @@ class IndicatorStrategicController extends baseController {
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
             $this->createArrangementRange($lastObjectInsert, $data);
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
-            $this->createObjetiveIndicator($objetives,$lastObjectInsert);
+            //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+            $this->createObjetiveIndicator($lastObjectInsert);
             
             return $this->redirect($this->generateUrl('pequiven_indicator_home', 
                     array('type' => 'indicatorStrategic',
@@ -225,6 +224,36 @@ class IndicatorStrategicController extends baseController {
         return array(
             'form' => $form->createView(),
             );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el indicador creado al objetivo estratégico seleccionado
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return boolean
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
+    public function createObjetiveIndicator(Indicator $indicator){
+        
+        $em = $this->getDoctrine()->getManager();
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent()));
+        $totalObjetives = count($objetives);
+        $em->getConnection()->beginTransaction();
+        if($totalObjetives > 0){
+            foreach($objetives as $objetive){
+                $objetive->addIndicator($indicator);
+                $em->persist($objetive);
+            }
+        }
+        
+        try{
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e){
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
     }
     
     /**
@@ -289,38 +318,6 @@ class IndicatorStrategicController extends baseController {
         }
 
         $em->persist($arrangementRange);
-        
-        try{
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (Exception $e){
-            $em->getConnection()->rollback();
-            throw $e;
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Función que guarda en la tabla intermedia el indicador creado al objetivo estratégico seleccionado
-     * @param type $objetives
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return boolean
-     * @throws \Pequiven\IndicatorBundle\Controller\Exception
-     */
-    public function createObjetiveIndicator($objetives = array(),  Indicator $indicator){
-        $totalObjetives = count($objetives);
-        $objetiveIndicator = new ObjetiveIndicator();
-        $objetiveIndicator->setIndicator($indicator);
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
-        if($totalObjetives > 0){
-            foreach($objetives as $objetive){
-                $objectObjetiveIndicator = clone $objetiveIndicator;
-                $objectObjetiveIndicator->setObjetive($objetive);
-                $em->persist($objectObjetiveIndicator);
-            }
-        }
         
         try{
             $em->flush();

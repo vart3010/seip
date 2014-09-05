@@ -15,6 +15,7 @@ pequiven_objetive:
                 popup:
                     description: Descripción
                     lineStrategic: Línea Estratégica
+                    indicators: Indicadores
                     created_at: Creado el
                     updated_at: Actualizado el
 

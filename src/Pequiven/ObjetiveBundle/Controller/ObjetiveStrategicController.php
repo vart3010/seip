@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\ObjetiveBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -124,10 +123,18 @@ class ObjetiveStrategicController extends baseController {
             //$object->setWeight(bcadd($data['weight'],'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
+            $ref = $data['ref'];
             
             //Obtenemos y Seteamos el nivel del objetivo
             $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_ESTRATEGICO));
             $object->setObjetiveLevel($objetiveLevel);
+            
+            if(isset($data['indicators'])){
+                foreach($data['indicators'] as $value){
+                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    $object->addIndicator($indicator);
+                }
+            }
             
             $em->persist($object);
             
@@ -140,11 +147,10 @@ class ObjetiveStrategicController extends baseController {
                 throw $e;
             }
             
-            $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            if(isset($data['indicators'])){
-                $this->createObjetiveIndicator($objetives,$data['indicators']);
-            }
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
+//            if(isset($data['indicators'])){
+//                $this->createObjetiveIndicator($objetives,$data['indicators']);
+//            }
             $this->createArrangementRange($objetives, $data);
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', 
@@ -248,20 +254,18 @@ class ObjetiveStrategicController extends baseController {
     public function createObjetiveIndicator($objetives = array(),$indicators = array()){
         $totalObjetives = count($objetives);
         $totalIndicators = count($indicators);
-        $objetiveIndicator = new ObjetiveIndicator();
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
         if($totalObjetives > 0){
             foreach($objetives as $objetive){
-                $objetiveIndicator->setObjetive($objetive);
                 if($totalIndicators > 0){
                     for($i = 0; $i < $totalIndicators; $i++){
-                        $objectObjetiveIndicator = clone $objetiveIndicator;
+                        $objectObjetive= clone $objetive;
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
                         $indicator->setTmp(false);
                         $em->persist($indicator);
-                        $objectObjetiveIndicator->setIndicator($indicator);
-                        $em->persist($objectObjetiveIndicator);
+                        $objectObjetive->addIndicator($indicator);
+                        $em->persist($objectObjetive);
                     }
                 }
             }

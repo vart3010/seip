@@ -371,27 +371,27 @@
            function change(){
                 //Escondemos por defecto el boton de registrar indicadores
                 buttonAddIndicator.hide();
-                
+
                 //Escondemos por defecto la sección de sumar indicadores al objetivo
                 sectionIndicators.hide();
-               
-               //Inicializamos el select2 de Línea Estratégica
-               chargeSelect2LineStrategic();
-               
-               //Inicializamos el select2 de Objetivo Estratégico
-               chargeSelect2ObjetiveStrategic();
-               
-               //Inicializamos el select2 de Objetivo Táctico
-               chargeSelect2ObjetiveTactic();
-               
-               messageLineStrategicCheckIndicator.hide();
-               messageObjetiveStrategicCheckIndicator.hide();
-               messageObjetiveTacticCheckIndicator.hide();
-               
+
+                //Inicializamos el select2 de Línea Estratégica
+                chargeSelect2LineStrategic();
+
+                //Inicializamos el select2 de Objetivo Estratégico
+                chargeSelect2ObjetiveStrategic();
+
+                //Inicializamos el select2 de Objetivo Táctico
+                chargeSelect2ObjetiveTactic();
+
+                messageLineStrategicCheckIndicator.hide();
+                messageObjetiveStrategicCheckIndicator.hide();
+                messageObjetiveTacticCheckIndicator.hide();
+
                 //Inicializamos el select de Indicadores
                 chargeSelectIndicator();
                
-               //Si el usuario tiene rol directivo
+                //Si el usuario tiene rol directivo
                 if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
@@ -417,31 +417,31 @@
                    selectGerenciaSecond.select2("enable",false);
                    sectionCheckGerencia.hide();
                    //Si el usuario tiene rol Gerencia 1ra Línea
-               }
+                }
                
                //Incializamos el formato numerico para el input de Peso
-               inputWeight.number(true,3,',','.');
+               inputWeight.number(true,2,',','.');
                
                //Incializamos el formato numerico para el input de Meta
-               inputGoal.number(true,0,',','.');
+               inputGoal.number(true,2,',','.');
                
                //Inicializamos el formato numerico para el input de Rango Alto
-               inputRankTop.number(true,0,',','.');
-               inputRankTopTopTop.number(true,0,',','.');
-               inputRankTopTopBottom.number(true,0,',','.');
-               inputRankTopBottomTop.number(true,0,',','.');
-               inputRankTopBottomBottom.number(true,0,',','.');
-               inputRankMiddleTop.number(true,0,',','.');
-               inputRankMiddleBottom.number(true,0,',','.');
-               inputRankMiddleTopTop.number(true,0,',','.');
-               inputRankMiddleTopBottom.number(true,0,',','.');
-               inputRankMiddleBottomTop.number(true,0,',','.');
-               inputRankMiddleBottomBottom.number(true,0,',','.');
-               inputRankBottom.number(true,0,',','.');
-               inputRankBottomTopTop.number(true,0,',','.');
-               inputRankBottomTopBottom.number(true,0,',','.');
-               inputRankBottomBottomTop.number(true,0,',','.');
-               inputRankBottomBottomBottom.number(true,0,',','.');
+               inputRankTop.number(true,2,',','.');
+               inputRankTopTopTop.number(true,2,',','.');
+               inputRankTopTopBottom.number(true,2,',','.');
+               inputRankTopBottomTop.number(true,2,',','.');
+               inputRankTopBottomBottom.number(true,2,',','.');
+               inputRankMiddleTop.number(true,2,',','.');
+               inputRankMiddleBottom.number(true,2,',','.');
+               inputRankMiddleTopTop.number(true,2,',','.');
+               inputRankMiddleTopBottom.number(true,2,',','.');
+               inputRankMiddleBottomTop.number(true,2,',','.');
+               inputRankMiddleBottomBottom.number(true,2,',','.');
+               inputRankBottom.number(true,2,',','.');
+               inputRankBottomTopTop.number(true,2,',','.');
+               inputRankBottomTopBottom.number(true,2,',','.');
+               inputRankBottomBottomTop.number(true,2,',','.');
+               inputRankBottomBottomBottom.number(true,2,',','.');
                
                sectionTopBasic.hide();
                sectionTopCompound.hide();

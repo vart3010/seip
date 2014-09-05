@@ -60,10 +60,15 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-                response =  '<strong>{{ 'pequiven_objetive.popup.description'|trans }}:</strong> ' + data.description + '<br>' +
-                            '<strong>{{ 'pequiven_objetive.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.description + '<br>'
+                response =  '<strong>{{ 'pequiven_objetive.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.ref + ' ' + data.line_strategic.description + '<br>'
                             ;
-                        
+                var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
+                    for(var i = 0; i < totalIndicators; i++){
+                        response = response + data.indicators[i].ref + data.indicators[i].description + '<br>';
+                    }
+                }
                 return response;
             }
     </script>
