@@ -147,6 +147,11 @@ class Indicator extends modelIndicator {
      * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="indicators")
      */
     private $objetives;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="\Pequiven\ArrangementBundle\Entity\ArrangementRange", mappedBy="objetive")
+     */
+    private $arrangementRange;
 
     /**
      * Get id
@@ -726,5 +731,28 @@ class Indicator extends modelIndicator {
     public function getObjetives()
     {
         return $this->objetives;
+    }
+
+    /**
+     * Set arrangementRange
+     *
+     * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
+     * @return Indicator
+     */
+    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null)
+    {
+        $this->arrangementRange = $arrangementRange;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementRange
+     *
+     * @return \Pequiven\ArrangementBundle\Entity\ArrangementRange 
+     */
+    public function getArrangementRange()
+    {
+        return $this->arrangementRange;
     }
 }
