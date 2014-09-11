@@ -147,50 +147,57 @@
                     {{ form_label(form.arrangementRangeTypeTop) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeTop'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeTop) }}
 
                     <span id="sectionTopBasic">
-                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTop) }} {{ form_widget(form.rankTop) }}
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBasic) }} {{ form_widget(form.rankTopBasic) }}
                     </span>
-                    <span id="sectionTopCompound">
-                        <div id="rangeTopTop">
-                            {{ 'form.info.rankTopTop'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopTop) }} {{ form_widget(form.rankTopTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopTopBottom) }} {{ form_widget(form.rankTopTopBottom) }}
-                        </div>
-                        <div id="rangeTopBottom">
-                            {{ 'form.info.rankTopBottom'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomTop) }} {{ form_widget(form.rankTopBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopBottomBottom) }} {{ form_widget(form.rankTopBottomBottom) }}
-                        </div>
+                    <span id="sectionTopMixed">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopMixedTop) }} {{ form_widget(form.rankTopMixedTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankTopMixedBottom) }} {{ form_widget(form.rankTopMixedBottom) }}
                     </span>
                 </div>
             </fieldset>
                     
-            <!-- Rango de Gestión Medio -->
+            <!-- Rango de Gestión Medio Alto -->
             <fieldset class="fieldset">
-                <legend class="legend">{{ 'form.rankArrangementMiddle'|trans }}</legend>
+                <legend class="legend">{{ 'form.rankArrangementMiddleTop'|trans }}</legend>
                 <div class="field-block button-height">
-                    {{ form_widget(form.typeArrangementRangeTypeMiddle) }}
-                    {{ form_label(form.arrangementRangeTypeMiddle) }}
+                    {{ form_widget(form.typeArrangementRangeTypeMiddleTop) }}
+                    {{ form_label(form.arrangementRangeTypeMiddleTop) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleTop'|trans }}</span>
                     </span>
-                    {{ form_widget(form.arrangementRangeTypeMiddle) }}
+                    {{ form_widget(form.arrangementRangeTypeMiddleTop) }}
 
-                    <span id="sectionMiddleBasic">
-                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTop) }} {{ form_widget(form.rankMiddleTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottom) }} {{ form_widget(form.rankMiddleBottom) }}
+                    <span id="sectionMiddleTopBasic">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopBasic) }} {{ form_widget(form.rankMiddleTopBasic) }}
                     </span>
-                    <span id="sectionMiddleCompound">
-                        <div id="rangeMiddleTop">
-                            {{ 'form.info.rankMiddleTop'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopTop) }} {{ form_widget(form.rankMiddleTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopBottom) }} {{ form_widget(form.rankMiddleTopBottom) }}
-                        </div>
-                        <div id="rangeMiddleBottom">
-                            {{ 'form.info.rankMiddleBottom'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomTop) }} {{ form_widget(form.rankMiddleBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomBottom) }} {{ form_widget(form.rankMiddleBottomBottom) }}
-                        </div>
+                    <span id="sectionMiddleTopMixed">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopMixedTop) }} {{ form_widget(form.rankMiddleTopMixedTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleTopMixedBottom) }} {{ form_widget(form.rankMiddleTopMixedBottom) }}
+                    </span>
+                </div>
+            </fieldset>
+                    
+            <!-- Rango de Gestión Medio Bajo -->
+            <fieldset class="fieldset">
+                <legend class="legend">{{ 'form.rankArrangementMiddleBottom'|trans }}</legend>
+                <div class="field-block button-height">
+                    {{ form_widget(form.typeArrangementRangeTypeMiddleBottom) }}
+                    {{ form_label(form.arrangementRangeTypeMiddleBottom) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleBottom'|trans }}</span>
+                    </span>
+                    {{ form_widget(form.arrangementRangeTypeMiddleBottom) }}
+
+                    <span id="sectionMiddleBottomBasic">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomBasic) }} {{ form_widget(form.rankMiddleBottomBasic) }}
+                    </span>
+                    <span id="sectionMiddleBottomMixed">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomMixedTop) }} {{ form_widget(form.rankMiddleBottomMixedTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankMiddleBottomMixedBottom) }} {{ form_widget(form.rankMiddleBottomMixedBottom) }}
                     </span>
                 </div>
             </fieldset>
@@ -203,22 +210,15 @@
                     {{ form_label(form.arrangementRangeTypeBottom) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.info.arrangementRangeType'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeBottom'|trans }}</span>
                     </span>
                     {{ form_widget(form.arrangementRangeTypeBottom) }}
 
                     <span id="sectionBottomBasic">
-                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottom) }} {{ form_widget(form.rankBottom) }}
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBasic) }} {{ form_widget(form.rankBottomBasic) }}
                     </span>
-                    <span id="sectionBottomCompound">
-                        <div id="rangeBottomTop">
-                            {{ 'form.info.rankBottomTop'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopTop) }} {{ form_widget(form.rankBottomTopTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomTopBottom) }} {{ form_widget(form.rankBottomTopBottom) }}
-                        </div>
-                        <div id="rangeBottomBottom">
-                            {{ 'form.info.rankBottomBottom'|trans }}</br>
-                            {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomTop) }} {{ form_widget(form.rankBottomBottomTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomBottomBottom) }} {{ form_widget(form.rankBottomBottomBottom) }}
-                        </div>
+                    <span id="sectionBottomMixed">
+                        {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomMixedTop) }} {{ form_widget(form.rankBottomMixedTop) }} y {{ 'form.textResObj'|trans }}{{ form_widget(form.opRankBottomMixedBottom) }} {{ form_widget(form.rankBottomMixedBottom) }}
                     </span>
                 </div>
             </fieldset>
@@ -292,403 +292,421 @@
     
     {% block javascript %}
         <script type="text/javascript">
-        $(document).ready(function()
-        {
-            var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
-                messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
-                messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
-                sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
-                sectionCheckGerencia = $("#view_check_gerencia"),//Sección dónde está el check para seleccionar las gerencias de los complejos que esten seleccionados
-                selectLineStrategic = $("#pequiven_objetive_tactic_registration_lineStrategic"),//Select de Línea Estratégica
-                selectObjetiveStrategic = $("#pequiven_objetive_tactic_registration_parent"),//Select de Objetivo Estratégico
-                selectComplejo = $("#pequiven_objetive_tactic_registration_complejo"),//Select Complejo
-                selectGerencia = $("#pequiven_objetive_tactic_registration_gerencia"),//Select de Gerencia
-                selectIndicators = $("#pequiven_objetive_tactic_registration_indicators"),//Select de Indicadores
-                inputRef = $("#pequiven_objetive_tactic_registration_ref"),//Input de Ref
-                inputGoal = $("#pequiven_objetive_tactic_registration_goal"),//Input de Meta
-                inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso
-                inputHiddenComplejoName = $("#pequiven_objetive_tactic_registration_complejo_name"),//Input Hidden del Nombre del Complejo del usuario logueado
-                inputHiddenRoleName = $("#pequiven_objetive_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
-                checkIndicator = $("#pequiven_objetive_tactic_registration_evalIndicator"),//Check de Evaluar por Indicador
-                checkGerencia = $("#pequiven_objetive_tactic_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
-                selectArrangementRangeTypeTop = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
-                selectArrangementRangeTypeMiddle = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeMiddle"),//Select de Tipo de Rango Alto
-                selectArrangementRangeTypeBottom = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Alto
-                sectionTopBasic = $("#sectionTopBasic"),//Input Hidden de la Referencia del Objetivo
-                sectionTopCompound = $("#sectionTopCompound"),//Input Hidden de la Referencia del Objetivo
-                sectionMiddleBasic = $("#sectionMiddleBasic"),//Input Hidden de la Referencia del Objetivo
-                sectionMiddleCompound = $("#sectionMiddleCompound"),//Input Hidden de la Referencia del Objetivo
-                sectionBottomBasic = $("#sectionBottomBasic"),//Input Hidden de la Referencia del Objetivo
-                sectionBottomCompound = $("#sectionBottomCompound"),//Input Hidden de la Referencia del Objetivo
-                inputHiddenTypeArrangementRangeTop = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
-                inputHiddenTypeArrangementRangeMiddle = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeMiddle"),//Input Hidden del tipo de rango de gestión medio
-                inputHiddenTypeArrangementRangeBottom = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
-                inputRankTop = $("#pequiven_objetive_tactic_registration_rankTop"),//Input de rankTop
-                inputRankTopTopTop = $("#pequiven_objetive_tactic_registration_rankTopTopTop"),//Input de rankTopTopTop
-                inputRankTopTopBottom = $("#pequiven_objetive_tactic_registration_rankTopTopBottom"),//Input de rankTopTopBottom
-                inputRankTopBottomTop = $("#pequiven_objetive_tactic_registration_rankTopBottomTop"),//Input de rankTopBottomTop
-                inputRankTopBottomBottom = $("#pequiven_objetive_tactic_registration_rankTopBottomBottom"),//Input de rankTopBottomBottom
-                inputRankMiddleTop = $("#pequiven_objetive_tactic_registration_rankMiddleTop"),//Input de rankMiddleTop
-                inputRankMiddleBottom = $("#pequiven_objetive_tactic_registration_rankMiddleBottom"),//Input de rankMiddleBottom
-                inputRankMiddleTopTop = $("#pequiven_objetive_tactic_registration_rankMiddleTopTop"),//Input de rankMiddleTopTop
-                inputRankMiddleTopBottom = $("#pequiven_objetive_tactic_registration_rankMiddleTopBottom"),//Input de rankMiddleTopBottom
-                inputRankMiddleBottomTop = $("#pequiven_objetive_tactic_registration_rankMiddleBottomTop"),//Input de rankMiddleBottomTop
-                inputRankMiddleBottomBottom = $("#pequiven_objetive_tactic_registration_rankMiddleBottomBottom"),//Input de rankMiddleBottomBottom
-                inputRankBottom = $("#pequiven_objetive_tactic_registration_rankBottom"),//Input de rankBottom
-                inputRankBottomTopTop = $("#pequiven_objetive_tactic_registration_rankBottomTopTop"),//Input de rankBottomTopTop
-                inputRankBottomTopBottom = $("#pequiven_objetive_tactic_registration_rankBottomTopBottom"),//Input de rankBottomTopBottom
-                inputRankBottomBottomTop = $("#pequiven_objetive_tactic_registration_rankBottomBottomTop"),//Input de rankBottomBottomTop
-                inputRankBottomBottomBottom = $("#pequiven_objetive_tactic_registration_rankBottomBottomBottom")//Input de rankBottomBottomBottom
-                ;
             
-           //Llamado de la función que carga los valores por defecto de la vista
-           change();
-           
-           function change(){
-               //Escondemos por defecto el boton de registrar indicadores
-                buttonAddIndicator.hide();
-                messageLineStrategicCheckIndicator.hide();
-                messageObjetiveStrategicCheckIndicator.hide();
-                
-                //Escondemos por defecto la sección de sumar indicadores al objetivo
-                sectionIndicators.hide();
-               
-               //Inicializamos el select2 de Línea Estratégica
-               chargeSelect2LineStrategic();
-               
-               //Inicializamos el select2 de Objetivo Estratégico
-               //chargeSelectObjetiveStrategicFromLineStrategic();
-               chargeSelect2ObjetiveStrategic();
-               
-                //Inicializamos el select de Indicadores
-                chargeSelectIndicator();
-               
-               if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
-                    //Inicializamos el select2 de Complejo
-                    selectComplejo.select2({
+            $(document).ready(function()
+            {
+                var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
+                    messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
+                    messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
+                    sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
+                    sectionCheckGerencia = $("#view_check_gerencia"),//Sección dónde está el check para seleccionar las gerencias de los complejos que esten seleccionados
+                    selectLineStrategic = $("#pequiven_objetive_tactic_registration_lineStrategic"),//Select de Línea Estratégica
+                    selectObjetiveStrategic = $("#pequiven_objetive_tactic_registration_parent"),//Select de Objetivo Estratégico
+                    selectComplejo = $("#pequiven_objetive_tactic_registration_complejo"),//Select Complejo
+                    selectGerencia = $("#pequiven_objetive_tactic_registration_gerencia"),//Select de Gerencia
+                    selectIndicators = $("#pequiven_objetive_tactic_registration_indicators"),//Select de Indicadores
+                    inputRef = $("#pequiven_objetive_tactic_registration_ref"),//Input de Ref
+                    inputGoal = $("#pequiven_objetive_tactic_registration_goal"),//Input de Meta
+                    inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso
+                    inputHiddenRoleName = $("#pequiven_objetive_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+                    checkIndicator = $("#pequiven_objetive_tactic_registration_evalIndicator"),//Check de Evaluar por Indicador
+                    checkGerencia = $("#pequiven_objetive_tactic_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
+                    selectArrangementRangeTypeTop = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
+                    selectArrangementRangeTypeMiddleTop = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
+                    selectArrangementRangeTypeMiddleBottom = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleBottom"),//Select de Tipo de Rango Medio Bajo
+                    selectArrangementRangeTypeBottom = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Bajo
+                    sectionTopBasic = $("#sectionTopBasic"),//Sección de Rango de Gestión Alto Básico
+                    sectionTopMixed = $("#sectionTopMixed"),//Sección de Rango de Gestión Alto Mixto
+                    sectionMiddleTopBasic = $("#sectionMiddleTopBasic"),//Sección de Rango de Gestión Medio Alto Básico
+                    sectionMiddleTopMixed = $("#sectionMiddleTopMixed"),//Sección de Rango de Gestión Medio Alto Mixto
+                    sectionMiddleBottomBasic = $("#sectionMiddleBottomBasic"),//Sección de Rango de Gestión Medio Bajo Básico
+                    sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed"),//Sección de Rango de Gestión Medio Bajo Mixto
+                    sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
+                    sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
+                    inputHiddenTypeArrangementRangeTop = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
+                    inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
+                    inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
+                    inputHiddenTypeArrangementRangeBottom = $("#pequiven_objetive_tactic_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
+                    inputRankTopBasic = $("#pequiven_objetive_tactic_registration_rankTopBasic"),//Input de rankTopBasic
+                    inputRankTopMixedTop = $("#pequiven_objetive_tactic_registration_rankTopMixedTop"),//Input de rankTopMixedTop
+                    inputRankTopMixedBottom = $("#pequiven_objetive_tactic_registration_rankTopMixedBottom"),//Input de rankTopMixedBottom
+                    inputRankMiddleTopBasic = $("#pequiven_objetive_tactic_registration_rankMiddleTopBasic"),//Input de rankMiddleTopBasic
+                    inputRankMiddleTopMixedTop = $("#pequiven_objetive_tactic_registration_rankMiddleTopMixedTop"),//Input de rankMiddleTopMixedTop
+                    inputRankMiddleTopMixedBottom = $("#pequiven_objetive_tactic_registration_rankMiddleTopMixedBottom"),//Input de rankMiddleTopMixedBottom
+                    inputRankMiddleBottomBasic = $("#pequiven_objetive_tactic_registration_rankMiddleBottomBasic"),//Input de rankMiddleBottomBasic
+                    inputRankMiddleBottomMixedTop = $("#pequiven_objetive_tactic_registration_rankMiddleBottomMixedTop"),//Input de rankMiddleBottomMixedTop
+                    inputRankMiddleBottomMixedBottom = $("#pequiven_objetive_tactic_registration_rankMiddleBottomMixedBottom"),//Input de rankMiddleBottomMixedBottom
+                    inputRankBottomBasic = $("#pequiven_objetive_tactic_registration_rankBottomBasic"),//Input de rankBottomBasic
+                    inputRankBottomMixedTop = $("#pequiven_objetive_tactic_registration_rankBottomMixedTop"),//Input de rankBottomMixedTop
+                    inputRankBottomMixedBottom = $("#pequiven_objetive_tactic_registration_rankBottomMixedBottom")//Input de rankBottomMixedBottom
+                    ;
+            
+                //Llamado de la función que carga los valores por defecto de la vista
+                charge();
 
-                    });
-                    
-                    //Inicializamos el select2 de Gerencia
-                    selectGerencia.select2({
+                function charge(){
+                    //Escondemos por defecto el boton de registrar indicadores
+                     buttonAddIndicator.hide();
+                     messageLineStrategicCheckIndicator.hide();
+                     messageObjetiveStrategicCheckIndicator.hide();
 
-                    });
-                    selectGerencia.select2("enable",false);
-                    sectionCheckGerencia.hide();
-               }
-               
-               //Inicializamos el formato numerico para el input de Peso
-               inputWeight.number(true,2,',','.');
-               
-               //Incializamos el formato numerico para el input de Meta
-               inputGoal.number(true,2,',','.');
-               
-               //Inicializamos el formato numerico para el input de Rango Alto
-               inputRankTop.number(true,2,',','.');
-               inputRankTopTopTop.number(true,2,',','.');
-               inputRankTopTopBottom.number(true,2,',','.');
-               inputRankTopBottomTop.number(true,2,',','.');
-               inputRankTopBottomBottom.number(true,2,',','.');
-               inputRankMiddleTop.number(true,2,',','.');
-               inputRankMiddleBottom.number(true,2,',','.');
-               inputRankMiddleTopTop.number(true,2,',','.');
-               inputRankMiddleTopBottom.number(true,2,',','.');
-               inputRankMiddleBottomTop.number(true,2,',','.');
-               inputRankMiddleBottomBottom.number(true,2,',','.');
-               inputRankBottom.number(true,2,',','.');
-               inputRankBottomTopTop.number(true,2,',','.');
-               inputRankBottomTopBottom.number(true,2,',','.');
-               inputRankBottomBottomTop.number(true,2,',','.');
-               inputRankBottomBottomBottom.number(true,2,',','.');
-               
-               sectionTopBasic.hide();
-               sectionTopCompound.hide();
-               sectionMiddleBasic.hide();
-               sectionMiddleCompound.hide();
-               sectionBottomBasic.hide();
-               sectionBottomCompound.hide();
-           }
-           
-            selectArrangementRangeTypeTop.click(function() {
-                if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeTop_1']").is(':checked')) {
-                    sectionTopBasic.show();
-                    sectionTopCompound.hide();
-                    inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
-                 }
-                 else {
-                    sectionTopBasic.hide();
-                    sectionTopCompound.show();
-                    inputHiddenTypeArrangementRangeTop.val("TOP_COMPOUND");
-                 }
-           });
-           
-           selectArrangementRangeTypeMiddle.click(function() {
-                if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeMiddle_2']").is(':checked')) {
-                    sectionMiddleBasic.show();
-                    sectionMiddleCompound.hide();
-                    inputHiddenTypeArrangementRangeMiddle.val("MIDDLE_BASIC");
-                 }
-                 else {
-                    sectionMiddleBasic.hide();
-                    sectionMiddleCompound.show();
-                    inputHiddenTypeArrangementRangeMiddle.val("MIDDLE_COMPOUND");
-                 }
-           });
-           
-           selectArrangementRangeTypeBottom.click(function() {
-                if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeBottom_3']").is(':checked')) {
-                    sectionBottomBasic.show();
-                    sectionBottomCompound.hide();
-                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
-                 }
-                 else {
-                    sectionBottomBasic.hide();
-                    sectionBottomCompound.show();
-                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_COMPOUND");
-                 }
-           });
-           
-           //Al seleccionar alguna opción en el select de Línea Estratégica
-            selectLineStrategic.on("select2-selecting", function(e) {
-                chargeSelectIndicator();
-                displayObjetiveStrategicFromLineStrategic(e);//Actualizamos los Objetivos Estratégicos
-            })
-            selectLineStrategic.change(function() {
-               inputRef.val("");
-            });
-            
-            //Al seleccionar alguna opción en el select de Objetivo Estratégico
-            selectObjetiveStrategic.on("select2-selecting", function(e) {
-                displayObjetiveRef(e);
-                chargeSelectIndicator();
-            })
-            
-            //Al cambiar el select de Complejo
-            selectComplejo.change(function() {
-                displayGerenciaFromComplejo();
-            });
-            
-            //Al seleccionar el check de Todas las Gerencias
-            checkGerencia.click(function() {
-               checkAllGerencias();
-           });
-           
-           //Al seleccionar el check de evaluar por Indicador
-           checkIndicator.click(function() {
-                if(checkIndicator.is(':checked')){
-                    if(selectLineStrategic.val() !== '' && selectObjetiveStrategic.val() !== ''){
-                        buttonAddIndicator.show();
-                        chargeSelectIndicator();
-                        sectionIndicators.show();
-                    } else{
-                        if(selectLineStrategic.val() === ''){
-                            messageLineStrategicCheckIndicator.show();
-                        } else if(selectObjetiveStrategic.val() === ''){
-                            messageObjetiveStrategicCheckIndicator.show();
-                        }
-                    }
-                } else{
-                    buttonAddIndicator.hide();
+                    //Escondemos por defecto la sección de sumar indicadores al objetivo
                     sectionIndicators.hide();
-                    messageLineStrategicCheckIndicator.hide();
-                    messageObjetiveStrategicCheckIndicator.hide();
+
+                    //Inicializamos el select2 de Línea Estratégica
+                    chargeSelect2LineStrategic();
+
+                    //Inicializamos el select2 de Objetivo Estratégico
+                    //chargeSelectObjetiveStrategicFromLineStrategic();
+                    chargeSelect2ObjetiveStrategic();
+
+                    //Inicializamos el select de Indicadores
+                    chargeSelectIndicator();
+
+                    if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                        //Inicializamos el select2 de Complejo
+                        selectComplejo.select2({
+
+                        });
+
+                        //Inicializamos el select2 de Gerencia
+                        selectGerencia.select2({
+
+                        });
+                        selectGerencia.select2("enable",false);
+                        sectionCheckGerencia.hide();
+                    }
+
+                    //Inicializamos el formato numerico para el input de Peso
+                    inputWeight.number(true,2,',','.');
+
+                    //Incializamos el formato numerico para el input de Meta
+                    inputGoal.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Alto
+                    inputRankTopBasic.number(true,2,',','.');
+                    inputRankTopMixedTop.number(true,2,',','.');
+                    inputRankTopMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Medio Alto
+                    inputRankMiddleTopBasic.number(true,2,',','.');
+                    inputRankMiddleTopMixedTop.number(true,2,',','.');
+                    inputRankMiddleTopMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Medio Bajo
+                    inputRankMiddleBottomBasic.number(true,2,',','.');
+                    inputRankMiddleBottomMixedTop.number(true,2,',','.');
+                    inputRankMiddleBottomMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Bajo
+                    inputRankBottomBasic.number(true,2,',','.');
+                    inputRankBottomMixedTop.number(true,2,',','.');
+                    inputRankBottomMixedBottom.number(true,2,',','.');
+
+                    //Escondemos por defecto las secciones de rango de gestión alto
+                    sectionTopBasic.hide();
+                    sectionTopMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión medio alto
+                    sectionMiddleTopBasic.hide();
+                    sectionMiddleTopMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión medio bajo
+                    sectionMiddleBottomBasic.hide();
+                    sectionMiddleBottomMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión bajo
+                    sectionBottomBasic.hide();
+                    sectionBottomMixed.hide();
                 }
-            });
-            
-            //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
-            function displayObjetiveStrategicFromLineStrategic(e){
-                var data = {
-                   lineStrategicId: $.trim(e.val),
-               };
-               $.ajax({
-                   type: 'post',
-                   url: '{{ path("select_objetiveStrategicFromLineStrategic") }}',
-                   data: data,
-                   success: function(data) {
-                        $('#pequiven_objetive_tactic_registration_parent option[value]').remove();
-                        $('#pequiven_objetive_tactic_registration_parent option').remove();
-                        selectObjetiveStrategic.append('<option></option>');
-                        if(typeof data[0].empty === 'undefined'){
-                            for(var i=0, total = data.length; i<total; i++){
-                                selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
-                            }
-                            chargeSelect2ObjetiveStrategic("full");
+
+                selectArrangementRangeTypeTop.click(function() {
+                    if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeTop_1']").is(':checked')) {
+                        sectionTopBasic.show();
+                        sectionTopMixed.hide();
+                        inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
+                    } else if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeTop_5']").is(':checked')) {
+                        sectionTopBasic.hide();
+                        sectionTopMixed.show();
+                        inputHiddenTypeArrangementRangeTop.val("TOP_MIXED");
+                    }
+                });
+
+                selectArrangementRangeTypeMiddleTop.click(function() {
+                    if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleTop_2']").is(':checked')) {
+                        sectionMiddleTopBasic.show();
+                        sectionMiddleTopMixed.hide();
+                        inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
+                    } else if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleTop_6']").is(':checked')) {
+                        sectionMiddleTopBasic.hide();
+                        sectionMiddleTopMixed.show();
+                        inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_MIXED");
+                    }
+                });
+
+                selectArrangementRangeTypeMiddleBottom.click(function() {
+                    if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleBottom_3']").is(':checked')) {
+                        sectionMiddleBottomBasic.show();
+                        sectionMiddleBottomMixed.hide();
+                        inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_BASIC");
+                    } else if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeMiddleBottom_7']").is(':checked')) {
+                        sectionMiddleBottomBasic.hide();
+                        sectionMiddleBottomMixed.show();
+                        inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_MIXED");
+                    }
+                });
+
+                selectArrangementRangeTypeBottom.click(function() {
+                    if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeBottom_4']").is(':checked')) {
+                        sectionBottomBasic.show();
+                        sectionBottomMixed.hide();
+                        inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
+                    } else if ($("input[id='pequiven_objetive_tactic_registration_arrangementRangeTypeBottom_8']").is(':checked')) {
+                        sectionBottomBasic.hide();
+                        sectionBottomMixed.show();
+                        inputHiddenTypeArrangementRangeBottom.val("BOTTOM_MIXED");
+                    }
+                });
+
+                //Al seleccionar alguna opción en el select de Línea Estratégica
+                selectLineStrategic.on("select2-selecting", function(e) {
+                    chargeSelectIndicator();
+                    displayObjetiveStrategicFromLineStrategic(e);//Actualizamos los Objetivos Estratégicos
+                })
+                //Al cambiar la opción en el select de Línea Estratégica
+                selectLineStrategic.change(function() {
+                   inputRef.val("");
+                });
+
+                //Al seleccionar alguna opción en el select de Objetivo Estratégico
+                selectObjetiveStrategic.on("select2-selecting", function(e) {
+                    displayObjetiveRef(e);
+                    chargeSelectIndicator();
+                })
+
+                //Al cambiar el select de Complejo
+                selectComplejo.change(function() {
+                    displayGerenciaFromComplejo();
+                });
+
+                //Al seleccionar el check de Todas las Gerencias
+                checkGerencia.click(function() {
+                   checkAllGerencias();
+               });
+
+                //Al seleccionar el check de evaluar por Indicador
+                checkIndicator.click(function() {
+                    if(checkIndicator.is(':checked')){
+                        if(selectLineStrategic.val() !== '' && selectObjetiveStrategic.val() !== ''){
+                            buttonAddIndicator.show();
+                            chargeSelectIndicator();
+                            sectionIndicators.show();
                         } else{
-                            if(typeof data[0].initial === 'undefined'){
-                                chargeSelect2ObjetiveStrategic("empty");
-                            } else{
-                                chargeSelect2ObjetiveStrategic("initial");
+                            if(selectLineStrategic.val() === ''){
+                                messageLineStrategicCheckIndicator.show();
+                            } else if(selectObjetiveStrategic.val() === ''){
+                                messageObjetiveStrategicCheckIndicator.show();
                             }
                         }
-                   }
+                    } else{
+                        buttonAddIndicator.hide();
+                        sectionIndicators.hide();
+                        messageLineStrategicCheckIndicator.hide();
+                        messageObjetiveStrategicCheckIndicator.hide();
+                    }
                 });
-            }
-            
-            //Función que muestra las gerencias de acuerdo a los complejos seleccionados
-            function displayGerenciaFromComplejo(){
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX' ){
+
+                //Función que muestra los objetivos estratégicos de acuerdo a la línea estratégica seleccionada
+                function displayObjetiveStrategicFromLineStrategic(e){
                     var data = {
-                        complejos: $.trim(selectComplejo.val()),
+                       lineStrategicId: $.trim(e.val),
                     };
                     $.ajax({
                         type: 'post',
-                        url: '{{ path("select_gerenciaFromComplejoTactic") }}',
+                        url: '{{ path("select_objetiveStrategicFromLineStrategic") }}',
                         data: data,
                         success: function(data) {
-
-                            $("#pequiven_objetive_tactic_registration_gerencia optgroup").remove();
-                            $("#pequiven_objetive_tactic_registration_gerencia option[value]").remove();
-
-                            //Actualizamos el select de gerencias
-                            var cantidad = data.length;
-                            var text = '';
-                            text = text + '<optgroup label="' + data[0].optGroup + '">';
-                            
-                             for(var i=0, total = data.length; i<total; i++){
-                                if(i == 0){
-                                    text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                                } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
-                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                                } else if ((i+1) == cantidad){
-                                    text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                            $('#pequiven_objetive_tactic_registration_parent option[value]').remove();
+                            $('#pequiven_objetive_tactic_registration_parent option').remove();
+                            selectObjetiveStrategic.append('<option></option>');
+                            if(typeof data[0].empty === 'undefined'){
+                                for(var i=0, total = data.length; i<total; i++){
+                                    selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                                }
+                                chargeSelect2ObjetiveStrategic("full");
+                            } else{
+                                if(typeof data[0].initial === 'undefined'){
+                                    chargeSelect2ObjetiveStrategic("empty");
                                 } else{
-                                    text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                    chargeSelect2ObjetiveStrategic("initial");
                                 }
                             }
-                             selectGerencia.append(text);
-                             selectGerencia.select2({
-                             });
-                            selectGerencia.select2("enable",true);
-                            sectionCheckGerencia.show();
-                        }
-                     });
+                       }
+                    });
                 }
-            }
-            
-            //Función que muestra el Número de Referencia del objetivo a crear, de acuerdo al táctico seleccionado
-            function displayObjetiveRef(e){
-            var data = {
-                objetiveStrategicId: $.trim(e.val)
-            };
-            $.ajax({
-                type: 'post',
-                url: '{{ path("displayRefObjetiveTactic") }}',
-                data: data,
-                success: function(data) {
-                    inputRef.val(data[0].ref);
-                }
-             });
-            }
-            
-            //Función que "marca" todas las gerencias de los complejos seleccionados
-            function checkAllGerencias(){
-                if(checkGerencia.is(':checked')){
-                    selectGerencia.select2("val",'');
-                    selectGerencia.select2("enable",false);
-                } else{
-                    selectGerencia.select2("enable",true);
-                }
-            }
-        
-            //Agarrar este select como ejemplo para los demás select2
-            //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
-            function chargeSelectIndicator(){
-                var data = {
-                    refParentId: $.trim(inputRef.val())
-                };
-                $.ajax({
-                    type: 'post',
-                    url: '{{ path("select_indicatorTacticFromRefParent") }}',
-                    data: data,
-                    success: function(data) {
-                        $('#pequiven_objetive_tactic_registration_indicators option[value]').remove();
-                        $('#pequiven_objetive_tactic_registration_indicators').select2("val",'');
-                        
-                        if(typeof data[0].empty === 'undefined'){
-                            for(var i=0, total = data.length; i<total; i++){
-                                selectIndicators.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+
+                //Función que muestra las gerencias de acuerdo a los complejos seleccionados
+                function displayGerenciaFromComplejo(){
+                    if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX' ){
+                        var data = {
+                            complejos: $.trim(selectComplejo.val()),
+                        };
+                        $.ajax({
+                            type: 'post',
+                            url: '{{ path("select_gerenciaFromComplejoTactic") }}',
+                            data: data,
+                            success: function(data) {
+
+                                $("#pequiven_objetive_tactic_registration_gerencia optgroup").remove();
+                                $("#pequiven_objetive_tactic_registration_gerencia option[value]").remove();
+
+                                //Actualizamos el select de gerencias
+                                var cantidad = data.length;
+                                var text = '';
+                                text = text + '<optgroup label="' + data[0].optGroup + '">';
+
+                                for(var i=0, total = data.length; i<total; i++){
+                                    if(i == 0){
+                                        text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                    } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
+                                        text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                    } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
+                                        text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                    } else if ((i+1) == cantidad){
+                                        text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                    } else{
+                                        text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
+                                    }
+                                }
+                                selectGerencia.append(text);
+                                selectGerencia.select2({
+                                });
+                                selectGerencia.select2("enable",true);
+                                sectionCheckGerencia.show();
                             }
-                            chargeSelect2Indicators("full");
-                        } else{
-                            chargeSelect2Indicators("empty");
-                        }
+                        });
                     }
-                });
-            }
-           
-           //Función que carga el select2 de Línea Estratégica
-            function chargeSelect2LineStrategic(type){
-                selectLineStrategic.select2({
-                    placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
-                    formatNoMatches: function(term) {
-                        if(type == 'full'){
-                            return "{{ 'form.messages.selectLineStrategicFormatNoMatcher'|trans }}";
-                        } else{
-                            return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
+                }
+
+                //Función que muestra el Número de Referencia del objetivo a crear, de acuerdo al táctico seleccionado
+                function displayObjetiveRef(e){
+                    var data = {
+                        objetiveStrategicId: $.trim(e.val)
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("displayRefObjetiveTactic") }}',
+                        data: data,
+                        success: function(data) {
+                            inputRef.val(data[0].ref);
                         }
+                    });
+                }
+
+                //Función que "marca" todas las gerencias de los complejos seleccionados
+                function checkAllGerencias(){
+                    if(checkGerencia.is(':checked')){
+                        selectGerencia.select2("val",'');
+                        selectGerencia.select2("enable",false);
+                    } else{
+                        selectGerencia.select2("enable",true);
                     }
-                });
-            }
+                }
+
+                //Agarrar este select como ejemplo para los demás select2
+                //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
+                function chargeSelectIndicator(){
+                    var data = {
+                        refParentId: $.trim(inputRef.val())
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("select_indicatorTacticFromRefParent") }}',
+                        data: data,
+                        success: function(data) {
+                            $('#pequiven_objetive_tactic_registration_indicators option[value]').remove();
+                            $('#pequiven_objetive_tactic_registration_indicators').select2("val",'');
+
+                            if(typeof data[0].empty === 'undefined'){
+                                for(var i=0, total = data.length; i<total; i++){
+                                    selectIndicators.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                                }
+                                chargeSelect2Indicators("full");
+                            } else{
+                                chargeSelect2Indicators("empty");
+                            }
+                        }
+                    });
+                }
+
+                //Función que carga el select2 de Línea Estratégica
+                function chargeSelect2LineStrategic(type){
+                    selectLineStrategic.select2({
+                        placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectLineStrategicFormatNoMatcher'|trans }}";
+                            } else{
+                                return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
+                            }
+                        }
+                    });
+                }
+
+                //Función que carga el select2 de Objetivo Estratégico
+                function chargeSelect2ObjetiveStrategic(type){
+                    selectObjetiveStrategic.select2({
+                        placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                            } else if (type == 'empty'){
+                                return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
+                            } else {
+                                return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                            }
+                        }
+                    });
+                }
+
+                //Función que carga el select2 de Indicadores
+                function chargeSelect2Indicators(type){
+                    selectIndicators.select2({
+                        placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            } else{
+                                return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            }
+                        }
+                    });
+                }
+                
+            });
             
-            //Función que carga el select2 de Objetivo Estratégico
-            function chargeSelect2ObjetiveStrategic(type){
-                selectObjetiveStrategic.select2({
-                    placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
-                    formatNoMatches: function(term) {
-                        if(type == 'full'){
-                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                        } else if (type == 'empty'){
-                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
-                        } else {
-                            return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+            function indicatorsRegisterSuccessful(){
+                $("#modals").remove();
+                //document.scripts.chargeSelectIndicator();
+                //document.chargeSelectIndicator();
+            };
+
+            function openFormIndicator(){
+                $.modal({
+                    title: '{{ 'pequiven_indicator.titleFrameAddTactic'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    url: '{{ path("pequiven_indicator_add_tactic_from_objetive") }}' ,
+                    useIframe: true,
+                    height: '800',
+                    width: '600',
+                    buttons: {
+                            'Cerrar': {
+                                classes:	'red-gradient glossy full-width',
+                                click:      function(win) { win.closeModal(); }
+                            }
                         }
-                    }
                 });
-            }
-           
-           //Función que carga el select2 de Indicadores
-           function chargeSelect2Indicators(type){
-                selectIndicators.select2({
-                    placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
-                    formatNoMatches: function(term) {
-                        if(type == 'full'){
-                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
-                        } else{
-                            return "<a href='#lineStrategic'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
-                        }
-                    }
-                });
-           }
-           
-           });
+            };
            
     </script>
     
     <script>
-        
-        function indicatorsRegisterSuccessful(){
-            $("#modals").remove();
-            //document.scripts.chargeSelectIndicator();
-            document.chargeSelectIndicator();
-        }
-
-        function openFormIndicator(){
-            $.modal({
-                title: '{{ 'pequiven_indicator.titleFrameAddTactic'|trans ({}, 'PequivenIndicatorBundle') }}',
-                url: '{{ path("pequiven_indicator_add_tactic_from_objetive") }}' ,
-                useIframe: true,
-                height: '800',
-                width: '600',
-                buttons: {
-                        'Cerrar': {
-                            classes:	'red-gradient glossy full-width',
-                            click:      function(win) { win.closeModal(); }
-                        }
-                    }
-            });
-        
             /**
             $.modal.alert('Indicador',{
                     buttons: {

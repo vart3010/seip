@@ -58,7 +58,7 @@ class RegistrationFormType extends AbstractType {
         //Fórmula del indicador a crear
             $builder->addEventSubscriber(new AddFormulaFieldListener());
         
-        //Rango de Gestión 
+        //Rango de Gestión
             $objectArrangementRangeType = new ArrangementRangeType();
             $rangeTypeNameArray = $objectArrangementRangeType->getRangeTypeNameArray();
             

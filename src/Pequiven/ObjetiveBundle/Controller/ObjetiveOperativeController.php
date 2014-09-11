@@ -115,14 +115,13 @@ class ObjetiveOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $role = $user->getRoles();
-        $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
-        $complejoNameArray = $complejoObject->getRefNameArray();
         
         $em->getConnection()->beginTransaction();
         if($form->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_operative_registration");
             
+            $ref = $data['ref'];
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             
@@ -141,6 +140,7 @@ class ObjetiveOperativeController extends baseController {
                 if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerenciaSecond']); $i++){
                         ${$nameObject.$i} = clone $object;
+                        ${$nameObject.$i}->resetIndicators();
                         $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         $complejo = $gerenciaSecond->getGerencia()->getComplejo();
                         $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerenciaSecond->getGerencia()->getId()));
@@ -148,6 +148,12 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject.$i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject.$i}->setComplejo($complejo);
                         ${$nameObject.$i}->setParent($parent);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$i}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$i});
                     }
                 } else{//En caso de que las gerencias de 2da línea a impactar, sean todas la de las gerencias de 1ra línea seleccionadas
@@ -161,10 +167,17 @@ class ObjetiveOperativeController extends baseController {
                         $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $complejo->getId(), 'ref' => $objetive->getRef(), 'gerencia' => $gerencia->getId()));
                         foreach($gerenciasSecond as $gerenciaSecond){
                             ${$nameObject.$j} = clone $object;
+                            ${$nameObject.$j}->resetIndicators();
                             ${$nameObject.$j}->setGerencia($gerencia);
                             ${$nameObject.$j}->setGerenciaSecond($gerenciaSecond);
                             ${$nameObject.$j}->setComplejo($complejo);
                             ${$nameObject.$j}->setParent($parent);
+                            if(isset($data['indicators'])){
+                                foreach($data['indicators'] as $value){
+                                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    ${$nameObject.$j}->addIndicator($indicator);
+                                }
+                            }
                             $em->persist(${$nameObject.$j});
                             $j++;
                         }
@@ -176,12 +189,19 @@ class ObjetiveOperativeController extends baseController {
                 if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerenciaSecond']); $i++){
                         ${$nameObject.$i} = clone $object;
+                        ${$nameObject.$i}->resetIndicators();
                         $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         $complejo = $gerenciaSecond->getGerencia()->getComplejo();
                         ${$nameObject.$i}->setGerencia($gerenciaSecond->getGerencia());
                         ${$nameObject.$i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject.$i}->setComplejo($complejo);
                         ${$nameObject.$i}->setParent($objetive);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$i}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$i});
                     }
                 } else{//En caso de que las gerencias de 2da línea a impactar, sean todas la de las gerencias de 1ra línea seleccionadas
@@ -190,11 +210,18 @@ class ObjetiveOperativeController extends baseController {
                     $gerencia = $user->getGerencia();
                     foreach($gerenciasSecond as $gerenciaSecond){
                         ${$nameObject.$j} = clone $object;
+                        ${$nameObject.$j}->resetIndicators();
                         $complejo = $gerenciaSecond->getComplejo();
                         ${$nameObject.$j}->setGerencia($gerencia);
                         ${$nameObject.$j}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject.$j}->setComplejo($complejo);
                         ${$nameObject.$j}->setParent($objetive);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$j}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$j});
                         $j++;
                     }
@@ -204,12 +231,19 @@ class ObjetiveOperativeController extends baseController {
                 if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerenciaSecond']); $i++){
                         ${$nameObject.$i} = clone $object;
+                        ${$nameObject.$i}->resetIndicators();
                         $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         $complejo = $gerenciaSecond->getGerencia()->getComplejo();
                         ${$nameObject.$i}->setGerencia($gerenciaSecond->getGerencia());
                         ${$nameObject.$i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject.$i}->setComplejo($complejo);
                         ${$nameObject.$i}->setParent($objetive);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$i}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$i});
                     }
                 } else{//En caso de que las gerencias de 2da línea a impactar, sean todas la de las gerencias de 1ra línea seleccionadas
@@ -218,19 +252,38 @@ class ObjetiveOperativeController extends baseController {
                     $gerencia = $user->getGerencia();
                     foreach($gerenciasSecond as $gerenciaSecond){
                         ${$nameObject.$j} = clone $object;
+                        ${$nameObject.$j}->resetIndicators();
                         $complejo = $gerenciaSecond->getComplejo();
                         ${$nameObject.$j}->setGerencia($gerencia);
                         ${$nameObject.$j}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject.$j}->setComplejo($complejo);
                         ${$nameObject.$j}->setParent($objetive);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$j}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$j});
                         $j++;
                     }
                 }
             } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
                 $object->setParent($objetive);
+                if(isset($data['indicators'])){
+                    foreach($data['indicators'] as $value){
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $object->addIndicator($indicator);
+                    }
+                }
                 $em->persist($object);
             } else{
+                if(isset($data['indicators'])){
+                    foreach($data['indicators'] as $value){
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $object->addIndicator($indicator);
+                    }
+                }
                 $em->persist($object);
             }
             
@@ -243,11 +296,8 @@ class ObjetiveOperativeController extends baseController {
                 throw $e;
             }
             
-            $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            if(isset($data['indicators'])){
-                $this->createObjetiveIndicator($objetives,$data['indicators']);
-            }
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
+
             $this->createArrangementRange($objetives, $data);
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', 
@@ -276,52 +326,52 @@ class ObjetiveOperativeController extends baseController {
         $em->getConnection()->beginTransaction();
         $totalObjetives = count($objetives);
         
-        //Seteamos los valores de rango alto
+                //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
         if($data['typeArrangementRangeTypeTop'] == 'TOP_BASIC'){
-            $arrangementRange->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
-            $arrangementRange->setOpRankTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTop'])));
-        } else{
-            $arrangementRange->setRankTopTopTop(bcadd(str_replace(',', '.', $data['rankTopTopTop']),'0',3));
-            $arrangementRange->setOpRankTopTopTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopTopTop'])));
-            $arrangementRange->setRankTopTopBottom(bcadd(str_replace(',', '.', $data['rankTopTopBottom']),'0',3));
-            $arrangementRange->setOpRankTopTopBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopTopBottom'])));
-            $arrangementRange->setRankTopBottomTop(bcadd(str_replace(',', '.', $data['rankTopBottomTop']),'0',3));
-            $arrangementRange->setOpRankTopBottomTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopBottomTop'])));
-            $arrangementRange->setRankTopBottomBottom(bcadd(str_replace(',', '.', $data['rankTopBottomBottom']),'0',3));
-            $arrangementRange->setOpRankTopBottomBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopBottomBottom'])));
+            $arrangementRange->setRankTopBasic(bcadd(str_replace(',', '.', $data['rankTopBasic']),'0',3));
+            $arrangementRange->setOpRankTopBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopBasic'])));
+        } else if($data['typeArrangementRangeTypeTop'] == 'TOP_MIXED'){
+            $arrangementRange->setRankTopMixedTop(bcadd(str_replace(',', '.', $data['rankTopMixedTop']),'0',3));
+            $arrangementRange->setOpRankTopMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopMixedTop'])));
+            $arrangementRange->setRankTopMixedBottom(bcadd(str_replace(',', '.', $data['rankTopMixedBottom']),'0',3));
+            $arrangementRange->setOpRankTopMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopMixedBottom'])));
         }
-        //Seteamos los valores de rango medio
-        $arrangementRange->setTypeRangeMiddle($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeMiddle'])));
-        if($data['typeArrangementRangeTypeMiddle'] == 'MIDDLE_BASIC'){
-            $arrangementRange->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
-            $arrangementRange->setOpRankMiddleTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTop'])));
-            $arrangementRange->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
-            $arrangementRange->setOpRankMiddleBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottom'])));
-        } else{
-            $arrangementRange->setRankMiddleTopTop(bcadd(str_replace(',', '.', $data['rankMiddleTopTop']),'0',3));
-            $arrangementRange->setOpRankMiddleTopTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopTop'])));
-            $arrangementRange->setRankMiddleTopBottom(bcadd(str_replace(',', '.', $data['rankMiddleTopBottom']),'0',3));
-            $arrangementRange->setOpRankMiddleTopBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopBottom'])));
-            $arrangementRange->setRankMiddleBottomTop(bcadd(str_replace(',', '.', $data['rankMiddleBottomTop']),'0',3));
-            $arrangementRange->setOpRankMiddleBottomTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomTop'])));
-            $arrangementRange->setRankMiddleBottomBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottomBottom']),'0',3));
-            $arrangementRange->setOpRankMiddleBottomBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomBottom'])));
+        
+        //Seteamos los valores de rango medio alto
+        $arrangementRange->setTypeRangeMiddleTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeMiddleTop'])));
+        if($data['typeArrangementRangeTypeMiddleTop'] == 'MIDDLE_TOP_BASIC'){
+            $arrangementRange->setRankMiddleTopBasic(bcadd(str_replace(',', '.', $data['rankMiddleTopBasic']),'0',3));
+            $arrangementRange->setOpRankMiddleTopBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopBasic'])));
+        } else if($data['typeArrangementRangeTypeMiddleTop'] == 'MIDDLE_TOP_MIXED'){
+            $arrangementRange->setRankMiddleTopMixedTop(bcadd(str_replace(',', '.', $data['rankMiddleTopMixedTop']),'0',3));
+            $arrangementRange->setOpRankMiddleTopMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopMixedTop'])));
+            $arrangementRange->setRankMiddleTopMixedBottom(bcadd(str_replace(',', '.', $data['rankMiddleTopMixedBottom']),'0',3));
+            $arrangementRange->setOpRankMiddleTopMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopMixedBottom'])));
         }
+        
+        //Seteamos los valores de rango medio bajo
+        $arrangementRange->setTypeRangeMiddleBottom($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeMiddleBottom'])));
+        if($data['typeArrangementRangeTypeMiddleBottom'] == 'MIDDLE_BOTTOM_BASIC'){
+            $arrangementRange->setRankMiddleBottomBasic(bcadd(str_replace(',', '.', $data['rankMiddleBottomBasic']),'0',3));
+            $arrangementRange->setOpRankMiddleBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomBasic'])));
+        } else if($data['typeArrangementRangeTypeMiddleBottom'] == 'MIDDLE_BOTTOM_MIXED'){
+            $arrangementRange->setRankMiddleBottomMixedTop(bcadd(str_replace(',', '.', $data['rankMiddleBottomMixedTop']),'0',3));
+            $arrangementRange->setOpRankMiddleBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomMixedTop'])));
+            $arrangementRange->setRankMiddleBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottomMixedBottom']),'0',3));
+            $arrangementRange->setOpRankMiddleBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomMixedBottom'])));
+        }
+        
         //Seteamos los valores de rango bajo
         $arrangementRange->setTypeRangeBottom($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeBottom'])));
         if($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_BASIC'){
-            $arrangementRange->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
-            $arrangementRange->setOpRankBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottom'])));
-        } else{
-            $arrangementRange->setRankBottomTopTop(bcadd(str_replace(',', '.', $data['rankBottomTopTop']),'0',3));
-            $arrangementRange->setOpRankBottomTopTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopTop'])));
-            $arrangementRange->setRankBottomTopBottom(bcadd(str_replace(',', '.', $data['rankBottomTopBottom']),'0',3));
-            $arrangementRange->setOpRankBottomTopBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopBottom'])));
-            $arrangementRange->setRankBottomBottomTop(bcadd(str_replace(',', '.', $data['rankBottomBottomTop']),'0',3));
-            $arrangementRange->setOpRankBottomBottomTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomTop'])));
-            $arrangementRange->setRankBottomBottomBottom(bcadd(str_replace(',', '.', $data['rankBottomBottomBottom']),'0',3));
-            $arrangementRange->setOpRankBottomBottomBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBottom'])));
+            $arrangementRange->setRankBottomBasic(bcadd(str_replace(',', '.', $data['rankBottomBasic']),'0',3));
+            $arrangementRange->setOpRankBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBasic'])));
+        } else if($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_MIXED'){
+            $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']),'0',3));
+            $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
+            $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']),'0',3));
+            $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
         }
         
         if($totalObjetives > 0){
@@ -329,45 +379,6 @@ class ObjetiveOperativeController extends baseController {
                 $objectArrangementRange = clone $arrangementRange;
                 $objectArrangementRange->setObjetive($objetive);
                 $em->persist($objectArrangementRange);
-            }
-        }
-        
-        try{
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (Exception $e){
-            $em->getConnection()->rollback();
-            throw $e;
-        }
-        
-        return true;
-    }    
-    
-    /**
-     * Función que guarda en la tabla intermedia los indicadores asignados al objetivo creado
-     * @param type $objetives
-     * @param type $indicators
-     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
-     */
-    public function createObjetiveIndicator($objetives = array(),$indicators = array()){
-        $totalObjetives = count($objetives);
-        $totalIndicators = count($indicators);
-        $objetiveIndicator = new ObjetiveIndicator();
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
-        if($totalObjetives > 0){
-            foreach($objetives as $objetive){
-                $objetiveIndicator->setObjetive($objetive);
-                if($totalIndicators > 0){
-                    for($i = 0; $i < $totalIndicators; $i++){
-                        $objectObjetiveIndicator = clone $objetiveIndicator;
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
-                        $indicator->setTmp(false);
-                        $em->persist($indicator);
-                        $objectObjetiveIndicator->setIndicator($indicator);
-                        $em->persist($objectObjetiveIndicator);
-                    }
-                }
             }
         }
         
@@ -595,17 +606,6 @@ class ObjetiveOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $gerenciasObjectArray = array();
-        
-        
-//        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-//            //Obtenemos las gerencias de 1ra línea por complejo para el usuario logueado
-//            $gerenciasResult = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('ref' => $user->getGerencia()->getRef(), 'complejo' => $complejosArray));
-//            foreach($gerenciasResult as $gerencia){
-//                $gerenciasObjectArray[] = $gerencia->getId();
-//            }
-//            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => 1,'gerencia' => $gerenciasObjectArray));
-//
-//        }
         
         if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             $complejos = $request->request->get('complejos');

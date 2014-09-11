@@ -212,287 +212,281 @@
     
     {% block javascript %}
         
-    <script type="text/javascript">
-        $(document).ready(function()
-        {
-            var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
-                messageCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
-                sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
-                selectLineStrategic = $("#pequiven_objetive_strategic_registration_lineStrategic"),//Select de Línea Estratégica
-                selectComplejo = $("#pequiven_objetive_strategic_registration_complejo"),//Select de Complejo
-                selectIndicators = $("#pequiven_objetive_strategic_registration_indicators"),//Select de Indicadores
-                inputRef = $("#pequiven_objetive_strategic_registration_ref"),//Input de Ref
-                inputGoal = $("#pequiven_objetive_strategic_registration_goal"),//Input de Meta
-                checkIndicator = $("#pequiven_objetive_strategic_registration_evalIndicator"),//Check de Evaluar por Indicador
-                selectArrangementRangeTypeTop = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
-                selectArrangementRangeTypeMiddleTop = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
-                selectArrangementRangeTypeMiddleBottom = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom"),//Select de Tipo de Rango Medio Bajo
-                selectArrangementRangeTypeBottom = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Bajo
-                sectionTopBasic = $("#sectionTopBasic"),//Sección de Rango de Gestión Alto Básico
-                sectionTopMixed = $("#sectionTopMixed"),//Sección de Rango de Gestión Alto Mixto
-                sectionMiddleTopBasic = $("#sectionMiddleTopBasic"),//Sección de Rango de Gestión Medio Alto Básico
-                sectionMiddleTopMixed = $("#sectionMiddleTopMixed"),//Sección de Rango de Gestión Medio Alto Mixto
-                sectionMiddleBottomBasic = $("#sectionMiddleBottomBasic"),//Sección de Rango de Gestión Medio Bajo Básico
-                sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed"),//Sección de Rango de Gestión Medio Bajo Mixto
-                sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
-                sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
-                inputHiddenTypeArrangementRangeTop = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
-                inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
-                inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
-                inputHiddenTypeArrangementRangeBottom = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
-                inputRankTopBasic = $("#pequiven_objetive_strategic_registration_rankTopBasic"),//Input de rankTopBasic
-                inputRankTopMixedTop = $("#pequiven_objetive_strategic_registration_rankTopMixedTop"),//Input de rankTopMixedTop
-                inputRankTopMixedBottom = $("#pequiven_objetive_strategic_registration_rankTopMixedBottom"),//Input de rankTopMixedBottom
-                inputRankMiddleTopBasic = $("#pequiven_objetive_strategic_registration_rankMiddleTopBasic"),//Input de rankMiddleTopBasic
-                inputRankMiddleTopMixedTop = $("#pequiven_objetive_strategic_registration_rankMiddleTopMixedTop"),//Input de rankMiddleTopMixedTop
-                inputRankMiddleTopMixedBottom = $("#pequiven_objetive_strategic_registration_rankMiddleTopMixedBottom"),//Input de rankMiddleTopMixedBottom
-                inputRankMiddleBottomBasic = $("#pequiven_objetive_strategic_registration_rankMiddleBottomBasic"),//Input de rankMiddleBottomBasic
-                inputRankMiddleBottomMixedTop = $("#pequiven_objetive_strategic_registration_rankMiddleBottomMixedTop"),//Input de rankMiddleBottomMixedTop
-                inputRankMiddleBottomMixedBottom = $("#pequiven_objetive_strategic_registration_rankMiddleBottomMixedBottom"),//Input de rankMiddleBottomMixedBottom
-                inputRankBottomBasic = $("#pequiven_objetive_strategic_registration_rankBottomBasic"),//Input de rankBottomBasic
-                inputRankBottomMixedTop = $("#pequiven_objetive_strategic_registration_rankBottomMixedTop"),//Input de rankBottomMixedTop
-                inputRankBottomMixedBottom = $("#pequiven_objetive_strategic_registration_rankBottomMixedBottom")//Input de rankBottomMixedBottom
-                ;
-            
-            charge();
-            
-            function charge(){
-                //Escondemos por defecto el boton de registrar indicadores y el mensaje en cao de no haber seleccionado alguna Línea Estratégica
-                buttonAddIndicator.hide();
-                messageCheckIndicator.hide();
-               
-                //Escondemos por defecto la sección de sumar indicadores al objetivo
-                sectionIndicators.hide();
-               
-                //Inicializamos el select de Línea Estratégica
-                chargeSelect2LineStrategic();
-               
-                //Inicializamos el select de Complejo
-                selectComplejo.select2({
-                   
-                });
-               
-                //Inicializamos el select de Indicadores
-                chargeSelectIndicator();
-               
-                //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true,2,',','.');
-             
-                //Inicializamos el formato numerico para el input de Rango Alto
-                inputRankTopBasic.number(true,2,',','.');
-                inputRankTopMixedTop.number(true,2,',','.');
-                inputRankTopMixedBottom.number(true,2,',','.');
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
+                    messageCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
+                    sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
+                    selectLineStrategic = $("#pequiven_objetive_strategic_registration_lineStrategic"),//Select de Línea Estratégica
+                    selectComplejo = $("#pequiven_objetive_strategic_registration_complejo"),//Select de Complejo
+                    selectIndicators = $("#pequiven_objetive_strategic_registration_indicators"),//Select de Indicadores
+                    inputRef = $("#pequiven_objetive_strategic_registration_ref"),//Input de Ref
+                    inputGoal = $("#pequiven_objetive_strategic_registration_goal"),//Input de Meta
+                    checkIndicator = $("#pequiven_objetive_strategic_registration_evalIndicator"),//Check de Evaluar por Indicador
+                    selectArrangementRangeTypeTop = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
+                    selectArrangementRangeTypeMiddleTop = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
+                    selectArrangementRangeTypeMiddleBottom = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom"),//Select de Tipo de Rango Medio Bajo
+                    selectArrangementRangeTypeBottom = $("#pequiven_objetive_strategic_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Bajo
+                    sectionTopBasic = $("#sectionTopBasic"),//Sección de Rango de Gestión Alto Básico
+                    sectionTopMixed = $("#sectionTopMixed"),//Sección de Rango de Gestión Alto Mixto
+                    sectionMiddleTopBasic = $("#sectionMiddleTopBasic"),//Sección de Rango de Gestión Medio Alto Básico
+                    sectionMiddleTopMixed = $("#sectionMiddleTopMixed"),//Sección de Rango de Gestión Medio Alto Mixto
+                    sectionMiddleBottomBasic = $("#sectionMiddleBottomBasic"),//Sección de Rango de Gestión Medio Bajo Básico
+                    sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed"),//Sección de Rango de Gestión Medio Bajo Mixto
+                    sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
+                    sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
+                    inputHiddenTypeArrangementRangeTop = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
+                    inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
+                    inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
+                    inputHiddenTypeArrangementRangeBottom = $("#pequiven_objetive_strategic_registration_typeArrangementRangeTypeBottom"),//Input Hidden del tipo de rango de gestión bajo
+                    inputRankTopBasic = $("#pequiven_objetive_strategic_registration_rankTopBasic"),//Input de rankTopBasic
+                    inputRankTopMixedTop = $("#pequiven_objetive_strategic_registration_rankTopMixedTop"),//Input de rankTopMixedTop
+                    inputRankTopMixedBottom = $("#pequiven_objetive_strategic_registration_rankTopMixedBottom"),//Input de rankTopMixedBottom
+                    inputRankMiddleTopBasic = $("#pequiven_objetive_strategic_registration_rankMiddleTopBasic"),//Input de rankMiddleTopBasic
+                    inputRankMiddleTopMixedTop = $("#pequiven_objetive_strategic_registration_rankMiddleTopMixedTop"),//Input de rankMiddleTopMixedTop
+                    inputRankMiddleTopMixedBottom = $("#pequiven_objetive_strategic_registration_rankMiddleTopMixedBottom"),//Input de rankMiddleTopMixedBottom
+                    inputRankMiddleBottomBasic = $("#pequiven_objetive_strategic_registration_rankMiddleBottomBasic"),//Input de rankMiddleBottomBasic
+                    inputRankMiddleBottomMixedTop = $("#pequiven_objetive_strategic_registration_rankMiddleBottomMixedTop"),//Input de rankMiddleBottomMixedTop
+                    inputRankMiddleBottomMixedBottom = $("#pequiven_objetive_strategic_registration_rankMiddleBottomMixedBottom"),//Input de rankMiddleBottomMixedBottom
+                    inputRankBottomBasic = $("#pequiven_objetive_strategic_registration_rankBottomBasic"),//Input de rankBottomBasic
+                    inputRankBottomMixedTop = $("#pequiven_objetive_strategic_registration_rankBottomMixedTop"),//Input de rankBottomMixedTop
+                    inputRankBottomMixedBottom = $("#pequiven_objetive_strategic_registration_rankBottomMixedBottom")//Input de rankBottomMixedBottom
+                    ;
 
-                //Inicializamos el formato numerico para el input de Rango Medio Alto
-                inputRankMiddleTopBasic.number(true,2,',','.');
-                inputRankMiddleTopMixedTop.number(true,2,',','.');
-                inputRankMiddleTopMixedBottom.number(true,2,',','.');
+                charge();
 
-                //Inicializamos el formato numerico para el input de Rango Medio Bajo
-                inputRankMiddleBottomBasic.number(true,2,',','.');
-                inputRankMiddleBottomMixedTop.number(true,2,',','.');
-                inputRankMiddleBottomMixedBottom.number(true,2,',','.');
-
-                //Inicializamos el formato numerico para el input de Rango Bajo
-                inputRankBottomBasic.number(true,2,',','.');
-                inputRankBottomMixedTop.number(true,2,',','.');
-                inputRankBottomMixedBottom.number(true,2,',','.');
-                
-               //Escondemos por defecto las secciones de rango de gestión alto
-                sectionTopBasic.hide();
-                sectionTopMixed.hide();
-                //Escondemos por defecto las secciones de rango de gestión medio alto
-                sectionMiddleTopBasic.hide();
-                sectionMiddleTopMixed.hide();
-                //Escondemos por defecto las secciones de rango de gestión medio bajo
-                sectionMiddleBottomBasic.hide();
-                sectionMiddleBottomMixed.hide();
-                //Escondemos por defecto las secciones de rango de gestión bajo
-                sectionBottomBasic.hide();
-                sectionBottomMixed.hide();
-            }
-            
-            selectArrangementRangeTypeTop.click(function() {
-                if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeTop_1']").is(':checked')) {
-                    sectionTopBasic.show();
-                    sectionTopMixed.hide();
-                    inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
-                 } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeTop_5']").is(':checked')) {
-                    sectionTopBasic.hide();
-                    sectionTopMixed.show();
-                    inputHiddenTypeArrangementRangeTop.val("TOP_MIXED");
-                 }
-            });
-           
-            selectArrangementRangeTypeMiddleTop.click(function() {
-                if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop_2']").is(':checked')) {
-                    sectionMiddleTopBasic.show();
-                    sectionMiddleTopMixed.hide();
-                    inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
-                 } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop_6']").is(':checked')) {
-                    sectionMiddleTopBasic.hide();
-                    sectionMiddleTopMixed.show();
-                    inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_MIXED");
-                 }
-            });
-           
-            selectArrangementRangeTypeMiddleBottom.click(function() {
-                if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom_3']").is(':checked')) {
-                    sectionMiddleBottomBasic.show();
-                    sectionMiddleBottomMixed.hide();
-                    inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_BASIC");
-                 } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom_7']").is(':checked')) {
-                    sectionMiddleBottomBasic.hide();
-                    sectionMiddleBottomMixed.show();
-                    inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_MIXED");
-                 }
-            });
-           
-            selectArrangementRangeTypeBottom.click(function() {
-                if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeBottom_4']").is(':checked')) {
-                    sectionBottomBasic.show();
-                    sectionBottomMixed.hide();
-                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
-                 } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeBottom_8']").is(':checked')) {
-                    sectionBottomBasic.hide();
-                    sectionBottomMixed.show();
-                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_MIXED");
-                 }
-            });
-           
-            //Al seleccionar alguna opción en el select de Línea Estratégica
-            selectLineStrategic.on("select2-selecting", function(e) {
-                chargeSelectIndicator();
-                displayObjetiveRef(e);//Actualizamos la Referencia del Objetivo a Crear
-            })
-            
-            //Función que muestra el Número de Referencia del objetivo a crear, de acuerdo a la línea estratégica seleccionada
-            function displayObjetiveRef(e){
-                var data = {
-                    lineStrategicId: $.trim(e.val)
-                };
-                $.ajax({
-                    type: 'post',
-                    url: '{{ path("displayRefObjetiveStrategic") }}',
-                    data: data,
-                    success: function(data) {
-                        inputRef.val(data[0].ref);
-                    }
-                 });
-            }
-           
-           //Check Para Evaluar el Objetivo a crear por Indicador
-            checkIndicator.click(function() {
-                if(checkIndicator.is(':checked')){
-                    if(selectLineStrategic.val() === ''){
-                        messageCheckIndicator.show();
-                    } else{
-                        buttonAddIndicator.show();
-                        chargeSelectIndicator();
-                        sectionIndicators.show();
-                    }
-                } else{
+                function charge(){
+                    //Escondemos por defecto el boton de registrar indicadores y el mensaje en cao de no haber seleccionado alguna Línea Estratégica
                     buttonAddIndicator.hide();
-                    sectionIndicators.hide();
                     messageCheckIndicator.hide();
-                }
-            });
-           
-            //Agarrar este select como ejemplo para los demás select2
-            //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
-            function chargeSelectIndicator(){
-                var data = {
-                    refParentId: $.trim(inputRef.val())
-                };
-                $.ajax({
-                    type: 'post',
-                    url: '{{ path("select_indicatorStrategicFromRefParent") }}',
-                    data: data,
-                    success: function(data) {
-                        //var $indicators_selector = $("#pequiven_objetive_strategic_registration_indicators");
-                        $('#pequiven_objetive_strategic_registration_indicators option[value]').remove();
-                        selectIndicators.select2("val",'');
-                        
-                        if(typeof data[0].empty === 'undefined'){
-                            for(var i=0, total = data.length; i<total; i++){
-                                selectIndicators.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
-                            }
-                            chargeSelect2Indicators("full");
-                        } else{
-                            chargeSelect2Indicators("empty");
-                        }
-                    }
-                });
-            }
-           
-            //Función que carga el select2 de Línea Estratégica
-            function chargeSelect2LineStrategic(type){
-                selectLineStrategic.select2({
-                    placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
-                    formatNoMatches: function(term) {
-                        if(type == 'full'){
-                            return "{{ 'form.messages.selectLineStrategicFormatNoMatcher'|trans }}";
-                        } else{
-                            return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
-                        }
-                    }
-                });
-            }
-           
-            //Función que carga el select2 de Indicadores
-            function chargeSelect2Indicators(type){
-                selectIndicators.select2({
-                    placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
-                    formatNoMatches: function(term) {
-                        if(type == 'full'){
-                            return "<a href='#lineStrategicq'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
-                        } else{
-                            return "<a href='#lineStrategicq'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
-                        }
-                    }
-                });
-            }
-           
-        });
-        
-        function indicatorsRegisterSuccessful(){
-            $("#modals").remove();
-            //document.scripts.chargeSelectIndicator();
-            document.chargeSelectIndicator();
-        }
 
-        function openFormIndicator(){
-            $.modal({
-                title: '{{ 'pequiven_indicator.titleFrameAddStrategic'|trans ({}, 'PequivenIndicatorBundle') }}',
-                url: '{{ path("pequiven_indicator_add_strategic_from_objetive") }}' ,
-                useIframe: true,
-                height: '800',
-                width: '600',
-                buttons: {
-                        'Cerrar': {
-                            classes:	'red-gradient glossy full-width',
-                            click:      function(win) { win.closeModal(); }
+                    //Escondemos por defecto la sección de sumar indicadores al objetivo
+                    sectionIndicators.hide();
+
+                    //Inicializamos el select de Línea Estratégica
+                    chargeSelect2LineStrategic();
+
+                    //Inicializamos el select de Complejo
+                    selectComplejo.select2({
+
+                    });
+
+                    //Inicializamos el select de Indicadores
+                    chargeSelectIndicator();
+
+                    //Incializamos el formato numerico para el input de Meta
+                    inputGoal.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Alto
+                    inputRankTopBasic.number(true,2,',','.');
+                    inputRankTopMixedTop.number(true,2,',','.');
+                    inputRankTopMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Medio Alto
+                    inputRankMiddleTopBasic.number(true,2,',','.');
+                    inputRankMiddleTopMixedTop.number(true,2,',','.');
+                    inputRankMiddleTopMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Medio Bajo
+                    inputRankMiddleBottomBasic.number(true,2,',','.');
+                    inputRankMiddleBottomMixedTop.number(true,2,',','.');
+                    inputRankMiddleBottomMixedBottom.number(true,2,',','.');
+
+                    //Inicializamos el formato numerico para el input de Rango Bajo
+                    inputRankBottomBasic.number(true,2,',','.');
+                    inputRankBottomMixedTop.number(true,2,',','.');
+                    inputRankBottomMixedBottom.number(true,2,',','.');
+
+                    //Escondemos por defecto las secciones de rango de gestión alto
+                    sectionTopBasic.hide();
+                    sectionTopMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión medio alto
+                    sectionMiddleTopBasic.hide();
+                    sectionMiddleTopMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión medio bajo
+                    sectionMiddleBottomBasic.hide();
+                    sectionMiddleBottomMixed.hide();
+                    //Escondemos por defecto las secciones de rango de gestión bajo
+                    sectionBottomBasic.hide();
+                    sectionBottomMixed.hide();
+                }
+
+                selectArrangementRangeTypeTop.click(function() {
+                    if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeTop_1']").is(':checked')) {
+                        sectionTopBasic.show();
+                        sectionTopMixed.hide();
+                        inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
+                     } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeTop_5']").is(':checked')) {
+                        sectionTopBasic.hide();
+                        sectionTopMixed.show();
+                        inputHiddenTypeArrangementRangeTop.val("TOP_MIXED");
+                     }
+                });
+
+                selectArrangementRangeTypeMiddleTop.click(function() {
+                    if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop_2']").is(':checked')) {
+                        sectionMiddleTopBasic.show();
+                        sectionMiddleTopMixed.hide();
+                        inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
+                     } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleTop_6']").is(':checked')) {
+                        sectionMiddleTopBasic.hide();
+                        sectionMiddleTopMixed.show();
+                        inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_MIXED");
+                     }
+                });
+
+                selectArrangementRangeTypeMiddleBottom.click(function() {
+                    if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom_3']").is(':checked')) {
+                        sectionMiddleBottomBasic.show();
+                        sectionMiddleBottomMixed.hide();
+                        inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_BASIC");
+                     } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeMiddleBottom_7']").is(':checked')) {
+                        sectionMiddleBottomBasic.hide();
+                        sectionMiddleBottomMixed.show();
+                        inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_MIXED");
+                     }
+                });
+
+                selectArrangementRangeTypeBottom.click(function() {
+                    if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeBottom_4']").is(':checked')) {
+                        sectionBottomBasic.show();
+                        sectionBottomMixed.hide();
+                        inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
+                     } else if ($("input[id='pequiven_objetive_strategic_registration_arrangementRangeTypeBottom_8']").is(':checked')) {
+                        sectionBottomBasic.hide();
+                        sectionBottomMixed.show();
+                        inputHiddenTypeArrangementRangeBottom.val("BOTTOM_MIXED");
+                     }
+                });
+
+                //Al seleccionar alguna opción en el select de Línea Estratégica
+                selectLineStrategic.on("select2-selecting", function(e) {
+                    chargeSelectIndicator();
+                    displayObjetiveRef(e);//Actualizamos la Referencia del Objetivo a Crear
+                })
+
+                //Función que muestra el Número de Referencia del objetivo a crear, de acuerdo a la línea estratégica seleccionada
+                function displayObjetiveRef(e){
+                    var data = {
+                        lineStrategicId: $.trim(e.val)
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("displayRefObjetiveStrategic") }}',
+                        data: data,
+                        success: function(data) {
+                            inputRef.val(data[0].ref);
                         }
-                    }
-            });
-        
-            /**
-            $.modal.alert('Indicador',{
-                    buttons: {
-                        'Cerrar': {
-                            classes:	'red-gradient glossy full-width',
-                            click:      function(win) { win.closeModal(); }
+                     });
+                }
+
+               //Check Para Evaluar el Objetivo a crear por Indicador
+                checkIndicator.click(function() {
+                    if(checkIndicator.is(':checked')){
+                        if(selectLineStrategic.val() === ''){
+                            messageCheckIndicator.show();
+                        } else{
+                            buttonAddIndicator.show();
+                            chargeSelectIndicator();
+                            sectionIndicators.show();
                         }
+                    } else{
+                        buttonAddIndicator.hide();
+                        sectionIndicators.hide();
+                        messageCheckIndicator.hide();
                     }
                 });
-            **/
-        };
-    </script>
-    
-    <script>
-        
-        
-        
-    </script>
+
+                //Agarrar este select como ejemplo para los demás select2
+                //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
+                function chargeSelectIndicator(){
+                    var data = {
+                        refParentId: $.trim(inputRef.val())
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("select_indicatorStrategicFromRefParent") }}',
+                        data: data,
+                        success: function(data) {
+                            //var $indicators_selector = $("#pequiven_objetive_strategic_registration_indicators");
+                            $('#pequiven_objetive_strategic_registration_indicators option[value]').remove();
+                            selectIndicators.select2("val",'');
+
+                            if(typeof data[0].empty === 'undefined'){
+                                for(var i=0, total = data.length; i<total; i++){
+                                    selectIndicators.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                                }
+                                chargeSelect2Indicators("full");
+                            } else{
+                                chargeSelect2Indicators("empty");
+                            }
+                        }
+                    });
+                }
+
+                //Función que carga el select2 de Línea Estratégica
+                function chargeSelect2LineStrategic(type){
+                    selectLineStrategic.select2({
+                        placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectLineStrategicFormatNoMatcher'|trans }}";
+                            } else{
+                                return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
+                            }
+                        }
+                    });
+                }
+
+                //Función que carga el select2 de Indicadores
+                function chargeSelect2Indicators(type){
+                    selectIndicators.select2({
+                        placeholder: '{{ 'form.messages.selectIndicatorPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "<a href='#lineStrategicq'>{{ 'form.messages.selectIndicatorFormatNoMatcher'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            } else{
+                                return "<a href='#lineStrategicq'>{{ 'form.messages.selectIndicatorFormatNoResult'|trans ({}, 'PequivenIndicatorBundle') }}</a>";
+                            }
+                        }
+                    });
+                }
+
+            });
+
+            function indicatorsRegisterSuccessful(){
+                $("#modals").remove();
+                //document.scripts.chargeSelectIndicator();
+                //document.chargeSelectIndicator();
+            }
+
+            function openFormIndicator(){
+                $.modal({
+                    title: '{{ 'pequiven_indicator.titleFrameAddStrategic'|trans ({}, 'PequivenIndicatorBundle') }}',
+                    url: '{{ path("pequiven_indicator_add_strategic_from_objetive") }}' ,
+                    useIframe: true,
+                    height: '800',
+                    width: '600',
+                    buttons: {
+                            'Cerrar': {
+                                classes:	'red-gradient glossy full-width',
+                                click:      function(win) { win.closeModal(); }
+                            }
+                        }
+                });
+
+                /**
+                $.modal.alert('Indicador',{
+                        buttons: {
+                            'Cerrar': {
+                                classes:	'red-gradient glossy full-width',
+                                click:      function(win) { win.closeModal(); }
+                            }
+                        }
+                    });
+                **/
+            };
+        </script>    
     {% endblock javascript %}
 {% endblock body %}
