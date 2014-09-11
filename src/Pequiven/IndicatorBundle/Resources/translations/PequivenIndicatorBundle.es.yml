@@ -39,11 +39,17 @@ form:
     formula: Fórmula
     
     arrangementRangeType: Tipo de Rango
+    arrangementRangeTypeTop: Tipo de Rango Alto
+    arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
+    arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
+    arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResInd: Res. Ind.
     
     rankArrangementTop: Rango de Gestión Alto
-    rankArrangementMiddle: Rango de Gestión Medio
+    rankArrangementMiddleTop: Rango de Gestión Medio Alto
+    rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
     rankArrangementBottom: Rango de Gestión Bajo
+    
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
     rankMiddleBottom: Rango Medio Bajo
@@ -68,6 +74,10 @@ form:
         goal: Meta del indicador
         formula: Fórmula de evaluación del indicador
         arrangementRangeType: Seleccione el tipo de rango
+        arrangementRangeTypeTop: Seleccione el tipo de rango Alto
+        arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
+        arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
+        arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
         rankTop: Valor alto del semáforo de evaluación de gestión
         rankMiddleTop: Valor medio alto del semáforo de evaluación de gestión
         rankMiddleBottom: Valor medio bajo del semáforo de evaluación de gestión

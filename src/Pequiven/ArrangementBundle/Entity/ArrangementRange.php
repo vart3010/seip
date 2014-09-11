@@ -65,7 +65,7 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Objetive
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="arrangementRange")
+     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive")
      * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
      */
     private $objetive;
@@ -73,7 +73,7 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Indicator
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="arrangementRange")
+     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
      * @ORM\JoinColumn(name="fk_indicator", referencedColumnName="id")
      */
     private $indicator;
@@ -82,7 +82,7 @@ class ArrangementRange extends modelArrangementRange {
      * ArrangementRangeType
      * @var \Pequiven\MasterBundle\Entity\ArrangementRangeType
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\ArrangementRangeType")
-     * @ORM\JoinColumn(name="type_range_top", referencedColumnName="id")
+     * @ORM\JoinColumn(name="typeRangeTop", referencedColumnName="id")
      */
     private $typeRangeTop;
     
@@ -90,257 +90,213 @@ class ArrangementRange extends modelArrangementRange {
      * ArrangementRangeType
      * @var \Pequiven\MasterBundle\Entity\ArrangementRangeType
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\ArrangementRangeType")
-     * @ORM\JoinColumn(name="type_range_middle", referencedColumnName="id")
+     * @ORM\JoinColumn(name="typeRangeMiddleTop", referencedColumnName="id")
      */
-    private $typeRangeMiddle;
+    private $typeRangeMiddleTop;
     
     /**
      * ArrangementRangeType
      * @var \Pequiven\MasterBundle\Entity\ArrangementRangeType
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\ArrangementRangeType")
-     * @ORM\JoinColumn(name="type_range_bottom", referencedColumnName="id")
+     * @ORM\JoinColumn(name="typeRangeMiddleBottom", referencedColumnName="id")
+     */
+    private $typeRangeMiddleBottom;
+    
+    /**
+     * ArrangementRangeType
+     * @var \Pequiven\MasterBundle\Entity\ArrangementRangeType
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\ArrangementRangeType")
+     * @ORM\JoinColumn(name="typeRangeBottom", referencedColumnName="id")
      */
     private $typeRangeBottom;
     
+    //RANGO ALTO BÁSICO
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_top", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankTopBasic", referencedColumnName="id")
      */
-    private $opRankTop;
+    private $opRankTopBasic;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_top", type="float", nullable=true)
+     * @ORM\Column(name="rankTopBasic", type="float", nullable=true)
      */
-    private $rankTop;
+    private $rankTopBasic;
     
+    //RANGO ALTO MIXTO
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_top", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankTopMixed_top", referencedColumnName="id")
      */
-    private $opRankMiddleTop;
+    private $opRankTopMixedTop;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
+     * @ORM\Column(name="rankTopMixedTop", type="float", nullable=true)
      */
-    private $rankMiddleTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_bottom", referencedColumnName="id")
-     */
-    private $opRankMiddleBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleBottom;
+    private $rankTopMixedTop;
     
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_bottom", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankTopMixed_bottom", referencedColumnName="id")
      */
-    private $opRankBottom;
+    private $opRankTopMixedBottom;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_bottom", type="float", nullable=true)
+     * @ORM\Column(name="rankTopMixedBottom", type="float", nullable=true)
      */
-    private $rankBottom;
+    private $rankTopMixedBottom;
+    
+    //RANGO MEDIO ALTO BÁSICO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankMiddleTopBasic", referencedColumnName="id")
+     */
+    private $oprankMiddleTopBasic;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankMiddleTopBasic", type="float", nullable=true)
+     */
+    private $rankMiddleTopBasic;
+    
+    //RANGO MEDIO ALTO MIXTO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankMiddleTopMixed_top", referencedColumnName="id")
+     */
+    private $opRankMiddleTopMixedTop;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankMiddleTopMixedTop", type="float", nullable=true)
+     */
+    private $rankMiddleTopMixedTop;
     
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_top_top_top", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankMiddleTopMixed_bottom", referencedColumnName="id")
      */
-    private $opRankTopTopTop;
+    private $opRankMiddleTopMixedBottom;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_top_top_top", type="float", nullable=true)
+     * @ORM\Column(name="rankMiddleTopMixedBottom", type="float", nullable=true)
      */
-    private $rankTopTopTop;
+    private $rankMiddleTopMixedBottom;
+    
+    //RANGO MEDIO BAJO BÁSICO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankMiddleBottomBasic", referencedColumnName="id")
+     */
+    private $oprankMiddleBottomBasic;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankMiddleBottomBasic", type="float", nullable=true)
+     */
+    private $rankMiddleBottomBasic;
+    
+    //RANGO MEDIO BAJO MIXTO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankMiddleBottomMixed_top", referencedColumnName="id")
+     */
+    private $opRankMiddleBottomMixedTop;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankMiddleBottomMixedTop", type="float", nullable=true)
+     */
+    private $rankMiddleBottomMixedTop;
     
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_top_top_bottom", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankMiddleBottomMixed_bottom", referencedColumnName="id")
      */
-    private $opRankTopTopBottom;
+    private $opRankMiddleBottomMixedBottom;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_top_top_bottom", type="float", nullable=true)
+     * @ORM\Column(name="rankMiddleBottomMixedBottom", type="float", nullable=true)
      */
-    private $rankTopTopBottom;
+    private $rankMiddleBottomMixedBottom;
+    
+    //RANGO BAJO BÁSICO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankBottomBasic", referencedColumnName="id")
+     */
+    private $oprankBottomBasic;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankBottomBasic", type="float", nullable=true)
+     */
+    private $rankBottomBasic;
+    
+    //RANGO BAJO MIXTO
+    /**
+     * Operator
+     * @var \Pequiven\MasterBundle\Entity\Operator
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
+     * @ORM\JoinColumn(name="op_rankBottomMixed_top", referencedColumnName="id")
+     */
+    private $opRankBottomMixedTop;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="rankBottomMixedTop", type="float", nullable=true)
+     */
+    private $rankBottomMixedTop;
     
     /**
      * Operator
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_top_bottom_top", referencedColumnName="id")
+     * @ORM\JoinColumn(name="op_rankBottomMixed_bottom", referencedColumnName="id")
      */
-    private $opRankTopBottomTop;
+    private $opRankBottomMixedBottom;
     
     /**
      * @var float
      * 
-     * @ORM\Column(name="rank_top_bottom_top", type="float", nullable=true)
+     * @ORM\Column(name="rankBottomMixedBottom", type="float", nullable=true)
      */
-    private $rankTopBottomTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_top_bottom_bottom", referencedColumnName="id")
-     */
-    private $opRankTopBottomBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_top_bottom_bottom", type="float", nullable=true)
-     */
-    private $rankTopBottomBottom;
-    
-        /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_top_top", referencedColumnName="id")
-     */
-    private $opRankMiddleTopTop;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_top_top", type="float", nullable=true)
-     */
-    private $rankMiddleTopTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_top_bottom", referencedColumnName="id")
-     */
-    private $opRankMiddleTopBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_top_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleTopBottom;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_bottom_top", referencedColumnName="id")
-     */
-    private $opRankMiddleBottomTop;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom_top", type="float", nullable=true)
-     */
-    private $rankMiddleBottomTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_middle_bottom_bottom", referencedColumnName="id")
-     */
-    private $opRankMiddleBottomBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleBottomBottom;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_bottom_top_top", referencedColumnName="id")
-     */
-    private $opRankBottomTopTop;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom_top_top", type="float", nullable=true)
-     */
-    private $rankBottomTopTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_bottom_top_bottom", referencedColumnName="id")
-     */
-    private $opRankBottomTopBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom_top_bottom", type="float", nullable=true)
-     */
-    private $rankBottomTopBottom;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_bottom_bottom_top", referencedColumnName="id")
-     */
-    private $opRankBottomBottomTop;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom_bottom_top", type="float", nullable=true)
-     */
-    private $rankBottomBottomTop;
-    
-    /**
-     * Operator
-     * @var \Pequiven\MasterBundle\Entity\Operator
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
-     * @ORM\JoinColumn(name="op_rank_bottom_bottom_bottom", referencedColumnName="id")
-     */
-    private $opRankBottomBottomBottom;
-    
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom_bottom_bottom", type="float", nullable=true)
-     */
-    private $rankBottomBottomBottom;
+    private $rankBottomMixedBottom;
     
     /**
      * @var boolean
@@ -348,6 +304,7 @@ class ArrangementRange extends modelArrangementRange {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;    
+
 
     /**
      * Get id
@@ -406,371 +363,302 @@ class ArrangementRange extends modelArrangementRange {
     }
 
     /**
-     * Set rankTop
+     * Set rankTopBasic
      *
-     * @param float $rankTop
+     * @param float $rankTopBasic
      * @return ArrangementRange
      */
-    public function setRankTop($rankTop)
+    public function setRankTopBasic($rankTopBasic)
     {
-        $this->rankTop = $rankTop;
+        $this->rankTopBasic = $rankTopBasic;
 
         return $this;
     }
 
     /**
-     * Get rankTop
+     * Get rankTopBasic
      *
      * @return float 
      */
-    public function getRankTop()
+    public function getRankTopBasic()
     {
-        return $this->rankTop;
+        return $this->rankTopBasic;
     }
 
     /**
-     * Set rankMiddleTop
+     * Set rankTopMixedTop
      *
-     * @param float $rankMiddleTop
+     * @param float $rankTopMixedTop
      * @return ArrangementRange
      */
-    public function setRankMiddleTop($rankMiddleTop)
+    public function setRankTopMixedTop($rankTopMixedTop)
     {
-        $this->rankMiddleTop = $rankMiddleTop;
+        $this->rankTopMixedTop = $rankTopMixedTop;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleTop
+     * Get rankTopMixedTop
      *
      * @return float 
      */
-    public function getRankMiddleTop()
+    public function getRankTopMixedTop()
     {
-        return $this->rankMiddleTop;
+        return $this->rankTopMixedTop;
     }
 
     /**
-     * Set rankMiddleBottom
+     * Set rankTopMixedBottom
      *
-     * @param float $rankMiddleBottom
+     * @param float $rankTopMixedBottom
      * @return ArrangementRange
      */
-    public function setRankMiddleBottom($rankMiddleBottom)
+    public function setRankTopMixedBottom($rankTopMixedBottom)
     {
-        $this->rankMiddleBottom = $rankMiddleBottom;
+        $this->rankTopMixedBottom = $rankTopMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleBottom
+     * Get rankTopMixedBottom
      *
      * @return float 
      */
-    public function getRankMiddleBottom()
+    public function getRankTopMixedBottom()
     {
-        return $this->rankMiddleBottom;
+        return $this->rankTopMixedBottom;
     }
 
     /**
-     * Set rankBottom
+     * Set rankMiddleTopBasic
      *
-     * @param float $rankBottom
+     * @param float $rankMiddleTopBasic
      * @return ArrangementRange
      */
-    public function setRankBottom($rankBottom)
+    public function setRankMiddleTopBasic($rankMiddleTopBasic)
     {
-        $this->rankBottom = $rankBottom;
+        $this->rankMiddleTopBasic = $rankMiddleTopBasic;
 
         return $this;
     }
 
     /**
-     * Get rankBottom
+     * Get rankMiddleTopBasic
      *
      * @return float 
      */
-    public function getRankBottom()
+    public function getRankMiddleTopBasic()
     {
-        return $this->rankBottom;
+        return $this->rankMiddleTopBasic;
     }
 
     /**
-     * Set rankTopTopTop
+     * Set rankMiddleTopMixedTop
      *
-     * @param float $rankTopTopTop
+     * @param float $rankMiddleTopMixedTop
      * @return ArrangementRange
      */
-    public function setRankTopTopTop($rankTopTopTop)
+    public function setRankMiddleTopMixedTop($rankMiddleTopMixedTop)
     {
-        $this->rankTopTopTop = $rankTopTopTop;
+        $this->rankMiddleTopMixedTop = $rankMiddleTopMixedTop;
 
         return $this;
     }
 
     /**
-     * Get rankTopTopTop
+     * Get rankMiddleTopMixedTop
      *
      * @return float 
      */
-    public function getRankTopTopTop()
+    public function getRankMiddleTopMixedTop()
     {
-        return $this->rankTopTopTop;
+        return $this->rankMiddleTopMixedTop;
     }
 
     /**
-     * Set rankTopTopBottom
+     * Set rankMiddleTopMixedBottom
      *
-     * @param float $rankTopTopBottom
+     * @param float $rankMiddleTopMixedBottom
      * @return ArrangementRange
      */
-    public function setRankTopTopBottom($rankTopTopBottom)
+    public function setRankMiddleTopMixedBottom($rankMiddleTopMixedBottom)
     {
-        $this->rankTopTopBottom = $rankTopTopBottom;
+        $this->rankMiddleTopMixedBottom = $rankMiddleTopMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get rankTopTopBottom
+     * Get rankMiddleTopMixedBottom
      *
      * @return float 
      */
-    public function getRankTopTopBottom()
+    public function getRankMiddleTopMixedBottom()
     {
-        return $this->rankTopTopBottom;
+        return $this->rankMiddleTopMixedBottom;
     }
 
     /**
-     * Set rankTopBottomTop
+     * Set rankMiddleBottomBasic
      *
-     * @param float $rankTopBottomTop
+     * @param float $rankMiddleBottomBasic
      * @return ArrangementRange
      */
-    public function setRankTopBottomTop($rankTopBottomTop)
+    public function setRankMiddleBottomBasic($rankMiddleBottomBasic)
     {
-        $this->rankTopBottomTop = $rankTopBottomTop;
+        $this->rankMiddleBottomBasic = $rankMiddleBottomBasic;
 
         return $this;
     }
 
     /**
-     * Get rankTopBottomTop
+     * Get rankMiddleBottomBasic
      *
      * @return float 
      */
-    public function getRankTopBottomTop()
+    public function getRankMiddleBottomBasic()
     {
-        return $this->rankTopBottomTop;
+        return $this->rankMiddleBottomBasic;
     }
 
     /**
-     * Set rankTopBottomBottom
+     * Set rankMiddleBottomMixedTop
      *
-     * @param float $rankTopBottomBottom
+     * @param float $rankMiddleBottomMixedTop
      * @return ArrangementRange
      */
-    public function setRankTopBottomBottom($rankTopBottomBottom)
+    public function setRankMiddleBottomMixedTop($rankMiddleBottomMixedTop)
     {
-        $this->rankTopBottomBottom = $rankTopBottomBottom;
+        $this->rankMiddleBottomMixedTop = $rankMiddleBottomMixedTop;
 
         return $this;
     }
 
     /**
-     * Get rankTopBottomBottom
+     * Get rankMiddleBottomMixedTop
      *
      * @return float 
      */
-    public function getRankTopBottomBottom()
+    public function getRankMiddleBottomMixedTop()
     {
-        return $this->rankTopBottomBottom;
+        return $this->rankMiddleBottomMixedTop;
     }
 
     /**
-     * Set rankMiddleTopTop
+     * Set rankMiddleBottomMixedBottom
      *
-     * @param float $rankMiddleTopTop
+     * @param float $rankMiddleBottomMixedBottom
      * @return ArrangementRange
      */
-    public function setRankMiddleTopTop($rankMiddleTopTop)
+    public function setRankMiddleBottomMixedBottom($rankMiddleBottomMixedBottom)
     {
-        $this->rankMiddleTopTop = $rankMiddleTopTop;
+        $this->rankMiddleBottomMixedBottom = $rankMiddleBottomMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleTopTop
+     * Get rankMiddleBottomMixedBottom
      *
      * @return float 
      */
-    public function getRankMiddleTopTop()
+    public function getRankMiddleBottomMixedBottom()
     {
-        return $this->rankMiddleTopTop;
+        return $this->rankMiddleBottomMixedBottom;
     }
 
     /**
-     * Set rankMiddleTopBottom
+     * Set rankBottomBasic
      *
-     * @param float $rankMiddleTopBottom
+     * @param float $rankBottomBasic
      * @return ArrangementRange
      */
-    public function setRankMiddleTopBottom($rankMiddleTopBottom)
+    public function setRankBottomBasic($rankBottomBasic)
     {
-        $this->rankMiddleTopBottom = $rankMiddleTopBottom;
+        $this->rankBottomBasic = $rankBottomBasic;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleTopBottom
+     * Get rankBottomBasic
      *
      * @return float 
      */
-    public function getRankMiddleTopBottom()
+    public function getRankBottomBasic()
     {
-        return $this->rankMiddleTopBottom;
+        return $this->rankBottomBasic;
     }
 
     /**
-     * Set rankMiddleBottomTop
+     * Set rankBottomMixedTop
      *
-     * @param float $rankMiddleBottomTop
+     * @param float $rankBottomMixedTop
      * @return ArrangementRange
      */
-    public function setRankMiddleBottomTop($rankMiddleBottomTop)
+    public function setRankBottomMixedTop($rankBottomMixedTop)
     {
-        $this->rankMiddleBottomTop = $rankMiddleBottomTop;
+        $this->rankBottomMixedTop = $rankBottomMixedTop;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleBottomTop
+     * Get rankBottomMixedTop
      *
      * @return float 
      */
-    public function getRankMiddleBottomTop()
+    public function getRankBottomMixedTop()
     {
-        return $this->rankMiddleBottomTop;
+        return $this->rankBottomMixedTop;
     }
 
     /**
-     * Set rankMiddleBottomBottom
+     * Set rankBottomMixedBottom
      *
-     * @param float $rankMiddleBottomBottom
+     * @param float $rankBottomMixedBottom
      * @return ArrangementRange
      */
-    public function setRankMiddleBottomBottom($rankMiddleBottomBottom)
+    public function setRankBottomMixedBottom($rankBottomMixedBottom)
     {
-        $this->rankMiddleBottomBottom = $rankMiddleBottomBottom;
+        $this->rankBottomMixedBottom = $rankBottomMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get rankMiddleBottomBottom
+     * Get rankBottomMixedBottom
      *
      * @return float 
      */
-    public function getRankMiddleBottomBottom()
+    public function getRankBottomMixedBottom()
     {
-        return $this->rankMiddleBottomBottom;
+        return $this->rankBottomMixedBottom;
     }
 
     /**
-     * Set rankBottomTopTop
+     * Set enabled
      *
-     * @param float $rankBottomTopTop
+     * @param boolean $enabled
      * @return ArrangementRange
      */
-    public function setRankBottomTopTop($rankBottomTopTop)
+    public function setEnabled($enabled)
     {
-        $this->rankBottomTopTop = $rankBottomTopTop;
+        $this->enabled = $enabled;
 
         return $this;
     }
 
     /**
-     * Get rankBottomTopTop
+     * Get enabled
      *
-     * @return float 
+     * @return boolean 
      */
-    public function getRankBottomTopTop()
+    public function getEnabled()
     {
-        return $this->rankBottomTopTop;
-    }
-
-    /**
-     * Set rankBottomTopBottom
-     *
-     * @param float $rankBottomTopBottom
-     * @return ArrangementRange
-     */
-    public function setRankBottomTopBottom($rankBottomTopBottom)
-    {
-        $this->rankBottomTopBottom = $rankBottomTopBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottomTopBottom
-     *
-     * @return float 
-     */
-    public function getRankBottomTopBottom()
-    {
-        return $this->rankBottomTopBottom;
-    }
-
-    /**
-     * Set rankBottomBottomTop
-     *
-     * @param float $rankBottomBottomTop
-     * @return ArrangementRange
-     */
-    public function setRankBottomBottomTop($rankBottomBottomTop)
-    {
-        $this->rankBottomBottomTop = $rankBottomBottomTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottomBottomTop
-     *
-     * @return float 
-     */
-    public function getRankBottomBottomTop()
-    {
-        return $this->rankBottomBottomTop;
-    }
-
-    /**
-     * Set rankBottomBottomBottom
-     *
-     * @param float $rankBottomBottomBottom
-     * @return ArrangementRange
-     */
-    public function setRankBottomBottomBottom($rankBottomBottomBottom)
-    {
-        $this->rankBottomBottomBottom = $rankBottomBottomBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottomBottomBottom
-     *
-     * @return float 
-     */
-    public function getRankBottomBottomBottom()
-    {
-        return $this->rankBottomBottomBottom;
+        return $this->enabled;
     }
 
     /**
@@ -889,26 +777,49 @@ class ArrangementRange extends modelArrangementRange {
     }
 
     /**
-     * Set typeRangeMiddle
+     * Set typeRangeMiddleTop
      *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddle
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop
      * @return ArrangementRange
      */
-    public function setTypeRangeMiddle(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddle = null)
+    public function setTypeRangeMiddleTop(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop = null)
     {
-        $this->typeRangeMiddle = $typeRangeMiddle;
+        $this->typeRangeMiddleTop = $typeRangeMiddleTop;
 
         return $this;
     }
 
     /**
-     * Get typeRangeMiddle
+     * Get typeRangeMiddleTop
      *
      * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
      */
-    public function getTypeRangeMiddle()
+    public function getTypeRangeMiddleTop()
     {
-        return $this->typeRangeMiddle;
+        return $this->typeRangeMiddleTop;
+    }
+
+    /**
+     * Set typeRangeMiddleBottom
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom
+     * @return ArrangementRange
+     */
+    public function setTypeRangeMiddleBottom(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom = null)
+    {
+        $this->typeRangeMiddleBottom = $typeRangeMiddleBottom;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRangeMiddleBottom
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
+     */
+    public function getTypeRangeMiddleBottom()
+    {
+        return $this->typeRangeMiddleBottom;
     }
 
     /**
@@ -935,393 +846,278 @@ class ArrangementRange extends modelArrangementRange {
     }
 
     /**
-     * Set opRankTop
+     * Set opRankTopBasic
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopBasic
      * @return ArrangementRange
      */
-    public function setOpRankTop(\Pequiven\MasterBundle\Entity\Operator $opRankTop = null)
+    public function setOpRankTopBasic(\Pequiven\MasterBundle\Entity\Operator $opRankTopBasic = null)
     {
-        $this->opRankTop = $opRankTop;
+        $this->opRankTopBasic = $opRankTopBasic;
 
         return $this;
     }
 
     /**
-     * Get opRankTop
+     * Get opRankTopBasic
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankTop()
+    public function getOpRankTopBasic()
     {
-        return $this->opRankTop;
+        return $this->opRankTopBasic;
     }
 
     /**
-     * Set opRankMiddleTop
+     * Set opRankTopMixedTop
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopMixedTop
      * @return ArrangementRange
      */
-    public function setOpRankMiddleTop(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleTop = null)
+    public function setOpRankTopMixedTop(\Pequiven\MasterBundle\Entity\Operator $opRankTopMixedTop = null)
     {
-        $this->opRankMiddleTop = $opRankMiddleTop;
+        $this->opRankTopMixedTop = $opRankTopMixedTop;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleTop
+     * Get opRankTopMixedTop
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleTop()
+    public function getOpRankTopMixedTop()
     {
-        return $this->opRankMiddleTop;
+        return $this->opRankTopMixedTop;
     }
 
     /**
-     * Set opRankMiddleBottom
+     * Set opRankTopMixedBottom
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopMixedBottom
      * @return ArrangementRange
      */
-    public function setOpRankMiddleBottom(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottom = null)
+    public function setOpRankTopMixedBottom(\Pequiven\MasterBundle\Entity\Operator $opRankTopMixedBottom = null)
     {
-        $this->opRankMiddleBottom = $opRankMiddleBottom;
+        $this->opRankTopMixedBottom = $opRankTopMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleBottom
+     * Get opRankTopMixedBottom
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleBottom()
+    public function getOpRankTopMixedBottom()
     {
-        return $this->opRankMiddleBottom;
+        return $this->opRankTopMixedBottom;
     }
 
     /**
-     * Set opRankBottom
+     * Set oprankMiddleTopBasic
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $oprankMiddleTopBasic
      * @return ArrangementRange
      */
-    public function setOpRankBottom(\Pequiven\MasterBundle\Entity\Operator $opRankBottom = null)
+    public function setOprankMiddleTopBasic(\Pequiven\MasterBundle\Entity\Operator $oprankMiddleTopBasic = null)
     {
-        $this->opRankBottom = $opRankBottom;
+        $this->oprankMiddleTopBasic = $oprankMiddleTopBasic;
 
         return $this;
     }
 
     /**
-     * Get opRankBottom
+     * Get oprankMiddleTopBasic
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankBottom()
+    public function getOprankMiddleTopBasic()
     {
-        return $this->opRankBottom;
+        return $this->oprankMiddleTopBasic;
     }
 
     /**
-     * Set opRankTopTopTop
+     * Set opRankMiddleTopMixedTop
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopTopTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopMixedTop
      * @return ArrangementRange
      */
-    public function setOpRankTopTopTop(\Pequiven\MasterBundle\Entity\Operator $opRankTopTopTop = null)
+    public function setOpRankMiddleTopMixedTop(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopMixedTop = null)
     {
-        $this->opRankTopTopTop = $opRankTopTopTop;
+        $this->opRankMiddleTopMixedTop = $opRankMiddleTopMixedTop;
 
         return $this;
     }
 
     /**
-     * Get opRankTopTopTop
+     * Get opRankMiddleTopMixedTop
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankTopTopTop()
+    public function getOpRankMiddleTopMixedTop()
     {
-        return $this->opRankTopTopTop;
+        return $this->opRankMiddleTopMixedTop;
     }
 
     /**
-     * Set opRankTopTopBottom
+     * Set opRankMiddleTopMixedBottom
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopTopBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopMixedBottom
      * @return ArrangementRange
      */
-    public function setOpRankTopTopBottom(\Pequiven\MasterBundle\Entity\Operator $opRankTopTopBottom = null)
+    public function setOpRankMiddleTopMixedBottom(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopMixedBottom = null)
     {
-        $this->opRankTopTopBottom = $opRankTopTopBottom;
+        $this->opRankMiddleTopMixedBottom = $opRankMiddleTopMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get opRankTopTopBottom
+     * Get opRankMiddleTopMixedBottom
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankTopTopBottom()
+    public function getOpRankMiddleTopMixedBottom()
     {
-        return $this->opRankTopTopBottom;
+        return $this->opRankMiddleTopMixedBottom;
     }
 
     /**
-     * Set opRankTopBottomTop
+     * Set oprankMiddleBottomBasic
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopBottomTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $oprankMiddleBottomBasic
      * @return ArrangementRange
      */
-    public function setOpRankTopBottomTop(\Pequiven\MasterBundle\Entity\Operator $opRankTopBottomTop = null)
+    public function setOprankMiddleBottomBasic(\Pequiven\MasterBundle\Entity\Operator $oprankMiddleBottomBasic = null)
     {
-        $this->opRankTopBottomTop = $opRankTopBottomTop;
+        $this->oprankMiddleBottomBasic = $oprankMiddleBottomBasic;
 
         return $this;
     }
 
     /**
-     * Get opRankTopBottomTop
+     * Get oprankMiddleBottomBasic
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankTopBottomTop()
+    public function getOprankMiddleBottomBasic()
     {
-        return $this->opRankTopBottomTop;
+        return $this->oprankMiddleBottomBasic;
     }
 
     /**
-     * Set opRankTopBottomBottom
+     * Set opRankMiddleBottomMixedTop
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopBottomBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomMixedTop
      * @return ArrangementRange
      */
-    public function setOpRankTopBottomBottom(\Pequiven\MasterBundle\Entity\Operator $opRankTopBottomBottom = null)
+    public function setOpRankMiddleBottomMixedTop(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomMixedTop = null)
     {
-        $this->opRankTopBottomBottom = $opRankTopBottomBottom;
+        $this->opRankMiddleBottomMixedTop = $opRankMiddleBottomMixedTop;
 
         return $this;
     }
 
     /**
-     * Get opRankTopBottomBottom
+     * Get opRankMiddleBottomMixedTop
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankTopBottomBottom()
+    public function getOpRankMiddleBottomMixedTop()
     {
-        return $this->opRankTopBottomBottom;
+        return $this->opRankMiddleBottomMixedTop;
     }
 
     /**
-     * Set opRankMiddleTopTop
+     * Set opRankMiddleBottomMixedBottom
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomMixedBottom
      * @return ArrangementRange
      */
-    public function setOpRankMiddleTopTop(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopTop = null)
+    public function setOpRankMiddleBottomMixedBottom(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomMixedBottom = null)
     {
-        $this->opRankMiddleTopTop = $opRankMiddleTopTop;
+        $this->opRankMiddleBottomMixedBottom = $opRankMiddleBottomMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleTopTop
+     * Get opRankMiddleBottomMixedBottom
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleTopTop()
+    public function getOpRankMiddleBottomMixedBottom()
     {
-        return $this->opRankMiddleTopTop;
+        return $this->opRankMiddleBottomMixedBottom;
     }
 
     /**
-     * Set opRankMiddleTopBottom
+     * Set oprankBottomBasic
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $oprankBottomBasic
      * @return ArrangementRange
      */
-    public function setOpRankMiddleTopBottom(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleTopBottom = null)
+    public function setOprankBottomBasic(\Pequiven\MasterBundle\Entity\Operator $oprankBottomBasic = null)
     {
-        $this->opRankMiddleTopBottom = $opRankMiddleTopBottom;
+        $this->oprankBottomBasic = $oprankBottomBasic;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleTopBottom
+     * Get oprankBottomBasic
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleTopBottom()
+    public function getOprankBottomBasic()
     {
-        return $this->opRankMiddleTopBottom;
+        return $this->oprankBottomBasic;
     }
 
     /**
-     * Set opRankMiddleBottomTop
+     * Set opRankBottomMixedTop
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomTop
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomMixedTop
      * @return ArrangementRange
      */
-    public function setOpRankMiddleBottomTop(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomTop = null)
+    public function setOpRankBottomMixedTop(\Pequiven\MasterBundle\Entity\Operator $opRankBottomMixedTop = null)
     {
-        $this->opRankMiddleBottomTop = $opRankMiddleBottomTop;
+        $this->opRankBottomMixedTop = $opRankBottomMixedTop;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleBottomTop
+     * Get opRankBottomMixedTop
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleBottomTop()
+    public function getOpRankBottomMixedTop()
     {
-        return $this->opRankMiddleBottomTop;
+        return $this->opRankBottomMixedTop;
     }
 
     /**
-     * Set opRankMiddleBottomBottom
+     * Set opRankBottomMixedBottom
      *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomBottom
+     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomMixedBottom
      * @return ArrangementRange
      */
-    public function setOpRankMiddleBottomBottom(\Pequiven\MasterBundle\Entity\Operator $opRankMiddleBottomBottom = null)
+    public function setOpRankBottomMixedBottom(\Pequiven\MasterBundle\Entity\Operator $opRankBottomMixedBottom = null)
     {
-        $this->opRankMiddleBottomBottom = $opRankMiddleBottomBottom;
+        $this->opRankBottomMixedBottom = $opRankBottomMixedBottom;
 
         return $this;
     }
 
     /**
-     * Get opRankMiddleBottomBottom
+     * Get opRankBottomMixedBottom
      *
      * @return \Pequiven\MasterBundle\Entity\Operator 
      */
-    public function getOpRankMiddleBottomBottom()
+    public function getOpRankBottomMixedBottom()
     {
-        return $this->opRankMiddleBottomBottom;
+        return $this->opRankBottomMixedBottom;
     }
-
-    /**
-     * Set opRankBottomTopTop
-     *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomTopTop
-     * @return ArrangementRange
-     */
-    public function setOpRankBottomTopTop(\Pequiven\MasterBundle\Entity\Operator $opRankBottomTopTop = null)
-    {
-        $this->opRankBottomTopTop = $opRankBottomTopTop;
-
-        return $this;
-    }
-
-    /**
-     * Get opRankBottomTopTop
-     *
-     * @return \Pequiven\MasterBundle\Entity\Operator 
-     */
-    public function getOpRankBottomTopTop()
-    {
-        return $this->opRankBottomTopTop;
-    }
-
-    /**
-     * Set opRankBottomTopBottom
-     *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomTopBottom
-     * @return ArrangementRange
-     */
-    public function setOpRankBottomTopBottom(\Pequiven\MasterBundle\Entity\Operator $opRankBottomTopBottom = null)
-    {
-        $this->opRankBottomTopBottom = $opRankBottomTopBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get opRankBottomTopBottom
-     *
-     * @return \Pequiven\MasterBundle\Entity\Operator 
-     */
-    public function getOpRankBottomTopBottom()
-    {
-        return $this->opRankBottomTopBottom;
-    }
-
-    /**
-     * Set opRankBottomBottomTop
-     *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomBottomTop
-     * @return ArrangementRange
-     */
-    public function setOpRankBottomBottomTop(\Pequiven\MasterBundle\Entity\Operator $opRankBottomBottomTop = null)
-    {
-        $this->opRankBottomBottomTop = $opRankBottomBottomTop;
-
-        return $this;
-    }
-
-    /**
-     * Get opRankBottomBottomTop
-     *
-     * @return \Pequiven\MasterBundle\Entity\Operator 
-     */
-    public function getOpRankBottomBottomTop()
-    {
-        return $this->opRankBottomBottomTop;
-    }
-
-    /**
-     * Set opRankBottomBottomBottom
-     *
-     * @param \Pequiven\MasterBundle\Entity\Operator $opRankBottomBottomBottom
-     * @return ArrangementRange
-     */
-    public function setOpRankBottomBottomBottom(\Pequiven\MasterBundle\Entity\Operator $opRankBottomBottomBottom = null)
-    {
-        $this->opRankBottomBottomBottom = $opRankBottomBottomBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get opRankBottomBottomBottom
-     *
-     * @return \Pequiven\MasterBundle\Entity\Operator 
-     */
-    public function getOpRankBottomBottomBottom()
-    {
-        return $this->opRankBottomBottomBottom;
-    }
-    
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return ArrangementRange
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }    
 }

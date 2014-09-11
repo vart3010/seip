@@ -44,12 +44,18 @@ form:
     goal: Meta
     
     arrangementRangeType: Tipo de Rango
+    arrangementRangeTypeTop: Tipo de Rango Alto
+    arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
+    arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
+    arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResObj: Res. Obj.
     
     rankArrangementTop: Rango de Gestión Alto
-    rankArrangementMiddle: Rango de Gestión Medio
+    rankArrangementMiddleTop: Rango de Gestión Medio Alto
+    rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
     rankArrangementBottom: Rango de Gestión Bajo
-    rankTop: Rango Alto
+    
+    rankTop: Rango Alto 
     rankMiddleTop: Rango Medio Alto
     rankMiddleBottom: Rango Medio Bajo
     rankBottom: Rango Bajo
@@ -59,6 +65,8 @@ form:
     rankMiddleBottomCompound: Rango Medio-Bajo
     rankBottomTop: Rango Bajo-Alto
     rankBottomBottom: Rango Bajo-Bajo
+    
+    
     
     typeEvaluation: Tipo de Evaluación
     evalObjetive: Por Objetivo
@@ -97,16 +105,20 @@ form:
         weight: Peso del objetivo
         goal: Meta del objetivo
         arrangementRangeType: Seleccione el tipo de rango
-        rankTop: Valor alto del semáforo de evaluación de gestión
-        rankMiddleTop: Valor medio alto del semáforo de evaluación de gestión
-        rankMiddleBottom: Valor medio bajo del semáforo de evaluación de gestión
-        rankBottom: Valor bajo del semáforo de evaluación de gestión
+        arrangementRangeTypeTop: Seleccione el tipo de rango Alto
+        arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
+        arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
+        arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
+        
         rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
         rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
-        rankMiddleTopCompound: Rango medio-alto del semáforo de evaluación de gestión
-        rankMiddleBottomCompound: Rango medio-bajo del semáforo de evaluación de gestión
+        rankMiddleTopTop: Rango medio alto-alto del semáforo de evaluación de gestión
+        rankMiddleTopBottom: Rango medio alto-bajo del semáforo de evaluación de gestión
+        rankMiddleBottomTop: Rango medio bajo-alto del semáforo de evaluación de gestión
+        rankMiddleBottomBottom: Rango medio bajo-bajo del semáforo de evaluación de gestión
         rankBottomTop: Rango bajo-alto del semáforo de evaluación de gestión
         rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
+        
         evalObjetive: Seleccione si el objetivo será evaluado por sub-objetivos
         evalIndicator: Seleccione si el objetivo será evaluado por indicadores
         evalArrangementProgram: Seleccione si el objetivo será evaluado por programas de gestión

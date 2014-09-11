@@ -137,16 +137,23 @@ class ObjetiveTacticController extends baseController{
             $object->setUserCreatedAt($user);
             //Obtenemos el objetivo estratégico al cual pertenecerá el objetivo táctico a crear
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            
+            $indicators = isset($data['indicators']) ? $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $ref)) : array();
             //Si el usuario tiene rol Directivo
             if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                 if(!isset($data['check_gerencia'])){
                     for($i = 0; $i < count($data['gerencia']); $i++){
                         ${$nameObject.$i} = clone $object;
+                        ${$nameObject.$i}->resetIndicators();
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject.$i}->setGerencia($gerencia);
                         ${$nameObject.$i}->setParent($objetive);
+                        if(isset($data['indicators'])){
+                            foreach($data['indicators'] as $value){
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                ${$nameObject.$j}->addIndicator($indicator);
+                            }
+                        }
                         $em->persist(${$nameObject.$i});
                     }
                 } else{//En caso de que las gerencias a impactar, sean todas la de las localidades seleccionadas
@@ -156,8 +163,15 @@ class ObjetiveTacticController extends baseController{
                         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
                         foreach($gerencias as $gerencia){//Recorremos todos los resultados de las gerencias obtenidas
                             ${$nameObject.$j} = clone $object;
+                            ${$nameObject.$i}->resetIndicators();
                             ${$nameObject.$j}->setGerencia($gerencia);
                             ${$nameObject.$j}->setParent($objetive);
+                            if(isset($data['indicators'])){
+                                foreach($data['indicators'] as $value){
+                                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    ${$nameObject.$j}->addIndicator($indicator);
+                                }
+                            }
                             $em->persist(${$nameObject.$j});
                             $j++;
                         }
@@ -167,25 +181,35 @@ class ObjetiveTacticController extends baseController{
             } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
                 $object->setGerencia($user->getGerencia());
                 $object->setParent($objetive);
+                if(isset($data['indicators'])){
+                    foreach($data['indicators'] as $value){
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $object->addIndicator($indicator);
+                    }
+                }
                 $em->persist($object);
             } else{
+                if(isset($data['indicators'])){
+                    foreach($data['indicators'] as $value){
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $object->addIndicator($indicator);
+                    }
+                }
                 $em->persist($object);
             }
             
             try{
-            $em->flush();
-            $lastId = $em->getConnection()->lastInsertId();
-            $em->getConnection()->commit();
+                
+                $em->flush();
+                $lastId = $em->getConnection()->lastInsertId();
+                $em->getConnection()->commit();
             } catch (Exception $e){
                 $em->getConnection()->rollback();
                 throw $e;
             }
             
-            $lastObjectInsert = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $lastId));
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $lastObjectInsert->getRef()));
-            if(isset($data['indicators'])){
-                $this->createObjetiveIndicator($objetives,$data['indicators']);
-            }
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
+
             $this->createArrangementRange($objetives, $data);
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', 
@@ -267,45 +291,6 @@ class ObjetiveTacticController extends baseController{
                 $objectArrangementRange = clone $arrangementRange;
                 $objectArrangementRange->setObjetive($objetive);
                 $em->persist($objectArrangementRange);
-            }
-        }
-        
-        try{
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (Exception $e){
-            $em->getConnection()->rollback();
-            throw $e;
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Función que guarda en la tabla intermedia los indicadores asignados al objetivo creado
-     * @param type $objetives
-     * @param type $indicators
-     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
-     */
-    public function createObjetiveIndicator($objetives = array(),$indicators = array()){
-        $totalObjetives = count($objetives);
-        $totalIndicators = count($indicators);
-        $objetiveIndicator = new ObjetiveIndicator();
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
-        if($totalObjetives > 0){
-            foreach($objetives as $objetive){
-                $objetiveIndicator->setObjetive($objetive);
-                if($totalIndicators > 0){
-                    for($i = 0; $i < $totalIndicators; $i++){
-                        $objectObjetiveIndicator = clone $objetiveIndicator;
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
-                        $indicator->setTmp(false);
-                        $em->persist($indicator);
-                        $objectObjetiveIndicator->setIndicator($indicator);
-                        $em->persist($objectObjetiveIndicator);
-                    }
-                }
             }
         }
         

@@ -149,9 +149,12 @@ class Indicator extends modelIndicator {
     private $objetives;
     
     /**
-     * @ORM\OneToOne(targetEntity="\Pequiven\ArrangementBundle\Entity\ArrangementRange", mappedBy="objetive")
+     * Constructor
      */
-    private $arrangementRange;
+    public function __construct()
+    {
+        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -692,13 +695,6 @@ class Indicator extends modelIndicator {
     {
         return $this->refParent;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add objetives
@@ -732,6 +728,7 @@ class Indicator extends modelIndicator {
     {
         return $this->objetives;
     }
+    
 
     /**
      * Set arrangementRange
@@ -754,5 +751,9 @@ class Indicator extends modelIndicator {
     public function getArrangementRange()
     {
         return $this->arrangementRange;
+    }
+    
+    public function resetObjetives(){
+        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
 }

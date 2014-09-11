@@ -30,42 +30,56 @@ class ArrangementRangeTypeFixture extends AbstractFixture implements OrderedFixt
         //Rango Alto Básico
         $arrangementRangeType = new ArrangementRangeType();
         $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]);
-        $arrangementRangeType->setRef('Alto');
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]);
         $arrangementRangeType->setEnabled(true);
             $manager->persist($arrangementRangeType);
             
-        //Rango Medio Básico
+        //Rango Medio Alto Básico
         $arrangementRangeType = new ArrangementRangeType();
-        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_BASIC]);
-        $arrangementRangeType->setRef('Medio');
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC]);
+        $arrangementRangeType->setEnabled(true);
+            $manager->persist($arrangementRangeType);
+            
+        //Rango Medio Bajo Básico
+        $arrangementRangeType = new ArrangementRangeType();
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]);
         $arrangementRangeType->setEnabled(true);
             $manager->persist($arrangementRangeType);
 
         //Rango Bajo Básico
         $arrangementRangeType = new ArrangementRangeType();
         $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]);
-        $arrangementRangeType->setRef('Bajo');
-        $arrangementRangeType->setEnabled(true);
-            $manager->persist($arrangementRangeType);
-
-        //Rango Alto Compuesto
-        $arrangementRangeType = new ArrangementRangeType();
-        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_TOP_COMPOUND]);
-        $arrangementRangeType->setRef('Alto-Alto|Alto-Bajo');
-        $arrangementRangeType->setEnabled(true);
-            $manager->persist($arrangementRangeType);
-
-        //Rango Medio Compuesto
-        $arrangementRangeType = new ArrangementRangeType();
-        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_COMPOUND]);
-        $arrangementRangeType->setRef('Medio-Alto|Medio-Bajo');
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]);
         $arrangementRangeType->setEnabled(true);
             $manager->persist($arrangementRangeType);
             
-        //Rango Bajo Compuesto
+        //Rango Alto Mixto
         $arrangementRangeType = new ArrangementRangeType();
-        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_BOTTOM_COMPOUND]);
-        $arrangementRangeType->setRef('Bajo-Alto|Bajo-Bajo');
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]);
+        $arrangementRangeType->setEnabled(true);
+            $manager->persist($arrangementRangeType);
+            
+        //Rango Medio Alto Mixto
+        $arrangementRangeType = new ArrangementRangeType();
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED]);
+        $arrangementRangeType->setEnabled(true);
+            $manager->persist($arrangementRangeType);
+            
+        //Rango Medio Bajo Mixto
+        $arrangementRangeType = new ArrangementRangeType();
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]);
+        $arrangementRangeType->setEnabled(true);
+            $manager->persist($arrangementRangeType);
+
+        //Rango Bajo Mixto
+        $arrangementRangeType = new ArrangementRangeType();
+        $arrangementRangeType->setDescription($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]);
+        $arrangementRangeType->setRef($arrangementRangeTypeName[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]);
         $arrangementRangeType->setEnabled(true);
             $manager->persist($arrangementRangeType);
             

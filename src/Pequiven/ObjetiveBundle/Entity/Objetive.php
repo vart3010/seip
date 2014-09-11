@@ -184,12 +184,6 @@ class Objetive extends modelObjetive {
      * @ORM\JoinTable(name="seip_objetives_indicators")
      */
     private $indicators;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="\Pequiven\ArrangementBundle\Entity\ArrangementRange", mappedBy="objetive")
-     */
-    private $arrangementRange;
-    
 
     /**
      * Constructor
@@ -757,27 +751,8 @@ class Objetive extends modelObjetive {
     {
         return $this->indicators;
     }
-
-    /**
-     * Set arrangementRange
-     *
-     * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
-     * @return Objetive
-     */
-    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null)
-    {
-        $this->arrangementRange = $arrangementRange;
-
-        return $this;
-    }
-
-    /**
-     * Get arrangementRange
-     *
-     * @return \Pequiven\ArrangementBundle\Entity\ArrangementRange 
-     */
-    public function getArrangementRange()
-    {
-        return $this->arrangementRange;
+    
+    public function resetIndicators(){
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
     }
 }

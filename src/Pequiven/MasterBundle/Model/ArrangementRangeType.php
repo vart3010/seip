@@ -16,21 +16,25 @@ namespace Pequiven\MasterBundle\Model;
 class ArrangementRangeType {
     //put your code here
     const RANGE_TYPE_TOP_BASIC = 'TYPE_TOP_BASIC';
-    const RANGE_TYPE_MIDDLE_BASIC = 'TYPE_MIDDLE_BASIC';
+    const RANGE_TYPE_MIDDLE_TOP_BASIC = 'TYPE_MIDDLE_TOP_BASIC';
+    const RANGE_TYPE_MIDDLE_BOTTOM_BASIC = 'TYPE_MIDDLE_BOTTOM_BASIC';
     const RANGE_TYPE_BOTTOM_BASIC = 'TYPE_BOTTOM_BASIC';
-    const RANGE_TYPE_TOP_COMPOUND = 'TYPE_TOP_COMPOUND';
-    const RANGE_TYPE_MIDDLE_COMPOUND = 'TYPE_MIDDLE_COMPOUND';
-    const RANGE_TYPE_BOTTOM_COMPOUND = 'TYPE_BOTTOM_COMPOUND';
+    const RANGE_TYPE_TOP_MIXED = 'TYPE_TOP_MIXED';
+    const RANGE_TYPE_MIDDLE_TOP_MIXED = 'TYPE_MIDDLE_TOP_MIXED';
+    const RANGE_TYPE_MIDDLE_BOTTOM_MIXED = 'TYPE_MIDDLE_BOTTOM_MIXED';
+    const RANGE_TYPE_BOTTOM_MIXED = 'TYPE_BOTTOM_MIXED';
     
     public $rangeTypeName = array();
     
     public function __construct() {
         $this->rangeTypeName[self::RANGE_TYPE_TOP_BASIC] = 'Rango Alto Básico';
-        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_BASIC] = 'Rango Medio Básico';
+        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_TOP_BASIC] = 'Rango Medio Alto Básico';
+        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_BOTTOM_BASIC] = 'Rango Medio Bajo Básico';
         $this->rangeTypeName[self::RANGE_TYPE_BOTTOM_BASIC] = 'Rango Bajo Básico';
-        $this->rangeTypeName[self::RANGE_TYPE_TOP_COMPOUND] = 'Rango Alto Compuesto';
-        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_COMPOUND] = 'Rango Medio Compuesto';
-        $this->rangeTypeName[self::RANGE_TYPE_BOTTOM_COMPOUND] = 'Rango Bajo Compuesto';
+        $this->rangeTypeName[self::RANGE_TYPE_TOP_MIXED] = 'Rango Alto Mixto';
+        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_TOP_MIXED] = 'Rango Medio Alto Mixto';
+        $this->rangeTypeName[self::RANGE_TYPE_MIDDLE_BOTTOM_MIXED] = 'Rango Medio Bajo Mixto';
+        $this->rangeTypeName[self::RANGE_TYPE_BOTTOM_MIXED] = 'Rango Bajo Mixto';
     }
     
     /**
