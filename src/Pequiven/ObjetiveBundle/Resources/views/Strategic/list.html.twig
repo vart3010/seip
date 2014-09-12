@@ -66,7 +66,7 @@
                 if(totalIndicators > 0){
                     response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
                     for(var i = 0; i < totalIndicators; i++){
-                        response = response + data.indicators[i].ref + data.indicators[i].description + '<br>';
+                        response = response + data.indicators[i].ref + data.indicators[i].description + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation + '<br>';
                     }
                 }
                 return response;

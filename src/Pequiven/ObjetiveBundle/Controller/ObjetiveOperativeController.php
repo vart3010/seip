@@ -298,7 +298,9 @@ class ObjetiveOperativeController extends baseController {
             
             $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
 
-            $this->createArrangementRange($objetives, $data);
+            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
+                $this->createArrangementRange($objetives, $data);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_objetive_home', 
                     array('type' => 'objetiveOperative',

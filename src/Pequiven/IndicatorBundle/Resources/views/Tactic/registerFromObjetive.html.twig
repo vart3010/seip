@@ -211,7 +211,7 @@
                     sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
                     sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
                     inputRefParent = $("#pequiven_objetive_tactic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo                    
-                    inputLineStrategicParent = $("#pequiven_indicator_tactic_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
+                    inputLineStrategicParent = $("#pequiven_objetive_tactic_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
                     inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
                     inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
                     inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
@@ -238,7 +238,7 @@
                     chargeSelect2Formula();
 
                     //Incializamos el formato numerico para el input de Meta
-                    inputGoal.number(true, 0, ',', '.');
+                    inputGoal.number(true, 2, ',', '.');
 
                     //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                     inputHiddenRefParent.val(inputRefParent.val());

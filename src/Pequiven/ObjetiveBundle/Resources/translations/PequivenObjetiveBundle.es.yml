@@ -40,6 +40,7 @@ form:
     gerencia_second: Gerencia 2da Línea
     parent_strategic: Objetivo Estratégico
     parent_tactic: Objetivo Táctico
+    parent_operative: Objetivo Operativo
     weight: Peso
     goal: Meta
     

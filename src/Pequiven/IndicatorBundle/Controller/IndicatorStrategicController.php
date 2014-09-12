@@ -118,7 +118,7 @@ class IndicatorStrategicController extends baseController {
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
             
-            $object->setRefParent($data['refObjetive']);
+            $object->setRefParent($em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']))->getRef());
             $object->setTmp(true);
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
@@ -147,7 +147,10 @@ class IndicatorStrategicController extends baseController {
             }
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            
+            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
+                $this->createArrangementRange($lastObjectInsert, $data);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
         }
@@ -210,7 +213,9 @@ class IndicatorStrategicController extends baseController {
             }
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
+                $this->createArrangementRange($lastObjectInsert, $data);
+            }
             //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
             $this->createObjetiveIndicator($lastObjectInsert);
             

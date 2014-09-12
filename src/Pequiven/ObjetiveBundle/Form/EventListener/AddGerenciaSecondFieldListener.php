@@ -27,6 +27,8 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
     protected $user;
     protected $em;
     
+    protected $registerIndicator = false;
+    
     public static function getSubscribedEvents() {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
@@ -39,6 +41,10 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
+        
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
+        }
     }
     
     public function preSetData(FormEvent $event){
@@ -77,6 +83,13 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
         $formOptions['multiple'] = true;
         $formOptions['mapped'] = false;
         $formOptions['empty_value'] = '';
+        
+        if($this->registerIndicator){
+            $formOptions['attr'] = array('class' => 'select2-offscreen placeholder', 'style' => 'width:300px');
+            $formOptions['multiple'] = false;
+            $formOptions['mapped'] = false;
+            $formOptions['required'] = false;
+        }
 
         if($gerenciaSecond){
             $formOptions['data'] = $gerenciaSecond;

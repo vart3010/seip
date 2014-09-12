@@ -121,7 +121,7 @@ class IndicatorTacticController extends baseController {
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_tactic_registration");
 
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
             
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
@@ -151,7 +151,10 @@ class IndicatorTacticController extends baseController {
             }
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            
+            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
+                $this->createArrangementRange($lastObjectInsert, $data);
+            }
             //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
             $this->createObjetiveIndicator($lastObjectInsert);
             
@@ -197,6 +200,8 @@ class IndicatorTacticController extends baseController {
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
+            //Obtenemos y seteamos la línea estratégica del indicador
+            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategicObjetive'])));
             
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
@@ -220,7 +225,9 @@ class IndicatorTacticController extends baseController {
             }
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
+                $this->createArrangementRange($lastObjectInsert, $data);
+            }
             
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
         }
@@ -231,7 +238,7 @@ class IndicatorTacticController extends baseController {
     }
     
     /**
-     * Función que guarda en la tabla intermedia el indicador creado al objetivo estratégico seleccionado
+     * Función que guarda en la tabla intermedia el indicador creado al objetivo táctico seleccionado
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
      * @return boolean
      * @throws \Pequiven\IndicatorBundle\Controller\Exception

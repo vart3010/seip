@@ -252,6 +252,13 @@ class FormulaFixture extends AbstractFixture implements OrderedFixtureInterface,
         $this->addReference('Formula-36', $formula);
             $manager->persist($formula);
             
+        $formula = new Formula();
+        $formula->setDescription('Por definir');
+        $formula->setEnabled(true);
+        $formula->setEquation('Por definir');
+        $this->addReference('Formula-37', $formula);
+            $manager->persist($formula);
+            
         $manager->flush();
     }
     

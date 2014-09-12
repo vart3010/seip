@@ -51,6 +51,7 @@ form:
     rankArrangementBottom: Rango de Gestión Bajo
     
     selectionOfObjetiveTactic: Selección de objetivo táctico
+    selectionOfObjetiveOperative: Selección de objetivo operativo
     
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
@@ -150,6 +151,11 @@ form:
         selectObjetiveTacticFormatNoMatcherIndicatorTacticOther: Seleccione un objetivo estratégico
         selectObjetiveTacticFormatNoResultIndicatorTacticOther: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
         selectObjetiveTacticPlaceholderIndicator: Seleccione un objetivo táctico
+        selectObjetiveOperativePlaceholderIndicator: Seleccione un objetivo operativo
+        selectObjetiveOperativeFormatNoMatcherIndicatorOperativeOther: Seleccione una gerencia de 2da línea
+        selectObjetiveOperativeFormatNoResultIndicatorOperativeOther: No hay objetivos operativos registrados para la gerencia de 2da línea y el objetivo táctico seleccionados
+        selectObjetiveOperativeFormatNoMatcherIndicatorOperativeManagerSecond: Seleccione un objetivo táctico
+        selectObjetiveOperativeFormatNoResultIndicatorOperativeManagerSecond: No hay objetivos operativos registrados para el objetivo táctico seleccionado
         
     title:
         addIndicatorStrategic: Registro Indicador Estratégico

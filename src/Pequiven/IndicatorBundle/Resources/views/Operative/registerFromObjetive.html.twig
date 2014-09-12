@@ -33,6 +33,11 @@
                 {{ form_widget(form.refObjetive) }}
             </div>
             
+            <!-- Hidden con la L+inea Estratégica del Objetivo Estratégico que se esta creando -->
+            <div>
+                {{ form_widget(form.lineStrategicObjetive) }}
+            </div>
+            
             <!-- Descripción del indicador -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
@@ -56,17 +61,17 @@
             </div>
             
             <!-- Peso del Objetivo -->
-            <!--
+            
             <div id="weight" class="field-block button-height">
-                {#{ form_label(form.weight) }}
+                {{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.weight_info'|trans }#}</span>
+                    <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
             </div>
-            -->
+            
                 
             <!-- Meta del indicador -->
             <div class="field-block button-height">
@@ -190,11 +195,13 @@
                 var selectFormula = $("#pequiven_indicator_operativefo_registration_formula"),//Select de Fórmula
                     inputRef = $("#pequiven_indicator_operativefo_registration_ref"),//Input de Ref
                     inputGoal = $("#pequiven_indicator_operativefo_registration_goal"),//Input de Meta
+                    inputWeight = $("#pequiven_indicator_operativefo_registration_weight"),//Input de Peso
                     selectArrangementRangeTypeTop = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
                     selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
                     selectArrangementRangeTypeMiddleBottom = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeMiddleBottom"),//Select de Tipo de Rango Medio Bajo
                     selectArrangementRangeTypeBottom = $("#pequiven_indicator_operativefo_registration_arrangementRangeTypeBottom"),//Select de Tipo de Rango Bajo                    
                     inputHiddenRefParent = $("#pequiven_indicator_operativefo_registration_refObjetive"),//Input Hidden de la Referencia del Objetivo
+                    inputHiddenLineStrategicParent = $("#pequiven_indicator_operativefo_registration_lineStrategicObjetive"),//Input Hidden de la Línea Estratégica del Objetivo Estratégico
                     sectionTopBasic = $("#sectionTopBasic"),//Sección de Rango de Gestión Alto Básico
                     sectionTopMixed = $("#sectionTopMixed"),//Sección de Rango de Gestión Alto Mixto
                     sectionMiddleTopBasic = $("#sectionMiddleTopBasic"),//Sección de Rango de Gestión Medio Alto Básico
@@ -204,6 +211,7 @@
                     sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
                     sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
                     inputRefParent = $("#pequiven_objetive_operative_registration_ref",window.parent.document),//Input de Referencia de la ventana Padre del Objetivo
+                    inputLineStrategicParent = $("#pequiven_objetive_operative_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
                     inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
                     inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
                     inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_operativefo_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
@@ -230,10 +238,16 @@
                     chargeSelect2Formula();
 
                     //Incializamos el formato numerico para el input de Meta
-                    inputGoal.number(true,0,',','.');
+                    inputGoal.number(true,2,',','.');
+                    
+                    //Incializamos el formato numerico para el input de Peso
+                    inputWeight.number(true,2,',','.');
 
                      //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                     inputHiddenRefParent.val(inputRefParent.val());
+                    
+                    //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
+                    inputHiddenLineStrategicParent.val(inputLineStrategicParent.val());
 
                     //Actualizamos la referencia del indicador a crear
                     displayIndicatorRef();

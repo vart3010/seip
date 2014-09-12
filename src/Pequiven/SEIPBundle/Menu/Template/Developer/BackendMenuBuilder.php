@@ -298,7 +298,7 @@ class BackendMenuBuilder extends MenuBuilder
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
                             $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
-                                'route' => '',
+                                'route' => 'pequiven_indicator_menu_add_operative',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
                         //Si el usuario logueado es Rol Gerente Primera Línea, Gerente Primera Línea Asignado, Gerente General de Complejo o Gerente General de Complejo Asignado
@@ -308,13 +308,13 @@ class BackendMenuBuilder extends MenuBuilder
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
                             $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
-                                'route' => '',
+                                'route' => 'pequiven_indicator_menu_add_operative',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
                         //Si el usuario logueado es Rol Gerente Segunda Línea o Gerente Segunda Línea Asignado
                         } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
                             $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
-                                'route' => '',
+                                'route' => 'pequiven_indicator_menu_add_operative',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.operative', $section)));
                         }

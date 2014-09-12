@@ -89,7 +89,8 @@ pequiven_indicator_menu_add_tactic:
 #Registro de Indicadores Operativos
 pequiven_indicator_menu_add_operative:
     path: /arrangement_stratetgic/indicator/operative/add
-    _controller: pequiven.controller.indicatoroperative:createAction
+    defaults:
+        _controller: pequiven.controller.indicatoroperative:createAction
         
 #Registro de gerencias de 1ra línea
 pequiven_master_menu_add_gerenciaFirst:

@@ -15,6 +15,12 @@ use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentTacticFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaSecondFieldListener;
+use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveOperativeFieldListener;
 use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
 /**
  * Description of RegistrationFormType
@@ -32,16 +38,47 @@ class RegistrationFormType extends AbstractType {
         $container = PequivenIndicatorBundle::getContainer();
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
+        $user = $securityContext->getToken()->getUser();
         
-      //Referencia del Objetivo Operativo al cual se le podrían añadir los indicadores creados
-        $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
+        if($this->typeForm == 'regular'){
+            //Rol del usuario que esta logueado
+            $array = $user->getRoles();
+            $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
+            
+            //Línea estratégica del objetivo a crear
+            $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+            //Objetivo Estratégico al cual impactará el indicador a crear
+            $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener(array('registerIndicator' => true)));
+            //Objetivo Táctico al cual impactará el indicador a crear
+            $builder->addEventSubscriber(new AddObjetiveParentTacticFieldListener(array('registerIndicator' => true)));
+            
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                //Localidad(es) donde impactará el indicador a crear
+                $builder->addEventSubscriber(new AddComplejoFieldListener(array('registerIndicator' => true,'typeOperative' => true)));
+                //Gerencia de 1ra línea donde impactará el indicador a crear
+                $builder->addEventSubscriber(new AddGerenciaFieldListener(array('registerIndicator' => true)));
+            }
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                //Gerencia de 2da línea dónde impactará el indicador a crear
+                $builder->addEventSubscriber(new AddGerenciaSecondFieldListener(array('registerIndicator' => true)));
+            }
+            //Objetivo Operativo donde impactará el indicador a crear
+            $builder->addEventSubscriber(new AddObjetiveOperativeFieldListener(array('registerIndicator' => true)));
+        } elseif($this->typeForm == 'fromObjetive'){
+            //Referencia del Objetivo Operativo al cual se le podrían añadir los indicadores a crear
+            $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
+            
+            //Línea Estratégica del Objetivo Operativo al cual se le podría añadir el indicador a crear
+            $builder->add('lineStrategicObjetive','hidden',array('data' => '', 'mapped' => false));
+        }
+        
         //Nombre del indicador a crear
         $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Referencia del indicador a crear
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
         
         //Peso del Indicador
-//        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "1000"), 'required' => false));
+        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "1000"), 'required' => false));
         //Meta del Indicador
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "1000")));
         //Fórmula del indicador a crear
