@@ -50,6 +50,8 @@ form:
     rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
     rankArrangementBottom: Rango de Gestión Bajo
     
+    selectionOfObjetiveTactic: Selección de objetivo táctico
+    
     rankTop: Rango Alto
     rankMiddleTop: Rango Medio Alto
     rankMiddleBottom: Rango Medio Bajo
@@ -68,6 +70,12 @@ form:
     register: Registrar
     
     info:
+        lineStrategic: Línea estratégica que seguirá el objetivo
+        objetiveStrategic: Objetivo estratégico que seguirá el objetivo
+        objetiveTactic: Objetivo táctico que seguirá el objetivo
+        location: Localidad dónde tendrá impacto el objetivo
+        gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
+        gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
         description: Nombre del indicador
         ref: Nro. de referencia del indicador
         weight: Peso del indicador
@@ -137,6 +145,11 @@ form:
         selectFormulaFormatNoMatcher: Seleccione una fórmula de evaluación
         selectFormulaFormatNoResult: No hay fórmulas registradas
         selectFormulaPlaceholder: Seleccione una fórmula de evaluación
+        selectObjetiveTacticFormatNoMatcherIndicatorTacticDirective: Seleccione una gerencia de 1ra línea
+        selectObjetiveTacticFormatNoResultIndicatorTacticDirective: No hay objetivos tácticos registrados para la gerencia de 1ra línea seleccionada
+        selectObjetiveTacticFormatNoMatcherIndicatorTacticOther: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoResultIndicatorTacticOther: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
+        selectObjetiveTacticPlaceholderIndicator: Seleccione un objetivo táctico
         
     title:
         addIndicatorStrategic: Registro Indicador Estratégico

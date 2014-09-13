@@ -32,6 +32,11 @@
             <div>
                 {{ form_widget(form.refObjetive) }}
             </div>
+            
+            <!-- Hidden con la L+inea Estratégica del Objetivo Estratégico que se esta creando -->
+            <div>
+                {{ form_widget(form.lineStrategicObjetive) }}
+            </div>
 
             <!-- Descripción del indicador -->
             <div class="field-block button-height">
@@ -192,6 +197,7 @@
                     inputRef = $("#pequiven_indicator_tacticfo_registration_ref"), //Input de Ref
                     inputGoal = $("#pequiven_indicator_tacticfo_registration_goal"), //Input de Meta
                     inputHiddenRefParent = $("#pequiven_indicator_tacticfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo
+                    inputHiddenLineStrategicParent = $("#pequiven_indicator_tacticfo_registration_lineStrategicObjetive"),//Input Hidden de la Línea Estratégica del Objetivo Estratégico
                     selectArrangementRangeTypeTop = $("#pequiven_indicator_tacticfo_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
                     selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
                     selectArrangementRangeTypeMiddleBottom = $("#pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddleBottom"),//Select de Tipo de Rango Medio Bajo
@@ -205,6 +211,7 @@
                     sectionBottomBasic = $("#sectionBottomBasic"),//Sección de Rango de Gestión Bajo Básico
                     sectionBottomMixed = $("#sectionBottomMixed"),//Sección de Rango de Gestión Bajo Mixto
                     inputRefParent = $("#pequiven_objetive_tactic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo                    
+                    inputLineStrategicParent = $("#pequiven_indicator_tactic_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
                     inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
                     inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
                     inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
@@ -235,6 +242,9 @@
 
                     //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                     inputHiddenRefParent.val(inputRefParent.val());
+                    
+                    //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
+                    inputHiddenLineStrategicParent.val(inputLineStrategicParent.val());
 
                     //Actualizamos la referencia del indicador a crear
                     displayIndicatorRef();

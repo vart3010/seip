@@ -31,6 +31,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
     protected $complejoObject;
     protected $complejoNameArray = array();
     protected $typeOperative = false;
+    protected $registerIndicator = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -49,6 +50,9 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $this->complejoNameArray = $this->complejoObject->getRefNameArray();
         if(isset($options['typeOperative'])){
             $this->typeOperative = true;
+        }
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
         }
     }
     
@@ -101,12 +105,24 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
               //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
                 $results = array();
                 $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
+                if($this->registerIndicator){
+                    $formOptions['multiple'] = false;
+                    $formOptions['attr'] = array('class' => 'populate select2-offscreen','style' => 'width:300px');
+                    $formOptions['mapped'] =false;
+                    $formOptions['required'] = false;
+                }
                 //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
             } else{
                 //$formOptions['attr'] = array('class' => 'select multiple-as-single red-gradient easy-multiple-selection check-list replacement','multiple' => 'multiple', 'style' => 'width:300px');
                 $formOptions['attr'] = array('class' => 'select2-container select2-container-multi','multiple' => 'multiple', 'style' => 'width:300px');
                 $results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("enabled" => true));
                 $results = array();
+                if($this->registerIndicator){
+                    $formOptions['multiple'] = false;
+                    $formOptions['attr'] = array('class' => 'populate select2-offscreen','style' => 'width:300px');
+                    $formOptions['mapped'] =false;
+                    $formOptions['required'] = false;
+                }
             }
             $complejo = $results;
         } else{

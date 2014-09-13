@@ -294,7 +294,7 @@ class BackendMenuBuilder extends MenuBuilder
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.strategic', $section)));
                             $thirdchild->addChild('arrangement_strategic.indicators.add.tactic', array(
-                                'route' => '',
+                                'route' => 'pequiven_indicator_menu_add_tactic',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
                             $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(
@@ -304,7 +304,7 @@ class BackendMenuBuilder extends MenuBuilder
                         //Si el usuario logueado es Rol Gerente Primera Línea, Gerente Primera Línea Asignado, Gerente General de Complejo o Gerente General de Complejo Asignado
                         } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
                             $thirdchild->addChild('arrangement_strategic.indicators.add.tactic', array(
-                                'route' => '',
+                                'route' => 'pequiven_indicator_menu_add_tactic',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.add.tactic', $section)));
                             $thirdchild->addChild('arrangement_strategic.indicators.add.operative', array(

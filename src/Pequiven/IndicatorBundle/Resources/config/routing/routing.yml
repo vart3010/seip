@@ -81,6 +81,12 @@ select_indicatorOperativeFromRefParent:
     defaults: 
         _controller: pequiven.controller.indicatoroperative:selectIndicatorOperativeFromRefParentAction
         
+#Select que devuelve los Objetivos Tácticos de acuerdo a la gerencia de 1ra línea y objetivo estratégico seleccionado
+select_objetiveTacticIndicator:
+    path: /arrangement_strategic/indicator/select_objetiveTacticIndicator
+    defaults:
+        _controller: pequiven.controller.indicatortactic:selectObjetiveTacticAction
+        
 #Devuelve el paginador con la data de los indicadores estratégicos
 indicatorStrategicList:
     path: /arrangement_strategic_indicator/list/strategic

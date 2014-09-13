@@ -29,6 +29,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     protected $complejoObject;
     protected $complejoNameArray = array();
     protected $typeTactic = false;
+    protected $registerIndicator = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -37,16 +38,19 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         );
     }
     
-    public function __construct() {
+    public function __construct($options = array()) {
         $this->container = PequivenObjetiveBundle::getContainer();
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
-        
+
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getRefNameArray();
         if(isset($options['typeTactic'])){
             $this->typeOperative = true;
+        }
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
         }
     }
     
@@ -112,6 +116,11 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
                 $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
                 $formOptions['multiple'] = true;
                 $formOptions['mapped'] = false;
+                if($this->registerIndicator){
+                    $formOptions['required'] = false;
+                    $formOptions['multiple'] = false;
+                    $formOptions['attr'] = array('class' => 'select2-offscreen placeholder', 'style' => 'width:300px');
+                }
             } else{
                 $gerenciaId = $this->user->getGerencia()->getId();
                 $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){

@@ -97,6 +97,78 @@ class IndicatorTacticController extends baseController {
     }
     
     /**
+     * Función que registra un indicador táctico
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenIndicatorBundle:Tactic:register.html.twig")
+     * @return type
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
+    public function createAction(Request $request){
+
+        $form = $this->createForm(new BaseFormType('regular'));
+        $form->handleRequest($request);
+        $nameObject = 'object';
+        $lastId = '';
+        
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $role = $user->getRoles();
+        
+        $em->getConnection()->beginTransaction();
+        
+        if($form->isValid()){
+            $object = $form->getData();
+            $data =  $this->container->get('request')->get("pequiven_indicator_tactic_registration");
+
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
+            $object->setRefParent($objetive->getRef());
+            
+            //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
+            $object->setUserCreatedAt($user);
+            //Obtenemos y seteamos la línea estratégica del indicador
+            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategic'])));
+            //Obtenemos y seteamos el nivel del indicador
+            $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
+            $object->setIndicatorLevel($indicatorLevel);
+            
+            //En caso de que el Indicador tenga Fórmula se obtiene y se setea respectivamente
+            if(isset($data['formula'])){
+                $formula = $em->getRepository('PequivenMasterBundle:Formula')->findOneBy(array('id' => $data['formula']));
+                $object->setFormula($formula);
+            }
+            
+            $em->persist($object);
+            
+            try{
+                $em->flush();
+                $lastId = $em->getConnection()->lastInsertId();
+                $em->getConnection()->commit();
+            } catch (Exception $e){
+                $em->getConnection()->rollback();
+                throw $e;
+            }
+            
+            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
+            $this->createArrangementRange($lastObjectInsert, $data);
+            //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+            $this->createObjetiveIndicator($lastObjectInsert);
+            
+            return $this->redirect($this->generateUrl('pequiven_indicator_home', 
+                    array('type' => 'indicatorTactic',
+                          'action' => 'REGISTER_SUCCESSFULL'
+                        )
+                    ));
+        }
+        
+        return array(
+            'form' => $form->createView(),
+            'role_name' => $role[0]
+            );
+    }
+    
+    /**
      * Función que registra un indicador táctico a partir del registro de un objetivo táctico
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @Template("PequivenIndicatorBundle:Tactic:registerFromObjetive.html.twig")
@@ -156,6 +228,36 @@ class IndicatorTacticController extends baseController {
         return array(
             'form' => $form->createView(),
             );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el indicador creado al objetivo estratégico seleccionado
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return boolean
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
+    public function createObjetiveIndicator(Indicator $indicator){
+        
+        $em = $this->getDoctrine()->getManager();
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent()));
+        $totalObjetives = count($objetives);
+        $em->getConnection()->beginTransaction();
+        if($totalObjetives > 0){
+            foreach($objetives as $objetive){
+                $objetive->addIndicator($indicator);
+                $em->persist($objetive);
+            }
+        }
+        
+        try{
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e){
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
     }
     
     /**
@@ -266,7 +368,71 @@ class IndicatorTacticController extends baseController {
     }
     
     /**
-     * Devuelve la Referencia del Indicador, de acuerdo a la cantidad que ya se encuentren registrados por línea estratégica
+     * Devuelve las gerencias de 1ra línea de acuerdo al complejo seleccionado
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaFirstFromComplejoAction(Request $request){
+        $response = new JsonResponse();
+        $gerenciaFirst = array();
+        $complejoId = $request->request->get('complejoId');
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $complejoId));
+        foreach ($results as $result){
+            $gerenciaFirst[] = array("id" => $result->getId(), "description" => $result->getDescription());
+        }
+//        var_dump($gerenciaFirst[0]->getId());
+//        die();
+        $response->setData($gerenciaFirst);
+//        var_dump($response);
+        //var_dump(new JsonResponse($objetiveChildrenTactic));
+//        die();
+        return $response;
+    }
+    
+    /**
+     * Devuelve los objetivos tácticos de acuerdo al objetivo estratégico seleccionado y si el usuario tiene rol directivo, también depende de la gerencia de 1ra línea seleccionada
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectObjetiveTacticAction(Request $request){
+        $response = new JsonResponse();
+        $objetiveChildrenTactic = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        
+        $objetiveStrategicId = $request->request->get('objetiveStrategicId');
+        $gerenciaFirstId = '';
+        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            $gerenciaFirstId = $request->request->get('gerenciaFirstId');
+        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            $gerenciaFirstId = $user->getGerencia()->getId();
+        }
+        
+        if(is_numeric($objetiveStrategicId) && is_numeric($gerenciaFirstId)){
+            
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $objetiveStrategicId, 'gerencia' => $gerenciaFirstId));
+
+            $totalResults = count($results);
+            if (is_array($results) && $totalResults > 0){
+                foreach ($results as $result){
+                    $objetiveChildrenTactic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else{
+                $objetiveChildrenTactic[] = array("empty" => true);
+            }
+        } else{
+            $objetiveChildrenTactic[] = array("empty" => true, "initial" => true);
+        }
+        
+        $response->setData($objetiveChildrenTactic);
+        
+        return $response;
+    }
+    
+    /**
+     * Devuelve la Referencia del Indicador, de acuerdo a la cantidad que ya se encuentren registrados para el objetivo táctico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -275,11 +441,12 @@ class IndicatorTacticController extends baseController {
         $indicator = new Indicator();
         $data = array();
         $options = array();
+        $em = $this->getDoctrine()->getManager();
         
-        $lineStrategicId = $request->request->get('lineStrategicId');
-        $options['lineStrategicId'] = $lineStrategicId;
+        $objetiveTacticId = $request->request->get('objetiveTacticId');
+        $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveTacticId))->getRef();
         $options['type'] = 'TACTIC';
-        $ref = $indicator->setNewRef($options);
+        $ref = $indicator->setNewRefFromObjetive($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);

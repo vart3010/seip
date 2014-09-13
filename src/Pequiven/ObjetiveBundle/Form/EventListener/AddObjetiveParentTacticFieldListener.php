@@ -31,6 +31,8 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
     protected $complejoObject;
     protected $complejoNameArray = array();
     
+    protected $registerIndicator = false;
+    
     public static function getSubscribedEvents() {
         return array(
             FormEvents::PRE_SET_DATA => 'preSetData',
@@ -38,7 +40,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         );
     }
     
-    public function __construct() {
+    public function __construct($options = array()) {
         $this->container = PequivenObjetiveBundle::getContainer();
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
@@ -46,6 +48,10 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getRefNameArray();
+        
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
+        }        
     }
 
     public function preSetData(FormEvent $event) {
@@ -81,6 +87,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         );
         
 //        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
+        if(!$this->registerIndicator) {
             $formOptions['query_builder'] = function (EntityRepository $er) use ($objetiveParentStrategicId){
                         $qb = $er->createQueryBuilder('objetive')
                          ->where('objetive.parent = :parentId')
@@ -88,6 +95,13 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
                                 ;
                         return $qb;
                     };
+        }
+                    
+            if($this->registerIndicator) {
+                $formOptions['mapped'] = false;
+                $formOptions['required'] = false;
+                $formOptions['attr'] = array('class' => 'placeholder select2-offscreen','style' => 'width:300px');
+            }
 //        } 
 //        else{
 //            $complejoId = $this->user->getComplejo()->getId();            
@@ -106,7 +120,11 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
             $formOptions['data'] = $objetiveParent;
         }
         
-        return $form->add('parent', 'entity', $formOptions);
+        if($this->registerIndicator) {
+            return $form->add('parentTactic', 'entity', $formOptions);
+        } else{
+            return $form->add('parent', 'entity', $formOptions);
+        }
     }
 
 }

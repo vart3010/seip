@@ -364,7 +364,7 @@ class IndicatorStrategicController extends baseController {
     }
     
     /**
-     * Devuelve la Referencia del Indicador, de acuerdo a la cantidad que ya se encuentren registrados por línea estratégica
+     * Devuelve la Referencia del Indicador, de acuerdo a la cantidad que ya se encuentren registrados para el objetivo estratégico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */

@@ -143,8 +143,8 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $formOptions['mapped'] = false;
             if($this->registerIndicator){
-                    $formOptions['required'] = false;
-                }
+                $formOptions['required'] = false;
+            }
             return $form->add('parent_strategic', 'entity', $formOptions);
         }
     }
