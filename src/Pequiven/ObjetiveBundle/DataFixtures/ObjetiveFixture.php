@@ -180,7 +180,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         //6.1
         $objetive = new Objetive();
         $objetive->setDescription('Proveer el talento humano calificado y desarrollar sus competencias '
-                . 'laborales alineados a los requerimientos de la Corporación.');
+                . 'laborales alineadas a los requerimientos de la Corporación.');
         $objetive->setObjetiveLevel($this->getReference('OBJETIVO_ESTRATEGICO'));
         $objetive->setLineStrategic($this->getReference($lineNameArray[LineStrategic::LINE_GESTION_TALENTO]));
         $objetive->setEnabled(true);
