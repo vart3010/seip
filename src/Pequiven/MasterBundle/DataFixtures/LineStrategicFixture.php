@@ -25,7 +25,6 @@ class LineStrategicFixture extends AbstractFixture implements OrderedFixtureInte
     public function load(ObjectManager $manager){
         $line_data = new LineStrategic();
         $lineNameArray = $line_data->getLineNameArray();
-
             
         $line = new LineStrategic();
         $line->setDescription('Eficiencia y calidad de los procesos');
@@ -119,7 +118,7 @@ class LineStrategicFixture extends AbstractFixture implements OrderedFixtureInte
     }
     
     public function getOrder(){
-        return 9;
+        return 10;
     }
     
     public function setContainer(ContainerInterface $container = null) {

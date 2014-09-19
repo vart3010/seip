@@ -76,21 +76,6 @@ class Indicator extends modelIndicator {
      */
     private $ref;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="refParent", type="string", length=15, nullable=true)
-     */
-    private $refParent;
-    
-    /**
-     * LineStrategic
-     * @var \Pequiven\MasterBundle\Entity\LineStrategic
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic")
-     * @ORM\JoinColumn(name="fk_line_strategic", referencedColumnName="id")
-     */
-    private $lineStrategic;
-    
         /**
      * @var float
      * 
@@ -305,98 +290,6 @@ class Indicator extends modelIndicator {
     }
 
     /**
-     * Set rankTop
-     *
-     * @param float $rankTop
-     * @return Indicator
-     */
-    public function setRankTop($rankTop)
-    {
-        $this->rankTop = $rankTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankTop
-     *
-     * @return float 
-     */
-    public function getRankTop()
-    {
-        return $this->rankTop;
-    }
-
-    /**
-     * Set rankMiddleTop
-     *
-     * @param float $rankMiddleTop
-     * @return Indicator
-     */
-    public function setRankMiddleTop($rankMiddleTop)
-    {
-        $this->rankMiddleTop = $rankMiddleTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleTop
-     *
-     * @return float 
-     */
-    public function getRankMiddleTop()
-    {
-        return $this->rankMiddleTop;
-    }
-
-    /**
-     * Set rankMiddleBottom
-     *
-     * @param float $rankMiddleBottom
-     * @return Indicator
-     */
-    public function setRankMiddleBottom($rankMiddleBottom)
-    {
-        $this->rankMiddleBottom = $rankMiddleBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleBottom
-     *
-     * @return float 
-     */
-    public function getRankMiddleBottom()
-    {
-        return $this->rankMiddleBottom;
-    }
-
-    /**
-     * Set rankBottom
-     *
-     * @param float $rankBottom
-     * @return Indicator
-     */
-    public function setRankBottom($rankBottom)
-    {
-        $this->rankBottom = $rankBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottom
-     *
-     * @return float 
-     */
-    public function getRankBottom()
-    {
-        return $this->rankBottom;
-    }
-
-    /**
      * Set enabled
      *
      * @param boolean $enabled
@@ -509,29 +402,6 @@ class Indicator extends modelIndicator {
     public function getFormula()
     {
         return $this->formula;
-    }
-
-    /**
-     * Set lineStrategic
-     *
-     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic
-     * @return Indicator
-     */
-    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null)
-    {
-        $this->lineStrategic = $lineStrategic;
-
-        return $this;
-    }
-
-    /**
-     * Get lineStrategic
-     *
-     * @return \Pequiven\MasterBundle\Entity\LineStrategic 
-     */
-    public function getLineStrategic()
-    {
-        return $this->lineStrategic;
     }
     
     /**
@@ -679,22 +549,22 @@ class Indicator extends modelIndicator {
      * @param string $refParent
      * @return Indicator
      */
-    public function setRefParent($refParent)
-    {
-        $this->refParent = $refParent;
-
-        return $this;
-    }
+//    public function setRefParent($refParent)
+//    {
+//        $this->refParent = $refParent;
+//
+//        return $this;
+//    }
 
     /**
      * Get refParent
      *
      * @return string 
      */
-    public function getRefParent()
-    {
-        return $this->refParent;
-    }
+//    public function getRefParent()
+//    {
+//        return $this->refParent;
+//    }
 
     /**
      * Add objetives
@@ -704,7 +574,7 @@ class Indicator extends modelIndicator {
      */
     public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
-        $this->objetives[] = $objetives;
+        $this->objetives->add($objetives);
 
         return $this;
     }

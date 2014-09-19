@@ -11,7 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Doctrine\ORM\EntityRepository;
 /**
@@ -38,8 +38,13 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         );
     }
     
-    public function __construct($options = array()) {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
@@ -71,24 +76,26 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     }
     
     public function addGerenciaForm($form,$gerencia = null){
-        if($this->securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-            $complejoId = $this->user->getComplejo()->getId();
-            $formOptions = array(
+        $formOptions = array(
                 'class' => 'PequivenMasterBundle:Gerencia',
                 'label' => 'form.gerenciaFirst',
                 'label_attr' => array('class' => 'label'),
                 'translation_domain' => 'PequivenObjetiveBundle',
-                'property' => 'description',            
-                'query_builder' => function (EntityRepository $er) use ($complejoId){
-                    $qb = $er->createQueryBuilder('gerencia')
-                             ->andWhere('gerencia.complejo = :complejoId')
-                             ->andWhere('gerencia.modular = :modular')
-                             ->setParameter('modular', true)
-                             ->setParameter('complejoId', $complejoId)
-                            ;
-                    return $qb;
-                }
+                'property' => 'description'
             );
+        
+        //Si el usuario tiene rol Gerente General Complejo
+        if($this->securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            $complejoId = $this->user->getComplejo()->getId();
+            $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId){
+                $qb = $er->createQueryBuilder('gerencia')
+                         ->andWhere('gerencia.complejo = :complejoId')
+                         ->andWhere('gerencia.modular = :modular')
+                         ->setParameter('modular', true)
+                         ->setParameter('complejoId', $complejoId)
+                            ;
+                return $qb;
+                };
             $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $complejoId,'modular' => true));
             $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
             $formOptions['multiple'] = true;
@@ -99,16 +106,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             }
             $form->add('gerencia','entity',$formOptions);
         } else{
-            //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
             $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
-
-            $formOptions = array(
-                'class' => 'PequivenMasterBundle:Gerencia',
-                'label' => 'form.gerenciaFirst',
-                'label_attr' => array('class' => 'label'),
-                'translation_domain' => 'PequivenObjetiveBundle',
-                'property' => 'description'
-            );
 
             if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();

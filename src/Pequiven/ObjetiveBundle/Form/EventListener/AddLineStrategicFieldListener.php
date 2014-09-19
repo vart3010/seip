@@ -11,9 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Pequiven\MasterBundle\Entity\Complejo;
-use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -22,7 +20,25 @@ use Doctrine\ORM\EntityRepository;
  * @author matias
  */
 class AddLineStrategicFieldListener implements EventSubscriberInterface {
-    //put your code here
+    
+    protected $container;
+    protected $typeOperative = false;
+    protected $typeTactic = false;
+    
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
+        if(isset($options['typeOperative'])){
+            $this->typeOperative = true;
+        }
+        if(isset($options['typeTactic'])){
+            $this->typeTactic = true;
+        }
+    }
     
     public static function getSubscribedEvents() {
         return array(
@@ -36,10 +52,10 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
         $form = $event->getForm();
         
         if(null === $object){
-            return $this->addLineStrategicForm($form, $object);
+            return $this->addLineStrategicForm($form);
         }
         
-        $this->addLineStrategicForm($form, $object);
+        $this->addLineStrategicForm($form, $object->getLineStrategics());
     }
     
     public function preSubmit(FormEvent $event){
@@ -55,14 +71,28 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'descriptionSelect',
-            'empty_value' => ''
+            'empty_value' => '',            
         );
+        
+        if($this->typeOperative){
+            $formOptions['attr'] = array('class' => 'placeholder select2-offscreen','style' => 'width:300px');
+            $formOptions['mapped'] = false;
+        } elseif($this->typeTactic){
+            $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
+            $formOptions['multiple'] = true;
+            $formOptions['mapped'] = false;
+        } else{
+            $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen', 'multiple' => 'multiple' ,'style' => 'width:300px');
+            $formOptions['multiple'] = true;
+        }
+        
         //'empty_value' => 'Seleccione la línea estratégica'
-        $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen', 'style' => 'width:300px');
         if($lineStrategic){
+            //var_dump($lineStrategic);
+            //die();
             $formOptions['data'] = $lineStrategic;
         }
         
-        $form->add('lineStrategic','entity',$formOptions);
+        $form->add('lineStrategics','entity',$formOptions);
     }
 }

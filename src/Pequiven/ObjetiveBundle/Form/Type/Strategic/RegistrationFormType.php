@@ -4,6 +4,8 @@ namespace Pequiven\ObjetiveBundle\Form\Type\Strategic;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
@@ -23,16 +25,21 @@ use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
  *
  * @author matias
  */
-class RegistrationFormType extends AbstractType {
+class RegistrationFormType extends AbstractType implements ContainerAwareInterface {
+    
+    protected $container;
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
     
     //put your code here
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenObjetiveBundle::getContainer();
+        $container = $this->container;
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         
         //Línea estratégica del objetivo a crear
-        $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+        $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container));
         //Referencia del objetivo
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true, 'attr' => array('class' => 'input','size' => 5)));
         //Descripción del objetivo

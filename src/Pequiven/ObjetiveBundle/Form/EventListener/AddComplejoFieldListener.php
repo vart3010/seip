@@ -11,6 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\MasterBundle\Entity\Complejo;
@@ -40,14 +41,20 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 );
     }
     
-    public function __construct($options = array()) {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
         
         $this->complejoObject = new Complejo();
         $this->complejoNameArray = $this->complejoObject->getRefNameArray();
+        
         if(isset($options['typeOperative'])){
             $this->typeOperative = true;
         }
@@ -141,11 +148,8 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
                 //$formOptions['attr'] = array('class' => 'checkbox mid-margin-left replacement','style' => 'width:800px');
                 //$formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:300px');
                 
-                //TODO: Optimizar este proceso de carga de los complejos en caso de que el usuario pertenezca a la Sede Corporativa
-                
                 
                 if($this->typeOperative){
-                  //$results = $this->em->getRepository('PequivenMasterBundle:Complejo')->findBy(array("id" => array(1,2,3,4,5,6)));  
                     $results = array();
                     //$formOptions['attr'] = array('style' => 'width:400px', 'size' => 6);
                     if($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){

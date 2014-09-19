@@ -15,7 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\ObjetiveBundle\Form\Type\Tactic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,8 +107,8 @@ class ObjetiveTacticController extends baseController{
      */
     public function createAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType());
-        $form->handleRequest($request);
+        $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
+//        $form->handleRequest($request);
         $nameObject = 'object';
         $lastId = '';
         $em = $this->getDoctrine()->getManager();
@@ -117,13 +116,9 @@ class ObjetiveTacticController extends baseController{
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $role = $user->getRoles();
-
-        //Obtenemos el valor de referencia del complejo
-        $complejoObject = new Complejo();
-        $complejoNameArray = $complejoObject->getRefNameArray();
         
         $em->getConnection()->beginTransaction();
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
@@ -136,7 +131,7 @@ class ObjetiveTacticController extends baseController{
 
             $object->setUserCreatedAt($user);
             //Obtenemos el objetivo estratégico al cual pertenecerá el objetivo táctico a crear
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
+            //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
             $indicators = isset($data['indicators']) ? $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $ref)) : array();
             //Si el usuario tiene rol Directivo
             if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
@@ -147,7 +142,7 @@ class ObjetiveTacticController extends baseController{
                         ${$nameObject.$i}->resetIndicators();
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject.$i}->setGerencia($gerencia);
-                        ${$nameObject.$i}->setParent($objetive);
+                        //${$nameObject.$i}->setParent($objetive);
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -156,6 +151,7 @@ class ObjetiveTacticController extends baseController{
                         }
                         $em->persist(${$nameObject.$i});
                     }
+                    
                 } else{//En caso de que las gerencias a impactar, sean todas la de las localidades seleccionadas
                     $j = 0;
                     for($i=0;$i<count($data['complejo']);$i++){//Recorremos todas las localidades seleccionadas
@@ -165,7 +161,6 @@ class ObjetiveTacticController extends baseController{
                             ${$nameObject.$j} = clone $object;
                             ${$nameObject.$i}->resetIndicators();
                             ${$nameObject.$j}->setGerencia($gerencia);
-                            ${$nameObject.$j}->setParent($objetive);
                             if(isset($data['indicators'])){
                                 foreach($data['indicators'] as $value){
                                     $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -180,7 +175,6 @@ class ObjetiveTacticController extends baseController{
                 //Si el usuario tiene rol Gerente General de Complejo o Gerente 1ra línea
             } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
                 $object->setGerencia($user->getGerencia());
-                $object->setParent($objetive);
                 if(isset($data['indicators'])){
                     foreach($data['indicators'] as $value){
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -199,7 +193,6 @@ class ObjetiveTacticController extends baseController{
             }
             
             try{
-                
                 $em->flush();
                 $lastId = $em->getConnection()->lastInsertId();
                 $em->getConnection()->commit();
@@ -214,9 +207,9 @@ class ObjetiveTacticController extends baseController{
                 $this->createArrangementRange($objetives, $data);
             }
             
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', 
-                    array('type' => 'objetiveTactic',
-                          'action' => 'REGISTER_SUCCESSFULL'
+            $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerObjetiveTacticSuccessfull', array(), 'PequivenObjetiveBundle'));
+            return $this->redirect($this->generateUrl('pequiven_objetive_menu_list_tactic', 
+                    array(
                         )
                     ));
         }
@@ -314,16 +307,17 @@ class ObjetiveTacticController extends baseController{
      */
     public function selectObjetiveStrategicFromLineStrategicAction(Request $request){
         $response = new JsonResponse();
-        $data = array();
+        
         $objetiveChildrenStrategic = array();
         $em = $this->getDoctrine()->getManager();
         
         $lineStrategicId = $request->request->get('lineStrategicId');
-        $objetiveLevelId = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        $lineStrategicArray = explode(',',$lineStrategicId);
         
         //En caso de que la variable de línea estratégica sea un número
-        if(is_numeric($lineStrategicId)){
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategic' => $lineStrategicId,'objetiveLevel' => $objetiveLevelId));
+        if(is_array($lineStrategicArray)){
+            //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategics' => $lineStrategicArray,'objetiveLevel' => $objetiveLevelId));
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLineStrategic($lineStrategicArray);
             $totalResults = count($results);
             if(is_array($results) && $totalResults > 0){
                 foreach ($results as $result){
@@ -377,21 +371,46 @@ class ObjetiveTacticController extends baseController{
      */
     public function displayRefObjetiveAction(Request $request){
         $response = new JsonResponse();
-        $objetive = new Objetive();
+        
         $data = array();
         $options = array();
-        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
         
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $options['objetiveStrategicId'] = $objetiveStrategicId;
-        $options['type'] = 'TACTIC';
-        $options['type_ref'] = 'TACTIC_REF';
+        $options['objetiveStrategics'] = $objetiveStrategicId;
         
-        $ref = $objetive->setNewRef($options);
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
     }
+    
+    /**
+     * Función que devuelve la referenica del objetivo táctico que se esta creando
+     * @param array $options
+     */
+    public function setNewRef($options = array()){
+        $em = $this->getDoctrine()->getManager();
+        $objetivesStrategics = explode(',',$options['objetiveStrategics']);
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $refObjetiveStrategic = $objetiveStrategic->getRef();
+        
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1]);
+        $total = count($results);
+        if (is_array($results) && $total > 0) {
+            $ref = $refObjetiveStrategic . ($total + 1) . '.';
+        } else {
+            $ref = $refObjetiveStrategic . '1.';
+        }
+        
+        //En caso de que el objetivo tenga varios padres
+        if($totalObjetivesStrategics > 1){
+            $ref.='m';
+        }
+        
+        return $ref;
+    }
+    
 }

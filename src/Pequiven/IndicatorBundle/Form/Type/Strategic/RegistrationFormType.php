@@ -11,6 +11,8 @@ namespace Pequiven\IndicatorBundle\Form\Type\Strategic;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
@@ -22,15 +24,21 @@ use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
  *
  * @author matias
  */
-class RegistrationFormType extends AbstractType {
+class RegistrationFormType extends AbstractType implements ContainerAwareInterface {
+    
+    protected $container;
     protected $typeForm;
+    
     public function __construct($type = 'fromObjetive') {
         $this->typeForm = $type;
     }
     
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenIndicatorBundle::getContainer();
-        $securityContext = $container->get('security.context');
+        $container = $this->container;
         $em = $container->get('doctrine')->getManager();
         
         if($this->typeForm == 'regular'){
@@ -41,9 +49,6 @@ class RegistrationFormType extends AbstractType {
         } elseif($this->typeForm == 'fromObjetive'){
             //Referencia del Objetivo Estratégico al cual se le podrían añadir el indicador a crear
             $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
-            
-            //Línea Estratégica del Objetivo Estratégico al cual se le podría añadir el indicador a crear
-            $builder->add('lineStrategicObjetive','hidden',array('data' => '', 'mapped' => false));
         }
         
         //Nombre del indicador a crear

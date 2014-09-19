@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\ObjetiveBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,10 +105,12 @@ class ObjetiveStrategicController extends baseController {
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
     public function createAction(Request $request){
+        //$objetive = new Objetive();
+        //$objetive->addIndicator(new Indicator());
+        //$objetive->addIndicator(new Indicator());
+        $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
+        //$form->handleRequest($request);
         
-        $form = $this->createForm(new BaseFormType());
-        $form->handleRequest($request);
-        $nameObject = 'object';
         $lastId = '';
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
@@ -115,7 +118,7 @@ class ObjetiveStrategicController extends baseController {
         $user = $securityContext->getToken()->getUser();
         
         $em->getConnection()->beginTransaction();
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_strategic_registration");
             //$object->setWeight(bcadd($data['weight'],'0',3));
@@ -151,9 +154,10 @@ class ObjetiveStrategicController extends baseController {
                 $this->createArrangementRange($objetives, $data);
             }
             
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', 
-                    array('type' => 'objetiveStrategic',
-                          'action' => 'REGISTER_SUCCESSFULL'
+            $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerObjetiveStrategicSuccessfull', array(), 'PequivenObjetiveBundle'));
+                        
+            return $this->redirect($this->generateUrl('pequiven_objetive_menu_list_strategic', 
+                    array(
                         )
                     ));
         }
@@ -244,62 +248,43 @@ class ObjetiveStrategicController extends baseController {
     }
     
     /**
-     * Función que guarda en la tabla intermedia los indicadores asignados al objetivo creado
-     * @param type $objetives
-     * @param type $indicators
-     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
-     */
-    public function createObjetiveIndicator($objetives = array(),$indicators = array()){
-        $totalObjetives = count($objetives);
-        $totalIndicators = count($indicators);
-        $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
-        if($totalObjetives > 0){
-            foreach($objetives as $objetive){
-                if($totalIndicators > 0){
-                    for($i = 0; $i < $totalIndicators; $i++){
-                        $objectObjetive= clone $objetive;
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $indicators[$i]));
-                        $indicator->setTmp(false);
-                        $em->persist($indicator);
-                        $objectObjetive->addIndicator($indicator);
-                        $em->persist($objectObjetive);
-                    }
-                }
-            }
-        }
-        
-        try{
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (Exception $e){
-            $em->getConnection()->rollback();
-            throw $e;
-        }
-        
-        return true;
-    }
-    
-    /**
      * Devuelve la Referencia del Objetivo, de acuerdo a la cantidad que ya se encuentren registrados
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function displayRefObjetiveAction(Request $request){
-        $response = new JsonResponse();
-        $objetive = new Objetive();
+        $response = new JsonResponse();        
         $data = array();
         $options = array();
         
-        $lineStrategicId = $request->request->get('lineStrategicId');
-        $options['lineStrategicId'] = $lineStrategicId;
-        $options['type'] = 'STRATEGIC';
-        $options['type_ref'] = 'STRATEGIC_REF';
-        $ref = $objetive->setNewRef($options);
+        $options['lineStrategicId'] = $request->request->get('lineStrategicId');
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
+    }
+    
+    /**
+     * Función que devuelve la referencia del objetivo estratégico que se esta creando
+     * @param array $options
+     */
+    public function setNewRef($options = array()){
+        $em = $this->getDoctrine()->getManager();
+        $lineStrategics = array();
+        $lineStrategics[] = $options['lineStrategicId'];
+        $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLineStrategic($lineStrategics);
+        
+        $refLineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']))->getRef();
+        
+        $total = count($results);
+        if (is_array($results) && $total > 0) {
+            $ref = $refLineStrategic . ($total + 1) . '.';
+        } else {
+            $ref = $refLineStrategic . '1.';
+        }
+        
+        return $ref;
     }
 
 }

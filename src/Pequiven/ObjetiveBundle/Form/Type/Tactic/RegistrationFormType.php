@@ -4,11 +4,10 @@ namespace Pequiven\ObjetiveBundle\Form\Type\Tactic;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
-use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveLevelFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddGerenciaFieldListener;
@@ -26,11 +25,16 @@ use Pequiven\ObjetiveBundle\Form\EventListener\AddIndicatorStrategicFieldListene
  *
  * @author matias
  */
-class RegistrationFormType extends AbstractType {
+class RegistrationFormType extends AbstractType implements ContainerAwareInterface {
+    
+    protected $container;
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
     
     //put your code here
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenObjetiveBundle::getContainer();
+        $container = $this->container;
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         $user = $securityContext->getToken()->getUser();
@@ -43,15 +47,15 @@ class RegistrationFormType extends AbstractType {
         $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
 
         //Línea estratégica del objetivo a crear
-        $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+        $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container,array('typeTactic' => true)));
         //Objetivo Estratégico al cual impactará el objetivo a crear
-        $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener());
+        $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener($this->container));
         
         if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             //Localidad(es) donde impactará el objetivo a crear
-            $builder->addEventSubscriber(new AddComplejoFieldListener());
+            $builder->addEventSubscriber(new AddComplejoFieldListener($this->container));
             //Gerencia donde impactará el objetivo a crear
-            $builder->addEventSubscriber(new AddGerenciaFieldListener());
+            $builder->addEventSubscriber(new AddGerenciaFieldListener($this->container));
             $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerencias','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
         }
         
@@ -60,9 +64,9 @@ class RegistrationFormType extends AbstractType {
         //Referencia del objetivo a crear
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 5)));      
         //Peso del Objetivo
-        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100"), 'required' => false));
+        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input', 'placeholder' => "100"), 'required' => false));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100")));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input', 'placeholder' => "100")));
         
         //Rango de Gestión 
             $objectArrangementRangeType = new ArrangementRangeType();

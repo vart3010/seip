@@ -11,6 +11,8 @@ namespace Pequiven\ObjetiveBundle\Form\Type\Operative;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
@@ -30,9 +32,14 @@ use Pequiven\ObjetiveBundle\Form\EventListener\AddIndicatorStrategicFieldListene
  * @author matias
  */
 class RegistrationFormType extends AbstractType {
+    
+    protected $container;
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
     //put your code here
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenObjetiveBundle::getContainer();
+        $container = $this->container;
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         $user = $securityContext->getToken()->getUser();
@@ -45,23 +52,23 @@ class RegistrationFormType extends AbstractType {
         $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
         
         //Línea estratégica del objetivo a crear
-        $builder->addEventSubscriber(new AddLineStrategicFieldListener());
+        $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container,array('typeOperative' => true)));
         
         //Objetivo Estratégico al cual impactará el objetivo a crear
-        $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener(array('typeOperative' => true)));
+        $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener($this->container,array('typeOperative' => true)));
         
         //Objetivo Estratégico al cual impactará el objetivo a crear
-        $builder->addEventSubscriber(new AddObjetiveParentTacticFieldListener());
+        $builder->addEventSubscriber(new AddObjetiveParentTacticFieldListener($this->container));
         
         if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             //Complejo(s) donde impactará(n) el objetivo a crear (Depndiendo de si pertenece a la Sede Corporativa)
-            $builder->addEventSubscriber(new AddComplejoFieldListener(array('typeOperative' => true)));
+            $builder->addEventSubscriber(new AddComplejoFieldListener($this->container,array('typeOperative' => true)));
             //Gerencia donde impactará el objetivo a crear
-            $builder->addEventSubscriber(new AddGerenciaFieldListener());
+            $builder->addEventSubscriber(new AddGerenciaFieldListener($this->container));
         }
                
         if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            $builder->addEventSubscriber(new AddGerenciaSecondFieldListener());
+            $builder->addEventSubscriber(new AddGerenciaSecondFieldListener($this->container));
             $builder->add('check_gerencia','checkbox',array('label' => 'form.question.allGerenciasSecondFull','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false, 'mapped' => false));
         }
         

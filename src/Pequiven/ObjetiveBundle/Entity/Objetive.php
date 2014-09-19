@@ -139,10 +139,10 @@ class Objetive extends modelObjetive {
     /**
      * LineStrategic
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic")
-     * @ORM\JoinColumn(name="fk_line_strategic", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="objetives")
+     * @ORM\JoinTable(name="seip_objetives_linestrategics")
      */
-    private $lineStrategic;
+    private $lineStrategics;
 
     /**
      * Complejo
@@ -169,18 +169,28 @@ class Objetive extends modelObjetive {
     private $gerenciaSecond;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parent")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parents", cascade={"persist"})
      */
-    private $children;
+    private $childrens;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="childrens")
+     * @ORM\JoinTable(name="seip_objetives_parents",
+     *      joinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")})
      */
-    private $parent;
+    private $parents;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives")
+     * Tendency
+     * @var \Pequiven\MasterBundle\Entity\Tendency
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Tendency")
+     * @ORM\JoinColumn(name="fk_tendency", referencedColumnName="id")
+     */
+    private $tendency;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist"})
      * @ORM\JoinTable(name="seip_objetives_indicators")
      */
     private $indicators;
@@ -189,8 +199,10 @@ class Objetive extends modelObjetive {
      * Constructor
      */
     public function __construct() {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -392,78 +404,6 @@ class Objetive extends modelObjetive {
     }
 
     /**
-     * Add children
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
-     * @return Objetive
-     */
-    public function addChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
-        $this->children[] = $children;
-
-        return $this;
-    }
-
-    /**
-     * Remove children
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
-     */
-    public function removeChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
-        $this->children->removeElement($children);
-    }
-
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChildren() {
-        return $this->children;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parent
-     * @return Objetive
-     */
-    public function setParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parent = null) {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
-     */
-    public function getParent() {
-        return $this->parent;
-    }
-
-    /**
-     * Set lineStrategic
-     *
-     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic
-     * @return Objetive
-     */
-    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null) {
-        $this->lineStrategic = $lineStrategic;
-
-        return $this;
-    }
-
-    /**
-     * Get lineStrategic
-     *
-     * @return \Pequiven\MasterBundle\Entity\LineStrategic 
-     */
-    public function getLineStrategic() {
-        return $this->lineStrategic;
-    }
-
-    /**
      * Set weight
      *
      * @param float $weight
@@ -638,6 +578,10 @@ class Objetive extends modelObjetive {
      */
     public function getDescriptionSelect() {
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
+        return $this->descriptionSelect;
+    }
+    
+    public function __toString() {
         return $this->getDescriptionSelect();
     }
 
@@ -726,8 +670,11 @@ class Objetive extends modelObjetive {
      */
     public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
     {
-        $indicators->addObjetive($this);
-        $this->indicators[] = $indicators;
+        
+        if(!$this->indicators->contains($indicators)){
+            $indicators->addObjetive($this);
+            $this->indicators->add($indicators);
+        }
 
         return $this;
     }
@@ -754,5 +701,128 @@ class Objetive extends modelObjetive {
     
     public function resetIndicators(){
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add childrens
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $childrens
+     * @return Objetive
+     */
+    public function addChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
+    {
+        $this->childrens[] = $childrens;
+
+        return $this;
+    }
+
+    /**
+     * Remove childrens
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $childrens
+     */
+    public function removeChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
+    {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens()
+    {
+        return $this->childrens;
+    }
+
+    /**
+     * Add parents
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parents
+     * @return Objetive
+     */
+    public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
+    {
+        //$parents->addChildren($this);
+        $this->parents[] = $parents;
+
+        return $this;
+    }
+
+    /**
+     * Remove parents
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parents
+     */
+    public function removeParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
+    {
+        $this->parents->removeElement($parents);
+    }
+
+    /**
+     * Get parents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParents()
+    {
+        return $this->parents;
+    }
+
+    /**
+     * Add lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     * @return Objetive
+     */
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics[] = $lineStrategics;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     */
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics->removeElement($lineStrategics);
+    }
+
+    /**
+     * Get lineStrategics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineStrategics()
+    {
+        return $this->lineStrategics;
+    }
+
+    /**
+     * Set tendency
+     *
+     * @param \Pequiven\MasterBundle\Entity\Tendency $tendency
+     * @return Objetive
+     */
+    public function setTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency = null)
+    {
+        $this->tendency = $tendency;
+
+        return $this;
+    }
+
+    /**
+     * Get tendency
+     *
+     * @return \Pequiven\MasterBundle\Entity\Tendency 
+     */
+    public function getTendency()
+    {
+        return $this->tendency;
     }
 }

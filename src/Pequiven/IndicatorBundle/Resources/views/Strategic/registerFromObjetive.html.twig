@@ -1,19 +1,11 @@
-{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutModal.html.twig' %}
-
 {% trans_default_domain 'PequivenIndicatorBundle' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
-{% block javascripts_base %}
-    {{ parent() }}
-    <!-- JavaScript at the bottom for fast page loading -->
-    <!-- Scripts -->
-    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
-    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
-{% endblock javascripts_base %}
-
 {% block body %}
-
+    
+    
+    
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             <a href="#">{{ 'pequiven_indicator.indicators'|trans }}</a>
@@ -27,16 +19,6 @@
     <form action="{{ path('pequiven_indicator_add_strategic_from_objetive') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
-            
-            <!-- Hidden con la Referencia del Objetivo Estratégico que se esta creando -->
-            <div>
-                {{ form_widget(form.refObjetive) }}
-            </div>
-            
-            <!-- Hidden con la L+inea Estratégica del Objetivo Estratégico que se esta creando -->
-            <div>
-                {{ form_widget(form.lineStrategicObjetive) }}
-            </div>
             
             <!-- Descripción del indicador -->
             <div class="field-block button-height">

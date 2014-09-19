@@ -21,8 +21,8 @@ class Tendency {
     public $tendencyName = array();
     
     public function __construct() {
-        $this->tendencyName[self::TENDENCY_MAX] = 'Maximizar';
-        $this->tendencyName[self::TENDENCY_MIN] = 'Minimizar';
+        $this->tendencyName[self::TENDENCY_MAX] = 'Favorable';
+        $this->tendencyName[self::TENDENCY_MIN] = 'Desfavorable';
     }
     
     /**

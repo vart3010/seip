@@ -40,9 +40,9 @@
                 
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
-                {{ form_label(form.lineStrategic) }}
-                {{ form_widget(form.lineStrategic) }}
-                {{ form_errors(form.lineStrategic) }}
+                {{ form_label(form.lineStrategics) }}
+                {{ form_widget(form.lineStrategics) }}
+                {{ form_errors(form.lineStrategics) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.info.lineStrategic'|trans }}</span>
@@ -62,9 +62,9 @@
                 
             <!-- Objetivo Táctico (Padre) -->
             <div class="field-block button-height">
-                {{ form_label(form.parent) }}
-                {{ form_widget(form.parent) }}
-                {{ form_errors(form.parent) }}
+                {{ form_label(form.parents) }}
+                {{ form_widget(form.parents) }}
+                {{ form_errors(form.parents) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.info.objetiveTactic'|trans }}</span>
@@ -310,8 +310,10 @@
         </fieldset>
     {{ form_rest(form) }}
     </form>
-    
-    {% block javascript %}
+
+{% endblock body %}
+
+{% block javascript %}
         <script type="text/javascript">
             $(document).ready(function()
             {
@@ -322,9 +324,9 @@
                     messageObjetiveTacticCheckIndicator = $('#choice_objetive_tactic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Táctico
                     sectionCheckGerencia = $("#view_check_gerencia"),//Sección dónde está el check para seleccionar las gerencias de los complejos que esten seleccionados
                     sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
-                    selectLineStrategic = $("#pequiven_objetive_operative_registration_lineStrategic"),//Select de Línea Estratégica
+                    selectLineStrategic = $("#pequiven_objetive_operative_registration_lineStrategics"),//Select de Línea Estratégica
                     selectObjetiveStrategic = $("#pequiven_objetive_operative_registration_parent_strategic"),//Select de Objetivo Estratégico
-                    selectObjetiveTactic = $("#pequiven_objetive_operative_registration_parent"),//Select de Objetivo Táctico
+                    selectObjetiveTactic = $("#pequiven_objetive_operative_registration_parents"),//Select de Objetivo Táctico
                     selectComplejo = $("#pequiven_objetive_operative_registration_complejo"),//Select Complejo
                     selectGerencia = $("#pequiven_objetive_operative_registration_gerencia"),//Select de Gerencia
                     selectGerenciaSecond = $("#pequiven_objetive_operative_registration_gerenciaSecond"),//Select de Gerencia 2da Línea
@@ -332,7 +334,6 @@
                     inputRef = $("#pequiven_objetive_operative_registration_ref"),//Input de Ref
                     inputGoal = $("#pequiven_objetive_operative_registration_goal"),//Input de Meta
                     inputWeight = $("#pequiven_objetive_operative_registration_weight"),//Input de Peso
-                    inputHiddenComplejoName = $("#pequiven_objetive_operative_registration_complejo_name"),//Input Hidden del Nombre del Complejo del usuario logueado
                     inputHiddenRoleName = $("#pequiven_objetive_operative_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
                     checkIndicator = $("#pequiven_objetive_operative_registration_evalIndicator"),//Check de Evaluar por Indicador
                     checkGerencia = $("#pequiven_objetive_operative_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
@@ -379,10 +380,16 @@
                     chargeSelect2LineStrategic();
 
                     //Inicializamos el select2 de Objetivo Estratégico
-                    chargeSelect2ObjetiveStrategic();
+                    selectObjetiveStrategic.select2({
+                        
+                    });
+                    selectObjetiveStrategic.select2("enable",false);
 
                     //Inicializamos el select2 de Objetivo Táctico
-                    chargeSelect2ObjetiveTactic();
+                    selectObjetiveTactic.select2({
+                        
+                    });
+                    selectObjetiveTactic.select2("enable",false);
 
                     messageLineStrategicCheckIndicator.hide();
                     messageObjetiveStrategicCheckIndicator.hide();
@@ -629,9 +636,9 @@
                                 }
                                 $("#pequiven_objetive_operative_registration_parent_strategic").select2("val", "");
                                 //Reiniciamos el select2 de Objetivo Táctico
-                                $('#pequiven_objetive_operative_registration_parent option[value]').remove();
-                                $('#pequiven_objetive_operative_registration_parent option').remove();
-                                selectObjetiveTactic.append('<option></option>');
+                                $('#pequiven_objetive_operative_registration_parents option[value]').remove();
+                                $('#pequiven_objetive_operative_registration_parents option').remove();
+                                //selectObjetiveTactic.append('<option></option>');
                                 chargeSelect2ObjetiveTactic();
 
                                 if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
@@ -647,6 +654,7 @@
                                     //Escondemos la sección del check de seleccionar las gerencias de los complejos seleccionados
                                     sectionCheckGerencia.hide();
                                 }
+                                selectObjetiveStrategic.select2("enable",true);
                                 chargeSelect2ObjetiveStrategic("full");
                             } else{
                                 if(typeof data[0].initial === 'undefined'){
@@ -669,9 +677,9 @@
                        url: '{{ path("select_objetiveTacticFromObjetiveStrategic") }}',
                        data: data,
                        success: function(data) {
-                            $('#pequiven_objetive_operative_registration_parent option[value]').remove();
-                            $('#pequiven_objetive_operative_registration_parent option').remove();
-                            selectObjetiveTactic.append('<option></option>');
+                            $('#pequiven_objetive_operative_registration_parents option[value]').remove();
+                            $('#pequiven_objetive_operative_registration_parents option').remove();
+                            //selectObjetiveTactic.append('<option></option>');
 
                             if(typeof data[0].empty === 'undefined'){
                                 for(var i=0, total = data.length; i<total; i++){
@@ -691,6 +699,7 @@
                                     selectGerencia.select2("enable",false);
                                     sectionCheckGerencia.hide();
                                 }
+                                selectObjetiveTactic.select2("enable",true);
                                 chargeSelect2ObjetiveTactic("full");
                             } else{
                                 if(typeof data[0].initial === 'undefined'){
@@ -945,7 +954,7 @@
                 //Función que carga el select2 de Objetivo Táctico
                 function chargeSelect2ObjetiveTactic(type){
                     selectObjetiveTactic.select2({
-                        placeholder: '{{ 'form.messages.selectObjetiveTacticPlaceholder'|trans }}',
+                        //placeholder: '{#{ 'form.messages.selectObjetiveTacticPlaceholder'|trans }#}',
                         formatNoMatches: function(term) {
                             if(type == 'full'){
                                 return "{{ 'form.messages.selectObjetiveTacticFormatNoMatcher'|trans }}";
@@ -1008,4 +1017,3 @@
             };
         </script>  
     {% endblock javascript %}
-{% endblock body %}

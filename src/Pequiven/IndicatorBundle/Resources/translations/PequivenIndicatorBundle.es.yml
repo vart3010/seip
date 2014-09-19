@@ -28,6 +28,7 @@ pequiven_indicator:
 form:
     ref: Nro. de Referencia
     indicator: Indicador
+    description: Descripción del Indicador
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
@@ -37,6 +38,7 @@ form:
     weight: Peso
     goal: Meta
     formula: Fórmula
+    tendency: Tendencia
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto
@@ -45,6 +47,7 @@ form:
     arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResInd: Res. Ind.
     
+    rankArrangement: Rango de Gestión (Semáforo)
     rankArrangementTop: Rango de Gestión Alto
     rankArrangementMiddleTop: Rango de Gestión Medio Alto
     rankArrangementMiddleBottom: Rango de Gestión Medio Bajo

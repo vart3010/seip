@@ -51,6 +51,7 @@ form:
     arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResObj: Res. Obj.
     
+    rankArrangement: Rango de Gestión
     rankArrangementTop: Rango de Gestión Alto
     rankArrangementMiddleTop: Rango de Gestión Medio Alto
     rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
@@ -167,6 +168,7 @@ form:
         selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico
         
 action:
-    registerObjetiveStrategicSuccessfull: Objetivo Estratégico registrado exitosamente
-    registerObjetiveTacticSuccessfull: Objetivo Táctico registrado exitosamente
-    registerObjetiveOperativeSuccessfull: Objetivo Operativo registrado exitosamente
+    messages:
+        registerObjetiveStrategicSuccessfull: Objetivo Estratégico registrado exitosamente
+        registerObjetiveTacticSuccessfull: Objetivo Táctico registrado exitosamente
+        registerObjetiveOperativeSuccessfull: Objetivo Operativo registrado exitosamente

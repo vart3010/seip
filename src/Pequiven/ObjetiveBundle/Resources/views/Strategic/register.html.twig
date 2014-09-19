@@ -32,9 +32,9 @@
             <!-- Línea Estratégica -->
             <a name="lineStrategicq"></a>
             <div id="lineStrategic" class="field-block button-height">
-                {{ form_label(form.lineStrategic) }}
-                {{ form_widget(form.lineStrategic) }}
-                {{ form_errors(form.lineStrategic) }}
+                {{ form_label(form.lineStrategics) }}
+                {{ form_widget(form.lineStrategics) }}
+                {{ form_errors(form.lineStrategics) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.info.lineStrategic'|trans }}</span>
@@ -207,10 +207,12 @@
             {{ actions.create() }}
             
         </fieldset>
-    {{ form_rest(form) }}
+            {{ form_rest(form) }}
     </form>
     
-    {% block javascript %}
+{% endblock body %}
+
+{% block javascript %}
         
         <script type="text/javascript">
             $(document).ready(function()
@@ -218,7 +220,7 @@
                 var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
                     messageCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
                     sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
-                    selectLineStrategic = $("#pequiven_objetive_strategic_registration_lineStrategic"),//Select de Línea Estratégica
+                    selectLineStrategic = $("#pequiven_objetive_strategic_registration_lineStrategics"),//Select de Línea Estratégica
                     selectComplejo = $("#pequiven_objetive_strategic_registration_complejo"),//Select de Complejo
                     selectIndicators = $("#pequiven_objetive_strategic_registration_indicators"),//Select de Indicadores
                     inputRef = $("#pequiven_objetive_strategic_registration_ref"),//Input de Ref
@@ -454,7 +456,7 @@
                 }
 
             });
-
+            
             function indicatorsRegisterSuccessful(){
                 $("#modals").remove();
                 //document.scripts.chargeSelectIndicator();
@@ -487,6 +489,5 @@
                     });
                 **/
             };
-        </script>    
+        </script>
     {% endblock javascript %}
-{% endblock body %}

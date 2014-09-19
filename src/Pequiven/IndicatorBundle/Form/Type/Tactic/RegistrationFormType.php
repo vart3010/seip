@@ -11,8 +11,10 @@ namespace Pequiven\IndicatorBundle\Form\Type\Tactic;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
+use Pequiven\MasterBundle\Entity\Tendency;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldListener;
@@ -25,15 +27,20 @@ use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
  *
  * @author matias
  */
-class RegistrationFormType extends AbstractType {
+class RegistrationFormType extends AbstractType implements ContainerAwareInterface {
     
     protected $typeForm;
+    protected $container;
     public function __construct($type = 'fromObjetive') {
         $this->typeForm = $type;
     }
     
+    public function setContainer(ContainerInterface $container = null) {
+    $this->container = $container;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenIndicatorBundle::getContainer();
+        $container = $this->container;
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         $user = $securityContext->getToken()->getUser();
@@ -62,20 +69,21 @@ class RegistrationFormType extends AbstractType {
         } elseif($this->typeForm == 'fromObjetive'){
             //Referencia del Objetivo Estratégico al cual se le podrían añadir el indicador a crear
             $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
-            
-            //Línea Estratégica del Objetivo Estratégico al cual se le podría añadir el indicador a crear
-            $builder->add('lineStrategicObjetive','hidden',array('data' => '', 'mapped' => false));
         }
         
+        //Tendencia del indicador
+        $dataTendency = $em->getRepository('PequivenMasterBundle:Tendency')->findOneBy(array('ref' => Tendency::TENDENCY_MAX));
+        $builder->add('tendency','entity',array('label' => 'form.tendency','data' => $dataTendency,'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:Tendency','empty_value' => false, 'required' => false));
+        
         //Descripción del indicador a crear
-        $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
+        $builder->add('description', 'textarea', array('label' => 'form.description', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Referencia del indicador a crear
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
         
         //Peso del Objetivo
         //$builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100"), 'required' => false));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100")));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input', 'placeholder' => "100")));
         //Fórmula del indicador a crear
         $builder->addEventSubscriber(new AddFormulaFieldListener());
 

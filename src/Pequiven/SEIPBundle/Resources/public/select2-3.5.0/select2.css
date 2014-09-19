@@ -489,6 +489,7 @@ disabled look for disabled choices in the results dropdown
     position: relative;
 
     border: 1px solid #aaa;
+    border-radius: 4px;
     cursor: text;
     overflow: hidden;
 

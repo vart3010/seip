@@ -52,7 +52,7 @@ class IndicatorLevelFixture extends AbstractFixture implements OrderedFixtureInt
     }
     
     public function getOrder(){
-        return 12;
+        return 9;
     }
     
     public function setContainer(ContainerInterface $container = null) {

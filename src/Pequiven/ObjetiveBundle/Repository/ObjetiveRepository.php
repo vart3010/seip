@@ -11,16 +11,14 @@ namespace Pequiven\ObjetiveBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as silyusEntityRepository;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Description of ObjetiveRepository
  *
  * @author matias
  */
 class ObjetiveRepository extends baseEntityRepository {
-    //put your code here
-    public function getByUser(){
-        
-    }
     
     /**
      * Devuelve un grupo de resultados de acuerdo al campo pasado en $options y agrupado por la referencia
@@ -96,54 +94,57 @@ class ObjetiveRepository extends baseEntityRepository {
     }
     
     /**
-     * Devuelve un grupo de resultados del objetivo para cuando se va a calcular el número de referencia para un objetivo operativo
+     * Función que devuelve los objetivos estratégicos de acuerdo a las líneas estratégicas
+     * @param type $lineStrategicsArray
+     * @return type
      */
-    public function getToCalculateRefFromObjetiveOperative($options = array()){
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->groupBy('o.ref');
-        $query->andWhere($query);
-        
-        
-        $q = $query->getQuery();
-        //var_dump($q->getSQL());
-        //die();
-        return $q->getResult();
+    public function getByLineStrategic($lineStrategicsArray){
+        //$em = $this->getEntityManager();
+        $query = $this->createQueryBuilder('o');
+        $query
+            ->select('o')
+            ->innerJoin('o.lineStrategics', 'ls')
+            ->andWhere($query->expr()->in('ls.id', $lineStrategicsArray))
+                ;
+        return $query->getQuery()->getResult();
     }
     
     /**
-     * 
-     * @param type $lineStrategicId
+     * Función que devuelve los objetivos hijos de un objetivo
+     * @param type $objetiveParentsArray
      * @return type
      */
-    public function getByLineStrategicGroupComplejo($lineStrategicId){
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->where('o.lineStrategic = ' . $lineStrategicId)
-                    ->groupBy('o.complejo')
-                    ->getQuery();
-        return $query->getResult();
-    }
-    
-    /**
-     * 
-     * @param type $type
-     * @return type
-     */
-    public function getByLevelStrategic(){
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO)
+    public function getByParent($objetiveParentsArray){
+        $securityContext = $this->getSecurityContext();
+        
+        $query = $this->createQueryBuilder('o');
+        $query
+                ->select('o')
+                ->innerJoin('o.parents', 'p')
+                ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
                 ;
         
-        $q = $query->getQuery();
-        return $q->getResult();
+        if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+        }
+
+        return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * Función que devuelve los objetivos padres de un objetivo
+     * @param type $objetiveChildrensArray
+     * @return type
+     */
+    public function getByChildren($objetiveChildrensArray){
+        $query = $this->createQueryBuilder('o');
+        $query
+                ->select('o')
+                ->innerJoin('o.childrens', 'c')
+                ->andWhere($query->expr()->in('c.id', $objetiveChildrensArray))
+                ;
+
+        return $query->getQuery()->getResult();
     }
     
     /**

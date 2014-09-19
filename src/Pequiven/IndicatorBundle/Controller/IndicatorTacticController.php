@@ -105,9 +105,8 @@ class IndicatorTacticController extends baseController {
      */
     public function createAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType('regular'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.tacticfo.registration.form.type'));
+        //$form->handleRequest($request);
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -117,7 +116,7 @@ class IndicatorTacticController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_tactic_registration");
 
@@ -127,8 +126,7 @@ class IndicatorTacticController extends baseController {
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
-            //Obtenemos y seteamos la línea estratégica del indicador
-            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategic'])));
+
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
             $object->setIndicatorLevel($indicatorLevel);
@@ -180,9 +178,8 @@ class IndicatorTacticController extends baseController {
      */
     public function createFromObjetiveAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType('fromObjetive'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.tacticfo.registration.form.type'));
+//        $form->handleRequest($request);
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -191,7 +188,7 @@ class IndicatorTacticController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_tacticfo_registration");
             

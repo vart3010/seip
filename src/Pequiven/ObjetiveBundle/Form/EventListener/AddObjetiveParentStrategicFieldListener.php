@@ -16,6 +16,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Doctrine\ORM\EntityRepository;
@@ -46,8 +47,13 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         );
     }
     
-    public function __construct($options = array()) {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
@@ -91,54 +97,31 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
+            'attr' => array('class' => 'populate placeholder select2-offscreen','style' => 'width:400px')
         );
-
-        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        if($this->user->getComplejo()->getRef() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-            $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId){
-            $qb = $er->createQueryBuilder('objetive')
-                     ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId')
-                     ->groupBy('objetive.ref')
-                     ->setParameter('lineStrategicId', $lineStrategicId)
-                     ->setParameter('objetiveLevelId', ObjetiveLevel::LEVEL_ESTRATEGICO)
-                    ;
-//            var_dump($qb->getQuery()->getSQL());
-//            die();
-            return $qb;
-            };
-        } else{
-            $formOptions['query_builder'] = function (EntityRepository $er) use ($lineStrategicId){
-            $qb = $er->createQueryBuilder('objetive')
-                     ->where('objetive.lineStrategic = :lineStrategicId AND objetive.objetiveLevel = :objetiveLevelId')
-                     ->groupBy('objetive.ref')
-                     ->setParameter('lineStrategicId', $lineStrategicId)
-                     ->setParameter('objetiveLevelId', ObjetiveLevel::LEVEL_ESTRATEGICO)
-                    ;
-            return $qb;
-            };
-        }
-      
-        //$complejoId = $gerencia->getComplejo()->getId();
-        //$objetiveLevelId = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('levelName' => $objetiveLevelName[ObjetiveLevel::LEVEL_ESTRATEGICO]))->getId();
 
         if ($objetiveParent) {
             $formOptions['data'] = $objetiveParent;
         }
-
+        
+        //En caso de que el usuario tenga un rol superior a Gerente de 2da línea
         if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            //En caso de que el formulario sea el de objetivo operativo
             if($this->typeOperative){
                 $formOptions['mapped'] = false;
+                //En caso de que el formulario sea el de indicador operativo
                 if($this->registerIndicator){
                     $formOptions['required'] = false;
                 }
                 return $form->add('parent_strategic', 'entity', $formOptions);
             } else{
+                $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen','multiple' => 'multiple','style' => 'width:400px');
+                $formOptions['multiple'] = true;
                 if($this->registerIndicator){
                     $formOptions['mapped'] =false;
                     $formOptions['required'] = false;
                 }
-                return $form->add('parent', 'entity', $formOptions);
+                return $form->add('parents', 'entity', $formOptions);
             }
         } elseif ($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $formOptions['mapped'] = false;

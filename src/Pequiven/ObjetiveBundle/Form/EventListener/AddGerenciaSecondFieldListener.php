@@ -11,6 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\MasterBundle\Entity\Gerencia;
 use Doctrine\ORM\EntityRepository;
@@ -36,8 +37,13 @@ class AddGerenciaSecondFieldListener implements EventSubscriberInterface {
                 );
     }
     
-    public function __construct($options = array()) {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();

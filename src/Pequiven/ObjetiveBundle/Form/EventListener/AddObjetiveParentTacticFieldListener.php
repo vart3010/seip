@@ -11,6 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Doctrine\ORM\EntityRepository;
@@ -40,8 +41,13 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         );
     }
     
-    public function __construct($options = array()) {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
@@ -51,7 +57,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         
         if(isset($options['registerIndicator'])){
             $this->registerIndicator = true;
-        }        
+        }
     }
 
     public function preSetData(FormEvent $event) {
@@ -83,38 +89,15 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
-            'attr' => array('class' => 'populate select2-offscreen','style' => 'width:400px')
+            'attr' => array('class' => 'placeholder populate select2-offscreen','multiple' => 'multiple','style' => 'width:400px'),
+            'multiple' => true
         );
-        
-//        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-        if(!$this->registerIndicator) {
-            $formOptions['query_builder'] = function (EntityRepository $er) use ($objetiveParentStrategicId){
-                        $qb = $er->createQueryBuilder('objetive')
-                         ->where('objetive.parent = :parentId')
-                         ->setParameter('parentId', $objetiveParentStrategicId)
-                                ;
-                        return $qb;
-                    };
-        }
                     
-            if($this->registerIndicator) {
-                $formOptions['mapped'] = false;
-                $formOptions['required'] = false;
-                $formOptions['attr'] = array('class' => 'placeholder select2-offscreen','style' => 'width:300px');
-            }
-//        } 
-//        else{
-//            $complejoId = $this->user->getComplejo()->getId();            
-//            $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId,$objetiveParentStrategicId){
-//                $qb = $er->createQueryBuilder('objetive')
-//                         ->where('objetive.complejo = :complejoId AND objetive.parent = :parentId')
-//                         ->setParameter('complejoId', $complejoId)
-//                         ->setParameter('parentId', $objetiveParentStrategicId)
-//                        ;
-//                return $qb;
-//            };
-//        }
-        
+        if($this->registerIndicator) {
+            $formOptions['mapped'] = false;
+            $formOptions['required'] = false;
+            $formOptions['attr'] = array('class' => 'placeholder select2-offscreen','style' => 'width:300px');
+        }
 
         if ($objetiveParent) {
             $formOptions['data'] = $objetiveParent;
@@ -123,7 +106,7 @@ class AddObjetiveParentTacticFieldListener implements EventSubscriberInterface{
         if($this->registerIndicator) {
             return $form->add('parentTactic', 'entity', $formOptions);
         } else{
-            return $form->add('parent', 'entity', $formOptions);
+            return $form->add('parents', 'entity', $formOptions);
         }
     }
 
