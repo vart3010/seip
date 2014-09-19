@@ -13,6 +13,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  * @ORM\Entity()
  * @ORM\Table(name="seip_user")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=false)),
+ * })
  */
 class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
 {

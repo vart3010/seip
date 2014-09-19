@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\SEIPBundle\DataFixtures;
+namespace Pequiven\SEIPBundle\DataFixtures\ORM;
 
 /**
  * Description of UserPermissionFixture
