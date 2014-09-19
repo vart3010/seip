@@ -1,3 +1,8 @@
+pequiven_arrangement_program:
+    resource: "@PequivenArrangementProgramBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 pequiven_arrangement:
     resource: "@PequivenArrangementBundle/Controller/"
     type:     annotation
