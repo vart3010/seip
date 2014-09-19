@@ -41,11 +41,11 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         //Línea estratégica del objetivo a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container));
         //Referencia del objetivo
-        $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true, 'attr' => array('class' => 'input','size' => 5)));
+        $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true, 'attr' => array('class' => 'input','size' => 8)));
         //Descripción del objetivo
         $builder->add('description', 'textarea', array('label' => 'form.objetive', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100")));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input','size' => 8,'placeholder' => "100")));
             
         //Rango de Gestión 
             $objectArrangementRangeType = new ArrangementRangeType();

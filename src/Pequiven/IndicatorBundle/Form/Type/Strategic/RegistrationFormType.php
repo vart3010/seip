@@ -51,15 +51,17 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
         }
         
-        //Nombre del indicador a crear
+        //Tendencia del indicador
+            $dataTendency = $em->getRepository('PequivenMasterBundle:Tendency')->findOneBy(array('ref' => Tendency::TENDENCY_MAX));
+            $builder->add('tendency','entity',array('label' => 'form.tendency','data' => $dataTendency,'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:Tendency','empty_value' => false, 'required' => false));
+        
+        //Descripción del indicador a crear
             $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Referencia del indicador a crear
             $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
-        
-        //Peso del Objetivo
-        //$builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100"), 'required' => false));
+                
         //Meta del Objetivo
-            $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100")));
+            $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input','placeholder' => "100", 'size' => 8)));
         //Fórmula del indicador a crear
             $builder->addEventSubscriber(new AddFormulaFieldListener());
         
