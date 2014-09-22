@@ -160,6 +160,7 @@ form:
         selectLineStrategicFormatNoMatcher: Seleccione una línea estratégica
         selectLineStrategicFormatNoResult: No hay líneas estratégicas registradas
         selectLineStrategicPlaceholder: Seleccione una línea estratégica
+        selectLineStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% línea estratégica
         selectObjetiveStrategicFormatNoMatcher: Seleccione una línea estratégica
         selectObjetiveStrategicFormatNoResult: No hay objetivos estratégicos registrados para la línea estratégica seleccionada
         selectObjetiveStrategicPlaceholder: Seleccione un objetivo estratégico

@@ -1,5 +1,5 @@
 <?php
-namespace Pequiven\MasterBundle\DataFixtures;
+namespace Pequiven\MasterBundle\DataFixtures\ORM;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates

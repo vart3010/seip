@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\ObjetiveBundle\DataFixtures;
+namespace Pequiven\ObjetiveBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -38,13 +38,9 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('1.1.');
         $objetive->addIndicator($this->getReference('IE-1.1.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-1.1.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-1.1.3.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-1.1.4.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-1.1.5.'));
         $this->addReference('OE-1.1.', $objetive);
             $manager->persist($objetive);
@@ -59,7 +55,6 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('1.2.');
         $objetive->addIndicator($this->getReference('IE-1.2.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-1.2.2.'));
         $this->addReference('OE-1.2.', $objetive);
             $manager->persist($objetive);
@@ -74,13 +69,9 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('2.1.');
         $objetive->addIndicator($this->getReference('IE-2.1.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.1.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.1.3.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.1.4.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.1.5.'));
         $this->addReference('OE-2.1.', $objetive);
             $manager->persist($objetive);
@@ -95,9 +86,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('2.2.');
         $objetive->addIndicator($this->getReference('IE-2.2.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.2.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-2.2.3.'));
         $this->addReference('OE-2.2.', $objetive);
             $manager->persist($objetive);
@@ -113,9 +102,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('3.1.');
         $objetive->addIndicator($this->getReference('IE-3.1.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-3.1.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-3.1.3.'));
         $this->addReference('OE-3.1.', $objetive);
             $manager->persist($objetive);
@@ -157,9 +144,7 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('4.1.');
         $objetive->addIndicator($this->getReference('IE-4.1.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-4.1.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-4.1.3.'));
         $this->addReference('OE-4.1.', $objetive);
             $manager->persist($objetive);
@@ -203,14 +188,10 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('5.2.');
         $objetive->addIndicator($this->getReference('IE-5.2.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-5.2.2.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-5.2.3.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-5.2.4.'));
-        $objetive->resetIndicators();
-        $objetive->addIndicator($this->getReference('IE-5.2.5.'));        
+        $objetive->addIndicator($this->getReference('IE-5.2.5.'));
         $this->addReference('OE-5.2.', $objetive);
             $manager->persist($objetive);
             
@@ -237,7 +218,6 @@ class ObjetiveFixture extends AbstractFixture implements OrderedFixtureInterface
         $objetive->setUserCreatedAt($this->getReference('SUPER_ADMIN'));
         $objetive->setRef('6.1.');
         $objetive->addIndicator($this->getReference('IE-6.1.1.'));
-        $objetive->resetIndicators();
         $objetive->addIndicator($this->getReference('IE-6.1.2.'));
         $this->addReference('OE-6.1.', $objetive);
             $manager->persist($objetive);

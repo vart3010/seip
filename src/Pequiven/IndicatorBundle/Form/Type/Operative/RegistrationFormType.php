@@ -11,8 +11,10 @@ namespace Pequiven\IndicatorBundle\Form\Type\Operative;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
+use Pequiven\MasterBundle\Entity\Tendency;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
 use Pequiven\ObjetiveBundle\Form\EventListener\AddObjetiveParentStrategicFieldListener;
@@ -27,15 +29,21 @@ use Pequiven\IndicatorBundle\Form\EventListener\AddFormulaFieldListener;
  *
  * @author matias
  */
-class RegistrationFormType extends AbstractType {
+class RegistrationFormType extends AbstractType implements ContainerAwareInterface {
     
     protected $typeForm;
+    protected $container;
+    
     public function __construct($type = 'fromObjetive') {
         $this->typeForm = $type;
     }
     
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options){
-        $container = PequivenIndicatorBundle::getContainer();
+        $container = $this->container;
         $securityContext = $container->get('security.context');
         $em = $container->get('doctrine')->getManager();
         $user = $securityContext->getToken()->getUser();
@@ -67,9 +75,6 @@ class RegistrationFormType extends AbstractType {
         } elseif($this->typeForm == 'fromObjetive'){
             //Referencia del Objetivo Operativo al cual se le podrían añadir los indicadores a crear
             $builder->add('refObjetive','hidden',array('data' => '','mapped' => false));
-            
-            //Línea Estratégica del Objetivo Operativo al cual se le podría añadir el indicador a crear
-            $builder->add('lineStrategicObjetive','hidden',array('data' => '', 'mapped' => false));
         }
         
         //Nombre del indicador a crear
@@ -78,11 +83,15 @@ class RegistrationFormType extends AbstractType {
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
         
         //Peso del Indicador
-        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "1000"), 'required' => false));
+        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100", 'class' => 'input', 'size' => 8), 'required' => false));
         //Meta del Indicador
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "1000")));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100", 'class' => 'input', 'size' => 8)));
         //Fórmula del indicador a crear
         $builder->addEventSubscriber(new AddFormulaFieldListener());
+        
+        //Tendencia del indicador
+        $dataTendency = $em->getRepository('PequivenMasterBundle:Tendency')->findOneBy(array('ref' => Tendency::TENDENCY_MAX));
+        $builder->add('tendency','entity',array('label' => 'form.tendency','data' => $dataTendency,'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:Tendency','empty_value' => false, 'required' => false));
         
         //Rango de Gestión
             $objectArrangementRangeType = new ArrangementRangeType();

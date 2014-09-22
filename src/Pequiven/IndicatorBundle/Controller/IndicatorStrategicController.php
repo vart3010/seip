@@ -103,9 +103,8 @@ class IndicatorStrategicController extends baseController {
      */
     public function createFromObjetiveAction(Request $request){
         
-        $form = $this->createForm(new BaseFormType('fromObjetive'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.strategicfo.registration.form.type'));
+        $form->handleRequest($request);        
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -118,13 +117,12 @@ class IndicatorStrategicController extends baseController {
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
             
-            $object->setRefParent($em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']))->getRef());
+            $object->setRefParent($data['refObjetive']);
             $object->setTmp(true);
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
-            //Obtenemos y seteamos la línea estratégica del indicador
-            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategicObjetive'])));
+
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_ESTRATEGICO));
             $object->setIndicatorLevel($indicatorLevel);
@@ -346,8 +344,6 @@ class IndicatorStrategicController extends baseController {
         
         $indicatorsStrategic = array();
         $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
         
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_ESTRATEGICO;

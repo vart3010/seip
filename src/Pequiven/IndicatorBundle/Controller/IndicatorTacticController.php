@@ -124,7 +124,7 @@ class IndicatorTacticController extends baseController {
             $object->setRefParent($objetive->getRef());
             
             //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -153,7 +153,7 @@ class IndicatorTacticController extends baseController {
             if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
                 $this->createArrangementRange($lastObjectInsert, $data);
             }
-            //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+            
             $this->createObjetiveIndicator($lastObjectInsert);
             
             return $this->redirect($this->generateUrl('pequiven_indicator_home', 
@@ -179,7 +179,7 @@ class IndicatorTacticController extends baseController {
     public function createFromObjetiveAction(Request $request){
 
         $form = $this->createForm($this->get('pequiven_indicator.tacticfo.registration.form.type'));
-//        $form->handleRequest($request);
+
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -194,11 +194,9 @@ class IndicatorTacticController extends baseController {
             
             $object->setRefParent($data['refObjetive']);
             $object->setTmp(true);
-            //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
+            
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
-            //Obtenemos y seteamos la línea estratégica del indicador
-            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategicObjetive'])));
             
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
@@ -385,12 +383,9 @@ class IndicatorTacticController extends baseController {
         foreach ($results as $result){
             $gerenciaFirst[] = array("id" => $result->getId(), "description" => $result->getDescription());
         }
-//        var_dump($gerenciaFirst[0]->getId());
-//        die();
+
         $response->setData($gerenciaFirst);
-//        var_dump($response);
-        //var_dump(new JsonResponse($objetiveChildrenTactic));
-//        die();
+
         return $response;
     }
     

@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Pequiven\ObjetiveBundle\DataFixtures;
+namespace Pequiven\ObjetiveBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
