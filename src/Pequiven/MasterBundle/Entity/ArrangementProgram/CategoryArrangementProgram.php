@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Categoria del programa de gestion
  *
- * @ORM\Table()
+ * @ORM\Table("seip_c_category_arrangement_program")
  * @ORM\Entity
  */
 class CategoryArrangementProgram

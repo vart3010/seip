@@ -5,9 +5,9 @@ namespace Pequiven\MasterBundle\Entity\ArrangementProgram;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tipo de meta
+ * Tipo de meta (Tipo de actividad)
  *
- * @ORM\Table()
+ * @ORM\Table("seip_c_type_goal")
  * @ORM\Entity
  */
 class TypeGoal

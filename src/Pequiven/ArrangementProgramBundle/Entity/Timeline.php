@@ -36,6 +36,13 @@ class Timeline
      */
     private $status;
 
+    /**
+     * Programa de gestion
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * 
+     * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timelines")
+     */
+    private $arrangementProgram;
 
     /**
      * Get id
