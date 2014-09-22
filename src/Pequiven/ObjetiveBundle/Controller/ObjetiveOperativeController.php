@@ -60,7 +60,7 @@ class ObjetiveOperativeController extends baseController {
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByLevel',
+                'createPaginatorOperative',
                 array($criteria, $sorting)
             );
             

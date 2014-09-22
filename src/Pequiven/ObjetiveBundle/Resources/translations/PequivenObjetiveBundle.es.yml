@@ -36,6 +36,7 @@ form:
     gerenciaSecond: Gerencia 2da línea
     objetiveStrategic: Objetivo estratégico
     objetiveTactic: Objetivo táctico
+    objetiveOperative: Objetivo operativo
     gerencia_first: Gerencia 1ra Línea
     gerencia_second: Gerencia 2da Línea
     parent_strategic: Objetivo Estratégico

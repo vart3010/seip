@@ -129,6 +129,19 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setEnabled(true);
         $user->setParent($this->getReference('mf-10015700'));
             $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('rpereira_ggm');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Ricardo');
+        $user->setLastName('Pereira');
+        $user->setEmail('rpereira@pequiven.com');
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('mf-10015700'));
+            $manager->persist($user);
         
         $user = new User();
         $user->setUsername('wnavarro');
@@ -159,6 +172,20 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             $manager->persist($user);
         
         $user = new User();
+        $user->setUsername('mizquierdo_ggamc');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('Marygher');
+        $user->setLastName('Izquierdo');
+        $user->setEmail('mizquierdo@pequiven.com');
+        $user->setNumPersonal(10018925);
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('mf-10018009'));
+            $manager->persist($user);
+        
+        $user = new User();
         $user->setUsername('mgracia');
         $user->setPlainPassword('12345');
         $user->setFirstName('Manuel');
@@ -178,6 +205,20 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
         $user->setFirstName('Victor');
         $user->setLastName('Escalona');
         $user->setEmail('victorescalona@pequiven.com');
+        $user->setNumPersonal(10016012);
+        $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+        $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));
+        $user->addRole('ROLE_GENERAL_COMPLEJO_AUX');
+        $user->setEnabled(true);
+        $user->setParent($this->getReference('mf-10017367'));
+            $manager->persist($user);
+            
+        $user = new User();
+        $user->setUsername('george_ggjaa');
+        $user->setPlainPassword('12345');
+        $user->setFirstName('George');
+        $user->setLastName('Rojas');
+        $user->setEmail('@pequiven.com');
         $user->setNumPersonal(10016012);
         $user->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
         $user->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]));

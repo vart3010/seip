@@ -148,26 +148,155 @@ class ObjetiveRepository extends baseEntityRepository {
     }
     
     /**
-     * Crea un paginador para los objetivos de acuerdo al nivel del mismo
+     * Crea un paginador para los objetivos estratégicos
      * 
      * @param array $criteria
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+    function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
         }
-//        if(isset($criteria['rif'])){
-//            $rif = $criteria['rif'];
-//            unset($criteria['rif']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
-//        }
+        //Filtro Línea Estratégica
+        if(isset($criteria['lineStrategicDescription'])){
+            $lineStrategicDescription = $criteria['lineStrategicDescription'];
+            unset($criteria['lineStrategicDescription']);
+            $queryBuilder->leftJoin('o.lineStrategics', 'ls');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$lineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$lineStrategicDescription."%'")));
+        }
+
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los objetivos tácticos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
+        $values = $criteria;
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Táctico
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        //Filtro Objetivo Estratégico
+        if(isset($criteria['parentsDescription'])){
+            $parentsDescription = $criteria['parentsDescription'];
+            unset($criteria['parentsDescription']);
+            $queryBuilder->leftJoin('o.parents', 'p');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
+        }
+        //Filtro Línea Estratégica
+        if(isset($criteria['parentsLineStrategicDescription'])){
+            $parentsLineStrategicDescription = $criteria['parentsLineStrategicDescription'];
+            unset($criteria['parentsLineStrategicDescription']);
+            if(!isset($values['parentsDescription'])){
+                $queryBuilder->leftJoin('o.parents','p');
+            }
+            $queryBuilder->leftJoin('p.lineStrategics', 'ls');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsLineStrategicDescription."%'")));
+        }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+        }
+        
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los objetivos operativos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
+        $values = $criteria;
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Operativo
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        //Filtro Objetivo Táctico
+        if(isset($criteria['parentsDescription'])){
+            $parentsDescription = $criteria['parentsDescription'];
+            unset($criteria['parentsDescription']);
+            $queryBuilder->leftJoin('o.parents', 'p');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
+        }
+        //Filtro Objetivo Estratégico
+        if(isset($criteria['parentsParentsDescription'])){
+            $parentsParentsDescription = $criteria['parentsParentsDescription'];
+            unset($criteria['parentsParentsDescription']);
+            if(!isset($values['parentsDescription'])){
+                $queryBuilder->leftJoin('o.parents', 'p');
+            }
+            $queryBuilder->leftJoin('p.parents', 'pp');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('pp.description', "'%".$parentsParentsDescription."%'"),$queryBuilder->expr()->like('pp.ref', "'%".$parentsParentsDescription."%'")));
+        }
+        //Filtro Línea Estratégica
+        if(isset($criteria['parentsParentsLineStrategicDescription'])){
+            $parentsParentsLineStrategicDescription = $criteria['parentsParentsLineStrategicDescription'];
+            unset($criteria['parentsParentsLineStrategicDescription']);
+            if(!isset($values['parentsDescription']) && !isset($values['parentsParentsDescription'])){
+                $queryBuilder->leftJoin('o.parents', 'p');
+                $queryBuilder->leftJoin('p.parents','pp');
+            } elseif(!isset($values['parentsParentsDescription'])){
+                $queryBuilder->leftJoin('p.parents','pp');
+            }
+            
+            $queryBuilder->leftJoin('pp.lineStrategics', 'ls');
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsParentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsParentsLineStrategicDescription."%'")));
+        }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+        } elseif($securityContext->isGranted('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX')){
+            $queryBuilder->andWhere('o.gerenciaSecond = '.$user->getGerenciaSecond()->getId());
+        } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
+            $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+            $queryBuilder->andWhere('gs.modular =:modular');
+            $queryBuilder->setParameter('modular', true);
+        }
+        
         if(isset($criteria['objetiveLevel'])){
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
