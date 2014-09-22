@@ -37,11 +37,11 @@ class TypeGoal
     private $categoryArrangementProgram;
     
     /**
-     * @var integer
+     * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $active;
+    private $active = true;
 
     /**
      * Get id
@@ -97,5 +97,28 @@ class TypeGoal
     public function getCategoryArrangementProgram()
     {
         return $this->categoryArrangementProgram;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return TypeGoal
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
     }
 }

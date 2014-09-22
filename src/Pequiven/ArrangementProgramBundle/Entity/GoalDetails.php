@@ -219,7 +219,14 @@ class GoalDetails
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
-
+    
+    /**
+     * Meta
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Goal
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="goalDetails")
+     */
+    private $goal;
 
     /**
      * Get id
@@ -235,7 +242,7 @@ class GoalDetails
      * Set januaryPlanned
      *
      * @param integer $januaryPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJanuaryPlanned($januaryPlanned)
     {
@@ -258,7 +265,7 @@ class GoalDetails
      * Set januaryReal
      *
      * @param integer $januaryReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJanuaryReal($januaryReal)
     {
@@ -281,7 +288,7 @@ class GoalDetails
      * Set februaryPlanned
      *
      * @param integer $februaryPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setFebruaryPlanned($februaryPlanned)
     {
@@ -304,7 +311,7 @@ class GoalDetails
      * Set februaryReal
      *
      * @param integer $februaryReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setFebruaryReal($februaryReal)
     {
@@ -327,7 +334,7 @@ class GoalDetails
      * Set marchPlanned
      *
      * @param integer $marchPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setMarchPlanned($marchPlanned)
     {
@@ -350,7 +357,7 @@ class GoalDetails
      * Set marchReal
      *
      * @param integer $marchReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setMarchReal($marchReal)
     {
@@ -373,7 +380,7 @@ class GoalDetails
      * Set aprilPlanned
      *
      * @param integer $aprilPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setAprilPlanned($aprilPlanned)
     {
@@ -396,7 +403,7 @@ class GoalDetails
      * Set aprilReal
      *
      * @param integer $aprilReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setAprilReal($aprilReal)
     {
@@ -419,7 +426,7 @@ class GoalDetails
      * Set mayPlanned
      *
      * @param integer $mayPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setMayPlanned($mayPlanned)
     {
@@ -442,7 +449,7 @@ class GoalDetails
      * Set mayReal
      *
      * @param integer $mayReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setMayReal($mayReal)
     {
@@ -465,7 +472,7 @@ class GoalDetails
      * Set junePlanned
      *
      * @param integer $junePlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJunePlanned($junePlanned)
     {
@@ -488,7 +495,7 @@ class GoalDetails
      * Set juneReal
      *
      * @param integer $juneReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJuneReal($juneReal)
     {
@@ -511,7 +518,7 @@ class GoalDetails
      * Set julyPlanned
      *
      * @param integer $julyPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJulyPlanned($julyPlanned)
     {
@@ -534,7 +541,7 @@ class GoalDetails
      * Set julyReal
      *
      * @param integer $julyReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setJulyReal($julyReal)
     {
@@ -557,7 +564,7 @@ class GoalDetails
      * Set augustPlanned
      *
      * @param integer $augustPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setAugustPlanned($augustPlanned)
     {
@@ -580,7 +587,7 @@ class GoalDetails
      * Set augustReal
      *
      * @param integer $augustReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setAugustReal($augustReal)
     {
@@ -603,7 +610,7 @@ class GoalDetails
      * Set septemberPlanned
      *
      * @param integer $septemberPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setSeptemberPlanned($septemberPlanned)
     {
@@ -626,7 +633,7 @@ class GoalDetails
      * Set septemberReal
      *
      * @param integer $septemberReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setSeptemberReal($septemberReal)
     {
@@ -649,7 +656,7 @@ class GoalDetails
      * Set octoberPlanned
      *
      * @param integer $octoberPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setOctoberPlanned($octoberPlanned)
     {
@@ -672,7 +679,7 @@ class GoalDetails
      * Set octoberReal
      *
      * @param integer $octoberReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setOctoberReal($octoberReal)
     {
@@ -695,7 +702,7 @@ class GoalDetails
      * Set novemberPlanned
      *
      * @param integer $novemberPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setNovemberPlanned($novemberPlanned)
     {
@@ -718,7 +725,7 @@ class GoalDetails
      * Set novemberReal
      *
      * @param integer $novemberReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setNovemberReal($novemberReal)
     {
@@ -741,7 +748,7 @@ class GoalDetails
      * Set decemberPlanned
      *
      * @param integer $decemberPlanned
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setDecemberPlanned($decemberPlanned)
     {
@@ -764,7 +771,7 @@ class GoalDetails
      * Set decemberReal
      *
      * @param integer $decemberReal
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setDecemberReal($decemberReal)
     {
@@ -787,7 +794,7 @@ class GoalDetails
      * Set status
      *
      * @param integer $status
-     * @return Goal�Details
+     * @return GoalDetails
      */
     public function setStatus($status)
     {
@@ -804,5 +811,28 @@ class GoalDetails
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set goal
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goal
+     * @return GoalDetails
+     */
+    public function setGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goal = null)
+    {
+        $this->goal = $goal;
+
+        return $this;
+    }
+
+    /**
+     * Get goal
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\Goal 
+     */
+    public function getGoal()
+    {
+        return $this->goal;
     }
 }

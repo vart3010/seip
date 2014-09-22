@@ -31,9 +31,9 @@ class Goal
 
     /**
      * Tipo de meta
-     * @var integer
+     * @var \Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal
      *
-     * @ORM\Column(name="typeGoal", type="integer")
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal")
      */
     private $typeGoal;
 
@@ -84,7 +84,21 @@ class Goal
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
-
+    
+    /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",inversedBy="goals")
+     */
+    private $timeline;
+    
+    /**
+     * Detalles de la meta
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="")
+     */
+    private $goalDetails;
 
     /**
      * Get id
@@ -117,29 +131,6 @@ class Goal
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set typeGoal
-     *
-     * @param integer $typeGoal
-     * @return Goal
-     */
-    public function setTypeGoal($typeGoal)
-    {
-        $this->typeGoal = $typeGoal;
-
-        return $this;
-    }
-
-    /**
-     * Get typeGoal
-     *
-     * @return integer 
-     */
-    public function getTypeGoal()
-    {
-        return $this->typeGoal;
     }
 
     /**
@@ -278,5 +269,74 @@ class Goal
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set typeGoal
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal $typeGoal
+     * @return Goal
+     */
+    public function setTypeGoal(\Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal $typeGoal = null)
+    {
+        $this->typeGoal = $typeGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get typeGoal
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal 
+     */
+    public function getTypeGoal()
+    {
+        return $this->typeGoal;
+    }
+
+    /**
+     * Set timeline
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
+     * @return Goal
+     */
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
+    {
+        $this->timeline = $timeline;
+
+        return $this;
+    }
+
+    /**
+     * Get timeline
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
+     */
+    public function getTimeline()
+    {
+        return $this->timeline;
+    }
+
+    /**
+     * Set goalDetails
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails
+     * @return Goal
+     */
+    public function setGoalDetails(\Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails = null)
+    {
+        $this->goalDetails = $goalDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get goalDetails
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\GoalDetails 
+     */
+    public function getGoalDetails()
+    {
+        return $this->goalDetails;
     }
 }

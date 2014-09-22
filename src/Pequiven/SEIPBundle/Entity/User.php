@@ -83,7 +83,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /** 
      * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
@@ -91,6 +92,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * Gerencia
+     * 
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
@@ -99,6 +101,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * GerenciaSecond
+     * 
      * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
      * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
@@ -107,6 +110,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * Cargo
+     * 
      * @var \Pequiven\MasterBundle\Entity\Cargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")

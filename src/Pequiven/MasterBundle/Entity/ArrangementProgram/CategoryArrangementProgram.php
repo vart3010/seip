@@ -29,11 +29,11 @@ class CategoryArrangementProgram
     private $description;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="active", type="boolean")
      */
-    private $status;
+    private $active = true;
 
 
     /**
@@ -69,26 +69,12 @@ class CategoryArrangementProgram
         return $this->description;
     }
 
-    /**
-     * Set status
-     *
-     * @param integer $status
-     * @return CategoryArrangementProgram
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
+    function getActive() {
+        return $this->active;
     }
 
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
+    function setActive($active) {
+        $this->active = $active;
+        return $this;
     }
 }

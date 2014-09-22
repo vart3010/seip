@@ -47,11 +47,11 @@ class Period
 
     /**
      * Estatus del periodo
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="status", type="boolean")
      */
-    private $status;
+    private $status = true;
 
 
     /**
