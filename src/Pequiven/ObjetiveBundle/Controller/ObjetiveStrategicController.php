@@ -133,6 +133,8 @@ class ObjetiveStrategicController extends baseController {
             if(isset($data['indicators'])){
                 foreach($data['indicators'] as $value){
                     $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    $indicator->setTmp(false);
+                    $em->persist($indicator);
                     $object->addIndicator($indicator);
                 }
             }

@@ -1,4 +1,3 @@
-{#{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/layout.html.twig' %}#}
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
@@ -272,7 +271,7 @@
             charge();
 
             function charge(){
-                //Escondemos por defecto el boton de registrar indicadores y el mensaje en cao de no haber seleccionado alguna Línea Estratégica
+                //Escondemos por defecto el boton de registrar indicadores y el mensaje en caso de no haber seleccionado alguna Línea Estratégica
                 buttonAddIndicator.hide();
                 messageCheckIndicator.hide();
 
@@ -446,6 +445,7 @@
         //Función que carga el select2 de Línea Estratégica
         function chargeSelect2LineStrategic(type){
             selectLineStrategic.select2({
+                maximumSelectionSize: 1,
                 placeholder: '{{ 'form.messages.selectLineStrategicPlaceholder'|trans }}',
                 formatNoMatches: function(term) {
                     if(type == 'full'){
@@ -453,7 +453,10 @@
                     } else{
                         return "{{ 'form.messages.selectLineStrategicFormatNoResult'|trans }}";
                     }
-                }
+                },
+                formatSelectionTooBig: function(maxSize) {
+                    return "{{ 'form.messages.selectLineStrategicFormatabsSelectionTooBig'|trans({ '%maxsize%': 1 }) }}";
+                },
             });
         }
 
@@ -474,6 +477,7 @@
         //Función que elimina el iframe del formulario de indicadores, en caso de que el registro haya sido exitoso
         function indicatorsRegisterSuccessful(){
             $("#modals").remove();
+            chargeSelectIndicator();
             //document.scripts.chargeSelectIndicator();
             //document.chargeSelectIndicator();
         }

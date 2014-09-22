@@ -104,9 +104,8 @@ class IndicatorOperativeController extends baseController {
      */
     public function createAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType('regular'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.operative.registration.form.type'));
+        
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -116,7 +115,7 @@ class IndicatorOperativeController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_operative_registration");
 
@@ -178,9 +177,8 @@ class IndicatorOperativeController extends baseController {
      */
     public function createFromObjetiveAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType('fromObjetive'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.operativefo.registration.form.type'));
+
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -189,7 +187,7 @@ class IndicatorOperativeController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_operativefo_registration");
 
@@ -198,8 +196,7 @@ class IndicatorOperativeController extends baseController {
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']),'0',2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
-            //Obtenemos y seteamos la línea estratégica del indicador
-            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategicObjetive'])));
+
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_OPERATIVO));
             $object->setIndicatorLevel($indicatorLevel);

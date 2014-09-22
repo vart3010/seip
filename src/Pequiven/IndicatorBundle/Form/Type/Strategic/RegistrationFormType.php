@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Pequiven\IndicatorBundle\PequivenIndicatorBundle;
+use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 
 use Pequiven\ObjetiveBundle\Form\EventListener\AddLineStrategicFieldListener;
@@ -56,7 +56,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('tendency','entity',array('label' => 'form.tendency','data' => $dataTendency,'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:Tendency','empty_value' => false, 'required' => false));
         
         //Descripción del indicador a crear
-            $builder->add('description', 'textarea', array('label' => 'form.indicator', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
+            $builder->add('description', 'textarea', array('label' => 'form.description', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('cols' => 50, 'rows' => 5,'class' => 'input')));
         //Referencia del indicador a crear
             $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
                 

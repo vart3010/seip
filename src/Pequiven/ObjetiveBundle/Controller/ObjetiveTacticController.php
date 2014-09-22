@@ -121,8 +121,8 @@ class ObjetiveTacticController extends baseController{
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
-            $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
+            $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',2));
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $ref = $data['ref'];
             
             //Obtenemos y Seteamos el nivel del objetivo
@@ -130,9 +130,7 @@ class ObjetiveTacticController extends baseController{
             $object->setObjetiveLevel($objetiveLevel);
 
             $object->setUserCreatedAt($user);
-            //Obtenemos el objetivo estratégico al cual pertenecerá el objetivo táctico a crear
-            //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            $indicators = isset($data['indicators']) ? $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $ref)) : array();
+            
             //Si el usuario tiene rol Directivo
             if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                 //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
@@ -146,6 +144,8 @@ class ObjetiveTacticController extends baseController{
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$i}->addIndicator($indicator);
                             }
                         }
@@ -164,6 +164,8 @@ class ObjetiveTacticController extends baseController{
                             if(isset($data['indicators'])){
                                 foreach($data['indicators'] as $value){
                                     $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    $indicator->setTmp(false);
+                                    $em->persist($indicator);
                                     ${$nameObject.$j}->addIndicator($indicator);
                                 }
                             }
@@ -178,6 +180,8 @@ class ObjetiveTacticController extends baseController{
                 if(isset($data['indicators'])){
                     foreach($data['indicators'] as $value){
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $object->addIndicator($indicator);
                     }
                 }
@@ -186,6 +190,8 @@ class ObjetiveTacticController extends baseController{
                 if(isset($data['indicators'])){
                     foreach($data['indicators'] as $value){
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $object->addIndicator($indicator);
                     }
                 }
