@@ -247,4 +247,8 @@ class Complejo extends modelComplejo
     {
         return $this->ref;
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }

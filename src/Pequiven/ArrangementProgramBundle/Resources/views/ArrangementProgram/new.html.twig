@@ -1,0 +1,15 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% block body -%}
+    <h1>ArrangementProgram creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('pequiven_arrangementprogram') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

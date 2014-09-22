@@ -626,4 +626,8 @@ class Indicator extends modelIndicator {
     public function resetObjetives(){
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }

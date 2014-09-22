@@ -8,3 +8,5 @@ tecnocreaciones_vzla_government:
                             save_and_close: Guardar y cerrar
                             question:
                                     delete: Desea eliminar este elemento
+pequiven:
+    list: Lista

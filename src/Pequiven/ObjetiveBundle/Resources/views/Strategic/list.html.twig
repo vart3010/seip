@@ -1,12 +1,8 @@
-{#% extends "::base.html.twig" %#}
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 {% block title %}- {{ 'pequiven_objetive.objetive_strategic'|trans }}{% endblock %}
 
 {% set route_index = 'pequiven_objetive_menu_list_strategic' %}
-{% if allow_create is not defined %}
-    {% set allow_create = false %}
-{% endif %}
 
 {% block body %}
     
@@ -15,16 +11,6 @@
             <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_strategic'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
-            <!--
-            {% if allow_create %}
-                <p class="button-height align-right">
-                    <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
-                            <span class="button-icon anthracite-gradient"><span class="icon-star"></span></span>
-                            {{ 'sigtec.create'|trans }}
-                    </a>
-                </p>
-            {% endif %}
-            -->
         </h1>
     </hgroup>
     
