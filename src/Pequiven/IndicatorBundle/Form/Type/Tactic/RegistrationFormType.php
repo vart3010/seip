@@ -31,6 +31,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
     
     protected $typeForm;
     protected $container;
+    
     public function __construct($type = 'fromObjetive') {
         $this->typeForm = $type;
     }
@@ -80,10 +81,8 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         //Referencia del indicador a crear
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
         
-        //Peso del Objetivo
-        //$builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100"), 'required' => false));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input', 'placeholder' => "100")));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input', 'placeholder' => "100", 'size' => 8)));
         //Fórmula del indicador a crear
         $builder->addEventSubscriber(new AddFormulaFieldListener());
 

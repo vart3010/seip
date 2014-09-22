@@ -107,7 +107,7 @@ class ObjetiveOperativeController extends baseController {
     public function createAction(Request $request){
 
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));
-        $form->handleRequest($request);
+        
         $nameObject = 'object';
         $lastId = '';
         
@@ -117,7 +117,7 @@ class ObjetiveOperativeController extends baseController {
         $role = $user->getRoles();
         
         $em->getConnection()->beginTransaction();
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_operative_registration");
             
@@ -147,6 +147,8 @@ class ObjetiveOperativeController extends baseController {
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$i}->addIndicator($indicator);
                             }
                         }
@@ -169,6 +171,8 @@ class ObjetiveOperativeController extends baseController {
                             if(isset($data['indicators'])){
                                 foreach($data['indicators'] as $value){
                                     $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    $indicator->setTmp(false);
+                                    $em->persist(false);
                                     ${$nameObject.$j}->addIndicator($indicator);
                                 }
                             }
@@ -192,6 +196,8 @@ class ObjetiveOperativeController extends baseController {
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$i}->addIndicator($indicator);
                             }
                         }
@@ -211,6 +217,8 @@ class ObjetiveOperativeController extends baseController {
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$j}->addIndicator($indicator);
                             }
                         }
@@ -232,6 +240,8 @@ class ObjetiveOperativeController extends baseController {
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$i}->addIndicator($indicator);
                             }
                         }
@@ -251,6 +261,8 @@ class ObjetiveOperativeController extends baseController {
                         if(isset($data['indicators'])){
                             foreach($data['indicators'] as $value){
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
                                 ${$nameObject.$j}->addIndicator($indicator);
                             }
                         }
@@ -262,6 +274,8 @@ class ObjetiveOperativeController extends baseController {
                 if(isset($data['indicators'])){
                     foreach($data['indicators'] as $value){
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $object->addIndicator($indicator);
                     }
                 }
@@ -270,6 +284,8 @@ class ObjetiveOperativeController extends baseController {
                 if(isset($data['indicators'])){
                     foreach($data['indicators'] as $value){
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
                         $object->addIndicator($indicator);
                     }
                 }

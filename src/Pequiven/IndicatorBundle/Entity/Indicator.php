@@ -76,7 +76,14 @@ class Indicator extends modelIndicator {
      */
     private $ref;
     
-        /**
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="refParent", type="string", length=15, nullable=true)
+     */
+    private $refParent;
+    
+    /**
      * @var float
      * 
      * @ORM\Column(name="weight", type="float", nullable=true)
@@ -544,29 +551,6 @@ class Indicator extends modelIndicator {
     }
 
     /**
-     * Set refParent
-     *
-     * @param string $refParent
-     * @return Indicator
-     */
-//    public function setRefParent($refParent)
-//    {
-//        $this->refParent = $refParent;
-//
-//        return $this;
-//    }
-
-    /**
-     * Get refParent
-     *
-     * @return string 
-     */
-//    public function getRefParent()
-//    {
-//        return $this->refParent;
-//    }
-
-    /**
      * Add objetives
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
@@ -626,8 +610,30 @@ class Indicator extends modelIndicator {
     public function resetObjetives(){
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
     public function __toString() {
         return $this->description;
+    }
+    
+    /**
+     * Set refParent
+     *
+     * @param string $refParent
+     * @return Indicator
+     */
+    public function setRefParent($refParent)
+    {
+        $this->refParent = $refParent;
+
+        return $this;
+    }
+
+    /**
+     * Get refParent
+     *
+     * @return string 
+     */
+    public function getRefParent()
+    {
+        return $this->refParent;
     }
 }

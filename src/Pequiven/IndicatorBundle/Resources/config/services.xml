@@ -73,21 +73,23 @@
             <argument>regular</argument>
         </service>
         
-        <!-- Servicio del Indicador Estratégico -->
+        <!-- Repositorio de Indicador Estratégico -->
         <service id="pequiven.repository.indicatorstrategic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
         </service>
-        <!-- Servicio del Indicador Táctico -->
+        
+        <!-- Repositorio de Indicador Táctico -->
         <service id="pequiven.repository.indicatortactic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
         </service>
-        <!-- Servicio del Indicador Operativo -->
+        
+        <!-- Repositorio de Indicador Operativo -->
         <service id="pequiven.repository.indicatoroperative" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

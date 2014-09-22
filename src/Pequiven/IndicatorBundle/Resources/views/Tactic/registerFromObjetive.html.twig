@@ -79,7 +79,7 @@
 
             <br><br>
                 
-            <!-- Rango de Gestión -->            
+            <!-- Rango de Gestión -->
             <details class="details margin-bottom">
                 <summary>{{ 'form.rankArrangement'|trans }}</summary>
                 <div class="with-padding">
@@ -190,7 +190,6 @@
             inputRef = $("#pequiven_indicator_tacticfo_registration_ref"), //Input de Ref
             inputGoal = $("#pequiven_indicator_tacticfo_registration_goal"), //Input de Meta
             inputHiddenRefParent = $("#pequiven_indicator_tacticfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo
-            inputHiddenLineStrategicParent = $("#pequiven_indicator_tacticfo_registration_lineStrategicObjetive"),//Input Hidden de la Línea Estratégica del Objetivo Estratégico
             selectTendency = $("#pequiven_indicator_tacticfo_registration_tendency"),//Select de Tendencia del indicador
             selectArrangementRangeTypeTop = $("#pequiven_indicator_tacticfo_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
             selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
@@ -208,8 +207,7 @@
             sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed-fo"),//Sección de Rango de Gestión Medio Bajo Mixto
             sectionBottomBasic = $("#sectionBottomBasic-fo"),//Sección de Rango de Gestión Bajo Básico
             sectionBottomMixed = $("#sectionBottomMixed-fo"),//Sección de Rango de Gestión Bajo Mixto
-            inputRefParent = $("#pequiven_objetive_tactic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo                    
-            inputLineStrategicParent = $("#pequiven_objetive_tactic_registration_lineStrategic",window.parent.document),//Input de Línea Estratégica de la ventana Padre del Objetivo
+            inputRefParent = $("#pequiven_objetive_tactic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo
             inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeTop"),//Input Hidden del tipo de rango de gestión alto
             inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleTop"),//Input Hidden del tipo de rango de gestión medio alto
             inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_tacticfo_registration_typeArrangementRangeTypeMiddleBottom"),//Input Hidden del tipo de rango de gestión medio bajo
@@ -228,16 +226,16 @@
             inputRankBottomMixedBottom = $("#pequiven_indicator_tacticfo_registration_rankBottomMixedBottom")//Input de rankBottomMixedBottom
             ;
         
-        //TODO: Mejorar esta función para hacerla más generica
+        //Función que cierra el formulario
         function closeIFrame() {
             $("#modals", window.parent.document).remove();
-            window.parent.chargeSelect2Indicators();
         }
 
         $(document).ready(function()
         {
             charge();
-
+            
+            //Función que carga por defecto los elementos de la página
             function charge() {
                 $("#add-tabs-fo").attr('style','height:200px;');
                 //Inicializamos el select2 de Fórmula
@@ -248,9 +246,6 @@
 
                 //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
                 inputHiddenRefParent.val(inputRefParent.val());
-
-                //Cargamos la referencia del objetivo que se esta creando en el inputHiddenRefParent
-                inputHiddenLineStrategicParent.val(inputLineStrategicParent.val());
 
                 //Actualizamos la referencia del indicador a crear
                 displayIndicatorRef();
@@ -289,7 +284,9 @@
                 sectionBottomMixed.hide();
             }
         });
+        //Fin document.ready
         
+        //Al seleccionar el Rango de Gestión Alto
         selectArrangementRangeTypeTop.click(function() {
             if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeTop_1']").is(':checked')) {
                 $("#add-tabs-fo").attr('style','height:200px;');
@@ -303,7 +300,7 @@
                 inputHiddenTypeArrangementRangeTop.val("TOP_MIXED");
             }
         });
-
+        //Al seleccionar el Rango de Gestión Medio Alto
         selectArrangementRangeTypeMiddleTop.click(function() {
             if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddleTop_2']").is(':checked')) {
                 $("#add-tabs-fo").attr('style','height:200px;');
@@ -317,7 +314,7 @@
                 inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_MIXED");
             }
         });
-
+        //Al seleccionar el Rango de Gestión Medio Bajo
         selectArrangementRangeTypeMiddleBottom.click(function() {
             if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeMiddleBottom_3']").is(':checked')) {
                 $("#add-tabs-fo").attr('style','height:200px;');
@@ -331,7 +328,7 @@
                 inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_MIXED");
             }
         });
-
+        //Al seleccionar el Rango de Gestión Bajo
         selectArrangementRangeTypeBottom.click(function() {
             if ($("input[id='pequiven_indicator_tacticfo_registration_arrangementRangeTypeBottom_4']").is(':checked')) {
                 $("#add-tabs-fo").attr('style','height:200px;');
@@ -345,7 +342,7 @@
                 inputHiddenTypeArrangementRangeBottom.val("BOTTOM_MIXED");
             }
         });
-        
+        //Al seleccionar la tendencia del Indicador
         selectTendency.click(function() {
             if ($("input[id='pequiven_indicator_tacticfo_registration_tendency_1']").is(':checked')) {
                 tabRankTop.attr('style','background: #00FF00;');
