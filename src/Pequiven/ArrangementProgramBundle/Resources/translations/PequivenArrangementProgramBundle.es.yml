@@ -1,3 +1,24 @@
 pequiven:
     arrangement_program:
         arrangement_program: Programa de gestión
+    form:
+        category_arrangement_program: Asociado a
+        tactical_objective: Objetivo táctico
+        operational_objective: Objetivo operativo
+        operating_indicator: Indicador operativo
+        location: Localidad
+        process: Proceso
+        responsible: Responsable
+        period: Periodo
+        name: Nombre
+        type_goal: Tipo de actividad
+        not_applicable: No aplica
+        start_date: Fecha inicio
+        end_date: Fecha fin
+        weight: Peso
+        observations: Observaciones
+    goals:
+        goal: Meta
+        goals: Metas
+        add_goal: Añadir meta
+        delete_this_goal: Eliminar esta meta

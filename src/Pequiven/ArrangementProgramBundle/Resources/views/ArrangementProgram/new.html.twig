@@ -1,15 +1,190 @@
 {% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
 
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
 {% block body -%}
-    <h1>ArrangementProgram creation</h1>
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_arrangementprogram') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.add'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+    {{ form_start(form) }}
+     
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
+            <div class="field-block button-height">
+                {{ form_label(form.period) }}
+                {{ form_widget(form.period) }}
+                {{ form_errors(form.period) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.categoryArrangementProgram) }}
+                {{ form_widget(form.categoryArrangementProgram) }}
+                {{ form_errors(form.categoryArrangementProgram) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.tacticalObjective) }}
+                {{ form_widget(form.tacticalObjective) }}
+                {{ form_errors(form.tacticalObjective) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.operationalObjective) }}
+                {{ form_widget(form.operationalObjective) }}
+                {{ form_errors(form.operationalObjective) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.operatingIndicator) }}
+                {{ form_widget(form.operatingIndicator) }}
+                {{ form_errors(form.operatingIndicator) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.location) }}
+                {{ form_widget(form.location) }}
+                {{ form_errors(form.location) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.process) }}
+                {{ form_widget(form.process) }}
+                {{ form_errors(form.process) }}
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.responsible) }}
+                {{ form_widget(form.responsible) }}
+                {{ form_errors(form.responsible) }}
+            </div>
+        </fieldset>
+            <div id="dialog-form" title="{{ "pequiven.goals.goals"|trans }}">
+                <h4>{{ "pequiven.goals.goals"|trans }}</h4>
+                <button type="button" class="button" id="add-form-goal">{{ "pequiven.goals.add_goal"|trans }}</button>
+                <br/><br/><br/>
+                {% for timeline in form.timelines %}
+                    {{ include('PequivenArrangementProgramBundle:Timeline:_form.html.twig', { 'timeline': timeline }) }}
+                {% endfor %}
+                <div class="standard-tabs margin-bottom" id="add-tabs" style="min-height: 100px">
+                    <ul class="tabs">
+                    </ul>
+                    <div class="tabs-content">
+                        
+                    </div>
+                </div>
 
-    {{ form(form) }}
+            </div>
+            <button id="metas-popup">Metas</button>
+              
+            <script type="text/javascript">
+                var $collectionHolder;
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('pequiven_arrangementprogram') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+                // setup an "add a tag" link
+                var $addTagLink = $('#add-form-goal');
+                //var $newLinkLi = $('<li></li>').append($addTagLink);
+                jQuery(document).ready(function() {
+                    var prototypeForm = {
+                        name: 'arrangementprogram_timelines_0_goals___name___name',
+                        typeGoal: 'arrangementprogram_timelines_0_goals___name___typeGoal',
+                        startDate: 'arrangementprogram_timelines_0_goals___name___startDate',
+                        endDate: 'arrangementprogram_timelines_0_goals___name___endDate',
+                        responsible: 'arrangementprogram_timelines_0_goals___name___responsible',
+                        weight: 'arrangementprogram_timelines_0_goals___name___weight',
+                        observations: 'arrangementprogram_timelines_0_goals___name___observations'
+                    };
+                    // Get the ul that holds the collection of tags
+                    $collectionHolder = $('ul.tags');
+                    
+                    // add a delete link to all of the existing tag form li elements
+                    $collectionHolder.find('li').each(function() {
+                        addTagFormDeleteLink($(this));
+                    });
+                    
+
+                    // add the "add a tag" anchor and li to the tags ul
+                    //$collectionHolder.append($newLinkLi);
+                    
+                    // count the current form inputs we have (e.g. 2), use that as the new
+                    // index when inserting a new item (e.g. 2)
+                    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+                    $addTagLink.on('click', function(e) {
+                        // prevent the link from creating a "#" on the URL
+                        e.preventDefault();
+                        // add a new tag form (see next code block)
+                        addTagForm($collectionHolder);
+                    });
+                    
+                    function addTagForm($collectionHolder) {
+                        // Get the data-prototype explained earlier
+                        var prototype = $collectionHolder.data('prototype');
+
+                        // get the new index
+                        var index = $collectionHolder.data('index');
+
+                        // Replace '__name__' in the prototype's HTML to
+                        // instead be a number based on how many items we have
+                        var newForm = prototype.replace(/__name__/g, index);
+                        var idTypeGoal = prototypeForm.typeGoal.replace(/__name__/g, index);
+                        var idResponsible = prototypeForm.responsible.replace(/__name__/g, index);
+
+                        // increase the index with one for the next item
+                        $collectionHolder.data('index', index + 1);
+
+                        addTab(newForm);
+                        
+                        $("#"+idTypeGoal).select2();
+                        $("#"+idResponsible).select2();
+                    }
+                    
+                    dialog = $( "#dialog-form" ).dialog({
+                        autoOpen: false,
+                        height: 600,
+                        width: 800,
+                        modal: true,
+                        buttons: {
+                          Cancelar: function() {
+                            dialog.dialog( "close" );
+                          }
+                        },
+                        close: function() {
+                         
+                        }
+                      });
+
+                      $( "#metas-popup" ).button().on( "click", function() {
+                        dialog.dialog( "open" );
+                      });
+                      
+                });
+                
+                    // Tabs adding/removing
+                    var tabsAdded = [];
+
+                    // Add a tab
+                    function addTab(content)
+                    {
+                            // New tab id
+                            var tabId = 'new-tab'+tabsAdded.length;
+
+                            // Register tab
+                            tabsAdded.push(tabId);
+                            var $removeFormA = '<a href="#" class="pull-right" onclick="removeTabs(\''+tabId+'\')">{{ "pequiven.goals.delete_this_goal"|trans }}</a>';
+
+                            // Create
+                            $('#add-tabs').addTab(tabId, '{{ "pequiven.goals.goal"|trans }} '+tabsAdded.length,$removeFormA+ content);
+                    };
+                    // Remove dynamically created tabs
+		function removeTabs(id)
+		{
+                    if(tabsAdded.length > 0)
+                    {
+                        $('#'+id).removeTab();
+                    }
+		};
+            </script>
+            
+        {{ form_rest(form) }}
+        {{ actions.create() }}
+    {{ form_end(form) }}
+
 {% endblock %}

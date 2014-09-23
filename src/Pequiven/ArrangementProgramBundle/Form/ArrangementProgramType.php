@@ -15,16 +15,66 @@ class ArrangementProgramType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('process')
-            ->add('timelines')
-            ->add('status')
-            ->add('period')
-            ->add('categoryArrangementProgramt')
-            ->add('tacticalObjective')
-            ->add('operationalObjective')
-            ->add('operatingIndicator')
-            ->add('location')
-            ->add('responsible')
+            ->add('categoryArrangementProgram',null,array(
+                'label' => 'pequiven.form.category_arrangement_program',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-large"
+                )
+            ))
+            ->add('tacticalObjective',null,array(
+                'label' => 'pequiven.form.tactical_objective',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-xxlarge"
+                )
+            ))
+            ->add('operationalObjective',null,array(
+                'label' => 'pequiven.form.operational_objective',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-xxlarge"
+                )
+            ))
+            ->add('operatingIndicator',null,array(
+                'label' => 'pequiven.form.operating_indicator',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-xxlarge"
+                )
+            ))
+            ->add('location',null,array(
+                'label' => 'pequiven.form.location',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-xlarge"
+                )
+            ))
+            ->add('process',null,array(
+                'label' => 'pequiven.form.process',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "input input-xlarge"
+                )
+            ))
+            ->add('responsible',null,array(
+                'label' => 'pequiven.form.responsible',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-xlarge"
+                )
+            ))
+            ->add('period',null,array(
+                'label' => 'pequiven.form.period',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "select2 input-large"
+                )
+            ))
+            ->add('timelines','collection',array(
+                'type' => new TimelineType(),
+                'allow_add' => true
+            ))
         ;
     }
     
@@ -34,7 +84,8 @@ class ArrangementProgramType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'
+            'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram',
+            'translation_domain' => 'PequivenArrangementProgramBundle'
         ));
     }
 
@@ -43,6 +94,6 @@ class ArrangementProgramType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_arrangementprogrambundle_arrangementprogram';
+        return 'arrangementprogram';
     }
 }

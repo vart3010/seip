@@ -41,6 +41,7 @@ app:
                     arrangement_programs:
                         main: Programas de Gestión
                         list: Lista
+                        add: Añadir
                     reports: Reportes
                     admin:
                         main: Administración

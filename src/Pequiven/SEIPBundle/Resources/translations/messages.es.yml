@@ -10,3 +10,4 @@ tecnocreaciones_vzla_government:
                                     delete: Desea eliminar este elemento
 pequiven:
     list: Lista
+    add: Añadir

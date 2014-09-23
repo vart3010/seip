@@ -35,7 +35,7 @@ class ArrangementProgram
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram")
      */
-    private $categoryArrangementProgramt;
+    private $categoryArrangementProgram;
 
     /**
      * Objetivo táctico
@@ -92,7 +92,6 @@ class ArrangementProgram
      * Lineas de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
      *
-     * @ORM\Column(name="timelines", type="integer")
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram")
      */
     private $timelines;
@@ -137,6 +136,10 @@ class ArrangementProgram
      */
     private $status;
 
+    public function __construct() {
+        $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -168,29 +171,6 @@ class ArrangementProgram
     public function getProcess()
     {
         return $this->process;
-    }
-
-    /**
-     * Set timelines
-     *
-     * @param integer $timelines
-     * @return ArrangementProgram
-     */
-    public function setTimelines($timelines)
-    {
-        $this->timelines = $timelines;
-
-        return $this;
-    }
-
-    /**
-     * Get timelines
-     *
-     * @return integer 
-     */
-    public function getTimelines()
-    {
-        return $this->timelines;
     }
 
     /**
@@ -286,26 +266,26 @@ class ArrangementProgram
     }
 
     /**
-     * Set categoryArrangementProgramt
+     * Set categoryArrangementProgram
      *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgramt
+     * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram
      * @return ArrangementProgram
      */
-    public function setCategoryArrangementProgramt(\Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgramt = null)
+    public function setCategoryArrangementProgram(\Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram = null)
     {
-        $this->categoryArrangementProgramt = $categoryArrangementProgramt;
+        $this->categoryArrangementProgram = $categoryArrangementProgram;
 
         return $this;
     }
 
     /**
-     * Get categoryArrangementProgramt
+     * Get categoryArrangementProgram
      *
      * @return \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram 
      */
-    public function getCategoryArrangementProgramt()
+    public function getCategoryArrangementProgram()
     {
-        return $this->categoryArrangementProgramt;
+        return $this->categoryArrangementProgram;
     }
 
     /**
@@ -467,5 +447,39 @@ class ArrangementProgram
     public function getApprovedBy()
     {
         return $this->approvedBy;
+    }
+
+    /**
+     * Add timelines
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
+     * @return ArrangementProgram
+     */
+    public function addTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
+    {
+        $timelines->setArrangementProgram($this);
+        $this->timelines->add($timelines);
+
+        return $this;
+    }
+
+    /**
+     * Remove timelines
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
+     */
+    public function removeTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
+    {
+        $this->timelines->removeElement($timelines);
+    }
+
+    /**
+     * Get timelines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTimelines()
+    {
+        return $this->timelines;
     }
 }

@@ -443,4 +443,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     {
         return $this->gerenciaSecond;
     }
+    
+    public function __toString() {
+        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
+    }
 }

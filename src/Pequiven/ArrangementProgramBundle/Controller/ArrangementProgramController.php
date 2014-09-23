@@ -38,7 +38,7 @@ class ArrangementProgramController extends Controller
     /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Route("/", name="arrangementprogram_create")
+     * @Route("/", name="pequiven_arrangementprogram_create")
      * @Method("POST")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
      */
@@ -72,11 +72,9 @@ class ArrangementProgramController extends Controller
     private function createCreateForm(ArrangementProgram $entity)
     {
         $form = $this->createForm(new ArrangementProgramType(), $entity, array(
-            'action' => $this->generateUrl('arrangementprogram_create'),
+            'action' => $this->generateUrl('pequiven_arrangementprogram_create'),
             'method' => 'POST',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
@@ -84,13 +82,17 @@ class ArrangementProgramController extends Controller
     /**
      * Displays a form to create a new ArrangementProgram entity.
      *
-     * @Route("/new", name="arrangementprogram_new")
+     * @Route("/new", name="pequiven_arrangementprogram_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
         $entity = new ArrangementProgram();
+        $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
+        //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
+        $entity->addTimeline($timeLine);
+        
         $form   = $this->createCreateForm($entity);
 
         return array(

@@ -55,9 +55,10 @@ class Goal
 
     /**
      * Responsables
-     * @var integer
+     * @var \Pequiven\SEIPBundle\Entity\User
      *
-     * @ORM\Column(name="responsible", type="integer")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_responsible_id")
      */
     private $responsible;
 

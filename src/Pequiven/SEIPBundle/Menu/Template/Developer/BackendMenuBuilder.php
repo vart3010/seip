@@ -348,7 +348,16 @@ class BackendMenuBuilder extends MenuBuilder
                     'route' => 'pequiven_arrangementprogram',
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.list', $section)));
-
+            
+            
+            $child
+                ->addChild('arrangement_programs.add',
+                array(
+                    'route' => 'pequiven_arrangementprogram_new',
+                    )
+            )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add', $section)));
+            
+            
             $menu->addChild($child);
         }
     }
