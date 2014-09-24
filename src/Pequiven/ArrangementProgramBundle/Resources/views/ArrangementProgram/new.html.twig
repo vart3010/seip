@@ -2,6 +2,10 @@
 
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+{% endblock stylesheets %}
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
@@ -12,7 +16,8 @@
             <span class="thin">{{ 'pequiven.add'|trans({},'messages') }}</span>
         </h1>
     </hgroup>
-    {{ form_start(form) }}
+        
+    {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
      
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
@@ -59,30 +64,61 @@
         </fieldset>
             <div id="dialog-form" title="{{ "pequiven.goals.goals"|trans }}">
                 <h4>{{ "pequiven.goals.goals"|trans }}</h4>
-                <button type="button" class="button" id="add-form-goal">{{ "pequiven.goals.add_goal"|trans }}</button>
-                <br/><br/><br/>
-                {% for timeline in form.timelines %}
-                    {{ include('PequivenArrangementProgramBundle:Timeline:_form.html.twig', { 'timeline': timeline }) }}
-                {% endfor %}
-                <div class="standard-tabs margin-bottom" id="add-tabs" style="min-height: 100px">
-                    <ul class="tabs">
-                    </ul>
-                    <div class="tabs-content">
-                        
-                    </div>
-                </div>
-
+                <div ng-include="template.url" onload="templateLoad(template)"></div>
             </div>
-            <button id="metas-popup">Metas</button>
+            
+            <table class="simple-table responsive-table" id="sorting-example2">
+                <thead>
+                        <tr>
+                            <th scope="col">{{ 'seip.table.header.name'|trans }}</th>
+                            <th scope="col" width="15%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                            <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                            <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                            <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                            <th scope="col" width="120" class="align-right">{{ 'seip.table.header.responsible'|trans }}</th>
+                            <th scope="col" width="120" class="align-right">{{ 'seip.table.header.actions'|trans }}</th>
+                        </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            [[ goals.length ]] entries found
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr ng-repeat="goal in goals">
+                        <th scope="row">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_name" value="[[ goal.name ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_typeGoal" value="[[ goal.type_goal ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_startDate" value="[[ goal.start_date ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_endDate" value="[[ goal.end_date ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_responsible" value="[[ goal.responsible ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_weight" value="[[ goal.weight ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_observations" value="[[ goal.observations ]]">
+                            [[ goal.name ]]<br>
+                            <small>[[ goal.observations ]]</small>
+                        </th>
+                        <td>[[ goal.type_goal ]]</td>
+                        <td>[[ goal.start_date ]]</td>
+                        <td>[[ goal.end_date ]]</td>
+                        <td>[[ goal.weight ]]</td>
+                        <td><small class="tag">[[ goal.responsible ]]</small></td>
+                        <td class="align-right vertical-center">
+                            <span class="button-group compact">
+                                <a href="javascript:void(0);" class="button icon-pencil">Edit</a>
+                                <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a class="button" href="#" ng-click="loadTemplateMeta()">Añadir meta</a>
               
             <script type="text/javascript">
-                var $collectionHolder;
-
-                // setup an "add a tag" link
-                var $addTagLink = $('#add-form-goal');
-                //var $newLinkLi = $('<li></li>').append($addTagLink);
-                jQuery(document).ready(function() {
-                    var prototypeForm = {
+                
+                var prototypeForm = {
                         name: 'arrangementprogram_timelines_0_goals___name___name',
                         typeGoal: 'arrangementprogram_timelines_0_goals___name___typeGoal',
                         startDate: 'arrangementprogram_timelines_0_goals___name___startDate',
@@ -91,6 +127,14 @@
                         weight: 'arrangementprogram_timelines_0_goals___name___weight',
                         observations: 'arrangementprogram_timelines_0_goals___name___observations'
                     };
+                
+                var $collectionHolder;
+
+                // setup an "add a tag" link
+                var $addTagLink = $('#add-form-goal');
+                //var $newLinkLi = $('<li></li>').append($addTagLink);
+                jQuery(document).ready(function() {
+                    
                     // Get the ul that holds the collection of tags
                     $collectionHolder = $('ul.tags');
                     
@@ -136,25 +180,6 @@
                         $("#"+idResponsible).select2();
                     }
                     
-                    dialog = $( "#dialog-form" ).dialog({
-                        autoOpen: false,
-                        height: 600,
-                        width: 800,
-                        modal: true,
-                        buttons: {
-                          Cancelar: function() {
-                            dialog.dialog( "close" );
-                          }
-                        },
-                        close: function() {
-                         
-                        }
-                      });
-
-                      $( "#metas-popup" ).button().on( "click", function() {
-                        dialog.dialog( "open" );
-                      });
-                      
                 });
                 
                     // Tabs adding/removing

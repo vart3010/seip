@@ -1,35 +1,43 @@
-<div class="field-block button-height">
-    {{ form_label(goal.name) }}
-    {{ form_widget(goal.name) }}
-    {{ form_errors(goal.name) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.typeGoal) }}
-    {{ form_widget(goal.typeGoal) }}
-    {{ form_errors(goal.typeGoal) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.startDate) }}
-    {{ form_widget(goal.startDate) }}
-    {{ form_errors(goal.startDate) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.endDate) }}
-    {{ form_widget(goal.endDate) }}
-    {{ form_errors(goal.endDate) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.responsible) }}
-    {{ form_widget(goal.responsible) }}
-    {{ form_errors(goal.responsible) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.weight) }}
-    {{ form_widget(goal.weight) }}
-    {{ form_errors(goal.weight) }}
-</div>
-<div class="field-block button-height">
-    {{ form_label(goal.observations) }}
-    {{ form_widget(goal.observations) }}
-    {{ form_errors(goal.observations) }}
-</div>
+<form id="goalForms">
+    <div class="field-block button-height">
+        {{ form_label(goal.name) }}
+        {{ form_widget(goal.name) }}
+        {{ form_errors(goal.name) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.typeGoal) }}
+        {{ form_widget(goal.typeGoal) }}
+        {{ form_errors(goal.typeGoal) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.startDate) }}
+        {{ form_widget(goal.startDate) }}
+        {{ form_errors(goal.startDate) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.endDate) }}
+        {{ form_widget(goal.endDate) }}
+        {{ form_errors(goal.endDate) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.responsible) }}
+        {{ form_widget(goal.responsible) }}
+        {{ form_errors(goal.responsible) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.weight) }}
+        {{ form_widget(goal.weight) }}
+        {{ form_errors(goal.weight) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(goal.observations) }}
+        {{ form_widget(goal.observations) }}
+        {{ form_errors(goal.observations) }}
+    </div>
+</form>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        jQuery('#goalForms select').select2();
+    });
+</script>

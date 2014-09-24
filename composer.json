@@ -27,8 +27,11 @@
 	"tecnocreaciones/ajax-fos-user-bundle": "dev-master",
 	"tecnocreaciones/install-bundle": "dev-master",
         "tecnocreaciones/tools-bundle": "dev-master",
+        
         "friendsofsymfony/rest-bundle":"@stable",
         "friendsofsymfony/user-bundle": "v1.3.3",
+        "friendsofsymfony/jsrouting-bundle": "1.5.3",
+        
         "jms/translation-bundle": "~1.1@dev",
         "jms/serializer-bundle": "@stable",
         "knplabs/knp-menu-bundle": "~2.0@dev",

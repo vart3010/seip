@@ -19,14 +19,17 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.name',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-xlarge"
-                )
+                    'class' => "input input-xlarge validate[required]",
+                    'ng-model' => 'model.goal.name'
+                ),
+                'required' => true,
             ))
             ->add('typeGoal',null,array(
                 'label' => 'pequiven.form.type_goal',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "select2 input-xlarge"
+                    'class' => "select2 input-xlarge",
+                    'ng-model' => 'model.goal.type_goal'
                 ),
                 'empty_value' => 'pequiven.form.not_applicable',
                 'required' => false,
@@ -35,39 +38,48 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.start_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium"
+                    'class' => "input input-medium validate[required]",
+                    'ng-model' => 'model.goal.start_date'
                 ),
-                'widget' => 'single_text'
+                'widget' => 'single_text',
+                'required' => true,
             ))
             ->add('endDate','date',array(
                 'label' => 'pequiven.form.end_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium"
+                    'class' => "input input-medium validate[required]",
+                    'ng-model' => 'model.goal.end_date',
                 ),
-                'widget' => 'single_text'
+                'widget' => 'single_text',
+                'required' => true,
             ))
             ->add('responsible',null,array(
                 'label' => 'pequiven.form.responsible',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "select2 input-xlarge"
+                    'class' => "select2 input-xlarge",
+                    'ng-model' => 'model.goal.responsible',
                 ),
+                'empty_value' => 'Seleccione',
                 'required' => true,
             ))
             ->add('weight','integer',array(
                 'label' => 'pequiven.form.weight',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-mini",
+                    'class' => "input input-mini validate[required,min[1] ]",
                     'min' => '1',
+                    'ng-model' => 'model.goal.weight',
                 ),
+                'required' => true,
             ))
             ->add('observations',null,array(
                 'label' => 'pequiven.form.observations',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-xlarge"
+                    'class' => "input input-xlarge",
+                    'ng-model' => 'model.goal.observations',
                 ),
             ))
         ;

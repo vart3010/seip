@@ -7,21 +7,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
-use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
+use Pequiven\ArrangementProgramBundle\Entity\Goal;
+use Pequiven\ArrangementProgramBundle\Form\GoalType;
 
 /**
- * Controlador del programa de gestion
+ * Goal controller.
  *
- * @Route("/arrangementprogram")
+ * @Route("/goal")
  */
-class ArrangementProgramController extends Controller
+class GoalController extends Controller
 {
 
     /**
-     * Lists all ArrangementProgram entities.
+     * Lists all Goal entities.
      *
-     * @Route("/", name="pequiven_arrangementprogram")
+     * @Route("/", name="goal")
      * @Method("GET")
      * @Template()
      */
@@ -29,22 +29,22 @@ class ArrangementProgramController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findAll();
+        $entities = $em->getRepository('PequivenArrangementProgramBundle:Goal')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
     /**
-     * Creates a new ArrangementProgram entity.
+     * Creates a new Goal entity.
      *
-     * @Route("/", name="pequiven_arrangementprogram_create")
+     * @Route("/", name="goal_create")
      * @Method("POST")
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
+     * @Template("PequivenArrangementProgramBundle:Goal:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new ArrangementProgram();
+        $entity = new Goal();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -53,7 +53,7 @@ class ArrangementProgramController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('goal_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -63,36 +63,34 @@ class ArrangementProgramController extends Controller
     }
 
     /**
-     * Creates a form to create a ArrangementProgram entity.
+     * Creates a form to create a Goal entity.
      *
-     * @param ArrangementProgram $entity The entity
+     * @param Goal $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ArrangementProgram $entity)
+    private function createCreateForm(Goal $entity)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
-            'action' => $this->generateUrl('pequiven_arrangementprogram_create'),
+        $form = $this->createForm(new GoalType(), $entity, array(
+            'action' => $this->generateUrl('goal_create'),
             'method' => 'POST',
         ));
+
+        $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
     }
 
     /**
-     * Displays a form to create a new ArrangementProgram entity.
+     * Displays a form to create a new Goal entity.
      *
-     * @Route("/new", name="pequiven_arrangementprogram_new")
+     * @Route("/new", name="goal_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new ArrangementProgram();
-        $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-        //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
-        $entity->addTimeline($timeLine);
-        
+        $entity = new Goal();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -100,22 +98,21 @@ class ArrangementProgramController extends Controller
             'form'   => $form->createView(),
         );
     }
-
+    
     /**
-     * Finds and displays a ArrangementProgram entity.
+     * Finds and displays a Goal entity.
      *
-     * @Route("/{id}", name="arrangementprogram_show")
+     * @Route("/{id}", name="goal_show",requirements={"id"="\d+"})
      * @Method("GET")
      * @Template()
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+            throw $this->createNotFoundException('Unable to find Goal entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -125,11 +122,27 @@ class ArrangementProgramController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
+    /**
+     * Displays a form to edit an existing Goal entity.
+     *
+     * @Route("/get-form", name="goal_get_form",options={"expose":"true"})
+     * @Method("GET")
+     * @Template("PequivenArrangementProgramBundle:Goal:_form.html.twig")
+     */
+    public function getFormAction()
+    {
+        $entity = new Goal();
+        $form = $this->createCreateForm($entity);
+        return array(
+            'goal' => $form->createView(),
+        );
+    }
 
     /**
-     * Displays a form to edit an existing ArrangementProgram entity.
+     * Displays a form to edit an existing Goal entity.
      *
-     * @Route("/{id}/edit", name="arrangementprogram_edit")
+     * @Route("/{id}/edit", name="goal_edit")
      * @Method("GET")
      * @Template()
      */
@@ -137,10 +150,10 @@ class ArrangementProgramController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+            throw $this->createNotFoundException('Unable to find Goal entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -154,16 +167,16 @@ class ArrangementProgramController extends Controller
     }
 
     /**
-    * Creates a form to edit a ArrangementProgram entity.
+    * Creates a form to edit a Goal entity.
     *
-    * @param ArrangementProgram $entity The entity
+    * @param Goal $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(ArrangementProgram $entity)
+    private function createEditForm(Goal $entity)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
-            'action' => $this->generateUrl('arrangementprogram_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new GoalType(), $entity, array(
+            'action' => $this->generateUrl('goal_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -172,20 +185,20 @@ class ArrangementProgramController extends Controller
         return $form;
     }
     /**
-     * Edits an existing ArrangementProgram entity.
+     * Edits an existing Goal entity.
      *
-     * @Route("/{id}", name="arrangementprogram_update")
+     * @Route("/{id}", name="goal_update")
      * @Method("PUT")
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
+     * @Template("PequivenArrangementProgramBundle:Goal:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+            throw $this->createNotFoundException('Unable to find Goal entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -195,7 +208,7 @@ class ArrangementProgramController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('arrangementprogram_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('goal_edit', array('id' => $id)));
         }
 
         return array(
@@ -205,9 +218,9 @@ class ArrangementProgramController extends Controller
         );
     }
     /**
-     * Deletes a ArrangementProgram entity.
+     * Deletes a Goal entity.
      *
-     * @Route("/{id}", name="arrangementprogram_delete")
+     * @Route("/{id}", name="goal_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -217,21 +230,21 @@ class ArrangementProgramController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+            $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+                throw $this->createNotFoundException('Unable to find Goal entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('arrangementprogram'));
+        return $this->redirect($this->generateUrl('goal'));
     }
 
     /**
-     * Creates a form to delete a ArrangementProgram entity by id.
+     * Creates a form to delete a Goal entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -240,7 +253,7 @@ class ArrangementProgramController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('arrangementprogram_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('goal_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

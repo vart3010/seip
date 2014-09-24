@@ -22,3 +22,14 @@ pequiven:
         goals: Metas
         add_goal: Añadir meta
         delete_this_goal: Eliminar esta meta
+seip:
+    table:
+        header:
+            name: Nombre
+            type_goal: Tipo de actividad
+            start_date: Fecha inicio
+            end_date: Fecha fin
+            responsible: Responsable
+            weight: Peso
+            observations: Observaciones
+            actions: Acciones

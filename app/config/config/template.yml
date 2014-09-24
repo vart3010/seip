@@ -2,7 +2,7 @@ lunetics_locale:
     allowed_locales:
         - es
         - en
-    strict_mode: false # defaults to false
+    strict_mode: true # defaults to false
     guessing_order:
         - query
         - router

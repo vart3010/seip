@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * User model
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
  * @ORM\Table(name="seip_user")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),

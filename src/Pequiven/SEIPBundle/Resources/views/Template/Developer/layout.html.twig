@@ -59,7 +59,7 @@
                   '{{ asset_url }}',
                 {% endjavascripts %}
             {% endif %}
-            '{{ url('bazinga_jstranslation_js') }}'
+            ''
         ];
         
         {# Agrego las dependencias de modulos de angularjs del proyecto #}
@@ -86,7 +86,10 @@
 
 {% block javascripts_base %}
     {{ parent() }}
+    {# Generador de rutas desde javascript #}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
-
     
 {% endblock javascripts_base %}

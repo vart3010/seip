@@ -44,5 +44,9 @@
             </call>
         </service>
         
+        <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
+        </service>
+        
     </services>
 </container>
