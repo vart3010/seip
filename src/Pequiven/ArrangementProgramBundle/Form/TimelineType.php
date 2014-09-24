@@ -19,6 +19,7 @@ class TimelineType extends AbstractType
                 'type' => new GoalType(),
                 'allow_add'    => true,
                 'allow_delete' => true,
+                'cascade_validation' => true,
             ))
         ;
     }
@@ -30,7 +31,8 @@ class TimelineType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\Timeline',
-            'translation_domain' => 'PequivenArrangementProgramBundle'
+            'translation_domain' => 'PequivenArrangementProgramBundle',
+            'cascade_validation' => true,
         ));
     }
 

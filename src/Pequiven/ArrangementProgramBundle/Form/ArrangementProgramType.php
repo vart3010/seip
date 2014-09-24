@@ -73,7 +73,8 @@ class ArrangementProgramType extends AbstractType
             ))
             ->add('timelines','collection',array(
                 'type' => new TimelineType(),
-                'allow_add' => true
+                'allow_add' => true,
+                'cascade_validation' => true,
             ))
         ;
     }
@@ -85,7 +86,8 @@ class ArrangementProgramType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram',
-            'translation_domain' => 'PequivenArrangementProgramBundle'
+            'translation_domain' => 'PequivenArrangementProgramBundle',
+            'cascade_validation' => true,
         ));
     }
 

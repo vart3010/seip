@@ -19,7 +19,7 @@ pequiven:
         observations: Observaciones
     goals:
         goal: Meta
-        goals: Metas
+        goals: Meta(s)
         add_goal: Añadir meta
         delete_this_goal: Eliminar esta meta
 seip:
@@ -33,3 +33,5 @@ seip:
             weight: Peso
             observations: Observaciones
             actions: Acciones
+        empty:
+            goals: No hay metas cargadas.

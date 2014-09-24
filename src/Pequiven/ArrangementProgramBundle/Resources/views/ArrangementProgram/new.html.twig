@@ -62,8 +62,7 @@
                 {{ form_errors(form.responsible) }}
             </div>
         </fieldset>
-            <div id="dialog-form" title="{{ "pequiven.goals.goals"|trans }}">
-                <h4>{{ "pequiven.goals.goals"|trans }}</h4>
+            <div id="dialog-form">
                 <div ng-include="template.url" onload="templateLoad(template)"></div>
             </div>
             
@@ -82,32 +81,37 @@
                 <tfoot>
                     <tr>
                         <td colspan="7">
-                            [[ goals.length ]] entries found
+                            [[ goals.length ]] {{ "pequiven.goals.goals"|trans }}
                         </td>
                     </tr>
                 </tfoot>
                 <tbody>
+                    <tr ng-if="goals.length == 0">
+                        <td colspan="7" class="empty_row">
+                            {{ "seip.table.empty.goals"|trans }}
+                        </td>
+                    </tr>
                     <tr ng-repeat="goal in goals">
                         <th scope="row">
                             <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_name" value="[[ goal.name ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_typeGoal" value="[[ goal.type_goal ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_typeGoal" value="[[ goal.type_goal.id ]]">
                             <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_startDate" value="[[ goal.start_date ]]">
                             <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_endDate" value="[[ goal.end_date ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_responsible" value="[[ goal.responsible ]]">
+                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_responsible" value="[[ goal.responsible.id ]]">
                             <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_weight" value="[[ goal.weight ]]">
                             <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_observations" value="[[ goal.observations ]]">
                             [[ goal.name ]]<br>
                             <small>[[ goal.observations ]]</small>
                         </th>
-                        <td>[[ goal.type_goal ]]</td>
+                        <td>[[ goal.type_goal.description ]]</td>
                         <td>[[ goal.start_date ]]</td>
                         <td>[[ goal.end_date ]]</td>
                         <td>[[ goal.weight ]]</td>
-                        <td><small class="tag">[[ goal.responsible ]]</small></td>
+                        <td>[[ goal.responsible.first_name + " "+ goal.responsible.last_name ]] <small class="tag">[[ " ("+goal.responsible.username+")" ]]</small></td>
                         <td class="align-right vertical-center">
                             <span class="button-group compact">
-                                <a href="javascript:void(0);" class="button icon-pencil">Edit</a>
-                                <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="Delete"></a>
+                                <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm" title="{{ "pequiven.actions.delete"|trans({},"messages") }}"></a>
                             </span>
                         </td>
                     </tr>
@@ -127,85 +131,7 @@
                         weight: 'arrangementprogram_timelines_0_goals___name___weight',
                         observations: 'arrangementprogram_timelines_0_goals___name___observations'
                     };
-                
-                var $collectionHolder;
-
-                // setup an "add a tag" link
-                var $addTagLink = $('#add-form-goal');
-                //var $newLinkLi = $('<li></li>').append($addTagLink);
-                jQuery(document).ready(function() {
-                    
-                    // Get the ul that holds the collection of tags
-                    $collectionHolder = $('ul.tags');
-                    
-                    // add a delete link to all of the existing tag form li elements
-                    $collectionHolder.find('li').each(function() {
-                        addTagFormDeleteLink($(this));
-                    });
-                    
-
-                    // add the "add a tag" anchor and li to the tags ul
-                    //$collectionHolder.append($newLinkLi);
-                    
-                    // count the current form inputs we have (e.g. 2), use that as the new
-                    // index when inserting a new item (e.g. 2)
-                    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-                    $addTagLink.on('click', function(e) {
-                        // prevent the link from creating a "#" on the URL
-                        e.preventDefault();
-                        // add a new tag form (see next code block)
-                        addTagForm($collectionHolder);
-                    });
-                    
-                    function addTagForm($collectionHolder) {
-                        // Get the data-prototype explained earlier
-                        var prototype = $collectionHolder.data('prototype');
-
-                        // get the new index
-                        var index = $collectionHolder.data('index');
-
-                        // Replace '__name__' in the prototype's HTML to
-                        // instead be a number based on how many items we have
-                        var newForm = prototype.replace(/__name__/g, index);
-                        var idTypeGoal = prototypeForm.typeGoal.replace(/__name__/g, index);
-                        var idResponsible = prototypeForm.responsible.replace(/__name__/g, index);
-
-                        // increase the index with one for the next item
-                        $collectionHolder.data('index', index + 1);
-
-                        addTab(newForm);
-                        
-                        $("#"+idTypeGoal).select2();
-                        $("#"+idResponsible).select2();
-                    }
-                    
-                });
-                
-                    // Tabs adding/removing
-                    var tabsAdded = [];
-
-                    // Add a tab
-                    function addTab(content)
-                    {
-                            // New tab id
-                            var tabId = 'new-tab'+tabsAdded.length;
-
-                            // Register tab
-                            tabsAdded.push(tabId);
-                            var $removeFormA = '<a href="#" class="pull-right" onclick="removeTabs(\''+tabId+'\')">{{ "pequiven.goals.delete_this_goal"|trans }}</a>';
-
-                            // Create
-                            $('#add-tabs').addTab(tabId, '{{ "pequiven.goals.goal"|trans }} '+tabsAdded.length,$removeFormA+ content);
-                    };
-                    // Remove dynamically created tabs
-		function removeTabs(id)
-		{
-                    if(tabsAdded.length > 0)
-                    {
-                        $('#'+id).removeTab();
-                    }
-		};
+               
             </script>
             
         {{ form_rest(form) }}

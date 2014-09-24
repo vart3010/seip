@@ -1,3 +1,12 @@
+.empty_row {
+    height: 70px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #e6e6e6;
+    font-size: 20px;
+}
+
 .input-mini,
 input.mini,
 textarea.mini,

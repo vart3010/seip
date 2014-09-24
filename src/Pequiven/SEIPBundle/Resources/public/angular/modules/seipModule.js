@@ -9,16 +9,31 @@ var seipModule = angular.module('seipModule', [
 function confirm(){
     
 }
+//Establece el valor de un select2
+function setValueSelect2(idSelect2,idEntity,data){
+    var selected = null;
+    var i = 0,j=0;
+    angular.forEach(data,function(val,i){
+        if(val != undefined){
+            if(val.id == idEntity){
+                selected = val;
+                j = i;
+            }
+        }
+        i++;
+    });
+    $("#"+idSelect2).select2("val",j);
+}
 
 
 angular.module('seipModule.controllers', [])
     .controller("ArrangementProgramController",function($scope,notificationBarService,$http){
         $scope.data = {
             responsible_goals: null,
-            type_goal: null
+            type_goals: null
         };
         //Inicializar modelo de meta
-        $scope.initModelGoal = function(){
+        $scope.initModelGoal = function(goal){
             $scope.model = {
                 goal: {
                     name: null,
@@ -30,8 +45,18 @@ angular.module('seipModule.controllers', [])
                     observations: null
                 }
             };
+            $("#goalForms select").each(function(){
+                    //$(this).select2("destroy");
+                    //$(this).select2();
+                    $(this).select2("val","");
+                });
+            if(goal){
+                $scope.model.goal = goal;
+                
+                setValueSelect2("goal_typeGoal",goal.type_goal.id,$scope.data.type_goals);
+                setValueSelect2("goal_responsible",goal.responsible.id,$scope.data.responsible_goals);
+            }
         };
-        
         //Metas
         $scope.goals = [];
         $scope.initModelGoal();
@@ -41,49 +66,79 @@ angular.module('seipModule.controllers', [])
                 $scope.goals.push($scope.model.goal);
                 $scope.initModelGoal();
             }
-            console.log(valid);
             return valid;
         };
         $scope.initGoalCallBack = function(){
             $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals")).success(function(data){
                 $scope.data.responsible_goals = data;
-                console.log(data);
             });
             $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal")).success(function(data){
-                $scope.data.type_goal = data;
-                console.log(data);
+                $scope.data.type_goals = data;
             });
-            console.log("initGoalCallBack");
         };
         
         //Funcion que carga el template de la meta
-        $scope.loadTemplateMeta = function(){
+        $scope.loadTemplateMeta = function(goal){
             $scope.templateOptions.setTemplate($scope.templates[0]);
-            $scope.openModalAuto();
+            $scope.templateOptions.setParameterCallBack(goal);
+            if(goal){
+                $scope.templateOptions.enableModeEdit();
+                $scope.openModalAuto(true);
+            }else{
+                $scope.openModalAuto(false);
+            }
+        };
+        
+        //Setea la dta del formulario
+        $scope.setDataFormGoal = function(goal){
+            $scope.initModelGoal(goal);
+        };
+        
+        $scope.removeGoal = function(goal){
+            $scope.goals.remove(goal);
         };
         
         var urlGoal = Routing.generate("goal_get_form",{},true);
         $scope.templates = [
             {
-                name: 'goalForm',
+                name: 'pequiven.modal.title.goal',
                 url:urlGoal,
                 confirmCallBack: $scope.addGoal,
                 initCallBack: $scope.initGoalCallBack,
+                loadCallBack: $scope.setDataFormGoal
             }
         ];
         
     })
-    .controller("MainContentController",function($scope,notificationBarService){
+    .controller("MainContentController",function($scope,notificationBarService,sfTranslator){
+        //Funcion para remover un elemento de un array
+        Array.prototype.remove = function(value){
+            var idx = this.indexOf(value);
+            if(idx != -1){
+                return this.splice(idx,1);
+            }
+            return false;
+        };
+        
         $scope.template = {
+            name: null,
             url: null,
             load: false,
             confirmCallBack: null,
+            parameterCallBack: null,
             loadCallBack: null,
-            initCallBack: null
+            initCallBack: null,
+            modeEdit: false
         };
         $scope.templateOptions = {};
         $scope.templateOptions.setConfirmCallBack = function(callBack){
             $scope.template.confirmCallBack = callBack;
+        };
+        $scope.templateOptions.enableModeEdit = function(){
+            $scope.template.modeEdit = true;
+        };
+        $scope.templateOptions.setParameterCallBack = function(parameterCallBack){
+            $scope.template.parameterCallBack = parameterCallBack;
         };
         $scope.templateOptions.setUrl = function(callBack){
             $scope.template.url = callBack;
@@ -96,7 +151,7 @@ angular.module('seipModule.controllers', [])
         jQuery(document).ready(function() {
             modalOpen = angular.element( "#dialog-form" ).dialog({
                 autoOpen: false,
-                        height: 800,
+                        height: 650,
                         width: 800,
                         modal: true,
                 buttons: {
@@ -112,7 +167,7 @@ angular.module('seipModule.controllers', [])
           });
         });
         
-        $scope.templateLoad = function(template,reload){
+        $scope.templateLoad = function(template){
           template.load = true;
           if(template.initCallBack){
              template.initCallBack(); 
@@ -128,28 +183,49 @@ angular.module('seipModule.controllers', [])
         };
         
         function openModal(){
-                // setter
-                modalOpen.dialog( "option", "buttons", [ 
-                    { text: "Añadir", click: function(){
-                            //console.log($scope.template.confirmCallBack);
-                            if($scope.template.confirmCallBack){
-                                if($scope.template.confirmCallBack()){
-                                    modalOpen.dialog( "close" );
-                                    $scope.$apply();
-                                }
-                            }else{
+                if($scope.template.name){
+                    modalOpen.dialog( "option", "title", sfTranslator.trans($scope.template.name));
+                }
+                
+                if($scope.template.modeEdit){
+                    $scope.template.modeEdit = false;
+                    // setter
+                    modalOpen.dialog( "option", "buttons", [ 
+                        { text: "Guardar", click: function(){
+                                $scope.$apply();
                                 modalOpen.dialog( "close" );
-                            }
-                    } },
-                    { text: "Cancelar", click: function() {
-                            modalOpen.dialog( "close" );
-                        } 
-                    }
-                ] );
+                        } },
+                        { text: "Cancelar", click: function() {
+                                modalOpen.dialog( "close" );
+                            } 
+                        }
+                    ] );
+                }else{
+                    // setter
+                    modalOpen.dialog( "option", "buttons", [ 
+                        { text: "Añadir", click: function(){
+                                //console.log($scope.template.confirmCallBack);
+                                if($scope.template.confirmCallBack){
+                                    if($scope.template.confirmCallBack()){
+                                        modalOpen.dialog( "close" );
+                                        $scope.$apply();
+                                    }
+                                }else{
+                                    modalOpen.dialog( "close" );
+                                }
+                        } },
+                        { text: "Cancelar", click: function() {
+                                modalOpen.dialog( "close" );
+                            } 
+                        }
+                    ] );
+                }
+                
             modalOpen.dialog( "open" );
             if($scope.template.loadCallBack){
-               $scope.template.loadCallBack(); 
+               $scope.template.loadCallBack($scope.template.parameterCallBack); 
             }
+            $scope.template.parameterCallBack = null;
             
             notificationBarService.getLoadStatus().done();
         }

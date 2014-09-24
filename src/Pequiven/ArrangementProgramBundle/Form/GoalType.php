@@ -29,7 +29,8 @@ class GoalType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-xlarge",
-                    'ng-model' => 'model.goal.type_goal'
+                    'ng-model' => 'model.goal.type_goal',
+                    'ng-options' => 'value as value.description for (key,value) in data.type_goals'
                 ),
                 'empty_value' => 'pequiven.form.not_applicable',
                 'required' => false,
@@ -60,6 +61,7 @@ class GoalType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-xlarge",
                     'ng-model' => 'model.goal.responsible',
+                    'ng-options' => 'value as (value.first_name + " "+ value.last_name + " ("+value.username+")") for (key,value) in data.responsible_goals'
                 ),
                 'empty_value' => 'Seleccione',
                 'required' => true,

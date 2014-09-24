@@ -108,7 +108,7 @@ class ArrangementProgram
      * Fecha de revision
      * @var \DateTime
      *
-     * @ORM\Column(name="revisionDate", type="datetime")
+     * @ORM\Column(name="revisionDate", type="datetime",nullable=true)
      */
     private $revisionDate;
 
@@ -124,7 +124,7 @@ class ArrangementProgram
      * Fecha de aprobacion
      * @var \DateTime
      *
-     * @ORM\Column(name="approvalDate", type="datetime")
+     * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
      */
     private $approvalDate;
 
@@ -134,7 +134,7 @@ class ArrangementProgram
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = 0;
 
     public function __construct() {
         $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
