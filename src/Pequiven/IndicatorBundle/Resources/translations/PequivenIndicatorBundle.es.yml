@@ -29,6 +29,7 @@ form:
     ref: Nro. de Referencia
     indicator: Indicador
     description: Descripción del Indicador
+    name: Nombre del Indicador
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
@@ -47,11 +48,11 @@ form:
     arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResInd: Res. Ind.
     
-    rankArrangement: Rango de Gestión (Semáforo)
-    rankArrangementTop: Rango de Gestión Alto
-    rankArrangementMiddleTop: Rango de Gestión Medio Alto
-    rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
-    rankArrangementBottom: Rango de Gestión Bajo
+    rankArrangement: Rango del Indicador
+    rankArrangementTop: Rango Alto
+    rankArrangementMiddleTop: Rango Medio Alto
+    rankArrangementMiddleBottom: Rango Medio Bajo
+    rankArrangementBottom: Rango Bajo
     
     selectionOfObjetiveTactic: Selección de objetivo táctico
     selectionOfObjetiveOperative: Selección de objetivo operativo
@@ -77,6 +78,7 @@ form:
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo
+        objetiveOperative: Objetivo operativo al cual pertenecerá el indicador
         location: Localidad dónde tendrá impacto el objetivo
         gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
         gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
@@ -137,12 +139,15 @@ form:
         selectLineStrategicFormatNoMatcher: Seleccione una línea estratégica
         selectLineStrategicFormatNoResult: No hay líneas estratégicas registradas
         selectLineStrategicPlaceholder: Seleccione una línea estratégica
+        selectLineStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% línea estratégica
         selectObjetiveStrategicFormatNoMatcher: Seleccione una línea estratégica
         selectObjetiveStrategicFormatNoResult: No hay objetivos estratégicos registrados para la línea estratégica seleccionada
         selectObjetiveStrategicPlaceholder: Seleccione un objetivo estratégico
+        selectObjetiveStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% objetivo estratégico
         selectObjetiveTacticFormatNoMatcher: Seleccione un objetivo estratégico
         selectObjetiveTacticFormatNoResult: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
         selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico
+        selectObjetiveTacticFormatSelectionTooBig: Sólo puede seleccionar %maxsize% objetivo táctico
         selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
         selectIndicatorFormatNoResult: No hay indicadores registrados para este objetivo
         selectIndicatorPlaceholder: Seleccione un Indicador
@@ -166,6 +171,7 @@ form:
         addIndicatorOperative: Registro Indicador Operativo
 
 action:
-    registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
-    registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
-    registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente
+    messages:    
+        registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
+        registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
+        registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente

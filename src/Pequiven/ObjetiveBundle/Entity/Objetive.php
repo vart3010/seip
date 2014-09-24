@@ -586,60 +586,6 @@ class Objetive extends modelObjetive {
     }
 
     /**
-     * Devuelve el valor referencial del objetivo
-     * <b> x.x. Estratégico </b>
-     * <b> x.x.x. Táctico </b>
-     * <b> x.x.x.x. Operativo </b>
-     * @param type $options
-     * @return boolean
-     */
-    public function setNewRef($options = array()) {
-        $container = \Pequiven\ObjetiveBundle\PequivenObjetiveBundle::getContainer();
-        $securityContext = $container->get('security.context');
-        $em = $container->get('doctrine')->getManager();
-
-        if ($options['type'] == 'STRATEGIC') {
-            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
-            $refLineStrategic = $lineStrategic->getRef();
-            $total = count($results);            
-            if (is_array($results) && $total > 0) {
-                $ref = $refLineStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refLineStrategic . '1.';
-            }
-        } elseif ($options['type'] == 'TACTIC') {
-            $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
-            $refObjetiveStrategic = $objetiveStrategic->getRef();
-            $options['refParent'] = $refObjetiveStrategic;
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refObjetiveStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refObjetiveStrategic . '1.';
-            }
-        } elseif ($options['type'] == 'OPERATIVE') {
-            $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
-            $refObjetiveTactic = $objetiveTactic->getRef();
-            $options['refParent'] = $refObjetiveTactic;
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getRefNewObjetive($options);
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refObjetiveTactic . ($total + 1) . '.';
-            } else {
-                $ref = $refObjetiveTactic . '1.';
-            }
-        }
-
-        return $ref;
-    }
-
-
-    /**
      * Set gerenciaSecond
      *
      * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond

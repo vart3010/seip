@@ -111,7 +111,6 @@ class ObjetiveStrategicController extends baseController {
         $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
         //$form->handleRequest($request);
         
-        $lastId = '';
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
@@ -121,7 +120,7 @@ class ObjetiveStrategicController extends baseController {
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_strategic_registration");
-            //$object->setWeight(bcadd($data['weight'],'0',3));
+            
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
             $ref = $data['ref'];
@@ -143,18 +142,16 @@ class ObjetiveStrategicController extends baseController {
             
             try{
                 $em->flush();
-                $lastId = $em->getConnection()->lastInsertId();
+//                $lastId = $em->getConnection()->lastInsertId();
                 $em->getConnection()->commit();
             } catch (Exception $e){
                 $em->getConnection()->rollback();
                 throw $e;
             }
             
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
-
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($objetives, $data);
-            }
+            //Obtenemos el último objetivo guardado y le añadimos el rango de gestión o semáforo
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));            
+            $this->createArrangementRange($objetives, $data);
             
             $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerObjetiveStrategicSuccessfull', array(), 'PequivenObjetiveBundle'));
                         

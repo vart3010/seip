@@ -409,55 +409,7 @@ class Indicator extends modelIndicator {
     public function getFormula()
     {
         return $this->formula;
-    }
-    
-    /**
-     * Devuelve el valor referencial del indicador
-     * <b> x.x Estratégico </b>
-     * <b> x.x.x Táctico </b>
-     * <b> x.x.x.x Operativo </b>
-     * @param type $options
-     * @return boolean
-     */
-    public function setNewRef($options = array()) {
-        $container = \Pequiven\IndicatorBundle\PequivenIndicatorBundle::getContainer();
-        $securityContext = $container->get('security.context');
-        $em = $container->get('doctrine')->getManager();
-        
-        if ($options['type'] == 'STRATEGIC') {
-            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
-            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRef($options);
-            $refLineStrategic = 'IE-'.$lineStrategic->getRef();
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refLineStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refLineStrategic . '1.';
-            }
-        } elseif($options['type'] == 'TACTIC'){
-            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
-            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRef($options);
-            $refLineStrategic = 'IT-'.$lineStrategic->getRef();
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refLineStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refLineStrategic . '1.';
-            }
-        } elseif($options['type'] == 'OPERATIVE'){
-            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
-            $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByOptionRef($options);
-            $refLineStrategic = 'IO-'.$lineStrategic->getRef();
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refLineStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refLineStrategic . '1.';
-            }
-        } 
-        
-        return $ref;
-    }
+    }    
     
     /**
      * Devuelve el valor de referencia del indicador creado a partir del formulario de objetivo

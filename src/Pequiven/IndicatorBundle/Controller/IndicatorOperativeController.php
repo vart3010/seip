@@ -125,8 +125,7 @@ class IndicatorOperativeController extends baseController {
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']),'0',2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
-            //Obtenemos y seteamos la línea estratégica del indicador
-            $object->setLineStrategic($em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $data['lineStrategic'])));
+            
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_OPERATIVO));
             $object->setIndicatorLevel($indicatorLevel);
@@ -148,16 +147,17 @@ class IndicatorOperativeController extends baseController {
                 throw $e;
             }
             
+            //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($lastObjectInsert, $data);
-            }
-            //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+            $this->createArrangementRange($lastObjectInsert, $data);
+            
+            //Guardamos la relación entre el indicador y el objetivo
             $this->createObjetiveIndicator($lastObjectInsert);
             
-            return $this->redirect($this->generateUrl('pequiven_indicator_home', 
-                    array('type' => 'indicatorOperative',
-                          'action' => 'REGISTER_SUCCESSFULL'
+            $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerIndicatorOperativeSuccessfull', array(), 'PequivenIndicatorBundle'));
+            
+            return $this->redirect($this->generateUrl('pequiven_indicator_menu_list_operative', 
+                    array(
                         )
                     ));
         }
@@ -218,10 +218,9 @@ class IndicatorOperativeController extends baseController {
                 throw $e;
             }
             
+            //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($lastObjectInsert, $data);
-            }
+            $this->createArrangementRange($lastObjectInsert, $data);
             
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
         }
@@ -419,18 +418,11 @@ class IndicatorOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $objetiveTacticId = $request->request->get('objetiveTacticId');
+        $objetiveTacticId = explode(',',$request->request->get('objetiveTacticId'));
         $gerenciaSecondId = $securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX')) ? $user->getGerenciaSecond()->getId() : $request->request->get('gerenciaSecondId');
         
-        $gerenciaFirstId = '';
-        if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-            $gerenciaFirstId = $request->request->get('gerenciaFirstId');
-        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            $gerenciaFirstId = $user->getGerencia()->getId();
-        }
-        
-        if(is_numeric($objetiveTacticId) && is_numeric($gerenciaSecondId)){
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('parent' => $objetiveTacticId, 'gerencia' => $gerenciaSecondId));
+        if(is_array($objetiveTacticId) && is_numeric($gerenciaSecondId)){
+            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveTacticId,array('fromIndicator' => true,'gerenciaSecondId' => $gerenciaSecondId));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0){
@@ -456,7 +448,7 @@ class IndicatorOperativeController extends baseController {
      */
     public function displayRefIndicatorAction(Request $request){
         $response = new JsonResponse();
-        $indicator = new Indicator();
+
         $data = array();
         $options = array();
         $em = $this->getDoctrine()->getManager();
@@ -464,7 +456,7 @@ class IndicatorOperativeController extends baseController {
         $objetiveOperativeId = $request->request->get('objetiveOperativeId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveOperativeId))->getRef();
         $options['type'] = 'OPERATIVE';
-        $ref = $indicator->setNewRefFromObjetive($options);
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
@@ -478,17 +470,35 @@ class IndicatorOperativeController extends baseController {
      */
     public function displayRefIndicatorFromObjetiveAction(Request $request){
         $response = new JsonResponse();
-        $indicator = new Indicator();
+
         $data = array();
         $options = array();
         
         $refParent =  $request->request->get('refParentId');
         $options['refParent'] = $refParent;
         $options['type'] = 'OPERATIVE';
-        $ref = $indicator->setNewRefFromObjetive($options);
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
+    }
+    
+    /**
+     * Función que devuelve la referencia del indicador operativo que se esta creando
+     * @param type $options
+     */
+    public function setNewRef($options = array()){
+        
+        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $refIndicator = 'IO-'.$options['refParent'];
+        $total = count($results);
+        if (is_array($results) && $total > 0) {
+            $ref = $refIndicator . ($total + 1) . '.';
+        } else {
+            $ref = $refIndicator . '1.';
+        }
+        
+        return $ref;
     }
 }

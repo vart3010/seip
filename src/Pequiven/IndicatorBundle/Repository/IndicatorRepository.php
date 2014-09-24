@@ -46,12 +46,16 @@ class IndicatorRepository extends baseEntityRepository {
         return $q->getResult();
     }
     
+    /**
+     * Función que devuelve la cantidad de indicadores que tiene un objetivo
+     * @param type $options
+     * @return type
+     */
     public function getByOptionRefParent($options = array()){
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
                     ->select('i')
                     ->from('\Pequiven\IndicatorBundle\Entity\Indicator', 'i')
-                    ->groupBy('i.refParent')
                     ->andWhere('i.refParent = :refParentId')
                     ->setParameter('refParentId', $options['refParent'])
                 ;
@@ -65,8 +69,7 @@ class IndicatorRepository extends baseEntityRepository {
         }
         
         $q = $query->getQuery();
-        //var_dump($q->getSQL());
-        //die();
+
         return $q->getResult();
     }
     

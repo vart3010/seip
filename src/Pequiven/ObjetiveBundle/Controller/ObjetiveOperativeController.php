@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveIndicator;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\ObjetiveBundle\Form\Type\Operative\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  * @author matias
  */
 class ObjetiveOperativeController extends baseController {
-    //put your code here
     
     /**
      * Función que retorna la vista con la lista de los objetivos operativos
@@ -47,7 +45,6 @@ class ObjetiveOperativeController extends baseController {
      */
     public function objetiveListAction(Request $request){
 
-//        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
@@ -90,8 +87,6 @@ class ObjetiveOperativeController extends baseController {
             $view->setData($resources);
         }else{
             $formatData = $request->get('_formatData','default');
-//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
-//            die();
             $view->setData($resources->toArray('',array(),$formatData));
         }
         return $this->handleView($view);
@@ -109,7 +104,6 @@ class ObjetiveOperativeController extends baseController {
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));
         
         $nameObject = 'object';
-        $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
@@ -120,7 +114,7 @@ class ObjetiveOperativeController extends baseController {
         if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_operative_registration");
-            
+
             $ref = $data['ref'];
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
@@ -294,18 +288,16 @@ class ObjetiveOperativeController extends baseController {
             
             try{
             $em->flush();
-            $lastId = $em->getConnection()->lastInsertId();
+//            $lastId = $em->getConnection()->lastInsertId();
             $em->getConnection()->commit();
             } catch (Exception $e){
                 $em->getConnection()->rollback();
                 throw $e;
             }
-            
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
 
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($objetives, $data);
-            }
+            //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
+            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
+            $this->createArrangementRange($objetives, $data);
             
             $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerObjetiveOperativeSuccessfull', array(), 'PequivenObjetiveBundle'));
             
@@ -441,8 +433,7 @@ class ObjetiveOperativeController extends baseController {
      */
     public function selectObjetiveTacticFromObjetiveStrategicAction(Request $request){
         $response = new JsonResponse();
-        $objetiveChildrenTactic = array();
-        $em = $this->getDoctrine()->getManager();
+        $objetiveChildrenTactic = array();        
         
         $objetiveStrategicId = explode(',',$request->request->get('objetiveStrategicId'));
         
@@ -658,7 +649,7 @@ class ObjetiveOperativeController extends baseController {
         $complejos = $request->request->get('complejos');
         $em = $this->getDoctrine()->getManager();
         $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
-        $data = '';
+
         foreach($results as $result){
             
             foreach($result as $gerencia){
@@ -700,7 +691,7 @@ class ObjetiveOperativeController extends baseController {
     }
     
     /**
-     * Función que devuelve la referenica del objetivo operativo que se esta creando
+     * Función que devuelve la referencia del objetivo operativo que se esta creando
      * @param array $options
      */
     public function setNewRef($options = array()){

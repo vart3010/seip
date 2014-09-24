@@ -104,7 +104,7 @@ class IndicatorStrategicController extends baseController {
     public function createFromObjetiveAction(Request $request){
         
         $form = $this->createForm($this->get('pequiven_indicator.strategicfo.registration.form.type'));
-        $form->handleRequest($request);        
+        
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -113,7 +113,7 @@ class IndicatorStrategicController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
             
@@ -145,10 +145,7 @@ class IndicatorStrategicController extends baseController {
             }
             
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($lastObjectInsert, $data);
-            }
+            $this->createArrangementRange($lastObjectInsert, $data);
             
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
         }
@@ -167,9 +164,7 @@ class IndicatorStrategicController extends baseController {
      */
     public function createAction(Request $request){
 
-        $form = $this->createForm(new BaseFormType('regular'));
-        $form->handleRequest($request);
-        $nameObject = 'object';
+        $form = $this->createForm($this->get('pequiven_indicator.strategic.registration.form.type'));
         $lastId = '';
         
         $em = $this->getDoctrine()->getManager();
@@ -178,20 +173,20 @@ class IndicatorStrategicController extends baseController {
         
         $em->getConnection()->beginTransaction();
         
-        if($form->isValid()){
+        if($request->isMethod('POST') && $form->submit($request)->isValid()){
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_indicator_strategic_registration");
             
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            $object->setRefParent($objetive->getRef());
-            
-            //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
             $object->setUserCreatedAt($user);
             
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_ESTRATEGICO));
             $object->setIndicatorLevel($indicatorLevel);
+            
+            //Obtenemos y seteamos la refParent del Objetivo Estratégico al que pertenece
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parents'][0]));
+            $object->setRefParent($objetive->getRef());
             
             //En caso de que el Indicador tenga Fórmula se obtiene y se setea respectivamente
             if(isset($data['formula'])){
@@ -210,16 +205,17 @@ class IndicatorStrategicController extends baseController {
                 throw $e;
             }
             
+            //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
             $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($lastObjectInsert, $data);
-            }
-            //$objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetive->getRef()));
+            $this->createArrangementRange($lastObjectInsert, $data);
+            
+            //Guardamos la relación entre el indicador y el objetivo
             $this->createObjetiveIndicator($lastObjectInsert);
             
-            return $this->redirect($this->generateUrl('pequiven_indicator_home', 
-                    array('type' => 'indicatorStrategic',
-                          'action' => 'REGISTER_SUCCESSFULL'
+            $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerIndicatorStrategicSuccessfull', array(), 'PequivenIndicatorBundle'));
+            
+            return $this->redirect($this->generateUrl('pequiven_indicator_menu_list_strategic',
+                    array(
                         )
                     ));
         }
@@ -371,7 +367,7 @@ class IndicatorStrategicController extends baseController {
      */
     public function displayRefIndicatorAction(Request $request){
         $response = new JsonResponse();
-        $indicator = new Indicator();
+
         $data = array();
         $options = array();
         $em = $this->getDoctrine()->getManager();
@@ -379,7 +375,8 @@ class IndicatorStrategicController extends baseController {
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId))->getRef();
         $options['type'] = 'STRATEGIC';
-        $ref = $indicator->setNewRefFromObjetive($options);
+        //$ref = $indicator->setNewRefFromObjetive($options);
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
@@ -393,17 +390,36 @@ class IndicatorStrategicController extends baseController {
      */
     public function displayRefIndicatorFromObjetiveAction(Request $request){
         $response = new JsonResponse();
-        $indicator = new Indicator();
+
         $data = array();
         $options = array();
         
         $refParent =  $request->request->get('refParentId');
         $options['refParent'] = $refParent;
         $options['type'] = 'STRATEGIC';
-        $ref = $indicator->setNewRefFromObjetive($options);
+        //$ref = $indicator->setNewRefFromObjetive($options);
+        $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
+    }
+    
+    /**
+     * Función que devuelve la referencia del indicador estratégico que se esta creando
+     * @param type $options
+     */
+    public function setNewRef($options = array()){
+        
+        $results = $this->get('pequiven.repository.indicatorstrategic')->getByOptionRefParent($options);
+        $refIndicator = 'IE-'.$options['refParent'];
+        $total = count($results);
+        if (is_array($results) && $total > 0) {
+            $ref = $refIndicator . ($total + 1) . '.';
+        } else {
+            $ref = $refIndicator . '1.';
+        }
+        
+        return $ref;
     }
 }

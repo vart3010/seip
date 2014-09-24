@@ -127,7 +127,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
             $formOptions['mapped'] = false;
             if($this->registerIndicator){
                 $formOptions['required'] = false;
-                return $form->add('parent', 'entity', $formOptions);
+                return $form->add('parents', 'entity', $formOptions);
             } else{
                 return $form->add('parent_strategic', 'entity', $formOptions);
             }

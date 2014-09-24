@@ -24,6 +24,7 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
     protected $container;
     protected $typeOperative = false;
     protected $typeTactic = false;
+    protected $registerIndicator = false;
     
     /**
      * 
@@ -37,6 +38,9 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
         }
         if(isset($options['typeTactic'])){
             $this->typeTactic = true;
+        }
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
         }
     }
     
@@ -84,6 +88,9 @@ class AddLineStrategicFieldListener implements EventSubscriberInterface {
         } else{
             $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen', 'multiple' => 'multiple' ,'style' => 'width:300px');
             $formOptions['multiple'] = true;
+            if($this->registerIndicator){
+                $formOptions['mapped'] = false;
+            }
         }
         
         //'empty_value' => 'Seleccione la línea estratégica'

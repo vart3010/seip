@@ -108,9 +108,8 @@ class ObjetiveTacticController extends baseController{
     public function createAction(Request $request){
 
         $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
-//        $form->handleRequest($request);
-        $nameObject = 'object';
-        $lastId = '';
+
+        $nameObject = 'object';        
         $em = $this->getDoctrine()->getManager();
         
         $securityContext = $this->container->get('security.context');
@@ -122,7 +121,7 @@ class ObjetiveTacticController extends baseController{
             $object = $form->getData();
             $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
             $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));            
             $ref = $data['ref'];
             
             //Obtenemos y Seteamos el nivel del objetivo
@@ -200,18 +199,16 @@ class ObjetiveTacticController extends baseController{
             
             try{
                 $em->flush();
-                $lastId = $em->getConnection()->lastInsertId();
+//                $lastId = $em->getConnection()->lastInsertId();
                 $em->getConnection()->commit();
             } catch (Exception $e){
                 $em->getConnection()->rollback();
                 throw $e;
             }
             
+            //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
-
-            if(isset($data['typeArrangementRangeTypeTop']) && $data['typeArrangementRangeTypeTop'] != null){
-                $this->createArrangementRange($objetives, $data);
-            }
+            $this->createArrangementRange($objetives, $data);
             
             $this->get('session')->getFlashBag()->add('success',$this->trans('action.messages.registerObjetiveTacticSuccessfull', array(), 'PequivenObjetiveBundle'));
             return $this->redirect($this->generateUrl('pequiven_objetive_menu_list_tactic', 
@@ -367,8 +364,6 @@ class ObjetiveTacticController extends baseController{
         
         return $response;
     }
-    
-    
     
     /**
      * Devuelve la Referencia del Objetivo, de acuerdo a la cantidad que ya se encuentren registrados

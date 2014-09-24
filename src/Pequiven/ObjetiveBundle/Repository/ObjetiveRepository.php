@@ -64,36 +64,6 @@ class ObjetiveRepository extends baseEntityRepository {
     }
     
     /**
-     * Función que devuelve los resultados necesarios para obtener la referencia del objetivo que se este creando
-     * @param type $options
-     * @return type
-     */
-    public function getRefNewObjetive($options = array()){
-        $em = $this->getEntityManager();
-        $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->andWhere('o.enabled = 1')
-                    ->groupBy('o.ref');
-        
-        if($options['type_ref'] === 'STRATEGIC_REF'){
-                $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId']);
-                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO);
-            } elseif($options['type_ref'] === 'TACTIC_REF'){
-                $query->andWhere("o.ref LIKE '".$options['refParent']."%'");
-                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO);
-            } elseif($options['type_ref'] === 'OPERATIVE_REF'){
-                $query->andWhere("o.ref LIKE '".$options['refParent']."%'");
-                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO);
-            }
-        
-        $q = $query->getQuery();
-//        var_dump($q->getSQL());
-//        die();
-        return $q->getResult();
-    }
-    
-    /**
      * Función que devuelve los objetivos estratégicos de acuerdo a las líneas estratégicas
      * @param type $lineStrategicsArray
      * @return type
@@ -114,7 +84,7 @@ class ObjetiveRepository extends baseEntityRepository {
      * @param type $objetiveParentsArray
      * @return type
      */
-    public function getByParent($objetiveParentsArray){
+    public function getByParent($objetiveParentsArray,$options = array()){
         $securityContext = $this->getSecurityContext();
         
         $query = $this->createQueryBuilder('o');
@@ -123,9 +93,16 @@ class ObjetiveRepository extends baseEntityRepository {
                 ->innerJoin('o.parents', 'p')
                 ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
                 ;
-        
-        if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-            $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+        if(isset($options['fromIndicator'])){
+            if(isset($options['gerenciaFirstId'])){
+                $query->andWhere("o.gerencia = " . $options['gerenciaFirstId']);
+            } elseif(isset($options['gerenciaSecondId'])){
+                $query->andWhere("o.gerenciaSecond = " . $options['gerenciaSecondId']);
+            }
+        } else{
+            if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+            }
         }
 
         return $query->getQuery()->getResult();

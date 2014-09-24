@@ -52,11 +52,11 @@ form:
     arrangementRangeTypeBottom: Tipo de Rango Bajo
     textResObj: Res. Obj.
     
-    rankArrangement: Rango de Gestión
-    rankArrangementTop: Rango de Gestión Alto
-    rankArrangementMiddleTop: Rango de Gestión Medio Alto
-    rankArrangementMiddleBottom: Rango de Gestión Medio Bajo
-    rankArrangementBottom: Rango de Gestión Bajo
+    rankArrangement: Rango del Objetivo
+    rankArrangementTop: Rango Alto
+    rankArrangementMiddleTop: Rango Medio Alto
+    rankArrangementMiddleBottom: Rango Medio Bajo
+    rankArrangementBottom: Rango Bajo
     
     rankTop: Rango Alto 
     rankMiddleTop: Rango Medio Alto
@@ -73,6 +73,8 @@ form:
     
     typeEvaluation: Tipo de Evaluación
     evalObjetive: Por Objetivo
+    evalByObjetiveTactic: Ponderación de objetivos tácticos
+    evalByObjetiveOperative: Ponderación de objetivos operativos
     evalIndicator: Por Indicador
     evalArrangementProgram: Por Programa de Gestión
     formEvaluation: Forma de Evaluación
@@ -123,6 +125,8 @@ form:
         rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
         
         evalObjetive: Seleccione si el objetivo será evaluado por sub-objetivos
+        evalByObjetiveTactic: Seleccione si el objetivo será evaluado por la ponderación de objetivos tácticos
+        evalByObjetiveOperative: Seleccione si el objetivo será evaluado por la ponderación de objetivos operativos
         evalIndicator: Seleccione si el objetivo será evaluado por indicadores
         evalArrangementProgram: Seleccione si el objetivo será evaluado por programas de gestión
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
