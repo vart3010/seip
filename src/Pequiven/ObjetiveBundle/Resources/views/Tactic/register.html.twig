@@ -24,7 +24,7 @@
         </h1>
     </hgroup>
     
-    <form action="{{ path('pequiven_objetive_menu_add_tactic') }}" {{ form_enctype(form) }} method="POST">
+    <form id="registerObjetiveTacticForm" action="{{ path('pequiven_objetive_menu_add_tactic') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
             <!-- Hidden con "ComplejoName" de la persona que esta logueada -->
@@ -308,6 +308,10 @@
 
 {% block javascript %}
     <script type="text/javascript">
+
+        jQuery(document).ready(function(){
+            jQuery('#registerObjetiveTacticForm').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        });
 
         var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
             messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica

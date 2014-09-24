@@ -196,12 +196,12 @@ class ArrangementProgramController extends Controller
         $originalGoals = new ArrayCollection();
 
         // Create an ArrayCollection of the current Tag objects in the database
-        foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline as $timeline->getGoals()) {
-                
-            }
-            $originalTags->add($tag);
-        }
+//        foreach ($entity->getTimelines() as $timeline) {
+//            foreach ($timeline as $timeline->getGoals()) {
+//                
+//            }
+//            $originalTags->add($tag);
+//        }
         
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);

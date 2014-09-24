@@ -23,7 +23,7 @@
         </h1>
     </hgroup>
     
-    <form action="{{ path('pequiven_indicator_menu_add_tactic') }}" {{ form_enctype(form) }} method="POST">
+    <form id="registerIndicatorTacticForm" action="{{ path('pequiven_indicator_menu_add_tactic') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
@@ -268,6 +268,11 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        
+        jQuery(document).ready(function(){
+            jQuery('#registerIndicatorTacticForm').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        });
+        
         var selectLineStrategic = $("#pequiven_indicator_tactic_registration_lineStrategics"),//Select de Línea Estratégica
             selectObjetiveStrategic = $("#pequiven_indicator_tactic_registration_parents"),//Select de Objetivo Estratégico
             selectObjetiveTactic = $("#pequiven_indicator_tactic_registration_parentTactic"),//Select de Objetivo Táctico

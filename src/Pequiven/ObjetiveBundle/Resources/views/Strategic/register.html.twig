@@ -25,7 +25,7 @@
         </h1>
     </hgroup>
     
-    <form action="{{ path('pequiven_objetive_menu_add_strategic') }}" {{ form_enctype(form) }} method="POST">
+    <form id="registerObjetiveStrategicForm" action="{{ path('pequiven_objetive_menu_add_strategic') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
 
@@ -44,7 +44,7 @@
             <!-- Descripción del objetivo -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
-                {{ form_widget(form.description,{'attr':{'class':'input' } }) }}
+                {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
@@ -232,6 +232,10 @@
 {% block javascript %}
         
     <script type="text/javascript">
+        
+        jQuery(document).ready(function(){
+            jQuery('#registerObjetiveStrategicForm').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        });
         
         var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
             messageCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
