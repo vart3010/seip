@@ -11,20 +11,18 @@ namespace Pequiven\SEIPBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\MasterBundle\Entity\Gerencia;
 use Pequiven\MasterBundle\Entity\GerenciaSecond;
 use Pequiven\SEIPBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Description of UserFixture
  *
  * @author matias
  */
 class UserFixture extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface {
-    //put your code here
-    //put your code here
     protected $container;
     public function load(ObjectManager $manager){
         

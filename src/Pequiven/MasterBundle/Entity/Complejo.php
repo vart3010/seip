@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Complejo as modelComplejo;
 
 /**
- * Complejo
+ * Localidad
  *
  * @ORM\Table(name="seip_c_complejo")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\ComplejoRepository")
@@ -246,5 +246,9 @@ class Complejo extends modelComplejo
     public function getRef()
     {
         return $this->ref;
+    }
+    
+    public function __toString() {
+        return $this->description;
     }
 }

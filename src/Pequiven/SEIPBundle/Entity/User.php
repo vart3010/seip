@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * User model
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
  * @ORM\Table(name="seip_user")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
@@ -83,7 +83,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /** 
      * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
@@ -91,6 +92,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * Gerencia
+     * 
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
@@ -99,6 +101,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * GerenciaSecond
+     * 
      * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
      * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
@@ -107,6 +110,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      * Cargo
+     * 
      * @var \Pequiven\MasterBundle\Entity\Cargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
@@ -438,5 +442,9 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getGerenciaSecond()
     {
         return $this->gerenciaSecond;
+    }
+    
+    public function __toString() {
+        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
     }
 }

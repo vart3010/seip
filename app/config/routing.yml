@@ -1,3 +1,8 @@
+pequiven_arrangement_program:
+    resource: "@PequivenArrangementProgramBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 pequiven_arrangement:
     resource: "@PequivenArrangementBundle/Controller/"
     type:     annotation
@@ -58,6 +63,9 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
+    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
     
 _bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    

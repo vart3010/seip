@@ -1,0 +1,54 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ArrangementProgram</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Process</th>
+                <td>{{ entity.process }}</td>
+            </tr>
+            <tr>
+                <th>Timelines</th>
+                <td>
+                    {% for timeline in entity.timelines %}
+                        {% for goal in timeline.goals %}
+                            Meta {{ loop.index }}: {{ goal.name }}<br/>
+                        {% endfor %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Revisiondate</th>
+                <td>{{ entity.revisionDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Approvaldate</th>
+                <td>{{ entity.approvalDate|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ entity.status }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('pequiven_arrangementprogram') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('arrangementprogram_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

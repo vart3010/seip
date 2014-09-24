@@ -1,0 +1,57 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_arrangementprogram') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.list'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Process</th>
+                <th>Timelines</th>
+                <th>Revisiondate</th>
+                <th>Approvaldate</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('arrangementprogram_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.process }}</td>
+                <td>{{ entity.timelines }}</td>
+                <td>{% if entity.revisionDate %}{{ entity.revisionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.approvalDate %}{{ entity.approvalDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.status }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('arrangementprogram_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('arrangementprogram_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('pequiven_arrangementprogram_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

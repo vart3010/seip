@@ -1,0 +1,10 @@
+Pequiven\SEIPBundle\Entity\User:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        firstName:
+            expose: true
+        lastName:
+            expose: true

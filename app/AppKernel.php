@@ -26,8 +26,9 @@ class AppKernel extends Kernel
             
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
             new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Generado de rutas javascript
             
-            new JMS\SerializerBundle\JMSSerializerBundle($this),//Serializador de objetos en json y xml
+            new JMS\SerializerBundle\JMSSerializerBundle(),//Serializador de objetos en json y xml
             new JMS\TranslationBundle\JMSTranslationBundle(),//Traductor optimizado
             
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
@@ -42,11 +43,13 @@ class AppKernel extends Kernel
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
             new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
             new Tecnocreaciones\Bundle\ToolsBundle\TecnocreacionesToolsBundle(),
+            
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),
             new Pequiven\IndicatorBundle\PequivenIndicatorBundle(),
             new Pequiven\ArrangementBundle\PequivenArrangementBundle(),
+            new Pequiven\ArrangementProgramBundle\PequivenArrangementProgramBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

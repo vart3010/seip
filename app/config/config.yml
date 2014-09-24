@@ -103,13 +103,29 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            
+            angular_dependencies: ['bundles/pequivenseip/angular/modules/seipModule.js']
+            angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'
 
 ext_direct:
     resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
     
+bazinga_js_translation:
+    locale_fallback: "%locale%"
+
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-d H:m:s" # ISO8601
+    metadata:
+        debug: "%kernel.debug%"
+        auto_detection: true
+        directories:
+            FOSUserBundle:
+                namespace_prefix: FOS\UserBundle
+                path: "@PequivenSEIPBundle/Resources/config/serializer/fos"
+                
 sylius_resource:
     resources:
         #Objetivo estratégico

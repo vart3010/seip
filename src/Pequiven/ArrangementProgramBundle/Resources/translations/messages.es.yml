@@ -1,0 +1,7 @@
+pequiven:
+    actions:
+        edit: Editar
+        delete: Eliminar
+    modal:
+        title:
+            goal: Meta

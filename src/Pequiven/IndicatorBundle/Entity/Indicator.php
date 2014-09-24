@@ -503,29 +503,6 @@ class Indicator extends modelIndicator {
     }
 
     /**
-     * Set refParent
-     *
-     * @param string $refParent
-     * @return Indicator
-     */
-//    public function setRefParent($refParent)
-//    {
-//        $this->refParent = $refParent;
-//
-//        return $this;
-//    }
-
-    /**
-     * Get refParent
-     *
-     * @return string 
-     */
-//    public function getRefParent()
-//    {
-//        return $this->refParent;
-//    }
-
-    /**
      * Add objetives
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
@@ -585,7 +562,10 @@ class Indicator extends modelIndicator {
     public function resetObjetives(){
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    public function __toString() {
+        return $this->description;
+    }
+    
     /**
      * Set refParent
      *
