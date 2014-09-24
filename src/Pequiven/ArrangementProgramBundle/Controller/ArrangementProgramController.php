@@ -148,7 +148,11 @@ class ArrangementProgramController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
-
+        foreach ($entity->getTimelines() as $timeline) {
+            foreach ($timeline->getGoals() as $goal) {
+                //var_dump($goal);
+            }
+        }
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -169,9 +173,6 @@ class ArrangementProgramController extends Controller
             'action' => $this->generateUrl('arrangementprogram_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
     /**
@@ -190,7 +191,18 @@ class ArrangementProgramController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
+        
+    
+        $originalGoals = new ArrayCollection();
 
+        // Create an ArrayCollection of the current Tag objects in the database
+        foreach ($entity->getTimelines() as $timeline) {
+            foreach ($timeline as $timeline->getGoals()) {
+                
+            }
+            $originalTags->add($tag);
+        }
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
