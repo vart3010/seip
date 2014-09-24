@@ -25,7 +25,7 @@ class GoalDetails
      * Planificado para enero
      * @var integer
      *
-     * @ORM\Column(name="januaryPlanned", type="integer")
+     * @ORM\Column(name="januaryPlanned", type="integer",nullable=true)
      */
     private $januaryPlanned;
 
@@ -33,7 +33,7 @@ class GoalDetails
      * Real de enero
      * @var integer
      *
-     * @ORM\Column(name="januaryReal", type="integer")
+     * @ORM\Column(name="januaryReal", type="integer",nullable=true)
      */
     private $januaryReal;
 
@@ -41,7 +41,7 @@ class GoalDetails
      * Planificado para febrero
      * @var integer
      *
-     * @ORM\Column(name="februaryPlanned", type="integer")
+     * @ORM\Column(name="februaryPlanned", type="integer",nullable=true)
      */
     private $februaryPlanned;
 
@@ -49,7 +49,7 @@ class GoalDetails
      * Real de febrero
      * @var integer
      *
-     * @ORM\Column(name="februaryReal", type="integer")
+     * @ORM\Column(name="februaryReal", type="integer",nullable=true)
      */
     private $februaryReal;
 
@@ -57,14 +57,14 @@ class GoalDetails
      * Planificado para marzo
      * @var integer
      *
-     * @ORM\Column(name="marchPlanned", type="integer")
+     * @ORM\Column(name="marchPlanned", type="integer",nullable=true)
      */
     private $marchPlanned;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="marchReal", type="integer")
+     * @ORM\Column(name="marchReal", type="integer",nullable=true)
      */
     private $marchReal;
 
@@ -72,7 +72,7 @@ class GoalDetails
      * Planificado para abril
      * @var integer
      *
-     * @ORM\Column(name="aprilPlanned", type="integer")
+     * @ORM\Column(name="aprilPlanned", type="integer",nullable=true)
      */
     private $aprilPlanned;
 
@@ -80,7 +80,7 @@ class GoalDetails
      * Real de abril
      * @var integer
      *
-     * @ORM\Column(name="aprilReal", type="integer")
+     * @ORM\Column(name="aprilReal", type="integer",nullable=true)
      */
     private $aprilReal;
 
@@ -88,7 +88,7 @@ class GoalDetails
      * Planificado para mayo
      * @var integer
      *
-     * @ORM\Column(name="mayPlanned", type="integer")
+     * @ORM\Column(name="mayPlanned", type="integer",nullable=true)
      */
     private $mayPlanned;
 
@@ -96,7 +96,7 @@ class GoalDetails
      * Real de mayo
      * @var integer
      *
-     * @ORM\Column(name="mayReal", type="integer")
+     * @ORM\Column(name="mayReal", type="integer",nullable=true)
      */
     private $mayReal;
 
@@ -104,7 +104,7 @@ class GoalDetails
      * Planificado para junio
      * @var integer
      *
-     * @ORM\Column(name="junePlanned", type="integer")
+     * @ORM\Column(name="junePlanned", type="integer",nullable=true)
      */
     private $junePlanned;
 
@@ -112,7 +112,7 @@ class GoalDetails
      * Real de junio
      * @var integer
      *
-     * @ORM\Column(name="juneReal", type="integer")
+     * @ORM\Column(name="juneReal", type="integer",nullable=true)
      */
     private $juneReal;
 
@@ -120,7 +120,7 @@ class GoalDetails
      * Planificado para julio
      * @var integer
      *
-     * @ORM\Column(name="julyPlanned", type="integer")
+     * @ORM\Column(name="julyPlanned", type="integer",nullable=true)
      */
     private $julyPlanned;
 
@@ -128,7 +128,7 @@ class GoalDetails
      * Real de julio
      * @var integer
      *
-     * @ORM\Column(name="julyReal", type="integer")
+     * @ORM\Column(name="julyReal", type="integer",nullable=true)
      */
     private $julyReal;
 
@@ -136,7 +136,7 @@ class GoalDetails
      * Planificado para agosto
      * @var integer
      *
-     * @ORM\Column(name="augustPlanned", type="integer")
+     * @ORM\Column(name="augustPlanned", type="integer",nullable=true)
      */
     private $augustPlanned;
 
@@ -144,7 +144,7 @@ class GoalDetails
      * Real de agosto
      * @var integer
      *
-     * @ORM\Column(name="augustReal", type="integer")
+     * @ORM\Column(name="augustReal", type="integer",nullable=true)
      */
     private $augustReal;
 
@@ -152,7 +152,7 @@ class GoalDetails
      * Planificado para septiembre
      * @var integer
      *
-     * @ORM\Column(name="septemberPlanned", type="integer")
+     * @ORM\Column(name="septemberPlanned", type="integer",nullable=true)
      */
     private $septemberPlanned;
 
@@ -160,7 +160,7 @@ class GoalDetails
      * Real de septiembre
      * @var integer
      *
-     * @ORM\Column(name="septemberReal", type="integer")
+     * @ORM\Column(name="septemberReal", type="integer",nullable=true)
      */
     private $septemberReal;
 
@@ -168,7 +168,7 @@ class GoalDetails
      * Planificado para octubre
      * @var integer
      *
-     * @ORM\Column(name="octoberPlanned", type="integer")
+     * @ORM\Column(name="octoberPlanned", type="integer",nullable=true)
      */
     private $octoberPlanned;
 
@@ -176,7 +176,7 @@ class GoalDetails
      * Real de octubre
      * @var integer
      *
-     * @ORM\Column(name="octoberReal", type="integer")
+     * @ORM\Column(name="octoberReal", type="integer",nullable=true)
      */
     private $octoberReal;
 
@@ -184,7 +184,7 @@ class GoalDetails
      * Planificado para noviembre
      * @var integer
      *
-     * @ORM\Column(name="novemberPlanned", type="integer")
+     * @ORM\Column(name="novemberPlanned", type="integer",nullable=true)
      */
     private $novemberPlanned;
 
@@ -192,7 +192,7 @@ class GoalDetails
      * Real de noviembre
      * @var integer
      *
-     * @ORM\Column(name="novemberReal", type="integer")
+     * @ORM\Column(name="novemberReal", type="integer",nullable=true)
      */
     private $novemberReal;
 
@@ -200,7 +200,7 @@ class GoalDetails
      * Planificado para diciembre
      * @var integer
      *
-     * @ORM\Column(name="decemberPlanned", type="integer")
+     * @ORM\Column(name="decemberPlanned", type="integer",nullable=true)
      */
     private $decemberPlanned;
 
@@ -208,7 +208,7 @@ class GoalDetails
      * Real de diciembre
      * @var integer
      *
-     * @ORM\Column(name="decemberReal", type="integer")
+     * @ORM\Column(name="decemberReal", type="integer",nullable=true)
      */
     private $decemberReal;
 
@@ -218,7 +218,7 @@ class GoalDetails
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = 0;
     
     /**
      * Meta

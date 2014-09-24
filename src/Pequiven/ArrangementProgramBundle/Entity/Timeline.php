@@ -25,7 +25,7 @@ class Timeline
      * Metas
      * @var \Pequiven\ArrangementProgramBundle\Entity\Goal
      * 
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="timeline")
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="timeline",cascade={"persist"})
      */
     private $goals;
     
@@ -35,13 +35,14 @@ class Timeline
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = 0;
 
     /**
      * Programa de gestion
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
      * 
      * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timelines")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $arrangementProgram;
     /**
@@ -93,7 +94,8 @@ class Timeline
      */
     public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
     {
-        $this->goals[] = $goals;
+        $goals->setTimeline($this);
+        $this->goals->add($goals);
 
         return $this;
     }

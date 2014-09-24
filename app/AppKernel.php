@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
             new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
             new Tecnocreaciones\Bundle\ToolsBundle\TecnocreacionesToolsBundle(),
+            
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),

@@ -18,7 +18,7 @@
     </hgroup>
         
     {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
-     
+        {{ form_errors(form) }}
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
             <div class="field-block button-height">
@@ -81,7 +81,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="7">
-                            [[ goals.length ]] {{ "pequiven.goals.goals"|trans }}
+                            {$ goals.length $} {{ "pequiven.goals.goals"|trans }}
                         </td>
                     </tr>
                 </tfoot>
@@ -93,21 +93,21 @@
                     </tr>
                     <tr ng-repeat="goal in goals">
                         <th scope="row">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_name" value="[[ goal.name ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_typeGoal" value="[[ goal.type_goal.id ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_startDate" value="[[ goal.start_date ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_endDate" value="[[ goal.end_date ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_responsible" value="[[ goal.responsible.id ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_weight" value="[[ goal.weight ]]">
-                            <input type="hidden" name="arrangementprogram_timelines_0_goals_[[ $index ]]_observations" value="[[ goal.observations ]]">
-                            [[ goal.name ]]<br>
-                            <small>[[ goal.observations ]]</small>
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][name]" value="{$ goal.name $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][typeGoal]" value="{$ goal.type_goal.id $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][startDate]" value="{$ goal.start_date $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][endDate]" value="{$ goal.end_date $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][responsible]" value="{$ goal.responsible.id $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
+                            <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
+                            {$ goal.name $}<br>
+                            <small>{$ goal.observations $}</small>
                         </th>
-                        <td>[[ goal.type_goal.description ]]</td>
-                        <td>[[ goal.start_date ]]</td>
-                        <td>[[ goal.end_date ]]</td>
-                        <td>[[ goal.weight ]]</td>
-                        <td>[[ goal.responsible.first_name + " "+ goal.responsible.last_name ]] <small class="tag">[[ " ("+goal.responsible.username+")" ]]</small></td>
+                        <td>{$ goal.type_goal.description $}</td>
+                        <td>{$ goal.start_date $}</td>
+                        <td>{$ goal.end_date $}</td>
+                        <td>{$ goal.weight $}</td>
+                        <td>{$ goal.responsible.first_name + " "+ goal.responsible.last_name $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
                         <td class="align-right vertical-center">
                             <span class="button-group compact">
                                 <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>

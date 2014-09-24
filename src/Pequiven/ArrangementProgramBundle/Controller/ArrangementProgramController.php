@@ -47,8 +47,11 @@ class ArrangementProgramController extends Controller
         $entity = new ArrangementProgram();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
         if ($form->isValid()) {
+            $timelines = $entity->getTimelines();
+            foreach ($timelines as $timeline) {
+                $timeline->setArrangementProgram($entity);
+            }
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();

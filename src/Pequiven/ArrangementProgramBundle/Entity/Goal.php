@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Goal
 {
@@ -84,12 +85,13 @@ class Goal
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = 0;
     
     /**
      * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
      * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",inversedBy="goals")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $timeline;
     
@@ -97,7 +99,8 @@ class Goal
      * Detalles de la meta
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="")
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="goal",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
 
@@ -339,5 +342,13 @@ class Goal
     public function getGoalDetails()
     {
         return $this->goalDetails;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->goalDetails = new GoalDetails();
     }
 }

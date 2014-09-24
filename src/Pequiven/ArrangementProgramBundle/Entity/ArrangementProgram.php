@@ -92,7 +92,7 @@ class ArrangementProgram
      * Lineas de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram")
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist"})
      */
     private $timelines;
 
