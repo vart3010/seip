@@ -15,7 +15,13 @@
             </tr>
             <tr>
                 <th>Timelines</th>
-                <td>{{ entity.timelines }}</td>
+                <td>
+                    {% for timeline in entity.timelines %}
+                        {% for goal in timeline.goals %}
+                            Meta {{ loop.index }}: {{ goal.name }}<br/>
+                        {% endfor %}
+                    {% endfor %}
+                </td>
             </tr>
             <tr>
                 <th>Revisiondate</th>
@@ -34,7 +40,7 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('arrangementprogram') }}">
+        <a href="{{ path('pequiven_arrangementprogram') }}">
             Back to the list
         </a>
     </li>
