@@ -61,7 +61,7 @@ class ObjetiveTacticController extends baseController{
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByLevel',
+                'createPaginatorTactic',
                 array($criteria, $sorting)
             );
             

@@ -41,16 +41,16 @@
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveOperativeList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
-                            <td data-title="'{{ 'form.lineStrategic'|trans }}'" >
-                                <a href="[[ result._links.self.href ]]">[[result.line_strategic.ref+result.line_strategic.description]]</a>
+                            <td data-title="'{{ 'form.lineStrategic'|trans }}'" filter="{'parentsParentsLineStrategicDescription' : 'text'}">
+                                <a href="[[ result._links.self.href ]]">[[result.parents[0].parents[0].line_strategics[0].ref+result.parents[0].parents[0].line_strategics[0].description]]</a>
                             </td>
-                            <td data-title="'{{ 'form.parent_strategic'|trans }}'">
-                                <a href="[[ result._links.self.href ]]">[[result.parent.parent.ref+result.parent.parent.description]]</a>
+                            <td data-title="'{{ 'form.objetiveStrategic'|trans }}'" filter="{'parentsParentsDescription' : 'text'}">
+                                <a href="[[ result._links.self.href ]]">[[result.parents[0].parents[0].ref+result.parents[0].parents[0].description]]</a>
                             </td>
-                            <td data-title="'{{ 'form.parent_tactic'|trans }}'">
-                                <a href="[[ result._links.self.href ]]">[[result.parent.ref+result.parent.description]]</a>
+                            <td data-title="'{{ 'form.objetiveTactic'|trans }}'" filter="{'parentsDescription' : 'text'}">
+                                <a href="[[ result._links.self.href ]]">[[result.parents[0].ref+result.parents[0].description]]</a>
                             </td>
-                            <td data-title="'{{ 'form.objetive'|trans }}'" sortable="'ref'">
+                            <td data-title="'{{ 'form.objetiveOperative'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
                                 <a href="[[ result._links.self.href ]]">[[result.ref+result.description]]</a>
                             </td>
                             
@@ -67,13 +67,16 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-                response =  '<strong>{{ 'pequiven_objetive.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.ref + ' ' + data.line_strategic.description + '<br>'
-                            ;
+                
                 var totalIndicators = data.indicators.length;
                 if(totalIndicators > 0){
                     response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
                     for(var i = 0; i < totalIndicators; i++){
-                        response = response + data.indicators[i].ref + data.indicators[i].description + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation + '<br>';
+                        response = response + data.indicators[i].ref + data.indicators[i].description;
+                        if(data.indicators[i].formula){
+                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
+                        }
+                        response = response + '<br>';
                     }
                 }
                 return response;

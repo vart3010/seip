@@ -102,7 +102,7 @@ objetiveStrategicList:
     defaults: 
         _controller: pequiven.controller.objetivestrategic:objetiveListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorStrategic
 
 #Devuelve el paginador con la data de los objetivos tácticos
 objetiveTacticList:
@@ -110,7 +110,7 @@ objetiveTacticList:
     defaults: 
         _controller: pequiven.controller.objetivetactic:objetiveListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorTactic
             
 #Devuelve el paginador con la data de los objetivos operativos
 objetiveOperativeList:
@@ -118,4 +118,4 @@ objetiveOperativeList:
     defaults: 
         _controller: pequiven.controller.objetiveoperative:objetiveListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorOperative
