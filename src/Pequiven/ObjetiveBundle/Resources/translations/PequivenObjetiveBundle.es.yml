@@ -50,7 +50,7 @@ form:
     arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
     arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
     arrangementRangeTypeBottom: Tipo de Rango Bajo
-    textResObj: Res. Obj.
+    textResObj: Valor
     
     rankArrangement: Rango del Objetivo
     rankArrangementTop: Rango Alto

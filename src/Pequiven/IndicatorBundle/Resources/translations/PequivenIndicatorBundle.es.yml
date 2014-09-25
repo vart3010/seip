@@ -46,7 +46,7 @@ form:
     arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
     arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
     arrangementRangeTypeBottom: Tipo de Rango Bajo
-    textResInd: Res. Ind.
+    textResInd: Valor
     
     rankArrangement: Rango del Indicador
     rankArrangementTop: Rango Alto
