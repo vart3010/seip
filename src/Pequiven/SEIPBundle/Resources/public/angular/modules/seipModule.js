@@ -234,6 +234,7 @@ angular.module('seipModule.controllers', [])
     .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
 //        console.log($scope.tableParams.$params.groupBy);
-console.log($scope.tableParams);
+//        console.log($scope.tableParams);
+//        console.log($scope.tableParams.settings().pages);
     })
     ;        

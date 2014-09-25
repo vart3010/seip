@@ -107,7 +107,7 @@ class Timeline
      */
     public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
     {
-//        xdebug_print_function_stack();
+        xdebug_print_function_stack();
         var_dump('removeGoal');
         //var_dump($goals);
         $goals->setTimeline(null);
