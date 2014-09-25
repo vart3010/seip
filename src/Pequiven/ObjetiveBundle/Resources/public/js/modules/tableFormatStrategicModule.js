@@ -5,7 +5,7 @@ var tableFormatObjetiveStrategic = angular.module('tableFormatObjetiveStrategic'
                 page: 1, // show first page
                 count: 10 // count per page
             }, {
-                groupBy: 'line_strategic.description',
+                groupBy: 'line_strategics[0].ref',
                 total: 0, // length of data
                 getData: function($defer, params) {
                     var parameters = params.url();
