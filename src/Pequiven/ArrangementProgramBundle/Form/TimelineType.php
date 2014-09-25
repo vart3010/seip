@@ -19,6 +19,7 @@ class TimelineType extends AbstractType
                 'type' => new GoalType(),
                 'allow_add'    => true,
                 'allow_delete' => true,
+                'by_reference' => false,
                 'cascade_validation' => true,
             ))
         ;

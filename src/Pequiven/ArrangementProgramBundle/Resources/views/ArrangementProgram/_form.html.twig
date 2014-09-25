@@ -44,10 +44,6 @@
         {{ form_errors(form.responsible) }}
     </div>
 </fieldset>
-    <div id="dialog-form">
-        <div ng-include="template.url" onload="templateLoad(template)"></div>
-    </div>
-
     <table class="simple-table responsive-table" id="sorting-example2">
         <thead>
                 <tr>
@@ -67,7 +63,7 @@
                 </td>
             </tr>
         </tfoot>
-        <tbody ng-init="goals={{ entity.timelines[0].goals|serialize }}">
+        <tbody ng-init="{% if entity.timelines.count > 0 %}goals={{ entity.timelines[0].goals|serialize }}{% endif %}">
             <tr ng-if="goals.length == 0">
                 <td colspan="7" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}

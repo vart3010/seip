@@ -48,10 +48,6 @@ class ArrangementProgramController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $timelines = $entity->getTimelines();
-            foreach ($timelines as $timeline) {
-                $timeline->setArrangementProgram($entity);
-            }
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -148,11 +144,7 @@ class ArrangementProgramController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
-        foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline->getGoals() as $goal) {
-                //var_dump($goal);
-            }
-        }
+        
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -193,21 +185,44 @@ class ArrangementProgramController extends Controller
         }
         
     
-        $originalGoals = new ArrayCollection();
-
+        $originalTimelines = new \Doctrine\Common\Collections\ArrayCollection();
         // Create an ArrayCollection of the current Tag objects in the database
         foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline as $timeline->getGoals()) {
-                
+            foreach ($timeline->getGoals() as $goal) {
+//                var_dump($goal);
             }
-            $originalTags->add($tag);
+            $originalTimelines->add($timeline);
         }
         
         $deleteForm = $this->createDeleteForm($id);
+        
         $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
+        var_dump("bbb");
+        $editForm->submit($request);
 
         if ($editForm->isValid()) {
+            $timelines = $entity->getTimelines();
+            var_dump("aaa");
+            var_dump($timelines[0]);
+            var_dump($_POST['arrangementprogram']['timelines']['0']['goals']);
+            foreach ($originalTimelines as $originalTimeline) {
+                if(false === $entity->getTimelines()->contains($originalTimeline)){
+                    $entity->getTimelines()->removeElement($originalTimeline);
+                    $em->remove($originalTimeline);
+                }else{
+                    $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
+                    //var_dump($timeline->getGoals());
+                    foreach ($originalTimeline->getGoals() as $originalGoal) {
+                        var_dump($timeline->getGoals()->contains($originalGoal));
+                        if(false === $timeline->getGoals()->contains($originalGoal)){
+                            $timeline->getGoals()->removeElement($originalGoal);
+                            $em->remove($originalGoal);
+                        }
+                    }
+                }
+                
+            }
+            die;
             $em->flush();
 
             return $this->redirect($this->generateUrl('arrangementprogram_edit', array('id' => $id)));

@@ -44,36 +44,36 @@
         $.fn.styleSelect.defaults.searchText = '{{ 'tecnocreaciones_vzla_government.search'|trans }}';
     </script>
     <script type="text/ng-template" id="ng-table/filters/select.html">
-        <select ng-options="data.id as data.title for data in column.data" ng-model="params.filter()[name]" ng-show="filter=='select'" class="select auto-refresh expandable-list input-small" name="[[column.filterName]]"> </select>
+        <select ng-options="data.id as data.title for data in column.data" ng-model="params.filter()[name]" ng-show="filter=='select'" class="select auto-refresh expandable-list input-small" name="{$column.filterName$}"> </select>
     </script>
     <script type="text/ng-template" id="ng-table/filters/text.html">
-        <input type="text" name="[[ column.filterName ]]" ng-model="params.filter()[name]" ng-if="filter=='text'" class="input input-small"/>
+        <input type="text" name="{$ column.filterName $}" ng-model="params.filter()[name]" ng-if="filter=='text'" class="input input-small"/>
     </script>
     <script type="text/ng-template" id="ng-table/headers/checkbox.html">
         <input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
     </script>
     <script type="text/ng-template" id="custom/header">
         <tr>
-            <td colspan="[[ $columns.length ]]">
+            <td colspan="{$ $columns.length $}">
                 <div class="table-header button-height anthracite-gradient">
                     <div class="float-right ng-cloak ng-table-pager">
                         {{ 'tecnocreaciones_vzla_government.search'|trans }}&nbsp;<input ng-model="tableParams.search" type="text" name="table_search" id="table_search" value="" class="input mid-margin-left">
                     </div>
                         {{ 'tecnocreaciones_vzla_government.show'|trans }}&nbsp;
                     <select name="range"  class="select red-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
-                        <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="[[count]]">
-                            <span ng-bind="count">[[count]]</span>
+                        <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="{$count$}">
+                            <span ng-bind="count">{$count$}</span>
                         </option>
                     </select>
                     <button ng-click="tableParams.reload()" class="button pull-right icon-refresh icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" ></button>
                     <button ng-click="tableParams.sorting({})" class="button pull-right icon-cross-round icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.clear_sorting'|trans }}"></button>
-                    <a ng-href="[[ csv.link() ]]"  class="button pull-right icon-download icon-size2 red-gradient glossy" ng-mousedown="csv.generate()" download="{{ 'tecnocreaciones_vzla_government.content'|trans }}.csv" title="{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}">{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}</a>
+                    <a ng-href="{$ csv.link() $}"  class="button pull-right icon-download icon-size2 red-gradient glossy" ng-mousedown="csv.generate()" download="{{ 'tecnocreaciones_vzla_government.content'|trans }}.csv" title="{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}">{{ 'tecnocreaciones_vzla_government.export_to_csv'|trans }}</a>
                 </div>
             </td>
         </tr>
     </tr>
     <tr>
-        <th ng-repeat="column in $columns" ng-class="{'sortable': parse(column.sortable), 'sort-asc': params.sorting()[parse(column.sortable)]=='asc', 'sort-desc': params.sorting()[parse(column.sortable)]=='desc' }" ng-click="sortBy(column, $event)" ng-show="column.show(this)" ng-init="template=column.headerTemplateURL(this)" class="header [[column.class]]">
+        <th ng-repeat="column in $columns" ng-class="{'sortable': parse(column.sortable), 'sort-asc': params.sorting()[parse(column.sortable)]=='asc', 'sort-desc': params.sorting()[parse(column.sortable)]=='desc' }" ng-click="sortBy(column, $event)" ng-show="column.show(this)" ng-init="template=column.headerTemplateURL(this)" class="header {$column.class$}">
             <div ng-if="!template" ng-show="!template" ng-bind="parse(column.title)"></div>
             <div ng-if="template" ng-show="template">
                 <div ng-include="template"></div>
@@ -126,7 +126,7 @@
                 <button type="submit" class="button red-gradient glossy">{{ 'tecnocreaciones_vzla_government.go'|trans }}</button>
                 &nbsp;&nbsp;&nbsp; 
             #}
-            [[ params.settings().total ]] {{ 'tecnocreaciones_vzla_government.entries_found'|trans }}
+            {$ params.settings().total $} {{ 'tecnocreaciones_vzla_government.entries_found'|trans }}
         </form>
     </script>
 
