@@ -30,11 +30,15 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
 
     
     public function onPostSerialize(\JMS\Serializer\EventDispatcher\ObjectEvent $event)
-    {        
+    {
         //var_dump('hola');
         //var_dump($event->getObject());
-        $lineStrategics = $event->getObject()->getLineStrategics();
-        $event->getVisitor()->addData('groupBy',$lineStrategics[0]->getRef().$lineStrategics[0]->getDescription());
+        if($event->getObject()->getObjetiveLevel()->getLevel() === \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            $lineStrategics = $event->getObject()->getLineStrategics();
+            $event->getVisitor()->addData('groupBy',$lineStrategics[0]->getRef().$lineStrategics[0]->getDescription());
+        } elseif($event->getObject()->getObjetiveLevel()->getLevel() === \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+            $event->getVisitor()->addData('groupBy','');
+        }
         //die();
         // do something
     }
