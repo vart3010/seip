@@ -118,9 +118,9 @@
         <div class="hidden-on-desktop">
             <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
         </div>
-        <div class="message-loading [[ notificationBarService.getLoadStatus().error_class ]]" ng-show="notificationBarService.getLoadStatus().showStatus">
+        <div class="message-loading {$ notificationBarService.getLoadStatus().error_class $}" ng-show="notificationBarService.getLoadStatus().showStatus">
                 <span ng-hide="true" >Cargando...</span>
-                <span ng-cloak>[[ notificationBarService.getLoadStatus().text ]]</span>
+                <span ng-cloak>{$ notificationBarService.getLoadStatus().text $}</span>
                 <span class="loader"></span>
         </div>
         <!-- Main content -->

@@ -549,7 +549,8 @@
                     }
                 },
                 formatSelectionTooBig: function(maxSize) {
-                    return "{{ 'form.messages.selectLineStrategicFormatSelectionTooBig'|trans({ '%maxsize%': 1 }) }}";
+                    return Translator.trans('form.messages.selectLineStrategicFormatSelectionTooBig', { "maxsize" : maxSize });
+{#                    return "{{ 'form.messages.selectLineStrategicFormatSelectionTooBig'|trans({ '%maxsize%': 1 }) }}";#}
                 },
             });
         }

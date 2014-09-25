@@ -149,7 +149,9 @@ angular.module('seipModule.controllers', [])
 
         var modalOpen;
         jQuery(document).ready(function() {
-            modalOpen = angular.element( "#dialog-form" ).dialog({
+            var angular = jQuery( "#dialog-form" );
+            if(angular){
+            modalOpen = angular.dialog({
                 autoOpen: false,
                         height: 650,
                         width: 800,
@@ -165,6 +167,7 @@ angular.module('seipModule.controllers', [])
                   //allFields.removeClass( "ui-state-error" );
                 }
           });
+            }
         });
         
         $scope.templateLoad = function(template){
@@ -232,6 +235,18 @@ angular.module('seipModule.controllers', [])
     })
     
     .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
+//        console.log($scope.tableParams.$params.groupBy);
+//        console.log($scope.tableParams);
+//        console.log($scope.tableParams.settings().pages);
+    })
+    .controller('TableObjetiveTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
+//        console.log($scope.tableParams.$params.groupBy);
+//        console.log($scope.tableParams);
+//        console.log($scope.tableParams.settings().pages);
+    })
+    .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);

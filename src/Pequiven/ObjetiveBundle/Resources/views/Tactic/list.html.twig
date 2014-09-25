@@ -15,21 +15,11 @@
             <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_tactic'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
-            <!--
-            {% if allow_create %}
-                <p class="button-height align-right">
-                    <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
-                            <span class="button-icon anthracite-gradient"><span class="icon-star"></span></span>
-                            {{ 'sigtec.create'|trans }}
-                    </a>
-                </p>
-            {% endif %}
-            -->
         </h1>
     </hgroup>
     
-    <div ng-controller="TableFormatController">
-        <!--<div ng-controller="ObjetiveTacticController">-->
+    <div ng-controller="TableGroupingFormatController">
+        <div ng-controller="TableObjetiveTacticController">
                 {% set filterYesNo = [
                     { 'id':0,'name': ('sigtec.no'|trans)},
                     { 'id':1,'name': ('sigtec.yes'|trans)},
@@ -39,7 +29,24 @@
                     { 'id':0,'name': ('sigtec.inactive'|trans)},
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tbody ng-repeat="group in $groups">
+                            <tr class="ng-table-group">
+                                <td colspan="{$ $columns.length $}">
+                                    <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                                        <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                                        <strong>{$ group.value $}</strong>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
+                                <td data-title="'{{ 'form.objetiveTactic'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                    <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {#<table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
                             {% set totalParents = '' %}
                             <td data-title="'{{ 'form.lineStrategic'|trans }}'" filter="{'parentsLineStrategicDescription' : 'text'}" >
@@ -48,13 +55,10 @@
                             <td data-title="'{{ 'form.objetiveStrategic'|trans }}'" filter="{'parentsDescription' : 'text'}">
                                 <a href="[[ result._links.self.href ]]">[[result.parents[0].ref+result.parents[0].description]]</a>
                             </td>
-                            <td data-title="'{{ 'form.objetiveTactic'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="[[ result._links.self.href ]]">[[result.ref+result.description]]</a>
-                            </td>
                         </tr>
-                    </table>
+                    </table>#}
                 </div>
-            <!--</div>-->
+            </div>
         </div>
 {% endblock %}
 
