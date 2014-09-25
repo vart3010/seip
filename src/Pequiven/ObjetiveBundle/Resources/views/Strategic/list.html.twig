@@ -26,12 +26,12 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('objetiveStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                             <td data-title="'{{ 'form.lineStrategic'|trans }}'" filter="{'lineStrategicDescription':'text'}" >
-                                <a href="[[ result._links.self.href ]]">[[result.line_strategics[0].ref+result.line_strategics[0].description]]</a>
+                                <a href="{$ result._links.self.href $}">{$result.line_strategics[0].ref+result.line_strategics[0].description$}</a>
                             </td>
                             <td data-title="'{{ 'form.objetiveStrategic'|trans }}'" sortable="'ref'" filter="{'description': 'text' }">
-                                <a href="[[ result._links.self.href ]]">[[result.ref+result.description]]</a>
+                                <a href="{$ result._links.self.href $}">{$result.ref+result.description$}</a>
                             </td>
                         </tr>
                     </table>
