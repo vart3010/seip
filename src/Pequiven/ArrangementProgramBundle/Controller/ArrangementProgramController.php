@@ -197,14 +197,12 @@ class ArrangementProgramController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         
         $editForm = $this->createEditForm($entity);
-        var_dump("bbb");
         $editForm->submit($request);
 
         if ($editForm->isValid()) {
             $timelines = $entity->getTimelines();
-            var_dump("aaa");
-            var_dump($timelines[0]);
-            var_dump($_POST['arrangementprogram']['timelines']['0']['goals']);
+//            var_dump($timelines[0]);
+//            var_dump($_POST['arrangementprogram']['timelines']['0']['goals']);
             foreach ($originalTimelines as $originalTimeline) {
                 if(false === $entity->getTimelines()->contains($originalTimeline)){
                     $entity->getTimelines()->removeElement($originalTimeline);
@@ -213,7 +211,7 @@ class ArrangementProgramController extends Controller
                     $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
                     //var_dump($timeline->getGoals());
                     foreach ($originalTimeline->getGoals() as $originalGoal) {
-                        var_dump($timeline->getGoals()->contains($originalGoal));
+//                        var_dump($timeline->getGoals()->contains($originalGoal));
                         if(false === $timeline->getGoals()->contains($originalGoal)){
                             $timeline->getGoals()->removeElement($originalGoal);
                             $em->remove($originalGoal);
@@ -222,7 +220,6 @@ class ArrangementProgramController extends Controller
                 }
                 
             }
-            die;
             $em->flush();
 
             return $this->redirect($this->generateUrl('arrangementprogram_edit', array('id' => $id)));
