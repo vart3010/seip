@@ -25,7 +25,7 @@
                     { 'id':0,'name': ('sigtec.inactive'|trans)},
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="'custom/pager'" template-header="custom/header" api-data-url="{{ path('objetiveStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tbody ng-repeat="group in $groups">
                             <tr class="ng-table-group">
                                 <td colspan="{$ $columns.length $}">
@@ -42,10 +42,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div ng-include="'custom/pager'"></div>
                 </div>
             </div>
-            {$ tableParams.settings() $}
         </div>
 {% endblock %}
 
