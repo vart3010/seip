@@ -86,6 +86,12 @@
       </script>
 {% endblock head_base %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- jquery-ui -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.css') }}">
+{% endblock stylesheets %}
+
 {% block javascripts_base %}
     {{ parent() }}
     {# Generador de rutas desde javascript #}
@@ -95,3 +101,9 @@
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
     
 {% endblock javascripts_base %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+{% endblock javascripts %}

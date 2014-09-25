@@ -73,7 +73,9 @@ class ArrangementProgramType extends AbstractType
             ))
             ->add('timelines','collection',array(
                 'type' => new TimelineType(),
-                'allow_add' => true,
+                'allow_add' => false,
+                'allow_delete' => false,
+                'by_reference' => false,
                 'cascade_validation' => true,
             ))
         ;
