@@ -44,6 +44,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setLastName('Jimenez')
              ->setEmail('matei249@gmail.com')
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_SUPER_ADMIN)))
+             ->setEnabled(true)
                 ;
         $this->addReference('SUPER_ADMIN', $user);
             $manager->persist($user);
@@ -58,6 +59,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setNumPersonal(10019742)
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_DIRECTIVE)))
+            ->setEnabled(true)
             ;
         $this->addReference('d-10019742', $user);
             $manager->persist($user);
@@ -71,6 +73,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setNumPersonal(10016012)
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX)))
+            ->setEnabled(true)
             ;
         $user->setParent($this->getReference('d-10019742'));
             $manager->persist($user);
@@ -96,7 +99,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setNumPersonal(10019618)
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX)))
+            ->setEnabled(true)
             ->setParent($this->getReference('d-10019742'));
+            
             $manager->persist($user);
             
         //Usuarios Gerente Generales Complejo (Análogo a Gerente 1ra línea)
@@ -110,6 +115,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]))
             ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO)))
+            ->setEnabled(true)
             ;
         $this->addReference('mf-10015700', $user);
             $manager->persist($user);
@@ -124,7 +130,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]))
             ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-            ->setParent($this->getReference('mf-10015700'));
+            ->setParent($this->getReference('mf-10015700'))
+            ->setEnabled(true);
             $manager->persist($user);
             
         $user = new User();
@@ -136,7 +143,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPM]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-             ->setParent($this->getReference('mf-10015700'));
+             ->setParent($this->getReference('mf-10015700'))
+             ->setEnabled(true);
             $manager->persist($user);
         
         $user = new User();
@@ -149,6 +157,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO)))
+             ->setEnabled(true)
             ;
         $this->addReference('mf-10018009', $user);
             $manager->persist($user);
@@ -163,7 +172,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-             ->setParent($this->getReference('mf-10018009'));
+             ->setParent($this->getReference('mf-10018009'))
+             ->setEnabled(true)
+                ;
             $manager->persist($user);
         
         $user = new User();
@@ -176,7 +187,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPAMC]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-             ->setParent($this->getReference('mf-10018009'));
+             ->setParent($this->getReference('mf-10018009'))
+             ->setEnabled(true);
             $manager->persist($user);
         
         $user = new User();
@@ -189,6 +201,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO)))
+             ->setEnabled(true)
                 ;
         $this->addReference('mf-10017367', $user);
             $manager->persist($user);
@@ -202,8 +215,10 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setNumPersonal(10016012)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]))
-             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)));
-        $user->setParent($this->getReference('mf-10017367'));
+             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
+             ->setParent($this->getReference('mf-10017367'))
+             ->setEnabled(true)
+             ;
             $manager->persist($user);
             
         $user = new User();
@@ -216,7 +231,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-             ->setParent($this->getReference('mf-10017367'));
+             ->setParent($this->getReference('mf-10017367'))
+             ->setEnabled(true);
             $manager->persist($user);
             
         $user = new User();
@@ -242,7 +258,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_PRONAVAY]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_NAVAY]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX)))
-             ->setParent($this->getReference('mf-10012577'));
+             ->setParent($this->getReference('mf-10012577'))
+             ->setEnabled(true)
+             ;
             $manager->persist($user);
             
         //Usuarios Gerente 1ra Línea
@@ -255,7 +273,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setNumPersonal(10019081)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]))
-             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST)));
+             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST)))
+             ->setEnabled(true);
         $this->addReference('mf-10019081', $user);
             $manager->persist($user);
             
@@ -269,7 +288,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX)))
-             ->setParent($this->getReference('d-10019742'));
+             ->setParent($this->getReference('d-10019742'))
+             ->setEnabled(true);
             $manager->persist($user);
             
         $user = new User();
@@ -282,7 +302,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX)))
-             ->setParent($this->getReference('mf-10019081'));
+             ->setParent($this->getReference('mf-10019081'))
+             ->setEnabled(true);
             $manager->persist($user);
             
         $user = new User();
@@ -294,7 +315,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setNumPersonal(10016450)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_UNFER]))
-             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST)));
+             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST)))
+             ->setEnabled(true)
+             ;
                 
         $this->addReference('mf_10016450', $user);
             $manager->persist($user);
@@ -311,7 +334,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_AUTOMATIZACION_INFORMATICA_Y_TELECOMUNICACIONES]))
              ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_AIT_CPM]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND)))
-                ;
+             ->setEnabled(true)
+             ;
         $this->addReference('ms-10016029', $user);
             $manager->persist($user);
             
@@ -324,9 +348,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setNumPersonal(10016012)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]))
-            ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]))
-            ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND)))
-                ;
+             ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]))
+             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND)))
+             ->setEnabled(true);
         $this->addReference('ms-10016012', $user);
             $manager->persist($user);
             
@@ -341,7 +365,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_SALUD]))
              ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_PLANIFICACION_Y_GESTION_SALUD_ZIV]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND)))
-                ;
+             ->setEnabled(true);
         $this->addReference('ms-10003393', $user);
             $manager->persist($user);
             
@@ -371,7 +395,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]))
              ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX)))
-             ->setParent($this->getReference('ms-10016012'));
+             ->setParent($this->getReference('ms-10016012'))
+             ->setEnabled(true);
             $manager->persist($user);
         
         $user = new User();
@@ -385,7 +410,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]))
              ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX)))
-             ->setParent($this->getReference('ms-10016012'));
+             ->setParent($this->getReference('ms-10016012'))
+             ->setEnabled(true);
             $manager->persist($user);
             
         //Usuarios Supervisor, Coordinador o Superintendente
@@ -400,7 +426,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]))
              ->setGerenciaSecond($this->getReference($gerenciaSecondNameArray[GerenciaSecond::REF_GERENCIA_CONTROL_ESTADISTICO_E_INFORMACION_ZIV]))
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_SUPERVISER)))
-                ;
+             ->setEnabled(true);
             $manager->persist($user);
             
         //Usuario Personal PQV
@@ -410,7 +436,7 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setFirstName('Junior')
              ->setEmail('junior@gmail.com')
              ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_WORKER_PQV)))
-             ;
+             ->setEnabled(true);
             $manager->persist($user);
             
         $manager->flush();
