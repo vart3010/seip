@@ -39,8 +39,8 @@
                     <small>{$ goal.observations $}</small>
                 </th>
                 <td>{$ goal.type_goal.description $}</td>
-                <td>{$ goal.start_date $}</td>
-                <td>{$ goal.end_date $}</td>
+                <td>{$ goal.start_date | myDate $}</td>
+                <td>{$ goal.end_date| myDate $}</td>
                 <td>{$ goal.weight $}</td>
                 <td>{$ goal.responsible.first_name + " "+ goal.responsible.last_name $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
                 <td class="align-right vertical-center">

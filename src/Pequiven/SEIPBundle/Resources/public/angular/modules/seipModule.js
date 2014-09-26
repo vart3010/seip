@@ -91,7 +91,9 @@ angular.module('seipModule.controllers', [])
         };
         
         $scope.removeGoal = function(goal){
-            $scope.goals.remove(goal);
+            $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal',function(){
+                $scope.goals.remove(goal);
+            });
         };
         
         var urlGoal = Routing.generate("goal_get_form",{},true);
@@ -110,7 +112,7 @@ angular.module('seipModule.controllers', [])
         $scope.data = {};
         $scope.dialog = {
             confirm: {
-                title: sfTranslator.trans("pequiven.confirm")
+                title: sfTranslator.trans("pequiven.dialog.confirm")
             }
         };
         //Funcion para remover un elemento de un array
@@ -149,12 +151,12 @@ angular.module('seipModule.controllers', [])
             $scope.template = template;
         };
 
-        var modalOpen;
+        var modalOpen,modalConfirm;
         jQuery(document).ready(function() {
             var angular = jQuery( "#dialog-form" );
             if(angular){
             modalOpen = angular.dialog({
-                autoOpen: false,
+                        autoOpen: false,
                         height: 650,
                         width: 800,
                         modal: true,
@@ -170,16 +172,16 @@ angular.module('seipModule.controllers', [])
                 }
           });
             }
-            
-            $( "#dialog-confirm" ).dialog({
+            modalConfirm = $( "#dialog-confirm" ).dialog({
+                autoOpen: false,
                 resizable: false,
-                height:140,
+                height:200,
                 modal: true,
                 buttons: {
-                  "Delete all items": function() {
+                  Si: function() {
                     $( this ).dialog( "close" );
                   },
-                  Cancel: function() {
+                  No: function() {
                     $( this ).dialog( "close" );
                   }
                 }
@@ -248,6 +250,33 @@ angular.module('seipModule.controllers', [])
             
             notificationBarService.getLoadStatus().done();
         }
+        
+        $scope.openModalConfirm = function(content,confirmCallBack,cancelCallBack){
+                $scope.dialog.confirm.content = sfTranslator.trans(content);
+                
+                // setter
+                modalConfirm.dialog( "option", "buttons", [ 
+                    { text: "Si", click: function(){
+                            if(confirmCallBack){
+                                confirmCallBack();
+                                modalConfirm.dialog( "close" );
+                                $scope.$apply();
+                            }else{
+                                modalConfirm.dialog( "close" );
+                            }
+                    } },
+                    { text: "No", click: function() {
+                            if(cancelCallBack){
+                                cancelCallBack();
+                            }
+                            modalConfirm.dialog( "close" );
+                        } 
+                    }
+                ] );
+                
+            modalConfirm.dialog( "open" );
+            notificationBarService.getLoadStatus().done();
+        };
     })
     
     .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {

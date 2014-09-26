@@ -117,7 +117,7 @@ bazinga_js_translation:
 jms_serializer:
     handlers:
         datetime:
-            default_format: "Y-m-d H:m:s" # ISO8601
+            default_format: "Y-m-d H:i:s" # ISO8601
     metadata:
         debug: "%kernel.debug%"
         auto_detection: true

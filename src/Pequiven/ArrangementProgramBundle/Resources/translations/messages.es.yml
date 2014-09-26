@@ -5,3 +5,6 @@ pequiven:
     modal:
         title:
             goal: Meta
+        confirm:
+            goal:
+                delete_this_goal: ¿Desea eliminar esta meta?

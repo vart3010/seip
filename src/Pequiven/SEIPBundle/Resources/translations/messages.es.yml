@@ -12,5 +12,7 @@ pequiven:
     list: Lista
     add: Añadir
     show: Ver
+    dialog:
+        confirm: Confirmar
 app:
     loading: Cargando
