@@ -40,6 +40,9 @@ form:
     goal: Meta
     formula: Fórmula
     tendency: Tendencia
+    indicatorStrategic: Indicador Estratégico
+    indicatorTactic: Indicador Táctico
+    indicatorOperative: Indicador Operativo
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto

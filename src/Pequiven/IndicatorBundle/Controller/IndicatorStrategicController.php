@@ -57,7 +57,7 @@ class IndicatorStrategicController extends baseController {
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByLevel',
+                'createPaginatorStrategic',
                 array($criteria, $sorting)
             );
             

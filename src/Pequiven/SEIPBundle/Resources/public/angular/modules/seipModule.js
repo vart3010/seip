@@ -242,15 +242,18 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams.settings().pages);
     })
     .controller('TableObjetiveTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
-//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
-//        console.log($scope.tableParams.$params.groupBy);
-//        console.log($scope.tableParams);
-//        console.log($scope.tableParams.settings().pages);
+
     })
     .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
-//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
-//        console.log($scope.tableParams.$params.groupBy);
-//        console.log($scope.tableParams);
-//        console.log($scope.tableParams.settings().pages);
+
+    })
+    .controller('TableIndicatorStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+
+    })
+    .controller('TableIndicatorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+
+    })
+    .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+
     })
     ;        

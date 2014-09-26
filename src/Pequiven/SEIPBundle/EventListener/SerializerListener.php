@@ -20,6 +20,7 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
     {
         return array(
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeObjetive', 'class' => 'Pequiven\ObjetiveBundle\Entity\Objetive', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeIndicator', 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator', 'format' => 'json'),
         );
     }
 
@@ -55,5 +56,11 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
             $event->getVisitor()->addData('groupBy',$valueGroupBy);
             $event->getVisitor()->addData('totalParents',count($parents));
         }
+    }
+    
+    public function onPostSerializeIndicator(\JMS\Serializer\EventDispatcher\ObjectEvent $event)
+    {
+        $objetives = $event->getObject()->getObjetives();
+        $event->getVisitor()->addData('groupBy',$objetives[0]->getRef().$objetives[0]->getDescription());
     }
 }
