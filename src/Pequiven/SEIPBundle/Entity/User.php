@@ -118,6 +118,15 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $cargo;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Rol")
+     * @ORM\JoinTable(name="fos_user_user_rol",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="rol_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+    
+    /**
      * Get id
      *
      * @return integer 
