@@ -126,6 +126,10 @@ jms_serializer:
                 namespace_prefix: FOS\UserBundle
                 path: "@PequivenSEIPBundle/Resources/config/serializer/fos"
                 
+tecnocreaciones_install:
+    credentials:
+        username: superAdmin
+                
 sylius_resource:
     resources:
         #Objetivo estratégico

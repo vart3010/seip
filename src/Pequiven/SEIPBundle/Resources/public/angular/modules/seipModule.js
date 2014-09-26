@@ -108,9 +108,10 @@ angular.module('seipModule.controllers', [])
                 loadCallBack: $scope.setDataFormGoal
             }
         ];
-        
+        console.log("ArrangementProgramController");
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator){
+        $scope.model = {};
         //Funcion para remover un elemento de un array
         Array.prototype.remove = function(value){
             var idx = this.indexOf(value);
