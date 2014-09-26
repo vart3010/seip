@@ -10,7 +10,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-use Pequiven\MasterBundle\Entity\LineStrategic;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
@@ -22,8 +21,6 @@ class IndicatorFixture extends AbstractFixture implements OrderedFixtureInterfac
     //put your code here
     protected $container;
     public function load(ObjectManager $manager){
-        $line_data = new LineStrategic();
-        $lineNameArray = $line_data->getLineNameArray();
         
         $IndicatorLevel = new IndicatorLevel();
         $lineLevelArray = $IndicatorLevel->getLevelNameArray();
@@ -233,7 +230,7 @@ class IndicatorFixture extends AbstractFixture implements OrderedFixtureInterfac
             $manager->persist($indicator);
             
         $indicator = new Indicator();
-        $indicator->setFormula($this->getReference('Formula-24'));
+        $indicator->setFormula($this->getReference('Formula-20'));
         $indicator->setDescription('Diversificación del Negocio');
         $indicator->setIndicatorLevel($this->getReference('INDICADOR_ESTRATEGICO'));
         $indicator->setRef('IE-4.2.1.');
@@ -353,7 +350,7 @@ class IndicatorFixture extends AbstractFixture implements OrderedFixtureInterfac
     }
     
     public function getOrder(){
-        return 12;
+        return 13;
     }
     
     public function setContainer(ContainerInterface $container = null) {

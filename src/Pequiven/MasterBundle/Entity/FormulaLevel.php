@@ -12,16 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\MasterBundle\Model\Formula as modelFormula;
+use Pequiven\MasterBundle\Model\FormulaLevel as modelFormulaLevel;
 
 /**
- * Formula
- *
- * @ORM\Table(name="seip_c_formula")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\FormulaRepository")
+ * FormulaLevel
+ * @ORM\Table(name="seip_formula_level")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\FormulaLevelRepository")
  * @author matias
  */
-class Formula extends modelFormula {
+class FormulaLevel extends modelFormulaLevel {
     
     /**
      * @var integer
@@ -45,7 +44,7 @@ class Formula extends modelFormula {
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-
+    
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -53,7 +52,7 @@ class Formula extends modelFormula {
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
      */
     private $userCreatedAt;
-
+    
     /**
      * User
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -65,31 +64,31 @@ class Formula extends modelFormula {
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300, nullable=true)
+     * @ORM\Column(name="description", type="string", length=100)
      */
     private $description;
-    
+
     /**
      * @var string
      *
-     * @ORM\Column(name="equation", type="string", length=300)
+     * @ORM\Column(name="level_name", type="string", length=50)
      */
-    private $equation;
-    
+    private $levelName;
+
     /**
-     * FormulaLevel
-     * @var \Pequiven\MasterBundle\Entity\FormulaLevel
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\FormulaLevel")
-     * @ORM\JoinColumn(name="fk_formula_level", referencedColumnName="id")
+     * @var integer
+     *
+     * @ORM\Column(name="level", type="integer")
      */
-    private $formulaLevel;
+    private $level;
     
+
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled = true;
+    private $enabled;
 
     /**
      * Get id
@@ -105,7 +104,7 @@ class Formula extends modelFormula {
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Formula
+     * @return IndicatorLevel
      */
     public function setCreatedAt($createdAt)
     {
@@ -128,7 +127,7 @@ class Formula extends modelFormula {
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Formula
+     * @return IndicatorLevel
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -151,7 +150,7 @@ class Formula extends modelFormula {
      * Set description
      *
      * @param string $description
-     * @return Formula
+     * @return IndicatorLevel
      */
     public function setDescription($description)
     {
@@ -171,33 +170,79 @@ class Formula extends modelFormula {
     }
 
     /**
-     * Set equation
+     * Set levelName
      *
-     * @param string $equation
-     * @return Formula
+     * @param string $levelName
+     * @return IndicatorLevel
      */
-    public function setEquation($equation)
+    public function setLevelName($levelName)
     {
-        $this->equation = $equation;
+        $this->levelName = $levelName;
 
         return $this;
     }
 
     /**
-     * Get equation
+     * Get levelName
      *
      * @return string 
      */
-    public function getEquation()
+    public function getLevelName()
     {
-        return $this->equation;
+        return $this->levelName;
+    }
+
+    /**
+     * Set level
+     *
+     * @param integer $level
+     * @return IndicatorLevel
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return integer 
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return IndicatorLevel
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 
     /**
      * Set userCreatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return Formula
+     * @return IndicatorLevel
      */
     public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
     {
@@ -220,7 +265,7 @@ class Formula extends modelFormula {
      * Set userUpdatedAt
      *
      * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return Formula
+     * @return IndicatorLevel
      */
     public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
     {
@@ -237,51 +282,5 @@ class Formula extends modelFormula {
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
-    }
-
-    /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return Formula
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Set formulaLevel
-     *
-     * @param \Pequiven\MasterBundle\Entity\FormulaLevel $formulaLevel
-     * @return Formula
-     */
-    public function setFormulaLevel(\Pequiven\MasterBundle\Entity\FormulaLevel $formulaLevel = null)
-    {
-        $this->formulaLevel = $formulaLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get formulaLevel
-     *
-     * @return \Pequiven\MasterBundle\Entity\FormulaLevel 
-     */
-    public function getFormulaLevel()
-    {
-        return $this->formulaLevel;
     }
 }
