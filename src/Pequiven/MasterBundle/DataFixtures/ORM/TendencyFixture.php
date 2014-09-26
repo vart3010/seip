@@ -45,7 +45,7 @@ class TendencyFixture extends AbstractFixture implements OrderedFixtureInterface
     }
     
     public function getOrder(){
-        return 17;
+        return 18;
     }
     
     public function setContainer(ContainerInterface $container = null) {

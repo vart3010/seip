@@ -173,6 +173,8 @@ class ObjetiveRepository extends baseEntityRepository {
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->innerJoin('o.parents', 'p');
+
         //Filtro Objetivo Táctico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -180,22 +182,22 @@ class ObjetiveRepository extends baseEntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
         }
         //Filtro Objetivo Estratégico
-        if(isset($criteria['parentsDescription'])){
-            $parentsDescription = $criteria['parentsDescription'];
-            unset($criteria['parentsDescription']);
-            $queryBuilder->leftJoin('o.parents', 'p');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
-        }
+//        if(isset($criteria['parentsDescription'])){
+//            $parentsDescription = $criteria['parentsDescription'];
+//            unset($criteria['parentsDescription']);
+//            $queryBuilder->leftJoin('o.parents', 'p');
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
+//        }
         //Filtro Línea Estratégica
-        if(isset($criteria['parentsLineStrategicDescription'])){
-            $parentsLineStrategicDescription = $criteria['parentsLineStrategicDescription'];
-            unset($criteria['parentsLineStrategicDescription']);
-            if(!isset($values['parentsDescription'])){
-                $queryBuilder->leftJoin('o.parents','p');
-            }
-            $queryBuilder->leftJoin('p.lineStrategics', 'ls');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsLineStrategicDescription."%'")));
-        }
+//        if(isset($criteria['parentsLineStrategicDescription'])){
+//            $parentsLineStrategicDescription = $criteria['parentsLineStrategicDescription'];
+//            unset($criteria['parentsLineStrategicDescription']);
+//            if(!isset($values['parentsDescription'])){
+//                $queryBuilder->leftJoin('o.parents','p');
+//            }
+//            $queryBuilder->leftJoin('p.lineStrategics', 'ls');
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsLineStrategicDescription."%'")));
+//        }
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
             $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
@@ -204,10 +206,14 @@ class ObjetiveRepository extends baseEntityRepository {
         if(isset($criteria['objetiveLevel'])){
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
-        $queryBuilder->groupBy('o.ref');
+        //$queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
+        
+//        echo $queryBuilder->getQuery()->getSQL();
+//        echo count($queryBuilder->getQuery()->getResult());
+//        die();
         
         return $this->getPaginator($queryBuilder);
     }
@@ -225,6 +231,8 @@ class ObjetiveRepository extends baseEntityRepository {
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->innerJoin('o.parents', 'p');
+        
         //Filtro Objetivo Operativo
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -232,36 +240,36 @@ class ObjetiveRepository extends baseEntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
         }
         //Filtro Objetivo Táctico
-        if(isset($criteria['parentsDescription'])){
-            $parentsDescription = $criteria['parentsDescription'];
-            unset($criteria['parentsDescription']);
-            $queryBuilder->leftJoin('o.parents', 'p');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
-        }
+//        if(isset($criteria['parentsDescription'])){
+//            $parentsDescription = $criteria['parentsDescription'];
+//            unset($criteria['parentsDescription']);
+//            $queryBuilder->leftJoin('o.parents', 'p');
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('p.description', "'%".$parentsDescription."%'"),$queryBuilder->expr()->like('p.ref', "'%".$parentsDescription."%'")));
+//        }
         //Filtro Objetivo Estratégico
-        if(isset($criteria['parentsParentsDescription'])){
-            $parentsParentsDescription = $criteria['parentsParentsDescription'];
-            unset($criteria['parentsParentsDescription']);
-            if(!isset($values['parentsDescription'])){
-                $queryBuilder->leftJoin('o.parents', 'p');
-            }
-            $queryBuilder->leftJoin('p.parents', 'pp');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('pp.description', "'%".$parentsParentsDescription."%'"),$queryBuilder->expr()->like('pp.ref', "'%".$parentsParentsDescription."%'")));
-        }
+//        if(isset($criteria['parentsParentsDescription'])){
+//            $parentsParentsDescription = $criteria['parentsParentsDescription'];
+//            unset($criteria['parentsParentsDescription']);
+//            if(!isset($values['parentsDescription'])){
+//                $queryBuilder->leftJoin('o.parents', 'p');
+//            }
+//            $queryBuilder->leftJoin('p.parents', 'pp');
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('pp.description', "'%".$parentsParentsDescription."%'"),$queryBuilder->expr()->like('pp.ref', "'%".$parentsParentsDescription."%'")));
+//        }
         //Filtro Línea Estratégica
-        if(isset($criteria['parentsParentsLineStrategicDescription'])){
-            $parentsParentsLineStrategicDescription = $criteria['parentsParentsLineStrategicDescription'];
-            unset($criteria['parentsParentsLineStrategicDescription']);
-            if(!isset($values['parentsDescription']) && !isset($values['parentsParentsDescription'])){
-                $queryBuilder->leftJoin('o.parents', 'p');
-                $queryBuilder->leftJoin('p.parents','pp');
-            } elseif(!isset($values['parentsParentsDescription'])){
-                $queryBuilder->leftJoin('p.parents','pp');
-            }
-            
-            $queryBuilder->leftJoin('pp.lineStrategics', 'ls');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsParentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsParentsLineStrategicDescription."%'")));
-        }
+//        if(isset($criteria['parentsParentsLineStrategicDescription'])){
+//            $parentsParentsLineStrategicDescription = $criteria['parentsParentsLineStrategicDescription'];
+//            unset($criteria['parentsParentsLineStrategicDescription']);
+//            if(!isset($values['parentsDescription']) && !isset($values['parentsParentsDescription'])){
+//                $queryBuilder->leftJoin('o.parents', 'p');
+//                $queryBuilder->leftJoin('p.parents','pp');
+//            } elseif(!isset($values['parentsParentsDescription'])){
+//                $queryBuilder->leftJoin('p.parents','pp');
+//            }
+//            
+//            $queryBuilder->leftJoin('pp.lineStrategics', 'ls');
+//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsParentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsParentsLineStrategicDescription."%'")));
+//        }
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());

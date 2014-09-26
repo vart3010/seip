@@ -42506,7 +42506,7 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
     }
     
     public function getOrder(){
-        return 18;
+        return 19;
     }
     
     public function setContainer(ContainerInterface $container = null) {
