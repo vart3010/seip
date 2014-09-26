@@ -12,12 +12,15 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * Objetive
  * 
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
  */
 class Objetive extends modelObjetive {
 
     //Texto a mostrar en los select
     protected $descriptionSelect;
+    
+    protected $typeView = '';
 
     /**
      * @var integer
@@ -771,4 +774,21 @@ class Objetive extends modelObjetive {
     {
         return $this->tendency;
     }
+    
+    public function getTypeView() {
+        return $this->typeView;
+    }
+
+    public function setTypeView($typeView) {
+        $this->typeView = $typeView;
+    }
+    
+    /**
+     * @ORM\PostLoad
+     */
+    public function postLoad(){
+        
+    }
+
+
 }

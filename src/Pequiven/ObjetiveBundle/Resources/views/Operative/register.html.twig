@@ -819,8 +819,10 @@
                         chargeSelect2ObjetiveTactic("full");
                     } else{
                         if(typeof data[0].initial === 'undefined'){
+                            selectObjetiveTactic.select2("enable",true);
                             chargeSelect2ObjetiveTactic("empty");
                         } else{
+                            selectObjetiveTactic.select2("enable",true);
                             chargeSelect2ObjetiveTactic("initial");
                         }
                     }
