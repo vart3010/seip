@@ -28,14 +28,11 @@ function setValueSelect2(idSelect2,idEntity,data){
 
 angular.module('seipModule.controllers', [])
     .controller("ArrangementProgramController",function($scope,notificationBarService,$http){
-        $scope.data = {
-            responsible_goals: null,
-            type_goals: null
-        };
+        $scope.data.responsible_goals = null;
+        $scope.data.type_goals = null;
         //Inicializar modelo de meta
         $scope.initModelGoal = function(goal){
-            $scope.model = {
-                goal: {
+            $scope.model.goal = {
                     name: null,
                     type_goal: null,
                     start_date: null,
@@ -43,8 +40,7 @@ angular.module('seipModule.controllers', [])
                     responsible: null,
                     weight: null,
                     observations: null
-                }
-            };
+                };
             $("#goalForms select").each(function(){
                     //$(this).select2("destroy");
                     //$(this).select2();
@@ -108,10 +104,15 @@ angular.module('seipModule.controllers', [])
                 loadCallBack: $scope.setDataFormGoal
             }
         ];
-        console.log("ArrangementProgramController");
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator){
         $scope.model = {};
+        $scope.data = {};
+        $scope.dialog = {
+            confirm: {
+                title: sfTranslator.trans("pequiven.confirm")
+            }
+        };
         //Funcion para remover un elemento de un array
         Array.prototype.remove = function(value){
             var idx = this.indexOf(value);
@@ -169,6 +170,20 @@ angular.module('seipModule.controllers', [])
                 }
           });
             }
+            
+            $( "#dialog-confirm" ).dialog({
+                resizable: false,
+                height:140,
+                modal: true,
+                buttons: {
+                  "Delete all items": function() {
+                    $( this ).dialog( "close" );
+                  },
+                  Cancel: function() {
+                    $( this ).dialog( "close" );
+                  }
+                }
+              });
         });
         
         $scope.templateLoad = function(template){

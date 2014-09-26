@@ -1,0 +1,57 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+                
+<div class="block">
+    <div class="block-title">
+        <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
+        <div class="button-group absolute-right compact">
+            <a href="" ng-click="loadTemplateMeta()" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table" id="sorting-example2">
+        <thead>
+                <tr>
+                    <th scope="col">{{ 'seip.table.header.name'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                    <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                    <th scope="col" width="120" class="align-right">{{ 'seip.table.header.responsible'|trans }}</th>
+                    <th scope="col" width="120" class="align-right">{{ 'seip.table.header.actions'|trans }}</th>
+                </tr>
+        </thead>
+        <tbody ng-init="{% if entity.timelines.count > 0 %}goals={{ entity.timelines[0].goals|serialize }}{% endif %}">
+            <tr ng-if="goals.length == 0">
+                <td colspan="7" class="empty_row">
+                    {{ "seip.table.empty.goals"|trans }}
+                </td>
+            </tr>
+            <tr ng-repeat="goal in goals">
+                <th scope="row">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][name]" value="{$ goal.name $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][typeGoal]" value="{$ goal.type_goal.id $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][startDate]" value="{$ goal.start_date $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][endDate]" value="{$ goal.end_date $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][responsible]" value="{$ goal.responsible.id $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
+                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
+                    {$ goal.name $}<br>
+                    <small>{$ goal.observations $}</small>
+                </th>
+                <td>{$ goal.type_goal.description $}</td>
+                <td>{$ goal.start_date $}</td>
+                <td>{$ goal.end_date $}</td>
+                <td>{$ goal.weight $}</td>
+                <td>{$ goal.responsible.first_name + " "+ goal.responsible.last_name $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
+                <td class="align-right vertical-center">
+                    <span class="button-group compact">
+                        <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                        <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm" title="{{ "pequiven.actions.delete"|trans({},"messages") }}"></a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+        
+    </div>
+</div>

@@ -94,7 +94,6 @@ class Timeline
      */
     public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
     {
-        var_dump('addGoal');
         $goals->setTimeline($this);
         $this->goals->add($goals);
 

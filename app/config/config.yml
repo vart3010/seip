@@ -129,6 +129,13 @@ jms_serializer:
 tecnocreaciones_install:
     credentials:
         username: superAdmin
+        
+tecnocreaciones_tools:
+    configuration:
+        enable: true
+        debug: false
+        configuration_manager_class: Pequiven\SEIPBundle\Service\Configuration
+        configuration_name_service: seip.configuration
                 
 sylius_resource:
     resources:

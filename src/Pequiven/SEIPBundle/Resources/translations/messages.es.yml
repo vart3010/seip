@@ -11,5 +11,6 @@ tecnocreaciones_vzla_government:
 pequiven:
     list: Lista
     add: Añadir
+    show: Ver
 app:
     loading: Cargando
