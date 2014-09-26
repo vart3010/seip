@@ -87,7 +87,8 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             ->setNumPersonal(10021125)
             ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_ZIV]))
             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX)))
-            ->setParent($this->getReference('d-10019742'));
+            ->setParent($this->getReference('d-10019742'))
+            ->setEnabled(true);
             $manager->persist($user);
         
         $user = new User();
@@ -244,7 +245,9 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
              ->setNumPersonal(10012577)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_PRONAVAY]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_NAVAY]))
-             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO)));
+             ->addGroup($this->getReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO)))
+             ->setEnabled(true)
+            ;
         $this->addReference('mf-10012577', $user);
             $manager->persist($user);
             
