@@ -78,7 +78,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         //Peso del Objetivo
         $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100",'class' => 'input', 'size' => 8), 'required' => false));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100",'class' => 'input validate[required]', 'size' => 8)));
+        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input validate[required]', 'size' => 8)));
         
         //Rango de Gestión
             $objectArrangementRangeType = new ArrangementRangeType();

@@ -126,17 +126,15 @@
             </div>
             
             <!-- Peso del Indicador -->
-            <!--
             <div id="weight" class="field-block button-height">
-                {#{ form_label(form.weight) }}
+                {{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.weight_info'|trans }#}</span>
+                    <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
             </div>
-            -->
                 
             <!-- Meta del Indicador -->
             <div class="field-block button-height">
@@ -281,6 +279,7 @@
             selectFormula = $("#pequiven_indicator_tactic_registration_formula"),//Select de Fórmula
             inputRef = $("#pequiven_indicator_tactic_registration_ref"),//Input de Ref
             inputGoal = $("#pequiven_indicator_tactic_registration_goal"),//Input de Meta
+            inputWeight = $("#pequiven_indicator_tactic_registration_weight"),//Input de Peso
             inputHiddenRoleName = $("#pequiven_indicator_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
             selectTendency = $("#pequiven_indicator_tactic_registration_tendency"),//Select de Tendencia del indicador
             selectArrangementRangeTypeTop = $("#pequiven_indicator_tactic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
@@ -361,6 +360,9 @@
 
                 //Incializamos el formato numerico para el input de Meta
                 inputGoal.number(true,2,',','.');
+                
+                //Incializamos el formato numerico para el input de Peso
+                inputWeight.number(true,2,',','.');
 
                 //Inicializamos el formato numerico para el input de Rango Alto
                 inputRankTopBasic.number(true,2,',','.');

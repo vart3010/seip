@@ -123,7 +123,7 @@ class IndicatorTacticController extends baseController {
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
             
-            //$object->setGoal(bcadd(str_replace(',', '.', $data['weight']),'0',3));
+            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']),'0',2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
 
@@ -195,6 +195,7 @@ class IndicatorTacticController extends baseController {
             $object->setRefParent($data['refObjetive']);
             $object->setTmp(true);
             
+            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']),'0',2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',2));
             $object->setUserCreatedAt($user);
             
