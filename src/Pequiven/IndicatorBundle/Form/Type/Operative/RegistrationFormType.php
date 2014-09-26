@@ -88,7 +88,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         //Meta del Indicador
         $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('placeholder' => "100", 'class' => 'input validate[required]', 'size' => 8)));
         //Fórmula del indicador a crear
-        $builder->addEventSubscriber(new AddFormulaFieldListener());
+        $builder->addEventSubscriber(new AddFormulaFieldListener($this->container,array('typeOperative' => true)));
         
         //Rango de Gestión
             $objectArrangementRangeType = new ArrangementRangeType();
