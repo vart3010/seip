@@ -23,7 +23,7 @@ class Rol extends modelRol
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var \DateTime
@@ -63,13 +63,6 @@ class Rol extends modelRol
     private $description;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="level_name", type="string", length=50)
-     */
-    private $levelName;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="level", type="integer")
@@ -81,7 +74,7 @@ class Rol extends modelRol
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
+    private $enabled = true;
 
 
     /**
@@ -161,29 +154,6 @@ class Rol extends modelRol
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set levelName
-     *
-     * @param string $levelName
-     * @return Rol
-     */
-    public function setLevelName($levelName)
-    {
-        $this->levelName = $levelName;
-
-        return $this;
-    }
-
-    /**
-     * Get levelName
-     *
-     * @return string 
-     */
-    public function getLevelName()
-    {
-        return $this->levelName;
     }
 
     /**
