@@ -1,8 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px; margin-top: 4px" >
+    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
     {#{ 'pequiven_seip.seip'|trans }#}
-        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />
+{#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
+        <img width="100%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" />
     </div>
 {% endblock body %}
