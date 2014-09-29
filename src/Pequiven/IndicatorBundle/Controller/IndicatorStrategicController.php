@@ -375,7 +375,6 @@ class IndicatorStrategicController extends baseController {
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId))->getRef();
         $options['type'] = 'STRATEGIC';
-        //$ref = $indicator->setNewRefFromObjetive($options);
         $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);
@@ -397,7 +396,6 @@ class IndicatorStrategicController extends baseController {
         $refParent =  $request->request->get('refParentId');
         $options['refParent'] = $refParent;
         $options['type'] = 'STRATEGIC';
-        //$ref = $indicator->setNewRefFromObjetive($options);
         $ref = $this->setNewRef($options);
         
         $data[] = array('ref' => $ref);

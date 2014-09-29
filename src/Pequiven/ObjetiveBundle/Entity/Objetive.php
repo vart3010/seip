@@ -234,7 +234,7 @@ class Objetive extends modelObjetive {
     private $approvalDate;
 
     /**
-     * Estatus del programa de gestion
+     * Estatus del Objetivo
      * @var integer
      * @ORM\Column(name="status", type="integer")
      */

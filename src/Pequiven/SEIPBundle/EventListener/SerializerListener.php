@@ -29,7 +29,10 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
         // do something
     }
 
-    
+    /**
+     * Función que serializa el objeto de objetivo para la vista
+     * @param \JMS\Serializer\EventDispatcher\ObjectEvent $event
+     */
     public function onPostSerializeObjetive(\JMS\Serializer\EventDispatcher\ObjectEvent $event)
     {
         if($event->getObject()->getObjetiveLevel()->getLevel() === \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
@@ -37,8 +40,6 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
             $event->getVisitor()->addData('groupBy',$lineStrategics[0]->getRef().$lineStrategics[0]->getDescription());
         } elseif($event->getObject()->getObjetiveLevel()->getLevel() === \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
             $object = $event->getObject();
-//            echo 'hola';
-//            die();
             $parents = $object->getParents();
             $valueGroupBy = '';
             foreach($parents as $parent){
@@ -58,6 +59,10 @@ class SerializerListener implements \JMS\Serializer\EventDispatcher\EventSubscri
         }
     }
     
+    /**
+     * Función que serializa el objeto de indicador para la vista
+     * @param \JMS\Serializer\EventDispatcher\ObjectEvent $event
+     */
     public function onPostSerializeIndicator(\JMS\Serializer\EventDispatcher\ObjectEvent $event)
     {
         $objetives = $event->getObject()->getObjetives();
