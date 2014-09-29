@@ -141,6 +141,14 @@ class Indicator extends modelIndicator {
     private $objetives;
     
     /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     */
+    private $period;
+    
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -587,5 +595,28 @@ class Indicator extends modelIndicator {
     public function getRefParent()
     {
         return $this->refParent;
+    }
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Indicator
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }
