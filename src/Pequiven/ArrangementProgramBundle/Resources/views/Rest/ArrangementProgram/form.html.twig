@@ -9,7 +9,20 @@
             'Ext.tip.QuickTipManager',
             'Ext.layout.container.Fit'
         ]);
-
+        
+        Ext.define('Goal',{
+            extend: 'Ext.data.Model',
+            fields: [
+                { name: 'id',type: 'int',useNull: true },
+                { name: 'name', type: 'string'},
+                { name: 'start_date', type: 'date',dateFormat:'Y-m-d H:i:s'},
+                { name: 'end_date', type: 'date',dateFormat:'Y-m-d H:i:s'},
+                { name: 'weight', type: 'int'},
+                { name: 'status', type: 'int'},
+                
+            ]
+        });
+        
         Ext.define('Task', {
             extend: 'Ext.data.Model',
             idProperty: 'taskId',
@@ -58,13 +71,13 @@
                 clicksToEdit: 1
             });
             var showSummary = true;
-            var grid = Ext.create('Ext.grid.Panel', {
+            {#var grid = Ext.create('Ext.grid.Panel', {
                 width: 800,
                 height: 450,
                 frame: true,
                 title: 'Sponsored Projects',
                 iconCls: 'icon-grid',
-                renderTo: document.body,
+                renderTo: 'grid-example',
                 store: store,
                 plugins: [cellEditing],
                 selModel: {
@@ -172,11 +185,128 @@
                     },
                     summaryRenderer: Ext.util.Format.usMoney
                 }]
+            });#}
+            
+            
+            var store = Ext.create('Ext.data.Store', {
+                autoLoad: true,
+                autoSync: true,
+                model: 'Goal',
+                proxy: {
+                    type: 'rest',
+                    url: 'http://localhost/symfony/seip/web/app_dev.php/api/arrangement-program/1/goals-details.json',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    },
+                    writer: {
+                        type: 'json'
+                    },
+                    api: {
+                        update  : 'http://localhost/symfony/seip/web/app_dev.php/api/arrangement-program/1/goals-details.json'
+                    },
+                    actionMethods: {
+                        update: 'POST'
+                    },
+                    extraParams: {
+{#                        _method: 'PUT'#}
+                    } 
+                },
+                listeners: {
+                    write: function(store, operation){
+                        var record = operation.getRecords()[0],
+                            name = Ext.String.capitalize(operation.action),
+                            verb;
+
+
+                        if (name == 'Destroy') {
+                            verb = 'Destroyed';
+                        } else {
+                            verb = name + 'd';
+                        }
+                        Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId()));
+
+                    },
+                    update: function(store, record, operation, modifiedFieldNames, eOpts){
+                        console.log(operation);
+                        
+                        if(Ext.data.Model.EDIT == operation){
+                            store.getProxy().setExtraParam("_method","PUT");
+                        }else if(Ext.data.Model.COMMIT == operation){
+                            //store.getProxy().setExtraParam("_method",null);
+                            delete store.getProxy().getExtraParams()["_method"];
+                            store.load();
+                        }
+                    }
+                }
+            });
+            
+            
+            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+                listeners: {
+                    cancelEdit: function(rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    }
+                }
             });
 
+             var grid = Ext.create('Ext.grid.Panel', {
+                renderTo: 'grid-example-2',
+                plugins: [rowEditing],
+                width: 500,
+                height: 330,
+                frame: true,
+                title: 'Users',
+                store: store,
+                iconCls: 'icon-user',
+                columns: [{
+                    text: 'ID',
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'id',
+                    renderer: function(v, meta, rec) {
+                        return rec.phantom ? '' : v;
+                    }
+                }, {
+                    text: 'Name',
+                    flex: 1,
+                    sortable: true,
+                    dataIndex: 'name',
+                    field: {
+                        xtype: 'textfield'
+                    }
+                }, {
+                    header: 'StartDate',
+                    width: 120,
+                    sortable: true,
+                    dataIndex: 'start_date',
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    field: {
+                        xtype: 'datefield'
+                    }
+                }, {
+                    text: 'EndDate',
+                    width: 120,
+                    sortable: true,
+                    dataIndex: 'end_date',
+                    renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    field: {
+                        xtype: 'datefield'
+                    }
+                }]
+            });
+           
+            
         });
     </script>
 {% endblock javascript %}
 {% block content %}
     <div id="grid-example"></div>
+    <br /><br />
+    <div id="grid-example-2"></div>
 {% endblock content %}
