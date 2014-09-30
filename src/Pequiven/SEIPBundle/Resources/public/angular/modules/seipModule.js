@@ -242,7 +242,15 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams.settings().pages);
     })
     .controller('TableObjetiveTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
-
+        $scope.gerenciaFirst = null;
+        $scope.$watch("gerenciaFirst", function () {
+            if($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+            {
+                 $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+            }else{
+                 $scope.tableParams.$params.filter['gerencia'] = null;
+            }
+        });
     })
     .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 

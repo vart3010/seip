@@ -168,6 +168,8 @@ class ObjetiveRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
+        
+        
         $values = $criteria;
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
@@ -203,9 +205,16 @@ class ObjetiveRepository extends baseEntityRepository {
             $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
         }
         
+        //Si esta seteado el parámetro de nivel del objetivo, lo anexamos al query
         if(isset($criteria['objetiveLevel'])){
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
+        
+        //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
+        if(isset($criteria['gerenciaFirst'])){
+            $queryBuilder->andWhere("o.gerencia = " . (int)$criteria['gerenciaFirst']);
+        }
+        
         //$queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
         $this->applyCriteria($queryBuilder, $criteria);
