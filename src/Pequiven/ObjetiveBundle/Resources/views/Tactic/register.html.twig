@@ -117,7 +117,7 @@
             </div>
             
             <!-- Peso del Objetivo -->
-            <div id="weight" class="field-block button-height">
+            {#<div id="weight" class="field-block button-height">
                 {{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
@@ -125,7 +125,7 @@
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
-            </div>
+            </div>#}
                 
             <!-- Meta del Objetivo -->
             <div class="field-block button-height">
@@ -143,7 +143,7 @@
 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementObjetiveTactic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -241,7 +241,12 @@
                 
             <!-- Tipo de Evaluación -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.typeEvaluation'|trans }}</summary>
+                <summary>{{ 'form.typeEvaluationObjetiveTactic'|trans }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.typeEvaluationObjetiveTactic'|trans }}</span>
+                    </span>
+                </summary>
                 <div class="with-padding">
                 
                     <!-- Por Objetivo -->
@@ -262,7 +267,7 @@
                         {{ form_errors(form.evalIndicator) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalIndicatorObjetiveTactic'|trans }}</span>
                         </span>
                         <span id="button_add_indicator">
                             <button type="button" class="button red-gradient glossy" onclick="openFormIndicator()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
@@ -294,7 +299,7 @@
                         {{ form_errors(form.evalArrangementProgram) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalArrangementProgram'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalArrangementProgramObjetiveTactic'|trans }}</span>
                         </span>
                     </div>
                 </div>
@@ -326,7 +331,7 @@
             selectIndicators = $("#pequiven_objetive_tactic_registration_indicators"),//Select de Indicadores
             inputRef = $("#pequiven_objetive_tactic_registration_ref"),//Input de Ref
             inputGoal = $("#pequiven_objetive_tactic_registration_goal"),//Input de Meta
-            inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso
+{#            inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso#}
             inputHiddenRoleName = $("#pequiven_objetive_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
             checkIndicator = $("#pequiven_objetive_tactic_registration_evalIndicator"),//Check de Evaluar por Indicador
             checkGerencia = $("#pequiven_objetive_tactic_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
@@ -407,7 +412,7 @@
                 }
 
                 //Inicializamos el formato numerico para el input de Peso
-                inputWeight.number(true,2,',','.');
+{#                inputWeight.number(true,2,',','.');#}
 
                 //Incializamos el formato numerico para el input de Meta
                 inputGoal.number(true,2,',','.');

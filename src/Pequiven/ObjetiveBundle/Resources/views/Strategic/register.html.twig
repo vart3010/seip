@@ -78,7 +78,7 @@
             
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementObjetiveStrategic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -176,7 +176,12 @@
                 
             <!-- Tipo de Evaluación -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.typeEvaluation'|trans }}</summary>
+                <summary>{{ 'form.typeEvaluationObjetiveStrategic'|trans }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.typeEvaluationObjetiveStrategic'|trans }}</span>
+                    </span>
+                </summary>
                 <div class="with-padding">
                 
                     <!-- Por Objetivo -->
@@ -197,7 +202,7 @@
                         {{ form_errors(form.evalIndicator) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalIndicatorObjetiveStrategic'|trans }}</span>
                         </span>
                         <span id="button_add_indicator">
                             <button type="button" class="button red-gradient glossy" onclick="openFormIndicator()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>

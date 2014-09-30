@@ -171,7 +171,7 @@
 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementObjetiveOperative'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -269,7 +269,12 @@
 
             <!-- Tipo de Evaluación -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.typeEvaluation'|trans }}</summary>
+                <summary>{{ 'form.typeEvaluationObjetiveOperative'|trans }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.typeEvaluationObjetiveOperative'|trans }}</span>
+                    </span>
+                </summary>
                 <div class="with-padding">                
 
                     <!-- Por Indicador -->
@@ -279,7 +284,7 @@
                         {{ form_errors(form.evalIndicator) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalIndicatorObjetiveOperative'|trans }}</span>
                         </span>
                         <span id="button_add_indicator">
                             <button type="button" class="button red-gradient glossy" onclick="openFormIndicator()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
@@ -314,7 +319,7 @@
                         {{ form_errors(form.evalArrangementProgram) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalArrangementProgram'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalArrangementProgramObjetiveOperative'|trans }}</span>
                         </span>
                     </div>
                 </div>

@@ -22,7 +22,7 @@ app:
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Lista
+                                main: Mostrar Carga
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
@@ -34,7 +34,7 @@ app:
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Lista
+                                main: Mostrar Carga
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo

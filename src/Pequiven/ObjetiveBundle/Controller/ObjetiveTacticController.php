@@ -116,7 +116,7 @@ class ObjetiveTacticController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
-            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
+//            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $ref = $data['ref'];
 

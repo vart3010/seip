@@ -40,6 +40,7 @@ form:
     goal: Meta
     formula: Fórmula
     tendency: Tendencia
+    conduct: Comportamiento
     indicatorStrategic: Indicador Estratégico
     indicatorTactic: Indicador Táctico
     indicatorOperative: Indicador Operativo
