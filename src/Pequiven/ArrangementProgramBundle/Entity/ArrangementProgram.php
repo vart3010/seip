@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ArrangementProgram
 {
+    const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
+    const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
+    const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
+
     /**
      * @var integer
      *
@@ -26,6 +30,7 @@ class ArrangementProgram
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -135,6 +140,14 @@ class ArrangementProgram
      * @ORM\Column(name="status", type="integer")
      */
     private $status = 0;
+    
+    /**
+     * Tipo de programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer")
+     */
+    private $type;
 
     public function __construct() {
         $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
@@ -481,5 +494,13 @@ class ArrangementProgram
     public function getTimelines()
     {
         return $this->timelines;
+    }
+    
+    function getType() {
+        return $this->type;
+    }
+
+    function setType($type) {
+        $this->type = $type;
     }
 }

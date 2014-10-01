@@ -35,7 +35,7 @@
             <tag name="app.repository" class="Pequiven\MasterBundle\Entity\GerenciaSecond" />
         </service>
         
-        <service id="pequiven.repository.type_goal" class="Pequiven\MasterBundle\Repository\GerenciaSecondRepository">
+        <service id="pequiven.repository.type_goal" class="Pequiven\MasterBundle\Repository\ArrangementProgram\TypeGoalRepository">
             <tag name="app.repository" class="Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal" />
         </service>
     </services>

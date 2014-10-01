@@ -3,31 +3,38 @@
 {{ form_errors(form) }}
 <fieldset class="fieldset fields-list">
     <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
+    
     <div class="field-block button-height">
-        {{ form_label(form.period) }}
-        {{ form_widget(form.period) }}
-        {{ form_errors(form.period) }}
+        <label class="label">{{ "pequiven.form.period"|trans }}</label>
+        <b>{{ entity.period }}</b>
     </div>
+    
     <div class="field-block button-height">
         {{ form_label(form.categoryArrangementProgram) }}
         {{ form_widget(form.categoryArrangementProgram) }}
         {{ form_errors(form.categoryArrangementProgram) }}
     </div>
-    <div class="field-block button-height">
-        {{ form_label(form.tacticalObjective) }}
-        {{ form_widget(form.tacticalObjective) }}
-        {{ form_errors(form.tacticalObjective) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.operationalObjective) }}
-        {{ form_widget(form.operationalObjective) }}
-        {{ form_errors(form.operationalObjective) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.operatingIndicator) }}
-        {{ form_widget(form.operatingIndicator) }}
-        {{ form_errors(form.operatingIndicator) }}
-    </div>
+    {% if form.tacticalObjective is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.tacticalObjective) }}
+            {{ form_widget(form.tacticalObjective) }}
+            {{ form_errors(form.tacticalObjective) }}
+        </div>
+    {% endif %}
+    {% if form.operationalObjective is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.operationalObjective) }}
+            {{ form_widget(form.operationalObjective) }}
+            {{ form_errors(form.operationalObjective) }}
+        </div>
+    {% endif %}
+    {% if  form.operatingIndicator is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.operatingIndicator) }}
+            {{ form_widget(form.operatingIndicator) }}
+            {{ form_errors(form.operatingIndicator) }}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(form.location) }}
         {{ form_widget(form.location) }}

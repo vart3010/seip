@@ -12,7 +12,7 @@ function confirm(){
 //Establece el valor de un select2
 function setValueSelect2(idSelect2,idEntity,data){
     var selected = null;
-    var i = 0,j=0;
+    var i = 0,j=null;
     angular.forEach(data,function(val,i){
         if(val != undefined){
             if(val.id == idEntity){
@@ -48,8 +48,12 @@ angular.module('seipModule.controllers', [])
                 });
             if(goal){
                 $scope.model.goal = goal;
-                
-                setValueSelect2("goal_typeGoal",goal.type_goal.id,$scope.data.type_goals);
+                console.log(goal);
+                if(goal.type_goal !== null){
+                    setValueSelect2("goal_typeGoal",goal.type_goal.id,$scope.data.type_goals);
+                }else{
+                    setValueSelect2("goal_typeGoal",null,$scope.data.type_goals);
+                }
                 setValueSelect2("goal_responsible",goal.responsible.id,$scope.data.responsible_goals);
             }
         };
@@ -64,12 +68,11 @@ angular.module('seipModule.controllers', [])
             }
             return valid;
         };
-        $scope.initGoalCallBack = function(){
+        $scope.init = function(){
+            notificationBarService.getLoadStatus().loading();
             $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals")).success(function(data){
                 $scope.data.responsible_goals = data;
-            });
-            $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal")).success(function(data){
-                $scope.data.type_goals = data;
+                notificationBarService.getLoadStatus().done();
             });
         };
         
@@ -96,13 +99,23 @@ angular.module('seipModule.controllers', [])
             });
         };
         
+        $scope.getTypeGoal = function(){
+            notificationBarService.getLoadStatus().loading();
+            var c = $scope.model.arrangement_program.category_arrangement_program;
+            $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal",{category : c})).success(function(data){
+                $scope.data.type_goals = data;
+                notificationBarService.getLoadStatus().done();
+            });
+        };
+        
+        $scope.init();
+        
         var urlGoal = Routing.generate("goal_get_form",{},true);
         $scope.templates = [
             {
                 name: 'pequiven.modal.title.goal',
                 url:urlGoal,
                 confirmCallBack: $scope.addGoal,
-                initCallBack: $scope.initGoalCallBack,
                 loadCallBack: $scope.setDataFormGoal
             }
         ];

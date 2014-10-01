@@ -61,7 +61,7 @@ class GoalType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-xlarge",
                     'ng-model' => 'model.goal.responsible',
-                    'ng-options' => 'value as (value.first_name + " "+ value.last_name + " ("+value.username+")") for (key,value) in data.responsible_goals'
+                    'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsible_goals'
                 ),
                 'empty_value' => 'Seleccione',
                 'required' => true,

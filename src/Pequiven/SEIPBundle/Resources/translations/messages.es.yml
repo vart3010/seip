@@ -9,6 +9,8 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    form:
+        not_applicable: No aplica
     list: Lista
     add: Añadir
     show: Ver

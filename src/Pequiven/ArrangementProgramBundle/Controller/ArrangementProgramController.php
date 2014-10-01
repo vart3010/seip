@@ -3,7 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,7 +15,7 @@ use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
  *
  * @Route("/arrangementprogram")
  */
-class ArrangementProgramController extends Controller
+class ArrangementProgramController extends SEIPController
 {
 
     /**
@@ -48,9 +48,9 @@ class ArrangementProgramController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            $period = $this->getRepositoryById('period')->findOneActive();
+            $entity->setPeriod($period);
+            $this->save($entity,true);
 
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
         }
@@ -81,13 +81,16 @@ class ArrangementProgramController extends Controller
     /**
      * Displays a form to create a new ArrangementProgram entity.
      *
-     * @Route("/new", name="pequiven_arrangementprogram_new")
+     * @Route("/{type}/new", name="pequiven_arrangementprogram_new",requirements={"type":"1|2|3"})
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($type)
     {
         $entity = new ArrangementProgram();
+        $entity->setType($type);
+        $period = $this->getRepositoryById('period')->findOneActive();
+        $entity->setPeriod($period);
         $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
         //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
         $entity->addTimeline($timeLine);

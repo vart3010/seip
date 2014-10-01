@@ -2,7 +2,7 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -12,7 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @Route("/data")
  */
-class GenericDataController extends FOSRestController {
+class GenericDataController extends SEIPController 
+{
     
     /**
      * Obtiene los responsable de una meta
@@ -22,23 +23,24 @@ class GenericDataController extends FOSRestController {
      */
     function getResponsibleGoalsAction()
     {
-        $repository = $this->get('pequiven.repository.user');
+        $user = $this->getUser();
+        $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($user);
         $view = $this->view();
-        $view->setData($repository->findAll());
+        $view->setData($results);
         return $view;
     }
     
     /**
      * Obtiene los tipos de meta de acuerdo al tipo de actividad
      *
-     * @Route("/type-goal.{_format}", name="pequiven_arrangementprogram_data_type_goal",requirements={"_format"="json|xml"},defaults={"_format"="json"},options={"expose"="true"})
+     * @Route("/{category}/type-goal.{_format}", name="pequiven_arrangementprogram_data_type_goal",requirements={"_format"="json|xml"},defaults={"_format"="json"},options={"expose"="true"})
      * @Method("GET")
      */
-    function getTypeGoalAction()
+    function getTypeGoalAction($category)
     {
-        $repository = $this->get('pequiven.repository.type_goal');
+        $results = $this->get('pequiven.repository.type_goal')->findByCategory($category);
         $view = $this->view();
-        $view->setData($repository->findAll());
+        $view->setData($results);
         return $view;
     }
 }

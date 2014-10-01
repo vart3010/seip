@@ -1,4 +1,5 @@
 pequiven:
+    select: Seleccione
     arrangement_program:
         arrangement_program: Programa de gestión
         period: Periodo

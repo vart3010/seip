@@ -38,7 +38,14 @@
                     {$ goal.name $}<br>
                     <small>{$ goal.observations $}</small>
                 </th>
-                <td>{$ goal.type_goal.description $}</td>
+                <td>
+                    <span ng-if="goal.type_goal">
+                        {$ goal.type_goal.description $}
+                    </span>
+                    <span ng-if="!goal.type_goal">
+                        {$ 'pequiven.form.not_applicable'|trans $}
+                    </span>
+                </td>
                 <td>{$ goal.start_date | myDate $}</td>
                 <td>{$ goal.end_date | myDate $}</td>
                 <td>{$ goal.weight $}</td>
