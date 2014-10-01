@@ -26,21 +26,70 @@ class Rol extends BaseGroup
     const ROLE_GENERAL_COMPLEJO_AUX = 12000;
     const ROLE_DIRECTIVE_AUX = 13000;
     
-    public $rol_name = array();
-    
     public function __construct() {
-        $this->rol_name = self::getRolesNames();
         parent::__construct(null,array());
     }
     
-    
+    /**
+     * Devuelve el nombre del rol
+     * @param type $role
+     * @return type
+     * @throws Exception
+     */
     static function getRoleName($role) {
         $rolesNames = self::getRolesNames();
-        if(isset($rolesNames[$role])){
-            return $rolesNames[$role];
+        if(!isset($rolesNames[$role])){
+            throw new Exception(sprintf("Role name '%s' dont exists",$role));
         }
-        return null;
+        return $rolesNames[$role];
     }
+    
+    /**
+     * Devuelve el nivel del rol
+     * @param type $role
+     * @return type
+     * @throws Exception
+     */
+    static function getRoleLevel($role) {
+        $rolesLevel = self::getRolesLevel();
+        if(!isset($rolesLevel[$role])){
+            throw new Exception(sprintf("Role level '%s' dont exists",$role));
+        }
+        return $rolesLevel[$role];
+    }
+    
+    /**
+     * Devuelve el nivel de los roles
+     * @staticvar array $rolesLevel
+     * @return array
+     */
+    static function getRolesLevel() {
+        static $rolesLevel = array(
+            self::ROLE_DEFAULT => 0,
+            self::ROLE_WORKER_PQV => 1000,
+            self::ROLE_SUPERVISER => 2000,
+            self::ROLE_MANAGER_SECOND => 3000,
+            self::ROLE_MANAGER_FIRST => 4000,
+            self::ROLE_GENERAL_COMPLEJO => 5000,
+            self::ROLE_DIRECTIVE => 6000,
+            self::ROLE_ADMIN => 7000,
+            self::ROLE_SUPER_ADMIN => 8000,
+        );
+        
+        $rolesLevel[self::ROLE_SUPERVISER_AUX] = $rolesLevel[self::ROLE_SUPERVISER];
+        $rolesLevel[self::ROLE_MANAGER_SECOND_AUX] = $rolesLevel[self::ROLE_MANAGER_SECOND];
+        $rolesLevel[self::ROLE_MANAGER_FIRST_AUX] = $rolesLevel[self::ROLE_MANAGER_FIRST];
+        $rolesLevel[self::ROLE_GENERAL_COMPLEJO_AUX] = $rolesLevel[self::ROLE_GENERAL_COMPLEJO];
+        $rolesLevel[self::ROLE_DIRECTIVE_AUX] = $rolesLevel[self::ROLE_DIRECTIVE];
+        
+        return $rolesLevel;
+    }
+    
+    /**
+     * Devuelve el nombre de los roles
+     * @staticvar array $rolesNames
+     * @return string
+     */
     static function getRolesNames() {
         static $rolesNames = array(
             self::ROLE_DEFAULT => 'ROLE_WORKER_PQV',
