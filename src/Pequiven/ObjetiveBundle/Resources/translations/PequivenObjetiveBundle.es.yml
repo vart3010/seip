@@ -34,9 +34,9 @@ form:
     gerencia: Gerencia
     gerenciaFirst: Gerencia 1ra línea
     gerenciaSecond: Gerencia 2da línea
-    objetiveStrategic: Objetivo estratégico
-    objetiveTactic: Objetivo táctico
-    objetiveOperative: Objetivo operativo
+    objetiveStrategic: Objetivo Estratégico
+    objetiveTactic: Objetivo Táctico
+    objetiveOperative: Objetivo Operativo
     gerencia_first: Gerencia 1ra Línea
     gerencia_second: Gerencia 2da Línea
     parent_strategic: Objetivo Estratégico
@@ -44,6 +44,7 @@ form:
     parent_operative: Objetivo Operativo
     weight: Peso
     goal: Meta
+    conduct: Comportamiento
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto
@@ -53,6 +54,9 @@ form:
     textResObj: Valor
     
     rankArrangement: Rango del Objetivo
+    rankArrangementObjetiveStrategic: Rango del Objetivo Estratégico
+    rankArrangementObjetiveTactic: Rango del Objetivo Táctico
+    rankArrangementObjetiveOperative: Rango del Objetivo Operativo
     rankArrangementTop: Rango Alto
     rankArrangementMiddleTop: Rango Medio Alto
     rankArrangementMiddleBottom: Rango Medio Bajo
@@ -72,10 +76,16 @@ form:
     
     
     typeEvaluation: Tipo de Evaluación
+    typeEvaluationObjetiveStrategic: Tipo de Evaluación del Objetivo Estratégico
+    typeEvaluationObjetiveTactic: Tipo de Evaluación del Objetivo Táctico
+    typeEvaluationObjetiveOperative: Tipo de Evaluación del Objetivo Operativo
     evalObjetive: Por Objetivo
-    evalByObjetiveTactic: Ponderación de objetivos tácticos
-    evalByObjetiveOperative: Ponderación de objetivos operativos
+    evalByObjetiveTactic: Ponderación de Objetivos Tácticos
+    evalByObjetiveOperative: Ponderación de Objetivos Operativos
     evalIndicator: Por Indicador
+    evalIndicatorObjetiveStrategic: Por Indicador Estratégico
+    evalIndicatorObjetiveTactic: Por Indicador Táctico
+    evalIndicatorObjetiveOperative: Por Indicador Operativo
     evalArrangementProgram: Por Programa de Gestión
     formEvaluation: Forma de Evaluación
     evalSimpleAverage: Promedio Simple
@@ -124,11 +134,19 @@ form:
         rankBottomTop: Rango bajo-alto del semáforo de evaluación de gestión
         rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
         
+        typeEvaluationObjetiveStrategic: Seleccione al menos una opción para evaluar el desempeño del Objetivo Estratégico
+        typeEvaluationObjetiveTactic: Seleccione al menos una opción para evaluar el desempeño del Objetivo Táctico
+        typeEvaluationObjetiveOperative: Seleccione al menos una opción para evaluar el desempeño del Objetivo Operativo
         evalObjetive: Seleccione si el objetivo será evaluado por sub-objetivos
-        evalByObjetiveTactic: Seleccione si el objetivo será evaluado por la ponderación de objetivos tácticos
-        evalByObjetiveOperative: Seleccione si el objetivo será evaluado por la ponderación de objetivos operativos
+        evalByObjetiveTactic: Seleccione si el desempeño del Objetivo Estratégico será evaluado por la ponderación de Objetivos Tácticos
+        evalByObjetiveOperative: Seleccione si el desempeño del Objetivo Táctico será evaluado por la ponderación de Objetivos Operativos
         evalIndicator: Seleccione si el objetivo será evaluado por indicadores
+        evalIndicatorObjetiveStrategic: Seleccione si el desempeño del Objetivo Estratégico será evaluado por Indicadores Estratégicos
+        evalIndicatorObjetiveTactic: Seleccione si el desempeño del Objetivo Táctico será evaluado por Indicadores Tácticos
+        evalIndicatorObjetiveOperative: Seleccione si el desempeño del Objetivo Operativo será evaluado por Indicadores Operativos
         evalArrangementProgram: Seleccione si el objetivo será evaluado por programas de gestión
+        evalArrangementProgramObjetiveTactic: Seleccione si el desempeño del Objetivo Táctico será evaluado por Programas de Gestión
+        evalArrangementProgramObjetiveOperative: Seleccione si el desempeño del Objetivo Operativo será evaluado por Programas de Gestión
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
         evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
         indicators: Indicadores que serán parte de la evaluación del objetivo a crear

@@ -19,3 +19,20 @@
 </hgroup>
         {% include "PequivenSEIPBundle:FOSUserBundle:Profile/edit_content.html.twig" %}
 {% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            charge();
+            
+            function charge(){
+                $("div.field-block label").attr("class","required label");
+                $("#currentPassword label.required").attr("class","required label");
+            }
+            
+        });
+        
+    </script>
+{% endblock %}

@@ -598,6 +598,33 @@ class GerenciaSecondFixture extends AbstractFixture implements OrderedFixtureInt
         $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_GERENCIA_INGENIERIA_ZIV]);
         $this->addReference($refNameArray[GerenciaSecond::REF_GERENCIA_INGENIERIA_ZIV], $gerenciaSecond);
             $manager->persist($gerenciaSecond);
+        
+        $gerenciaSecond = new GerenciaSecond();
+        $gerenciaSecond->setDescription('Coordinación Morón');
+        $gerenciaSecond->setEnabled(1);
+        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPMORON]));
+        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_COORDINACION_MORON]);
+        $this->addReference($refNameArray[GerenciaSecond::REF_COORDINACION_MORON], $gerenciaSecond);
+            $manager->persist($gerenciaSecond);
+            
+        $gerenciaSecond = new GerenciaSecond();
+        $gerenciaSecond->setDescription('Coordinación AMC');
+        $gerenciaSecond->setEnabled(1);
+        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPAMC]));
+        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_COORDINACION_AMC]);
+        $this->addReference($refNameArray[GerenciaSecond::REF_COORDINACION_AMC], $gerenciaSecond);
+            $manager->persist($gerenciaSecond);
+            
+        $gerenciaSecond = new GerenciaSecond();
+        $gerenciaSecond->setDescription('Coordinación JAA');
+        $gerenciaSecond->setEnabled(1);
+        $gerenciaSecond->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]));
+        $gerenciaSecond->setGerencia($this->getReference($refGerenciaNameArray[Gerencia::REF_GERENCIA_PLANIFICACION_ESTRATEGICA_NUEVOS_DESARROLLOS]));
+        $gerenciaSecond->setRef($refNameArray[GerenciaSecond::REF_COORDINACION_JAA]);
+        $this->addReference($refNameArray[GerenciaSecond::REF_COORDINACION_JAA], $gerenciaSecond);
+            $manager->persist($gerenciaSecond);
             
         //ZIV-Seg. Ctrol. Financiero/Admvo. Proyectos
         $gerenciaSecond = new GerenciaSecond();

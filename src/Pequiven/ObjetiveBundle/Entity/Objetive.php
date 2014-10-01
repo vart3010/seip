@@ -12,12 +12,15 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * Objetive
  * 
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
  */
 class Objetive extends modelObjetive {
 
     //Texto a mostrar en los select
     protected $descriptionSelect;
+    
+    protected $typeView = '';
 
     /**
      * @var integer
@@ -194,7 +197,49 @@ class Objetive extends modelObjetive {
      * @ORM\JoinTable(name="seip_objetives_indicators")
      */
     private $indicators;
+    
+    /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     */
+    private $period;
+    
+    /**
+     * Revisado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $reviewedBy;
 
+    /**
+     * Fecha de revision
+     * @var \DateTime
+     * @ORM\Column(name="revisionDate", type="datetime",nullable=true)
+     */
+    private $revisionDate;
+
+    /**
+     * Aprobado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $approvedBy;
+
+    /**
+     * Fecha de aprobacion
+     * @var \DateTime
+     * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
+     */
+    private $approvalDate;
+
+    /**
+     * Estatus del Objetivo
+     * @var integer
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status = 0;
+    
     /**
      * Constructor
      */
@@ -770,5 +815,167 @@ class Objetive extends modelObjetive {
     public function getTendency()
     {
         return $this->tendency;
+    }
+    
+    /**
+     * Set revisionDate
+     *
+     * @param \DateTime $revisionDate
+     * @return Objetive
+     */
+    public function setRevisionDate($revisionDate)
+    {
+        $this->revisionDate = $revisionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get revisionDate
+     *
+     * @return \DateTime 
+     */
+    public function getRevisionDate()
+    {
+        return $this->revisionDate;
+    }
+
+    /**
+     * Set approvalDate
+     *
+     * @param \DateTime $approvalDate
+     * @return Objetive
+     */
+    public function setApprovalDate($approvalDate)
+    {
+        $this->approvalDate = $approvalDate;
+
+        return $this;
+    }
+
+    /**
+     * Get approvalDate
+     *
+     * @return \DateTime 
+     */
+    public function getApprovalDate()
+    {
+        return $this->approvalDate;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Objetive
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set reviewedBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
+     * @return Objetive
+     */
+    public function setReviewedBy(\Pequiven\SEIPBundle\Entity\User $reviewedBy = null)
+    {
+        $this->reviewedBy = $reviewedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get reviewedBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getReviewedBy()
+    {
+        return $this->reviewedBy;
+    }
+
+    /**
+     * Set approvedBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $approvedBy
+     * @return Objetive
+     */
+    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null)
+    {
+        $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get approvedBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeView() {
+        return $this->typeView;
+    }
+
+    /**
+     * 
+     * @param type $typeView
+     */
+    public function setTypeView($typeView) {
+        $this->typeView = $typeView;
+    }
+    
+    /**
+     * @ORM\PostLoad
+     */
+    public function postLoad(){
+        
+    }
+
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

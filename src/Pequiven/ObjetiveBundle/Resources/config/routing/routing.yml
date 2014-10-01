@@ -56,6 +56,12 @@ select_gerenciaFromComplejoTactic:
     defaults:
         _controller: pequiven.controller.objetivetactic:selectGerenciaFromComplejoAction
 
+#Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
+select_gerenciaFirstTactic:
+    path: /arrangement_strategic/objetive/select_gerenciaFirstTactic
+    defaults:
+        _controller: pequiven.controller.objetivetactic:selectGerenciaFirstAction
+
 #Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
 select_gerenciaFromComplejoOperative:
     path: /arrangement_strategic/objetive/select_gerenciaFromComplejoOperative

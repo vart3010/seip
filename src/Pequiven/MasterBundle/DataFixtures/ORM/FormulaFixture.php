@@ -1230,37 +1230,296 @@ class FormulaFixture extends AbstractFixture implements OrderedFixtureInterface,
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('PESVPEMFP = (N° RSVP<= 5 días hábiles / NT° SVP) * 100');
+        $formula->setEquation('PESVPEMFP = (N° RSVPEMFP<= 8 días hábiles / NT° SVPEMFP) * 100');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-175', $formula);
             $manager->persist($formula);
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('');
+        $formula->setEquation('PESVE = (N° RSVE<= 7 días hábiles / NT° SVE) * 100');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-176', $formula);
             $manager->persist($formula);
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('');
+        $formula->setEquation('CPAREPF = (ΣEPFE/ΣEPFP) * 100');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-177', $formula);
             $manager->persist($formula);
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('');
+        $formula->setEquation('CPAREC = (ΣECE/ΣECP) * 100');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-178', $formula);
             $manager->persist($formula);
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('');
+        $formula->setEquation('EAD = (ΣDA/ΣDR) * 100');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-179', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CPEC = (ΣAPECE/ΣAPECP) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-180', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CPPAI = (ΣAPAIE/ΣAPAIP) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-181', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('EIIG = (ΣIIO/ΣIIG) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-182', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CPTP = (ΣAPTPE/ΣAPTPP) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-183', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CPPI = (ΣAPPIE/ΣAPPIP) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-184', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('BI = (ΣN° BI/ΣN° BR) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-185', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CPACG = (ΣAPACGE/ΣAPACGP) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-186', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('MODELO CPJAA= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-187', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('MODELO EEMM= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-188', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('CUMP. REPORTES= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-189', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('DESARROLLO DE LA SALA= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-190', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('MODELO CPM= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-191', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('MODELO CPAMC= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-192', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('MODELO CORP= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-193', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Gestión y Administración de Recursos= Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-194', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('SGD = Real/Plan*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-195', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('% Procesamiento = Solicitudes procesadas/ Solicitudes recibidas*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-196', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('% Cumplimiento = Real/(Planificado + Solicitudes adicionales)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-197', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('% Atención = Solicitudes atendidas/Solicitudes asignadas*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-198', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Requerimiento Alcanzado * Tiempo Alcanzado / Requerimiento Esperado * Estándar de Tiempo) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-199', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Días promedio de selección ');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-200', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Avance del Plan de Ingreso / Plan de Ingreso * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-201', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Eficacia de la Capacitación = (Promedio Ponderado) Calificaciones + Medición de Competencias');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-202', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Planes de acción del Supervisor cumplidos / Planes de acción del supervisor programados');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-203', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Avance del Programa de Optimización  / Programa Planificado * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-204', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Total de Horas Extras Trabajadas / Total de Horas Normales de Trabajo * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-205', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Total de Beneficios + Bienestar / Labor Directa + Labor Indirecta');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-206', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Iniciativas con alianzas estratégicas / Total de iniciativas planificadas) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-207', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Solicitudes Alcanzadas * Tiempo Alcanzado / Solicitudes Esperadas * Estándar de Tiempo) * 100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-208', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Cantidad de Reembolsos procesados/Cantidad de solicitudes de reembolso recibidas)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-209', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Cantidad de Cartas Avales Iniciales procesadas/Cantidad de Solicitudes de cartas Avales Iniciales recibidas)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-210', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Cantidad de Facturas procesadas/Cantidad de Facturas recibidas)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-211', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Avance = (Avance Ejecutado/Avance Programado)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-212', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Avance= (Indice logrado/Indice programado) ');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-213', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('Avance= (Accidentes investigados/Accidentes Ocurridos)');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-214', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Informes entregados / Informes necesarios)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-215', $formula);
+            $manager->persist($formula);
+            
+        $formula = new Formula();
+        $formula->setEnabled(true);
+        $formula->setEquation('(Solicitudes de permisos entregados  / Permisos requeridos)*100');
+        $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
+        $this->addReference('Formula-216', $formula);
             $manager->persist($formula);
             
         $manager->flush();

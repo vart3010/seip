@@ -6,7 +6,8 @@
     <!-- Additional styles -->
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
-
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/ng-table/ng-table.css') }}">
    
@@ -219,3 +220,10 @@
         });
     </script>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.js') }}"></script>
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+{% endblock javascripts %}

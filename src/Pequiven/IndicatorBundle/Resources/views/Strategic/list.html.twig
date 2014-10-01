@@ -15,43 +15,40 @@
             <a href="{{ path(route_index) }}">{{ 'pequiven_indicator.indicator_strategic'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_indicator.list'|trans }}</span>
-            <!--
-            {% if allow_create %}
-                <p class="button-height align-right">
-                    <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
-                            <span class="button-icon anthracite-gradient"><span class="icon-star"></span></span>
-                            {{ 'sigtec.create'|trans }}
-                    </a>
-                </p>
-            {% endif %}
-            -->
         </h1>
     </hgroup>
     
-    <div ng-controller="TableFormatController">
-        <!--<div ng-controller="ObjetiveTacticController">-->
-                {% set filterYesNo = [
-                    { 'id':0,'name': ('sigtec.no'|trans)},
-                    { 'id':1,'name': ('sigtec.yes'|trans)},
-                ] %}
-                {% set filterActiveInactive = [
-                    { 'id':1,'name': ('sigtec.active'|trans)},
-                    { 'id':0,'name': ('sigtec.inactive'|trans)},
-                ] %}
-                <div loading-container="tableParams.settings().$loading">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('indicatorStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        <tr ng-repeat="result in $data | filter:tableParams.search" data="[[ result|json ]]">
-                            <td data-title="'{{ 'form.line_strategic'|trans }}'" >
-                                <a href="[[ result._links.self.href ]]">[[result.line_strategic.ref+result.line_strategic.description]]</a>
-                            </td>
-                            <td data-title="'{{ 'form.indicator'|trans }}'" sortable="'ref'">
-                                <a href="[[ result._links.self.href ]]">[[result.ref+result.description]]</a>
+    <div ng-controller="TableGroupingFormatController">
+        <div ng-controller="TableIndicatorStrategicController">
+            {% set filterYesNo = [
+                { 'id':0,'name': ('sigtec.no'|trans)},
+                { 'id':1,'name': ('sigtec.yes'|trans)},
+            ] %}
+            {% set filterActiveInactive = [
+                { 'id':1,'name': ('sigtec.active'|trans)},
+                { 'id':0,'name': ('sigtec.inactive'|trans)},
+            ] %}
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('indicatorStrategicList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <tbody ng-repeat="group in $groups">
+                        <tr class="ng-table-group">
+                            <td colspan="{$ $columns.length $}">
+                                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                                    <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                                    <strong>{$ group.value $}</strong>
+                                </a>
                             </td>
                         </tr>
-                    </table>
-                </div>
-            <!--</div>-->
+                        <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
+                            <td data-title="'{{ 'form.indicatorStrategic'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
@@ -60,11 +57,20 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-                response =  '<strong>{{ 'pequiven_indicator.popup.description'|trans }}:</strong> ' + data.description + '<br>' +
-                            '<strong>{{ 'pequiven_indicator.popup.lineStrategic' |trans }}:</strong> ' + data.line_strategic.description + '<br>' +
-                            '<strong>{{ 'pequiven_indicator.popup.formula' |trans }}:</strong> ' + data.formula.equation + '<br>'
-                            ;
-                        
+
+                response = response + 'Fórmula: ' + data.formula.equation;
+                
+                {#var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
+                    for(var i = 0; i < totalIndicators; i++){
+                        response = response + data.indicators[i].ref + data.indicators[i].description;
+                        if(data.indicators[i].formula){
+                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
+                        }
+                        response = response + '<br>';
+                    }
+                }#}
                 return response;
             }
     </script>

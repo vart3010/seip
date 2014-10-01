@@ -117,7 +117,7 @@
             </div>
             
             <!-- Peso del Objetivo -->
-            <div id="weight" class="field-block button-height">
+            {#<div id="weight" class="field-block button-height">
                 {{ form_label(form.weight) }}
                 {{ form_widget(form.weight) }}
                 {{ form_errors(form.weight) }}
@@ -125,7 +125,7 @@
                     <span class="icon-info-round"></span>
                     <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
-            </div>
+            </div>#}
                 
             <!-- Meta del Objetivo -->
             <div class="field-block button-height">
@@ -143,7 +143,7 @@
 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementObjetiveTactic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -170,10 +170,10 @@
                                     {{ form_widget(form.arrangementRangeTypeTop) }}
 
                                     <span id="sectionTopBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankTopBasic) }} {{ form_widget(form.rankTopBasic) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopBasic) }} {{ form_widget(form.rankTopBasic) }}
                                     </span>
                                     <span id="sectionTopMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankTopMixedTop) }} {{ form_widget(form.rankTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankTopMixedBottom) }} {{ form_widget(form.rankTopMixedBottom) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedTop) }} {{ form_widget(form.rankTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedBottom) }} {{ form_widget(form.rankTopMixedBottom) }}
                                     </span>
                                 </div>
                             </div>
@@ -189,10 +189,10 @@
                                     {{ form_widget(form.arrangementRangeTypeMiddleTop) }}
 
                                     <span id="sectionMiddleTopBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleTopBasic) }} {{ form_widget(form.rankMiddleTopBasic) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopBasic) }} {{ form_widget(form.rankMiddleTopBasic) }}
                                     </span>
                                     <span id="sectionMiddleTopMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleTopMixedTop) }} {{ form_widget(form.rankMiddleTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleTopMixedBottom) }} {{ form_widget(form.rankMiddleTopMixedBottom) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedTop) }} {{ form_widget(form.rankMiddleTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedBottom) }} {{ form_widget(form.rankMiddleTopMixedBottom) }}
                                     </span>
                                 </div>
                             </div>
@@ -208,10 +208,10 @@
                                     {{ form_widget(form.arrangementRangeTypeMiddleBottom) }}
 
                                     <span id="sectionMiddleBottomBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleBottomBasic) }} {{ form_widget(form.rankMiddleBottomBasic) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomBasic) }} {{ form_widget(form.rankMiddleBottomBasic) }}
                                     </span>
                                     <span id="sectionMiddleBottomMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleBottomMixedTop) }} {{ form_widget(form.rankMiddleBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankMiddleBottomMixedBottom) }} {{ form_widget(form.rankMiddleBottomMixedBottom) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedTop) }} {{ form_widget(form.rankMiddleBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedBottom) }} {{ form_widget(form.rankMiddleBottomMixedBottom) }}
                                     </span>
                                 </div>
                             </div>
@@ -227,10 +227,10 @@
                                     {{ form_widget(form.arrangementRangeTypeBottom) }}
 
                                     <span id="sectionBottomBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankBottomBasic) }} {{ form_widget(form.rankBottomBasic) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomBasic) }} {{ form_widget(form.rankBottomBasic) }}
                                     </span>
                                     <span id="sectionBottomMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankBottomMixedTop) }} {{ form_widget(form.rankBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}</label>{{ form_widget(form.opRankBottomMixedBottom) }} {{ form_widget(form.rankBottomMixedBottom) }}
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedTop) }} {{ form_widget(form.rankBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedBottom) }} {{ form_widget(form.rankBottomMixedBottom) }}
                                     </span>
                                 </div>
                             </div>
@@ -241,7 +241,12 @@
                 
             <!-- Tipo de Evaluación -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.typeEvaluation'|trans }}</summary>
+                <summary>{{ 'form.typeEvaluationObjetiveTactic'|trans }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.typeEvaluationObjetiveTactic'|trans }}</span>
+                    </span>
+                </summary>
                 <div class="with-padding">
                 
                     <!-- Por Objetivo -->
@@ -262,7 +267,7 @@
                         {{ form_errors(form.evalIndicator) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalIndicator'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalIndicatorObjetiveTactic'|trans }}</span>
                         </span>
                         <span id="button_add_indicator">
                             <button type="button" class="button red-gradient glossy" onclick="openFormIndicator()">{{ 'pequiven_objetive.registerIndicator'|trans }}</button>
@@ -294,7 +299,7 @@
                         {{ form_errors(form.evalArrangementProgram) }}
                         <span class="info-spot">
                             <span class="icon-info-round"></span>
-                            <span class="info-bubble">{{ 'form.info.evalArrangementProgram'|trans }}</span>
+                            <span class="info-bubble">{{ 'form.info.evalArrangementProgramObjetiveTactic'|trans }}</span>
                         </span>
                     </div>
                 </div>
@@ -326,7 +331,7 @@
             selectIndicators = $("#pequiven_objetive_tactic_registration_indicators"),//Select de Indicadores
             inputRef = $("#pequiven_objetive_tactic_registration_ref"),//Input de Ref
             inputGoal = $("#pequiven_objetive_tactic_registration_goal"),//Input de Meta
-            inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso
+{#            inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso#}
             inputHiddenRoleName = $("#pequiven_objetive_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
             checkIndicator = $("#pequiven_objetive_tactic_registration_evalIndicator"),//Check de Evaluar por Indicador
             checkGerencia = $("#pequiven_objetive_tactic_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
@@ -407,10 +412,15 @@
                 }
 
                 //Inicializamos el formato numerico para el input de Peso
-                inputWeight.number(true,2,',','.');
+{#                inputWeight.number(true,2,',','.');#}
 
                 //Incializamos el formato numerico para el input de Meta
                 inputGoal.number(true,2,',','.');
+                
+                inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
+                inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
+                inputHiddenTypeArrangementRangeMiddleBottom.val("MIDDLE_BOTTOM_BASIC");
+                inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
 
                 //Inicializamos el formato numerico para el input de Rango Alto
                 inputRankTopBasic.number(true,2,',','.');

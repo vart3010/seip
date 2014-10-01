@@ -223,11 +223,11 @@ class UserFixture extends AbstractFixture implements OrderedFixtureInterface, Co
             $manager->persist($user);
             
         $user = new User();
-        $user->setUsername('george_ggjaa')
+        $user->setUsername('grojas_ggjaa')
              ->setPlainPassword('12345')
              ->setFirstName('George')
              ->setLastName('Rojas')
-             ->setEmail('george_ggjaa@pequiven.com')
+             ->setEmail('grojas_ggjaa@pequiven.com')
              ->setNumPersonal(10016012)
              ->setComplejo($this->getReference($complejoNameArray[Complejo::COMPLEJO_CPJAA]))
              ->setGerencia($this->getReference($gerenciaNameArray[Gerencia::REF_GERENCIA_GENERAL_CPJAA]))

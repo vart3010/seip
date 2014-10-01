@@ -42,12 +42,12 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaFirstList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        <tr ng-repeat="result in $data | filter:tableParams.search " data="[[ result|json ]]">
+                        <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
                             <td data-title="'{{ 'form.complejo'|trans }}'" >
-                                <a href="[[ result._links.self.href ]]">[[result.complejo.description]]</a>
+                                <a href="{$ result._links.self.href $}">{$result.complejo.description$}</a>
                             </td>
                             <td data-title="'{{ 'form.gerencia_first'|trans }}'" sortable="'description'" filter="{ 'description': 'text' }" >
-                                <a href="[[ result._links.self.href ]]">[[result.description]]</a>
+                                <a href="{$ result._links.self.href $}">{$result.description$}</a>
                             </td>
                         </tr>
                     </table>

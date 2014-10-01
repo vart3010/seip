@@ -19,7 +19,7 @@
     -->
     <services>
         
-        <!-- Formulario de Indicador Estratégico De Objetivo Estratégico -->
+        <!-- Formulario de registro de Indicador Estratégico De Objetivo Estratégico -->
         <service id="pequiven_indicator.strategicfo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_strategicfo_registration" />
             <call method="setContainer">
@@ -28,7 +28,7 @@
             <argument>fromObjetive</argument>
         </service>
         
-        <!-- Formulario de Indicador Estratégico -->
+        <!-- Formulario de registro de Indicador Estratégico -->
         <service id="pequiven_indicator.strategic.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_strategic_registration" />
             <call method="setContainer">
@@ -37,7 +37,7 @@
             <argument>regular</argument>
         </service>
         
-        <!-- Formulario de Indicador Táctico De Objetivo Táctico -->
+        <!-- Formulario de registro de Indicador Táctico De Objetivo Táctico -->
         <service id="pequiven_indicator.tacticfo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Tactic\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_tacticfo_registration" />
             <call method="setContainer">
@@ -46,7 +46,7 @@
             <argument>fromObjetive</argument>
         </service>
         
-        <!-- Formulario de Indicador Táctico -->
+        <!-- Formulario de registro de Indicador Táctico -->
         <service id="pequiven_indicator.tactic.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Tactic\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_tactic_registration" />
             <call method="setContainer">
@@ -55,7 +55,7 @@
             <argument>regular</argument>
         </service>
         
-        <!-- Formulario de Indicador Operativo De Objetivo Operativo -->
+        <!-- Formulario de registro de Indicador Operativo De Objetivo Operativo -->
         <service id="pequiven_indicator.operativefo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_operativefo_registration" />
             <call method="setContainer">
@@ -64,7 +64,7 @@
             <argument>fromObjetive</argument>
         </service>
         
-        <!-- Formulario de Indicador Operativo -->
+        <!-- Formulario de registro de Indicador Operativo -->
         <service id="pequiven_indicator.operative.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_operative_registration" />
             <call method="setContainer">

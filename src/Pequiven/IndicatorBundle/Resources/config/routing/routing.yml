@@ -105,7 +105,7 @@ indicatorStrategicList:
     defaults: 
         _controller: pequiven.controller.indicatorstrategic:indicatorListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorStrategic
             
 #Devuelve el paginador con la data de los indicadores tácticos
 indicatorTacticList:
@@ -113,7 +113,7 @@ indicatorTacticList:
     defaults: 
         _controller: pequiven.controller.indicatortactic:indicatorListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorTactic
             
 #Devuelve el paginador con la data de los indicadores operativos
 indicatorOperativeList:
@@ -121,4 +121,4 @@ indicatorOperativeList:
     defaults: 
         _controller: pequiven.controller.indicatoroperative:indicatorListAction
         _sylius:
-            method: createPaginatorByLevel
+            method: createPaginatorOperative

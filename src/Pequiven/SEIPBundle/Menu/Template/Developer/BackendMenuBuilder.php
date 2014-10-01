@@ -65,15 +65,15 @@ class BackendMenuBuilder extends MenuBuilder
 //        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.support', $section)));
         
         //Menú Administración
-        $this->addAdministrationMenu($menu, $section);
+        //$this->addAdministrationMenu($menu, $section);
         //Menú Gestión Estratégica
         $this->addArrangementStrategicMenu($menu, $section);
         //Menú Programas de Gestión
-        $this->addArrangementProgramsMenu($menu, $section);
+        //$this->addArrangementProgramsMenu($menu, $section);
         //Menú Reportes
-        $menu->addChild('reports', array(
-            'route' => null,
-            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
+//        $menu->addChild('reports', array(
+//            'route' => null,
+//            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
         
     //$menu->setCurrent($this->request->getRequestUri());
         return $menu;

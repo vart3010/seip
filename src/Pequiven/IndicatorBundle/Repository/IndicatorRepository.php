@@ -110,4 +110,90 @@ class IndicatorRepository extends baseEntityRepository {
 //        die();
         return $this->getPaginator($queryBuilder);
     }
+    
+    /**
+     * Crea un paginador para los indicadores estratégicos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Estratégico
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+
+        if(isset($criteria['indicatorLevel'])){
+            $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
+        }
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los indicadores tácticos
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Estratégico
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+
+        if(isset($criteria['indicatorLevel'])){
+            $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
+        }
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los indicadores operativos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        //Filtro Objetivo Estratégico
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+
+        if(isset($criteria['indicatorLevel'])){
+            $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
+        }
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
 }

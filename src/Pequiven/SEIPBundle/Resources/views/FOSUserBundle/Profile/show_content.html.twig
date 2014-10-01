@@ -37,12 +37,12 @@
             <label class="label">{{ 'pequiven_seip.profile.last_login'|trans }}</label>
             {{ user.lastLogin ? user.lastLogin | date('Y-m-d h:i a') : null }}
         </p>
-        <p class="inline-label">
+        {#<p class="inline-label">
             <label class="label">{{ 'pequiven_seip.profile.groups'|trans }}</label>
             {% for group in user.groups %}
                 {{ group }}
             {% endfor %}
-        </p>
+        </p>#}
         
     </fieldset>
 <p class="button-height align-right">
