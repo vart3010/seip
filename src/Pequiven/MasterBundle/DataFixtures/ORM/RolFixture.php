@@ -35,7 +35,7 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         
         $this->addReference(Rol::getRoleName(Rol::ROLE_WORKER_PQV), $rol);
             $manager->persist($rol);
-        //Supervisor, Coordinador o Superintendente    
+        //Supervisor
         $rol = new Rol();
         $rol->setDescription('Supervisor')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_SUPERVISER))
@@ -43,6 +43,15 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
             ->addRole(Rol::getRoleName(Rol::ROLE_SUPERVISER))
                 ;
         $this->addReference(Rol::getRoleName(Rol::ROLE_SUPERVISER), $rol);
+            $manager->persist($rol);
+        //Coordinador, Superintendente
+        $rol = new Rol();
+        $rol->setDescription('Coordinador')
+            ->setLevel(Rol::getRoleLevel(Rol::ROLE_COORDINATOR))
+            ->setName(Rol::getRoleName(Rol::ROLE_COORDINATOR))
+            ->addRole(Rol::getRoleName(Rol::ROLE_COORDINATOR))
+                ;
+        $this->addReference(Rol::getRoleName(Rol::ROLE_COORDINATOR), $rol);
             $manager->persist($rol);
         //Gerende 2da Línea
         $rol = new Rol();

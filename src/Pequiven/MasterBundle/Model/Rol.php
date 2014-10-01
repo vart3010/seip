@@ -14,6 +14,7 @@ class Rol extends BaseGroup
     const ROLE_DEFAULT = 0;
     const ROLE_WORKER_PQV = 1000;
     const ROLE_SUPERVISER = 2000;
+    const ROLE_COORDINATOR = 2500;
     const ROLE_MANAGER_SECOND = 3000;
     const ROLE_MANAGER_FIRST = 4000;
     const ROLE_GENERAL_COMPLEJO = 5000;
@@ -68,8 +69,9 @@ class Rol extends BaseGroup
             self::ROLE_DEFAULT => 0,
             self::ROLE_WORKER_PQV => 1000,
             self::ROLE_SUPERVISER => 2000,
-            self::ROLE_MANAGER_SECOND => 3000,
-            self::ROLE_MANAGER_FIRST => 4000,
+            self::ROLE_COORDINATOR => 3000,
+            self::ROLE_MANAGER_SECOND => 4000,
+            self::ROLE_MANAGER_FIRST => 5000,
             self::ROLE_GENERAL_COMPLEJO => 5000,
             self::ROLE_DIRECTIVE => 6000,
             self::ROLE_ADMIN => 7000,
@@ -95,6 +97,7 @@ class Rol extends BaseGroup
             self::ROLE_DEFAULT => 'ROLE_WORKER_PQV',
             self::ROLE_WORKER_PQV => 'ROLE_WORKER_PQV',
             self::ROLE_SUPERVISER => 'ROLE_SUPERVISER',
+            self::ROLE_COORDINATOR => 'ROLE_COORDINATOR',
             self::ROLE_MANAGER_SECOND => 'ROLE_MANAGER_SECOND',
             self::ROLE_MANAGER_FIRST => 'ROLE_MANAGER_FIRST',
             self::ROLE_GENERAL_COMPLEJO => 'ROLE_GENERAL_COMPLEJO',
