@@ -77,6 +77,9 @@ class ArrangementProgramType extends AbstractType
                         'attr' => array(
                             'class' => "select2 input-xxlarge"
                         ),
+                        'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
+                            return $repository->findQueryObjetivesTactic();
+                        },
                         'empty_value' => 'pequiven.select',
                         'required' => true,
                 ))
