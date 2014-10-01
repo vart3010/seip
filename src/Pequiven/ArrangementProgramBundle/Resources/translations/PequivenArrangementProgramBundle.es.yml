@@ -23,7 +23,7 @@ pequiven:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo táctico
         operational_objective: Objetivo operativo
-        operating_indicator: Indicador operativo
+        operating_indicagoalstor: Indicador operativo
         location: Localidad
         process: Proceso
         responsible: Responsable
@@ -40,6 +40,8 @@ pequiven:
         goals: Meta(s)
         add_goal: Añadir meta
         delete_this_goal: Eliminar esta meta
+        abbr_planned: P
+        abbr_real: R
 seip:
     table:
         header:

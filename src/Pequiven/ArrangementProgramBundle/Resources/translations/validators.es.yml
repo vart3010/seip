@@ -1,0 +1,4 @@
+pequiven:
+    validators:
+        goals_details:
+            min_value: El valor minimo permitido es cero

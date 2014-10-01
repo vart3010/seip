@@ -30,13 +30,18 @@ class RestArrangementProgramController extends FOSRestController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         $timelines = $entity->getTimelines();
-        $data = $timelines[0]->getGoals();
+        $data = array();
+        foreach ($timelines[0]->getGoals() as $goal) {
+            $data[] = $goal->getGoalDetails();
+        }
         $view = $this->view();
         $result = array(
             'data' => $data,
+            'success' => true,
+            'total' => count($data)
         );
         $view->setData($result);
-        $view->getSerializationContext()->setGroups(array('id','api_list','goalDetails'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
         return $view;
     }
@@ -44,19 +49,37 @@ class RestArrangementProgramController extends FOSRestController
     /**
      * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
-    function putGoalsDetailsAction($id) {
+    function putGoalsDetailsAction($id,Request $request,$slug) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:GoalDetails')->find($slug);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+            throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
-        $timelines = $entity->getTimelines();
-        $data = $timelines[0]->getGoals();
+        $form = $this->createForm(new \Pequiven\ArrangementProgramBundle\Form\GoalDetailsType(),$entity);
+        $dataRequest = $request->request->all();
+        
+        unset($dataRequest['id']);
+        unset($dataRequest['null']);
+        
+        $form->submit($dataRequest,false);
+//        var_dump($dataRequest);
+        $success = false;
+        if($form->isValid()){
+            $success = true;
+            $em->persist($entity);
+            $em->flush();
+        }else{
+            $entity = $form;
+        }
+        
         $view = $this->view();
         $result = array(
-            'data' => $data,
+            'data' => $entity,
+            'success' => $success,
+            'total' => 1,
+            'messages' => 'Exitooooo'
         );
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id','api_list','goalDetails'));

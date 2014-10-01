@@ -1,15 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
+<html lang="{{ app.request.locale }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>All</title>
+    <title>{% block title ''%}</title>
+    
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
     
     <link rel="stylesheet" type="text/css" href="{{ asset("ext/base/base.css") }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset("ext/ext-theme-classic/build/resources/ext-theme-classic-all.css") }}" />
+{#    <link rel="stylesheet" type="text/css" href="{{ asset("ext/ext-theme-classic/build/resources/ext-theme-classic-all.css") }}" />#}
+    <link rel="stylesheet" type="text/css" href="{{ asset("ext/build/packages/ext-theme-gray/build/resources/ext-theme-gray-all.css") }}" />
     
     <script type="text/javascript" src="{{ asset("ext/build/ext-all.js") }}"></script>
-    <script type="text/javascript" src="{{ asset("ext/base/options-toolbar.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("ext/build/packages/ext-locale/build/ext-locale-" ~ app.request.locale ~ ".js") }}"></script>
+    
     <script type="text/javascript" src="{{ asset("ext/base/toolbar.js") }}"></script>
+    <script type="text/javascript" src="{{ path("extjs_generate_model") }}"></script>
     <script type="text/javascript">
         var injectScriptElement = Ext.Loader.injectScriptElement,
             queue = [],
@@ -33,8 +39,6 @@
                 injectScriptElement.apply(Ext.Loader, item);
             }
         }
-
-        //Ext.require('*');
 
         Ext.onReady(function() {
             clearInterval(timer);

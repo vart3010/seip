@@ -108,8 +108,15 @@ tecnocreaciones_vzla_government:
     config:
         main_route: 'pequiven_seip_default_index'
 
-ext_direct:
-    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+#ext_direct:
+#    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+
+tpg_extjs:
+    entities:
+        - @PequivenArrangementProgramBundle/Entity/
+    remoting:
+        bundles:
+            - PequivenArrangementProgramBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"

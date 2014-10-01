@@ -40,10 +40,10 @@
         
         "ghua/ext-direct-bundle": "v2.4.0",
         
-        "sylius/resource-bundle": "0.10.0"
+        "sylius/resource-bundle": "0.10.0",
+        
+        "tecnocreaciones/extjs-bundle": "dev-master"
        
-
-
     },
     "scripts": {
         "post-install-cmd": [

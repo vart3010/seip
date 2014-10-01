@@ -94,7 +94,8 @@ class GoalType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal',
-            'translation_domain' => 'PequivenArrangementProgramBundle'
+            'translation_domain' => 'PequivenArrangementProgramBundle',
+            'csrf_protection' => false,
         ));
     }
 
