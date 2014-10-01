@@ -48,8 +48,12 @@ class ArrangementProgramController extends SEIPController
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $user = $this->getUser();
             $period = $this->getRepositoryById('period')->findOneActive();
-            $entity->setPeriod($period);
+            $entity
+                    ->setPeriod($period)
+                    ->setCreatedBy($user)
+                    ;
             $this->save($entity,true);
 
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
@@ -88,9 +92,12 @@ class ArrangementProgramController extends SEIPController
     public function newAction($type)
     {
         $entity = new ArrangementProgram();
-        $entity->setType($type);
+        $user = $this->getUser();
         $period = $this->getRepositoryById('period')->findOneActive();
-        $entity->setPeriod($period);
+        $entity->setType($type)
+               ->setPeriod($period)
+               ->setCreatedBy($user)
+                ;
         $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
         //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
         $entity->addTimeline($timeLine);

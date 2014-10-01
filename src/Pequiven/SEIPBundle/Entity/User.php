@@ -93,7 +93,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     /**
      * Gerencia
      * 
-     * @var=\Pequiven\MasterBundle\Entity\Gerencia
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */

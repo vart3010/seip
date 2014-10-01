@@ -36,9 +36,8 @@
         </div>
     {% endif %}
     <div class="field-block button-height">
-        {{ form_label(form.location) }}
-        {{ form_widget(form.location) }}
-        {{ form_errors(form.location) }}
+        <label class="label">{{ "pequiven.form.location"|trans }}</label>
+        {{ entity.createdBy.complejo }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.process) }}

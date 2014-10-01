@@ -30,15 +30,6 @@ class ArrangementProgramType extends AbstractType
                 'empty_value' => 'pequiven.select',
                 'required' => true,
             ))
-            ->add('location',null,array(
-                'label' => 'pequiven.form.location',
-                'label_attr' => array('class' => 'label'),
-                'attr' => array(
-                    'class' => "select2 input-xlarge"
-                ),
-                'empty_value' => 'pequiven.select',
-                'required' => true,
-            ))
             ->add('process',null,array(
                 'label' => 'pequiven.form.process',
                 'label_attr' => array('class' => 'label'),

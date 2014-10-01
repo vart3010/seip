@@ -74,7 +74,7 @@ class Gerencia extends modelGerencia
     
     /** 
      * Dirección
-     * @var=\Pequiven\MasterBundle\Entity\Direction
+     * @var \Pequiven\MasterBundle\Entity\Direction
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
      * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
      */

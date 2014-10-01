@@ -69,14 +69,6 @@ class ArrangementProgram
     private $operatingIndicator;
 
     /**
-     * Localidad
-     * @var \Pequiven\MasterBundle\Entity\Complejo
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Complejo")
-     */
-    private $location;
-
-    /**
      * Proceso
      * @var string
      *
@@ -148,6 +140,15 @@ class ArrangementProgram
      * @ORM\Column(name="type", type="integer")
      */
     private $type;
+    
+    /**
+     * Creado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $createdBy;
 
     public function __construct() {
         $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
@@ -371,29 +372,6 @@ class ArrangementProgram
     }
 
     /**
-     * Set location
-     *
-     * @param \Pequiven\MasterBundle\Entity\Complejo $location
-     * @return ArrangementProgram
-     */
-    public function setLocation(\Pequiven\MasterBundle\Entity\Complejo $location = null)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return \Pequiven\MasterBundle\Entity\Complejo 
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
      * Set responsible
      *
      * @param \Pequiven\SEIPBundle\Entity\User $responsible
@@ -502,5 +480,16 @@ class ArrangementProgram
 
     function setType($type) {
         $this->type = $type;
+        
+        return $this;
+    }
+    
+    function getCreatedBy() {
+        return $this->createdBy;
+    }
+
+    function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
+        $this->createdBy = $createdBy;
+        return $this;
     }
 }
