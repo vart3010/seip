@@ -28,7 +28,7 @@ function setValueSelect2(idSelect2,idEntity,data){
 
 
 angular.module('seipModule.controllers', [])
-    .controller("ArrangementProgramController",function($scope,notificationBarService,$http){
+    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter){
         $scope.data.responsible_goals = null;
         $scope.data.type_goals = null;
         
@@ -53,6 +53,8 @@ angular.module('seipModule.controllers', [])
                 });
             if(goal){
                 $scope.model.goal = goal;
+                $scope.model.start_date = $filter('myDate')(goal.start_date);
+                console.log($filter('myDate')(goal.start_date));
                 console.log(goal);
                 if(goal.type_goal !== null){
                     setValueSelect2("goal_typeGoal",goal.type_goal.id,$scope.data.type_goals);
