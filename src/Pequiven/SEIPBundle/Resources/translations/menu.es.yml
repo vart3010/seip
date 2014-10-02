@@ -3,7 +3,7 @@ app:
             menu:
                 sidebar:
                     home: Inicio
-                    example: 
+                    example:
                         main: Ejemplo
                         company: Compañia
                         technical_reports: Reporte tecnico
@@ -12,8 +12,8 @@ app:
                             admin: Administrador
                             groups: Grupos
                     support: Soporte
-                    arrangement:
-                        main: Gestión
+                    arrangement_strategic:
+                        main: Gestión Estratégica
                         objetives:
                             main: Objetivos
                             add:
@@ -21,11 +21,51 @@ app:
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
-                            list: Lista
-                        indicators: 
+                            list:
+                                main: Mostrar Carga
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
+                        indicators:
                             main: Indicadores
-                            list: Lista
-                        arrangement_programs: 
-                            main: Programas de Gestión
-                            list: Lista
+                            add:
+                                main: Añadir
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
+                            list:
+                                main: Mostrar Carga
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
+                    arrangement_programs:
+                        main: Programas de Gestión
+                        list: Lista
+                        add: Añadir
                     reports: Reportes
+                    admin:
+                        main: Administración
+                        complejo:
+                            main: Complejos
+                            list: Lista
+                            add: Añadir
+                        gerencia_first:
+                            main: Gerencia 1ra Línea
+                            list: Lista
+                            add: Añadir
+                        gerencia_second:
+                            main: Gerencia 2da Línea
+                            list: Lista
+                            add: Añadir
+                        cargo:
+                            main: Cargos
+                            list: Lista
+                            add: Añadir
+                        personal:
+                            main: Personal PQV
+                            list: Lista
+                            add: Añadir
+                        rol:
+                            main: Roles
+                            list: Lista
+                            add: Añadir

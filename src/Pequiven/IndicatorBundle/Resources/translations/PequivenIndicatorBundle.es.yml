@@ -1,0 +1,193 @@
+pequiven_indicator:
+                #Registrar
+                indicators: Indicadores
+                add: Añadir
+                list: Lista
+                strategic: Estratégico
+                tactic: Táctico
+                operative: Operativo
+                titleFrameAddStrategic: Registro de Indicador Estratégico
+                titleFrameAddTactic: Registro de Indicador Táctico
+                titleFrameAddOperative: Registro de Indicador Operativo
+                indicator_strategic: Indicador Estratégico
+                indicator_tactic: Indicador Táctico
+                indicator_operative: Indicador Operativo
+                
+                popup:
+                    description: Descripción
+                    lineStrategic: Línea Estratégica
+                    formula: Fórmula
+                    created_at: Creado el
+                    updated_at: Actualizado el
+
+                #Buttons
+                edit: Editar
+                save: Guardar
+                cancel: Cancelar
+
+form:
+    ref: Nro. de Referencia
+    indicator: Indicador
+    description: Descripción del Indicador
+    name: Nombre del Indicador
+    indicator_level: Nivel de Indicador
+    line_strategic: Línea Estratégica
+    lineStrategic: Línea Estratégica
+    location: Localidad
+    complejo: Complejo
+    gerencia: Gerencia
+    weight: Peso
+    goal: Meta
+    formula: Fórmula
+    tendency: Tendencia
+    conduct: Comportamiento
+    indicatorStrategic: Indicador Estratégico
+    indicatorTactic: Indicador Táctico
+    indicatorOperative: Indicador Operativo
+    
+    arrangementRangeType: Tipo de Rango
+    arrangementRangeTypeTop: Tipo de Rango Alto
+    arrangementRangeTypeTopEstable: Tipo de Rango Medio
+    arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
+    arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
+    arrangementRangeTypeBottom: Tipo de Rango Bajo
+    textResInd: Valor
+    
+    rankArrangement: Rango del Indicador
+    rankArrangementIndicatorStrategic: Rango del Indicador Estratégico
+    rankArrangementIndicatorTactic: Rango del Indicador Táctico
+    rankArrangementIndicatorOperative: Rango del Indicador Operativo
+    rankArrangementTop: Rango Alto
+    rankArrangementMiddle: Rango Medio
+    rankArrangementMiddleTop: Rango Medio Alto
+    rankArrangementMiddleBottom: Rango Medio Bajo
+    rankArrangementBottom: Rango Bajo
+    rankArrangementBottomTop: Rango Bajo Alto
+    rankArrangementBottomBottom: Rango Bajo Bajo
+    
+    selectionOfObjetiveTactic: Selección de objetivo táctico
+    selectionOfObjetiveOperative: Selección de objetivo operativo
+    
+    rankTop: Rango Alto
+    rankMiddleTop: Rango Medio Alto
+    rankMiddleBottom: Rango Medio Bajo
+    rankBottom: Rango Bajo
+    rankTopTop: Rango Alto-Alto
+    rankTopBottom: Rango Alto-Bajo
+    rankMiddleTopCompound: Rango Medio-Alto
+    rankMiddleBottomCompound: Rango Medio-Bajo
+    rankBottomTop: Rango Bajo-Alto
+    rankBottomBottom: Rango Bajo-Bajo
+    
+    rankTopNoEstableBasic: Rango Alto Básico
+    rankTopNoEstableMixed: Rango Alto Mixto
+    rankTopEstableBasic: Rango Medio Básico
+    rankTopEstableMixed: Rango Medio Mixto
+    
+    typeEvaluation: Tipo de Evaluación
+    formEvaluation: Forma de Evaluación
+    evalSimpleAverage: Promedio Simple
+    evalWeightedAverage: Promedio Ponderado
+    register: Registrar
+    
+    info:
+        lineStrategic: Línea estratégica que seguirá el objetivo
+        objetiveStrategic: Objetivo estratégico que seguirá el objetivo
+        objetiveTactic: Objetivo táctico que seguirá el objetivo
+        objetiveOperative: Objetivo operativo al cual pertenecerá el indicador
+        location: Localidad dónde tendrá impacto el objetivo
+        gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
+        gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
+        description: Nombre del indicador
+        ref: Nro. de referencia del indicador
+        weight: Peso del indicador
+        goal: Meta del indicador
+        formula: Fórmula de evaluación del indicador
+        arrangementRangeType: Seleccione el tipo de rango
+        arrangementRangeTypeTop: Seleccione el tipo de rango Alto
+        arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
+        arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
+        arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
+        rankTop: Valor alto del semáforo de evaluación de gestión
+        rankMiddleTop: Valor medio alto del semáforo de evaluación de gestión
+        rankMiddleBottom: Valor medio bajo del semáforo de evaluación de gestión
+        rankBottom: Valor bajo del semáforo de evaluación de gestión
+        rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
+        rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
+        rankMiddleTopCompound: Rango medio-alto del semáforo de evaluación de gestión
+        rankMiddleBottomCompound: Rango medio-bajo del semáforo de evaluación de gestión
+        rankBottomTop: Rango bajo-alto del semáforo de evaluación de gestión
+        rankBottomBottom: Rango bajo-bajo del semáforo de evaluación de gestión
+        evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
+        evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
+    
+    ref_info: Nro. de Referencia del indicador
+    description_info: Nombre del indicador
+    indicatorLevel_info: Nivel del indicador (Estratégico, Táctico u Operativo)
+    lineStrategic_info: Línea Estratégica del Indicador
+    complejo_info: Complejo dónde tendrá impacto el indicador
+    gerencia_info: Gerencia dónde tendrá impacto el indicador
+    weight_info: Peso del indicador. El valor decimal es ".".
+    goal_info: Meta del indicador. El valor decimal es ".".
+    formula_info: Fórmula de evaluación del indicador.
+    
+    arrangementRangeType_info: Seleccione el tipo de rango
+    
+    rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankBottom_info: Valor bajo del semáforo de evaluación de gestión. El valor decimal es ".".
+    rankTopTop_info: Rango alto-alto del semáforo de evaluación de gestión. 
+    rankTopBottom_info: Rango alto-bajo del semáforo de evaluación de gestión. 
+    rankMiddleTopCompound_info: Rango medio-alto del semáforo de evaluación de gestión. 
+    rankMiddleBottomCompound_info: Rango medio-bajo del semáforo de evaluación de gestión. 
+    rankBottomTop_info: Rango bajo-alto del semáforo de evaluación de gestión. 
+    rankBottomBottom_info: Rango bajo-bajo del semáforo de evaluación de gestión. 
+    
+    
+    evalSimpleAverage_info: Seleccione si el resultado será obtenido por un promedio simple.
+    evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
+    
+    messages:
+        pleaseChoiceALineStrategic: Seleccione una Línea Estratégica
+        pleaseChoiceAObjetiveStrategic: Seleccione un Objetivo Estratégico
+        pleaseChoiceAObjetiveTactic: Seleccione un Objetivo Táctico
+        selectLineStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectLineStrategicFormatNoResult: No hay líneas estratégicas registradas
+        selectLineStrategicPlaceholder: Seleccione una línea estratégica
+        selectLineStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% línea estratégica
+        selectObjetiveStrategicFormatNoMatcher: Seleccione una línea estratégica
+        selectObjetiveStrategicFormatNoResult: No hay objetivos estratégicos registrados para la línea estratégica seleccionada
+        selectObjetiveStrategicPlaceholder: Seleccione un objetivo estratégico
+        selectObjetiveStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% objetivo estratégico
+        selectObjetiveTacticFormatNoMatcher: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoResult: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
+        selectObjetiveTacticPlaceholder: Seleccione un objetivo táctico
+        selectObjetiveTacticFormatSelectionTooBig: Sólo puede seleccionar %maxsize% objetivo táctico
+        selectIndicatorFormatNoMatcher: Seleccione una línea estratégica
+        selectIndicatorFormatNoResult: No hay indicadores registrados para este objetivo
+        selectIndicatorPlaceholder: Seleccione un Indicador
+        selectFormulaFormatNoMatcher: Seleccione una fórmula de evaluación
+        selectFormulaFormatNoResult: No hay fórmulas registradas
+        selectFormulaPlaceholder: Seleccione una fórmula de evaluación
+        selectObjetiveTacticFormatNoMatcherIndicatorTacticDirective: Seleccione una gerencia de 1ra línea
+        selectObjetiveTacticFormatNoResultIndicatorTacticDirective: No hay objetivos tácticos registrados para la gerencia de 1ra línea seleccionada
+        selectObjetiveTacticFormatNoMatcherIndicatorTacticOther: Seleccione un objetivo estratégico
+        selectObjetiveTacticFormatNoResultIndicatorTacticOther: No hay objetivos tácticos registrados para el objetivo estratégico seleccionado
+        selectObjetiveTacticPlaceholderIndicator: Seleccione un objetivo táctico
+        selectObjetiveOperativePlaceholderIndicator: Seleccione un objetivo operativo
+        selectObjetiveOperativeFormatNoMatcherIndicatorOperativeOther: Seleccione una gerencia de 2da línea
+        selectObjetiveOperativeFormatNoResultIndicatorOperativeOther: No hay objetivos operativos registrados para la gerencia de 2da línea y el objetivo táctico seleccionados
+        selectObjetiveOperativeFormatNoMatcherIndicatorOperativeManagerSecond: Seleccione un objetivo táctico
+        selectObjetiveOperativeFormatNoResultIndicatorOperativeManagerSecond: No hay objetivos operativos registrados para el objetivo táctico seleccionado
+        
+    title:
+        addIndicatorStrategic: Registro Indicador Estratégico
+        addIndicatorTactic: Registro Indicador Táctico
+        addIndicatorOperative: Registro Indicador Operativo
+
+action:
+    messages:    
+        registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente
+        registerIndicatorTacticSuccessfull: Indicador Táctico registrado exitosamente
+        registerIndicatorOperativeSuccessfull: Indicador Operativo registrado exitosamente

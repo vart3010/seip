@@ -1,0 +1,6 @@
+<ul class="tags" data-prototype="{% filter escape %}
+    {{ include('PequivenArrangementProgramBundle:Goal:_form.html.twig', { 'goal': timeline.goals.vars.prototype}) }}{% endfilter %}">
+    {% for goal in timeline.goals %}
+        <li>{{ include('PequivenArrangementProgramBundle:Goal:_form.html.twig', { 'goal': goal }) }}</li>
+    {% endfor %}
+</ul>

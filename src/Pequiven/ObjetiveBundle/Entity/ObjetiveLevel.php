@@ -37,6 +37,7 @@ class ObjetiveLevel extends modelObjetiveLevel
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
+    private $updatedAt;
     
     /**
      * User
@@ -272,5 +273,27 @@ class ObjetiveLevel extends modelObjetiveLevel
         }
         return true;
     }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return ObjetiveLevel
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }
-        

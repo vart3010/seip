@@ -11,8 +11,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * User model
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
  * @ORM\Table(name="seip_user")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
+ *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=false)),
+ * })
  */
 class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
 {
@@ -79,27 +83,48 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /** 
      * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $Complejo;
+    private $complejo;
     
     /**
      * Gerencia
+     * 
      * @var=\Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
-    private $Gerencia;
+    private $gerencia;
+    
+    /**
+     * GerenciaSecond
+     * 
+     * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
+     */
+    private $gerenciaSecond;
     
     /**
      * Cargo
+     * 
      * @var \Pequiven\MasterBundle\Entity\Cargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
      */
-    private $Cargo;
+    private $cargo;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Rol")
+     * @ORM\JoinTable(name="fos_user_user_rol",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="rol_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
     
     /**
      * Get id
@@ -344,7 +369,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
     {
-        $this->Complejo = $complejo;
+        $this->complejo = $complejo;
 
         return $this;
     }
@@ -356,7 +381,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getComplejo()
     {
-        return $this->Complejo;
+        return $this->complejo;
     }
 
     /**
@@ -367,7 +392,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
     {
-        $this->Gerencia = $gerencia;
+        $this->gerencia = $gerencia;
 
         return $this;
     }
@@ -379,7 +404,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getGerencia()
     {
-        return $this->Gerencia;
+        return $this->gerencia;
     }
 
     /**
@@ -390,7 +415,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
     {
-        $this->Cargo = $cargo;
+        $this->cargo = $cargo;
 
         return $this;
     }
@@ -402,6 +427,33 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getCargo()
     {
-        return $this->Cargo;
+        return $this->cargo;
+    }
+
+    /**
+     * Set gerenciaSecond
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
+     * @return User
+     */
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
+    {
+        $this->gerenciaSecond = $gerenciaSecond;
+
+        return $this;
+    }
+
+    /**
+     * Get gerenciaSecond
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
+     */
+    public function getGerenciaSecond()
+    {
+        return $this->gerenciaSecond;
+    }
+    
+    public function __toString() {
+        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
     }
 }

@@ -7,15 +7,99 @@ pequiven_seip_menu_home:
 pequiven_objetive_menu_create:
     path: /arrangement/objetive/create
     defaults: {_controller: PequivenObjetiveBundle:Objetive:create}
-    
+
+#Lista de Objetivos Estratégicos
+pequiven_objetive_menu_list_strategic:
+    path: /arrangement_strategic/objetive/list/strategic
+    defaults: 
+        _controller: pequiven.controller.objetivestrategic:listAction
+        
+#Lista de Objetivos Tácticos
+pequiven_objetive_menu_list_tactic:
+    path: /arrangement_strategic/objetive/list/tactic
+    defaults:
+        _controller: pequiven.controller.objetivetactic:listAction
+        
+#Lista de Objetivos Operativos
+pequiven_objetive_menu_list_operative:
+    path: /arrangement_strategic/objetive/list/operative
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:listAction
+        
+#Lista de Indicadores Estratégicos
+pequiven_indicator_menu_list_strategic:
+    path: /arrangement_strategic/indicator/list/strategic
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:listAction
+        
+#Lista de Indicadores Tacticos
+pequiven_indicator_menu_list_tactic:
+    path: /arrangement_strategic/indicator/list/tactic
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:listAction
+        
+#Lista de Indicadores Operativos
+pequiven_indicator_menu_list_operative:
+    path: /arrangement_strategic/indicator/list/operative
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:listAction
+        
+#Lista de Gerencias de 1ra Línea
+pequiven_master_menu_list_gerenciaFirst:
+    path: /adminMaster/list/gerenciaFirst
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:listAction
+        
+#Lista de Gerencias de 2da Línea
+pequiven_master_menu_list_gerenciaSecond:
+    path: /adminMaster/list/gerenciaSecond
+    defaults:
+        _controller: pequiven.controller.gerenciasecond:listAction
+        
+#Registro de Objetivos  Estratégicos
 pequiven_objetive_menu_add_strategic:
-    path: /arrangement/objetive/strategic/add
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveStrategic:create}
-    
+    path: /arrangement_strategic/objetive/strategic/add
+    defaults:
+        _controller: pequiven.controller.objetivestrategic:createAction
+        
+#Registro de Objetivos Tácticos
 pequiven_objetive_menu_add_tactic:
-    path: /arrangement/objetive/tactic/add
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveTactic:create}
-    
+    path: /arrangement_strategic/objetive/tactic/add
+    defaults:
+        _controller: pequiven.controller.objetivetactic:createAction
+        
+#Registro de Objetivos Operativos
 pequiven_objetive_menu_add_operative:
-    path: /arrangement/objetive/operative/add
-    defaults: {_controller: PequivenObjetiveBundle:ObjetiveOperative:create}
+    path: /arrangement_strategic/objetive/operative/add
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:createAction
+        
+#Registro de Indicadores Estratégicos
+pequiven_indicator_menu_add_strategic:
+    path: /arrangement_strategic/indicator/strategic/add
+    defaults:
+        _controller: pequiven.controller.indicatorstrategic:createAction
+        
+#Registro de Indicadores Tácticos
+pequiven_indicator_menu_add_tactic:
+    path: /arrangement_strategic/indicator/tactic/add
+    defaults:
+        _controller: pequiven.controller.indicatortactic:createAction
+        
+#Registro de Indicadores Operativos
+pequiven_indicator_menu_add_operative:
+    path: /arrangement_stratetgic/indicator/operative/add
+    defaults:
+        _controller: pequiven.controller.indicatoroperative:createAction
+        
+#Registro de gerencias de 1ra línea
+pequiven_master_menu_add_gerenciaFirst:
+    path: /adminMaster/gerenciaFirst/add
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:createAction
+        
+#Registro de gerencias de 2da línea
+pequiven_master_menu_add_gerenciaSecond:
+    path: /adminMaster/gerenciaSecond/add
+    defaults:
+        _controller: pequiven.controller.gerenciasecond:createAction

@@ -11,7 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Doctrine\ORM\EntityRepository;
 /**
@@ -28,6 +28,8 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     
     protected $complejoObject;
     protected $complejoNameArray = array();
+    protected $typeTactic = false;
+    protected $registerIndicator = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -36,14 +38,25 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         );
     }
     
-    public function __construct() {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    /**
+     * 
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param type $options
+     */
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
-        
+
         $this->complejoObject = new Complejo();
-        $this->complejoNameArray = $this->complejoObject->getComplejoNameArray();
+        $this->complejoNameArray = $this->complejoObject->getRefNameArray();
+        if(isset($options['typeTactic'])){
+            $this->typeOperative = true;
+        }
+        if(isset($options['registerIndicator'])){
+            $this->registerIndicator = true;
+        }
     }
     
     public function preSetData(FormEvent $event){
@@ -63,30 +76,66 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     }
     
     public function addGerenciaForm($form,$gerencia = null){
-        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        $gerenciaId = $this->user->getGerencia()->getId();
-        $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
-        
         $formOptions = array(
-            'class' => 'PequivenMasterBundle:Gerencia',
-            'label' => 'form.gerencia',
-            'label_attr' => array('class' => 'label'),
-            'translation_domain' => 'PequivenObjetiveBundle',
-            'property' => 'description',
-            'empty_value' => 'Seleccione su Gerencia',
-            'query_builder' => function (EntityRepository $er) use ($gerenciaId){
-                $qb = $er->createQueryBuilder('gerencia')
-                         ->where('gerencia.id = :gerenciaId')
-                         ->setParameter('gerenciaId', $gerenciaId)
-                        ;
-                return $qb;
-            }
-        );
-        $formOptions['attr'] = array('class' => 'select red-gradient check-list replacement', 'style' => 'width:300px');
-        if($gerencia){
-            $formOptions['data'] = $gerencia;
-        }
+                'class' => 'PequivenMasterBundle:Gerencia',
+                'label' => 'form.gerenciaFirst',
+                'label_attr' => array('class' => 'label'),
+                'translation_domain' => 'PequivenObjetiveBundle',
+                'property' => 'description'
+            );
         
-        $form->add('gerencia','entity',$formOptions);
+        //Si el usuario tiene rol Gerente General Complejo
+        if($this->securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            $complejoId = $this->user->getComplejo()->getId();
+            $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId){
+                $qb = $er->createQueryBuilder('gerencia')
+                         ->andWhere('gerencia.complejo = :complejoId')
+                         ->andWhere('gerencia.modular = :modular')
+                         ->setParameter('modular', true)
+                         ->setParameter('complejoId', $complejoId)
+                            ;
+                return $qb;
+                };
+            $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $complejoId,'modular' => true));
+            $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
+            $formOptions['multiple'] = true;
+            $formOptions['mapped'] = false;
+            
+            if($gerencia){
+                $formOptions['data'] = $gerencia;
+            }
+            $form->add('gerencia','entity',$formOptions);
+        } else{
+            $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
+
+            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+                $gerencia = null;
+                $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
+                $formOptions['multiple'] = true;
+                $formOptions['mapped'] = false;
+                if($this->registerIndicator){
+                    $formOptions['required'] = false;
+                    $formOptions['multiple'] = false;
+                    $formOptions['attr'] = array('class' => 'select2-offscreen placeholder', 'style' => 'width:300px');
+                }
+            } else{
+                $gerenciaId = $this->user->getGerencia()->getId();
+                $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){
+                    $qb = $er->createQueryBuilder('gerencia')
+                             ->where('gerencia.id = :gerenciaId')
+                             ->setParameter('gerenciaId', $gerenciaId)
+                            ;
+                    return $qb;
+                };
+                $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
+             }
+
+            if($gerencia){
+                $formOptions['data'] = $gerencia;
+            }
+
+            $form->add('gerencia','entity',$formOptions);
+        }
     }
 }

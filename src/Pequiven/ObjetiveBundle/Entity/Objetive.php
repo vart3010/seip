@@ -12,12 +12,15 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * Objetive
  * 
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
  */
 class Objetive extends modelObjetive {
 
     //Texto a mostrar en los select
     protected $descriptionSelect;
+    
+    protected $typeView = '';
 
     /**
      * @var integer
@@ -87,34 +90,6 @@ class Objetive extends modelObjetive {
     private $goal;
 
     /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_top", type="float", nullable=true)
-     */
-    private $rankTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_top", type="float", nullable=true)
-     */
-    private $rankMiddleTop;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_middle_bottom", type="float", nullable=true)
-     */
-    private $rankMiddleBottom;
-
-    /**
-     * @var float
-     * 
-     * @ORM\Column(name="rank_bottom", type="float", nullable=true)
-     */
-    private $rankBottom;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="eval_objetive", type="boolean")
@@ -167,10 +142,10 @@ class Objetive extends modelObjetive {
     /**
      * LineStrategic
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic")
-     * @ORM\JoinColumn(name="fk_line_strategic", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="objetives")
+     * @ORM\JoinTable(name="seip_objetives_linestrategics")
      */
-    private $lineStrategic;
+    private $lineStrategics;
 
     /**
      * Complejo
@@ -187,23 +162,92 @@ class Objetive extends modelObjetive {
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
+    
+    /**
+     * GerenciaSecond
+     * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
+     */
+    private $gerenciaSecond;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parent")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parents", cascade={"persist"})
      */
-    private $children;
+    private $childrens;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="childrens")
+     * @ORM\JoinTable(name="seip_objetives_parents",
+     *      joinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")})
      */
-    private $parent;
+    private $parents;
+    
+    /**
+     * Tendency
+     * @var \Pequiven\MasterBundle\Entity\Tendency
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Tendency")
+     * @ORM\JoinColumn(name="fk_tendency", referencedColumnName="id")
+     */
+    private $tendency;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist"})
+     * @ORM\JoinTable(name="seip_objetives_indicators")
+     */
+    private $indicators;
+    
+    /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     */
+    private $period;
+    
+    /**
+     * Revisado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $reviewedBy;
 
+    /**
+     * Fecha de revision
+     * @var \DateTime
+     * @ORM\Column(name="revisionDate", type="datetime",nullable=true)
+     */
+    private $revisionDate;
+
+    /**
+     * Aprobado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $approvedBy;
+
+    /**
+     * Fecha de aprobacion
+     * @var \DateTime
+     * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
+     */
+    private $approvalDate;
+
+    /**
+     * Estatus del Objetivo
+     * @var integer
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status = 0;
+    
     /**
      * Constructor
      */
     public function __construct() {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -405,78 +449,6 @@ class Objetive extends modelObjetive {
     }
 
     /**
-     * Add children
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
-     * @return Objetive
-     */
-    public function addChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
-        $this->children[] = $children;
-
-        return $this;
-    }
-
-    /**
-     * Remove children
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $children
-     */
-    public function removeChild(\Pequiven\ObjetiveBundle\Entity\Objetive $children) {
-        $this->children->removeElement($children);
-    }
-
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChildren() {
-        return $this->children;
-    }
-
-    /**
-     * Set parent
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parent
-     * @return Objetive
-     */
-    public function setParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parent = null) {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
-     */
-    public function getParent() {
-        return $this->parent;
-    }
-
-    /**
-     * Set lineStrategic
-     *
-     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic
-     * @return Objetive
-     */
-    public function setLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategic = null) {
-        $this->lineStrategic = $lineStrategic;
-
-        return $this;
-    }
-
-    /**
-     * Get lineStrategic
-     *
-     * @return \Pequiven\MasterBundle\Entity\LineStrategic 
-     */
-    public function getLineStrategic() {
-        return $this->lineStrategic;
-    }
-
-    /**
      * Set weight
      *
      * @param float $weight
@@ -516,90 +488,6 @@ class Objetive extends modelObjetive {
      */
     public function getGoal() {
         return $this->goal;
-    }
-
-    /**
-     * Set rankTop
-     *
-     * @param float $rankTop
-     * @return Objetive
-     */
-    public function setRankTop($rankTop) {
-        $this->rankTop = $rankTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankTop
-     *
-     * @return float 
-     */
-    public function getRankTop() {
-        return $this->rankTop;
-    }
-
-    /**
-     * Set rankMiddleTop
-     *
-     * @param float $rankMiddleTop
-     * @return Objetive
-     */
-    public function setRankMiddleTop($rankMiddleTop) {
-        $this->rankMiddleTop = $rankMiddleTop;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleTop
-     *
-     * @return float 
-     */
-    public function getRankMiddleTop() {
-        return $this->rankMiddleTop;
-    }
-
-    /**
-     * Set rankMiddleBottom
-     *
-     * @param float $rankMiddleBottom
-     * @return Objetive
-     */
-    public function setRankMiddleBottom($rankMiddleBottom) {
-        $this->rankMiddleBottom = $rankMiddleBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankMiddleBottom
-     *
-     * @return float 
-     */
-    public function getRankMiddleBottom() {
-        return $this->rankMiddleBottom;
-    }
-
-    /**
-     * Set rankBottom
-     *
-     * @param float $rankBottom
-     * @return Objetive
-     */
-    public function setRankBottom($rankBottom) {
-        $this->rankBottom = $rankBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get rankBottom
-     *
-     * @return float 
-     */
-    public function getRankBottom() {
-        return $this->rankBottom;
     }
 
     /**
@@ -735,58 +623,359 @@ class Objetive extends modelObjetive {
      */
     public function getDescriptionSelect() {
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
+        return $this->descriptionSelect;
+    }
+    
+    public function __toString() {
         return $this->getDescriptionSelect();
     }
 
     /**
-     * Devuelve el valor referencial del objetivo
-     * <b> x.x Estratégico </b>
-     * <b> x.x.x Táctico </b>
-     * <b> x.x.x.x Operativo </b>
-     * @param type $options
-     * @return boolean
+     * Set gerenciaSecond
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
+     * @return Objetive
      */
-    public function setNewRef($options = array()) {
-        $container = \Pequiven\ObjetiveBundle\PequivenObjetiveBundle::getContainer();
-        $securityContext = $container->get('security.context');
-        $em = $container->get('doctrine')->getManager();
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
+    {
+        $this->gerenciaSecond = $gerenciaSecond;
 
-        if ($options['type'] == 'STRATEGIC') {
-            $lineStrategic = $em->getRepository('PequivenMasterBundle:LineStrategic')->findOneBy(array('id' => $options['lineStrategicId']));
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
-            $refLineStrategic = $lineStrategic->getRef();
-            $total = count($results);            
-            if (is_array($results) && $total > 0) {
-                $ref = $refLineStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refLineStrategic . '1.';
-            }
-        } elseif ($options['type'] == 'TACTIC') {
-            $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveStrategicId']));
-            $refObjetiveStrategic = $objetiveStrategic->getRef();
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refObjetiveStrategic . ($total + 1) . '.';
-            } else {
-                $ref = $refObjetiveStrategic . '1.';
-            }
-        } elseif ($options['type'] == 'OPERATIVE') {
-            $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $options['objetiveTacticId']));
-            $refObjetiveTactic = $objetiveTactic->getRef();
-            $options['type'] = null;
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef($options);
-            $total = count($results);
-            if (is_array($results) && $total > 0) {
-                $ref = $refObjetiveTactic . ($total + 1) . '.';
-            } else {
-                $ref = $refObjetiveTactic . '1.';
-            }
-        }
-
-        return $ref;
+        return $this;
     }
 
+    /**
+     * Get gerenciaSecond
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
+     */
+    public function getGerenciaSecond()
+    {
+        return $this->gerenciaSecond;
+    }
+
+    /**
+     * Add indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     * @return Objetive
+     */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        
+        if(!$this->indicators->contains($indicators)){
+            $indicators->addObjetive($this);
+            $this->indicators->add($indicators);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     */
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+     * Get indicators
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicators()
+    {
+        return $this->indicators;
+    }
+    
+    public function resetIndicators(){
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add childrens
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $childrens
+     * @return Objetive
+     */
+    public function addChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
+    {
+        $this->childrens[] = $childrens;
+
+        return $this;
+    }
+
+    /**
+     * Remove childrens
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $childrens
+     */
+    public function removeChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
+    {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens()
+    {
+        return $this->childrens;
+    }
+
+    /**
+     * Add parents
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parents
+     * @return Objetive
+     */
+    public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
+    {
+        //$parents->addChildren($this);
+        $this->parents[] = $parents;
+
+        return $this;
+    }
+
+    /**
+     * Remove parents
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parents
+     */
+    public function removeParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
+    {
+        $this->parents->removeElement($parents);
+    }
+
+    /**
+     * Get parents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getParents()
+    {
+        return $this->parents;
+    }
+
+    /**
+     * Add lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     * @return Objetive
+     */
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics[] = $lineStrategics;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     */
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics->removeElement($lineStrategics);
+    }
+
+    /**
+     * Get lineStrategics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineStrategics()
+    {
+        return $this->lineStrategics;
+    }
+
+    /**
+     * Set tendency
+     *
+     * @param \Pequiven\MasterBundle\Entity\Tendency $tendency
+     * @return Objetive
+     */
+    public function setTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency = null)
+    {
+        $this->tendency = $tendency;
+
+        return $this;
+    }
+
+    /**
+     * Get tendency
+     *
+     * @return \Pequiven\MasterBundle\Entity\Tendency 
+     */
+    public function getTendency()
+    {
+        return $this->tendency;
+    }
+    
+    /**
+     * Set revisionDate
+     *
+     * @param \DateTime $revisionDate
+     * @return Objetive
+     */
+    public function setRevisionDate($revisionDate)
+    {
+        $this->revisionDate = $revisionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get revisionDate
+     *
+     * @return \DateTime 
+     */
+    public function getRevisionDate()
+    {
+        return $this->revisionDate;
+    }
+
+    /**
+     * Set approvalDate
+     *
+     * @param \DateTime $approvalDate
+     * @return Objetive
+     */
+    public function setApprovalDate($approvalDate)
+    {
+        $this->approvalDate = $approvalDate;
+
+        return $this;
+    }
+
+    /**
+     * Get approvalDate
+     *
+     * @return \DateTime 
+     */
+    public function getApprovalDate()
+    {
+        return $this->approvalDate;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return Objetive
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set reviewedBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
+     * @return Objetive
+     */
+    public function setReviewedBy(\Pequiven\SEIPBundle\Entity\User $reviewedBy = null)
+    {
+        $this->reviewedBy = $reviewedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get reviewedBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getReviewedBy()
+    {
+        return $this->reviewedBy;
+    }
+
+    /**
+     * Set approvedBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $approvedBy
+     * @return Objetive
+     */
+    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null)
+    {
+        $this->approvedBy = $approvedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get approvedBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getTypeView() {
+        return $this->typeView;
+    }
+
+    /**
+     * 
+     * @param type $typeView
+     */
+    public function setTypeView($typeView) {
+        $this->typeView = $typeView;
+    }
+    
+    /**
+     * @ORM\PostLoad
+     */
+    public function postLoad(){
+        
+    }
+
+
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Objetive
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
 }

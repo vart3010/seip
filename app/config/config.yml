@@ -103,6 +103,101 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            
+            angular_dependencies: ['bundles/pequivenseip/angular/modules/seipModule.js']
+            angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'
+
+ext_direct:
+    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+    
+bazinga_js_translation:
+    locale_fallback: "%locale%"
+
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-d H:m:s" # ISO8601
+    metadata:
+        debug: "%kernel.debug%"
+        auto_detection: true
+        directories:
+            FOSUserBundle:
+                namespace_prefix: FOS\UserBundle
+                path: "@PequivenSEIPBundle/Resources/config/serializer/fos"
+                
+tecnocreaciones_install:
+    credentials:
+        username: superAdmin
+                
+sylius_resource:
+    resources:
+        #Objetivo estratégico
+        pequiven.objetivestrategic:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Strategic:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveStrategicController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Objetivo táctico
+        pequiven.objetivetactic:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Tactic:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Objetivo operativo
+        pequiven.objetiveoperative:
+            driver: doctrine/orm
+            templates: PequivenObjetiveBundle:Operative:list.html.twig
+            classes:
+                model: Pequiven\ObjetiveBundle\Entity\Objetive
+                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
+                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        #Indicador estratégico
+        pequiven.indicatorstrategic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorStrategicController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        #Indicador táctico
+        pequiven.indicatortactic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorTacticController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        #Indicador operativo
+        pequiven.indicatoroperative:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\IndicatorBundle\Controller\IndicatorOperativeController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+                
+        #Maestro gerencia 1ra línea
+        pequiven.gerenciafirst:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:Gerencia:list.html.twig
+            classes:
+                model: Pequiven\MasterBundle\Entity\Gerencia
+                controller: Pequiven\MasterBundle\Controller\GerenciaController
+                repository: Pequiven\MasterBundle\Repository\GerenciaRepository
+        #Maestro gerencia 2da línea
+        pequiven.gerenciasecond:
+            driver: doctrine/orm
+            templates: PequivenMasterBundle:GerenciaSecond:list.html.twig
+            classes:
+                model: Pequiven\MasterBundle\Entity\GerenciaSecond
+                controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
+                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
+        #Nivel de Acceso por Usuario
+        pequiven_seip.userpermission:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\UserPermissionController
+                model: Pequiven\SEIPBundle\Entity\UserPermission
+                repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository

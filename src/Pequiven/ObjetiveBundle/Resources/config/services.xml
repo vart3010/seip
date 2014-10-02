@@ -20,19 +20,56 @@
     
     <services>
         <service id="pequiven_objetive.entity.objetive.class" class="Pequiven\ObjetiveBundle\Entity\Objetive">
-
         </service>
         
-        <service id="pequiven_objetive.registration.form.type" class="Pequiven\ObjetiveBundle\Form\Type\RegistrationFormType">
-            <tag name="form.type" alias="pequiven_objetive_registration" />
+        <!-- Formulario de registro de Objetivo Estratégico -->
+        <service id="pequiven_objetive.strategic.registration.form.type" class="Pequiven\ObjetiveBundle\Form\Type\Strategic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_objetive_strategic_registration" />
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
         
-        <!-- Servicio necesario para el ComplejoListener -->
-        <service id="pequiven_objetive.form.complejo.listener.registration" class="Pequiven\ObjetiveBundle\Form\EventListener\AddComplejoFieldListener">
-            <tag name="kernel.event_subscriber" />
+        <!-- Formulario de registro de Objetivo Táctico -->
+        <service id="pequiven_objetive.tactic.registration.form.type" class="Pequiven\ObjetiveBundle\Form\Type\Tactic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_objetive_tactic_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
+        
+        <!-- Formulario de registro de Objetivo Operativo -->
+        <service id="pequiven_objetive.operative.registration.form.type" class="Pequiven\ObjetiveBundle\Form\Type\Operative\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_objetive_operative_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
+        <!-- Repositorio de Objetivo Estratégico -->
+        <service id="pequiven.repository.objetivestrategic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        
+        <!-- Repositorio de Objetivo Táctico -->
+        <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        
+        <!-- Repositorio de Objetivo Operativo -->
+        <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        
     </services>
+    
 </container>

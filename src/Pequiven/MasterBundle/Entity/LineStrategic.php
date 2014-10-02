@@ -91,6 +91,11 @@ class LineStrategic extends modelLineStrategic
      * @ORM\Column(name="level", type="integer")
      */
     private $level;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="lineStrategics")
+     */
+    private $objetives;
 
     /**
      * @var boolean
@@ -348,5 +353,46 @@ class LineStrategic extends modelLineStrategic
     public function getDescriptionSelect (){
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
         return $this->descriptionSelect;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        parent::__construct();
+    }
+
+    /**
+     * Add objetives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+     * @return LineStrategic
+     */
+    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives[] = $objetives;
+
+        return $this;
+    }
+
+    /**
+     * Remove objetives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+     */
+    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives->removeElement($objetives);
+    }
+
+    /**
+     * Get objetives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObjetives()
+    {
+        return $this->objetives;
     }
 }

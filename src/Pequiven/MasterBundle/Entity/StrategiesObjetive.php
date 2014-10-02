@@ -74,6 +74,13 @@ class StrategiesObjetive extends modelStrategiesObjetive {
      * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
      */
     private $objetive;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=15, nullable=true)
+     */
+    private $ref;
 
     /**
      * @var boolean
@@ -251,5 +258,28 @@ class StrategiesObjetive extends modelStrategiesObjetive {
     public function getObjetive()
     {
         return $this->objetive;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return StrategiesObjetive
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
     }
 }

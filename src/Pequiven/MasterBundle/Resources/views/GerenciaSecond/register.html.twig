@@ -1,0 +1,147 @@
+{#{% extends 'TecnocreacionesVzlaGovernmentBundle:Template:Developer/layout.html.twig' %}#}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenMasterBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+    
+{% block body %}
+
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="#">{{ 'pequiven_master.gerencia_second'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_master.add'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+    <form action="{{ path('pequiven_master_menu_add_gerenciaSecond') }}" {{ form_enctype(form) }} method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_master.gerencia_second'|trans }}</legend>
+
+            <!-- Complejo -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.complejo) }}
+                {{ form_widget(form.complejo) }}
+                {{ form_errors(form.complejo) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.complejo_info'|trans }}</span>
+                </span>
+            </div>
+            
+            <!-- Gerencia 1ra Línea -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.gerencia) }}
+                {{ form_widget(form.gerencia) }}
+                {{ form_errors(form.gerencia) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.gerencia_first_info'|trans }}</span>
+                </span>
+            </div>
+                
+            <!-- Description Gerencia 2da Línea -->
+            <div id="complejo" class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.gerencia_second_info'|trans }}</span>
+                </span>
+            </div>
+                
+            {{ actions.create() }}
+        </fieldset>
+        {{ form_rest(form) }}
+    </form>
+    
+    {% block javascript %}
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                var selectComplejo = $('#pequiven_master_gerenciaSecond_registration_complejo'),//Select de Complejo
+                    selectGerencia = $('#pequiven_master_gerenciaSecond_registration_gerencia')//Select de Gerencia
+                ;
+                
+                charge();
+            
+                function charge(){
+                    chargeSelect2Complejo();
+                    chargeSelect2Gerencia();
+                }
+                
+                //Al seleccionar alguna opción en el select de Línea Estratégica
+                selectComplejo.on("select2-selecting", function(e) {
+                    displaySelectGerenciaFromComplejo(e);
+                    //displayObjetiveRef(e);//Actualizamos la Referencia del Objetivo a Crear
+                })
+                
+            //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
+            function displaySelectGerenciaFromComplejo(e){
+                var data = {
+                    complejoId: $.trim(e.val)
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("select_gerenciaFromComplejo") }}',
+                    data: data,
+                    success: function(data) {
+                        //var $indicators_selector = $("#pequiven_objetive_strategic_registration_indicators");
+                        selectGerencia.html('');
+                        selectGerencia.append('<option></option>')
+                        selectGerencia.select2("val",'');
+                        
+                        if(typeof data[0].empty === 'undefined'){
+                            for(var i=0, total = data.length; i<total; i++){
+                                selectGerencia.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
+                            }
+                            chargeSelect2Gerencia("full");
+                        } else{
+                            chargeSelect2Gerencia("empty");
+                        }
+                    }
+                });
+            }
+                
+                //Función que carga el select2 de Complejo
+                function chargeSelect2Complejo(type){
+                    selectComplejo.select2({
+                        placeholder: '{{ 'form.messages.selectComplejoPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectComplejoFormatNoMatcher'|trans }}";
+                            } else{
+                                return "{{ 'form.messages.selectComplejoFormatNoResult'|trans }}";
+                            }
+                        }
+                    });
+                }
+                
+                //Función que carga el select2 de Gerencia
+                function chargeSelect2Gerencia(type){
+                    selectGerencia.select2({
+                        placeholder: '{{ 'form.messages.selectGerenciaFirstPlaceholder'|trans }}',
+                        formatNoMatches: function(term) {
+                            if(type == 'full'){
+                                return "{{ 'form.messages.selectGerenciaFirstFormatNoMatcher'|trans }}";
+                            } else{
+                                return "{{ 'form.messages.selectGerenciaFirstFormatNoResult'|trans }}";
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+    {% endblock javascript %}
+    
+{% endblock body %}

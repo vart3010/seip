@@ -1,0 +1,100 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!--
+    <parameters>
+        <parameter key="pequiven_indicator.example.class">Pequiven\IndicatorBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="pequiven_indicator.example" class="%pequiven_indicator.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+    <services>
+        
+        <!-- Formulario de registro de Indicador Estratégico De Objetivo Estratégico -->
+        <service id="pequiven_indicator.strategicfo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_strategicfo_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>fromObjetive</argument>
+        </service>
+        
+        <!-- Formulario de registro de Indicador Estratégico -->
+        <service id="pequiven_indicator.strategic.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_strategic_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>regular</argument>
+        </service>
+        
+        <!-- Formulario de registro de Indicador Táctico De Objetivo Táctico -->
+        <service id="pequiven_indicator.tacticfo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Tactic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_tacticfo_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>fromObjetive</argument>
+        </service>
+        
+        <!-- Formulario de registro de Indicador Táctico -->
+        <service id="pequiven_indicator.tactic.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Tactic\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_tactic_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>regular</argument>
+        </service>
+        
+        <!-- Formulario de registro de Indicador Operativo De Objetivo Operativo -->
+        <service id="pequiven_indicator.operativefo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_operativefo_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>fromObjetive</argument>
+        </service>
+        
+        <!-- Formulario de registro de Indicador Operativo -->
+        <service id="pequiven_indicator.operative.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType">
+            <tag name="form.type" alias="pequiven_indicator_operative_registration" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <argument>regular</argument>
+        </service>
+        
+        <!-- Repositorio de Indicador Estratégico -->
+        <service id="pequiven.repository.indicatorstrategic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+        
+        <!-- Repositorio de Indicador Táctico -->
+        <service id="pequiven.repository.indicatortactic" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+        
+        <!-- Repositorio de Indicador Operativo -->
+        <service id="pequiven.repository.indicatoroperative" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+    </services>
+</container>

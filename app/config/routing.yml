@@ -1,3 +1,18 @@
+pequiven_arrangement_program:
+    resource: "@PequivenArrangementProgramBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+pequiven_arrangement:
+    resource: "@PequivenArrangementBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+pequiven_indicator:
+    resource: "@PequivenIndicatorBundle/Controller/"
+    type:     annotation
+    prefix:   /indicator
+
 pequiven_master:
     resource: "@PequivenMasterBundle/Controller/"
     type:     annotation
@@ -20,9 +35,15 @@ tecnocreaciones_template:
 
 pequiven_seip_menu:
     resource: "@PequivenSEIPBundle/Resources/config/routing/menu.yml"
+
+pequiven_master_route:
+    resource: "@PequivenMasterBundle/Resources/config/routing/routing.yml"
     
 pequiven_objetive_route:
     resource: "@PequivenObjetiveBundle/Resources/config/routing/routing.yml"
+
+pequiven_indicator_route:
+    resource: "@PequivenIndicatorBundle/Resources/config/routing/routing.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
@@ -43,5 +64,15 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
     
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group
+    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
 _bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    
+    
+ext_direct:
+    resource: "@ExtDirectBundle/Resources/config/routing.yml"

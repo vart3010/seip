@@ -62,6 +62,7 @@
         <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/modal3860.css') }}?v=1" />
         <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.css') }}" />
         <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/login/fonts/header.css') }}" />
+        <!--<link rel="stylesheet" href="{{ asset('bundles/pequivenseip/extjs-4.2.2/resources/css/ext-all.css') }}" />-->
         {% block stylesheets '' %}
 
         <!-- JavaScript at bottom except for Modernizr -->
@@ -114,13 +115,13 @@
         <div class="hidden-on-desktop">
             <img class="logo-menu-mobile" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.ico') }}" height="24px" width="24px" />
         </div>
-        <div class="message-loading [[ notificationBarService.getLoadStatus().error_class ]]" ng-show="notificationBarService.getLoadStatus().showStatus">
+        <div class="message-loading {$ notificationBarService.getLoadStatus().error_class $}" ng-show="notificationBarService.getLoadStatus().showStatus">
                 <span ng-hide="true" >Cargando...</span>
-                <span ng-cloak>[[ notificationBarService.getLoadStatus().text ]]</span>
+                <span ng-cloak>{$ notificationBarService.getLoadStatus().text $}</span>
                 <span class="loader"></span>
         </div>
         <!-- Main content -->
-        <section ng-cloak role="main" id="main" class="block main-frontend">
+        <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend">
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
             {% include 'PequivenSEIPBundle:Block:header.html.twig' %}
             <div  class="content-container">
@@ -138,6 +139,9 @@
                 {% block after_body '' %}
             </div>
             {% include 'PequivenSEIPBundle:Block:footer.html.twig' %}
+            <div id="dialog-form">
+                <div ng-include="template.url" onload="templateLoad(template)"></div>
+            </div>
         </section>
         <!-- End main content -->
         

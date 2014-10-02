@@ -26,7 +26,7 @@ pequiven_seip:
 
                 message_header_center: Sistema Estadístico de Información Petroquímica
                 message_app_title: Sistema Estadístico de Información Petroquímica
-                message_footer: Desarrollado por la Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
+                message_footer: Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
 
                 logout: Salir
 
@@ -68,6 +68,8 @@ pequiven_seip:
                     administrator: Administrador
                     directive: Ejecutivo
                     directive_aux: Ejecutivo (Asignado)
+                    general_complejo: Gerente General Complejo %complejo%
+                    general_complejo_aux: Gerente General Complejo (Asignado)
                     manager_first: Gerente 1ra Línea
                     manager_first_aux: Gerente 1ra Línea (Asignado)
                     manager_second: Gerente 2da Línea
@@ -99,3 +101,10 @@ form:
     first_name: Nombre
     last_name: Apellido
     num_personal: Número de personal
+    
+ng-table:
+    tooltip:
+        first: Inicio
+        prev: Anterior
+        next: Siguiente
+        last: Fin

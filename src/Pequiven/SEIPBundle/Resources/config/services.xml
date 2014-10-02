@@ -19,11 +19,13 @@
     -->
     
     <services>
+        <!-- Formulario de registro de usuario  -->
         <service id="pequiven_seip.registration.form.type" class="Pequiven\SEIPBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_seip_user_registration" />
             <argument>%fos_user.model.user.class%</argument>
         </service>
         
+        <!-- Formulario de edición de perfil de usuario -->
         <service id="pequiven_seip.profile.form.type" class="Pequiven\SEIPBundle\Form\Type\ProfileFormType">
             <tag name="form.type" alias="pequiven_seip_user_profile" />
             <argument>%fos_user.model.user.class%</argument>
@@ -37,11 +39,20 @@
             </call>
         </service>
         
+        <!-- Servicio necesario para el SerializerListener -->
+        <service id="seip.listener.serializer" class="Pequiven\SEIPBundle\EventListener\SerializerListener">
+            <tag name="jms_serializer.event_subscriber" />
+        </service>
+        
         <!-- Servicio necesario para el CommonObject -->
         <service id="pequiven_seip.common.object" class="Pequiven\SEIPBundle\Model\Common\CommonObject">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+        </service>
+        
+        <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
         
     </services>

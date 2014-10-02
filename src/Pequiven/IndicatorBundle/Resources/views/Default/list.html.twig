@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{#% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %#}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block body %}
+    
+    <a href="{{ path('pequiven_indicator_test_redirect') }}" class="button glossy">
+        <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
+        Test
+    </a>
+    {#% include 'PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig' %#}
+    {% block javascript %}
+        <script>
+            function probarRedirección(){
+                console.log('redireccion exitosa');
+            }
+        </script>
+    {% endblock javascript %}
+{% endblock body %}
