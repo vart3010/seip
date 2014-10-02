@@ -69,7 +69,7 @@ class BackendMenuBuilder extends MenuBuilder
         //Menú Gestión Estratégica
         $this->addArrangementStrategicMenu($menu, $section);
         //Menú Programas de Gestión
-        //$this->addArrangementProgramsMenu($menu, $section);
+        $this->addArrangementProgramsMenu($menu, $section);
         //Menú Reportes
 //        $menu->addChild('reports', array(
 //            'route' => null,
@@ -365,14 +365,31 @@ class BackendMenuBuilder extends MenuBuilder
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.list', $section)));
             
-            
-            $child
-                ->addChild('arrangement_programs.add',
-                array(
-                    'route' => 'pequiven_arrangementprogram_new',
+            $subchild = $this->factory->createItem('arrangement_programs.add.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
                     )
-            )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add', $section)));
-            
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
+            $subchild
+                    ->addChild('arrangement_programs.tactic', array(
+                        'route' => 'pequiven_arrangementprogram_new',
+                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.tactic', $section)));
+
+            $subchild->addChild('arrangement_programs.operative', array(
+                        'route' => 'pequiven_arrangementprogram_new',
+                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
+            $subchild->addChild('arrangement_programs.other', array(
+                        'route' => 'pequiven_arrangementprogram_new',
+                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OTHER),
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.other', $section)));
+            $child->addChild($subchild);
             
             $menu->addChild($child);
         }

@@ -93,7 +93,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     /**
      * Gerencia
      * 
-     * @var=\Pequiven\MasterBundle\Entity\Gerencia
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
@@ -118,6 +118,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $cargo;
     
     /**
+     * @var \Pequiven\MasterBundle\Entity\Rol
      * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Rol")
      * @ORM\JoinTable(name="fos_user_user_rol",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},

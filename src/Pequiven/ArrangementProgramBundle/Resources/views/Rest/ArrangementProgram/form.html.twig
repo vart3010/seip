@@ -1,0 +1,546 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.form.field.Number',
+            'Ext.form.field.Date',
+            'Ext.tip.QuickTipManager',
+            'Ext.layout.container.Fit'
+        ]);
+        
+        Ext.onReady(function(){
+
+            Ext.tip.QuickTipManager.init();
+            
+            var store = Ext.create('Ext.data.Store', {
+                autoLoad: true,
+                autoSync: true,
+                model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
+                proxy: {
+                    type: 'rest',
+                    url: 'http://localhost/symfony/seip/web/app_dev.php/api/arrangement-program/4/goals-details.json',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    },
+                    writer: {
+                        type: 'json'
+                    },
+                    api: {
+                        update  : 'http://localhost/symfony/seip/web/app_dev.php/api/arrangement-program/4/goals-details.json'
+                    },
+                    actionMethods: {
+                        update: 'POST'
+                    }
+                },
+                listeners: {
+                    write: function(store, operation){
+                        var record = operation.getRecords()[0],
+                            name = Ext.String.capitalize(operation.action),
+                            verb;
+
+
+                        if (name == 'Destroy') {
+                            verb = 'Destroyed';
+                        } else {
+                            verb = name + 'd';
+                        }
+                        Ext.example.msg(Translator.trans(name), Ext.String.format("{{ "pequiven.goals.goal"|trans }} {1} {0}", Translator.trans(verb), record.getId()));
+
+                    },
+                    update: function(store, record, operation, modifiedFieldNames, eOpts){
+                        if(Ext.data.Model.EDIT == operation){
+                            store.getProxy().setExtraParam("_method","PUT");
+                        }else if(Ext.data.Model.COMMIT == operation){
+                            delete store.getProxy().getExtraParams()["_method"];
+                        }
+                    }
+                }
+            });
+
+            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToEdit: 2,
+                listeners: {
+                    cancelEdit: function(rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    },
+                    beforeedit: function(editor, context, eOpts){
+                        {#
+                        var field = context.field;
+                        if(field == "januaryPlanned"){
+                           return false; 
+                        }
+                        console.log(context.record);
+                        console.log(editor);
+                        console.log(context);
+                        console.log(eOpts);
+                        #}
+                        //return true;
+                    }
+                }
+            });
+            
+            /**
+            * Custom function used for column renderer
+            * @param {Object} val
+            */
+           function valGoalDetails(val, metaData, record, rowIndex,colIndex, store){
+{#               grid.columns[m.cellIndex].disable();#}
+               var columnName = grid.columns[colIndex + 4].dataIndex;
+               {#console.log(record.data.goal.startDate);
+               console.log(record.data.goal.startDate);#}
+               if(columnName === "decemberReal" ){
+                   metaData.css = 'td-bg-disabled';
+                   return val;
+               }
+{#               console.log(grid.columns[m.cellIndex]);#}
+               {#console.log(val);
+               console.log(m.cellIndex);
+               console.log(r);#}
+               if(val > 0){
+                   return '<span style="color:green;">' + Ext.util.Format.number(Ext.util.Format.number(val,'0.000,00/i')) + '</span>';
+               }else if(val < 0){
+                   return '<span style="color:red;">' + val + '</span>';
+               }
+               return val;
+           }
+            var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1,
+                listeners: {
+                    cancelEdit: function(rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    },
+                    beforeedit: function(editor, context, eOpts){
+                        {#
+                        var field = context.field;
+                        if(field == "januaryPlanned"){
+                           return false; 
+                        }
+                        console.log(context.record);
+                        console.log(editor);
+                        console.log(context);
+                        console.log(eOpts);
+                        #}
+                        return true;
+                    }
+                }
+            });
+             var grid = Ext.create('Ext.grid.Panel', {
+                selType: 'cellmodel',
+                renderTo: 'grid-example-2',
+                plugins: [cellEditing],
+                height: 330,
+                frame: true,
+                title: '{{ "pequiven.goals.goals"|trans }}',
+                store: store,
+                iconCls: 'icon-user',
+                listeners: {
+                    beforeedit: function( editor, context, eOpts ){
+                        {#context.grid.columns[4].field.xtype="displayfield";
+                        context.grid.columns[5].field.xtype="displayfield";#}
+                        //context.grid.columns[5].disable();
+                        //context.grid.reconfigure();
+                        
+                        {#console.log(editor);
+                        console.log(context);
+                        console.log(eOpts);
+                        console.log(editor.form);#}
+                        //return false;
+                    }
+                },
+                columns: [{
+                    text: 'ID',
+                    width: 50,
+                    sortable: true,
+                    dataIndex: 'id',
+                    locked: true,
+                    renderer: function(v, meta, rec) {
+                        return rec.phantom ? '' : v;
+                    }
+                }, {
+                    text: '{{ "pequiven.name"|trans({},"messages") }}',
+                    flex: 1,
+                    sortable: true,
+                    dataIndex: 'name',
+                    locked: true,
+                    field: {
+                        xtype: 'displayfield'
+                    },
+                    renderer: function (v, m, r) {
+                        var d = r.data.goal.name;
+                        return d;
+                    }
+                }, {
+                    header: '{{ "pequiven.start_date"|trans({},"messages") }}',
+                    width: 120,
+                    sortable: true,
+                    dataIndex: 'startDate',
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    locked: true,
+                    field: {
+                        xtype: 'displayfield'
+                    },
+                    renderer: function (v, m, r) {
+                        var d = r.data.goal.startDate;
+                        return Ext.util.Format.date(d,'Y-m-d');
+                    }
+                }, {
+                    text: '{{ "pequiven.end_date"|trans({},"messages") }}',
+                    width: 120,
+                    sortable: true,
+                    dataIndex: 'endDate',
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    locked: true,
+                    field: {
+                        xtype: 'displayfield'
+                    },
+                    renderer: function (v, m, r) {
+                        var d = r.data.goal.endDate;
+                        return Ext.util.Format.date(d,'Y-m-d');
+                    }
+                }, {
+                    text: '{{ "pequiven.months.january"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'januaryPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'januaryReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.february"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'februaryPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'februaryReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.march"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'marchPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'marchReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.april"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'aprilPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'aprilReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.may"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'mayPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'mayReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.june"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'junePlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'juneReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.july"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'julyPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'julyReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.august"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'augustPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'augustReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.september"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'septemberPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'septemberReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.october"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'octoberPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'octoberReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.november"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'novemberPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'novemberReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }, {
+                    text: '{{ "pequiven.months.december"|trans({},"messages") }}',
+                    columns: [
+                        {
+                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'decemberPlanned',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }, {
+                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                            sortable: true,
+                            groupable: false,
+                            align: 'center',
+                            dataIndex: 'decemberReal',
+                            renderer: valGoalDetails,
+                            field: {
+                                xtype: 'numberfield',
+                                minValue: 0
+                            }
+                        }
+                    ]
+                }
+                
+                
+            ]
+            });
+        });
+    </script>
+{% endblock javascript %}
+{% block content %}
+    <div id="grid-example-2"></div>
+{% endblock content %}

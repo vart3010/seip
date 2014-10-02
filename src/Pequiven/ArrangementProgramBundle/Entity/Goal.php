@@ -3,10 +3,12 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tpg\ExtjsBundle\Annotation as Extjs;
 
 /**
  * Meta
- *
+ * @Extjs\Model
+ * @Extjs\ModelProxy("/api/goals")
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalRepository")
  * @ORM\HasLifecycleCallbacks()

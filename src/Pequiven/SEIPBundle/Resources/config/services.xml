@@ -54,6 +54,9 @@
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
+        <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Period" />
+        </service>
         
     </services>
 </container>

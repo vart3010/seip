@@ -94,7 +94,6 @@ class Timeline
      */
     public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
     {
-        var_dump('addGoal');
         $goals->setTimeline($this);
         $this->goals->add($goals);
 
@@ -115,11 +114,21 @@ class Timeline
     /**
      * Get goals
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function &getGoals()
+    public function getGoals()
     {
         return $this->goals;
+    }
+    
+    /**
+     * Set goals
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function setGoals($goals)
+    {
+        return $this->goals = $goals;
     }
 
     /**

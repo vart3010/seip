@@ -1,7 +1,26 @@
 pequiven:
+    months:
+        january: Enero
+        february: Febrero
+        march: Marzo
+        april: Abril
+        may: Mayo
+        june: Junio
+        july: Julio
+        august: Agosto
+        september: Septiembre
+        october: Octubre
+        november: Noviembre
+        december: Diciembre
+    name: Nombre
+    start_date: Fecha inicio
+    end_date: Fecha fin
     actions:
         edit: Editar
         delete: Eliminar
     modal:
         title:
             goal: Meta
+        confirm:
+            goal:
+                delete_this_goal: ¿Desea eliminar esta meta?

@@ -1,0 +1,98 @@
+Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
+    properties:
+        januaryPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        januaryReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        februaryPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        februaryReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        marchPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        marchReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        aprilPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        aprilReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        mayPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        mayReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        junePlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        juneReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        julyPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        julyReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        augustPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        augustReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        septemberPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        septemberReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        octoberPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        octoberReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        novemberPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        novemberReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        decemberPlanned:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+        decemberReal:
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value

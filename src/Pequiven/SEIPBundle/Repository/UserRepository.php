@@ -2,6 +2,7 @@
 
 namespace Pequiven\SEIPBundle\Repository;
 
+use Pequiven\SEIPBundle\Entity\User;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,5 +13,56 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    /**
+     * Retornar los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * @return type
+     */
+    function findQueryToAssingTacticArrangementProgram(){
+        $qb = $this->getQueryBuilder();
+        $user = $this->getUser();
+        $groups = $user->getGroups();
+        $group = $groups[0];
+        $level = $group->getLevel();
+        $qb
+            ->innerJoin('u.groups','g')
+            ->andWhere($qb->expr()->orX('g.level < :level','u.id = :user'))
+            ->andWhere('u.gerencia = :gerencia')
+            ->setParameter('level', $level)
+            ->setParameter('user', $user)
+            ->setParameter('gerencia', $user->getGerencia())
+            ;
+        return $qb;
+    }
     
+    /**
+     * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
+     * @return type
+     */
+    function findQueryToAssingTacticArrangementProgramGoal(User $user){
+        $qb = $this->getQueryBuilder();
+        $groups = $user->getGroups();
+        $group = $groups[0];
+        $level = $group->getLevel();
+        $qb
+            ->innerJoin('u.groups','g')
+            ->andWhere($qb->expr()->orX('g.level < :level','u.id = :user'))
+            ->andWhere('u.gerencia = :gerencia')
+            ->setParameter('level', $level)
+            ->setParameter('user', $user)
+            ->setParameter('gerencia', $user->getGerencia())
+            ;
+        return $qb;
+    }
+    
+    /**
+     * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
+     * @return type
+     */
+    function findToAssingTacticArrangementProgramGoal(User $user){
+        return $this->findQueryToAssingTacticArrangementProgramGoal($user)->getQuery()->getResult();
+    }
+    
+    protected function getAlias() {
+        return 'u';
+    }
 }

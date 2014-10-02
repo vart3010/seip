@@ -30,7 +30,8 @@ class GoalType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-xlarge",
                     'ng-model' => 'model.goal.type_goal',
-                    'ng-options' => 'value as value.description for (key,value) in data.type_goals'
+                    'ng-options' => 'value as value.description for (key,value) in data.type_goals',
+                    'style' => 'width: 270px',
                 ),
                 'empty_value' => 'pequiven.form.not_applicable',
                 'required' => false,
@@ -61,7 +62,8 @@ class GoalType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-xlarge",
                     'ng-model' => 'model.goal.responsible',
-                    'ng-options' => 'value as (value.first_name + " "+ value.last_name + " ("+value.username+")") for (key,value) in data.responsible_goals'
+                    'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsible_goals',
+                    'style' => 'width: 270px',
                 ),
                 'empty_value' => 'Seleccione',
                 'required' => true,
@@ -94,7 +96,8 @@ class GoalType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal',
-            'translation_domain' => 'PequivenArrangementProgramBundle'
+            'translation_domain' => 'PequivenArrangementProgramBundle',
+            'csrf_protection' => false,
         ));
     }
 
