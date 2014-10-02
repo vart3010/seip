@@ -103,7 +103,9 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            angular_dependencies: ['bundles/pequivenseip/angular/modules/seipModule.js']
+            angular_dependencies: 
+                        - 'bundles/pequivenseip/angular/modules/seipModule.js'
+                        - 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-cookies.min.js'
             angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'

@@ -4,7 +4,8 @@
 var seipModule = angular.module('seipModule', [
     'ngRoute',
     'seipModule.controllers',
-    'notificationBarModule'
+    'notificationBarModule',
+    'ngCookies'
 ]);
 function confirm(){
     
@@ -30,6 +31,10 @@ angular.module('seipModule.controllers', [])
     .controller("ArrangementProgramController",function($scope,notificationBarService,$http){
         $scope.data.responsible_goals = null;
         $scope.data.type_goals = null;
+        
+        $scope.model.arrangement_program = {
+            category_arrangement_program: null,
+        };
         //Inicializar modelo de meta
         $scope.initModelGoal = function(goal){
             $scope.model.goal = {
@@ -99,9 +104,8 @@ angular.module('seipModule.controllers', [])
             });
         };
         
-        $scope.getTypeGoal = function(){
+        $scope.getTypeGoal = function(c){
             notificationBarService.getLoadStatus().loading();
-            var c = $scope.model.arrangement_program.category_arrangement_program;
             $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal",{category : c})).success(function(data){
                 $scope.data.type_goals = data;
                 notificationBarService.getLoadStatus().done();
@@ -128,6 +132,7 @@ angular.module('seipModule.controllers', [])
                 title: sfTranslator.trans("pequiven.dialog.confirm")
             }
         };
+        $scope.setValueSelect2 = setValueSelect2;
         //Funcion para remover un elemento de un array
         Array.prototype.remove = function(value){
             var idx = this.indexOf(value);

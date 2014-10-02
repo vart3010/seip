@@ -38,24 +38,24 @@ class ArrangementProgramController extends SEIPController
     /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Route("/", name="pequiven_arrangementprogram_create")
+     * @Route("/{type}", name="pequiven_arrangementprogram_create",requirements={"type":"1|2|3"})
      * @Method("POST")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request,$type)
     {
         $entity = new ArrangementProgram();
-        $form = $this->createCreateForm($entity);
+        $user = $this->getUser();
+        $period = $this->getRepositoryById('period')->findOneActive();
+        $entity
+                ->setType($type)
+                ->setPeriod($period)
+                ->setCreatedBy($user);
+        
+        $form = $this->createCreateForm($entity,array('type' => $type));
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $user = $this->getUser();
-            $period = $this->getRepositoryById('period')->findOneActive();
-            $entity
-                    ->setPeriod($period)
-                    ->setCreatedBy($user)
-                    ;
             $this->save($entity,true);
-
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
         }
 
@@ -72,10 +72,10 @@ class ArrangementProgramController extends SEIPController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(ArrangementProgram $entity)
+    private function createCreateForm(ArrangementProgram $entity,array $parameters)
     {
         $form = $this->createForm(new ArrangementProgramType(), $entity, array(
-            'action' => $this->generateUrl('pequiven_arrangementprogram_create'),
+            'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
             'method' => 'POST',
         ));
 
@@ -99,10 +99,9 @@ class ArrangementProgramController extends SEIPController
                ->setCreatedBy($user)
                 ;
         $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-        //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
         $entity->addTimeline($timeLine);
         
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity,array('type' => $type));
 
         return array(
             'entity' => $entity,
@@ -194,12 +193,12 @@ class ArrangementProgramController extends SEIPController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-    
         $originalTimelines = new \Doctrine\Common\Collections\ArrayCollection();
+        $originalGoalsArray = array();
         // Create an ArrayCollection of the current Tag objects in the database
         foreach ($entity->getTimelines() as $timeline) {
             foreach ($timeline->getGoals() as $goal) {
-//                var_dump($goal);
+                $originalGoalsArray[$timeline->getId()][] = $goal;
             }
             $originalTimelines->add($timeline);
         }
@@ -208,31 +207,30 @@ class ArrangementProgramController extends SEIPController
         
         $editForm = $this->createEditForm($entity);
         $editForm->submit($request);
-
+        
         if ($editForm->isValid()) {
-            $timelines = $entity->getTimelines();
-//            var_dump($timelines[0]);
-//            var_dump($_POST['arrangementprogram']['timelines']['0']['goals']);
             foreach ($originalTimelines as $originalTimeline) {
                 if(false === $entity->getTimelines()->contains($originalTimeline)){
                     $entity->getTimelines()->removeElement($originalTimeline);
                     $em->remove($originalTimeline);
                 }else{
                     $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
-                    //var_dump($timeline->getGoals());
-                    foreach ($originalTimeline->getGoals() as $originalGoal) {
-//                        var_dump($timeline->getGoals()->contains($originalGoal));
-                        if(false === $timeline->getGoals()->contains($originalGoal)){
-                            $timeline->getGoals()->removeElement($originalGoal);
-                            $em->remove($originalGoal);
+                    if(isset($originalGoalsArray[$timeline->getId()])){
+                        $goals = $originalGoalsArray[$timeline->getId()];
+                        foreach ($goals as $originalGoal) {
+                            if(false === $timeline->getGoals()->contains($originalGoal)){
+                                $timeline->getGoals()->removeElement($originalGoal);
+                                $em->remove($originalGoal);
+                            }
                         }
                     }
                 }
                 
             }
+         
             $em->flush();
 
-            return $this->redirect($this->generateUrl('arrangementprogram_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $id)));
         }
 
         return array(

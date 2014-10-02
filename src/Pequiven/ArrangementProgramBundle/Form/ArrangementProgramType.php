@@ -25,7 +25,7 @@ class ArrangementProgramType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-large",
                     "ng-model" => "model.arrangement_program.category_arrangement_program",
-                    "ng-change" => "getTypeGoal()",
+                    "ng-change" => "getTypeGoal(model.arrangement_program.category_arrangement_program)",
                 ),
                 'empty_value' => 'pequiven.select',
                 'required' => true,

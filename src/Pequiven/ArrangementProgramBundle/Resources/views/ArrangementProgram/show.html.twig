@@ -27,22 +27,28 @@
             <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
             {{ entity.categoryArrangementProgram }}
         </p>
-        <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
-            {{ entity.tacticalObjective }}
-        </p>
-        <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
-            {{ entity.operationalObjective }}
-        </p>
-        <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.operating_indicator'|trans }}</label>
-            {{ entity.operatingIndicator }}
-        </p>
-        <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.location'|trans }}</label>
-            {{ entity.location }}
-        </p>
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+                {{ entity.tacticalObjective }}
+            </p>
+        {% endif %}
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
+                {{ entity.operationalObjective }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.operating_indicator'|trans }}</label>
+                {{ entity.operatingIndicator }}
+            </p>
+        {% endif %}
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.location'|trans }}</label>
+                {{ entity.tacticalObjective.gerencia.complejo }}
+            </p>
+        {% endif %}
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.responsible'|trans }}</label>
             {{ entity.responsible }}

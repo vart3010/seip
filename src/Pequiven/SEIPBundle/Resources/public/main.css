@@ -36,6 +36,7 @@ input.xlarge,
 textarea.xlarge,
 select.xlarge {
   width: 270px;
+  min-width: 270px;
 }
 .input-xxlarge,
 input.xxlarge,

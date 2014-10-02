@@ -114,11 +114,21 @@ class Timeline
     /**
      * Get goals
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function &getGoals()
+    public function getGoals()
     {
         return $this->goals;
+    }
+    
+    /**
+     * Set goals
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function setGoals($goals)
+    {
+        return $this->goals = $goals;
     }
 
     /**
