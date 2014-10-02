@@ -369,6 +369,11 @@ class ObjetiveTacticController extends baseController {
         return $response;
     }
 
+    /**
+     * Gerencias de 1ra línea para la tabla de visualización
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function selectGerenciaFirstAction(Request $request) {
         $response = new JsonResponse();
 

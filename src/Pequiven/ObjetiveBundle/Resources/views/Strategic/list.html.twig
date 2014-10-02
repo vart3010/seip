@@ -53,8 +53,23 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-
+                
+                response = response + '<strong>¿Será evaluado por Objetivos Tácticos?: </strong>';
+                if(data.evalObjetive === 1){
+                    response = response + 'Sí';
+                } else{
+                    response = response + 'No';
+                }
+                response = response + '<br>';
+                
+                response = response + '<strong>¿Será evaluado por Indicadores Estratégicos?: </strong>';
                 var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + 'Sí';
+                } else{
+                    response = response + 'No';
+                }
+                response = response + '<br>';
                 if(totalIndicators > 0){
                     response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
                     for(var i = 0; i < totalIndicators; i++){
