@@ -1,0 +1,4 @@
+pequiven_seip_arrangementprogram_routes:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/backend/main.yml"
+    prefix:   /
+

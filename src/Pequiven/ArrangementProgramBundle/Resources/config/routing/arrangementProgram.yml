@@ -1,0 +1,4 @@
+pequiven_seip_arrangementprogram:
+    path: /arrangement_strategic/indicators/{type}/{action}
+    defaults: {_controller: PequivenIndicatorBundle:Indicator:showHome}
+    methods: [GET]

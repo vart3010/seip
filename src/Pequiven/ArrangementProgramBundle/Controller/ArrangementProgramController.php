@@ -25,7 +25,7 @@ class ArrangementProgramController extends SEIPController
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -42,8 +42,9 @@ class ArrangementProgramController extends SEIPController
      * @Method("POST")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
      */
-    public function createAction(Request $request,$type)
+    public function createAction(Request $request)
     {
+        $type = $request->get("type");
         $entity = new ArrangementProgram();
         $user = $this->getUser();
         $period = $this->getRepositoryById('period')->findOneActive();
@@ -116,8 +117,9 @@ class ArrangementProgramController extends SEIPController
      * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -183,8 +185,9 @@ class ArrangementProgramController extends SEIPController
      * @Method("PUT")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -245,8 +248,9 @@ class ArrangementProgramController extends SEIPController
      * @Route("/{id}", name="arrangementprogram_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
+        $id = $request->get("id");
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

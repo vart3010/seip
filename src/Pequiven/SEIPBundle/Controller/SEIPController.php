@@ -2,14 +2,14 @@
 
 namespace Pequiven\SEIPBundle\Controller;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
 /**
  * Base de controlador SEIP
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class SEIPController extends FOSRestController
+class SEIPController extends ResourceController
 {
     /**
      * 

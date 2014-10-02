@@ -2,6 +2,8 @@
 
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
 {% block body -%}
 <div ng-controller="ArrangementProgramController">
     <hgroup id="main-title" class="thin breadcrumb">
@@ -70,17 +72,10 @@
 </div>
 
 <br /><br />
+{{ buttons.generic(path('pequiven_arrangementprogram', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+{{ buttons.generic_modal(path('arrangementprogram_delete', { 'id': entity.id })) }}
+
 <ul class="record_actions">
-    <li>
-        <a href="{{ path('pequiven_arrangementprogram') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('arrangementprogram_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
 {% endblock %}

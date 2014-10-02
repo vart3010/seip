@@ -13,7 +13,11 @@ pequiven:
         not_applicable: No aplica
     list: Lista
     add: Añadir
+    update: Actualizar
+    edit: Editar
+    delete: Eliminar
     show: Ver
+    details: Detalles
     dialog:
         confirm: Confirmar
 app:
