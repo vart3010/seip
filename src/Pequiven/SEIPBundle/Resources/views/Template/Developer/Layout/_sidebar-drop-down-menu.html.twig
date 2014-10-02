@@ -46,7 +46,7 @@
             <!--<li><a href title="Messages"><span class="icon-inbox"></span><span class="count">2</span></a></li>
             <li><a href title="Calendar"><span class="icon-calendar"></span></a></li> -->
             <li><a href="{{ path('fos_user_profile_show') }}" title="{{ 'pequiven_seip.profile.profile'|trans }}"><span class="icon-user"></span></a></li>
-            <li><a href="{{ path('fos_user_security_logout') }}" title="{{ 'pequiven_seip.logout'|trans }}"><span class="icon-lock"></span></a></li>
+            <li><a href="{{ path('fos_user_security_logout') }}" title="{{ 'pequiven_seip.logout'|trans }}" style="margin:8px"><img src="{{ asset('bundles/pequivenseip/logotipos-pqv/icon_application_exit.png') }}" width="32" height="32" /></a></li>
         </ul>
 
         <section class="navigable">
@@ -59,7 +59,7 @@
                     <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png') }}"  />
                 </a>
             </li>
-    </ul>
+        </ul>
         <div>
         </div>
     </div>

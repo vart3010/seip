@@ -124,6 +124,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $selectRangeTypeBottom = $em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findBy(array('description' => array($rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC],$rangeTypeNameArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED])));
             $builder->add('arrangementRangeTypeBottom','entity',array('label' => 'form.arrangementRangeTypeBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeBottom,'mapped' => false));
             $builder->add('typeArrangementRangeTypeBottom','hidden',array('data' => '','mapped' => false,'mapped' => false));
+        //Comportamiento No Estable
             //Rango Bajo Básico
                 $builder->add('rankBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
                 $builder->add('opRankBottomBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
@@ -132,6 +133,13 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
                 $builder->add('opRankBottomMixedTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
                 $builder->add('rankBottomMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankBottomMixedBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
+        //Comportamiento Estable
+            //Rango Bajo Básico Alto
+                $builder->add('rankBottomTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
+                $builder->add('opRankBottomTopBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
+            //Rango Bajo Básico Bajo
+                $builder->add('rankBottomBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
+                $builder->add('opRankBottomBottomBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
                 
         //Tipo de Evaluación
             //Evaluar por Objetivo

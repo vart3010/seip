@@ -63,7 +63,7 @@
                         {{ 'tecnocreaciones_vzla_government.show'|trans }}&nbsp;
                     <select name="range"  class="select red-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
                         <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="{$count$}">
-                            <span ng-bind="count">{$count$}</span>
+                            <span ng-bind="count">{$count$} </span>
                         </option>
                     </select>
                     <button ng-click="tableParams.reload()" class="button pull-right icon-refresh icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" ></button>
@@ -98,9 +98,11 @@
         <form method="post" action="#" class="table-footer button-height ng-cloak ng-table-pager anthracite-gradient">
             <div class="float-right pagination ng-table-pagination">
                 <div class="button-group">
-                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first','prev'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
-                        <span ng-switch-when="first" class="icon-previous"></span>
-                        <span ng-switch-when="prev" class="icon-backward"></span>
+                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['first'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
+                        <span title="{{ 'ng-table.tooltip.first'|trans ({}, 'PequivenSEIPBundle') }}" ng-switch-when="first" class="icon-previous"></span>
+                    </a>
+                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['prev'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
+                        <span title="{{ 'ng-table.tooltip.prev'|trans ({}, 'PequivenSEIPBundle') }}" ng-switch-when="prev" class="icon-backward"></span>
                     </a>
                 </div>
                 <div class="button-group">
@@ -112,9 +114,11 @@
                     </a>
                 </div>
                 <div class="button-group">
-                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['last','next'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
-                        <span ng-switch-when="last" <span class="icon-next"></span>
-                        <span ng-switch-when="next" <span class="icon-forward"></span>
+                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['next'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
+                        <span title="{{ 'ng-table.tooltip.next'|trans ({}, 'PequivenSEIPBundle') }}" ng-switch-when="next" <span class="icon-forward"></span>
+                    </a>
+                    <a ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-if="evalFooter(page.type,['last'])" ng-switch="page.type" ng-click="params.page(page.number)" class="button red-gradient glossy">
+                        <span title="{{ 'ng-table.tooltip.last'|trans ({}, 'PequivenSEIPBundle') }}" ng-switch-when="last" <span class="icon-next"></span>
                     </a>
                 </div>
             </div>
