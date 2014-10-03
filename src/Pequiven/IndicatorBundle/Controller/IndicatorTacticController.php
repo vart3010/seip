@@ -119,7 +119,6 @@ class IndicatorTacticController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -191,7 +190,6 @@ class IndicatorTacticController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador

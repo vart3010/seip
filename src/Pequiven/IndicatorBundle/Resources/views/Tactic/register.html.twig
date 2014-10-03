@@ -135,17 +135,6 @@
                     <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
                 </span>
             </div>
-                
-            <!-- Meta del Indicador -->
-            <div class="field-block button-height">
-                    {{ form_label(form.goal) }}
-                    {{ form_widget(form.goal) }}
-                    {{ form_errors(form.goal) }}
-                    <span class="info-spot">
-                        <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.goal_info'|trans }}</span>
-                    </span>
-            </div>
                     
             <!-- Fórmula de evaluación del indicador -->
             <div id="formula" class="field-block button-height">
@@ -299,7 +288,6 @@
             selectGerencia = $("#pequiven_indicator_tactic_registration_gerencia"),//Select de Gerencia
             selectFormula = $("#pequiven_indicator_tactic_registration_formula"),//Select de Fórmula
             inputRef = $("#pequiven_indicator_tactic_registration_ref"),//Input de Ref
-            inputGoal = $("#pequiven_indicator_tactic_registration_goal"),//Input de Meta
             inputWeight = $("#pequiven_indicator_tactic_registration_weight"),//Input de Peso
             inputHiddenRoleName = $("#pequiven_indicator_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
             selectTendency = $("#pequiven_indicator_tactic_registration_tendency"),//Select de Tendencia del indicador
@@ -388,9 +376,6 @@
                 selectFormula.select2({
                     placeholder: '{{ 'form.messages.selectFormulaPlaceholder'|trans ({}, 'PequivenIndicatorBundle') }}',
                 });
-
-                //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true,2,',','.');
                 
                 //Incializamos el formato numerico para el input de Peso
                 inputWeight.number(true,2,',','.');
