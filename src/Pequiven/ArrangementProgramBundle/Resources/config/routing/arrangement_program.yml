@@ -1,0 +1,37 @@
+pequiven_arrangementprogram:
+    path: /
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:indexAction }
+    methods: [GET]
+    
+pequiven_arrangementprogram_create:
+    path: /{type}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:createAction }
+    requirements:
+        type: 1|2|3
+    methods: [POST]
+    
+pequiven_arrangementprogram_new:
+    path: /{type}/new
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:newAction }
+    requirements: 
+        type: 1|2|3
+    methods: [GET]
+    
+arrangementprogram_show:
+    path: /{id}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:showAction }
+    methods: [GET]
+    
+arrangementprogram_edit:
+    path: /{id}/edit
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:editAction }
+    methods: [GET]
+    
+arrangementprogram_update:
+    path: /{id}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:updateAction }
+    methods: [PUT]
+arrangementprogram_delete:
+    path: /{id}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:deleteAction }
+    methods: [DELETE]

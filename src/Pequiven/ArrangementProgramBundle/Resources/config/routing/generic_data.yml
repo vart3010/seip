@@ -1,0 +1,21 @@
+pequiven_arrangementprogram_data_responsible_goals:
+    path: /responsible-goals.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getResponsibleGoalsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_type_goal:
+    path: /{category}/type-goal.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getTypeGoalAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

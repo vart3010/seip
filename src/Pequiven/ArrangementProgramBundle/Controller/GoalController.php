@@ -3,7 +3,6 @@
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -12,20 +11,16 @@ use Pequiven\ArrangementProgramBundle\Form\GoalType;
 
 /**
  * Goal controller.
- *
- * @Route("/goal")
  */
-class GoalController extends Controller
+class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
 {
 
     /**
      * Lists all Goal entities.
-     *
-     * @Route("/", name="goal")
-     * @Method("GET")
+     * 
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -38,8 +33,6 @@ class GoalController extends Controller
     /**
      * Creates a new Goal entity.
      *
-     * @Route("/", name="goal_create")
-     * @Method("POST")
      * @Template("PequivenArrangementProgramBundle:Goal:new.html.twig")
      */
     public function createAction(Request $request)
@@ -84,8 +77,6 @@ class GoalController extends Controller
     /**
      * Displays a form to create a new Goal entity.
      *
-     * @Route("/new", name="goal_new")
-     * @Method("GET")
      * @Template()
      */
     public function newAction()
@@ -102,12 +93,11 @@ class GoalController extends Controller
     /**
      * Finds and displays a Goal entity.
      *
-     * @Route("/{id}", name="goal_show",requirements={"id"="\d+"})
-     * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
 
@@ -126,8 +116,6 @@ class GoalController extends Controller
     /**
      * Displays a form to edit an existing Goal entity.
      *
-     * @Route("/get-form", name="goal_get_form",options={"expose":"true"})
-     * @Method("GET")
      * @Template("PequivenArrangementProgramBundle:Goal:_form.html.twig")
      */
     public function getFormAction()
@@ -187,12 +175,11 @@ class GoalController extends Controller
     /**
      * Edits an existing Goal entity.
      *
-     * @Route("/{id}", name="goal_update")
-     * @Method("PUT")
      * @Template("PequivenArrangementProgramBundle:Goal:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:Goal')->find($id);
@@ -220,11 +207,10 @@ class GoalController extends Controller
     /**
      * Deletes a Goal entity.
      *
-     * @Route("/{id}", name="goal_delete")
-     * @Method("DELETE")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
+        $id = $request->get("id");
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
