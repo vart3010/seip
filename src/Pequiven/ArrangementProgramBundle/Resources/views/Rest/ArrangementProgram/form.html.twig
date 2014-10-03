@@ -91,12 +91,18 @@
             */
            function valGoalDetails(val, metaData, record, rowIndex,colIndex, store){
 {#               grid.columns[m.cellIndex].disable();#}
-               var columnName = grid.columns[colIndex + 4].dataIndex;
-               {#console.log(record.data.goal.startDate);
-               console.log(record.data.goal.startDate);#}
-               if(columnName === "decemberReal" ){
-                   metaData.css = 'td-bg-disabled';
-                   return val;
+               var columnName = grid.columns[colIndex + 5].dataIndex;
+{#               console.log(grid.columns[colIndex + 5]);#}
+               var data = record.data;
+{#               console.log(data);#}
+               if(data._data[columnName] != undefined) {
+                  var extraData = data._data[columnName];
+                  if(extraData['isEnabled'] != undefined){
+                      if(extraData.isEnabled == false){
+                           metaData.css = 'td-bg-disabled';
+                           return val;
+                      }
+                  }
                }
 {#               console.log(grid.columns[m.cellIndex]);#}
                {#console.log(val);
@@ -119,25 +125,26 @@
                         }
                     },
                     beforeedit: function(editor, context, eOpts){
-                        {#
-                        var field = context.field;
-                        if(field == "januaryPlanned"){
-                           return false; 
-                        }
-                        console.log(context.record);
-                        console.log(editor);
-                        console.log(context);
-                        console.log(eOpts);
-                        #}
+                        var columnName = context.field;
+                        var data = context.record.data;
+                       if(data._data[columnName] != undefined) {
+                          var extraData = data._data[columnName];
+                          if(extraData['isEnabled'] != undefined){
+                              if(extraData.isEnabled == false){
+                                   return false;
+                              }
+                          }
+                       }
                         return true;
                     }
                 }
             });
+            var widthColumnValues = 60;
              var grid = Ext.create('Ext.grid.Panel', {
                 selType: 'cellmodel',
                 renderTo: 'grid-example-2',
                 plugins: [cellEditing],
-                height: 330,
+                height: 580,
                 frame: true,
                 title: '{{ "pequiven.goals.goals"|trans }}',
                 store: store,
@@ -158,7 +165,7 @@
                 },
                 columns: [{
                     text: 'ID',
-                    width: 50,
+                    width: 30,
                     sortable: true,
                     dataIndex: 'id',
                     locked: true,
@@ -180,7 +187,7 @@
                     }
                 }, {
                     header: '{{ "pequiven.start_date"|trans({},"messages") }}',
-                    width: 120,
+                    width: 80,
                     sortable: true,
                     dataIndex: 'startDate',
                     summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
@@ -194,7 +201,7 @@
                     }
                 }, {
                     text: '{{ "pequiven.end_date"|trans({},"messages") }}',
-                    width: 120,
+                    width: 80,
                     sortable: true,
                     dataIndex: 'endDate',
                     summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
@@ -206,11 +213,25 @@
                         var d = r.data.goal.endDate;
                         return Ext.util.Format.date(d,'Y-m-d');
                     }
-                }, {
+                },{  text: '{{ "pequiven.weight"|trans({},"messages") }}',
+                    sortable: true,
+                    width: 60,
+                    dataIndex: 'weight',
+                    locked: true,
+                    field: {
+                        xtype: 'displayfield'
+                    },
+                    renderer: function (v, m, r) {
+                        var d = r.data.goal.weight;
+                        return d;
+                    }
+                },{
                     text: '{{ "pequiven.months.january"|trans({},"messages") }}',
                     columns: [
                         {
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             sortable: true,
                             groupable: false,
                             align: 'center',
@@ -224,6 +245,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'januaryReal',
                             renderer: valGoalDetails,
@@ -240,6 +262,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            baseCls: 'bg-column-gray',
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'februaryPlanned',
                             renderer: valGoalDetails,
@@ -251,6 +275,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'februaryReal',
                             renderer: valGoalDetails,
@@ -267,6 +292,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'marchPlanned',
                             renderer: valGoalDetails,
@@ -278,6 +305,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'marchReal',
                             renderer: valGoalDetails,
@@ -294,6 +322,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'aprilPlanned',
                             renderer: valGoalDetails,
@@ -305,6 +335,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'aprilReal',
                             renderer: valGoalDetails,
@@ -321,6 +352,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'mayPlanned',
                             renderer: valGoalDetails,
@@ -332,6 +365,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'mayReal',
                             renderer: valGoalDetails,
@@ -348,6 +382,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'junePlanned',
                             renderer: valGoalDetails,
@@ -359,6 +395,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'juneReal',
                             renderer: valGoalDetails,
@@ -375,6 +412,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'julyPlanned',
                             renderer: valGoalDetails,
@@ -386,6 +425,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'julyReal',
                             renderer: valGoalDetails,
@@ -402,6 +442,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'augustPlanned',
                             renderer: valGoalDetails,
@@ -413,6 +455,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'augustReal',
                             renderer: valGoalDetails,
@@ -429,6 +472,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'septemberPlanned',
                             renderer: valGoalDetails,
@@ -440,6 +485,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'septemberReal',
                             renderer: valGoalDetails,
@@ -456,6 +502,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'octoberPlanned',
                             renderer: valGoalDetails,
@@ -467,6 +515,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'octoberReal',
                             renderer: valGoalDetails,
@@ -483,6 +532,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'novemberPlanned',
                             renderer: valGoalDetails,
@@ -494,6 +545,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'novemberReal',
                             renderer: valGoalDetails,
@@ -510,6 +562,8 @@
                             text: '{{ "pequiven.goals.abbr_planned"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
+                            baseCls: 'bg-column-gray',
                             align: 'center',
                             dataIndex: 'decemberPlanned',
                             renderer: valGoalDetails,
@@ -521,6 +575,7 @@
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
                             groupable: false,
+                            width: widthColumnValues,
                             align: 'center',
                             dataIndex: 'decemberReal',
                             renderer: valGoalDetails,

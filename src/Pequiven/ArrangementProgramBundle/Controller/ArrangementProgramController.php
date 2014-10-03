@@ -51,7 +51,7 @@ class ArrangementProgramController extends SEIPController
         $form = $this->createCreateForm($entity,array('type' => $type));
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $this->save($entity,true);
+            $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
         }
 

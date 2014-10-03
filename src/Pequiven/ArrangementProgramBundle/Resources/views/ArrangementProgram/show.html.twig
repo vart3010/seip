@@ -69,11 +69,42 @@
         </p>
     </fieldset>
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/timelines.html.twig' %}
+    
+<script type="text/javascript">
+    $(function() {
+            $('a.showPopup').click(function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                var horizontalPadding = 20;
+                var verticalPadding = 20;
+                var width = 1200;
+                var heigth = 600;
+                $('<iframe id="site" src="' + this.href + '" style="padding:0"/>').dialog({
+                    title: ($this.attr('title')) ? $this.attr('title') : 'Site',
+                    autoOpen: true,
+                    width: width,
+                    height: heigth,
+                    modal: true,
+                    resizable: true,
+                    autoResize: true,
+                    overlay: {
+                        opacity: 0.5,
+                        background: "black"
+                    }
+                }).width(width - horizontalPadding).height(heigth - verticalPadding);
+            });
+    });
+</script>
+ 
+
 </div>
 
 <br /><br />
-{{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
-{{ buttons.generic_modal(path('arrangementprogram_delete', { 'id': entity.id })) }}
+
+<p class="button-height align-right">
+    {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+</p>
 
 <ul class="record_actions">
     <li>{{ form(delete_form) }}</li>
@@ -83,11 +114,7 @@
 {% block javascript %}
     <script type="text/javascript">
         jQuery(document).ready(function(){
-             $('.tables-extras').tablesorter({
-                headers: {
-                    4: {sorter: false}
-                }
-            });
+             $('.tables-extras').tablesorter();
         });
     </script>
 {% endblock javascript %}

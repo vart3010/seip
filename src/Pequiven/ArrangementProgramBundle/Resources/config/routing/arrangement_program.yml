@@ -20,18 +20,26 @@ pequiven_arrangementprogram_new:
 arrangementprogram_show:
     path: /{id}
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:showAction }
+    requirements:
+        id: "\d+"
     methods: [GET]
     
 arrangementprogram_edit:
     path: /{id}/edit
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:editAction }
+    requirements:
+        id: "\d+"
     methods: [GET]
     
 arrangementprogram_update:
     path: /{id}
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:updateAction }
+    requirements:
+        id: "\d+"
     methods: [PUT]
 arrangementprogram_delete:
     path: /{id}
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:deleteAction }
+    requirements:
+        id: "\d+"
     methods: [DELETE]

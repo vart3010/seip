@@ -1,6 +1,6 @@
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
                 
-<div class="block" ng-init="getTypeGoal('{{ entity.categoryArrangementProgram.id }}'); model.arrangementProgram.categoryArrangementProgram={{ entity.categoryArrangementProgram.id }}">
+<div class="block" ng-init="{% if entity.categoryArrangementProgram %}getTypeGoal('{{ entity.categoryArrangementProgram.id }}');model.arrangementProgram.categoryArrangementProgram={{ entity.categoryArrangementProgram.id }}{% endif %} ">
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">

@@ -4,11 +4,11 @@
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
-            <a href="" ng-click="loadTemplateMeta()" class="button icon-list">{{ 'pequiven.details'|trans({},'messages') }}</a>
+            <a class="button icon-list showPopup" href="{{ path('get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails',{id:app.request.get('id'),_format:'html'}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.details'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
-        <table class="simple-table responsive-table" id="sorting-example2">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
         <thead>
                 <tr>
                     <th scope="col">{{ 'seip.table.header.name'|trans }}</th>

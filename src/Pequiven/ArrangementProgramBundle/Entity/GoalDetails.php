@@ -4,6 +4,7 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
+use Pequiven\ArrangementProgramBundle\Model\GoalDetails as Base;
 
 /**
  * Detalles de la meta
@@ -13,7 +14,7 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalDetailsRepository")
  */
-class GoalDetails
+class GoalDetails extends Base
 {
     /**
      * @var integer
