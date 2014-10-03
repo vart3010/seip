@@ -82,6 +82,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $parent;
     
     /** 
+     * Dirección
+     * @var \Pequiven\MasterBundle\Entity\Direction
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
+     * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
+     */
+    private $direction;
+    
+    /** 
      * Complejo
      * 
      * @var \Pequiven\MasterBundle\Entity\Complejo
@@ -452,6 +460,29 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getGerenciaSecond()
     {
         return $this->gerenciaSecond;
+    }
+    
+    /**
+     * Set direction
+     *
+     * @param \Pequiven\MasterBundle\Entity\Direction $direction
+     * @return Gerencia
+     */
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
+    {
+        $this->direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return \Pequiven\MasterBundle\Entity\Direction 
+     */
+    public function getDirection()
+    {
+        return $this->direction;
     }
     
     public function __toString() {
