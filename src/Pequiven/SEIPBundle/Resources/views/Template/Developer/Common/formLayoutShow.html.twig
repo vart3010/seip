@@ -4,6 +4,28 @@
     <!-- Additional styles -->
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/form3860.css?v=1') }}">
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/switches3860.css?v=1') }}">
+    
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/progress-slider3860.css?v=1') }}">
+    
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+    
+    <!-- jQuery Form Validation -->
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/developr.validationEngine3860.css?v=1') }}">    
+    
 {% endblock %}
 
-
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery.tablesorter.min.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.progress-slider.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.js?v=1') }}"></script>
+    
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/jquery.validationEngine3860.js?v=1') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/formValidator/languages/jquery.validationEngine-' ~ app.request.locale ~ '3860.js?v=1') }}"></script>
+{% endblock %}

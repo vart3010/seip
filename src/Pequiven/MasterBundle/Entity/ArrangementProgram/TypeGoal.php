@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tipo de meta (Tipo de actividad)
  *
  * @ORM\Table("seip_c_type_goal")
- * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Entity\ArrangementProgram\Repository\TypeGoalRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\ArrangementProgram\TypeGoalRepository")
  */
 class TypeGoal
 {

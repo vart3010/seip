@@ -28,6 +28,8 @@ fos_user:
     
 
 fos_rest:
+    service:
+        serializer: tpg_extjs.serializer
     allowed_methods_listener: true
     routing_loader:
         default_format: json
@@ -36,6 +38,7 @@ fos_rest:
     access_denied_listener:
         # all requests using the 'json' format will return a 403 on an access denied violation
         json: true
+    param_fetcher_listener: true
         
 sensio_framework_extra:
     view:    { annotations: false }

@@ -1,24 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\ObjetiveBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as silyusEntityRepository;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+
 /**
  * Description of ObjetiveRepository
  *
  * @author matias
  */
-class ObjetiveRepository extends baseEntityRepository {
+class ObjetiveRepository extends EntityRepository {
     
     /**
      * Devuelve un grupo de resultados de acuerdo al campo pasado en $options y agrupado por la referencia
@@ -300,6 +291,25 @@ class ObjetiveRepository extends baseEntityRepository {
         $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Retorna un query builder de los objetivos tacticos asociados a la gerencia
+     * @return type
+     */
+    function findQueryObjetivesTactic()
+    {
+        $user = $this->getUser();
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin("o.objetiveLevel","ol")
+                ->innerJoin("o.gerencia","g")
+                ->andWhere("ol.level = :level")
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                ->setParameter("gerencia", $user->getGerencia())
+            ;
+        return $qb;
     }
 
 }

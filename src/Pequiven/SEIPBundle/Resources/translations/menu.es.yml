@@ -41,7 +41,11 @@ app:
                     arrangement_programs:
                         main: Programas de Gestión
                         list: Lista
-                        add: Añadir
+                        add:
+                            main: Añadir
+                            tactic: Táctico
+                            operative: Operativo
+                            other: Otro
                     reports: Reportes
                     admin:
                         main: Administración

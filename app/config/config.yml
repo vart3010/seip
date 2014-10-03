@@ -103,13 +103,22 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            angular_dependencies: ['bundles/pequivenseip/angular/modules/seipModule.js']
+            angular_dependencies: 
+                        - 'bundles/pequivenseip/angular/modules/seipModule.js'
+                        - 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-cookies.min.js'
             angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'
 
-ext_direct:
-    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+#ext_direct:
+#    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+
+tpg_extjs:
+    entities:
+        - @PequivenArrangementProgramBundle/Entity/
+    remoting:
+        bundles:
+            - PequivenArrangementProgramBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -117,7 +126,7 @@ bazinga_js_translation:
 jms_serializer:
     handlers:
         datetime:
-            default_format: "Y-m-d H:m:s" # ISO8601
+            default_format: "Y-m-d H:i:s" # ISO8601
     metadata:
         debug: "%kernel.debug%"
         auto_detection: true
@@ -129,6 +138,13 @@ jms_serializer:
 tecnocreaciones_install:
     credentials:
         username: superAdmin
+        
+tecnocreaciones_tools:
+    configuration:
+        enable: true
+        debug: false
+        configuration_manager_class: Pequiven\SEIPBundle\Service\Configuration
+        configuration_name_service: seip.configuration
                 
 sylius_resource:
     resources:

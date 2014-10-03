@@ -1,44 +1,76 @@
-{% extends '::base.html.twig' %}
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
 {% block body -%}
-    <h1>ArrangementProgram</h1>
+<div ng-controller="ArrangementProgramController">
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_arrangementprogram') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Process</th>
-                <td>{{ entity.process }}</td>
-            </tr>
-            <tr>
-                <th>Timelines</th>
-                <td>
-                    {% for timeline in entity.timelines %}
-                        {% for goal in timeline.goals %}
-                            Meta {{ loop.index }}: {{ goal.name }}<br/>
-                        {% endfor %}
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <th>Revisiondate</th>
-                <td>{{ entity.revisionDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Approvaldate</th>
-                <td>{{ entity.approvalDate|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ entity.status }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.period'|trans }}</label>
+            {{ entity.period }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.process'|trans }}</label>
+            {{ entity.process }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
+            {{ entity.categoryArrangementProgram }}
+        </p>
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+                {{ entity.tacticalObjective }}
+            </p>
+        {% endif %}
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
+                {{ entity.operationalObjective }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.operating_indicator'|trans }}</label>
+                {{ entity.operatingIndicator }}
+            </p>
+        {% endif %}
+        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.location'|trans }}</label>
+                {{ entity.tacticalObjective.gerencia.complejo }}
+            </p>
+        {% endif %}
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.responsible'|trans }}</label>
+            {{ entity.responsible }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>
+            {{ entity.revisionDate ? entity.revisionDate|date(appConfiguration.generalDateFormat) : null }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.approval_date'|trans }}</label>
+            {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : null }}
+        </p>
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.status'|trans }}</label>
+            {{ entity.status }}
+        </p>
+    </fieldset>
+    {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/timelines.html.twig' %}
+</div>
 
-        <ul class="record_actions">
+<br /><br />
+<ul class="record_actions">
     <li>
         <a href="{{ path('pequiven_arrangementprogram') }}">
             Back to the list
@@ -52,3 +84,15 @@
     <li>{{ form(delete_form) }}</li>
 </ul>
 {% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+             $('.tables-extras').tablesorter({
+                headers: {
+                    4: {sorter: false}
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}
