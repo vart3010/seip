@@ -375,7 +375,15 @@ angular.module('seipModule.controllers', [])
         });
     })
     .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
-
+        $scope.gerenciaSecond = null;
+        $scope.$watch("gerenciaSecond", function () {
+            if($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
+            {
+                 $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
+            }else{
+                 $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+            }
+        });
     })
     .controller('TableIndicatorStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 

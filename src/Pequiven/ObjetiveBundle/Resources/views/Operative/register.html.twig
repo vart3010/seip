@@ -172,99 +172,120 @@
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
                 <summary>{{ 'form.rankArrangementObjetiveOperative'|trans }}</summary>
-                <div class="with-padding">
-                    <div class="field-block button-height">
-                        {{form_label(form.tendency)}}
-                        {{form_widget(form.tendency)}}
-                    </div>
-                    
-                    <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
-                        <ul class="tabs">
-                            <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
-                            <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
-                            <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
-                            <li id="tabRankBottom" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
-                        </ul>
-                        <div class="tabs-content" style="min-height: 29px;">
-                            <!-- Tab Rango Alto -->
-                            <div id="rankArrangementTop" class="with-padding">
-                                <div class="field-block button-height">
-                                    {{ form_widget(form.typeArrangementRangeTypeTop) }}
-                                    {{ form_label(form.arrangementRangeTypeTop) }}
-                                    <span class="info-spot">
-                                        <span class="icon-info-round"></span>
-                                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeTop'|trans }}</span>
-                                    </span>
-                                    {{ form_widget(form.arrangementRangeTypeTop) }}
+                <span id="noEstable">
+                    <div class="with-padding">
+                        <div class="field-block button-height">
+                            {{form_label(form.tendency)}}
+                            {{form_widget(form.tendency)}}
+                        </div>
 
-                                    <span id="sectionTopBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopBasic) }} {{ form_widget(form.rankTopBasic) }}
-                                    </span>
-                                    <span id="sectionTopMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedTop) }} {{ form_widget(form.rankTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedBottom) }} {{ form_widget(form.rankTopMixedBottom) }}
+                        <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
+                            <ul id="listNoEstable" class="tabs">
+                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
+                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                                <li id="tabRankBottom" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                            </ul>
+                            <ul id="listEstable" class="tabs">
+                                <li id="tabRankBottomBottomEstable" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleBottomEstable" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                                <li id="tabRankTopEstable" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementMiddle'|trans }}</a></li>
+                                <li id="tabRankMiddleTopEstable" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                                <li id="tabRankBottomTopEstable" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
+                            </ul>
+                            <div class="tabs-content" style="min-height: 29px;">
+                                <!-- Tab Rango Alto -->
+                                <div id="rankArrangementTop" class="with-padding">
+                                    <div class="field-block button-height">
+                                        {{ form_widget(form.typeArrangementRangeTypeTop) }}
+                                        {{ form_label(form.arrangementRangeTypeTop) }}
+                                        <span class="info-spot">
+                                            <span class="icon-info-round"></span>
+                                            <span class="info-bubble">{{ 'form.info.arrangementRangeTypeTop'|trans }}</span>
+                                        </span>
+                                        {{ form_widget(form.arrangementRangeTypeTop) }}
+
+                                        <span id="sectionTopBasic">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopBasic) }} {{ form_widget(form.rankTopBasic) }}
+                                        </span>
+                                        <span id="sectionTopMixed">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedTop) }} {{ form_widget(form.rankTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankTopMixedBottom) }} {{ form_widget(form.rankTopMixedBottom) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Tab Rango Medio Alto -->
+                                <div id="rankArrangementMiddleTop" class="with-padding">
+                                    <div class="field-block button-height">
+                                        {{ form_widget(form.typeArrangementRangeTypeMiddleTop) }}
+                                        {{ form_label(form.arrangementRangeTypeMiddleTop) }}
+                                        <span class="info-spot">
+                                            <span class="icon-info-round"></span>
+                                            <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleTop'|trans }}</span>
+                                        </span>
+                                        {{ form_widget(form.arrangementRangeTypeMiddleTop) }}
+
+                                        <span id="sectionMiddleTopBasic">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopBasic) }} {{ form_widget(form.rankMiddleTopBasic) }}
+                                        </span>
+                                        <span id="sectionMiddleTopMixed">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedTop) }} {{ form_widget(form.rankMiddleTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedBottom) }} {{ form_widget(form.rankMiddleTopMixedBottom) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Tab Rango Medio Bajo -->
+                                <div id="rankArrangementMiddleBottom" class="with-padding">
+                                    <div class="field-block button-height">
+                                        {{ form_widget(form.typeArrangementRangeTypeMiddleBottom) }}
+                                        {{ form_label(form.arrangementRangeTypeMiddleBottom) }}
+                                        <span class="info-spot">
+                                            <span class="icon-info-round"></span>
+                                            <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleBottom'|trans }}</span>
+                                        </span>
+                                        {{ form_widget(form.arrangementRangeTypeMiddleBottom) }}
+
+                                        <span id="sectionMiddleBottomBasic">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomBasic) }} {{ form_widget(form.rankMiddleBottomBasic) }}
+                                        </span>
+                                        <span id="sectionMiddleBottomMixed">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedTop) }} {{ form_widget(form.rankMiddleBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedBottom) }} {{ form_widget(form.rankMiddleBottomMixedBottom) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Tab Rango Bajo -->
+                                {{ form_widget(form.typeArrangementRangeTypeBottom) }}
+                                <div id="rankArrangementBottom" class="with-padding">
+                                    <div class="field-block button-height">
+                                        {{ form_label(form.arrangementRangeTypeBottom) }}
+                                        <span class="info-spot">
+                                            <span class="icon-info-round"></span>
+                                            <span class="info-bubble">{{ 'form.info.arrangementRangeTypeBottom'|trans }}</span>
+                                        </span>
+                                        {{ form_widget(form.arrangementRangeTypeBottom) }}
+
+                                        <span id="sectionBottomBasic">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomBasic) }} {{ form_widget(form.rankBottomBasic) }}
+                                        </span>
+                                        <span id="sectionBottomMixed">
+                                            <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedTop) }} {{ form_widget(form.rankBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedBottom) }} {{ form_widget(form.rankBottomMixedBottom) }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Rango Bajo-Bajo para el comportamiento -->
+                                <div id="rankArrangementBottomTop" class="with-padding">
+                                    <span id="sectionBottomTopBasic">
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomTopBasic) }} {{ form_widget(form.rankBottomTopBasic) }}
                                     </span>
                                 </div>
-                            </div>
-                            <!-- Tab Rango Medio Alto -->
-                            <div id="rankArrangementMiddleTop" class="with-padding">
-                                <div class="field-block button-height">
-                                    {{ form_widget(form.typeArrangementRangeTypeMiddleTop) }}
-                                    {{ form_label(form.arrangementRangeTypeMiddleTop) }}
-                                    <span class="info-spot">
-                                        <span class="icon-info-round"></span>
-                                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleTop'|trans }}</span>
-                                    </span>
-                                    {{ form_widget(form.arrangementRangeTypeMiddleTop) }}
-
-                                    <span id="sectionMiddleTopBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopBasic) }} {{ form_widget(form.rankMiddleTopBasic) }}
-                                    </span>
-                                    <span id="sectionMiddleTopMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedTop) }} {{ form_widget(form.rankMiddleTopMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleTopMixedBottom) }} {{ form_widget(form.rankMiddleTopMixedBottom) }}
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Tab Rango Medio Bajo -->
-                            <div id="rankArrangementMiddleBottom" class="with-padding">
-                                <div class="field-block button-height">
-                                    {{ form_widget(form.typeArrangementRangeTypeMiddleBottom) }}
-                                    {{ form_label(form.arrangementRangeTypeMiddleBottom) }}
-                                    <span class="info-spot">
-                                        <span class="icon-info-round"></span>
-                                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeMiddleBottom'|trans }}</span>
-                                    </span>
-                                    {{ form_widget(form.arrangementRangeTypeMiddleBottom) }}
-
-                                    <span id="sectionMiddleBottomBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomBasic) }} {{ form_widget(form.rankMiddleBottomBasic) }}
-                                    </span>
-                                    <span id="sectionMiddleBottomMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedTop) }} {{ form_widget(form.rankMiddleBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankMiddleBottomMixedBottom) }} {{ form_widget(form.rankMiddleBottomMixedBottom) }}
-                                    </span>
-                                </div>
-                            </div>
-                            <!-- Tab Rango Bajo -->
-                            <div id="rankArrangementBottom" class="with-padding">
-                                <div class="field-block button-height">
-                                    {{ form_widget(form.typeArrangementRangeTypeBottom) }}
-                                    {{ form_label(form.arrangementRangeTypeBottom) }}
-                                    <span class="info-spot">
-                                        <span class="icon-info-round"></span>
-                                        <span class="info-bubble">{{ 'form.info.arrangementRangeTypeBottom'|trans }}</span>
-                                    </span>
-                                    {{ form_widget(form.arrangementRangeTypeBottom) }}
-
-                                    <span id="sectionBottomBasic">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomBasic) }} {{ form_widget(form.rankBottomBasic) }}
-                                    </span>
-                                    <span id="sectionBottomMixed">
-                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedTop) }} {{ form_widget(form.rankBottomMixedTop) }} y <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomMixedBottom) }} {{ form_widget(form.rankBottomMixedBottom) }}
+                                <!-- Rango Bajo-Alto para el comportamiento -->
+                                <div id="rankArrangementBottomBottom" class="with-padding">
+                                    <span id="sectionBottomBottomBasic">
+                                        <label style="color: #000000; font-weight: bold;">{{ 'form.textResObj'|trans }}&nbsp;</label>{{ form_widget(form.opRankBottomBottomBasic) }} {{ form_widget(form.rankBottomBottomBasic) }}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </span>
             </details>
 
             <!-- Tipo de Evaluación -->
@@ -367,6 +388,11 @@
             tabRankMiddleTop = $("#tabRankMiddleTop"),//Tab de Rango Medio Alto
             tabRankMiddleBottom = $("#tabRankMiddleBottom"),//Tab de Rango Medio Bajo
             tabRankBottom = $("#tabRankBottom"),//Tab de Rango Bajo
+            tabRankTopEstable = $("#tabRankTopEstable"),//Tab de Rango Alto Estable
+            tabRankMiddleTopEstable = $("#tabRankMiddleTopEstable"),//Tab de Rango Medio Alto Estable
+            tabRankMiddleBottomEstable = $("#tabRankMiddleBottomEstable"),//Tab de Rango Medio Bajo Estable
+            tabRankBottomTopEstable = $("#tabRankBottomTopEstable"),//Tab de Rango Bajo Alto Estable
+            tabRankBottomBottomEstable = $("#tabRankBottomBottomEstable"),//Tab de Rango Bajo Bajo Estable
             sectionTopBasic = $("#sectionTopBasic"),//Sección de Rango de Gestión Alto Básico
             sectionTopMixed = $("#sectionTopMixed"),//Sección de Rango de Gestión Alto Mixto
             sectionMiddleTopBasic = $("#sectionMiddleTopBasic"),//Sección de Rango de Gestión Medio Alto Básico
@@ -389,8 +415,11 @@
             inputRankMiddleBottomMixedTop = $("#pequiven_objetive_operative_registration_rankMiddleBottomMixedTop"),//Input de rankMiddleBottomMixedTop
             inputRankMiddleBottomMixedBottom = $("#pequiven_objetive_operative_registration_rankMiddleBottomMixedBottom"),//Input de rankMiddleBottomMixedBottom
             inputRankBottomBasic = $("#pequiven_objetive_operative_registration_rankBottomBasic"),//Input de rankBottomBasic
+            inputRankBottomTopBasic = $("#pequiven_objetive_operative_registration_rankBottomTopBasic"),//Input de rankBottomMixedTop
+            inputRankBottomBottomBasic = $("#pequiven_objetive_operative_registration_rankBottomBottomBasic"),//Input de rankBottomMixedBottom
             inputRankBottomMixedTop = $("#pequiven_objetive_operative_registration_rankBottomMixedTop"),//Input de rankBottomMixedTop
-            inputRankBottomMixedBottom = $("#pequiven_objetive_operative_registration_rankBottomMixedBottom")//Input de rankBottomMixedBottom
+            inputRankBottomMixedBottom = $("#pequiven_objetive_operative_registration_rankBottomMixedBottom"),//Input de rankBottomMixedBottom
+            labelsRangeTop = $("#pequiven_objetive_operative_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
             ;
         
         $(document).ready(function()
@@ -399,6 +428,8 @@
             change();
 
             function change(){
+                $("#listEstable").hide();
+                
                 //Escondemos por defecto el boton de registrar indicadores y el mensaje en caso de no haber seleccionado alguna Línea Estratégica, algún Objetivo Estratégico o algún Objetivo Táctico
                 buttonAddIndicator.hide();
                 messageLineStrategicCheckIndicator.hide();
@@ -482,6 +513,8 @@
 
                 //Inicializamos el formato numerico para el input de Rango Bajo
                 inputRankBottomBasic.number(true,2,',','.');
+                inputRankBottomTopBasic.number(true,2,',','.');
+                inputRankBottomBottomBasic.number(true,2,',','.');
                 inputRankBottomMixedTop.number(true,2,',','.');
                 inputRankBottomMixedBottom.number(true,2,',','.');
 
@@ -509,13 +542,17 @@
         });
         //Fin document.ready
         
-        //Al hacer click sobre la tab de Rango Alto
+        //Al hacer click sobre la tab de Rango Alto NoEstable
         tabRankTop.click(function() {
             if ($("input[id='pequiven_objetive_operative_registration_tendency_1']").is(':checked')) {
                 $("#tabRankTop a").attr("style","color: #000000; background: #00FF00;");
             } else if ($("input[id='pequiven_objetive_operative_registration_tendency_2']").is(':checked')){
                 $("#tabRankTop a").attr("style","color: #000000; background: red;");                
             }
+        });
+        //Al hacer click sobre la tab de Rango Alto Estable
+        tabRankTopEstable.click(function() {
+            $("#tabRankTopEstable a").attr("style","color: #000000; background: #00FF00;");
         });
         //Al hacer click sobre la tab de Rango Medio Alto
         tabRankMiddleTop.click(function() {            
@@ -525,7 +562,11 @@
                 $("#tabRankMiddleTop a").attr("style","color: #000000; background: #ffb900;");
             }
         });
-        //Al hacer click sobre la tab de Rango Medio Bajo
+        //Al hacer click sobre la tab de Rango Medio Alto Estable
+        tabRankMiddleTopEstable.click(function() {
+            $("#tabRankMiddleTopEstable a").attr("style","color: #000000; background: #ffe326;");
+        });
+        //Al hacer click sobre la tab de Rango Medio Bajo No Estable
         tabRankMiddleBottom.click(function() {
             if ($("input[id='pequiven_objetive_operative_registration_tendency_1']").is(':checked')) {
                 $("#tabRankMiddleBottom a").attr("style","color: #000000; background: #ffb900;");
@@ -533,13 +574,25 @@
                 $("#tabRankMiddleBottom a").attr("style","color: #000000; background: #ffe326;");
             }
         });
-        //Al hacer click sobre la tab de Rango Bajo
+        //Al hacer click sobre la tab de Rango Medio Bajo Estable
+        tabRankMiddleBottomEstable.click(function() {
+            $("#tabRankMiddleBottomEstable a").attr("style","color: #000000; background: #ffb900;");
+        });
+        //Al hacer click sobre la tab de Rango Bajo para Comportamiento No Estable
         tabRankBottom.click(function() {
             if ($("input[id='pequiven_objetive_operative_registration_tendency_1']").is(':checked')) {
                 $("#tabRankBottom a").attr("style","color: #000000; background: red;");
             } else if ($("input[id='pequiven_objetive_operative_registration_tendency_2']").is(':checked')) {
                 $("#tabRankBottom a").attr("style","color: #000000; background: #00FF00;");
             }
+        });
+        //Al hacer click sobre la tab de Rango Bajo-Bajo (Rango Bajo) para Comportamiento Estable
+        tabRankBottomTopEstable.click(function() {
+            $("#tabRankBottomTopEstable a").attr("style","color: #000000; background: red;");
+        });
+        //Al hacer click sobre la tab de Rango Bajo-Alto (Rango Alto) para Comportamiento Estable
+        tabRankBottomBottomEstable.click(function() {
+            $("#tabRankBottomBottomEstable a").attr("style","color: #000000; background: red;");
         });
         
         //Al seleccionar el Rango de Gestión Alto
@@ -593,6 +646,12 @@
         //Al seleccionar la tendencia del Indicador
         selectTendency.click(function() {
             if ($("input[id='pequiven_objetive_operative_registration_tendency_1']").is(':checked')) {
+                $("#listNoEstable").show();
+                $("#listEstable").hide();
+                if($("input[id='pequiven_objetive_operative_registration_arrangementRangeTypeBottom_4']").is(':checked')){
+                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
+                }
+                $("#listEstable li.active").attr("class","");
                 $("#tabRankTop a").attr("style","color: #000000; background: #00FF00;");
                 $("#tabRankMiddleTop a").attr("style","color: #000000; background: #ffe326;");
                 $("#tabRankMiddleBottom a").attr("style","color: #000000; background: #ffb900;");
@@ -601,7 +660,16 @@
                 tabRankMiddleTop.attr('style','background: #ffe326;');
                 tabRankMiddleBottom.attr('style','background: #ffb900;');
                 tabRankBottom.attr('style','background: red;');
+                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
+                labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_objetive_operative_registration_tendency_2']").is(':checked')) {
+                $("#listNoEstable").show();
+                $("#listEstable").hide();
+                if($("input[id='pequiven_objetive_operative_registration_arrangementRangeTypeBottom_4']").is(':checked')){
+                    inputHiddenTypeArrangementRangeBottom.val("BOTTOM_BASIC");
+                }
+                $("#listEstable li.active").attr("class","");
                 $("#tabRankTop a").attr("style","color: #000000; background: red;");
                 $("#tabRankMiddleTop a").attr("style","color: #000000; background: #ffb900;");
                 $("#tabRankMiddleBottom a").attr("style","color: #000000; background: #ffe326;");
@@ -610,6 +678,27 @@
                 tabRankMiddleTop.attr('style','background: #ffb900;');
                 tabRankMiddleBottom.attr('style','background: #ffe326;');
                 tabRankBottom.attr('style','background: #00FF00;');
+                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
+                labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
+            } else if ($("input[id='pequiven_objetive_operative_registration_tendency_3']").is(':checked')) {
+                $("#listNoEstable").hide();
+                $("#listEstable").show();
+                inputHiddenTypeArrangementRangeBottom.val("BOTTOM_MIXED");
+                $("#listNoEstable li.active").attr("class","");                
+                $("#tabRankTopEstable a").attr("style","color: #000000; background: #00FF00;");
+                $("#tabRankMiddleTopEstable a").attr("style","color: #000000; background: #ffe326;");
+                $("#tabRankMiddleBottomEstable a").attr("style","color: #000000; background: #ffb900;");
+                $("#tabRankBottomTopEstable a").attr("style","color: #000000; background: red;");
+                $("#tabRankBottomBottomEstable a").attr("style","color: #000000; background: red;");
+                tabRankTopEstable.attr('style','background: #00FF00;');
+                tabRankMiddleTopEstable.attr('style','background: #ffe326;');
+                tabRankMiddleBottomEstable.attr('style','background: #ffb900;');
+                tabRankBottomTopEstable.attr('style','background: red;');
+                tabRankBottomBottomEstable.attr('style','background: red;');
+                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
+                labelsRangeTop[0].innerHTML = '{{ 'form.rankTopEstableBasic'|trans }}';
+                labelsRangeTop[1].innerHTML = '{{ 'form.rankTopEstableMixed'|trans }}';
             }
         });
 
@@ -1125,7 +1214,7 @@
                 url: '{{ path("pequiven_indicator_add_operative_from_objetive") }}' ,
                 useIframe: true,
                 height: '800',
-                width: '600',
+                width: '800',
                 buttons: {
                         'Cerrar': {
                             classes:	'red-gradient glossy full-width',

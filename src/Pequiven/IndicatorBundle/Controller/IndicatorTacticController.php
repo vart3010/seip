@@ -117,6 +117,7 @@ class IndicatorTacticController extends baseController {
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
 
+            $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
@@ -188,6 +189,7 @@ class IndicatorTacticController extends baseController {
             $object->setRefParent($data['refObjetive']);
             $object->setTmp(true);
 
+            $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
@@ -311,10 +313,19 @@ class IndicatorTacticController extends baseController {
             $arrangementRange->setRankBottomBasic(bcadd(str_replace(',', '.', $data['rankBottomBasic']), '0', 3));
             $arrangementRange->setOpRankBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBasic'])));
         } else if ($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_MIXED') {
-            $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
-            $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
-            $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
-            $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
+            if($data['tendency'] < 3){//Comportamiento No Estable
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
+            } else{ //Comportamiento Estable
+                //Rango Bajo-Alto
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomTopBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopBasic'])));
+                //Rango Bajo-Bajo
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomBottomBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
+            }
         }
 
         $em->persist($arrangementRange);

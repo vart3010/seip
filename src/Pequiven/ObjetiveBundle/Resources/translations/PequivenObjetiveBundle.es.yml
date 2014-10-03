@@ -48,6 +48,7 @@ form:
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto
+    arrangementRangeTypeTopEstable: Tipo de Rango Medio
     arrangementRangeTypeMiddleTop: Tipo de Rango Medio Alto
     arrangementRangeTypeMiddleBottom: Tipo de Rango Medio Bajo
     arrangementRangeTypeBottom: Tipo de Rango Bajo
@@ -58,9 +59,12 @@ form:
     rankArrangementObjetiveTactic: Rango del Objetivo Táctico
     rankArrangementObjetiveOperative: Rango del Objetivo Operativo
     rankArrangementTop: Rango Alto
+    rankArrangementMiddle: Rango Medio
     rankArrangementMiddleTop: Rango Medio Alto
     rankArrangementMiddleBottom: Rango Medio Bajo
     rankArrangementBottom: Rango Bajo
+    rankArrangementBottomTop: Rango Bajo Alto
+    rankArrangementBottomBottom: Rango Bajo Bajo
     
     rankTop: Rango Alto 
     rankMiddleTop: Rango Medio Alto
@@ -73,7 +77,10 @@ form:
     rankBottomTop: Rango Bajo-Alto
     rankBottomBottom: Rango Bajo-Bajo
     
-    
+    rankTopNoEstableBasic: Rango Alto Básico
+    rankTopNoEstableMixed: Rango Alto Mixto
+    rankTopEstableBasic: Rango Medio Básico
+    rankTopEstableMixed: Rango Medio Mixto
     
     typeEvaluation: Tipo de Evaluación
     typeEvaluationObjetiveStrategic: Tipo de Evaluación del Objetivo Estratégico

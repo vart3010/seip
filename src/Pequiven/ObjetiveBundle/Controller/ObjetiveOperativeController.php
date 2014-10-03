@@ -112,6 +112,7 @@ class ObjetiveOperativeController extends baseController {
             $data = $this->container->get('request')->get("pequiven_objetive_operative_registration");
 
             $ref = $data['ref'];
+            $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 3));
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 3));
 
@@ -363,10 +364,19 @@ class ObjetiveOperativeController extends baseController {
             $arrangementRange->setRankBottomBasic(bcadd(str_replace(',', '.', $data['rankBottomBasic']), '0', 3));
             $arrangementRange->setOpRankBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBasic'])));
         } else if ($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_MIXED') {
-            $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
-            $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
-            $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
-            $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
+            if($data['tendency'] < 3){//Comportamiento No Estable
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
+            } else{ //Comportamiento Estable
+                //Rango Bajo-Alto
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomTopBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopBasic'])));
+                //Rango Bajo-Bajo
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomBottomBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
+            }
         }
 
         if ($totalObjetives > 0) {
@@ -626,6 +636,67 @@ class ObjetiveOperativeController extends baseController {
                 );
             }
         }
+
+        $response->setData($gerenciaSecondChildren);
+
+        return $response;
+    }
+    
+    /**
+     * Función que devuelve la(s) gerencias de 2da línea asociadaa a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaSecondAction(Request $request) {
+        $response = new JsonResponse();
+        $gerenciaSecondChildren = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $gerenciasObjectArray = array();
+
+        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+            $complejos = $request->request->get('complejos');
+            $gerencias = $request->request->get('gerencias');
+            $gerenciasArray = explode(',', $gerencias);
+            $complejosArray = explode(',', $complejos);
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+            $gerenciasObjectArray = $gerenciasArray;
+        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
+        } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $user->getGerencia()->getId()));
+        }
+
+//        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+//            foreach ($results as $result) {
+//                $complejo = $result->getGerencia()->getComplejo();
+//                $gerencia = $result->getGerencia();
+//                foreach ($complejosArray as $valueComplejo) {
+//                    foreach ($gerenciasObjectArray as $valueGerencia) {
+//                        if ($complejo->getId() . '-' . $gerencia->getId() == $valueComplejo . '-' . $valueGerencia) {
+//                            $gerenciaSecondChildren[] = array(
+//                                'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
+//                                'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
+//                                'id' => $result->getId(),
+//                                'description' => $result->getDescription()
+//                            );
+//                        }
+//                    }
+//                }
+//            }
+//        } else {
+            foreach ($results as $result) {
+                $complejo = $result->getGerencia()->getComplejo();
+                $gerencia = $result->getGerencia();
+                $gerenciaSecondChildren[] = array(
+                    'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
+                    'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
+                    'id' => $result->getId(),
+                    'description' => $result->getDescription()
+                );
+            }
+        //}
 
         $response->setData($gerenciaSecondChildren);
 

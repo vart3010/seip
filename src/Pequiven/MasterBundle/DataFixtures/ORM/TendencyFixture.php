@@ -27,17 +27,24 @@ class TendencyFixture extends AbstractFixture implements OrderedFixtureInterface
         $objectTendency = new Tendency();
         $tendencyName = $objectTendency->getTendencyNameArray();
         
-        //Maximizar
+        //Favorable
         $tendency = new Tendency();
         $tendency->setDescription($tendencyName[Tendency::TENDENCY_MAX]);
         $tendency->setRef(Tendency::TENDENCY_MAX);
         $tendency->setEnabled(true);
             $manager->persist($tendency);
         
-        //Minimizar
+        //Desfavorable
         $tendency = new Tendency();
         $tendency->setDescription($tendencyName[Tendency::TENDENCY_MIN]);
         $tendency->setRef(Tendency::TENDENCY_MIN);
+        $tendency->setEnabled(true);
+            $manager->persist($tendency);
+
+        //Estable
+        $tendency = new Tendency();
+        $tendency->setDescription($tendencyName[Tendency::TENDENCY_EST]);
+        $tendency->setRef(Tendency::TENDENCY_EST);
         $tendency->setEnabled(true);
             $manager->persist($tendency);
 

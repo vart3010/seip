@@ -79,6 +79,12 @@ select_gerenciaSecondFromGerenciaFirstOperative:
    path: /arrangement_strategic/objetive/select_gerenciaSecondFromGerenciaFirstOperative
    defaults:
        _controller: pequiven.controller.objetiveoperative:selectGerenciaSecondFromGerenciaFirstAction
+       
+#Select que devuelve las Gerencias de 2da Línea para la visualización de objetivos a nivel Operativo
+select_gerenciaSecondOperative:
+    path: /arrangement_strategic/objetive/select_gerenciaSecondOperative
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectGerenciaSecondAction
     
 displayWeightObjetive:
     path: /arrangement_strategic/objetive/displayWeightObjetive

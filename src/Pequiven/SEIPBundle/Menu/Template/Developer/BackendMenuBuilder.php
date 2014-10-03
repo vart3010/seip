@@ -183,7 +183,8 @@ class BackendMenuBuilder extends MenuBuilder
                         )
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.main',$section)));
                 
-                $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
                             'route' => 'pequiven_objetive_menu_list_strategic',
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.strategic', $section)));
@@ -195,6 +196,21 @@ class BackendMenuBuilder extends MenuBuilder
                             'route' => 'pequiven_objetive_menu_list_operative',
                         ))
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
+                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.tactic', array(
+                            'route' => 'pequiven_objetive_menu_list_tactic',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.tactic', $section)));
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.operative', array(
+                            'route' => 'pequiven_objetive_menu_list_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
+                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                    $thirdchild->addChild('arrangement_strategic.objetives.list.operative', array(
+                            'route' => 'pequiven_objetive_menu_list_operative',
+                        ))
+                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
+                }
                     
             $subchild->addChild($thirdchild);
             
