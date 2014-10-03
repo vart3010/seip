@@ -1,0 +1,12 @@
+pequiven_seip_arrangementprogram_routes:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/arrangement_program.yml"
+    prefix:   /arrangementprogram
+
+pequiven_seip_arrangementprogram_data:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/generic_data.yml"
+    prefix:   /data
+    
+pequiven_seip_arrangementprogram_goals:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/goal.yml"
+    prefix:   /goal
+

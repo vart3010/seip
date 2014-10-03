@@ -4,11 +4,11 @@
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
-            <a href="" ng-click="loadTemplateMeta()" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a class="button icon-list showPopup" href="{{ path('get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails',{id:app.request.get('id'),_format:'html'}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.details'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
-        <table class="simple-table responsive-table" id="sorting-example2">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
         <thead>
                 <tr>
                     <th scope="col">{{ 'seip.table.header.name'|trans }}</th>
@@ -30,9 +30,16 @@
                     {$ goal.name $}<br>
                     <small>{$ goal.observations $}</small>
                 </th>
-                <td>{$ goal.type_goal.description $}</td>
-                <td>{$ goal.start_date | myDate $} {$ goal.start_date $}</td>
-                <td>{$ goal.end_date| myDate $}</td>
+                <td>
+                    <span ng-if="goal.typeGoal">
+                        {$ goal.typeGoal.description $}
+                    </span>
+                    <span ng-if="!goal.typeGoal">
+                        {$ 'pequiven.form.not_applicable'|trans $}
+                    </span>
+                </td>
+                <td>{$ goal.startDate | myDate $}</td>
+                <td>{$ goal.endDate| myDate $}</td>
                 <td>{$ goal.weight $}</td>
                 <td>{$ goal.responsible.firstName + " "+ goal.responsible.lastName $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
             </tr>

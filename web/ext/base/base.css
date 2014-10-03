@@ -5,8 +5,8 @@
  * http://www.sencha.com/license
  */
 body {
-    padding:20px;
-    padding-top:32px;
+    /*padding:1px;*/
+    /*padding-top:32px;*/
 }
 .x-body {
     font-family:helvetica,tahoma,verdana,sans-serif;
@@ -92,5 +92,12 @@ body > a:focus
 }
 
 .td-bg-disabled {
-	background-color:#dedede;
+    background-color:#eaeaea;
+}
+
+.bg-disabled {
+    background-color:#dcdcdc;
+}
+.bg-column-gray div {
+    background-color:#dcdcdc;
 }
