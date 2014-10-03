@@ -147,6 +147,10 @@ form:
         arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
         arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
         
+        conductCreciente: Creciente= Si el comportamiento tiende a Maximizar
+        conductDecreciente: Decreciente= Si el comportamiento tiende a Minimizar
+        conductEstable: Estable= Si el comportamiento tiende a 
+        
         rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
         rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
         rankMiddleTopTop: Rango medio alto-alto del semáforo de evaluación de gestión
