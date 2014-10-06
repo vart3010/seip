@@ -150,7 +150,7 @@
                 var response = '';
 
                 response = response + '<strong>¿Será evaluado por Objetivos Operativos?: </strong>';
-                if(data.evalObjetive === 1){
+                if(data.evalObjetive === true){
                     response = response + 'Sí';
                 } else{
                     response = response + 'No';
@@ -158,7 +158,7 @@
                 response = response + '<br>';
                 
                 response = response + '<strong>¿Será evaluado por Programas de Gestión?: </strong>';
-                if(data.evalArrangementProgram === 1){
+                if(data.evalArrangementProgram === true){
                     response = response + 'Sí';
                 } else{
                     response = response + 'No';
