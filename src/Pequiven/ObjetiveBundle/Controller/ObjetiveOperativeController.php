@@ -263,6 +263,8 @@ class ObjetiveOperativeController extends baseController {
                 }
             } elseif ($securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
                 $object->setGerenciaSecond($user->getGerenciaSecond());
+                $object->setGerencia($user->getGerencia());
+                $object->setComplejo($user->getComplejo());
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
