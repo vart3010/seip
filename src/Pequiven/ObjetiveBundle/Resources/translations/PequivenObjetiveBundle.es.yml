@@ -132,9 +132,9 @@ form:
         gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
         gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
         description: Nombre del objetivo
-        nameObjetiveStrategic: Nombre del Objetivo Estratégico
-        nameObjetiveTactic: Nombre del Objetivo Táctico
-        nameObjetiveOperative: Nombre del Objetivo Operativo
+        nameObjetiveStrategic: Enunciado del Objetivo Estratégico
+        nameObjetiveTactic: Enunciado del Objetivo Táctico
+        nameObjetiveOperative: Enunciado del Objetivo Operativo
         ref: Nro. de referencia del objetivo
         refObjetiveStrategic: Nro. de referencia del Objetivo Estratégico
         refObjetiveTactic: Nro. de referencia del Objetivo Táctico
