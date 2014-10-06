@@ -19,3 +19,14 @@ pequiven_arrangementprogram_data_type_goal:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_arrangementprogram_data_operational_objectives:
+    path: /{idObjetiveTactical}/operational-objectives.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getOperationalObjectivesAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

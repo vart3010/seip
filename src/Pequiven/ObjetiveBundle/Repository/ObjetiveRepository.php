@@ -311,5 +311,23 @@ class ObjetiveRepository extends EntityRepository {
             ;
         return $qb;
     }
-
+    
+    /**
+     * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
+     * @return type
+     */
+    function findObjetivesOperationalByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetiveTactic)
+    {
+        $user = $this->getUser();
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin("o.objetiveLevel","ol")
+                ->innerJoin("o.gerencia","g")
+                ->andWhere("ol.level = :level")
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                ->setParameter("gerencia", $user->getGerencia())
+            ;
+        return $qb->getQuery()->getResult();
+    }
 }

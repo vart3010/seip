@@ -41,6 +41,7 @@ angular.module('seipModule.controllers', [])
     .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter){
         $scope.data.responsibleGoals = null;
         $scope.data.typeGoals = null;
+        $scope.data.operationalObjectives = null;
         
         $scope.model.arrangementProgram = {
             categoryArrangementProgram: null
@@ -150,6 +151,15 @@ angular.module('seipModule.controllers', [])
         var urlGoal = Routing.generate("goal_get_form",{},true);
         var initCallBack = function(){
             return false;
+        };
+        
+        $scope.setOperationalObjective = function(tacticalObjetive){
+            console.log(tacticalObjetive);
+            notificationBarService.getLoadStatus().loading();
+            $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
+                $scope.data.operationalObjectives = null;
+                notificationBarService.getLoadStatus().done();
+            });
         };
         $scope.templates = [
             {
