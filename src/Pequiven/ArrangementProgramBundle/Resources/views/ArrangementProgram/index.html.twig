@@ -16,10 +16,6 @@
                     { 'id':0,'name': ('sigtec.no'|trans)},
                     { 'id':1,'name': ('sigtec.yes'|trans)},
                 ] %}
-                {% set filterActiveInactive = [
-                    { 'id':1,'name': ('sigtec.active'|trans)},
-                    { 'id':0,'name': ('sigtec.inactive'|trans)},
-                ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
@@ -32,7 +28,7 @@
                             <td data-title="'{{ 'pequiven.arrangement_program.category_arrangement_program' | trans }}'" sortable="'rifValidated'" filter="{ 'rifValidated': 'select' }" filter-data="names({{ filterYesNo|json_encode() }})">
                                 {$ result.categoryArrangementProgram.description $}
                             </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }" filter-data="names({{ filterActiveInactive|json_encode() }})">
+                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }">
                                 {$ result.tacticalObjective.gerencia.complejo.description $}
                             </td>
                             <td class="low-padding">
