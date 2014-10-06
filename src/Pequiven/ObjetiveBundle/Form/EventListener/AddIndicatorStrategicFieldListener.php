@@ -11,7 +11,7 @@ namespace Pequiven\ObjetiveBundle\Form\EventListener;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Pequiven\ObjetiveBundle\PequivenObjetiveBundle;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Doctrine\ORM\EntityRepository;
 
@@ -27,8 +27,9 @@ class AddIndicatorStrategicFieldListener implements EventSubscriberInterface {
     protected $user;
     protected $em;
     
-    protected $complejoObject;
-    protected $complejoNameArray = array();
+    protected $typeStrategic = false;
+    protected $typeTactic = false;
+    protected $typeOperative = false;
     
     public static function getSubscribedEvents() {
         return array(
@@ -37,14 +38,21 @@ class AddIndicatorStrategicFieldListener implements EventSubscriberInterface {
         );
     }
     
-    public function __construct() {
-        $this->container = PequivenObjetiveBundle::getContainer();
+    public function __construct(ContainerInterface $container,$options = array()) {
+        $this->container = $container;
         $this->securityContext = $this->container->get('security.context');
         $this->user = $this->securityContext->getToken()->getUser();
         $this->em = $this->container->get('doctrine')->getManager();
         
-        $this->complejoObject = new Complejo();
-        $this->complejoNameArray = $this->complejoObject->getRefNameArray();
+        if(isset($options['typeStrategic'])){
+            $this->typeStrategic = true;
+        }
+        if(isset($options['typeTactic'])){
+            $this->typeTactic = true;
+        }
+        if(isset($options['typeOperative'])){
+            $this->typeOperative = true;
+        }
     }
     
     public function preSetData(FormEvent $event){
@@ -64,11 +72,9 @@ class AddIndicatorStrategicFieldListener implements EventSubscriberInterface {
     }
     
     public function addIndicatorStrategicForm($form,$indicator = null){
-        //$this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
         
         $formOptions = array(
             'class' => 'PequivenIndicatorBundle:Indicator',
-            'label' => 'form.indicators',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenObjetiveBundle',
             'property' => 'description',
@@ -77,6 +83,14 @@ class AddIndicatorStrategicFieldListener implements EventSubscriberInterface {
             'required' => false,
             'mapped' => false
         );
+        
+        if($this->typeStrategic){
+            $formOptions['label'] = 'form.indicatorsStrategic';
+        } elseif($this->typeTactic){
+            $formOptions['label'] = 'form.indicatorsTactic';
+        } elseif($this->typeOperative){
+            $formOptions['label'] = 'form.indicatorsOperative';
+        }
         
         if($indicator){
             $formOptions['data'] = $indicator;

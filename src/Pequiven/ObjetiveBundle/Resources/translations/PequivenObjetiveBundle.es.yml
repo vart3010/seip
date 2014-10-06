@@ -43,7 +43,13 @@ form:
     parent_tactic: Objetivo Táctico
     parent_operative: Objetivo Operativo
     weight: Peso
+    weightObjetiveStrategic: Peso del Objetivo Estratégico
+    weightObjetiveTactic: Peso del Objetivo Táctico
+    weightObjetiveOperative: Peso del Objetivo Operativo
     goal: Meta
+    goalObjetiveStrategic: Meta del Objetivo Estratégico
+    goalObjetiveTactic: Meta del Objetivo Táctico
+    goalObjetiveOperative: Meta del Objetivo Operativo
     conduct: Comportamiento
     
     arrangementRangeType: Tipo de Rango
@@ -98,6 +104,9 @@ form:
     evalSimpleAverage: Promedio Simple
     evalWeightedAverage: Promedio Ponderado
     indicators: Indicadores
+    indicatorsStrategic: Indicadores Estratégicos
+    indicatorsTactic: Indicadores Tácticos
+    indicatorsOperative: Indicadores Operativos
     addIndicators: Añadir Indicadores
     register: Registrar
     ref_info: Nro. de Referencia del objetivo
@@ -123,14 +132,27 @@ form:
         gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
         gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
         description: Nombre del objetivo
+        nameObjetiveStrategic: Enunciado del Objetivo Estratégico
+        nameObjetiveTactic: Enunciado del Objetivo Táctico
+        nameObjetiveOperative: Enunciado del Objetivo Operativo
         ref: Nro. de referencia del objetivo
+        refObjetiveStrategic: Nro. de referencia del Objetivo Estratégico
+        refObjetiveTactic: Nro. de referencia del Objetivo Táctico
+        refObjetiveOperative: Nro. de referencia del Objetivo Operativo
         weight: Peso del objetivo
         goal: Meta del objetivo
+        goalObjetiveStrategic: Meta del Objetivo Estratégico
+        goalObjetiveTactic: Meta del Objetivo Táctico
+        goalObjetiveOperative: Meta del Objetivo Operativo
         arrangementRangeType: Seleccione el tipo de rango
         arrangementRangeTypeTop: Seleccione el tipo de rango Alto
         arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
         arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
         arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
+        
+        conductCreciente: Creciente= Si el comportamiento tiende a Maximizar
+        conductDecreciente: Decreciente= Si el comportamiento tiende a Minimizar
+        conductEstable: Estable= Si el comportamiento tiende a 
         
         rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
         rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
@@ -157,6 +179,9 @@ form:
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
         evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
         indicators: Indicadores que serán parte de la evaluación del objetivo a crear
+        indicatorsStrategic: Indicadores Estratégicos que serán parte de la evaluación del Objetivo Estratégico a crear
+        indicatorsTactic: Indicadores Tácticos que serán parte de la evaluación del Objetivo Táctico a crear
+        indicatorsOperative: Indicadores Operativos que serán parte de la evaluación del Objetivo Operativo a crear
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".

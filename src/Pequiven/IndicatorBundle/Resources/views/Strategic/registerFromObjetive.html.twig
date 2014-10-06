@@ -33,14 +33,14 @@
                 {{ form_widget(form.refObjetive) }}
             </div>
 
-            <!-- Descripción del indicador -->
+            <!-- Nombre del indicador -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.nameIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -51,18 +51,7 @@
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
-                </span>
-            </div>
-
-            <!-- Meta del Objetivo -->
-            <div class="field-block button-height">
-                {{ form_label(form.goal) }}
-                {{ form_widget(form.goal) }}
-                {{ form_errors(form.goal) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.refIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -73,7 +62,7 @@
                 {{ form_errors(form.formula) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.formula'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.formulaIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -81,7 +70,7 @@
 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementIndicatorStrategic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -209,7 +198,6 @@
 
         var selectFormula = $("#pequiven_indicator_strategicfo_registration_formula"), //Select de Fórmula
             inputRef = $("#pequiven_indicator_strategicfo_registration_ref"), //Input de Ref
-            inputGoal = $("#pequiven_indicator_strategicfo_registration_goal"), //Input de Meta
             inputHiddenRefParent = $("#pequiven_indicator_strategicfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo Estratégico            
             selectTendency = $("#pequiven_indicator_strategicfo_registration_tendency"), //Select de Tendencia del indicador
             selectArrangementRangeTypeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop"), //Select de Tipo de Rango Alto
@@ -270,9 +258,6 @@
                 $("#add-tabs-fo").attr('style', 'height:210px;');
                 //Inicializamos el select2 de Fórmula
                 chargeSelect2Formula();
-
-                //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true, 2, ',', '.');
 
                 inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
                 inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
@@ -478,7 +463,7 @@
                 tabRankMiddleTop.attr('style', 'background: #ffe326;');
                 tabRankMiddleBottom.attr('style', 'background: #ffb900;');
                 tabRankBottom.attr('style', 'background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
@@ -505,7 +490,7 @@
                 tabRankMiddleTop.attr('style', 'background: #ffb900;');
                 tabRankMiddleBottom.attr('style', 'background: #ffe326;');
                 tabRankBottom.attr('style', 'background: #00FF00;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_3']").is(':checked')) {
@@ -538,7 +523,7 @@
                 tabRankMiddleBottomEstable.attr('style', 'background: #ffb900;');
                 tabRankBottomTopEstable.attr('style', 'background: red;');
                 tabRankBottomBottomEstable.attr('style', 'background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopEstableMixed'|trans }}';
             }

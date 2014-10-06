@@ -119,7 +119,6 @@ class IndicatorOperativeController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -190,7 +189,6 @@ class IndicatorOperativeController extends baseController {
             $object->setTmp(true);
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador

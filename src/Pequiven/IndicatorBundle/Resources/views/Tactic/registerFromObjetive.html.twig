@@ -33,14 +33,14 @@
                 {{ form_widget(form.refObjetive) }}
             </div>
 
-            <!-- Descripción del indicador -->
+            <!-- Nombre del indicador -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.nameIndicatorTactic'|trans }}</span>
                 </span>
             </div>
 
@@ -51,7 +51,7 @@
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.refIndicatorTactic'|trans }}</span>
                 </span>
             </div>
                 
@@ -62,18 +62,7 @@
                 {{ form_errors(form.weight) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
-                </span>
-            </div>
-
-            <!-- Meta del indicador -->
-            <div class="field-block button-height">
-                {{ form_label(form.goal) }}
-                {{ form_widget(form.goal) }}
-                {{ form_errors(form.goal) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.weightIndicatorTactic'|trans }}</span>
                 </span>
             </div>
 
@@ -84,7 +73,7 @@
                 {{ form_errors(form.formula) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.formula'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.formulaIndicatorTactic'|trans }}</span>
                 </span>
             </div>
 
@@ -92,7 +81,7 @@
                 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementIndicatorTactic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -218,7 +207,6 @@
     <script type="text/javascript">
         var selectFormula = $("#pequiven_indicator_tacticfo_registration_formula"), //Select de Fórmula
             inputRef = $("#pequiven_indicator_tacticfo_registration_ref"), //Input de Ref
-            inputGoal = $("#pequiven_indicator_tacticfo_registration_goal"), //Input de Meta
             inputWeight = $("#pequiven_indicator_tacticfo_registration_weight"),//Input de Peso
             inputHiddenRefParent = $("#pequiven_indicator_tacticfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo
             selectTendency = $("#pequiven_indicator_tacticfo_registration_tendency"),//Select de Tendencia del indicador
@@ -280,9 +268,6 @@
                 $("#add-tabs-fo").attr('style', 'height:210px;');
                 //Inicializamos el select2 de Fórmula
                 chargeSelect2Formula();
-
-                //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true, 2, ',', '.');
                 
                 //Incializamos el formato numerico para el input de Peso
                 inputWeight.number(true,2,',','.');
@@ -491,7 +476,7 @@
                 tabRankMiddleTop.attr('style','background: #ffe326;');
                 tabRankMiddleBottom.attr('style','background: #ffb900;');
                 tabRankBottom.attr('style','background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_tacticfo_registration_tendency_2']").is(':checked')) {
@@ -518,7 +503,7 @@
                 tabRankMiddleTop.attr('style', 'background: #ffb900;');
                 tabRankMiddleBottom.attr('style', 'background: #ffe326;');
                 tabRankBottom.attr('style', 'background: #00FF00;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_tacticfo_registration_tendency_3']").is(':checked')) {
@@ -551,7 +536,7 @@
                 tabRankMiddleBottomEstable.attr('style', 'background: #ffb900;');
                 tabRankBottomTopEstable.attr('style', 'background: red;');
                 tabRankBottomBottomEstable.attr('style', 'background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopEstableMixed'|trans }}';
             }

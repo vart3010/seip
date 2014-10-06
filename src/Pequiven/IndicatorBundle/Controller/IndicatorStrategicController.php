@@ -115,8 +115,7 @@ class IndicatorStrategicController extends baseController {
             $object->setRefParent($data['refObjetive']);
             $object->setTmp(true);
             
-            $data['tendency'] = (int)$data['tendency'];
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 3));
+            $data['tendency'] = (int)$data['tendency'];            
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -173,8 +172,7 @@ class IndicatorStrategicController extends baseController {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_strategic_registration");
 
-            $data['tendency'] = (int)$data['tendency'];
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 3));
+            $data['tendency'] = (int)$data['tendency'];            
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador

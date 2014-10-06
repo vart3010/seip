@@ -30,6 +30,9 @@ form:
     indicator: Indicador
     description: Descripción del Indicador
     name: Nombre del Indicador
+    nameIndicatorStrategic: Nombre del Indicador Estratégico
+    nameIndicatorTactic: Nombre del Indicador Táctico
+    nameIndicatorOperative: Nombre del Indicador Operativo
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
@@ -37,8 +40,17 @@ form:
     complejo: Complejo
     gerencia: Gerencia
     weight: Peso
+    weightIndicatorStrategic: Peso del Indicador Estratégico
+    weightIndicatorTactic: Peso del Indicador Táctico
+    weightIndicatorOperative: Peso del Indicador Operativo
     goal: Meta
+    goalIndicatorStrategic: Meta del Indicador Estratégico
+    goalIndicatorTactic: Meta del Indicador Táctico
+    goalIndicatorOperative: Meta del Indicador Operativo
     formula: Fórmula
+    formulaIndicatorStrategic: Fórmula del Indicador Estratégico
+    formulaIndicatorTactic: Fórmula del Indicador Táctico
+    formulaIndicatorOperative: Fórmula del Indicador Operativo
     tendency: Tendencia
     conduct: Comportamiento
     indicatorStrategic: Indicador Estratégico
@@ -99,10 +111,22 @@ form:
         gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
         gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
         description: Nombre del indicador
+        nameIndicatorStrategic: Nombre del Indicador Estratégico
+        nameIndicatorTactic: Nombre del Indicador Táctico
+        nameIndicatorOperative: Nombre del Indicador Operativo
         ref: Nro. de referencia del indicador
+        refIndicatorStrategic: Nro. de referencia del Indicador Estratégico
+        refIndicatorTactic: Nro. de referencia del Indicador Táctico
+        refIndicatorOperative: Nro. de referencia del Indicador Operativo
         weight: Peso del indicador
+        weightIndicatorStrategic: Peso del Indicador Estratégico
+        weightIndicatorTactic: Peso del Indicador Táctico
+        weightIndicatorOperative: Peso del Indicador Operativo
         goal: Meta del indicador
         formula: Fórmula de evaluación del indicador
+        formulaIndicatorStrategic: Fórmula de evaluación del Indicador Estratégico
+        formulaIndicatorTactic: Fórmula de evaluación del Indicador Táctico
+        formulaIndicatorOperative: Fórmula de evaluación del Indicador Operativo
         arrangementRangeType: Seleccione el tipo de rango
         arrangementRangeTypeTop: Seleccione el tipo de rango Alto
         arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto

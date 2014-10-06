@@ -131,3 +131,12 @@ objetiveOperativeList:
         _controller: pequiven.controller.objetiveoperative:objetiveListAction
         _sylius:
             method: createPaginatorOperative
+            
+#Muestra un Objetivo Estratégico
+objetiveStrategic_show:
+    path: /{id}
+    defaults: 
+        _controller: pequiven.controller.objetivestrategic:showAction 
+    requirements:
+        id: "\d+"
+    methods: [GET]
