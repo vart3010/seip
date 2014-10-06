@@ -318,6 +318,10 @@ class ObjetiveRepository extends EntityRepository {
      */
     function findObjetivesOperationalByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetiveTactic)
     {
+        return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
+    }
+    
+    function findQueryObjetivesOperationalByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetiveTactic) {
         $user = $this->getUser();
         $qb = $this->getQueryBuilder();
         $qb
@@ -331,6 +335,6 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
                 ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
             ;
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 }

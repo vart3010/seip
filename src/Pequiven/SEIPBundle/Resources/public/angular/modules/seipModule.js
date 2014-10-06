@@ -64,7 +64,6 @@ angular.module('seipModule.controllers', [])
                 $scope.model.goal = goal;
                 $scope.model.goal.startDate = $filter('myDate')(goal.startDate);
                 $scope.model.goal.endDate = $filter('myDate')(goal.endDate);
-                console.log(goal);
                 var setTypeGoalCall = function(selected){
                     $scope.model.goal.typeGoal = selected;
                 };
@@ -154,12 +153,29 @@ angular.module('seipModule.controllers', [])
         };
         
         $scope.setOperationalObjective = function(tacticalObjetive){
-            console.log(tacticalObjetive);
-            notificationBarService.getLoadStatus().loading();
-            $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
+            var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
+            if(tacticalObjetive){
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
+                    var dataIndex = [];
+                    angular.forEach(data,function(value){
+                        dataIndex[value.id] = value;
+                    });
+                    $scope.data.operationalObjectives = dataIndex;
+                    operationalObjective.select2('enable',true);
+                    notificationBarService.getLoadStatus().done();
+                });
+            }else{
                 $scope.data.operationalObjectives = null;
-                notificationBarService.getLoadStatus().done();
-            });
+                $scope.model.arrangementProgram.tacticalObjective = null;
+                operationalObjective.select2('val','');
+                operationalObjective.select2('enable',false);
+            }
+        };
+        $scope.submitForm = function(){
+            console.log("submitForm");
+            //var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
+//            setValueSelect2("arrangementprogram_operationalObjective",$scope.model.arrangementProgram.operationalObjective.id,$scope.data.operationalObjectives);
         };
         $scope.templates = [
             {

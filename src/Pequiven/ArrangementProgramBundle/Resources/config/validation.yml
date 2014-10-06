@@ -1,3 +1,22 @@
+Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
+    properties:
+        period:
+            - NotNull: ~
+        categoryArrangementProgram:
+            - NotNull: ~
+        tacticalObjective:
+            - NotNull:
+                groups: [tacticalObjective]
+        operationalObjective:
+            - NotNull:
+                groups: [operationalObjective]
+        process:
+            - NotNull: ~
+        responsible:
+            - NotNull: ~
+        type:
+            - NotNull: ~
+
 Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
     properties:
         januaryPlanned:
