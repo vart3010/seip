@@ -53,7 +53,7 @@ class GenericDataController extends SEIPController
         $results = $repository->findObjetivesOperationalByObjetiveTactic($objetiveTactic);
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','lineStrategics'));
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $this->handleView($view);
     }
 }

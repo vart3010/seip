@@ -321,12 +321,15 @@ class ObjetiveRepository extends EntityRepository {
         $user = $this->getUser();
         $qb = $this->getQueryBuilder();
         $qb
+                ->innerJoin("o.parents","p")
                 ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerencia","g")
+                ->innerJoin("o.gerenciaSecond","gs")
+                ->andWhere('p.id = :parent')
                 ->andWhere("ol.level = :level")
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-                ->setParameter("gerencia", $user->getGerencia())
+                ->andWhere("gs.id = :gerenciaSecond")
+                ->setParameter('parent', $objetiveTactic)
+                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
+                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
             ;
         return $qb->getQuery()->getResult();
     }
