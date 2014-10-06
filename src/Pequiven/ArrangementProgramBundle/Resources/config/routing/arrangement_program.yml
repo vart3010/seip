@@ -1,6 +1,10 @@
 pequiven_seip_arrangementprogram_index:
-    path: /
-    defaults: { _controller: pequiven_seip.controller.arrangementprogram:indexAction }
+    path: /.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:indexAction
+        _format: html
+    requirements:
+        _format: html|json|xml
     methods: [GET]
     
 pequiven_arrangementprogram_create:

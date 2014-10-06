@@ -42,6 +42,9 @@
         <!-- Servicio necesario para el SerializerListener -->
         <service id="seip.listener.serializer" class="Pequiven\SEIPBundle\EventListener\SerializerListener">
             <tag name="jms_serializer.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         
         <!-- Servicio necesario para el CommonObject -->

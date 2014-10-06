@@ -18,21 +18,6 @@ class ArrangementProgramController extends SEIPController
 {
 
     /**
-     * Lists all ArrangementProgram entities.
-     *
-     * @Template()
-     */
-    public function indexAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-    /**
      * Creates a new ArrangementProgram entity.
      *
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")

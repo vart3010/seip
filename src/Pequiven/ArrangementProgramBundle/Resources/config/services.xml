@@ -18,7 +18,7 @@
     </services>
     -->
     <services>
-        <service id="pequiven.repository.arrangement_program" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository">
+        <service id="pequiven_seip.repository.arrangementprogram" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository">
             <tag name="app.repository" class="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram" />
         </service>
     </services>
