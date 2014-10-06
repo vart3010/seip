@@ -1,0 +1,90 @@
+Pequiven\ObjetiveBundle\Entity\Objetive:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        userCreatedAt:
+            expose: true
+            groups: [api_details]
+        userUpdatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]
+        ref:
+            expose: true
+            groups: [api_list]
+        weight:
+            expose: true
+            groups: [api_list]
+        goal:
+            expose: true
+            groups: [api_list]
+        evalObjetive:
+            expose: true
+            groups: [api_list]
+        evalIndicator:
+            expose: true
+            groups: [api_list]
+        evalArrangementProgram:
+            expose: true
+            groups: [api_list]
+        evalSimpleAverage:
+            expose: true
+            groups: [api_list]
+        evalWeightedAverage:
+            expose: true
+            groups: [api_list]
+        objetiveLevel:
+            expose: true
+            groups: [api_details]
+        lineStrategics:
+            expose: true
+            groups: [lineStrategics]
+        complejo:
+            expose: true
+            groups: [complejo]
+        gerencia:
+            expose: true
+            groups: [gerencia]
+        gerenciaSecond:
+            expose: true
+            groups: [gerenciaSecond]
+        childrens:
+            expose: true
+            groups: [childrens]
+        parents:
+            expose: true
+            groups: [parents]
+        tendency:
+            expose: true
+            groups: [tendency]
+        indicators:
+            expose: true
+            groups: [indicators]
+        period:
+            expose: true
+            groups: [period]
+        reviewedBy:
+            expose: true
+            groups: [api_details]
+        revisionDate:
+            expose: true
+            groups: [api_details]
+        approvedBy:
+            expose: true
+            groups: [api_details]
+        approvalDate:
+            expose: true
+            groups: [api_details]
+        status:
+            expose: true
+            groups: [api_list]

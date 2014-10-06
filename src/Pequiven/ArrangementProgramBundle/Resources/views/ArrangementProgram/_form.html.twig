@@ -28,13 +28,6 @@
             {{ form_errors(form.operationalObjective) }}
         </div>
     {% endif %}
-    {% if  form.operatingIndicator is defined %}
-        <div class="field-block button-height">
-            {{ form_label(form.operatingIndicator) }}
-            {{ form_widget(form.operatingIndicator) }}
-            {{ form_errors(form.operatingIndicator) }}
-        </div>
-    {% endif %}
     <div class="field-block button-height">
         <label class="label">{{ "pequiven.form.location"|trans }}</label>
         {{ entity.createdBy.complejo }}

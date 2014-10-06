@@ -61,14 +61,6 @@ class ArrangementProgram
     private $operationalObjective;
 
     /**
-     * Indicador operativo
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
-     */
-    private $operatingIndicator;
-
-    /**
      * Proceso
      * @var string
      *
@@ -346,29 +338,6 @@ class ArrangementProgram
     public function getOperationalObjective()
     {
         return $this->operationalObjective;
-    }
-
-    /**
-     * Set operatingIndicator
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $operatingIndicator
-     * @return ArrangementProgram
-     */
-    public function setOperatingIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $operatingIndicator = null)
-    {
-        $this->operatingIndicator = $operatingIndicator;
-
-        return $this;
-    }
-
-    /**
-     * Get operatingIndicator
-     *
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
-     */
-    public function getOperatingIndicator()
-    {
-        return $this->operatingIndicator;
     }
 
     /**

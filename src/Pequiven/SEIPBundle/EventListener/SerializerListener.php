@@ -48,10 +48,10 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
      * @param ObjectEvent $event
      */
     public function onPostSerializeObjetive(ObjectEvent $event) {
-        if ($event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
+        if ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
             $lineStrategics = $event->getObject()->getLineStrategics();
             $event->getVisitor()->addData('groupBy', $lineStrategics[0]->getRef() . $lineStrategics[0]->getDescription());
-        } elseif ($event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
+        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
             $object = $event->getObject();
             $parents = $object->getParents();
             $valueGroupBy = '';
@@ -60,7 +60,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
-        } elseif ($event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
+        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
             $object = $event->getObject();
             $parents = $object->getParents();
             $valueGroupBy = '';

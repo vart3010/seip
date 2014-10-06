@@ -76,24 +76,45 @@ class ArrangementProgramType extends AbstractType
                 ))
                 ;
             }elseif($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                $form->add('operationalObjective',null,array(
-                    'label' => 'pequiven.form.operational_objective',
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => "select2 input-xxlarge"
-                    ),
-                    'empty_value' => 'pequiven.select',
-                    'required' => true,
-                ))
-                ->add('operatingIndicator',null,array(
-                    'label' => 'pequiven.form.operating_indicator',
-                    'label_attr' => array('class' => 'label'),
-                    'attr' => array(
-                        'class' => "select2 input-xxlarge"
-                    ),
-                    'empty_value' => 'pequiven.select',
-                    'required' => true,
-                ));
+                $form->add('responsible',null,array(
+                        'label' => 'pequiven.form.responsible',
+                        'label_attr' => array('class' => 'label'),
+                        'attr' => array(
+                            'class' => "select2 input-xlarge"
+                        ),
+                        'query_builder' => function(UserRepository $repository){
+                            return $repository->findQueryToAssingTacticArrangementProgram();
+                        },
+                        'empty_value' => 'pequiven.select',
+                        'required' => true,
+                    ))
+                    ->add('tacticalObjective',null,array(
+                        'label' => 'pequiven.form.tactical_objective',
+                        'label_attr' => array('class' => 'label'),
+                        'attr' => array(
+                            'class' => "select2 input-xxlarge",
+                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
+                            'ng-change' => 'setOperationalObjective(model.arrangementProgram.tacticalObjective)',
+                        ),
+                        'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
+                            return $repository->findQueryObjetivesTactic();
+                        },
+                        'empty_value' => 'pequiven.select',
+                        'required' => true,
+                    ))
+                    ->add('operationalObjective',null,array(
+                        'label' => 'pequiven.form.operational_objective',
+                        'label_attr' => array('class' => 'label'),
+                        'attr' => array(
+                            'class' => "select2 input-xxlarge",
+                            'disabled' => 'disabled',
+                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
+                            'ng-options' => 'value as value.description for (key,value) in data.operationalObjectives',
+                        ),                        
+                        'empty_value' => 'pequiven.select',
+                        'required' => true,
+                    ))
+                ;
             }
             
         });
