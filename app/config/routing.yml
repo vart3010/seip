@@ -1,5 +1,5 @@
 pequiven_arrangement_program:
-    resource: "@PequivenArrangementProgramBundle/Controller/"
+    resource: "@PequivenArrangementProgramBundle/Controller/Rest"
     type:     annotation
     prefix:   /
 
@@ -44,6 +44,9 @@ pequiven_objetive_route:
 
 pequiven_indicator_route:
     resource: "@PequivenIndicatorBundle/Resources/config/routing/routing.yml"
+    
+pequiven_arrangement_program_yml:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/main.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

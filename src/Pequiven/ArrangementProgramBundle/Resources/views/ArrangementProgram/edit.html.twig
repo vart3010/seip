@@ -10,20 +10,17 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
-    <h1>ArrangementProgram edit</h1>
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.update'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
 
     {{ form_start(edit_form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
        {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_form.html.twig' with {'form':edit_form} %}
+       <br/><br/>
        {{ actions.update() }}
     </form>
-    
-    
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('pequiven_arrangementprogram') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

@@ -29,8 +29,8 @@ class GoalType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-xlarge",
-                    'ng-model' => 'model.goal.type_goal',
-                    'ng-options' => 'value as value.description for (key,value) in data.type_goals',
+                    'ng-model' => 'model.goal.typeGoal',
+                    'ng-options' => 'value as value.description for (key,value) in data.typeGoals',
                     'style' => 'width: 270px',
                 ),
                 'empty_value' => 'pequiven.form.not_applicable',
@@ -41,20 +41,22 @@ class GoalType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "input input-medium validate[required]",
-                    'ng-model' => 'model.goal.start_date'
+                    'ng-model' => 'model.goal.startDate'
                 ),
                 'widget' => 'single_text',
                 'required' => true,
+                'format' => 'yyyy-MM-dd'
             ))
             ->add('endDate','date',array(
                 'label' => 'pequiven.form.end_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "input input-medium validate[required]",
-                    'ng-model' => 'model.goal.end_date',
+                    'ng-model' => 'model.goal.endDate',
                 ),
                 'widget' => 'single_text',
                 'required' => true,
+                'format' => 'yyyy-MM-dd'
             ))
             ->add('responsible',null,array(
                 'label' => 'pequiven.form.responsible',
@@ -62,7 +64,7 @@ class GoalType extends AbstractType
                 'attr' => array(
                     'class' => "select2 input-xlarge",
                     'ng-model' => 'model.goal.responsible',
-                    'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsible_goals',
+                    'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsibleGoals',
                     'style' => 'width: 270px',
                 ),
                 'empty_value' => 'Seleccione',

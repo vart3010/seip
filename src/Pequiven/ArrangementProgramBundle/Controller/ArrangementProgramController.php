@@ -13,37 +13,18 @@ use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
 /**
  * Controlador del programa de gestion
  *
- * @Route("/arrangementprogram")
  */
 class ArrangementProgramController extends SEIPController
 {
 
     /**
-     * Lists all ArrangementProgram entities.
-     *
-     * @Route("/", name="pequiven_arrangementprogram")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-    /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Route("/{type}", name="pequiven_arrangementprogram_create",requirements={"type":"1|2|3"})
-     * @Method("POST")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
      */
-    public function createAction(Request $request,$type)
+    public function createAction(Request $request)
     {
+        $type = $request->get("type");
         $entity = new ArrangementProgram();
         $user = $this->getUser();
         $period = $this->getRepositoryById('period')->findOneActive();
@@ -55,7 +36,7 @@ class ArrangementProgramController extends SEIPController
         $form = $this->createCreateForm($entity,array('type' => $type));
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $this->save($entity,true);
+            $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
         }
 
@@ -85,8 +66,6 @@ class ArrangementProgramController extends SEIPController
     /**
      * Displays a form to create a new ArrangementProgram entity.
      *
-     * @Route("/{type}/new", name="pequiven_arrangementprogram_new",requirements={"type":"1|2|3"})
-     * @Method("GET")
      * @Template()
      */
     public function newAction($type)
@@ -112,12 +91,11 @@ class ArrangementProgramController extends SEIPController
     /**
      * Finds and displays a ArrangementProgram entity.
      *
-     * @Route("/{id}", name="arrangementprogram_show")
-     * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -137,8 +115,6 @@ class ArrangementProgramController extends SEIPController
     /**
      * Displays a form to edit an existing ArrangementProgram entity.
      *
-     * @Route("/{id}/edit", name="arrangementprogram_edit")
-     * @Method("GET")
      * @Template()
      */
     public function editAction($id)
@@ -152,12 +128,10 @@ class ArrangementProgramController extends SEIPController
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
         
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -179,12 +153,11 @@ class ArrangementProgramController extends SEIPController
     /**
      * Edits an existing ArrangementProgram entity.
      *
-     * @Route("/{id}", name="arrangementprogram_update")
-     * @Method("PUT")
      * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -227,8 +200,7 @@ class ArrangementProgramController extends SEIPController
                 }
                 
             }
-         
-            $em->flush();
+            $this->domainManager->update($entity);
 
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $id)));
         }
@@ -238,31 +210,6 @@ class ArrangementProgramController extends SEIPController
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
-    }
-    /**
-     * Deletes a ArrangementProgram entity.
-     *
-     * @Route("/{id}", name="arrangementprogram_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('arrangementprogram'));
     }
 
     /**
@@ -277,7 +224,6 @@ class ArrangementProgramController extends SEIPController
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('arrangementprogram_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }

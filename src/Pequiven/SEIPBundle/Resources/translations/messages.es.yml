@@ -9,11 +9,16 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    actions: Acciones
     form:
         not_applicable: No aplica
     list: Lista
     add: Añadir
+    update: Actualizar
+    edit: Editar
+    delete: Eliminar
     show: Ver
+    details: Detalles
     dialog:
         confirm: Confirmar
 app:

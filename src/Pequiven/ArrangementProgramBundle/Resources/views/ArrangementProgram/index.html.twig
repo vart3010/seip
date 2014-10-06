@@ -5,53 +5,45 @@
 {% block body -%}
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path('pequiven_arrangementprogram') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven.list'|trans({},'messages') }}</span>
         </h1>
     </hgroup>
-        
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Process</th>
-                <th>Timelines</th>
-                <th>Revisiondate</th>
-                <th>Approvaldate</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('arrangementprogram_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.process }}</td>
-                <td>{{ entity.timelines }}</td>
-                <td>{% if entity.revisionDate %}{{ entity.revisionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.approvalDate %}{{ entity.approvalDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.status }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('arrangementprogram_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('arrangementprogram_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+   <div ng-controller="TableFormatController">
+        <div >
+                {% set filterYesNo = [
+                    { 'id':0,'name': ('sigtec.no'|trans)},
+                    { 'id':1,'name': ('sigtec.yes'|trans)},
+                ] %}
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'period': 'text' }">
+                                <a href="{$ result._links.self.href $}">{$ result.period.name $}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.process'|trans }}'" sortable="'process'" filter="{ 'process': 'text' }">
+                                {$ result.process $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.category_arrangement_program' | trans }}'" sortable="'rifValidated'" filter="{ 'rifValidated': 'select' }" filter-data="names({{ filterYesNo|json_encode() }})">
+                                {$ result.categoryArrangementProgram.description $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }">
+                                {$ result.tacticalObjective.gerencia.complejo.description $}
+                            </td>
+                            <td class="low-padding">
+                                <span class="select compact full-width" tabindex="0">
+                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">
+                                        <a href ng-click="itemEdit(result._links.edit.href)" >{{ 'pequiven.edit'|trans({},'messages') }}</a>
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
 
-        <ul>
-        <li>
-            <a href="{{ path('pequiven_arrangementprogram_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}

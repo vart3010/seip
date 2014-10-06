@@ -37,7 +37,7 @@
 </form>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
         jQuery('#goalForms select').select2();
     });
 </script>
