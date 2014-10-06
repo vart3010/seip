@@ -1,4 +1,4 @@
-pequiven_arrangementprogram:
+pequiven_seip_arrangementprogram_index:
     path: /
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:indexAction }
     methods: [GET]

@@ -8,7 +8,7 @@
 <div ng-controller="ArrangementProgramController">
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path('pequiven_arrangementprogram') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
         </h1>
@@ -106,9 +106,6 @@
     {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
 </p>
 
-<ul class="record_actions">
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}
 
 {% block javascript %}

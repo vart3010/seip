@@ -143,12 +143,10 @@ class ArrangementProgramController extends SEIPController
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
         
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -228,29 +226,6 @@ class ArrangementProgramController extends SEIPController
             'delete_form' => $deleteForm->createView(),
         );
     }
-    /**
-     * Deletes a ArrangementProgram entity.
-     */
-    public function deleteAction(Request $request)
-    {
-        $id = $request->get("id");
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('arrangementprogram'));
-    }
 
     /**
      * Creates a form to delete a ArrangementProgram entity by id.
@@ -264,7 +239,6 @@ class ArrangementProgramController extends SEIPController
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('arrangementprogram_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
     }
