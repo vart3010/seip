@@ -3,6 +3,8 @@
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Entity\Period;
+use Pequiven\SEIPBundle\Entity\User;
 
 /**
  * Repositorio de programa de gestion
@@ -12,6 +14,22 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class ArrangementProgramRepository extends EntityRepository
 {
+    /**
+     * Retorna los programas de gestion que tengan de responsable al usuario que cuenta como una
+     */
+    function findByUserAndPeriodNotGoals(User $user,Period $period,array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb->andWhere('ap.responsible = :responsible')
+           ->andWhere('ap.period = :period')
+           ->setParameter('responsible', $user)
+           ->setParameter('period', $period);
+        if(isset($criteria['notArrangementProgram'])){
+            $qb->andWhere('ap.id != :arrangementProgram');
+            $qb->setParameter('arrangementProgram', $criteria['notArrangementProgram']);
+        }
+        return $qb->getQuery()->getResult();
+    }
     protected function getAlias() {
         return 'ap';
     }

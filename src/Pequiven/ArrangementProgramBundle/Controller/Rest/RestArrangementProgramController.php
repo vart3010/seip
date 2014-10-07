@@ -29,13 +29,12 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
-        $timelines = $entity->getTimelines();
+        $timeline = $entity->getTimeline();
         $data = array();
-        if(isset($timelines[0])){
-            foreach ($timelines[0]->getGoals() as $goal) {
-                $data[] = $goal->getGoalDetails();
-            }
+        foreach ($timeline->getGoals() as $goal) {
+            $data[] = $goal->getGoalDetails();
         }
+        
         $view = $this->view();
         $result = array(
             'data' => $data,

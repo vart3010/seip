@@ -2,6 +2,8 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
+use Pequiven\SEIPBundle\Entity\Period;
+use Pequiven\SEIPBundle\Entity\User;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,12 +14,20 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class GoalRepository extends EntityRepository
 {
-    function findGoalsByUserAndPeriod(\Pequiven\SEIPBundle\Entity\User $user,\Pequiven\SEIPBundle\Entity\Period $period,array $criteria = array())
+    /**
+     * Retorna las metas del usuario en los programa de gestion donde no es responsable
+     * @param User $user
+     * @param Period $period
+     * @param array $criteria
+     * @return type
+     */
+    function findGoalsByUserAndPeriod(User $user,Period $period,array $criteria = array())
     {
         $qb = $this->getQueryBuilder();
         $qb
             ->innerJoin('g.timeline', 't')
             ->innerJoin('t.arrangementProgram', 'ap')
+            ->andWhere('ap.responsible != :responsible')
             ->andWhere('ap.period = :period')
             ->andWhere('g.responsible = :responsible')
             ->setParameter('period', $period)

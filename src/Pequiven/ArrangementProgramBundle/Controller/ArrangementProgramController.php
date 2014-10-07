@@ -35,18 +35,17 @@ class ArrangementProgramController extends SEIPController
         
         if($request->isMethod('GET')){
             $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-            $entity->addTimeline($timeLine);
+//            $entity->setTimeline($timeLine);
         }
         $form = $this->createCreateForm($entity,array('type' => $type));
         if($request->isMethod('GET')){
-            $form->remove('timelines');
+            $form->remove('timeline');
         }
         
         if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
-//        $form->remove('timelines');
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -147,14 +146,11 @@ class ArrangementProgramController extends SEIPController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-        $originalTimelines = new \Doctrine\Common\Collections\ArrayCollection();
         $originalGoalsArray = array();
+        $timeline = $entity->getTimeline();
         // Create an ArrayCollection of the current Tag objects in the database
-        foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline->getGoals() as $goal) {
-                $originalGoalsArray[$timeline->getId()][] = $goal;
-            }
-            $originalTimelines->add($timeline);
+        foreach ($timeline->getGoals() as $goal) {
+            $originalGoalsArray[$timeline->getId()][] = $goal;
         }
         
         $deleteForm = $this->createDeleteForm($id);
@@ -163,24 +159,17 @@ class ArrangementProgramController extends SEIPController
         $editForm->submit($request,false);
         
         if ($editForm->isValid()) {
-            foreach ($originalTimelines as $originalTimeline) {
-                if(false === $entity->getTimelines()->contains($originalTimeline)){
-                    $entity->getTimelines()->removeElement($originalTimeline);
-                    $em->remove($originalTimeline);
-                }else{
-                    $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
-                    if(isset($originalGoalsArray[$timeline->getId()])){
-                        $goals = $originalGoalsArray[$timeline->getId()];
-                        foreach ($goals as $originalGoal) {
-                            if(false === $timeline->getGoals()->contains($originalGoal)){
-                                $timeline->getGoals()->removeElement($originalGoal);
-                                $em->remove($originalGoal);
-                            }
-                        }
+            $timeline = $entity->getTimeline();
+            if(isset($originalGoalsArray[$timeline->getId()])){
+                $goals = $originalGoalsArray[$timeline->getId()];
+                foreach ($goals as $originalGoal) {
+                    if(false === $timeline->getGoals()->contains($originalGoal)){
+                        $timeline->getGoals()->removeElement($originalGoal);
+                        $em->remove($originalGoal);
                     }
                 }
-                
             }
+                
             $this->domainManager->update($entity);
 
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));

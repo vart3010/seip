@@ -79,12 +79,12 @@ class ArrangementProgram
     private $responsible;
 
     /**
-     * Lineas de tiempo
+     * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
-    private $timelines;
+    private $timeline;
 
     /**
      * Revisado por
@@ -143,10 +143,6 @@ class ArrangementProgram
      */
     private $createdBy;
 
-    public function __construct() {
-        $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Get id
      *
@@ -410,40 +406,6 @@ class ArrangementProgram
         return $this->approvedBy;
     }
 
-    /**
-     * Add timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     * @return ArrangementProgram
-     */
-    public function addTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $timelines->setArrangementProgram($this);
-        $this->timelines->add($timelines);
-
-        return $this;
-    }
-
-    /**
-     * Remove timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     */
-    public function removeTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $this->timelines->removeElement($timelines);
-    }
-
-    /**
-     * Get timelines
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTimelines()
-    {
-        return $this->timelines;
-    }
-    
     function getType() {
         return $this->type;
     }
@@ -472,5 +434,29 @@ class ArrangementProgram
         if(isset($labels[$this->type])){
             return $labels[$this->type];
         }
+    }
+
+    /**
+     * Set timeline
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
+     * @return ArrangementProgram
+     */
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
+    {
+        $timeline->setArrangementProgram($this);
+        $this->timeline = $timeline;
+
+        return $this;
+    }
+
+    /**
+     * Get timeline
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
+     */
+    public function getTimeline()
+    {
+        return $this->timeline;
     }
 }
