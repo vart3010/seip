@@ -440,17 +440,40 @@
         })
         //Al cambiar alguna opción en el select de Línea Estratégica
         selectLineStrategic.change(function() {
-           inputRef.val("");
+            inputRef.val("");
+            $("#pequiven_indicator_tactic_registration_parents option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parents option").remove();
+            selectObjetiveStrategic.select2("val",'');
+            selectComplejo.select2("val",'');
+            selectComplejo.select2("enable",false);
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            $("#pequiven_indicator_tactic_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectObjetiveTactic.select2("enable",false);
         });
 
-        //AL seleccionar alguna opción en el select de Objetivo Estratégico
+        //Al seleccionar alguna opción en el select de Objetivo Estratégico
         selectObjetiveStrategic.on("select2-selecting", function(e) {
             if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                 selectComplejo.select2("enable",true);
             } else{
                 displayObjetiveTactic(e);
-            }                    
+            }
         })
+        
+        //Al cambiar alguna opción en el select de Objetivo Estratégico
+        selectObjetiveStrategic.change(function() {
+            inputRef.val("");
+            selectComplejo.select2("val",'');
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            $("#pequiven_indicator_tactic_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectObjetiveTactic.select2("enable",false);
+        });
 
         //Al seleccionar alguna opción en el select de Localidad
         selectComplejo.on("select2-selecting", function(e) {

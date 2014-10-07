@@ -470,13 +470,47 @@
         })
         //Al cambiar alguna opción en el select de Línea Estratégica
         selectLineStrategic.change(function() {
-           inputRef.val("");
+            inputRef.val("");
+            $("#pequiven_indicator_operative_registration_parents option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parents option").remove();
+            selectObjetiveStrategic.select2("val",'');
+            $("#pequiven_indicator_operative_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectComplejo.select2("val",'');
+            selectComplejo.select2("enable",false);
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            selectGerenciaSecond.select2("val",'');
+            selectGerenciaSecond.select2("enable",false);
+            $("#pequiven_indicator_operative_registration_parentOperative option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentOperative option").remove();
+            selectObjetiveOperative.select2("val",'');
+            selectObjetiveOperative.select2("enable", false);
         });
 
         //Al seleccionar alguna opción en el select de Objetivo Estratégico
         selectObjetiveStrategic.on("select2-selecting", function(e) {
             displayObjetiveTactic(e);
         })
+        
+        //Al cambiar alguna opción en el select de Objetivo Estratégico
+        selectObjetiveStrategic.change(function() {
+            inputRef.val("");
+            $("#pequiven_indicator_operative_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectComplejo.select2("val",'');
+            selectComplejo.select2("enable",false);
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            selectGerenciaSecond.select2("val",'');
+            selectGerenciaSecond.select2("enable",false);
+            $("#pequiven_indicator_operative_registration_parentOperative option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentOperative option").remove();
+            selectObjetiveOperative.select2("val",'');
+            selectObjetiveOperative.select2("enable", false);
+        });
 
         //Al seleccionar alguna opción en el select de Objetivo Táctico
         selectObjetiveTactic.on("select2-selecting", function(e) {
@@ -490,21 +524,59 @@
                 displayObjetiveOperative(e);
             }
         })
+        
+        //Al cambiar alguna opción en el select de Objetivo Táctico
+        selectObjetiveTactic.change(function() {
+            inputRef.val("");
+            selectComplejo.select2("val",'');
+            selectComplejo.select2("enable",false);
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            selectGerenciaSecond.select2("val",'');
+            selectGerenciaSecond.select2("enable",false);
+            $("#pequiven_indicator_operative_registration_parentOperative option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentOperative option").remove();
+            selectObjetiveOperative.select2("val",'');
+            selectObjetiveOperative.select2("enable", false);
+        });
 
         //Al seleccionar alguna opción en el select de Localidad
         selectComplejo.on("select2-selecting", function(e) {
             displayGerenciaFromComplejo(e);
         })
+        
+        //Al cambiar alguna opción en el select de Localidad
+        selectComplejo.change(function() {
+            inputRef.val("");
+        });
 
         //Al seleccionar alguna opción en el select de Gerencia de 1ra Línea
         selectGerencia.on("select2-selecting", function(e) {
             displayGerenciaSecond(e);
         })
+        
+        //Al cambiar alguna opción en el select de Gerencia de 1ra Línea
+        selectGerencia.change(function() {
+            inputRef.val("");
+            selectGerenciaSecond.select2("val",'');
+            $("#pequiven_indicator_operative_registration_parentOperative option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentOperative option").remove();
+            selectObjetiveOperative.select2("val",'');
+            selectObjetiveOperative.select2("enable", false);
+        });
 
         //Al seleccionar alguna opción en el select de Gerencia de 2da Línea
         selectGerenciaSecond.on("select2-selecting", function(e) {
             displayObjetiveOperative(e);
         })
+        
+        //Al cambiar alguna opción en el select de Gerencia de 2da Línea
+        selectGerenciaSecond.change(function() {
+            inputRef.val("");
+            $("#pequiven_indicator_operative_registration_parentOperative option[value]").remove();
+            $("#pequiven_indicator_operative_registration_parentOperative option").remove();
+            selectObjetiveOperative.select2("val",'');
+        });
 
         //Al seleccionar alguna opción en el select de Objetivo Operativo
         selectObjetiveOperative.on("select2-selecting", function(e) {
