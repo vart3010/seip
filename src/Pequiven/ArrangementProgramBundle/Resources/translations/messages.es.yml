@@ -25,3 +25,5 @@ pequiven:
         confirm:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?
+    validators:
+        select_responsible_person: Seleccione un responsable

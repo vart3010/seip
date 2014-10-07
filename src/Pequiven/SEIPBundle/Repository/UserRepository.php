@@ -25,7 +25,7 @@ class UserRepository extends EntityRepository
         $level = $group->getLevel();
         $qb
             ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level < :level','u.id = :user'))
+            ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('u.gerencia = :gerencia')
             ->setParameter('level', $level)
             ->setParameter('user', $user)
@@ -45,7 +45,7 @@ class UserRepository extends EntityRepository
         $level = $group->getLevel();
         $qb
             ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level < :level','u.id = :user'))
+            ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('u.gerencia = :gerencia')
             ->setParameter('level', $level)
             ->setParameter('user', $user)

@@ -97,7 +97,8 @@ angular.module('seipModule.controllers', [])
             var valid = $('#goalForms').validationEngine('validate');
             if(valid){
                 if($scope.model.goal.responsible == undefined){
-                    jQuery('#goal_responsible').validationEngine('showPrompt', 'seip.validators.rasadasdasesponsive', 'error') 
+                    var message = "* "+ Translator.trans('pequiven.validators.select_responsible_person');
+                    jQuery('#goal_responsible').validationEngine('showPrompt',message, 'error') ;
                     valid = false;
                 }
             }

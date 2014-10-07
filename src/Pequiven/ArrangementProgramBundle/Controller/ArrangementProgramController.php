@@ -39,7 +39,7 @@ class ArrangementProgramController extends SEIPController
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
         }
-
+        $form->remove('timelines');
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -81,6 +81,7 @@ class ArrangementProgramController extends SEIPController
         $entity->addTimeline($timeLine);
         
         $form   = $this->createCreateForm($entity,array('type' => $type));
+        $form->remove('timelines');
 
         return array(
             'entity' => $entity,
