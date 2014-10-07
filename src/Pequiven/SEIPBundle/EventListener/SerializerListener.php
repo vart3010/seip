@@ -92,10 +92,10 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $isLoadRealEnabled = true;
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = true;
-        //Permitir cargar valores reales de meses adelantados
+        //Habilitar carga de valores reales de meses adelantados
         $isEnabledLoadRealFuture = false;
-        //Deshabilitar la carga de valores reales atrasados
-        $isEnabledLoadRealLate = false;
+        //Habilitar la carga de valores reales atrasados
+        $isEnabledLoadRealLate = true;
         
         $month = $date->format('m');
         

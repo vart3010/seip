@@ -384,11 +384,6 @@ class BackendMenuBuilder extends MenuBuilder
                         'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
-            $subchild->addChild('arrangement_programs.other', array(
-                        'route' => 'pequiven_arrangementprogram_create',
-                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OTHER),
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.other', $section)));
             $child->addChild($subchild);
             
             $menu->addChild($child);
