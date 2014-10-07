@@ -368,6 +368,7 @@
 
                  //Inicializamos el select2 de Objetivo Estratégico
                 chargeSelect2ObjetiveStrategic();
+                selectObjetiveStrategic.select2("enable",false);
 
                 //Inicializamos el select2 de Objetivo Táctico
                 selectObjetiveTactic.select2({
@@ -690,6 +691,7 @@
                             selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
                         }
                         chargeSelect2ObjetiveStrategic("full");
+                        selectObjetiveStrategic.select2("enable",true);
                     } else{
                         if(typeof data[0].initial === 'undefined'){
                             chargeSelect2ObjetiveStrategic("empty");

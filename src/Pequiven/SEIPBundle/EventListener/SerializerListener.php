@@ -60,7 +60,6 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
-            $event->getContext();
         } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
             $object = $event->getObject();
             $parents = $object->getParents();
