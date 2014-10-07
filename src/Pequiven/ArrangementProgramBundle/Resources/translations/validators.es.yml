@@ -1,4 +1,8 @@
 pequiven:
     validators:
+        arrangement_program:
+            responsible_person: Debe asignar un responsable
+            goal:
+                responsible_person: Debe asignar un responsable a la meta
         goals_details:
             min_value: El valor minimo permitido es cero

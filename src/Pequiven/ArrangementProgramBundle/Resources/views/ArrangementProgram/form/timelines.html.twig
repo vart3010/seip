@@ -37,6 +37,8 @@
                     <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
                     {$ goal.name $}<br>
                     <small>{$ goal.observations $}</small>
+                    <span ng-bind-html='printFormErrors("ss")'></span>
+                    <div class="alert alert-danger">//TODO agregar errores serializados</div>
                 </th>
                 <td>
                     <span ng-if="goal.typeGoal">
@@ -51,9 +53,13 @@
                 <td>{$ goal.weight $}</td>
                 <td>{$ goal.responsible.firstName + " "+ goal.responsible.lastName $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
                 <td class="align-right vertical-center">
-                    <span class="button-group compact">
-                        <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
-                        <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm" title="{{ "pequiven.actions.delete"|trans({},"messages") }}"></a>
+                    <span class="select compact" tabindex="0">
+                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                        <span class="select-arrow"></span>
+                        <span class="drop-down">
+                            <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                        </span>
                     </span>
                 </td>
             </tr>

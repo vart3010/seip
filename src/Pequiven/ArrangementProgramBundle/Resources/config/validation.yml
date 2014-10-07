@@ -1,9 +1,11 @@
 Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
     properties:
         period:
-            - NotNull: ~
+            - NotNull:
+                groups: [base]
         categoryArrangementProgram:
-            - NotNull: ~
+            - NotNull:
+                groups: [base]
         tacticalObjective:
             - NotNull:
                 groups: [tacticalObjective]
@@ -11,12 +13,34 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
             - NotNull:
                 groups: [operationalObjective]
         process:
-            - NotNull: ~
+            - NotNull:
+                groups: [base]
         responsible:
-            - NotNull: ~
+            - NotNull:
+                message: pequiven.validators.arrangement_program.responsible_person
+                groups: [base]
         type:
-            - NotNull: ~
+            - NotNull:
+                groups: [base]
 
+Pequiven\ArrangementProgramBundle\Entity\Goal:
+    properties:
+        name:
+            - NotNull:
+                groups: [base]
+        startDate:
+            - NotNull:
+                groups: [base]
+        endDate:
+            - NotNull:
+                groups: [base]
+        responsible:
+            - NotNull:
+                message: pequiven.validators.arrangement_program.goal.responsible_person
+                groups: [base]
+        weight:
+            - NotNull:
+                groups: [base]
 Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
     properties:
         januaryPlanned:

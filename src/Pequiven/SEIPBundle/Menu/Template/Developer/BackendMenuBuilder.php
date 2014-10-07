@@ -374,18 +374,18 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
             $subchild
                     ->addChild('arrangement_programs.tactic', array(
-                        'route' => 'pequiven_arrangementprogram_new',
+                        'route' => 'pequiven_arrangementprogram_create',
                         'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.tactic', $section)));
 
             $subchild->addChild('arrangement_programs.operative', array(
-                        'route' => 'pequiven_arrangementprogram_new',
+                        'route' => 'pequiven_arrangementprogram_create',
                         'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
             $subchild->addChild('arrangement_programs.other', array(
-                        'route' => 'pequiven_arrangementprogram_new',
+                        'route' => 'pequiven_arrangementprogram_create',
                         'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OTHER),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.other', $section)));

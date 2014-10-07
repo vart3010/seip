@@ -18,8 +18,11 @@ pequiven:
         weight: Peso
         observations: Observaciones
         revision_date: Fecha de revisión
-        approval_date: Fecha de aprovación
+        approval_date: Fecha de aprobación
         status: Estatus
+        type:
+            tactic: Tactico
+            operative: Operativo
     form:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo táctico

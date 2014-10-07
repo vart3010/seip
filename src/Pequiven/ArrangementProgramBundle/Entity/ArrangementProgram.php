@@ -74,7 +74,7 @@ class ArrangementProgram
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id")
+     * @ORM\JoinColumn(name="user_responsible_id",nullable=false)
      */
     private $responsible;
 
@@ -461,5 +461,16 @@ class ArrangementProgram
     function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
         $this->createdBy = $createdBy;
         return $this;
+    }
+    
+    function getTypeLabel() {
+        
+        $labels = array(
+            self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
+            self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',
+        );
+        if(isset($labels[$this->type])){
+            return $labels[$this->type];
+        }
     }
 }

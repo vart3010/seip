@@ -20,7 +20,7 @@ class ArrangementProgramController extends SEIPController
     /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
+     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:create.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -33,13 +33,20 @@ class ArrangementProgramController extends SEIPController
                 ->setPeriod($period)
                 ->setCreatedBy($user);
         
-        $form = $this->createCreateForm($entity,array('type' => $type));
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $this->domainManager->create($entity);
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
+        if($request->isMethod('GET')){
+            $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
+            $entity->addTimeline($timeLine);
         }
-        $form->remove('timelines');
+        $form = $this->createCreateForm($entity,array('type' => $type));
+        if($request->isMethod('GET')){
+            $form->remove('timelines');
+        }
+        
+        if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
+            $this->domainManager->create($entity);
+            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
+        }
+//        $form->remove('timelines');
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -61,32 +68,6 @@ class ArrangementProgramController extends SEIPController
         ));
 
         return $form;
-    }
-
-    /**
-     * Displays a form to create a new ArrangementProgram entity.
-     *
-     * @Template()
-     */
-    public function newAction($type)
-    {
-        $entity = new ArrangementProgram();
-        $user = $this->getUser();
-        $period = $this->getRepositoryById('period')->findOneActive();
-        $entity->setType($type)
-               ->setPeriod($period)
-               ->setCreatedBy($user)
-                ;
-        $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-        $entity->addTimeline($timeLine);
-        
-        $form   = $this->createCreateForm($entity,array('type' => $type));
-        $form->remove('timelines');
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
     }
 
     /**
@@ -178,9 +159,9 @@ class ArrangementProgramController extends SEIPController
         }
         
         $deleteForm = $this->createDeleteForm($id);
-        
         $editForm = $this->createEditForm($entity);
-        $editForm->submit($request);
+        
+        $editForm->submit($request,false);
         
         if ($editForm->isValid()) {
             foreach ($originalTimelines as $originalTimeline) {
@@ -203,7 +184,7 @@ class ArrangementProgramController extends SEIPController
             }
             $this->domainManager->update($entity);
 
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
         }
 
         return array(

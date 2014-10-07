@@ -14,6 +14,8 @@
         <h1>
             <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
             <span class="icon-forward"></span>
+            <span class="thin">{{ entity.getTypeLabel|trans }}</span>
+            <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven.update'|trans({},'messages') }}</span>
         </h1>
     </hgroup>
@@ -21,6 +23,6 @@
     {{ form_start(edit_form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
        {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_form.html.twig' with {'form':edit_form} %}
        <br/><br/>
-       {{ actions.update() }}
+       {{ actions.update(path('pequiven_seip_arrangementprogram_show',{id:entity.id})) }}
     </form>
 {% endblock %}

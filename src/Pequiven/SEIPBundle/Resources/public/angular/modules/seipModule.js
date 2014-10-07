@@ -38,7 +38,7 @@ function setValueSelect2(idSelect2,idEntity,data,callBack){
 
 
 angular.module('seipModule.controllers', [])
-    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter){
+    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter,$timeout){
         $scope.data.responsibleGoals = null;
         $scope.data.typeGoals = null;
         $scope.data.operationalObjectives = null;
@@ -93,12 +93,13 @@ angular.module('seipModule.controllers', [])
             }
             return valid;
         };
+        
         $scope.validFormTypeGoal = function(){
             var valid = $('#goalForms').validationEngine('validate');
             if(valid){
                 if($scope.model.goal.responsible == undefined){
-                    var message = "* "+ Translator.trans('pequiven.validators.select_responsible_person');
-                    jQuery('#goal_responsible').validationEngine('showPrompt',message, 'error') ;
+                    
+                    $scope.sendMessageError('pequiven.validators.select_responsible_person','goal_responsible');
                     valid = false;
                 }
             }
@@ -139,11 +140,15 @@ angular.module('seipModule.controllers', [])
         };
         
         $scope.getTypeGoal = function(c){
-            notificationBarService.getLoadStatus().loading();
-            $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal",{category : c})).success(function(data){
-                $scope.data.typeGoals = data;
-                notificationBarService.getLoadStatus().done();
-            });
+            if(c){
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal",{category : c})).success(function(data){
+                    $scope.data.typeGoals = data;
+                    notificationBarService.getLoadStatus().done();
+                });
+            }else{
+                $scope.data.typeGoals = null;
+            }
         };
         
         $scope.init();
@@ -196,11 +201,40 @@ angular.module('seipModule.controllers', [])
             }
         });
         
-        $scope.submitForm = function(){
-            console.log("submitForm");
-            //var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
-//            setValueSelect2("arrangementprogram_operationalObjective",$scope.model.arrangementProgram.operationalObjective.id,$scope.data.operationalObjectives);
+        var form = angular.element('form');
+        form.submit(function(){
+            var valid = true;
+            
+            
+            //Select de asociado a
+            var arrangementprogramCategoryArrangementProgram = angular.element('#arrangementprogram_categoryArrangementProgram');
+            //Select de responsables
+            var arrangementprogramResponsible = angular.element('#arrangementprogram_responsible');
+            if(arrangementprogramResponsible){
+                if(arrangementprogramResponsible.val() == ''){
+                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person","s2id_arrangementprogram_responsible");
+                    valid = false;
+                }
+            }
+            if(arrangementprogramCategoryArrangementProgram.val() == ''){
+                $scope.sendMessageError("pequiven.validators.arrangement_program.select_category","s2id_arrangementprogram_categoryArrangementProgram");
+                valid = false;
+            }
+            
+            return valid;
+        });
+        
+        $scope.sendMessageError = function(message,id){
+            var messageTrans = "* "+ Translator.trans(message);
+            if(id == undefined){
+                id = 'message-errors';
+            }
+            jQuery('#'+id).validationEngine('showPrompt',messageTrans, 'error');
+            $timeout(function(){
+                jQuery('#'+id).validationEngine('hide');
+            },3000);
         };
+        
         $scope.templates = [
             {
                 name: 'pequiven.modal.title.goal',
@@ -214,7 +248,9 @@ angular.module('seipModule.controllers', [])
         $scope.templateOptions.setTemplate($scope.templates[0]);
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
+        
         $scope.model = {};
+        $scope.form = {};
         $scope.data = {};
         $scope.dialog = {
             confirm: {
@@ -405,9 +441,20 @@ angular.module('seipModule.controllers', [])
             modalConfirm.dialog( "open" );
             notificationBarService.getLoadStatus().done();
         };
-    })
-    
-    .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        
+        $scope.printFormErrors = function(formErrors){
+          if(formErrors !== undefined && formErrors.errors !== undefined){
+              var divError = '<div class="alert alert-danger">';
+              angular.forEach(formErrors.errors,function(error){
+                  divError+= error;
+                  divError+= '<br />';
+              });
+              divError += '</div>';
+              return divError;
+          }
+      };
+      
+    }).controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);

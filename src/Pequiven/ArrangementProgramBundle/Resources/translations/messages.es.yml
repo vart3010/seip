@@ -26,4 +26,6 @@ pequiven:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?
     validators:
-        select_responsible_person: Seleccione un responsable
+        arrangement_program:
+            select_responsible_person: Seleccione un responsable
+            select_category: Seleccione una categoria
