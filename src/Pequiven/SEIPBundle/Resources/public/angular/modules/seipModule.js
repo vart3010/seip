@@ -176,17 +176,18 @@ angular.module('seipModule.controllers', [])
         var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
         tacticalObjective.on('change',function(e){
             
-            console.log(e.val);
             if(e.val){
                 var tacticalObjetive = e.val;
-//                selectObjetiveStrategic.remove();
+                operationalObjective.find('option').remove().end();
                 notificationBarService.getLoadStatus().loading();
                 $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
+                    operationalObjective.append('<option value="">'+Translator.trans('pequiven.select')+'</option>');
                     angular.forEach(data,function(value){
-                        
+                        operationalObjective.append('<option value="'+value.id+'">'+value.description+'</option>');
                     });
                     operationalObjective.select2('val',e.val);
                     operationalObjective.select2('enable',true);
+                    notificationBarService.getLoadStatus().done();
                 });
             }else{
                 operationalObjective.select2('val','');

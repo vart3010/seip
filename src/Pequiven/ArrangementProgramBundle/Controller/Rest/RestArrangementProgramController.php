@@ -31,8 +31,10 @@ class RestArrangementProgramController extends FOSRestController
         }
         $timelines = $entity->getTimelines();
         $data = array();
-        foreach ($timelines[0]->getGoals() as $goal) {
-            $data[] = $goal->getGoalDetails();
+        if(isset($timelines[0])){
+            foreach ($timelines[0]->getGoals() as $goal) {
+                $data[] = $goal->getGoalDetails();
+            }
         }
         $view = $this->view();
         $result = array(
