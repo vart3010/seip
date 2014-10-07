@@ -135,7 +135,6 @@ class ArrangementProgramController extends SEIPController
     /**
      * Edits an existing ArrangementProgram entity.
      *
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
      */
     public function updateAction(Request $request)
     {
@@ -186,12 +185,19 @@ class ArrangementProgramController extends SEIPController
 
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
         }
-
-        return array(
+        
+        $data = array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ); 
+        if($editForm->isValid() === false){
+            $data['formErrors'] = $editForm;
+        }
+        
+        $view = $this->view($data);
+        $view->setTemplate('PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig');
+        return $this->handleView($view);
     }
 
     /**

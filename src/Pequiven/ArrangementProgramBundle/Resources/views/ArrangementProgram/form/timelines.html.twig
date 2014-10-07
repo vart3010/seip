@@ -37,8 +37,6 @@
                     <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
                     {$ goal.name $}<br>
                     <small>{$ goal.observations $}</small>
-                    <span ng-bind-html='printFormErrors("ss")'></span>
-                    <div class="alert alert-danger">//TODO agregar errores serializados</div>
                 </th>
                 <td>
                     <span ng-if="goal.typeGoal">
@@ -51,7 +49,10 @@
                 <td>{$ goal.startDate | myDate $}</td>
                 <td>{$ goal.endDate | myDate $}</td>
                 <td>{$ goal.weight $}</td>
-                <td>{$ goal.responsible.firstName + " "+ goal.responsible.lastName $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
+                <td>
+                    {$ goal.responsible.firstName + " "+ goal.responsible.lastName $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small>
+                    <span ng-bind-html='printFormErrors(form.children.timelines.children[0].children.goals.children[$index].children.responsible)'></span>
+                </td>
                 <td class="align-right vertical-center">
                     <span class="select compact" tabindex="0">
                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>

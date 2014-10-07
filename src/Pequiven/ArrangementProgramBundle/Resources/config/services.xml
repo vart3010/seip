@@ -21,5 +21,11 @@
         <service id="pequiven_seip.repository.arrangementprogram" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository">
             <tag name="app.repository" class="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram" />
         </service>
+        <service id="pequiven.orm.validator.maximum_goal_responsible" class="Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsibleValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.maximum_goal_responsible" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>

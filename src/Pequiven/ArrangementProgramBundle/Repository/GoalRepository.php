@@ -2,7 +2,7 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * GoalRepository
@@ -12,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class GoalRepository extends EntityRepository
 {
+    function findGoalsByUserAndPeriod(\Pequiven\SEIPBundle\Entity\User $user,\Pequiven\SEIPBundle\Entity\Period $period,array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('g.timeline', 't')
+            ->innerJoin('t.arrangementProgram', 'ap')
+            ->andWhere('ap.period = :period')
+            ->andWhere('g.responsible = :responsible')
+            ->setParameter('period', $period)
+            ->setParameter('responsible', $user)
+            ;
+        if(isset($criteria['notArrangementProgram'])){
+            $qb->andWhere('ap.id != :arrangementProgram');
+            $qb->setParameter('arrangementProgram', $criteria['notArrangementProgram']);
+        }
+        return $qb->getQuery()->getResult();
+    }
+    protected function getAlias() {
+        return 'g';
+    }
 }

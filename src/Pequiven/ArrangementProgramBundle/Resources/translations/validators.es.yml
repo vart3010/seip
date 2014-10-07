@@ -4,5 +4,6 @@ pequiven:
             responsible_person: Debe asignar un responsable
             goal:
                 responsible_person: Debe asignar un responsable a la meta
+                maximum_responsible: El limite de metas asignadas a "%1" el periodo "%period%" fue excedida (%2/%3).
         goals_details:
             min_value: El valor minimo permitido es cero
