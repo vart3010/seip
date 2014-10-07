@@ -130,8 +130,10 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     public function onPostSerializeArrangementProgram(ObjectEvent $event) {
         $data = array();
         $object = $event->getObject();
-        $data['self']['href'] = $this->generateUrl('arrangementprogram_show', array('id' => $object->getId()));
-        $data['self']['edit'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
+        if($object->getId() > 0){
+            $data['self']['href'] = $this->generateUrl('arrangementprogram_show', array('id' => $object->getId()));
+            $data['self']['edit'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
+        }
         $event->getVisitor()->addData('_links',$data);
     }
     

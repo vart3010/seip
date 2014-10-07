@@ -152,7 +152,7 @@ angular.module('seipModule.controllers', [])
             return false;
         };
         
-        $scope.setOperationalObjective = function(tacticalObjetive){
+        $scope.setOperationalObjective = function(tacticalObjetive,selected){
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             if(tacticalObjetive){
                 notificationBarService.getLoadStatus().loading();
@@ -172,6 +172,28 @@ angular.module('seipModule.controllers', [])
                 operationalObjective.select2('enable',false);
             }
         };
+        var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
+        var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
+        tacticalObjective.on('change',function(e){
+            
+            console.log(e.val);
+            if(e.val){
+                var tacticalObjetive = e.val;
+//                selectObjetiveStrategic.remove();
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
+                    angular.forEach(data,function(value){
+                        
+                    });
+                    operationalObjective.select2('val',e.val);
+                    operationalObjective.select2('enable',true);
+                });
+            }else{
+                operationalObjective.select2('val','');
+                operationalObjective.select2('enable',false);
+            }
+        });
+        
         $scope.submitForm = function(){
             console.log("submitForm");
             //var operationalObjective = angular.element('#arrangementprogram_operationalObjective');

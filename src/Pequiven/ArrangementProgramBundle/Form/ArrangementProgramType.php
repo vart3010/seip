@@ -50,9 +50,9 @@ class ArrangementProgramType extends AbstractType
             $formModifier = function (\Symfony\Component\Form\FormInterface $form, \Pequiven\ObjetiveBundle\Model\Objetive $tacticalObjective = null) {
                 $qb = null;
                 if($tacticalObjective){
-                   $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository)use ($tacticalObjective){
+                   $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) use ($tacticalObjective){
                        return $repository->findQueryObjetivesOperationalByObjetiveTactic($tacticalObjective);
-                   }; 
+                   };
                 }
                
                 $form->add('operationalObjective',null,array(
@@ -61,20 +61,19 @@ class ArrangementProgramType extends AbstractType
                         'attr' => array(
                             'class' => "select2 input-xxlarge",
 //                            'disabled' => 'disabled',
-                            'ng-model' => 'model.arrangementProgram.operationalObjective',
-                            'ng-options' => 'value as value.description for (key,value) in data.operationalObjectives',
-                            'query_builder' => $qb,
+//                            'ng-model' => 'model.arrangementProgram.operationalObjective',
+//                            'ng-options' => 'value as value.description for (key,value) in data.operationalObjectives',
                         ),                        
+                        'query_builder' => $qb,
                         'empty_value' => 'pequiven.select',
                         'required' => true,
                     ));
-                var_dump('Hola');
-//                var_dump($tacticalObjective);
-//                die;
             };
+            
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($formModifier){
             $object = $event->getData();
             $form = $event->getForm();
+            
             if($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $form->add('responsible',null,array(
                         'label' => 'pequiven.form.responsible',
@@ -119,8 +118,8 @@ class ArrangementProgramType extends AbstractType
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
                             'class' => "select2 input-xxlarge",
-                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
-                            'ng-change' => 'setOperationalObjective(model.arrangementProgram.tacticalObjective)',
+//                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
+//                            'ng-change' => 'setOperationalObjective(model.arrangementProgram.tacticalObjective)',
                         ),
                         'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
                             return $repository->findQueryObjetivesTactic();
@@ -129,7 +128,8 @@ class ArrangementProgramType extends AbstractType
                         'required' => true,
                     ))
                 ;
-                $formModifier($form);
+//                var_dump();die;
+                $formModifier($form,$object->getTacticalObjective());
             }
             
         });
@@ -137,11 +137,6 @@ class ArrangementProgramType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($formModifier){
             $form = $event->getForm();
             $data = $form->getData();
-//            var_dump('chao');
-//            
-//            var_dump($event->getData());
-//            var_dump($data->getTacticalObjective());
-//            die;
             $formModifier($form,$data->getTacticalObjective());
         });
         
