@@ -39,6 +39,7 @@ class ArrangementProgram
      * @var \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $categoryArrangementProgram;
 
@@ -129,7 +130,7 @@ class ArrangementProgram
      * Tipo de programa de gestion
      * @var integer
      *
-     * @ORM\Column(name="type", type="integer")
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type;
     
