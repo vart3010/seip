@@ -2,6 +2,18 @@
 
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
+{% block stylesheet %}
+    {{ parent() }}
+    <style type="text/css" media="screen">
+        .x-grid-row-summary .x-grid-cell-inner {
+            font-weight: bold;
+        }
+        .icon-grid {
+            background: url(../shared/icons/fam/grid.png) no-repeat 0 -1px;
+        }
+    </style>
+{% endblock %}
+
 {% block javascript %}
     <script type="text/javascript">
         Ext.require([
@@ -21,6 +33,7 @@
                 autoLoad: true,
                 autoSync: true,
                 model: 'Pequiven.ArrangementProgramBundle.Entity.GoalDetails',
+                groupField: 'project',
                 proxy: {
                     type: 'rest',
                     url: '{{ path('get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails',{id:app.request.get('id'),_format:'json'}) }}',
@@ -60,41 +73,13 @@
                 }
             });
 
-            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
-                clicksToEdit: 2,
-                listeners: {
-                    cancelEdit: function(rowEditing, context) {
-                        // Canceling editing of a locally added, unsaved record: remove it
-                        if (context.record.phantom) {
-                            store.remove(context.record);
-                        }
-                    },
-                    beforeedit: function(editor, context, eOpts){
-                        {#
-                        var field = context.field;
-                        if(field == "januaryPlanned"){
-                           return false; 
-                        }
-                        console.log(context.record);
-                        console.log(editor);
-                        console.log(context);
-                        console.log(eOpts);
-                        #}
-                        //return true;
-                    }
-                }
-            });
-            
             /**
             * Custom function used for column renderer
             * @param {Object} val
             */
            function valGoalDetails(val, metaData, record, rowIndex,colIndex, store){
-{#               grid.columns[m.cellIndex].disable();#}
                var columnName = grid.columns[colIndex + 5].dataIndex;
-{#               console.log(grid.columns[colIndex + 5]);#}
                var data = record.data;
-{#               console.log(data);#}
                if(data._data[columnName] != undefined) {
                   var extraData = data._data[columnName];
                   if(extraData['isEnabled'] != undefined){
@@ -135,7 +120,7 @@
                               }
                           }
                        }
-                        return true;
+                       return true;
                     }
                 }
             });
@@ -163,6 +148,13 @@
                         //return false;
                     }
                 },
+                features: [{
+                    id: 'group',
+                    ftype: 'groupingsummary',
+                    groupHeaderTpl: '{name}',
+                    hideGroupedHeader: true,
+                    enableGroupingMenu: false
+                }],
                 columns: [{
                     text: 'ID',
                     width: 30,
@@ -178,19 +170,23 @@
                     sortable: true,
                     dataIndex: 'name',
                     locked: true,
+                    hideable: false,
                     field: {
                         xtype: 'displayfield'
                     },
                     renderer: function (v, m, r) {
                         var d = r.data.goal.name;
                         return d;
+                    },
+                    summaryType: 'count',
+                    summaryRenderer: function(value, summaryData, dataIndex) {
+                        return ((value === 0 || value > 1) ? '(' + value + ' Metas)' : '(1 Meta)');
                     }
                 }, {
                     header: '{{ "pequiven.start_date"|trans({},"messages") }}',
                     width: 80,
                     sortable: true,
-                    dataIndex: 'startDate',
-                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    dataIndex: 'goalDateStart',
                     locked: true,
                     field: {
                         xtype: 'displayfield'
@@ -198,13 +194,14 @@
                     renderer: function (v, m, r) {
                         var d = r.data.goal.startDate;
                         return Ext.util.Format.date(d,'Y-m-d');
-                    }
+                    },
+                    summaryType: 'min',
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d')
                 }, {
                     text: '{{ "pequiven.end_date"|trans({},"messages") }}',
                     width: 80,
                     sortable: true,
-                    dataIndex: 'endDate',
-                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d'),
+                    dataIndex: 'goalDateEnd',
                     locked: true,
                     field: {
                         xtype: 'displayfield'
@@ -212,11 +209,13 @@
                     renderer: function (v, m, r) {
                         var d = r.data.goal.endDate;
                         return Ext.util.Format.date(d,'Y-m-d');
-                    }
+                    },
+                    summaryType: 'max',
+                    summaryRenderer: Ext.util.Format.dateRenderer('Y-m-d')
                 },{  text: '{{ "pequiven.weight"|trans({},"messages") }}',
                     sortable: true,
                     width: 60,
-                    dataIndex: 'weight',
+                    dataIndex: 'goalWeight',
                     locked: true,
                     field: {
                         xtype: 'displayfield'
@@ -224,7 +223,8 @@
                     renderer: function (v, m, r) {
                         var d = r.data.goal.weight;
                         return d;
-                    }
+                    },
+                    summaryType: 'sum'
                 },{
                     text: '{{ "pequiven.months.january"|trans({},"messages") }}',
                     columns: [
@@ -240,7 +240,8 @@
                             field: {
                                 xtype: 'numberfield',
                                 minValue: 0
-                            }
+                            },
+                            summaryType: 'sum'
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
