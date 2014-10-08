@@ -75,10 +75,14 @@ class RestArrangementProgramController extends FOSRestController
             if($isEnabledClearRealByPlannedEmpty === true){
                 $propertyAccessor = new PropertyAccessor();
                 foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
-                    $value = $propertyAccessor->getValue($entity,$planned);
+                    $valuePlanned = $propertyAccessor->getValue($entity,$planned);
                     $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
-                    if($value == '' || $value == '0' || $value === null){
+                    $valueReal = $propertyAccessor->getValue($entity, $monthReal);
+                    if($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null){
                         $propertyAccessor->setValue($entity, $monthReal, 0);
+                    }else if($valueReal > $valuePlanned){
+                        //Valida que el valor real no pueda ser mayor al planeado.
+                        $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
                     }
                 }
             }

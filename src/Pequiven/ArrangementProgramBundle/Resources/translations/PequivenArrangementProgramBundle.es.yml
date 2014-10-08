@@ -47,6 +47,7 @@ pequiven:
         delete_this_goal: Eliminar esta meta
         abbr_planned: P
         abbr_real: R
+        summary: Avances
 seip:
     table:
         header:
