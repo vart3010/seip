@@ -1,10 +1,11 @@
 pequiven:
     validators:
         arrangement_program:
-            responsible_person: Debe asignar un responsable
+            responsible_person: Debe asignar un responsable.
+            incorrect_weight: La suma del peso de las metas no debe execer el 100%.
             goal:
-                responsible_person: Debe asignar un responsable a la meta
+                responsible_person: Debe asignar un responsable a la meta.
                 maximum_responsible: El limite de responsabilidades asignadas a "%user%" fue excedida en el periodo "%period%" con %arrangementPrograms% PG y %goals% M del limite de %limit%.
         goals_details:
-            min_value: El valor minimo permitido es cero
-            max_value: El valor maximo permitido es cien
+            min_value: El valor minimo permitido es cero.
+            max_value: El valor maximo permitido es cien.

@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
 
 /**
  * Programa de gestion
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
-class ArrangementProgram
+class ArrangementProgram extends Model
 {
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
@@ -84,7 +85,7 @@ class ArrangementProgram
      *
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
-    private $timeline;
+    protected $timeline;
 
     /**
      * Revisado por
@@ -434,29 +435,5 @@ class ArrangementProgram
         if(isset($labels[$this->type])){
             return $labels[$this->type];
         }
-    }
-
-    /**
-     * Set timeline
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
-     * @return ArrangementProgram
-     */
-    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
-    {
-        $timeline->setArrangementProgram($this);
-        $this->timeline = $timeline;
-
-        return $this;
-    }
-
-    /**
-     * Get timeline
-     *
-     * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
-     */
-    public function getTimeline()
-    {
-        return $this->timeline;
     }
 }

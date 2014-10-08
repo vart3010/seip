@@ -2,7 +2,6 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
     constraints:
         - Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsible:
                 groups: [base]
-        
     properties:
         period:
             - NotNull:
@@ -26,6 +25,11 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         type:
             - NotNull:
                 groups: [base]
+    getters:
+        validTimeLine:
+            - "True":
+                message: pequiven.validators.arrangement_program.incorrect_weight
+                groups: [base]
 
 Pequiven\ArrangementProgramBundle\Entity\Goal:
     properties:
@@ -45,6 +49,13 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         weight:
             - NotNull:
                 groups: [base]
+            - Range:
+                min: 0
+                minMessage: pequiven.validators.goals_details.min_value
+                max: 100
+                maxMessage: pequiven.validators.goals_details.max_value
+                groups: [base]
+                
 Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
     properties:
         januaryPlanned:
@@ -52,142 +63,142 @@ Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         januaryReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         februaryPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         februaryReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         marchPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         marchReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         aprilPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         aprilReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         mayPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         mayReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         junePlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         juneReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         julyPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         julyReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         augustPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         augustReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         septemberPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         septemberReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         octoberPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         octoberReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         novemberPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         novemberReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         decemberPlanned:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
         decemberReal:
             - Range:
                 min: 0
                 minMessage: pequiven.validators.goals_details.min_value
                 max: 100
-                minMessage: pequiven.validators.goals_details.max_value
+                maxMessage: pequiven.validators.goals_details.max_value
