@@ -11,6 +11,9 @@
         .icon-grid {
             background: url(../shared/icons/fam/grid.png) no-repeat 0 -1px;
         }
+        .x-group-hd-container {
+            display:none;
+        }
     </style>
 {% endblock %}
 
@@ -161,6 +164,7 @@
                 minValue: 0,
                 maxValue: 100
             };
+            
             var widthColumnValues = 60;
              var grid = Ext.create('Ext.grid.Panel', {
                 selType: 'cellmodel',
@@ -208,9 +212,6 @@
                     dataIndex: 'name',
                     locked: true,
                     hideable: false,
-                    field: {
-                        xtype: 'displayfield'
-                    },
                     renderer: function (v, m, r) {
                         var d = r.data.goal.name;
                         return d;
@@ -225,9 +226,6 @@
                     sortable: true,
                     dataIndex: 'goalDateStart',
                     locked: true,
-                    field: {
-                        xtype: 'displayfield'
-                    },
                     renderer: function (v, m, r) {
                         var d = r.data.goal.startDate;
                         return Ext.util.Format.date(d,'Y-m-d');
@@ -240,9 +238,6 @@
                     sortable: true,
                     dataIndex: 'goalDateEnd',
                     locked: true,
-                    field: {
-                        xtype: 'displayfield'
-                    },
                     renderer: function (v, m, r) {
                         var d = r.data.goal.endDate;
                         return Ext.util.Format.date(d,'Y-m-d');
@@ -254,9 +249,6 @@
                     width: 60,
                     dataIndex: 'goalWeight',
                     locked: true,
-                    field: {
-                        xtype: 'displayfield'
-                    },
                     renderer: function (v, m, r) {
                         var d = r.data.goal.weight;
                         return d;
