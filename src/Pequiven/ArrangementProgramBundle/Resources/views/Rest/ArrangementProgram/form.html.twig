@@ -53,8 +53,6 @@
                         var record = operation.getRecords()[0],
                             name = Ext.String.capitalize(operation.action),
                             verb;
-
-
                         if (name == 'Destroy') {
                             verb = 'Destroyed';
                         } else {
@@ -72,7 +70,11 @@
                     }
                 }
             });
-            
+            /**
+             * Formatea un numero a dos decimales
+             * @param {type} val
+             * @returns {unresolved}
+             */
             var formatNumber = function (val){
                 return Ext.util.Format.number(Ext.util.Format.number(val,'0.000,00/i'));
             };
@@ -100,6 +102,9 @@
                }
                return val;
            }
+           /**
+           * Calcula el resumen de lo planeado y real 
+           */
            var calculateSummaryRenderer = function(records, values,nameField) {
                 var i = 0,
                     length = records.length,
@@ -212,7 +217,7 @@
                     },
                     summaryType: 'count',
                     summaryRenderer: function(value, summaryData, dataIndex) {
-                        return ((value === 0 || value > 1) ? '(' + value + ' Metas)' : '(1 Meta)');
+                        return ((value === 0 || value > 1) ? '' + value + ' {{ 'pequiven.goals.goals_only'|trans }}' : '1 {{ 'pequiven.goals.goal'|trans }}');
                     }
                 }, {
                     header: '{{ "pequiven.start_date"|trans({},"messages") }}',

@@ -42,6 +42,7 @@ pequiven:
     goals:
         goal: Meta
         goals: Meta(s)
+        goals_only: Metas
         add_goal: Añadir meta
         delete_this_goal: Eliminar esta meta
         abbr_planned: P
