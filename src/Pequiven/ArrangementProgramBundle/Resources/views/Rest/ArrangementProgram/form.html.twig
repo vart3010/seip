@@ -100,6 +100,29 @@
                }
                return val;
            }
+           var calculateSummaryRenderer = function(records, values,nameField) {
+                var i = 0,
+                    length = records.length,
+                    total = 0,
+                    record,
+                    val;
+                for (; i < length; ++i) {
+                    record = records[i];
+                    val = record.get(nameField);
+                    if(val > 0){
+                        total += (record.get('goalWeight') / 100 ) * val ;
+                    }
+                }
+                return total;
+            };
+            
+           /**
+  
+            * @param {type} value
+            * @param {type} summaryData
+            * @param {type} dataIndex
+            * @returns {unresolved}          * Formatea los numeros del resumen
+            */
            var valSummaryRenderer = function(value, summaryData, dataIndex){
                return formatNumber(value);
            };
@@ -128,6 +151,11 @@
                     }
                 }
             });
+            var fieldTypeProperties = {
+                xtype: 'numberfield',
+                minValue: 0,
+                maxValue: 100
+            };
             var widthColumnValues = 60;
              var grid = Ext.create('Ext.grid.Panel', {
                 selType: 'cellmodel',
@@ -241,26 +269,10 @@
                             align: 'center',
                             dataIndex: 'januaryPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0,
-                                maxValue: 100
-                            },
+                            field: fieldTypeProperties,
                             summaryType: function(records, values) {
-                                var i = 0,
-                                    length = records.length,
-                                    total = 0,
-                                    record,
-                                    val;
                                 var nameField = 'januaryPlanned';
-                                for (; i < length; ++i) {
-                                    record = records[i];
-                                    val = record.get(nameField);
-                                    if(val > 0){
-                                        total += (record.get('goalWeight') / 100 ) * val ;
-                                    }
-                                }
-                                return total;
+                                return calculateSummaryRenderer(records, values,nameField);
                             },
                             summaryRenderer: valSummaryRenderer
                         }, {
@@ -271,10 +283,12 @@
                             align: 'center',
                             dataIndex: 'januaryReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'januaryReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -289,10 +303,12 @@
                             align: 'center',
                             dataIndex: 'februaryPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'februaryPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -301,10 +317,12 @@
                             align: 'center',
                             dataIndex: 'februaryReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'februaryReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -319,10 +337,12 @@
                             align: 'center',
                             dataIndex: 'marchPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'marchPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -331,10 +351,12 @@
                             align: 'center',
                             dataIndex: 'marchReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'marchReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -349,10 +371,12 @@
                             align: 'center',
                             dataIndex: 'aprilPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'aprilPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -361,10 +385,12 @@
                             align: 'center',
                             dataIndex: 'aprilReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'aprilReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -379,10 +405,12 @@
                             align: 'center',
                             dataIndex: 'mayPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'mayPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -391,10 +419,12 @@
                             align: 'center',
                             dataIndex: 'mayReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'mayReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -409,10 +439,12 @@
                             align: 'center',
                             dataIndex: 'junePlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'junePlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -421,10 +453,12 @@
                             align: 'center',
                             dataIndex: 'juneReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'juneReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -439,10 +473,12 @@
                             align: 'center',
                             dataIndex: 'julyPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'julyPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -451,10 +487,12 @@
                             align: 'center',
                             dataIndex: 'julyReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'julyReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -469,10 +507,12 @@
                             align: 'center',
                             dataIndex: 'augustPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'augustPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -481,10 +521,12 @@
                             align: 'center',
                             dataIndex: 'augustReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'augustReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -499,10 +541,12 @@
                             align: 'center',
                             dataIndex: 'septemberPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'septemberPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -511,10 +555,12 @@
                             align: 'center',
                             dataIndex: 'septemberReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'septemberReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -529,10 +575,12 @@
                             align: 'center',
                             dataIndex: 'octoberPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'octoberPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -541,10 +589,12 @@
                             align: 'center',
                             dataIndex: 'octoberReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'octoberReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -559,10 +609,12 @@
                             align: 'center',
                             dataIndex: 'novemberPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'novemberPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -571,10 +623,12 @@
                             align: 'center',
                             dataIndex: 'novemberReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'novemberReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }, {
@@ -589,10 +643,12 @@
                             align: 'center',
                             dataIndex: 'decemberPlanned',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'decemberPlanned';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }, {
                             text: '{{ "pequiven.goals.abbr_real"|trans }}',
                             sortable: true,
@@ -601,10 +657,12 @@
                             align: 'center',
                             dataIndex: 'decemberReal',
                             renderer: valGoalDetails,
-                            field: {
-                                xtype: 'numberfield',
-                                minValue: 0
-                            }
+                            field: fieldTypeProperties,
+                            summaryType: function(records, values) {
+                                var nameField = 'decemberReal';
+                                return calculateSummaryRenderer(records, values,nameField);
+                            },
+                            summaryRenderer: valSummaryRenderer
                         }
                     ]
                 }

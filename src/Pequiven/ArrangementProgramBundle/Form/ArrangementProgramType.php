@@ -21,7 +21,6 @@ class ArrangementProgramType extends AbstractType
         $builder
             ->add('categoryArrangementProgram',null,array(
                 'label' => 'pequiven.form.category_arrangement_program',
-                'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-large",
                     "ng-model" => "model.arrangementProgram.categoryArrangementProgram",
