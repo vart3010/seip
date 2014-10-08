@@ -74,8 +74,9 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.weight',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-mini validate[required,min[1] ]",
+                    'class' => "input input-mini validate[required,min[1],max[100] ]",
                     'min' => '1',
+                    'max' => '100',
                     'ng-model' => 'model.goal.weight',
                 ),
                 'required' => true,
