@@ -2,13 +2,16 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller\Rest;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Controller\Annotations;
+use FOS\RestBundle\Controller\FOSRestController;
+use Pequiven\ArrangementProgramBundle\Form\GoalDetailsType;
+use Pequiven\ArrangementProgramBundle\Model\GoalDetails;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Controlador rest de los programas de gestion
@@ -58,19 +61,31 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
-        $form = $this->createForm(new \Pequiven\ArrangementProgramBundle\Form\GoalDetailsType(),$entity);
+        $form = $this->createForm(new GoalDetailsType(),$entity);
         $dataRequest = $request->request->all();
         
         unset($dataRequest['id']);
         unset($dataRequest['null']);
         
         $form->submit($dataRequest,false);
-//        var_dump($dataRequest);
         $success = false;
         if($form->isValid()){
-            $success = true;
+            //Habilitar limpiar los valores reales si el planeado se establecio en cero
+            $isEnabledClearRealByPlannedEmpty = true;
+            if($isEnabledClearRealByPlannedEmpty === true){
+                $propertyAccessor = new PropertyAccessor();
+                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                    $value = $propertyAccessor->getValue($entity,$planned);
+                    $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                    if($value == '' || $value == '0' || $value === null){
+                        $propertyAccessor->setValue($entity, $monthReal, 0);
+                    }
+                }
+            }
+            
             $em->persist($entity);
             $em->flush();
+            $success = true;
         }else{
             $entity = $form;
         }
