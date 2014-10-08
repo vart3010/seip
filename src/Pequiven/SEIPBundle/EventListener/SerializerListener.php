@@ -96,6 +96,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $isEnabledLoadRealFuture = false;
         //Habilitar la carga de valores reales atrasados
         $isEnabledLoadRealLate = true;
+        //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
+        $isEnabledEditByPlannedLoad = true;
         
         $month = $date->format('m');
         
@@ -120,6 +122,16 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             foreach (GoalDetails::getMonthsReal() as $key => $monthGoal) {
                 if($month > $monthGoal){
                     $data[$key]['isEnabled'] = false;
+                }
+            }
+        }
+        if($isEnabledEditByPlannedLoad === true){
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $value = $propertyAccessor->getValue($object,$planned);
+                $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                if($value == '' || $value == '0' || $value === null){
+                    $data[$monthReal]['isEnabled'] = false;
                 }
             }
         }
