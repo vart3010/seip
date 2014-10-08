@@ -7,3 +7,4 @@ pequiven:
                 maximum_responsible: El limite de responsabilidades asignadas a "%user%" fue excedida en el periodo "%period%" con %arrangementPrograms% PG y %goals% M del limite de %limit%.
         goals_details:
             min_value: El valor minimo permitido es cero
+            max_value: El valor maximo permitido es cien

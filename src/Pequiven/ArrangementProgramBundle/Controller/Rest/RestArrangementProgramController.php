@@ -83,7 +83,7 @@ class RestArrangementProgramController extends FOSRestController
             'messages' => 'Exitooooo'
         );
         $view->setData($result);
-        $view->getSerializationContext()->setGroups(array('id','api_list','goalDetails'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
         return $view;
     }
