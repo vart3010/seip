@@ -94,9 +94,9 @@
                         value = value + data[key];
                     }
                 }
-                if(value > 0){
+                {#if(value > 0){
                     value = value / 12;
-                }
+                }#}
                 return value;
             };
             

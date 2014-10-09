@@ -86,6 +86,28 @@ class RestArrangementProgramController extends FOSRestController
                     }
                 }
             }
+            //Habilitar limpiar los valores planeados no sobrepasen el 100% distribuido en todas las columnas
+            $clearPlannedOnComplete = true;
+            if($clearPlannedOnComplete === true){
+                //Limite de porcentaje que se asigna al planeado
+                $limitPlannedPercentaje = 100;
+                $percentajeAcumulated = 0;
+                $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+                $disable = false;
+                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                    $percentaje = $propertyAccessor->getValue($entity,$planned);
+                    $percentajeAcumulated += $percentaje;
+                    if($disable){
+                        $propertyAccessor->setValue($entity, $planned, 0);
+                        continue;
+                    }
+                    if($percentajeAcumulated >= $limitPlannedPercentaje){
+                        $diff = $percentaje - ($percentajeAcumulated - $limitPlannedPercentaje);
+                        $propertyAccessor->setValue($entity, $planned,$diff);
+                        $disable = true;
+                    }
+                }
+            }
             
             $em->persist($entity);
             $em->flush();

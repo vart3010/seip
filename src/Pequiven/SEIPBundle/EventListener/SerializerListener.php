@@ -98,6 +98,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $isEnabledLoadRealLate = true;
         //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
         $isEnabledEditByPlannedLoad = true;
+        //Deshabilitar las celdas planeadas cuando se distribuya el 100%
+        $disablePlannedOnComplete = true;
         
         $month = $date->format('m');
         
@@ -135,6 +137,26 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 }
             }
         }
+        
+        if($disablePlannedOnComplete === true){
+            //Limite de porcentaje que se asigna al planeado
+            $limitPlannedPercentaje = 100;
+            $percentajeAcumulated = 0;
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            $disable = false;
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $percentaje = $propertyAccessor->getValue($object,$planned);
+                $percentajeAcumulated += $percentaje;
+                if($disable){
+                    $data[$planned]['isEnabled'] = false;
+                    continue;
+                }
+                if($percentajeAcumulated >= $limitPlannedPercentaje){
+                    $disable = true;
+                }
+            }
+        }
+//        var_dump($data);
         $event->getVisitor()->addData('_data',$data);
         
     }
