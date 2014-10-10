@@ -6,7 +6,7 @@ pequiven:
             goal:
                 responsible_person: Debe asignar un responsable a la meta.
                 maximum_responsible: El limite de responsabilidades asignadas a "%user%" fue excedida en el periodo "%period%" con %arrangementPrograms% PG y %goals% M del limite de %limit%.
-                level_roles_responsible: %responsibleProgram% no puede asignarle metas a %responsibleGoals%
+                level_roles_responsible: %responsibleProgram% no puede asignarle metas a %responsibleGoals% en la meta "%goal%"
         goals_details:
             min_value: El valor minimo permitido es cero.
             max_value: El valor maximo permitido es cien.

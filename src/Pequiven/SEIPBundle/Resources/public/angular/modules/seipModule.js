@@ -127,13 +127,7 @@ angular.module('seipModule.controllers', [])
         $scope.cancelEditGoal = function(){
             return $scope.validFormTypeGoal();
         };
-        $scope.init = function(){
-            notificationBarService.getLoadStatus().loading();
-            $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals")).success(function(data){
-                $scope.data.responsibleGoals = data;
-                notificationBarService.getLoadStatus().done();
-            });
-        };
+        
         
         //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal){
@@ -169,8 +163,6 @@ angular.module('seipModule.controllers', [])
                 $scope.data.typeGoals = null;
             }
         };
-        
-        $scope.init();
         
         var urlGoal = Routing.generate("goal_get_form",{},true);
         var initCallBack = function(){
@@ -222,13 +214,19 @@ angular.module('seipModule.controllers', [])
         });
         programResponsible.on('change',function(object){
             var reponsibleId = object.val;
-            programResponsible.find('option').remove().end();
-            notificationBarService.getLoadStatus().loading();
-            $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
-                
-                notificationBarService.getLoadStatus().done();
-            });
+            $scope.getResponsiblesGoal(reponsibleId);
         });
+        $scope.getResponsiblesGoal = function(reponsibleId){
+            if(reponsibleId == ''){
+                $scope.data.responsibleGoals = [];
+            }else{
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibleProgram : reponsibleId})).success(function(data){
+                    $scope.data.responsibleGoals = data;
+                    notificationBarService.getLoadStatus().done();
+                });
+            }
+        };
         
         var form = angular.element('form');
         form.submit(function(){
@@ -275,6 +273,12 @@ angular.module('seipModule.controllers', [])
             }
         ];
         $scope.templateOptions.setTemplate($scope.templates[0]);
+        
+        $scope.init = function(){
+            $scope.getResponsiblesGoal(programResponsible.val());
+        };
+        
+        $scope.init();
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
         
