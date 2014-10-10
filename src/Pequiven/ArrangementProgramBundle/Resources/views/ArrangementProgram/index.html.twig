@@ -32,11 +32,11 @@
                                 {$ result.tacticalObjective.gerencia.complejo.description $}
                             </td>
                             <td class="low-padding">
-                                <span class="select compact full-width" tabindex="0">
+                                <span class="select compact" tabindex="0">
                                     <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                                     <span class="select-arrow"></span>
                                     <span class="drop-down">
-                                        <a href ng-click="itemEdit(result._links.edit.href)" >{{ 'pequiven.edit'|trans({},'messages') }}</a>
+                                        <a href ng-click="itemEdit(result._links.self.edit.href)" >{{ 'pequiven.edit'|trans({},'messages') }}</a>
                                     </span>
                                 </span>
                             </td>

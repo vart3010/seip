@@ -2,7 +2,9 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Entity\Period;
+use Pequiven\SEIPBundle\Entity\User;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * GoalRepository
@@ -12,4 +14,33 @@ use Doctrine\ORM\EntityRepository;
  */
 class GoalRepository extends EntityRepository
 {
+    /**
+     * Retorna las metas del usuario en los programa de gestion donde no es responsable
+     * @param User $user
+     * @param Period $period
+     * @param array $criteria
+     * @return type
+     */
+    function findGoalsByUserAndPeriod(User $user,Period $period,array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('g.timeline', 't')
+            ->innerJoin('g.responsibles', 'g_r')
+            ->innerJoin('t.arrangementProgram', 'ap')
+            ->andWhere('ap.responsible != :responsible')
+            ->andWhere('ap.period = :period')
+            ->andWhere('g_r.id = :responsible')
+            ->setParameter('period', $period)
+            ->setParameter('responsible', $user)
+            ;
+        if(isset($criteria['notArrangementProgram'])){
+            $qb->andWhere('ap.id != :arrangementProgram');
+            $qb->setParameter('arrangementProgram', $criteria['notArrangementProgram']);
+        }
+        return $qb->getQuery()->getResult();
+    }
+    protected function getAlias() {
+        return 'g';
+    }
 }

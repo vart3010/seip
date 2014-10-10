@@ -16,11 +16,11 @@ use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
  */
 class ArrangementProgramController extends SEIPController
 {
-
+    
     /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
+     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:create.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -33,13 +33,19 @@ class ArrangementProgramController extends SEIPController
                 ->setPeriod($period)
                 ->setCreatedBy($user);
         
-        $form = $this->createCreateForm($entity,array('type' => $type));
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $this->domainManager->create($entity);
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
+        if($request->isMethod('GET')){
+            $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
+//            $entity->setTimeline($timeLine);
         }
-
+        $form = $this->createCreateForm($entity,array('type' => $type));
+        if($request->isMethod('GET')){
+            $form->remove('timeline');
+        }
+        
+        if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
+            $this->domainManager->create($entity);
+            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
+        }
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -61,31 +67,6 @@ class ArrangementProgramController extends SEIPController
         ));
 
         return $form;
-    }
-
-    /**
-     * Displays a form to create a new ArrangementProgram entity.
-     *
-     * @Template()
-     */
-    public function newAction($type)
-    {
-        $entity = new ArrangementProgram();
-        $user = $this->getUser();
-        $period = $this->getRepositoryById('period')->findOneActive();
-        $entity->setType($type)
-               ->setPeriod($period)
-               ->setCreatedBy($user)
-                ;
-        $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-        $entity->addTimeline($timeLine);
-        
-        $form   = $this->createCreateForm($entity,array('type' => $type));
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
     }
 
     /**
@@ -153,7 +134,6 @@ class ArrangementProgramController extends SEIPController
     /**
      * Edits an existing ArrangementProgram entity.
      *
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
      */
     public function updateAction(Request $request)
     {
@@ -166,50 +146,47 @@ class ArrangementProgramController extends SEIPController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-        $originalTimelines = new \Doctrine\Common\Collections\ArrayCollection();
         $originalGoalsArray = array();
+        $timeline = $entity->getTimeline();
         // Create an ArrayCollection of the current Tag objects in the database
-        foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline->getGoals() as $goal) {
-                $originalGoalsArray[$timeline->getId()][] = $goal;
-            }
-            $originalTimelines->add($timeline);
+        foreach ($timeline->getGoals() as $goal) {
+            $originalGoalsArray[$timeline->getId()][] = $goal;
         }
         
         $deleteForm = $this->createDeleteForm($id);
-        
         $editForm = $this->createEditForm($entity);
-        $editForm->submit($request);
+        
+        $editForm->submit($request,false);
         
         if ($editForm->isValid()) {
-            foreach ($originalTimelines as $originalTimeline) {
-                if(false === $entity->getTimelines()->contains($originalTimeline)){
-                    $entity->getTimelines()->removeElement($originalTimeline);
-                    $em->remove($originalTimeline);
-                }else{
-                    $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
-                    if(isset($originalGoalsArray[$timeline->getId()])){
-                        $goals = $originalGoalsArray[$timeline->getId()];
-                        foreach ($goals as $originalGoal) {
-                            if(false === $timeline->getGoals()->contains($originalGoal)){
-                                $timeline->getGoals()->removeElement($originalGoal);
-                                $em->remove($originalGoal);
-                            }
-                        }
+            $timeline = $entity->getTimeline();
+            if(isset($originalGoalsArray[$timeline->getId()])){
+                $goals = $originalGoalsArray[$timeline->getId()];
+                foreach ($goals as $originalGoal) {
+                    if(false === $timeline->getGoals()->contains($originalGoal)){
+                        $timeline->getGoals()->removeElement($originalGoal);
+                        $em->remove($originalGoal);
                     }
                 }
-                
             }
+                
             $this->domainManager->update($entity);
 
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
         }
-
-        return array(
+        
+        $data = array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ); 
+        if($editForm->isValid() === false){
+            $data['formErrors'] = $editForm;
+        }
+        
+        $view = $this->view($data);
+        $view->setTemplate('PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig');
+        return $this->handleView($view);
     }
 
     /**

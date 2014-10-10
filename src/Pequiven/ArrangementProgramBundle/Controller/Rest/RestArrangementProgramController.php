@@ -2,13 +2,16 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller\Rest;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use FOS\RestBundle\Controller\Annotations;
+use FOS\RestBundle\Controller\FOSRestController;
+use Pequiven\ArrangementProgramBundle\Form\GoalDetailsType;
+use Pequiven\ArrangementProgramBundle\Model\GoalDetails;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Controlador rest de los programas de gestion
@@ -29,11 +32,12 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
-        $timelines = $entity->getTimelines();
+        $timeline = $entity->getTimeline();
         $data = array();
-        foreach ($timelines[0]->getGoals() as $goal) {
+        foreach ($timeline->getGoals() as $goal) {
             $data[] = $goal->getGoalDetails();
         }
+        
         $view = $this->view();
         $result = array(
             'data' => $data,
@@ -57,19 +61,57 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
-        $form = $this->createForm(new \Pequiven\ArrangementProgramBundle\Form\GoalDetailsType(),$entity);
+        $form = $this->createForm(new GoalDetailsType(),$entity);
         $dataRequest = $request->request->all();
         
         unset($dataRequest['id']);
         unset($dataRequest['null']);
         
         $form->submit($dataRequest,false);
-//        var_dump($dataRequest);
         $success = false;
         if($form->isValid()){
-            $success = true;
+            //Habilitar limpiar los valores reales si el planeado se establecio en cero
+            $isEnabledClearRealByPlannedEmpty = true;
+            if($isEnabledClearRealByPlannedEmpty === true){
+                $propertyAccessor = new PropertyAccessor();
+                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                    $valuePlanned = $propertyAccessor->getValue($entity,$planned);
+                    $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                    $valueReal = $propertyAccessor->getValue($entity, $monthReal);
+                    if($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null){
+                        $propertyAccessor->setValue($entity, $monthReal, 0);
+                    }else if($valueReal > $valuePlanned){
+                        //Valida que el valor real no pueda ser mayor al planeado.
+                        $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+                    }
+                }
+            }
+            //Habilitar limpiar los valores planeados no sobrepasen el 100% distribuido en todas las columnas
+            $clearPlannedOnComplete = true;
+            if($clearPlannedOnComplete === true){
+                //Limite de porcentaje que se asigna al planeado
+                $limitPlannedPercentaje = 100;
+                $percentajeAcumulated = 0;
+                $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+                $disable = false;
+                foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                    $percentaje = $propertyAccessor->getValue($entity,$planned);
+                    $percentajeAcumulated += $percentaje;
+                    if($disable){
+                        $propertyAccessor->setValue($entity, $planned, 0);
+                        continue;
+                    }
+                    if($percentajeAcumulated >= $limitPlannedPercentaje){
+                        $diff = $percentaje - ($percentajeAcumulated - $limitPlannedPercentaje);
+                        $propertyAccessor->setValue($entity, $planned,$diff);
+                        $disable = true;
+                    }
+                }
+            }
+            
             $em->persist($entity);
             $em->flush();
+            $success = true;
         }else{
             $entity = $form;
         }
@@ -82,7 +124,7 @@ class RestArrangementProgramController extends FOSRestController
             'messages' => 'Exitooooo'
         );
         $view->setData($result);
-        $view->getSerializationContext()->setGroups(array('id','api_list','goalDetails'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
         return $view;
     }

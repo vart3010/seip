@@ -231,6 +231,25 @@ class GoalDetails extends Base
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="goalDetails")
      */
     private $goal;
+    
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="int",mapping="goal.weight")
+     */
+    private $goalWeight;
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="date",mapping="goal.startDate")
+     */
+    private $goalDateStart;
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="date",mapping="goal.endDate")
+     */
+    private $goalDateEnd;
 
     /**
      * Get id

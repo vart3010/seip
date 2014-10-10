@@ -60,10 +60,10 @@ class Goal
      * Responsables
      * @var \Pequiven\SEIPBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="goals")
+     * @ORM\JoinTable(name="goals_users")
      */
-    private $responsible;
+    private $responsibles;
 
     /**
      * Peso
@@ -105,7 +105,11 @@ class Goal
      * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
-
+    
+    public function __construct() {
+        $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -183,29 +187,6 @@ class Goal
     public function getEndDate()
     {
         return $this->endDate;
-    }
-
-    /**
-     * Set responsible
-     *
-     * @param integer $responsible
-     * @return Goal
-     */
-    public function setResponsible($responsible)
-    {
-        $this->responsible = $responsible;
-
-        return $this;
-    }
-
-    /**
-     * Get responsible
-     *
-     * @return integer 
-     */
-    public function getResponsible()
-    {
-        return $this->responsible;
     }
 
     /**
@@ -352,5 +333,39 @@ class Goal
     public function prePersist()
     {
         $this->goalDetails = new GoalDetails();
+    }
+
+    /**
+     * Add responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @return Goal
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsible)
+    {
+        $responsible->addGoal($this); 
+        $this->responsibles->add($responsible);
+
+        return $this;
+    }
+
+    /**
+     * Remove responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->removeElement($responsibles);
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles()
+    {
+        return $this->responsibles;
     }
 }

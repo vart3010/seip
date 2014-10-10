@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
 
 /**
  * Programa de gestion
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
-class ArrangementProgram
+class ArrangementProgram extends Model
 {
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
@@ -74,17 +75,17 @@ class ArrangementProgram
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id")
+     * @ORM\JoinColumn(name="user_responsible_id",nullable=false)
      */
     private $responsible;
 
     /**
-     * Lineas de tiempo
+     * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
      *
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
-    private $timelines;
+    protected $timeline;
 
     /**
      * Revisado por
@@ -143,10 +144,6 @@ class ArrangementProgram
      */
     private $createdBy;
 
-    public function __construct() {
-        $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
     /**
      * Get id
      *
@@ -410,40 +407,6 @@ class ArrangementProgram
         return $this->approvedBy;
     }
 
-    /**
-     * Add timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     * @return ArrangementProgram
-     */
-    public function addTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $timelines->setArrangementProgram($this);
-        $this->timelines->add($timelines);
-
-        return $this;
-    }
-
-    /**
-     * Remove timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     */
-    public function removeTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $this->timelines->removeElement($timelines);
-    }
-
-    /**
-     * Get timelines
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTimelines()
-    {
-        return $this->timelines;
-    }
-    
     function getType() {
         return $this->type;
     }
@@ -461,5 +424,16 @@ class ArrangementProgram
     function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
         $this->createdBy = $createdBy;
         return $this;
+    }
+    
+    function getTypeLabel() {
+        
+        $labels = array(
+            self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
+            self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',
+        );
+        if(isset($labels[$this->type])){
+            return $labels[$this->type];
+        }
     }
 }

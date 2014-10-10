@@ -39,8 +39,6 @@ class GoalDetailsType extends AbstractType
             ->add('novemberReal')
             ->add('decemberPlanned')
             ->add('decemberReal')
-            ->add('status')
-            ->add('goal')
         ;
     }
     

@@ -40,7 +40,7 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.start_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium validate[required]",
+                    'class' => "input datepicker input-medium validate[required]",
                     'ng-model' => 'model.goal.startDate'
                 ),
                 'widget' => 'single_text',
@@ -51,22 +51,24 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.end_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium validate[required]",
+                    'class' => "input datepicker input-medium validate[required]",
                     'ng-model' => 'model.goal.endDate',
                 ),
                 'widget' => 'single_text',
                 'required' => true,
                 'format' => 'yyyy-MM-dd'
             ))
-            ->add('responsible',null,array(
+            ->add('responsibles',null,array(
                 'label' => 'pequiven.form.responsible',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-xlarge",
-                    'ng-model' => 'model.goal.responsible',
+                    'ng-model' => 'model.goal.responsibles',
                     'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsibleGoals',
                     'style' => 'width: 270px',
+                    'multiple' => 'multiple'
                 ),
+                'multiple' => true,
                 'empty_value' => 'Seleccione',
                 'required' => true,
             ))
@@ -74,8 +76,9 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.weight',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-mini validate[required,min[1] ]",
+                    'class' => "input input-mini validate[required,min[1],max[100] ]",
                     'min' => '1',
+                    'max' => '100',
                     'ng-model' => 'model.goal.weight',
                 ),
                 'required' => true,
@@ -100,6 +103,7 @@ class GoalType extends AbstractType
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal',
             'translation_domain' => 'PequivenArrangementProgramBundle',
             'csrf_protection' => false,
+            'validation_groups' => array('base'),
         ));
     }
 

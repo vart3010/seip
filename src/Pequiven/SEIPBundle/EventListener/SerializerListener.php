@@ -96,10 +96,14 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $isLoadRealEnabled = true;
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = true;
-        //Permitir cargar valores reales de meses adelantados
+        //Habilitar carga de valores reales de meses adelantados
         $isEnabledLoadRealFuture = false;
-        //Deshabilitar la carga de valores reales atrasados
-        $isEnabledLoadRealLate = false;
+        //Habilitar la carga de valores reales atrasados
+        $isEnabledLoadRealLate = true;
+        //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
+        $isEnabledEditByPlannedLoad = true;
+        //Deshabilitar las celdas planeadas cuando se distribuya el 100%
+        $disablePlannedOnComplete = true;
         
         $month = $date->format('m');
         
@@ -127,6 +131,35 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 }
             }
         }
+        if($isEnabledEditByPlannedLoad === true){
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $value = $propertyAccessor->getValue($object,$planned);
+                $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                if($value == '' || $value == '0' || $value === null){
+                    $data[$monthReal]['isEnabled'] = false;
+                }
+            }
+        }
+        
+        if($disablePlannedOnComplete === true){
+            //Limite de porcentaje que se asigna al planeado
+            $limitPlannedPercentaje = 100;
+            $percentajeAcumulated = 0;
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            $disable = false;
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $percentaje = $propertyAccessor->getValue($object,$planned);
+                $percentajeAcumulated += $percentaje;
+                if($disable){
+                    $data[$planned]['isEnabled'] = false;
+                    continue;
+                }
+                if($percentajeAcumulated >= $limitPlannedPercentaje){
+                    $disable = true;
+                }
+            }
+        }
         $event->getVisitor()->addData('_data',$data);
         
     }
@@ -135,8 +168,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $data = array();
         $object = $event->getObject();
         if($object->getId() > 0){
-            $data['self']['href'] = $this->generateUrl('arrangementprogram_show', array('id' => $object->getId()));
-            $data['self']['edit'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
+            $data['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
+            $data['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
         }
         $event->getVisitor()->addData('_links',$data);
     }

@@ -41,7 +41,7 @@ class Timeline
      * Programa de gestion
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
      * 
-     * @ORM\ManyToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timelines")
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timeline")
      * @ORM\JoinColumn(nullable=false)
      */
     private $arrangementProgram;

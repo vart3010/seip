@@ -5,17 +5,19 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
 {% block body -%}
-<div ng-controller="ArrangementProgramController">
+<div>
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ entity.getTypeLabel|trans }}</span>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
         </h1>
     </hgroup>
         
     <fieldset class="fieldset">
-        <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</legend>
+        <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;(<b>{{ entity.getTypeLabel|trans }}</b>)</legend>
 
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.period'|trans }}</label>
@@ -71,8 +73,8 @@
             $('a.showPopup').click(function(e) {
                 e.preventDefault();
                 var $this = $(this);
-                var horizontalPadding = 20;
-                var verticalPadding = 20;
+                var horizontalPadding = 10;
+                var verticalPadding = 10;
                 var width = 1200;
                 var heigth = 600;
                 $('<iframe id="site" src="' + this.href + '" style="padding:0"/>').dialog({

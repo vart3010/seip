@@ -20,45 +20,65 @@
                     <th scope="col" width="120" class="align-right">{{ 'seip.table.header.actions'|trans }}</th>
                 </tr>
         </thead>
-        <tbody ng-init="{% if entity.timelines.count > 0 %}goals={{ entity.timelines[0].goals|serialize('json',serialization_context().setGroups(['id','api_list'])) }}{% endif %}">
+        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
             <tr ng-if="goals.length == 0">
                 <td colspan="7" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}
                 </td>
             </tr>
-            <tr ng-repeat="goal in goals">
+            <tr ng-repeat="goal in goals" ng-init="parentIndex = $index">
                 <th scope="row">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][name]" value="{$ goal.name $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][startDate]" value="{$ goal.startDate $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][endDate]" value="{$ goal.endDate $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][responsible]" value="{$ goal.responsible.id $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
-                    <input type="hidden" name="arrangementprogram[timelines][0][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][name]" value="{$ goal.name $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][startDate]" value="{$ goal.startDate $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][endDate]" value="{$ goal.endDate $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ parentIndex $}][responsibles][]" ng-repeat="responsible in goal.responsibles" value="{$ responsible.id $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
+                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
                     {$ goal.name $}<br>
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
                     <small>{$ goal.observations $}</small>
                 </th>
                 <td>
                     <span ng-if="goal.typeGoal">
                         {$ goal.typeGoal.description $}
+                        <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.description)'></span>
                     </span>
                     <span ng-if="!goal.typeGoal">
                         {$ 'pequiven.form.not_applicable'|trans $}
                     </span>
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.typeGoal)'></span>
                 </td>
-                <td>{$ goal.startDate | myDate $}</td>
-                <td>{$ goal.endDate | myDate $}</td>
-                <td>{$ goal.weight $}</td>
-                <td>{$ goal.responsible.firstName + " "+ goal.responsible.lastName $} <small class="tag">{$ " ("+goal.responsible.username+")" $}</small></td>
+                <td>
+                    {$ goal.startDate | myDate $}
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.startDate)'></span>
+                </td>
+                <td>
+                    {$ goal.endDate | myDate $}
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.endDate)'></span>
+                </td>
+                <td>
+                    {$ goal.weight $}%
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.weight)'></span>
+                </td>
+                <td>
+                    <span ng-repeat="responsible in goal.responsibles">
+                        {$ responsible.firstName + " "+ responsible.lastName $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
+                    </span>
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.responsibles)'></span>
+                </td>
                 <td class="align-right vertical-center">
-                    <span class="button-group compact">
-                        <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
-                        <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm" title="{{ "pequiven.actions.delete"|trans({},"messages") }}"></a>
+                    <span class="select compact" tabindex="0">
+                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                        <span class="select-arrow"></span>
+                        <span class="drop-down">
+                            <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                        </span>
                     </span>
                 </td>
             </tr>
         </tbody>
     </table>
-        
     </div>
 </div>

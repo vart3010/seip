@@ -21,29 +21,23 @@ class ArrangementProgramType extends AbstractType
         $builder
             ->add('categoryArrangementProgram',null,array(
                 'label' => 'pequiven.form.category_arrangement_program',
-                'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-large",
                     "ng-model" => "model.arrangementProgram.categoryArrangementProgram",
                     "ng-change" => "getTypeGoal(model.arrangementProgram.categoryArrangementProgram)",
                 ),
                 'empty_value' => 'pequiven.select',
-                'required' => true,
+                'required' => false,
             ))
             ->add('process',null,array(
                 'label' => 'pequiven.form.process',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-xlarge"
+                    'class' => "input input-xlarge validate[required]"
                 ),
                 'required' => true,
             ))
-            ->add('timelines','collection',array(
-                'type' => new TimelineType(),
-                'allow_add' => true,
-                'allow_delete' => false,
-                'by_reference' => false,
-                'cascade_validation' => true,
+            ->add('timeline',new TimelineType(),array(
             ))
         ;
         
@@ -54,7 +48,6 @@ class ArrangementProgramType extends AbstractType
                        return $repository->findQueryObjetivesOperationalByObjetiveTactic($tacticalObjective);
                    };
                 }
-               
                 $form->add('operationalObjective',null,array(
                         'label' => 'pequiven.form.operational_objective',
                         'label_attr' => array('class' => 'label'),
@@ -79,13 +72,13 @@ class ArrangementProgramType extends AbstractType
                         'label' => 'pequiven.form.responsible',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
-                            'class' => "select2 input-xlarge"
+                            'class' => "select2 input-xlarge",
                         ),
                         'query_builder' => function(UserRepository $repository){
                             return $repository->findQueryToAssingTacticArrangementProgram();
                         },
                         'empty_value' => 'pequiven.select',
-                        'required' => true,
+                        'required' => false,
                     ))
                     ->add('tacticalObjective',null,array(
                         'label' => 'pequiven.form.tactical_objective',
@@ -98,20 +91,21 @@ class ArrangementProgramType extends AbstractType
                         },
                         'empty_value' => 'pequiven.select',
                         'required' => true,
-                ))
-                ;
+                ));
+                        
             }elseif($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            
                 $form->add('responsible',null,array(
                         'label' => 'pequiven.form.responsible',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
-                            'class' => "select2 input-xlarge"
+                            'class' => "select2 input-xlarge",
                         ),
                         'query_builder' => function(UserRepository $repository){
                             return $repository->findQueryToAssingTacticArrangementProgram();
                         },
                         'empty_value' => 'pequiven.select',
-                        'required' => true,
+                        'required' => false
                     ))
                     ->add('tacticalObjective',null,array(
                         'label' => 'pequiven.form.tactical_objective',
@@ -137,7 +131,11 @@ class ArrangementProgramType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($formModifier){
             $form = $event->getForm();
             $data = $form->getData();
-            $formModifier($form,$data->getTacticalObjective());
+            
+            if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $formModifier($form,$data->getTacticalObjective());
+                
+            }
         });
         
     }
@@ -154,9 +152,9 @@ class ArrangementProgramType extends AbstractType
             'validation_groups' => function (\Symfony\Component\Form\FormInterface $form){
                 $data = $form->getData();
                 if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                    return array('tacticalObjective');
+                    return array('base','tacticalObjective');
                 }elseif($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                    return array('operationalObjective');
+                    return array('base','operationalObjective');
                 }
             },
         ));

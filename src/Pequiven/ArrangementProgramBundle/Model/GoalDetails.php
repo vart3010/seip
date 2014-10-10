@@ -2,6 +2,8 @@
 
 namespace Pequiven\ArrangementProgramBundle\Model;
 
+use Exception;
+
 /**
  * Modelo de detalle de meta
  *
@@ -59,6 +61,15 @@ class GoalDetails {
         return $months[$real];
     }
     
+    static function getMonthOfRealByMonth($monthNumber) {
+        $months = self::getMonthsReal();
+        $key = array_search($monthNumber, $months);
+        if($key === false){
+            throw new Exception(sprintf('month number "%s" not defined',$monthNumber));
+        }
+        return $key;
+    }
+    
     static function getMonthsReal(){
         static $months = array(
             self::JANUARY_REAL => 1,
@@ -86,7 +97,7 @@ class GoalDetails {
     static function getMonthOfPlanned($planned) {
         $months = self::getMonthsPlanned();
         if(!isset($months[$planned])){
-            throw new Exception(sprintf('month planned %s not defined',$planned));
+            throw new Exception(sprintf('month planned "%s" not defined',$planned));
         }
         return $months[$planned];
     }
