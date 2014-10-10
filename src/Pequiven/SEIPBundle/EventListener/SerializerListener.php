@@ -156,7 +156,6 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 }
             }
         }
-//        var_dump($data);
         $event->getVisitor()->addData('_data',$data);
         
     }
