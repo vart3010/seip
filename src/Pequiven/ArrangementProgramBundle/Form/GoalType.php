@@ -40,7 +40,7 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.start_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium validate[required]",
+                    'class' => "input datepicker input-medium validate[required]",
                     'ng-model' => 'model.goal.startDate'
                 ),
                 'widget' => 'single_text',
@@ -51,7 +51,7 @@ class GoalType extends AbstractType
                 'label' => 'pequiven.form.end_date',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
-                    'class' => "input input-medium validate[required]",
+                    'class' => "input datepicker input-medium validate[required]",
                     'ng-model' => 'model.goal.endDate',
                 ),
                 'widget' => 'single_text',
