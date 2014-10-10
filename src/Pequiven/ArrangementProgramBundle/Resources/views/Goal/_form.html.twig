@@ -39,5 +39,24 @@
     jQuery(document).ready(function(){
         jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
         jQuery('#goalForms select').select2();
+        
+        $( "#goal_startDate" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "yy-mm-dd",
+            onClose: function( selectedDate ) {
+              $( "#goal_endDate" ).datepicker( "option", "minDate", selectedDate );
+            }
+          });
+          $( "#goal_endDate" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "yy-mm-dd",
+            onClose: function( selectedDate ) {
+              $( "#goal_startDate" ).datepicker( "option", "maxDate", selectedDate );
+            }
+          });
     });
 </script>
