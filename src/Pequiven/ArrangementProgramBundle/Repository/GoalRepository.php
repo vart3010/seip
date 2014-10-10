@@ -26,10 +26,11 @@ class GoalRepository extends EntityRepository
         $qb = $this->getQueryBuilder();
         $qb
             ->innerJoin('g.timeline', 't')
+            ->innerJoin('g.responsibles', 'g_r')
             ->innerJoin('t.arrangementProgram', 'ap')
             ->andWhere('ap.responsible != :responsible')
             ->andWhere('ap.period = :period')
-            ->andWhere('g.responsible = :responsible')
+            ->andWhere('g_r.id = :responsible')
             ->setParameter('period', $period)
             ->setParameter('responsible', $user)
             ;

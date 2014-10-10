@@ -58,15 +58,17 @@ class GoalType extends AbstractType
                 'required' => true,
                 'format' => 'yyyy-MM-dd'
             ))
-            ->add('responsible',null,array(
+            ->add('responsibles',null,array(
                 'label' => 'pequiven.form.responsible',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-xlarge",
-                    'ng-model' => 'model.goal.responsible',
+                    'ng-model' => 'model.goal.responsibles',
                     'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsibleGoals',
                     'style' => 'width: 270px',
+                    'multiple' => 'multiple'
                 ),
+                'multiple' => true,
                 'empty_value' => 'Seleccione',
                 'required' => true,
             ))
@@ -101,6 +103,7 @@ class GoalType extends AbstractType
             'data_class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal',
             'translation_domain' => 'PequivenArrangementProgramBundle',
             'csrf_protection' => false,
+            'validation_groups' => array('base'),
         ));
     }
 

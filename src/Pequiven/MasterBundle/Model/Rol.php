@@ -11,6 +11,15 @@ use FOS\UserBundle\Entity\Group as BaseGroup;
  */
 class Rol extends BaseGroup
 {
+    /**
+     * Propietario
+     */
+    const TYPE_ROL_OWNER = 0;
+    /**
+     * Auxiliar
+     */
+    const TYPE_ROL_AUX = 1;
+    
     const ROLE_DEFAULT = 0;
     const ROLE_WORKER_PQV = 1000;
     const ROLE_SUPERVISER = 2000;

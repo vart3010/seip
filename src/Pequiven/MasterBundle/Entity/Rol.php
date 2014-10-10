@@ -75,7 +75,13 @@ class Rol extends modelRol
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeRol", type="integer")
+     */
+    private $typeRol = self::TYPE_ROL_OWNER;
 
     /**
      * Get id
@@ -246,5 +252,30 @@ class Rol extends modelRol
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
+    }
+    
+    
+
+    /**
+     * Set typeRol
+     *
+     * @param integer $typeRol
+     * @return Rol
+     */
+    public function setTypeRol($typeRol)
+    {
+        $this->typeRol = $typeRol;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRol
+     *
+     * @return integer 
+     */
+    public function getTypeRol()
+    {
+        return $this->typeRol;
     }
 }
