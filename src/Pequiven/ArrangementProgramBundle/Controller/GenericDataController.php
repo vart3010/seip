@@ -13,11 +13,15 @@ class GenericDataController extends SEIPController
 {
     
     /**
-     * Obtiene los responsable de una meta
+     * Obtiene los responsable que se pueden asignar a una meta
      */
-    function getResponsibleGoalsAction()
+    function getResponsibleGoalsAction($responsibleProgram)
     {
-        $user = $this->getUser();
+        $repository = $this->getRepositoryById('user');
+        $user = $repository->find($responsibleProgram);
+        if(!$user){
+            throw $this->createNotFoundException();
+        }
         $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($user);
         $view = $this->view();
         $view->setData($results);
