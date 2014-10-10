@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
+use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\ObjetiveBundle\Form\Type\Operative\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,32 @@ class ObjetiveOperativeController extends baseController {
      */
     public function listAction() {
         return array(
+        );
+    }
+    
+    /**
+     * Finds and displays a Objetive entity of level Operative by Id.
+     *
+     * @Template("PequivenObjetiveBundle:Operative:show.html.twig")
+     */
+    public function showAction(Request $request)
+    {
+        $id = $request->get("id");
+        //$ref = $request->get("ref");
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
+        //$entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $ref));
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Objetive entity.');
+        }
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity
+            //'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -128,6 +155,10 @@ class ObjetiveOperativeController extends baseController {
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
                 //En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
                 if (!isset($data['check_gerencia'])) {
+                    $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($data['gerenciaSecond'])));
+                    if(isset($data['indicators'])){
+                        $respIndicator = $this->createIndicator($data,array('totalGerencia' => count($data['gerenciaSecond'])), $totalRef);
+                    }
                     for ($i = 0; $i < count($data['gerenciaSecond']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
@@ -136,6 +167,7 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject . $i}->setGerencia($gerenciaSecond->getGerencia());
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $i}->setComplejo($complejo);
+                        ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -154,12 +186,17 @@ class ObjetiveOperativeController extends baseController {
                     foreach ($gerencias as $gerencia) {
                         $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $gerencia->getId()));
                         $complejo = $gerencia->getComplejo();
+                        $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
+                        if(isset($data['indicators'])){
+                            $respIndicator = $this->createIndicator($data,count($gerenciasSecond), $totalRef);
+                        }
                         foreach ($gerenciasSecond as $gerenciaSecond) {
                             ${$nameObject . $j} = clone $object;
                             ${$nameObject . $j}->resetIndicators();
                             ${$nameObject . $j}->setGerencia($gerencia);
                             ${$nameObject . $j}->setGerenciaSecond($gerenciaSecond);
                             ${$nameObject . $j}->setComplejo($complejo);
+                            ${$nameObject . $j}->setRef($totalRef[$j]);
                             if (isset($data['indicators'])) {
                                 foreach ($data['indicators'] as $value) {
                                     $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -177,6 +214,10 @@ class ObjetiveOperativeController extends baseController {
             } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
                 //En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
                 if (!isset($data['check_gerencia'])) {
+                    $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($data['gerenciaSecond'])));
+                    if(isset($data['indicators'])){
+                        $respIndicator = $this->createIndicator($data,array('totalGerencia' => count($data['gerenciaSecond'])), $totalRef);
+                    }
                     for ($i = 0; $i < count($data['gerenciaSecond']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
@@ -185,6 +226,7 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject . $i}->setGerencia($gerenciaSecond->getGerencia());
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $i}->setComplejo($complejo);
+                        ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -199,6 +241,10 @@ class ObjetiveOperativeController extends baseController {
                     $j = 0;
                     $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('complejo' => $user->getComplejo()->getId(), 'modular' => true));
                     $gerencia = $user->getGerencia();
+                    $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
+                    if(isset($data['indicators'])){
+                        $respIndicator = $this->createIndicator($data,count($gerenciasSecond), $totalRef);
+                    }
                     foreach ($gerenciasSecond as $gerenciaSecond) {
                         ${$nameObject . $j} = clone $object;
                         ${$nameObject . $j}->resetIndicators();
@@ -206,6 +252,7 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject . $j}->setGerencia($gerencia);
                         ${$nameObject . $j}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $j}->setComplejo($complejo);
+                        ${$nameObject . $j}->setRef($totalRef[$j]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -221,6 +268,10 @@ class ObjetiveOperativeController extends baseController {
             } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
                 //En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
                 if (!isset($data['check_gerencia'])) {
+                    $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($data['gerenciaSecond'])));
+                    if(isset($data['indicators'])){
+                        $respIndicator = $this->createIndicator($data,array('totalGerencia' => count($data['gerenciaSecond'])), $totalRef);
+                    }
                     for ($i = 0; $i < count($data['gerenciaSecond']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
@@ -229,6 +280,7 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject . $i}->setGerencia($gerenciaSecond->getGerencia());
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $i}->setComplejo($complejo);
+                        ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -243,6 +295,10 @@ class ObjetiveOperativeController extends baseController {
                     $j = 0;
                     $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $user->getGerencia()->getId()));
                     $gerencia = $user->getGerencia();
+                    $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
+                    if(isset($data['indicators'])){
+                        $respIndicator = $this->createIndicator($data,count($gerenciasSecond), $totalRef);
+                    }
                     foreach ($gerenciasSecond as $gerenciaSecond) {
                         ${$nameObject . $j} = clone $object;
                         ${$nameObject . $j}->resetIndicators();
@@ -250,6 +306,7 @@ class ObjetiveOperativeController extends baseController {
                         ${$nameObject . $j}->setGerencia($gerencia);
                         ${$nameObject . $j}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $j}->setComplejo($complejo);
+                        ${$nameObject . $j}->setRef($totalRef[$j]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
                                 $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -266,6 +323,8 @@ class ObjetiveOperativeController extends baseController {
                 $object->setGerenciaSecond($user->getGerenciaSecond());
                 $object->setGerencia($user->getGerencia());
                 $object->setComplejo($user->getComplejo());
+                $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => 1));
+                $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -276,6 +335,8 @@ class ObjetiveOperativeController extends baseController {
                 }
                 $em->persist($object);
             } else {
+                $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => 1));
+                $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -289,7 +350,6 @@ class ObjetiveOperativeController extends baseController {
 
             try {
                 $em->flush();
-//            $lastId = $em->getConnection()->lastInsertId();
                 $em->getConnection()->commit();
             } catch (Exception $e) {
                 $em->getConnection()->rollback();
@@ -297,8 +357,18 @@ class ObjetiveOperativeController extends baseController {
             }
 
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
-            $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $ref));
-            $this->createArrangementRange($objetives, $data);
+            foreach($totalRef as $value){
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $this->createArrangementRange($objetives, $data);
+            }
+            
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+                if(isset($data['indicators'])){
+                    $this->removeIndicators($totalRef);
+                    $this->addIndicators($totalRef);
+                    $this->addIndicatorArrangementRange($totalRef);
+                }
+            }
 
             $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.registerObjetiveOperativeSuccessfull', array(), 'PequivenObjetiveBundle'));
 
@@ -311,6 +381,199 @@ class ObjetiveOperativeController extends baseController {
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que remueve los indicadores asociados a los objetivos de más
+     * @param type $totalRef
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function removeIndicators($totalRef = array()){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+            
+        //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => '1.3.10.'));
+        //$indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => '1.3.9.'));
+        $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $j = 1;
+        foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
+            if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
+                $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
+                foreach($indicators as $indicator){
+                    $objetive->removeIndicator($indicator);
+                    $em->persist($objetive);
+                }
+            }
+            $j++;
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Función que agrega los indicadores reales a cada objetivo creado de más
+     * @param type $totalRef
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addIndicators($totalRef = array()){
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        
+        $j = 1;
+        foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
+            if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
+                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
+                foreach($indicators as $indicator){
+                    $objetive->addIndicator($indicator);
+                    $em->persist($objetive);
+                }
+            }
+            $j++;
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Función que sirve para crear los rango para los Indicadores Operativos creados de más
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addIndicatorArrangementRange($totalRef){
+        $nameObject = 'object';
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        
+        //Obtenemos los Indicatores Operativos creados originalmente desde el formulario de Objetivos Operativos
+        $indicatorsOriginals = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $arrangementRangeOriginals = array();
+        $k = 0;
+        foreach($indicatorsOriginals as $indicatorOriginal){//Recorremos los Indicadores Operativos creados originalmente desde el formulario de Objetivos Operativos
+            //Obtenemos los Rangos de Gestión de los Indicadores Operativos creados originalmente
+            $arrangementRangeOriginals[$k] = $em->getRepository('PequivenArrangementBundle:ArrangementRange')->findOneBy(array('indicator' => $indicatorOriginal));
+            $k++;
+        }
+        
+        $j = 1;
+        $i = 0;
+        foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
+            if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
+                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $p = 0;
+                foreach($indicators as $indicator){
+                    ${$nameObject . $i} = new ArrangementRange();
+                    ${$nameObject . $i}->setIndicator($indicator);
+                    ${$nameObject . $i}->setTypeRangeTop($arrangementRangeOriginals[$p]->getTypeRangeTop());
+                    ${$nameObject . $i}->setTypeRangeMiddleTop($arrangementRangeOriginals[$p]->getTypeRangeMiddleTop());
+                    ${$nameObject . $i}->setTypeRangeMiddleBottom($arrangementRangeOriginals[$p]->getTypeRangeMiddleBottom());
+                    ${$nameObject . $i}->setTypeRangeBottom($arrangementRangeOriginals[$p]->getTypeRangeBottom());
+                    ${$nameObject . $i}->setRankTopBasic($arrangementRangeOriginals[$p]->getRankTopBasic());
+                    ${$nameObject . $i}->setRankTopMixedTop($arrangementRangeOriginals[$p]->getRankTopMixedTop());
+                    ${$nameObject . $i}->setRankTopMixedBottom($arrangementRangeOriginals[$p]->getRankTopMixedBottom());
+                    ${$nameObject . $i}->setRankMiddleTopBasic($arrangementRangeOriginals[$p]->getRankMiddleTopBasic());
+                    ${$nameObject . $i}->setRankMiddleTopMixedTop($arrangementRangeOriginals[$p]->getRankMiddleTopMixedTop());
+                    ${$nameObject . $i}->setRankMiddleTopMixedBottom($arrangementRangeOriginals[$p]->getRankMiddleTopMixedBottom());
+                    ${$nameObject . $i}->setRankMiddleBottomBasic($arrangementRangeOriginals[$p]->getRankMiddleBottomBasic());
+                    ${$nameObject . $i}->setRankMiddleBottomMixedTop($arrangementRangeOriginals[$p]->getRankMiddleBottomMixedTop());
+                    ${$nameObject . $i}->setRankMiddleBottomMixedBottom($arrangementRangeOriginals[$p]->getRankMiddleBottomMixedBottom());
+                    ${$nameObject . $i}->setRankBottomBasic($arrangementRangeOriginals[$p]->getRankBottomBasic());
+                    ${$nameObject . $i}->setRankBottomMixedTop($arrangementRangeOriginals[$p]->getRankBottomMixedTop());
+                    ${$nameObject . $i}->setRankBottomMixedBottom($arrangementRangeOriginals[$p]->getRankBottomMixedBottom());
+                    ${$nameObject . $i}->setOpRankTopBasic($arrangementRangeOriginals[$p]->getOpRankTopBasic());
+                    ${$nameObject . $i}->setOpRankTopMixedTop($arrangementRangeOriginals[$p]->getOpRankTopMixedTop());
+                    ${$nameObject . $i}->setOpRankTopMixedBottom($arrangementRangeOriginals[$p]->getOpRankTopMixedBottom());
+                    ${$nameObject . $i}->setOprankMiddleTopBasic($arrangementRangeOriginals[$p]->getOprankMiddleTopBasic());
+                    ${$nameObject . $i}->setOpRankMiddleTopMixedTop($arrangementRangeOriginals[$p]->getOpRankMiddleTopMixedTop());
+                    ${$nameObject . $i}->setOpRankMiddleTopMixedBottom($arrangementRangeOriginals[$p]->getOpRankMiddleTopMixedBottom());
+                    ${$nameObject . $i}->setOprankMiddleBottomBasic($arrangementRangeOriginals[$p]->getOprankMiddleBottomBasic());
+                    ${$nameObject . $i}->setOpRankMiddleBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankMiddleBottomMixedTop());
+                    ${$nameObject . $i}->setOpRankMiddleBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankMiddleBottomMixedBottom());
+                    ${$nameObject . $i}->setOprankBottomBasic($arrangementRangeOriginals[$p]->getOprankBottomBasic());
+                    ${$nameObject . $i}->setOpRankBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankBottomMixedTop());
+                    ${$nameObject . $i}->setOpRankBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankBottomMixedBottom());
+                    
+                    $em->persist(${$nameObject . $i});
+                    $i++;
+                    $p++;
+                }
+            }
+            $j++;
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        } return true;
+    }
+    
+    /**
+     * Función que crea los Indicadores Operativos para los Objetivos Operativos que serán creados de más (cuando se selecciona más de una Gerencia de 1ra Línea)
+     * @param type $data
+     * @param type $options
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function createIndicator($data = array(),$options = array(), $totalRef = array()){
+        
+        $nameObject = 'object';
+        $totalGerencias = $options['totalGerencia'];//Total de Gerencias de 1ra Línea que abarca el Objetivo Operativo a crear
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        
+        $j = 0;//Contador de Indicadores Operativos asociados al Objetivo Operativo
+        for($i = 0; $i < $totalGerencias; $i++){//Recorremos las Gerencias Seleccionada            
+            if($i >= 1){//Consultamos en caso de que exista más de una Gerencia de 1ra Línea
+                $k = 1;//Contador de Indicadores seleccionados en el Select del Formulario
+                foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Operativos ya creados asociados al Objetivo Operativo a crear
+                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    ${$nameObject . $j} = new Indicator();
+                    ${$nameObject . $j}->setRef('IO-'.$totalRef[$i].$k);
+                    ${$nameObject . $j}->setRefParent($totalRef[$i]);
+                    ${$nameObject . $j}->setTmp(false);
+                    ${$nameObject . $j}->setWeight($indicator->getWeight());
+                    ${$nameObject . $j}->setIndicatorLevel($indicator->getIndicatorLevel());
+                    ${$nameObject . $j}->setFormula($indicator->getFormula());
+                    ${$nameObject . $j}->setTendency($indicator->getTendency());
+                    ${$nameObject . $j}->setDescription($indicator->getDescription());
+                    $em->persist(${$nameObject . $j});
+                    $j++;
+                    $k++;
+                }
+            }
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return true;
     }
 
     /**
@@ -770,7 +1033,7 @@ class ObjetiveOperativeController extends baseController {
         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));
         $refObjetiveTactic = $objetiveTactic->getRef();
 
-        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1]);
+        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true));
         $total = count($results);
         if (is_array($results) && $total > 0) {
             $ref = $refObjetiveTactic . ($total + 1) . '.';
@@ -779,6 +1042,33 @@ class ObjetiveOperativeController extends baseController {
         }
 
         return $ref;
+    }
+    
+    /**
+     * Función que devuelve la referencia del objetivo táctico que se esta creando
+     * @param array $options
+     */
+    public function setRef($options = array()) {
+        $em = $this->getDoctrine()->getManager();
+        $objetivesTactics = $options['objetiveTactics'];
+        $totalObjetivesTactics = count($objetivesTactics);
+        $totalRef = array();
+
+        $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));
+        $refObjetiveTactic = $objetiveTactic->getRef();
+
+        $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetivesTactics[$totalObjetivesTactics - 1], array('searchByRef' => true));
+        $total = count($results);
+        
+        for($i = 0; $i < $options['totalGerencias']; $i++){
+            $totalRef[$i] = $refObjetiveTactic . ($total + ($i +1)) . '.';
+            //En caso de que el objetivo tenga varios padres
+            if ($totalObjetivesTactics > 1) {
+                $totalRef[$i].='m';
+            }
+        }
+
+        return $totalRef;
     }
 
 }

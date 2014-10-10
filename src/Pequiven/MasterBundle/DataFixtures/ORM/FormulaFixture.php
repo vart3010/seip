@@ -367,7 +367,7 @@ class FormulaFixture extends AbstractFixture implements OrderedFixtureInterface,
         
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('Confiabilidad Oportuna = (ΣProductos entregados oportunamente / ΣSolicitudes)');
+        $formula->setEquation('Consignación Oportuna = (ΣProductos entregados oportunamente / ΣSolicitudes)');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_TACTICO]));
         $this->addReference('Formula-52', $formula);
             $manager->persist($formula);
@@ -1097,7 +1097,7 @@ class FormulaFixture extends AbstractFixture implements OrderedFixtureInterface,
             
         $formula = new Formula();
         $formula->setEnabled(true);
-        $formula->setEquation('Confiabilidad Oportuna = (ΣProductos entregados oportunamente / ΣSolicitudes)');
+        $formula->setEquation('Consignación Oportuna = (ΣProductos entregados oportunamente / ΣSolicitudes)');
         $formula->setFormulaLevel($this->getReference($lineLevelArray[FormulaLevel::LEVEL_OPERATIVO]));
         $this->addReference('Formula-156', $formula);
             $manager->persist($formula);

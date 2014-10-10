@@ -134,9 +134,27 @@ objetiveOperativeList:
             
 #Muestra un Objetivo Estratégico
 objetiveStrategic_show:
-    path: /{id}
+    path: /arrangement_strategic_objetive/strategic/show/{id}
     defaults: 
-        _controller: pequiven.controller.objetivestrategic:showAction 
+        _controller: pequiven.controller.objetivestrategic:showAction
+    requirements:
+        id: "\d+"
+    methods: [GET]
+            
+#Muestra un Objetivo Táctico
+objetiveTactic_show:
+    path: /arrangement_strategic_objetive/tactic/show/{id}
+    defaults: 
+        _controller: pequiven.controller.objetivetactic:showAction
+    requirements:
+        id: "\d+"
+    methods: [GET]
+            
+#Muestra un Objetivo Operativo
+objetiveOperative_show:
+    path: /arrangement_strategic_objetive/operative/show/{id}
+    defaults: 
+        _controller: pequiven.controller.objetiveoperative:showAction
     requirements:
         id: "\d+"
     methods: [GET]

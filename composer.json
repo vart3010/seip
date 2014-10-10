@@ -42,6 +42,8 @@
         
         "sylius/resource-bundle": "0.10.0",
         
+        "phpoffice/phpexcel": "1.8.0",
+        
         "tecnocreaciones/extjs-bundle": "dev-master"
        
     },

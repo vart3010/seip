@@ -91,11 +91,13 @@ class ObjetiveRepository extends EntityRepository {
                 $query->andWhere("o.gerenciaSecond = " . $options['gerenciaSecondId']);
             }
         } else{
-            if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+            if(!isset($options['searchByRef'])){
+                if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                    $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+                }
             }
         }
-
+        
         return $query->getQuery()->getResult();
     }
     

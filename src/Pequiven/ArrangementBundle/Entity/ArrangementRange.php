@@ -361,6 +361,190 @@ class ArrangementRange extends modelArrangementRange {
     {
         return $this->updatedAt;
     }
+    
+    /**
+     * Set userCreatedAt
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
+     * @return ArrangementRange
+     */
+    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
+    {
+        $this->userCreatedAt = $userCreatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get userCreatedAt
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getUserCreatedAt()
+    {
+        return $this->userCreatedAt;
+    }
+
+    /**
+     * Set userUpdatedAt
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
+     * @return ArrangementRange
+     */
+    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
+    {
+        $this->userUpdatedAt = $userUpdatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get userUpdatedAt
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getUserUpdatedAt()
+    {
+        return $this->userUpdatedAt;
+    }
+
+    /**
+     * Set objetive
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return ArrangementRange
+     */
+    public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
+    {
+        $this->objetive = $objetive;
+
+        return $this;
+    }
+
+    /**
+     * Get objetive
+     *
+     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
+     */
+    public function getObjetive()
+    {
+        return $this->objetive;
+    }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return ArrangementRange
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
+    {
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getIndicator()
+    {
+        return $this->indicator;
+    }
+
+    /**
+     * Set typeRangeTop
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeTop
+     * @return ArrangementRange
+     */
+    public function setTypeRangeTop(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeTop = null)
+    {
+        $this->typeRangeTop = $typeRangeTop;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRangeTop
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
+     */
+    public function getTypeRangeTop()
+    {
+        return $this->typeRangeTop;
+    }
+
+    /**
+     * Set typeRangeMiddleTop
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop
+     * @return ArrangementRange
+     */
+    public function setTypeRangeMiddleTop(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop = null)
+    {
+        $this->typeRangeMiddleTop = $typeRangeMiddleTop;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRangeMiddleTop
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
+     */
+    public function getTypeRangeMiddleTop()
+    {
+        return $this->typeRangeMiddleTop;
+    }
+
+    /**
+     * Set typeRangeMiddleBottom
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom
+     * @return ArrangementRange
+     */
+    public function setTypeRangeMiddleBottom(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom = null)
+    {
+        $this->typeRangeMiddleBottom = $typeRangeMiddleBottom;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRangeMiddleBottom
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
+     */
+    public function getTypeRangeMiddleBottom()
+    {
+        return $this->typeRangeMiddleBottom;
+    }
+
+    /**
+     * Set typeRangeBottom
+     *
+     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeBottom
+     * @return ArrangementRange
+     */
+    public function setTypeRangeBottom(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeBottom = null)
+    {
+        $this->typeRangeBottom = $typeRangeBottom;
+
+        return $this;
+    }
+
+    /**
+     * Get typeRangeBottom
+     *
+     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
+     */
+    public function getTypeRangeBottom()
+    {
+        return $this->typeRangeBottom;
+    }
 
     /**
      * Set rankTopBasic
@@ -639,213 +823,6 @@ class ArrangementRange extends modelArrangementRange {
     }
 
     /**
-     * Set enabled
-     *
-     * @param boolean $enabled
-     * @return ArrangementRange
-     */
-    public function setEnabled($enabled)
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * Get enabled
-     *
-     * @return boolean 
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Set userCreatedAt
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $userCreatedAt
-     * @return ArrangementRange
-     */
-    public function setUserCreatedAt(\Pequiven\SEIPBundle\Entity\User $userCreatedAt = null)
-    {
-        $this->userCreatedAt = $userCreatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get userCreatedAt
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getUserCreatedAt()
-    {
-        return $this->userCreatedAt;
-    }
-
-    /**
-     * Set userUpdatedAt
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $userUpdatedAt
-     * @return ArrangementRange
-     */
-    public function setUserUpdatedAt(\Pequiven\SEIPBundle\Entity\User $userUpdatedAt = null)
-    {
-        $this->userUpdatedAt = $userUpdatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get userUpdatedAt
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getUserUpdatedAt()
-    {
-        return $this->userUpdatedAt;
-    }
-
-    /**
-     * Set objetive
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
-     * @return ArrangementRange
-     */
-    public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
-    {
-        $this->objetive = $objetive;
-
-        return $this;
-    }
-
-    /**
-     * Get objetive
-     *
-     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
-     */
-    public function getObjetive()
-    {
-        return $this->objetive;
-    }
-
-    /**
-     * Set indicator
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
-     * @return ArrangementRange
-     */
-    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
-    {
-        $this->indicator = $indicator;
-
-        return $this;
-    }
-
-    /**
-     * Get indicator
-     *
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
-     */
-    public function getIndicator()
-    {
-        return $this->indicator;
-    }
-
-    /**
-     * Set typeRangeTop
-     *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeTop
-     * @return ArrangementRange
-     */
-    public function setTypeRangeTop(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeTop = null)
-    {
-        $this->typeRangeTop = $typeRangeTop;
-
-        return $this;
-    }
-
-    /**
-     * Get typeRangeTop
-     *
-     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
-     */
-    public function getTypeRangeTop()
-    {
-        return $this->typeRangeTop;
-    }
-
-    /**
-     * Set typeRangeMiddleTop
-     *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop
-     * @return ArrangementRange
-     */
-    public function setTypeRangeMiddleTop(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleTop = null)
-    {
-        $this->typeRangeMiddleTop = $typeRangeMiddleTop;
-
-        return $this;
-    }
-
-    /**
-     * Get typeRangeMiddleTop
-     *
-     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
-     */
-    public function getTypeRangeMiddleTop()
-    {
-        return $this->typeRangeMiddleTop;
-    }
-
-    /**
-     * Set typeRangeMiddleBottom
-     *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom
-     * @return ArrangementRange
-     */
-    public function setTypeRangeMiddleBottom(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeMiddleBottom = null)
-    {
-        $this->typeRangeMiddleBottom = $typeRangeMiddleBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get typeRangeMiddleBottom
-     *
-     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
-     */
-    public function getTypeRangeMiddleBottom()
-    {
-        return $this->typeRangeMiddleBottom;
-    }
-
-    /**
-     * Set typeRangeBottom
-     *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeBottom
-     * @return ArrangementRange
-     */
-    public function setTypeRangeBottom(\Pequiven\MasterBundle\Entity\ArrangementRangeType $typeRangeBottom = null)
-    {
-        $this->typeRangeBottom = $typeRangeBottom;
-
-        return $this;
-    }
-
-    /**
-     * Get typeRangeBottom
-     *
-     * @return \Pequiven\MasterBundle\Entity\ArrangementRangeType 
-     */
-    public function getTypeRangeBottom()
-    {
-        return $this->typeRangeBottom;
-    }
-
-    /**
      * Set opRankTopBasic
      *
      * @param \Pequiven\MasterBundle\Entity\Operator $opRankTopBasic
@@ -1119,5 +1096,28 @@ class ArrangementRange extends modelArrangementRange {
     public function getOpRankBottomMixedBottom()
     {
         return $this->opRankBottomMixedBottom;
+    }
+    
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return ArrangementRange
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 }
