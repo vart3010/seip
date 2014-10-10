@@ -42,10 +42,10 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         endDate:
             - NotNull:
                 groups: [base]
-        responsible:
-            - NotNull:
-                message: pequiven.validators.arrangement_program.goal.responsible_person
-                groups: [base]
+#        responsible:
+#            - NotNull:
+#                message: pequiven.validators.arrangement_program.goal.responsible_person
+#                groups: [base]
         weight:
             - NotNull:
                 groups: [base]

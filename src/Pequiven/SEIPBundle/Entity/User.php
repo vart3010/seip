@@ -134,6 +134,24 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * )
      */
     protected $groups;
+
+    /**
+     * Metas
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Goal
+     * @ORM\ManyToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="responsibles")
+     */
+    private $goals;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
     /**
      * Get id
@@ -304,14 +322,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getNumPersonal()
     {
         return $this->numPersonal;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -487,5 +497,48 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     public function __toString() {
         return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Add goals
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
+     * @return User
+     */
+    public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
+    {
+        $this->goals[] = $goals;
+
+        return $this;
+    }
+
+    /**
+     * Remove goals
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
+     */
+    public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
+    {
+        $this->goals->removeElement($goals);
+    }
+
+    /**
+     * Get goals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoals()
+    {
+        return $this->goals;
     }
 }

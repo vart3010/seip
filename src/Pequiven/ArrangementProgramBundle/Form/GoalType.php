@@ -58,7 +58,7 @@ class GoalType extends AbstractType
                 'required' => true,
                 'format' => 'yyyy-MM-dd'
             ))
-            ->add('responsible',null,array(
+            ->add('responsibles',null,array(
                 'label' => 'pequiven.form.responsible',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
@@ -66,6 +66,7 @@ class GoalType extends AbstractType
                     'ng-model' => 'model.goal.responsible',
                     'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.username+")") for (key,value) in data.responsibleGoals',
                     'style' => 'width: 270px',
+                    'multiple' => 'multiple'
                 ),
                 'empty_value' => 'Seleccione',
                 'required' => true,
