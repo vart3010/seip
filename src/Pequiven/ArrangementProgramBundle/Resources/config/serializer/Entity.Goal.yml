@@ -15,9 +15,9 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         endDate:
             expose: true
             groups: [api_list]
-        responsible:
+        responsibles:
             expose: true
-            groups: [api_list]
+            groups: [responsibles]
         weight:
             expose: true
             groups: [api_list]

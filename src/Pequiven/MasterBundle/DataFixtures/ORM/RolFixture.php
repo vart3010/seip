@@ -20,7 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  * @author matias
  */
 class RolFixture extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface {
-    //put your code here
     protected $container;
     public function load(ObjectManager $manager){
         
@@ -113,7 +112,9 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setDescription('Supervisor Temporal')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_SUPERVISER_AUX))
             ->setName(Rol::getRoleName(Rol::ROLE_SUPERVISER_AUX))
-            ->addRole(Rol::getRoleName(Rol::ROLE_SUPERVISER_AUX));
+            ->addRole(Rol::getRoleName(Rol::ROLE_SUPERVISER_AUX))
+            ->setTypeRol(Rol::TYPE_ROL_AUX)
+            ;
                 
         $this->addReference(Rol::getRoleName(Rol::ROLE_SUPERVISER_AUX), $rol);
             $manager->persist($rol);
@@ -122,7 +123,9 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setDescription('Gerente 2da Línea Temporal')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_MANAGER_SECOND_AUX))
             ->setName(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX))
-            ->addRole(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX));
+            ->addRole(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX))
+            ->setTypeRol(Rol::TYPE_ROL_AUX)
+        ;
         
         $this->addReference(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND_AUX), $rol);
             $manager->persist($rol);
@@ -132,7 +135,9 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setDescription('Gerente 1ra Línea Temporal')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_MANAGER_FIRST_AUX))
             ->setName(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX))
-            ->addRole(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX));
+            ->addRole(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX))
+            ->setTypeRol(Rol::TYPE_ROL_AUX)
+        ;
         
         $this->addReference(Rol::getRoleName(Rol::ROLE_MANAGER_FIRST_AUX), $rol);
             $manager->persist($rol);
@@ -141,7 +146,9 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setDescription('Gerente General Temporal')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_GENERAL_COMPLEJO_AUX))
             ->setName(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX))
-            ->addRole(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX));
+            ->addRole(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX))
+            ->setTypeRol(Rol::TYPE_ROL_AUX)
+        ;
         
         $this->addReference(Rol::getRoleName(Rol::ROLE_GENERAL_COMPLEJO_AUX), $rol);
             $manager->persist($rol);
@@ -150,7 +157,9 @@ class RolFixture extends AbstractFixture implements OrderedFixtureInterface, Con
         $rol->setDescription('Directivo Temporal')
             ->setLevel(Rol::getRoleLevel(Rol::ROLE_DIRECTIVE_AUX))
             ->setName(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX))
-            ->addRole(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX));
+            ->addRole(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX))
+            ->setTypeRol(Rol::TYPE_ROL_AUX)
+            ;
         
         $this->addReference(Rol::getRoleName(Rol::ROLE_DIRECTIVE_AUX), $rol);
             $manager->persist($rol);

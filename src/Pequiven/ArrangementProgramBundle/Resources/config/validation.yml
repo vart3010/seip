@@ -2,6 +2,8 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
     constraints:
         - Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsible:
                 groups: [base]
+        - Pequiven\ArrangementProgramBundle\Validator\Constraints\LevelRolesResponsible:
+                groups: [base]
     properties:
         period:
             - NotNull:

@@ -27,5 +27,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="pequiven.orm.validator.arrangement_program.level_roles_responsible" class="Pequiven\ArrangementProgramBundle\Validator\Constraints\LevelRolesResponsibleValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.arrangement_program.level_roles_responsible" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>
