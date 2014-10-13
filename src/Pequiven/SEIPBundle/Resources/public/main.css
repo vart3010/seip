@@ -48,3 +48,8 @@ select.xxlarge {
 .pull-right {
     float: right;
 }
+
+.alert-danger-seip {
+    color: white;
+    font-weight: bold;
+}

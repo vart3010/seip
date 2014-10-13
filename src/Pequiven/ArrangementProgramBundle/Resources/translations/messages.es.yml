@@ -15,7 +15,7 @@ pequiven:
     name: Nombre
     start_date: Fecha inicio
     end_date: Fecha fin
-    weight: Peso
+    weight: Peso de la meta
     actions:
         edit: Editar
         delete: Eliminar

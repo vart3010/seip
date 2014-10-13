@@ -16,7 +16,7 @@ class GoalType extends AbstractType
     {
         $builder
             ->add('name',null,array(
-                'label' => 'pequiven.form.name',
+                'label' => 'pequiven.form.goal.name',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "input input-xlarge validate[required]",
@@ -59,7 +59,7 @@ class GoalType extends AbstractType
                 'format' => 'yyyy-MM-dd'
             ))
             ->add('responsibles',null,array(
-                'label' => 'pequiven.form.responsible',
+                'label' => 'pequiven.form.goal.responsible',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
                     'class' => "select2 input-xlarge",

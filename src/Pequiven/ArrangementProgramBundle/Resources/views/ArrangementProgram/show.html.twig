@@ -62,8 +62,8 @@
             {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : null }}
         </p>
         <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.status'|trans }}</label>
-            {{ entity.status }}
+            <label class="label">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
+            <small class="tag">{{ entity.labelStatus|trans }}</small>
         </p>
     </fieldset>
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/timelines.html.twig' %}

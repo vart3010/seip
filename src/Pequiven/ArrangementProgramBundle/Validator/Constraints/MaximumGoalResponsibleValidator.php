@@ -25,7 +25,7 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
     {
         $timeline = $object->getTimeline();
         
-        $limitGoals = 3;
+        $limitGoals = 5;
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         
         //Repositorios
@@ -56,11 +56,10 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
                     //Se evaluan las metas xq no es responsable del programa de gestion
                     foreach ($timeline->getGoals() as $subGoal) {
                         if($currentGoal !== $subGoal){
-                            foreach ($subGoal->getResponsibles() as $reposible) {
-//                                if($subGoal->getResponsible() === $reposible){
-//
-//                                }
-//                                $countGoals++;//Mas 1 de otras metas del mismo programa de gestion
+                            foreach ($subGoal->getResponsibles() as $subReposible) {
+                                if($subReposible === $reposible){
+                                    $countGoals++;//Mas 1 de otras metas del mismo programa de gestion
+                                }
                             }
                         }
                     }
@@ -68,7 +67,14 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
 
                 $total = $countGoals + $countArrangementPrograms;
                 if($total > $limitGoals){
-                    $errors[$reposible->getId()] = array('%user%' => $reposible,'%goals%' => $countGoals,'%limit%'=> $limitGoals,'%period%' => $period,'%arrangementPrograms%' => $countArrangementPrograms);
+                    $errors[$reposible->getId()] = array(
+                        '%user%' => $reposible,
+                        '%goals%' => $countGoals,
+                        '%limit%'=> $limitGoals,
+                        '%period%' => $period,
+                        '%arrangementPrograms%' => $countArrangementPrograms,
+                        '%total%' => ($countArrangementPrograms + $countGoals)
+                    );
                 }
             }
         }

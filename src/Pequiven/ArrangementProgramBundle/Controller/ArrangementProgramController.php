@@ -169,7 +169,6 @@ class ArrangementProgramController extends SEIPController
                     }
                 }
             }
-                
             $this->domainManager->update($entity);
 
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));

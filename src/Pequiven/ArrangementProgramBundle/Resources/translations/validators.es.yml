@@ -5,8 +5,8 @@ pequiven:
             incorrect_weight: La suma del peso de las metas no debe exceder el 100%.
             goal:
                 responsible_person: Debe asignar un responsable a la meta.
-                maximum_responsible: El limite de responsabilidades asignadas a "%user%" fue excedida en el periodo "%period%" con %arrangementPrograms% PG y %goals% M del limite de %limit%.
-                level_roles_responsible: %responsibleProgram% no puede asignarle metas a %responsibleGoals% en la meta "%goal%"
+                maximum_responsible: El límite de metas asignada a "%user%" se excedió. Debe saber que el límite es %limit% y las asignadas son %total%.
+                level_roles_responsible: La meta "%goal%" no puede ser asignada por %responsibleProgram%  a %responsibleGoals%.
         goals_details:
             min_value: El valor minimo permitido es cero.
             max_value: El valor maximo permitido es cien.

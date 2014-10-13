@@ -26,8 +26,8 @@
                     {{ "seip.table.empty.goals"|trans }}
                 </td>
             </tr>
-            <tr ng-repeat="goal in goals" ng-init="parentIndex = $index">
-                <th scope="row">
+            <tr ng-repeat="goal in goals">
+                <th scope="row" ng-init="parentIndex = $index">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][name]" value="{$ goal.name $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][startDate]" value="{$ goal.startDate $}">
@@ -35,7 +35,9 @@
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ parentIndex $}][responsibles][]" ng-repeat="responsible in goal.responsibles" value="{$ responsible.id $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
-                    {$ goal.name $}<br>
+                    Parent:{$ parentIndex $}{#{$ goal.name $}<br>#}
+                    <br/>
+                    index: {$ $index $}
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
                     <small>{$ goal.observations $}</small>
                 </th>
