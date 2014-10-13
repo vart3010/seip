@@ -542,6 +542,8 @@ class ObjetiveOperativeController extends baseController {
         $totalGerencias = $options['totalGerencia'];//Total de Gerencias de 1ra Línea que abarca el Objetivo Operativo a crear
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
         
         $j = 0;//Contador de Indicadores Operativos asociados al Objetivo Operativo
         for($i = 0; $i < $totalGerencias; $i++){//Recorremos las Gerencias Seleccionada            
@@ -558,6 +560,7 @@ class ObjetiveOperativeController extends baseController {
                     ${$nameObject . $j}->setFormula($indicator->getFormula());
                     ${$nameObject . $j}->setTendency($indicator->getTendency());
                     ${$nameObject . $j}->setDescription($indicator->getDescription());
+                    ${$nameObject . $j}->setUserCreatedAt($user);
                     $em->persist(${$nameObject . $j});
                     $j++;
                     $k++;

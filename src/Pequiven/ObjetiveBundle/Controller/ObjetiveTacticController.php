@@ -427,6 +427,8 @@ class ObjetiveTacticController extends baseController {
         $totalGerencias = $options['totalGerencia']; //Total de Gerencias de 1ra Línea que abarca el Objetivo Táctico a crear
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
 
         $j = 0; //Contador de Indicadores Tácticos asociados al Objetivo Táctico
         for ($i = 0; $i < $totalGerencias; $i++) {//Recorremos las Gerencias Seleccionada            
@@ -443,6 +445,7 @@ class ObjetiveTacticController extends baseController {
                     ${$nameObject . $j}->setFormula($indicator->getFormula());
                     ${$nameObject . $j}->setTendency($indicator->getTendency());
                     ${$nameObject . $j}->setDescription($indicator->getDescription());
+                    ${$nameObject . $j}->setUserCreatedAt($user);
                     $em->persist(${$nameObject . $j});
                     $j++;
                     $k++;
@@ -727,6 +730,20 @@ class ObjetiveTacticController extends baseController {
         }
 
         return $totalRef;
+    }
+    
+    
+    public function verifyIndicatorRef($options = array()){
+        $em = $this->getDoctrine()->getManager();
+        $objetivesStrategics = $options['objetiveStrategics'];
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        $totalRef = array();
+
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $refObjetiveStrategic = $objetiveStrategic->getRef();
+
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true));
+        $total = count($results);
     }
 
 }
