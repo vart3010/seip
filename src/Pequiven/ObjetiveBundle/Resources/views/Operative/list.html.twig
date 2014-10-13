@@ -94,6 +94,7 @@
                     if(typeof data[0].empty === 'undefined'){
                         var cantidad = data.length;
                         var text = '';
+                        text = text + '<option value="0">Todas</option>';
                         text = text + '<optgroup label="' + data[0].optGroup + '">';
 
                         for(var i=0, total = data.length; i<total; i++){

@@ -194,7 +194,7 @@ class ObjetiveRepository extends EntityRepository {
 //            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$parentsLineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$parentsLineStrategicDescription."%'")));
 //        }
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
             $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -204,8 +204,12 @@ class ObjetiveRepository extends EntityRepository {
         }
         
         //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
-        if(isset($criteria['gerenciaFirst'])){
-            $queryBuilder->andWhere("o.gerencia = " . (int)$criteria['gerenciaFirst']);
+        if(isset($criteria['gerencia'])){
+            if((int)$criteria['gerencia'] > 0){
+                $queryBuilder->andWhere("o.gerencia = " . (int)$criteria['gerencia']);
+            } else{
+                unset($criteria['gerencia']);
+            }
         }
         
         //$queryBuilder->groupBy('o.ref');
@@ -274,14 +278,37 @@ class ObjetiveRepository extends EntityRepository {
 //        }
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){
+                    $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());;
+                }
+            } else{
+                $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+            }
         } elseif($securityContext->isGranted('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX')){
             $queryBuilder->andWhere('o.gerenciaSecond = '.$user->getGerenciaSecond()->getId());
         } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-            $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
-            $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
-            $queryBuilder->andWhere('gs.modular =:modular');
-            $queryBuilder->setParameter('modular', true);
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){
+                    $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
+                    $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                    $queryBuilder->andWhere('gs.modular =:modular');
+                    $queryBuilder->setParameter('modular', true);
+                }
+            } else{
+                $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
+                $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                $queryBuilder->andWhere('gs.modular =:modular');
+                $queryBuilder->setParameter('modular', true);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
         }
         
         if(isset($criteria['objetiveLevel'])){
