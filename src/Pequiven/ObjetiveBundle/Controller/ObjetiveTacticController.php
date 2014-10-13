@@ -160,6 +160,9 @@ class ObjetiveTacticController extends baseController {
                 //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                 if (!isset($data['check_gerencia'])) {
                     $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($data['gerencia'])));
+                    if($totalRef[0] != $data['ref']){
+                        $this->updateIndicatorRef($data, $totalRef);
+                    }
                     if (isset($data['indicators'])) {
                         $respIndicator = $this->createIndicator($data, array('totalGerencia' => count($data['gerencia'])), $totalRef);
                     }
@@ -185,6 +188,9 @@ class ObjetiveTacticController extends baseController {
                         //Obtenemos todas las gerencias de 1ra línea de las localidades seleccionadas
                         $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
                         $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($gerencias)));
+                        if($totalRef[0] != $data['ref']){
+                            $this->updateIndicatorRef($data, $totalRef);
+                        }
                         if (isset($data['indicators'])) {
                             $respIndicator = $this->createIndicator($data, count($gerencias), $totalRef);
                         }
@@ -210,6 +216,9 @@ class ObjetiveTacticController extends baseController {
             } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
                 $object->setGerencia($user->getGerencia());
                 $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
+                if($totalRef[0] != $data['ref']){
+                    $this->updateIndicatorRef($data, $totalRef);
+                }
                 $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
@@ -222,6 +231,9 @@ class ObjetiveTacticController extends baseController {
                 $em->persist($object);
             } else {
                 $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
+                if($totalRef[0] != $data['ref']){
+                    $this->updateIndicatorRef($data, $totalRef);
+                }
                 $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
@@ -732,18 +744,35 @@ class ObjetiveTacticController extends baseController {
         return $totalRef;
     }
     
-    
-    public function verifyIndicatorRef($options = array()){
+    /**
+     * Función que actualiza la referencia de los Indicadores, en caso de que se creen dos Objetivos Tácticos por diferente usuarios al mismo tiempo
+     * @param type $data
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function updateIndicatorRef($data = array(), $totalRef = array()){
         $em = $this->getDoctrine()->getManager();
-        $objetivesStrategics = $options['objetiveStrategics'];
-        $totalObjetivesStrategics = count($objetivesStrategics);
-        $totalRef = array();
+        $em->getConnection()->beginTransaction();
+        
+        $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
+        foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
+            $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+            $indicator->setRef('IT-' . $totalRef[0] . $k);
+            $indicator->setRefParent($totalRef[0]);
+            $em->persist($indicator);
+            $k++;
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
 
-        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
-        $refObjetiveStrategic = $objetiveStrategic->getRef();
-
-        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true));
-        $total = count($results);
+        return true;
     }
 
 }
