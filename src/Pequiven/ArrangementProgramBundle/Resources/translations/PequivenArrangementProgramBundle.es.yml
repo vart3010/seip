@@ -24,9 +24,16 @@ pequiven:
             draft: Borrador
             revised: Revisado
             approved: Aprobado
+        buttons:
+            revised: Revisado
+            approved: Aprobado
         type:
             tactic: Tactico
             operative: Operativo
+        questions:
+            revised: ¿Desea marcar el programa de gestión como revisado?
+            approved: ¿Desea aprobar el programa de gestión?
+            
         
     form:
         category_arrangement_program: Asociado a

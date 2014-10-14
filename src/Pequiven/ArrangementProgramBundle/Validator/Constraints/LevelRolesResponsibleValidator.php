@@ -24,6 +24,10 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
     public function validate($object, Constraint $constraint){
         $responsible = $object->getResponsible();
         $timeline = $object->getTimeline();
+        //Sino se asigno ninguna meta al crear el programa de gestion
+        if(!$timeline){
+            return;
+        }
         $goals = $timeline->getGoals();
         $errors = array();
         foreach ($responsible->getGroups() as $group) {

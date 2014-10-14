@@ -98,6 +98,10 @@ abstract class ArrangementProgram
     function isValidTimeLine()
     {
         $timeline = $this->getTimeline();
+        //Sino se asigno ninguna meta al crear el programa de gestion
+        if(!$timeline){
+            return ;
+        }
         $weight = 0;
         foreach ($timeline->getGoals() as $goal) {
             $weight+= $goal->getWeight();

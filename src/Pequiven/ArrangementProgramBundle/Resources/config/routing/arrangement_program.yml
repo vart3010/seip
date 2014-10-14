@@ -28,6 +28,20 @@ arrangementprogram_edit:
         id: "\d+"
     methods: [GET]
     
+arrangementprogram_revised:
+    path: /{id}/revised
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:revisedAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    
+arrangementprogram_approved:
+    path: /{id}/approved
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:approvedAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    
 arrangementprogram_update:
     path: /{id}
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:updateAction }

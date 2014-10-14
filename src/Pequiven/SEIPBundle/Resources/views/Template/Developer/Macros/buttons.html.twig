@@ -79,7 +79,7 @@
     {% if parameters['icon'] is defined %}
         {% set icon = parameters['icon'] %}
     {% endif  %}
-    {% set idForm = url|hash %}
+    {% set idForm = (url ~ message)|hash %}
         <button type="button" class="button" onclick="openPopUpConfirm_{{ idForm }}('{{ idForm }}')">
             <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
             {{ message|trans({},translation_domain) }}

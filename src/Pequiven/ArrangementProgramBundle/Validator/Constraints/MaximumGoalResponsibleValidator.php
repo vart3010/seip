@@ -24,8 +24,11 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
     public function validate($object, Constraint $constraint)
     {
         $timeline = $object->getTimeline();
-        
-        $limitGoals = 5;
+        //Sino se asigno ninguna meta al crear el programa de gestion
+        if(!$timeline){
+            return;
+        }
+        $limitGoals = 12;
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         
         //Repositorios
