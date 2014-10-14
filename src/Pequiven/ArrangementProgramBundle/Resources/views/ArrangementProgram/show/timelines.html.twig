@@ -16,7 +16,7 @@
                     <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
-                    <th scope="col" width="25%">{{ 'seip.table.header.responsible'|trans }}</th>
+                    <th scope="col" width="25%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
                 </tr>
         </thead>
         <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">

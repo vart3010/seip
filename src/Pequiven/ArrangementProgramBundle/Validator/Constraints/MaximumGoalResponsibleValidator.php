@@ -28,7 +28,7 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
         if(!$timeline){
             return;
         }
-        $limitGoals = 12;
+        $limitGoals = 3;
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         
         //Repositorios

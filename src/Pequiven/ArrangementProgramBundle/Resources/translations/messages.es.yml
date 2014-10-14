@@ -1,17 +1,22 @@
 pequiven:
     months:
-        january: Enero
-        february: Febrero
-        march: Marzo
-        april: Abril
-        may: Mayo
-        june: Junio
-        july: Julio
-        august: Agosto
-        september: Septiembre
-        october: Octubre
-        november: Noviembre
-        december: Diciembre
+        january: ENE
+        february: FEB
+        march: MAR
+        april: ABR
+        may: MAY
+        june: JUN
+        july: JUL
+        august: AGO
+        september: SEP
+        october: OCT
+        november: NOV
+        december: DIC
+    quarter:
+        first: I TRIMESTRE
+        second: II TRIMESTRE
+        third: III TRIMESTRE
+        fourth: IV TRIMESTRE
     name: Nombre
     start_date: Fecha inicio
     end_date: Fecha fin

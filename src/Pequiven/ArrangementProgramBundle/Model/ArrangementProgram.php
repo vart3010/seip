@@ -29,6 +29,13 @@ abstract class ArrangementProgram
      */
     const STATUS_APPROVED = 2;
     
+    /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $timeline;
     
     /**
      * Estatus del programa de gestion
@@ -86,12 +93,6 @@ abstract class ArrangementProgram
     }
     
     /**
-     * Linea de tiempo
-     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     */
-    protected $timeline;
-    
-    /**
      * Valida el total del peso de la linea de tiempo
      * @return boolean
      */
@@ -134,4 +135,35 @@ abstract class ArrangementProgram
             return $labels[$this->status];
         }
     }
+    
+    /**
+     * Retorna el porcentaje de avance del programa de gestion
+     */
+    function getAdvances()
+    {
+        $advances = 0;
+        $timeline = $this->getTimeline();
+        if($timeline){
+//            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+//            foreach ($timeline->getGoals() as $goal) {
+//                $goalDetails = $goal->getGoalDetails();
+//                $reflection = new \ReflectionClass($goal);
+//                foreach ($reflection->getProperties() as $property) {
+//                    if(preg_match('', $property->getName())){
+//                        
+//                    }
+//                    var_dump();
+//                    
+//                }
+//                
+//            }
+        }
+        return $advances;
+    }
+    
+    protected function calculateAverageRowReal(){
+        
+    }
+    
+    
 }
