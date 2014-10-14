@@ -118,7 +118,7 @@ angular.module('seipModule.controllers', [])
             var valid = $('#goalForms').validationEngine('validate');
             if(valid){
                 if($scope.model.goal.responsibles == undefined){
-                    $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person','goal_responsibles');
+                    $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person','s2id_goal_responsibles');
                     valid = false;
                 }
             }
@@ -523,5 +523,12 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 
+    })
+    .directive('ngCustomDirective',function(index){
+        console.log('aaa');
+        return function(index2){
+            console.log(index);
+            console.log(index2);
+        }
     })
     ;        

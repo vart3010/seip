@@ -1,7 +1,7 @@
 pequiven:
     select: Seleccione
     arrangement_program:
-        arrangement_program: Programa de gestión
+        arrangement_program: Programa de Gestión
         period: Periodo
         process: Proceso
         category_arrangement_program: Progama asociado a
@@ -19,31 +19,46 @@ pequiven:
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
-        status: Estatus
+        status:
+            status: Estatus
+            draft: Borrador
+            revised: Revisado
+            approved: Aprobado
+        buttons:
+            revised: Revisado
+            approved: Aprobado
         type:
             tactic: Tactico
             operative: Operativo
+        questions:
+            revised: ¿Desea marcar el programa de gestión como revisado?
+            approved: ¿Desea aprobar el programa de gestión?
+            
+        
     form:
         category_arrangement_program: Asociado a
-        tactical_objective: Objetivo táctico
-        operational_objective: Objetivo operativo
-        operating_indicator: Indicador operativo
+        tactical_objective: Objetivo Táctico
+        operational_objective: Objetivo Operativo
+        operating_indicator: Indicador Operativo
         location: Localidad
         process: Proceso
         responsible: Responsable
         period: Periodo
         name: Nombre
-        type_goal: Tipo de actividad
-        not_applicable: No aplica
-        start_date: Fecha inicio
-        end_date: Fecha fin
+        type_goal: Tipo de Actividad
+        not_applicable: No Aplica
+        start_date: Fecha Inicio
+        end_date: Fecha Fin
         weight: Peso
         observations: Observaciones
+        goal:
+            name: Meta
+            responsible: Responsable de la Meta
     goals:
         goal: Meta
         goals: Meta(s)
         goals_only: Metas
-        add_goal: Añadir meta
+        add_goal: Añadir Meta
         delete_this_goal: Eliminar esta meta
         abbr_planned: P
         abbr_real: R
@@ -52,12 +67,12 @@ seip:
     table:
         header:
             name: Nombre
-            type_goal: Tipo de actividad
-            start_date: Fecha inicio
-            end_date: Fecha fin
+            type_goal: Tipo de Actividad
+            start_date: Fecha Inicio
+            end_date: Fecha Fin
             responsible: Responsable
             weight: Peso
             observations: Observaciones
             actions: Acciones
         empty:
-            goals: No hay metas cargadas.
+            goals: No Hay Metas Cargadas.

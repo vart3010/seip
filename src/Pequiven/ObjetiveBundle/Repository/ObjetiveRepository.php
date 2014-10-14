@@ -350,7 +350,7 @@ class ObjetiveRepository extends EntityRepository {
         return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
     }
     
-    function findQueryObjetivesOperationalByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetiveTactic) {
+    function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic) {
         $user = $this->getUser();
         $qb = $this->getQueryBuilder();
         $qb

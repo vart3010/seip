@@ -48,3 +48,12 @@ select.xxlarge {
 .pull-right {
     float: right;
 }
+
+.alert-danger-seip {
+    color: white;
+    font-weight: bold;
+}
+form > fieldset > div.alert.alert-danger-seip {
+    color: red;
+}
+

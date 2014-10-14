@@ -13,10 +13,6 @@ use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
  */
 class ArrangementProgram extends Model
 {
-    const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
-    const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
-    const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
-
     /**
      * @var integer
      *
@@ -120,14 +116,6 @@ class ArrangementProgram extends Model
     private $approvalDate;
 
     /**
-     * Estatus del programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="integer")
-     */
-    private $status = 0;
-    
-    /**
      * Tipo de programa de gestion
      * @var integer
      *
@@ -221,29 +209,6 @@ class ArrangementProgram extends Model
     public function getApprovalDate()
     {
         return $this->approvalDate;
-    }
-
-    /**
-     * Set status
-     *
-     * @param integer $status
-     * @return ArrangementProgram
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**

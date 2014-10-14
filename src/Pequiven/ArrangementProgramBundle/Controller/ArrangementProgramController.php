@@ -34,15 +34,18 @@ class ArrangementProgramController extends SEIPController
                 ->setCreatedBy($user);
         
         if($request->isMethod('GET')){
-            $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
 //            $entity->setTimeline($timeLine);
         }
         $form = $this->createCreateForm($entity,array('type' => $type));
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }
-        
-        if($request->isMethod('POST') && $form->submit($request,false)->isValid()){
+        $form->handleRequest($request);
+        if($request->isMethod('POST') && $form->isValid()){
+            if($entity->getTimeline() === null){
+                $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
+                $entity->setTimeline($timeLine);
+            }
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
@@ -169,7 +172,6 @@ class ArrangementProgramController extends SEIPController
                     }
                 }
             }
-                
             $this->domainManager->update($entity);
 
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
@@ -188,7 +190,16 @@ class ArrangementProgramController extends SEIPController
         $view->setTemplate('PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig');
         return $this->handleView($view);
     }
-
+    
+    function revisedAction(Request $request)
+    {
+        
+    }
+    function approvedAction(Request $request)
+    {
+        
+    }
+    
     /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *
