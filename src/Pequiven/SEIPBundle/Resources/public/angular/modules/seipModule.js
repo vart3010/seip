@@ -214,7 +214,6 @@ angular.module('seipModule.controllers', [])
         });
         programResponsible.on('change',function(object){
             var reponsibleId = object.val;
-            console.log(object.val);
             $scope.getResponsiblesGoal(reponsibleId);
         });
         $scope.getResponsiblesGoal = function(reponsibleId){

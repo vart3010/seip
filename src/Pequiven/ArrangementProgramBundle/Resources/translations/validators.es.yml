@@ -1,6 +1,7 @@
 pequiven:
     validators:
         arrangement_program:
+            incorrect_responsibles: Debe asignar por lo mínimo un responsable al programa de gestión.
             responsible_person: Debe asignar un responsable.
             incorrect_weight: La suma del peso de las metas no debe exceder el 100%.
             goal:

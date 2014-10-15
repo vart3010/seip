@@ -67,14 +67,6 @@ class ArrangementProgram extends Model
     private $process;
 
     /**
-     * Responsables del programa
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
-     */
-    private $responsibles;
-
-    /**
      * Revisado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *
@@ -106,14 +98,6 @@ class ArrangementProgram extends Model
      */
     private $approvalDate;
 
-    /**
-     * Tipo de programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
-    private $type;
-    
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -361,49 +345,5 @@ class ArrangementProgram extends Model
     function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
         $this->createdBy = $createdBy;
         return $this;
-    }
-    
-    function getTypeLabel() {
-        
-        $labels = array(
-            self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
-            self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',
-        );
-        if(isset($labels[$this->type])){
-            return $labels[$this->type];
-        }
-    }
-
-    /**
-     * Add responsibles
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
-     * @return ArrangementProgram
-     */
-    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
-        $this->responsibles->add($responsibles);
-
-        return $this;
-    }
-
-    /**
-     * Remove responsibles
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
-     */
-    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
-        $this->responsibles->removeElement($responsibles);
-    }
-
-    /**
-     * Get responsibles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getResponsibles()
-    {
-        return $this->responsibles;
     }
 }

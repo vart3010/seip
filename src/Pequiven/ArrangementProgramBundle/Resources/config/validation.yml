@@ -20,10 +20,6 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         process:
             - NotNull:
                 groups: [base]
-        responsibles:
-            - NotNull:
-                message: pequiven.validators.arrangement_program.responsible_person
-                groups: [base]
         type:
             - NotNull:
                 groups: [base]
@@ -31,6 +27,10 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         validTimeLine:
             - "True":
                 message: pequiven.validators.arrangement_program.incorrect_weight
+                groups: [base]
+        validResponsibles:
+            - "True":
+                message: pequiven.validators.arrangement_program.incorrect_responsibles
                 groups: [base]
 
 Pequiven\ArrangementProgramBundle\Entity\Goal:

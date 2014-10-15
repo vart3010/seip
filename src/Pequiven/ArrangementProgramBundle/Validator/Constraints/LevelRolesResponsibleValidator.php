@@ -24,6 +24,7 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
     public function validate($object, Constraint $constraint){
         $responsibles = $object->getResponsibles();
         $topLevel = 0;
+        $userTopLevel = null;
         foreach ($responsibles as $r) {
             foreach ($r->getGroups() as $group) {
                 if($group->getLevel() > $topLevel){
@@ -41,20 +42,22 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
         }
         $goals = $timeline->getGoals();
         $errors = array();
-        foreach ($responsible->getGroups() as $group) {
-            foreach ($goals as $goal) {
-                foreach ($goal->getResponsibles() as $goalResponsible) {
-                    foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
-                        if($groupResponsibleGoal->getLevel() > $group->getLevel()){
-                            $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+        if($responsible){
+            foreach ($responsible->getGroups() as $group) {
+                foreach ($goals as $goal) {
+                    foreach ($goal->getResponsibles() as $goalResponsible) {
+                        foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
+                            if($groupResponsibleGoal->getLevel() > $group->getLevel()){
+                                $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        foreach ($errors as $error) {
-            $this->context->addViolation($constraint->message,$error);
+
+            foreach ($errors as $error) {
+                $this->context->addViolation($constraint->message,$error);
+            }
         }
     }
     
