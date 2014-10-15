@@ -487,7 +487,25 @@ angular.module('seipModule.controllers', [])
           }
       };
       
-    }).controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+    })
+    .controller("ObjetiveStrategicController",function($scope,notificationBarService,$http,$filter,$timeout){
+        var form = angular.element('form');
+
+        form.submit(function(){
+            var valid = true;
+            
+            //Select de Línea Estratégica
+            var selectLineStrategics = angular.element('#pequiven_objetive_strategic_registration_lineStrategics');
+            console.log('hola');
+            if(selectLineStrategics.val() == ''){
+                $scope.sendMessageError("error","s2id_pequiven_objetive_strategic_registration_lineStrategics");
+                valid = false;
+            }
+            
+            return valid;
+        });
+    })
+    .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);
