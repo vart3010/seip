@@ -155,6 +155,12 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                     $disable = true;
                 }
             }
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $percentaje = $propertyAccessor->getValue($object,$planned);
+                if($disable === true && ($percentaje == 0 && $percentaje == '0' || $percentaje == '' || $percentaje == null)){
+                    $data[$planned]['isEnabled'] = false;
+                }
+            }
         }
         $event->getVisitor()->addData('_data',$data);
         
