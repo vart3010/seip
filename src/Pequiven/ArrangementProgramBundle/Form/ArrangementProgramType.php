@@ -120,8 +120,6 @@ class ArrangementProgramType extends AbstractType
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
                             'class' => "select2 input-xxlarge",
-//                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
-//                            'ng-change' => 'setOperationalObjective(model.arrangementProgram.tacticalObjective)',
                         ),
                         'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
                             return $repository->findQueryObjetivesTactic();
