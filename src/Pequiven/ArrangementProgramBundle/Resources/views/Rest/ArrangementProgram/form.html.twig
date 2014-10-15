@@ -83,21 +83,34 @@
                 };
 
                 /**
-                 * Calcula el promedio de los valores real de una fila
+                 * Calcula el promedio de los valores planeados de una fila
                  * @param {type} data
-                 * @returns {form.html_L11.calculateAverageRowReal.value}             */
-                var calculateAverageRowReal = function (data) {
+                 * @returns {form.html_L11.calculateAverageRow.value}             */
+                var calculateAverageRow = function (data,property) {
                     var key;
                     var value = 0;
                     for (key in data) {
-                        if (key.match('Real')) {
+                        if (key.match(property)) {
                             value = value + data[key];
                         }
                     }
-        {#if(value > 0){
-            value = value / 12;
-        }#}
                     return value;
+                };
+                
+                var summaryTypeOfSummary  = function (records,property){
+                    var i, length, data, average, total, subAverage;
+                                length = records.length;
+                                total = 0;
+                                for (i = 0; i < length; i++) {
+                                    data = records[i].data;
+                                    subAverage = calculateAverageRow(data,property);
+                                    total = total + subAverage;
+                                }
+                                average = 0;
+                                if (total > 0) {
+                                    average = total / length;
+                                }
+                                return average;
                 };
 
                 /**
@@ -721,22 +734,10 @@
                                             align: 'center',
                                             renderer: function (v, m, r) {
                                                 var data = m.record.data;
-                                                return formatNumber(calculateAverageRowReal(data)) + "%";
+                                                return formatNumber(calculateAverageRow(data,'Planned')) + "%";
                                             },
                                             summaryType: function (records, values) {
-                                                var i, length, data, average, total, subAverage;
-                                                length = records.length;
-                                                total = 0;
-                                                for (i = 0; i < length; i++) {
-                                                    data = records[i].data;
-                                                    subAverage = calculateAverageRowReal(data);
-                                                    total = total + subAverage;
-                                                }
-                                                average = 0;
-                                                if (total > 0) {
-                                                    average = total / length;
-                                                }
-                                                return average;
+                                                return summaryTypeOfSummary(records,'Planned');
                                             },
                                             summaryRenderer: function (value, summaryData, dataIndex) {
                                                 return formatNumber(value) + '%';
@@ -749,59 +750,17 @@
                                             align: 'center',
                                             renderer: function (v, m, r) {
                                                 var data = m.record.data;
-                                                return formatNumber(calculateAverageRowReal(data)) + "%";
+                                                return formatNumber(calculateAverageRow(data,'Real')) + "%";
                                             },
                                             summaryType: function (records, values) {
-                                                var i, length, data, average, total, subAverage;
-                                                length = records.length;
-                                                total = 0;
-                                                for (i = 0; i < length; i++) {
-                                                    data = records[i].data;
-                                                    subAverage = calculateAverageRowReal(data);
-                                                    total = total + subAverage;
-                                                }
-                                                average = 0;
-                                                if (total > 0) {
-                                                    average = total / length;
-                                                }
-                                                return average;
+                                                return summaryTypeOfSummary(records,'Real');
                                             },
                                             summaryRenderer: function (value, summaryData, dataIndex) {
                                                 return formatNumber(value) + '%';
                                             }
                                         }
                                     ]
-                        },
-                        {
-                            text: '{{ "pequiven.goals.summary"|trans }}',
-                            sortable: true,
-                            locked: true,
-                            hideable: false,
-                            renderer: function (v, m, r) {
-                                var data = m.record.data;
-                                return formatNumber(calculateAverageRowReal(data)) + "%";
-                            },
-                            summaryType: function (records, values) {
-                                var i, length, data, average, total, subAverage;
-                                length = records.length;
-                                total = 0;
-                                for (i = 0; i < length; i++) {
-                                    data = records[i].data;
-                                    subAverage = calculateAverageRowReal(data);
-                                    total = total + subAverage;
-                                }
-                                average = 0;
-                                if (total > 0) {
-                                    average = total / length;
-                                }
-                                return average;
-                            },
-                            summaryRenderer: function (value, summaryData, dataIndex) {
-                                return formatNumber(value) + '%';
-                            }
                         }
-
-
                     ]
                 });
             });
