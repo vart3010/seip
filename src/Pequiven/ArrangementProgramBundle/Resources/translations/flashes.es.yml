@@ -1,5 +1,5 @@
 pequiven_seip:
     arrangementprogram:
-        create: Programa de gestión creado
-        update: Programa de gestión actualizado
-        delete: Programa de gestión eliminado
+        create: Programa de gestión creado.
+        update: Programa de gestión actualizado.
+        delete: Programa de gestión eliminado.

@@ -130,8 +130,7 @@ class ArrangementProgramType extends AbstractType
                         'required' => true,
                     ))
                 ;
-//                var_dump();die;
-//                $formModifier($event,$object->getTacticalObjective());
+                $formModifier($event,$object->getTacticalObjective());
             }
             
         });
