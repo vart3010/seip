@@ -20,7 +20,8 @@ class ArrangementProgramRepository extends EntityRepository
     function findByUserAndPeriodNotGoals(User $user,Period $period,array $criteria = array())
     {
         $qb = $this->getQueryBuilder();
-        $qb->andWhere('ap.responsible = :responsible')
+        $qb->innerJoin('ap.responsibles', 'ap_r')
+           ->andWhere('ap_r.id = :responsible')
            ->andWhere('ap.period = :period')
            ->setParameter('responsible', $user)
            ->setParameter('period', $period);

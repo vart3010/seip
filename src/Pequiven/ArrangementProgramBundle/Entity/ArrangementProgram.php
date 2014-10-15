@@ -67,13 +67,12 @@ class ArrangementProgram extends Model
     private $process;
 
     /**
-     * Responsable
+     * Responsables del programa
      * @var \Pequiven\SEIPBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id",nullable=false)
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
      */
-    private $responsible;
+    private $responsibles;
 
     /**
      * Revisado por
@@ -123,7 +122,11 @@ class ArrangementProgram extends Model
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
-
+ 
+    public function __construct() {
+        $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -296,29 +299,6 @@ class ArrangementProgram extends Model
     }
 
     /**
-     * Set responsible
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsible
-     * @return ArrangementProgram
-     */
-    public function setResponsible(\Pequiven\SEIPBundle\Entity\User $responsible = null)
-    {
-        $this->responsible = $responsible;
-
-        return $this;
-    }
-
-    /**
-     * Get responsible
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getResponsible()
-    {
-        return $this->responsible;
-    }
-
-    /**
      * Set reviewedBy
      *
      * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
@@ -392,5 +372,38 @@ class ArrangementProgram extends Model
         if(isset($labels[$this->type])){
             return $labels[$this->type];
         }
+    }
+
+    /**
+     * Add responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @return ArrangementProgram
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->add($responsibles);
+
+        return $this;
+    }
+
+    /**
+     * Remove responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->removeElement($responsibles);
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles()
+    {
+        return $this->responsibles;
     }
 }

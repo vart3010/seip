@@ -50,8 +50,10 @@
             </p>
         {% endif %}
         <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.responsible'|trans }}</label>
-            {{ entity.responsible }}
+            <label class="label">{{ 'pequiven.arrangement_program.responsibles'|trans }}</label>
+            {% for responsible in entity.responsibles %}
+                {{ responsible }}{% if loop.last == false %},{% else %}.{% endif %}
+            {% endfor %}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>

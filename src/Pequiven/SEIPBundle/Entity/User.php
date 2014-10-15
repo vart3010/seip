@@ -134,6 +134,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * )
      */
     protected $groups;
+    
+    /**
+     * Programas de gestion
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * @ORM\ManyToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="responsibles")
+     */
+    protected $arrangementPrograms;
 
     /**
      * Metas
@@ -151,6 +159,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         parent::__construct();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -496,7 +505,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     }
     
     public function __toString() {
-        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
+        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getNumPersonal());
     }
 
     /**

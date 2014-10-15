@@ -10,7 +10,7 @@ pequiven:
         operating_indicator: Indicador operativo
         location: Localidad
         process: Proceso
-        responsible: Responsable
+        responsibles: Responsable(s)
         type_goal: Tipo de actividad
         not_applicable: No aplica
         start_date: Fecha inicio
@@ -43,7 +43,7 @@ pequiven:
         operating_indicator: Indicador Operativo
         location: Localidad
         process: Proceso
-        responsible: Responsable
+        responsibles: Responsable(s)
         period: Periodo
         name: Nombre
         type_goal: Tipo de Actividad
@@ -54,7 +54,7 @@ pequiven:
         observations: Observaciones
         goal:
             name: Meta
-            responsible: Responsable de la Meta
+            responsible: Responsable(s) de la Meta
     goals:
         goal: Meta
         goals: Meta(s)
@@ -71,8 +71,8 @@ seip:
             type_goal: Tipo de Actividad
             start_date: Fecha Inicio
             end_date: Fecha Fin
-            responsible: Responsable
-            responsible_goal: Responsable de la Meta
+            responsible: Responsable(s)
+            responsible_goal: Responsable(s) de la Meta
             weight: Peso
             observations: Observaciones
             actions: Acciones

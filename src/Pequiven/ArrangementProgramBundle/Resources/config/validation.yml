@@ -20,7 +20,7 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         process:
             - NotNull:
                 groups: [base]
-        responsible:
+        responsibles:
             - NotNull:
                 message: pequiven.validators.arrangement_program.responsible_person
                 groups: [base]

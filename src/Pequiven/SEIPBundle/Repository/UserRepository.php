@@ -40,18 +40,25 @@ class UserRepository extends EntityRepository
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findQueryToAssingTacticArrangementProgramGoal(User $user){
+    function findQueryToAssingTacticArrangementProgramGoal(array $users){
         $qb = $this->getQueryBuilder();
-        $groups = $user->getGroups();
-        $group = $groups[0];
-        $level = $group->getLevel();
+        $level = 0;
+        $usersId = array();
+        foreach ($users as $user) {
+            $groups = $user->getGroups();
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level){
+                    $level = $group->getLevel();
+                }
+            }
+            $usersId[] = $user->getId();
+        }
         $qb
             ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
+            ->andWhere($qb->expr()->orX('g.level <= :level',$qb->expr()->in('u.id', $usersId)))
             ->andWhere('u.gerencia = :gerencia')
             ->andWhere('g.typeRol = :typeRol')
             ->setParameter('level', $level)
-            ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
             ->setParameter('gerencia', $user->getGerencia())
             ;
@@ -62,8 +69,20 @@ class UserRepository extends EntityRepository
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findToAssingTacticArrangementProgramGoal(User $user){
-        return $this->findQueryToAssingTacticArrangementProgramGoal($user)->getQuery()->getResult();
+    function findToAssingTacticArrangementProgramGoal(array $users){
+        return $this->findQueryToAssingTacticArrangementProgramGoal($users)->getQuery()->getResult();
+    }
+    
+    function findUsers(array $responsiblesId) {
+        $qb = $this->getQueryBuilder();
+        $qb
+           ->addSelect('g')
+           ->innerJoin('u.groups', 'g')
+           ->andWhere($qb->expr()->in('u.id', $responsiblesId))
+           ->andWhere('u.enabled = :enabled')
+           ->setParameter('enabled', true)
+            ;
+        return $qb->getQuery()->getResult();
     }
     
     protected function getAlias() {

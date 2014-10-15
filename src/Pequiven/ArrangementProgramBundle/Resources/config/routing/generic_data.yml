@@ -1,5 +1,5 @@
 pequiven_arrangementprogram_data_responsible_goals:
-    path: /{responsibleProgram}/responsible-goals.{_format}
+    path: /responsible-goals.{_format}
     defaults: 
         _controller: pequiven_seip.controller.arrangementprogram_data:getResponsibleGoalsAction
         _format: json

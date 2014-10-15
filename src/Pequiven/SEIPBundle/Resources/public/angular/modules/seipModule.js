@@ -190,7 +190,7 @@ angular.module('seipModule.controllers', [])
             }
         };
         var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
-        var programResponsible = angular.element('#arrangementprogram_responsible');//Responsable del programa de gestion
+        var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
         var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
         tacticalObjective.on('change',function(e){
             
@@ -214,6 +214,7 @@ angular.module('seipModule.controllers', [])
         });
         programResponsible.on('change',function(object){
             var reponsibleId = object.val;
+            console.log(object.val);
             $scope.getResponsiblesGoal(reponsibleId);
         });
         $scope.getResponsiblesGoal = function(reponsibleId){
@@ -221,7 +222,7 @@ angular.module('seipModule.controllers', [])
                 $scope.data.responsibleGoals = [];
             }else{
                 notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibleProgram : reponsibleId})).success(function(data){
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibles : reponsibleId})).success(function(data){
                     $scope.data.responsibleGoals = data;
                     notificationBarService.getLoadStatus().done();
                 });

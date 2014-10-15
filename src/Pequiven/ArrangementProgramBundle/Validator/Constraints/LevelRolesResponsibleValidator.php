@@ -22,7 +22,18 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
     private $container;
     
     public function validate($object, Constraint $constraint){
-        $responsible = $object->getResponsible();
+        $responsibles = $object->getResponsibles();
+        $topLevel = 0;
+        foreach ($responsibles as $r) {
+            foreach ($r->getGroups() as $group) {
+                if($group->getLevel() > $topLevel){
+                    $topLevel = $group->getLevel();
+                    $userTopLevel = $r;
+                }
+            }
+        }
+        
+        $responsible = $userTopLevel;
         $timeline = $object->getTimeline();
         //Sino se asigno ninguna meta al crear el programa de gestion
         if(!$timeline){
@@ -35,7 +46,7 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
                 foreach ($goal->getResponsibles() as $goalResponsible) {
                     foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
                         if($groupResponsibleGoal->getLevel() > $group->getLevel()){
-                            $errors[] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+                            $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
                         }
                     }
                 }
