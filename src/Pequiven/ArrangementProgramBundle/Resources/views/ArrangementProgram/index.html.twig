@@ -25,8 +25,8 @@
                             <td data-title="'{{ 'pequiven.arrangement_program.process'|trans }}'" sortable="'process'" filter="{ 'process': 'text' }">
                                 {$ result.process $}
                             </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.category_arrangement_program' | trans }}'" sortable="'rifValidated'" filter="{ 'rifValidated': 'select' }" filter-data="names({{ filterYesNo|json_encode() }})">
-                                {$ result.categoryArrangementProgram.description $}
+                            <td data-title="'{{ 'pequiven.arrangement_program.advances' | trans }}'" sortable="'rifValidated'" filter="{ 'rifValidated': 'select' }" filter-data="names({{ filterYesNo|json_encode() }})">
+                                {$ result._data.advances $}%
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }">
                                 {$ result.tacticalObjective.gerencia.complejo.description $}

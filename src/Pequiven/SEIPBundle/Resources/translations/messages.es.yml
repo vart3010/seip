@@ -23,6 +23,10 @@ pequiven:
     details: Detalles
     dialog:
         confirm: Confirmar
+    advances:
+        nope: Nada
+        better: Mejor
+        complete: Completo
 app:
     loading: Cargando
 

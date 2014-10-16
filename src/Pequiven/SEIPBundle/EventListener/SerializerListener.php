@@ -292,13 +292,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     }
     
     public function onPostSerializeArrangementProgram(ObjectEvent $event) {
-        $data = array();
+        $links = $data = array();
         $object = $event->getObject();
         if($object->getId() > 0){
-            $data['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
-            $data['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
+            $links['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
+            $links['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
         }
-        $event->getVisitor()->addData('_links',$data);
+        $data['advances'] = $object->getAdvances();
+        $event->getVisitor()->addData('_data',$data);
+        $event->getVisitor()->addData('_links',$links);
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

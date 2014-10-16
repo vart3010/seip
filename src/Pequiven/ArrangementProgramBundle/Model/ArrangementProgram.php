@@ -217,11 +217,17 @@ abstract class ArrangementProgram
             foreach ($timeline->getGoals() as $goal) {
                 $goalDetails = $goal->getGoalDetails();
                 $reflection = new \ReflectionClass($goalDetails);
-                $nameMatch = 'Real';
+                $nameMatch = '^get\w+Real$';
                 foreach ($reflection->getMethods() as $method) {
                     $methodName = $method->getName();
                     if(preg_match('/'.$nameMatch.'/i', $methodName)){
-//                        var_dump($propertyName);
+                        $class = $method->getDeclaringClass();
+                        if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
+                            continue;
+                        }
+                        $real = $goalDetails->$methodName();
+                        $weight = $goalDetails->getGoal()->getWeight();
+                        $advances +=  ($weight/100) * $real;
                     }
                 }
                 
