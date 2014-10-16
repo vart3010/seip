@@ -20,6 +20,8 @@ pequiven:
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
+        no_revison_date: No revisado.
+        no_approval_date: No aprobado.
         status:
             status: Estatus
             draft: Borrador

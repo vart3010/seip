@@ -61,11 +61,11 @@
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>
-            {{ entity.revisionDate ? entity.revisionDate|date(appConfiguration.generalDateFormat) : null }}
+            {{ entity.revisionDate ? entity.revisionDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_revison_date'|trans }}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.approval_date'|trans }}</label>
-            {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : null }}
+            {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_approval_date'|trans }}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
