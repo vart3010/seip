@@ -31,6 +31,18 @@ class ArrangementProgramRepository extends EntityRepository
         }
         return $qb->getQuery()->getResult();
     }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($ref = $criteria->remove('ap.ref'))){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
+        }
+        parent::applyCriteria($queryBuilder, $criteria->toArray());
+    }
+    protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
+        parent::applySorting($queryBuilder, $sorting);
+    }
+    
     protected function getAlias() {
         return 'ap';
     }

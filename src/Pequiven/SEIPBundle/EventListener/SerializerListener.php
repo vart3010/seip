@@ -303,7 +303,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $links['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
             $links['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
         }
-        $data['advances'] = $object->getAdvances();
+        $data['summary'] = $object->getSummary();
         $event->getVisitor()->addData('_data',$data);
         $event->getVisitor()->addData('_links',$links);
     }

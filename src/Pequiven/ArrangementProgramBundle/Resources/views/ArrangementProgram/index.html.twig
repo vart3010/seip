@@ -19,26 +19,25 @@
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven.arrangement_program.advances' | trans }}'">
+                                <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances >= 50"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
+                                <span>
+                                    {$ result._data.summary.advances $}/{$ result._data.summary.weight $}%
+                                </span>
+                            </td>
+                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                                <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
+                            </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'period': 'text' }">
-                                <a href="{$ result._links.self.href $}">{$ result.period.name $}</a>
+                                {$ result.period.name $}
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.process'|trans }}'" sortable="'process'" filter="{ 'process': 'text' }">
                                 {$ result.process $}
                             </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.advances' | trans }}'" sortable="'rifValidated'" filter="{ 'rifValidated': 'select' }" filter-data="names({{ filterYesNo|json_encode() }})">
-                                {$ result._data.advances $}%
-                            </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }">
                                 {$ result.tacticalObjective.gerencia.complejo.description $}
-                            </td>
-                            <td class="low-padding">
-                                <span class="select compact" tabindex="0">
-                                    <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                                    <span class="select-arrow"></span>
-                                    <span class="drop-down">
-                                        <a href ng-click="itemEdit(result._links.self.edit.href)" >{{ 'pequiven.edit'|trans({},'messages') }}</a>
-                                    </span>
-                                </span>
                             </td>
                         </tr>
                     </table>

@@ -208,14 +208,21 @@ abstract class ArrangementProgram
     /**
      * Retorna el porcentaje de avance del programa de gestion
      */
-    function getAdvances()
+    function getSummary()
     {
+        $summary = array(
+            'weight' => 0,
+            'advances' => 0,
+        );
+        $totalWeight = 0;
         $advances = 0;
         $timeline = $this->getTimeline();
         if($timeline){
             $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
                 $goalDetails = $goal->getGoalDetails();
+                $weight = $goalDetails->getGoal()->getWeight();
+                $totalWeight += $weight;
                 $reflection = new \ReflectionClass($goalDetails);
                 $nameMatch = '^get\w+Real$';
                 foreach ($reflection->getMethods() as $method) {
@@ -226,14 +233,15 @@ abstract class ArrangementProgram
                             continue;
                         }
                         $real = $goalDetails->$methodName();
-                        $weight = $goalDetails->getGoal()->getWeight();
                         $advances +=  ($weight/100) * $real;
                     }
                 }
                 
             }
         }
-        return $advances;
+        $summary['advances'] = $advances;
+        $summary['weight'] = $totalWeight;
+        return $summary;
     }
     
     protected function calculateAverageRowReal(){
