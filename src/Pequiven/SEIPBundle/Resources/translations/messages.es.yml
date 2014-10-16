@@ -27,6 +27,8 @@ pequiven:
         nope: Nada
         better: Mejor
         complete: Completo
+    filters: Filtros
+    limit: Limite
 app:
     loading: Cargando
 

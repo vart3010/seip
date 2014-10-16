@@ -299,6 +299,10 @@ angular.module('seipModule.controllers', [])
         
         $scope.init();
     })
+    .controller('ReportArrangementProgramController',function($scope){
+        $scope.data = {};
+
+    })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
         
         $scope.model = {};
@@ -572,12 +576,5 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         
-    })
-    .directive('ngCustomDirective',function(index){
-        console.log('aaa');
-        return function(index2){
-            console.log(index);
-            console.log(index2);
-        }
     })
     ;        
