@@ -283,7 +283,22 @@
                                 var d = r.data.goal.weight;
                                 return d;
                             },
-                            summaryType: 'sum'
+                            summaryType: function (records, values) {
+                                var i,key,value=0,summary;
+                                for(i=0 ; i < 1; i++){
+                                    var data = records[i].data;
+                                    for(key in data){
+                                        if (key.match('Real')) {
+                                            summary = calculateSummaryRenderer(records, values, key);
+                                            value = value + summary;
+                                        }
+                                    }
+                                }
+                                return value;
+                            },
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return formatNumber(value) + '%';
+                            }
                         }, {
                             text: '{{ 'pequiven.quarter.first'|trans({},'messages') }}',
                             columns: [

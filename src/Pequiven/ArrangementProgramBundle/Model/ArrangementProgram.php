@@ -213,19 +213,19 @@ abstract class ArrangementProgram
         $advances = 0;
         $timeline = $this->getTimeline();
         if($timeline){
-//            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
-//            foreach ($timeline->getGoals() as $goal) {
-//                $goalDetails = $goal->getGoalDetails();
-//                $reflection = new \ReflectionClass($goal);
-//                foreach ($reflection->getProperties() as $property) {
-//                    if(preg_match('', $property->getName())){
-//                        
-//                    }
-//                    var_dump();
-//                    
-//                }
-//                
-//            }
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            foreach ($timeline->getGoals() as $goal) {
+                $goalDetails = $goal->getGoalDetails();
+                $reflection = new \ReflectionClass($goalDetails);
+                $nameMatch = 'Real';
+                foreach ($reflection->getMethods() as $method) {
+                    $methodName = $method->getName();
+                    if(preg_match('/'.$nameMatch.'/i', $methodName)){
+//                        var_dump($propertyName);
+                    }
+                }
+                
+            }
         }
         return $advances;
     }
