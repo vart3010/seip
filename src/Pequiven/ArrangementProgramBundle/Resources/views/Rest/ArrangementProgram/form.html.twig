@@ -272,105 +272,112 @@
                     },
                     summaryType: 'sum'
                 },{
-                    text: '{{ "pequiven.months.january"|trans({},"messages") }}',
+                    text: 'Test',
                     columns: [
                         {
-                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
-                            width: widthColumnValues,
-                            baseCls: 'bg-column-gray',
-                            sortable: true,
-                            groupable: false,
-                            align: 'center',
-                            dataIndex: 'januaryPlanned',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'januaryPlanned';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
-                        }, {
-                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
-                            sortable: true,
-                            groupable: false,
-                            width: widthColumnValues,
-                            align: 'center',
-                            dataIndex: 'januaryReal',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'januaryReal';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
-                        }
-                    ]
-                }, {
-                    text: '{{ "pequiven.months.february"|trans({},"messages") }}',
-                    columns: [
+                            text: '{{ "pequiven.months.january"|trans({},"messages") }}',
+                            columns: [
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                    width: widthColumnValues,
+                                    baseCls: 'bg-column-gray',
+                                    sortable: true,
+                                    groupable: false,
+                                    align: 'center',
+                                    dataIndex: 'januaryPlanned',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'januaryPlanned';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }, {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                    sortable: true,
+                                    groupable: false,
+                                    width: widthColumnValues,
+                                    align: 'center',
+                                    dataIndex: 'januaryReal',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'januaryReal';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }
+                            ]
+                        },
                         {
-                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
-                            sortable: true,
-                            groupable: false,
-                            baseCls: 'bg-column-gray',
-                            width: widthColumnValues,
-                            align: 'center',
-                            dataIndex: 'februaryPlanned',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'februaryPlanned';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
-                        }, {
-                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
-                            sortable: true,
-                            groupable: false,
-                            width: widthColumnValues,
-                            align: 'center',
-                            dataIndex: 'februaryReal',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'februaryReal';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
-                        }
-                    ]
-                }, {
-                    text: '{{ "pequiven.months.march"|trans({},"messages") }}',
-                    columns: [
+                            text: '{{ "pequiven.months.february"|trans({},"messages") }}',
+                            columns: [
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                    sortable: true,
+                                    groupable: false,
+                                    baseCls: 'bg-column-gray',
+                                    width: widthColumnValues,
+                                    align: 'center',
+                                    dataIndex: 'februaryPlanned',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'februaryPlanned';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }, {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                    sortable: true,
+                                    groupable: false,
+                                    width: widthColumnValues,
+                                    align: 'center',
+                                    dataIndex: 'februaryReal',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'februaryReal';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }
+                            ]
+                        },
                         {
-                            text: '{{ "pequiven.goals.abbr_planned"|trans }}',
-                            sortable: true,
-                            groupable: false,
-                            width: widthColumnValues,
-                            baseCls: 'bg-column-gray',
-                            align: 'center',
-                            dataIndex: 'marchPlanned',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'marchPlanned';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
-                        }, {
-                            text: '{{ "pequiven.goals.abbr_real"|trans }}',
-                            sortable: true,
-                            groupable: false,
-                            width: widthColumnValues,
-                            align: 'center',
-                            dataIndex: 'marchReal',
-                            renderer: valGoalDetails,
-                            field: fieldTypeProperties,
-                            summaryType: function(records, values) {
-                                var nameField = 'marchReal';
-                                return calculateSummaryRenderer(records, values,nameField);
-                            },
-                            summaryRenderer: valSummaryRenderer
+                            text: '{{ "pequiven.months.march"|trans({},"messages") }}',
+                            columns: [
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans }}',
+                                    sortable: true,
+                                    groupable: false,
+                                    width: widthColumnValues,
+                                    baseCls: 'bg-column-gray',
+                                    align: 'center',
+                                    dataIndex: 'marchPlanned',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'marchPlanned';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }, {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans }}',
+                                    sortable: true,
+                                    groupable: false,
+                                    width: widthColumnValues,
+                                    align: 'center',
+                                    dataIndex: 'marchReal',
+                                    renderer: valGoalDetails,
+                                    field: fieldTypeProperties,
+                                    summaryType: function(records, values) {
+                                        var nameField = 'marchReal';
+                                        return calculateSummaryRenderer(records, values,nameField);
+                                    },
+                                    summaryRenderer: valSummaryRenderer
+                                }
+                            ]
                         }
                     ]
                 }, {

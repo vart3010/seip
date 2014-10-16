@@ -76,14 +76,6 @@ class ArrangementProgram extends Model
     private $responsible;
 
     /**
-     * Linea de tiempo
-     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     *
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
-     */
-    protected $timeline;
-
-    /**
      * Revisado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *

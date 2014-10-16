@@ -16,6 +16,7 @@ pequiven:
         start_date: Fecha inicio
         end_date: Fecha fin
         weight: Peso
+        advances: Avances
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
@@ -71,6 +72,7 @@ seip:
             start_date: Fecha Inicio
             end_date: Fecha Fin
             responsible: Responsable
+            responsible_goal: Responsable de la Meta
             weight: Peso
             observations: Observaciones
             actions: Acciones

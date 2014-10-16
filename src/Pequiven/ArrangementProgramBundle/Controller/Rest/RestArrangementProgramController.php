@@ -72,6 +72,9 @@ class RestArrangementProgramController extends FOSRestController
         if($form->isValid()){
             //Habilitar limpiar los valores reales si el planeado se establecio en cero
             $isEnabledClearRealByPlannedEmpty = true;
+            //Permitir cargar valor real mayor a planificado.
+            $isAllowLoadingLongerThanPlannedRealValue = false;
+            
             if($isEnabledClearRealByPlannedEmpty === true){
                 $propertyAccessor = new PropertyAccessor();
                 foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
@@ -82,7 +85,9 @@ class RestArrangementProgramController extends FOSRestController
                         $propertyAccessor->setValue($entity, $monthReal, 0);
                     }else if($valueReal > $valuePlanned){
                         //Valida que el valor real no pueda ser mayor al planeado.
-                        $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+                        if($isAllowLoadingLongerThanPlannedRealValue === false){
+                            $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+                        }
                     }
                 }
             }
