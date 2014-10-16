@@ -23,6 +23,13 @@ class ArrangementProgram extends Model
     private $id;
 
     /**
+     * Referencia del programa de gestion
+     * @var string
+     * @ORM\Column(name="ref",type="string",length=100)
+     */
+    private $ref = 'TEMP';
+
+    /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
@@ -67,15 +74,6 @@ class ArrangementProgram extends Model
     private $process;
 
     /**
-     * Responsable
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id",nullable=false)
-     */
-    private $responsible;
-
-    /**
      * Revisado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *
@@ -108,14 +106,6 @@ class ArrangementProgram extends Model
     private $approvalDate;
 
     /**
-     * Tipo de programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
-    private $type;
-    
-    /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *
@@ -123,7 +113,11 @@ class ArrangementProgram extends Model
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
-
+ 
+    public function __construct() {
+        $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -296,29 +290,6 @@ class ArrangementProgram extends Model
     }
 
     /**
-     * Set responsible
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsible
-     * @return ArrangementProgram
-     */
-    public function setResponsible(\Pequiven\SEIPBundle\Entity\User $responsible = null)
-    {
-        $this->responsible = $responsible;
-
-        return $this;
-    }
-
-    /**
-     * Get responsible
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getResponsible()
-    {
-        return $this->responsible;
-    }
-
-    /**
      * Set reviewedBy
      *
      * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
@@ -382,15 +353,107 @@ class ArrangementProgram extends Model
         $this->createdBy = $createdBy;
         return $this;
     }
-    
-    function getTypeLabel() {
-        
-        $labels = array(
-            self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
-            self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',
-        );
-        if(isset($labels[$this->type])){
-            return $labels[$this->type];
-        }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return ArrangementProgram
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return ArrangementProgram
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Add responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @return ArrangementProgram
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles[] = $responsibles;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->removeElement($responsibles);
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles()
+    {
+        return $this->responsibles;
+    }
+
+    /**
+     * Set timeline
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
+     * @return ArrangementProgram
+     */
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
+    {
+        $timeline->setArrangementProgram($this);
+        $this->timeline = $timeline;
+
+        return $this;
+    }
+
+    /**
+     * Get timeline
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
+     */
+    public function getTimeline()
+    {
+        return $this->timeline;
     }
 }

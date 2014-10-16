@@ -20,6 +20,10 @@
         <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
 
         <p class="inline-label">
+            <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+            {{ entity.ref }}
+        </p>
+        <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.period'|trans }}</label>
             {{ entity.period }}
         </p>
@@ -50,20 +54,32 @@
             </p>
         {% endif %}
         <p class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.responsible'|trans }}</label>
-            {{ entity.responsible }}
+            <label class="label">{{ 'pequiven.arrangement_program.responsibles'|trans }}</label>
+            {% for responsible in entity.responsibles %}
+                {{ responsible }}{% if loop.last == false %},{% else %}.{% endif %}
+            {% endfor %}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>
-            {{ entity.revisionDate ? entity.revisionDate|date(appConfiguration.generalDateFormat) : null }}
+            {{ entity.revisionDate ? entity.revisionDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_revison_date'|trans }}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.approval_date'|trans }}</label>
-            {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : null }}
+            {{ entity.approvalDate ? entity.approvalDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_approval_date'|trans }}
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-            <small class="tag">{{ entity.advances|trans }}%</small>
+            {% set summary = entity.summary %}
+            {% set advances = summary['advances'] %}
+            {% set advancesClass = 'red-gradient' %}
+            {% if advances >= 50 %}
+                {% set advancesClass = 'orange-gradient' %}
+            
+            {% elseif advances == 100 %}
+                {% set advancesClass = 'green-gradient' %}
+            {% endif %}
+            <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+            <br/><br/>
         </p>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
@@ -96,6 +112,12 @@
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             });
     });
+    $(function(){
+        {% if app.session.flashbag.has('autoOpenOnSave') %}
+            {% set tmpClear = app.session.flashbag.get('autoOpenOnSave') %}
+            $('#arrangementGoalDetailsPop').click();
+        {% endif %}
+    });
 </script>
  
 
@@ -116,6 +138,8 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
              $('.tables-extras').tablesorter();
+             // Progress
+            $('.progress').progress();
         });
     </script>
 {% endblock javascript %}

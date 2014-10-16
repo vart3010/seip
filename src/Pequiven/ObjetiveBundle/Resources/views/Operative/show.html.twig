@@ -1,0 +1,90 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_objetive_menu_list_operative') }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_objetive.objetive_operative'|trans }} {{ entity.ref }}</legend>
+
+        <!-- Objetivo Tácticos al cual o a los cuales esta Asociado el Objetivo Operativo -->
+        <div class="inline-label">
+            <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
+            <ul>
+            {% for parent in entity.parents %}
+                <li>{{ parent.ref }} {{ parent.description }}</li>
+            {% endfor  %}
+            </ul>
+        </div>
+        <br>
+        
+        <!-- Enunciado del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.statementOperative'|trans }}</label>
+            {{ entity.description }}
+        </p>
+        
+        <!-- Meta del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.goalObjetiveOperative'|trans }}</label>
+            {{ entity.goal|number_format(2,',','.') }}%
+        </p>
+        
+        <!-- Gerencia 2da Línea a la cual impacta el Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.gerenciaSecond'|trans }}</label>
+            {{ entity.gerenciaSecond.description }}
+        </p>
+        
+        <!-- ¿Evaluación por Indicadores Operativos? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByIndicatorOperative'|trans }}</label>
+            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+        </p>
+        
+        <!-- Indicadores Operativos Asociados al Objetivo Operativo -->
+        {% if entity.indicators|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
+                <ul>
+                {% for indicator in entity.indicators %}
+                    <li>{{ indicator.ref }} {{ indicator.description }}</li>
+                {% endfor  %}
+                </ul>
+            </div>
+            <br>
+        {% endif %}
+        
+        <!-- ¿Evaluación por Programas de Gestión? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
+            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+        </p>
+        
+    </fieldset>
+
+<br /><br />
+
+{#<p class="button-height align-right">
+    {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+</p>#}
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+             {#$('.tables-extras').tablesorter();#}
+        });
+    </script>
+{% endblock javascript %}

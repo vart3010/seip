@@ -10,3 +10,6 @@ Pequiven\SEIPBundle\Entity\User:
         lastName:
             expose: true
             groups: [api_list]
+        numPersonal:
+            expose: true
+            groups: [api_list]

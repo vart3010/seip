@@ -69,7 +69,7 @@ class BackendMenuBuilder extends MenuBuilder
         //Menú Gestión Estratégica
         $this->addArrangementStrategicMenu($menu, $section);
         //Menú Programas de Gestión
-        $this->addArrangementProgramsMenu($menu, $section);
+        //$this->addArrangementProgramsMenu($menu, $section);
         //Menú Reportes
 //        $menu->addChild('reports', array(
 //            'route' => null,

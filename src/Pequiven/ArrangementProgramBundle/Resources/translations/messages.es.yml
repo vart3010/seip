@@ -21,6 +21,7 @@ pequiven:
     start_date: Fecha inicio
     end_date: Fecha fin
     weight: Peso de la meta
+    weight_goal: Peso
     actions:
         edit: Editar
         delete: Eliminar
@@ -30,6 +31,8 @@ pequiven:
         confirm:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?
+            arrangement_program:
+                open_on_save: ¿Desea abrir formulario de las metas luego de guardar?
     validators:
         arrangement_program:
             select_responsible_person: Seleccione un responsable

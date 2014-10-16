@@ -36,6 +36,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeIndicator', 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoalDetails', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgram', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
         );
     }
 
@@ -48,11 +49,13 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
      * @param ObjectEvent $event
      */
     public function onPostSerializeObjetive(ObjectEvent $event) {
-        if ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
+        $object = $event->getObject();
+        if ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
             $lineStrategics = $event->getObject()->getLineStrategics();
             $event->getVisitor()->addData('groupBy', $lineStrategics[0]->getRef() . $lineStrategics[0]->getDescription());
-        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
-            $object = $event->getObject();
+            $data['self']['href'] = $this->generateUrl('objetiveStrategic_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
+        } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
             $parents = $object->getParents();
             $valueGroupBy = '';
             foreach ($parents as $parent) {
@@ -60,9 +63,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
-            $event->getContext();
-        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
-            $object = $event->getObject();
+            $data['self']['href'] = $this->generateUrl('objetiveTactic_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
+        } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
             $parents = $object->getParents();
             $valueGroupBy = '';
             foreach ($parents as $parent) {
@@ -70,6 +73,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
+            $data['self']['href'] = $this->generateUrl('objetiveOperative_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
         }
     }
 
@@ -101,6 +106,37 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         //Deshabilitar las celdas planeadas cuando se distribuya el 100%
         $disablePlannedOnComplete = true;
         
+        //Habilitar la carga por trimestre
+        $isEnabledLoadByQuarter = true;
+        
+        //Habilitar la carga del primer trimestre (Requiere isEnabledLoadByQuarter)
+        $isEnabledLoadByQuarterFirst = false;
+        //Habilitar la carga de valores planificados del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
+        $isEnabledLoadByQuarterFirstPlanned = true;
+        //Habilitar la carga de valores reales del primer trimestre (Requiere isEnabledLoadByQuarterFirst)
+        $isEnabledLoadByQuarterFirstReal = true;
+        
+        //Habilitar la carga del segundo trimestre (Requiere isEnabledLoadByQuarter)
+        $isEnabledLoadByQuarterSecond = false;
+        //Habilitar la carga de valores planificados del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
+        $isEnabledLoadByQuarterSecondPlanned = true;
+        //Habilitar la carga de valores reales del segundo trimestre (Requiere isEnabledLoadByQuarterSecond)
+        $isEnabledLoadByQuarterSecondReal = true;
+        
+        //Habilitar la carga del tercer trimestre (Requiere isEnabledLoadByQuarter)
+        $isEnabledLoadByQuarterThird = false;
+        //Habilitar la carga de valores planificados del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
+        $isEnabledLoadByQuarterThirdPlanned = true;
+        //Habilitar la carga de valores reales del tercer trimestre (Requiere isEnabledLoadByQuarterThird)
+        $isEnabledLoadByQuarterThirdReal = true;
+        
+        //Habilitar la carga del cuarto trimestre (Requiere isEnabledLoadByQuarter)
+        $isEnabledLoadByQuarterFourth = false;
+        //Habilitar la carga de valores planificados del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
+        $isEnabledLoadByQuarterFourthPlanned = true;
+        //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
+        $isEnabledLoadByQuarterFourthReal = true;
+        
         $month = $date->format('m');
         
         if($isLoadRealEnabled === false){
@@ -127,17 +163,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 }
             }
         }
-        if($isEnabledEditByPlannedLoad === true){
-            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
-            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
-                $value = $propertyAccessor->getValue($object,$planned);
-                $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
-                if($value == '' || $value == '0' || $value === null){
-                    $data[$monthReal]['isEnabled'] = false;
-                }
-            }
-        }
-        
+                
         if($disablePlannedOnComplete === true){
             //Limite de porcentaje que se asigna al planeado
             $limitPlannedPercentaje = 100;
@@ -155,19 +181,194 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                     $disable = true;
                 }
             }
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $percentaje = $propertyAccessor->getValue($object,$planned);
+                if($disable === true && ($percentaje == 0 && $percentaje == '0' || $percentaje == '' || $percentaje == null)){
+                    $data[$planned]['isEnabled'] = false;
+                }
+            }
         }
+        
+        if($isEnabledLoadByQuarter === true){
+            $currentCuarter = null;
+            $quarterDef = array(
+                1 => array(1,2,3),
+                2 => array(4,5,6),
+                3 => array(7,8,9),
+                4 => array(10,11,12),
+            );
+            foreach ($quarterDef as $key => $quarter) {
+                foreach ($quarter as $monthQuarter) {
+                    if($monthQuarter == $month){
+                        $currentCuarter = $key;
+                        break;
+                    }
+                }
+                if($currentCuarter !== null){
+                    break;
+                }
+            }
+            /**
+             * Deshabilitar meses que no estan en el trimestre
+             */
+            $disableQuartes = function ($months,&$data,$currentCuarter) use ($quarterDef) {
+                foreach ($months as $planned => $monthNumber) {
+                    $disable = true;
+                    foreach ($quarterDef[$currentCuarter] as $monthQuarter) {
+                        if($monthNumber == $monthQuarter){
+                            $disable = false;
+                        }
+                    }
+                    if($disable === true){
+                        $data[$planned]['isEnabled'] = false;
+                    }else{
+                        $data[$planned]['isEnabled'] = true;
+                    }
+                }
+            };
+            
+            $enableQuartes = function($months,&$data,$cuarter) use ($quarterDef) {
+                
+                 foreach ($months as $planned => $monthNumber) {
+                    $disable = true;
+                    foreach ($quarterDef[$cuarter] as $monthQuarter) {
+                        if($monthNumber == $monthQuarter){
+                            $disable = false;
+                        }
+                    }
+                    if($disable === false){
+                        $data[$planned]['isEnabled'] = true;
+                    }else{
+                        $data[$planned]['isEnabled'] = false;
+                    }
+                }
+            };
+            
+            $disableQuartes(GoalDetails::getMonthsPlanned(),$data,$currentCuarter);
+            $disableQuartes(GoalDetails::getMonthsReal(),$data,$currentCuarter);
+            
+            if($isEnabledLoadByQuarterFirst === true){
+                if($isEnabledLoadByQuarterFirstPlanned === true){
+                    $enableQuartes(GoalDetails::getMonthsPlanned(),$data,1);
+                }
+                if($isEnabledLoadByQuarterFirstReal === true){
+                    $enableQuartes(GoalDetails::getMonthsReal(),$data,1);
+                }
+            }
+            if($isEnabledLoadByQuarterSecond === true){
+                if($isEnabledLoadByQuarterSecondPlanned === true){
+                    $enableQuartes(GoalDetails::getMonthsPlanned(),$data,2);
+                }
+                if($isEnabledLoadByQuarterSecondReal === true){
+                    $enableQuartes(GoalDetails::getMonthsReal(),$data,2);
+                }
+            }
+            if($isEnabledLoadByQuarterThird === true){
+                if($isEnabledLoadByQuarterThirdPlanned === true){
+                    $enableQuartes(GoalDetails::getMonthsPlanned(),$data,3);
+                }
+                if($isEnabledLoadByQuarterThirdReal === true){
+                    $enableQuartes(GoalDetails::getMonthsReal(),$data,3);
+                }
+            }
+            if($isEnabledLoadByQuarterFourth === true){
+                if($isEnabledLoadByQuarterFourthPlanned === true){
+                    $enableQuartes(GoalDetails::getMonthsPlanned(),$data,4);
+                }
+                if($isEnabledLoadByQuarterFourthReal === true){
+                    $enableQuartes(GoalDetails::getMonthsReal(),$data,4);
+                }
+            }
+        }
+        
+        if($isEnabledEditByPlannedLoad === true){
+            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+                $value = $propertyAccessor->getValue($object,$planned);
+                $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+                if($value == '' || $value == '0' || $value === null){
+                    $data[$monthReal]['isEnabled'] = false;
+                }
+            }
+        }
+        
         $event->getVisitor()->addData('_data',$data);
         
     }
     
     public function onPostSerializeArrangementProgram(ObjectEvent $event) {
-        $data = array();
+        $links = $data = array();
         $object = $event->getObject();
         if($object->getId() > 0){
-            $data['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
-            $data['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
+            $links['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $object->getId()));
+            $links['self']['edit']['href'] = $this->generateUrl('arrangementprogram_edit', array('id' => $object->getId()));
         }
-        $event->getVisitor()->addData('_links',$data);
+        $data['summary'] = $object->getSummary();
+        $event->getVisitor()->addData('_data',$data);
+        $event->getVisitor()->addData('_links',$links);
+    }
+    
+    /**
+     * Función que serializa el objeto de indicador para la vista
+     * @param ObjectEvent $event
+     */
+    public function onPostSerializeMonitor(ObjectEvent $event) {
+        $monitor = $event->getObject();
+        $range = array();
+        $filter = array();
+        $res = array();
+        $images = array();
+        $routeImage = array();
+        $images['good'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_green.png';
+        $images['middle'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_yellow.png';
+        $images['bad'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_red.png';
+        
+        $range['good'] = (float)70;
+        $range['bad'] =(float)40;
+        
+        //Acomodar Data
+        
+        //Obj. Táctico Original
+        $res['objTacticOriginal'] = $monitor->getObjTacticOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getObjTacticOriginalReal() / (float)$monitor->getObjTacticOriginal()) * 100,'0',2);
+        if($res['objTacticOriginal'] >= $range['good']){
+            $filter['objTacticOriginal'] = 1;
+        } elseif ($res['objTacticOriginal'] < $range['good'] && $res['objTacticOriginal'] >= $range['bad']){
+            $filter['objTacticOriginal'] = 2;
+        } elseif($res['objTacticOriginal'] < $range['bad']){
+            $filter['objTacticOriginal'] = 3;
+        }
+        if($filter['objTacticOriginal'] == 1){
+            $routeImage['objTacticOriginal'] = $images['good'];
+        } elseif($filter['objTacticOriginal'] == 2){
+            $routeImage['objTacticOriginal'] = $images['middle'];
+        } else{
+            $routeImage['objTacticOriginal'] = $images['bad'];
+        }
+        
+        //Ind. Táctico Original
+        $res['indTacticOriginal'] = $monitor->getIndTacticOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getIndTacticOriginalReal() / (float)$monitor->getIndTacticOriginal()) * 100,'0',2);
+        if($res['indTacticOriginal'] >= $range['good']){
+            $filter['indTacticOriginal'] = 1;
+        } elseif ($res['indTacticOriginal'] < $range['good'] && $res['indTacticOriginal'] >= $range['bad']){
+            $filter['indTacticOriginal'] = 2;
+        } elseif($res['indTacticOriginal'] < $range['bad']){
+            $filter['indTacticOriginal'] = 3;
+        }
+        if($filter['indTacticOriginal'] == 1){
+            $routeImage['indTacticOriginal'] = $images['good'];
+        } elseif($filter['indTacticOriginal'] == 2){
+            $routeImage['indTacticOriginal'] = $images['middle'];
+        } else{
+            $routeImage['indTacticOriginal'] = $images['bad'];
+        }
+        
+        //Resultados
+        //Obj. Táctico Original
+        $event->getVisitor()->addData('resObjTacticOriginal', $res['objTacticOriginal']);
+        $event->getVisitor()->addData('imageObjTacticOriginal', $routeImage['objTacticOriginal']);        
+        //Ind. Táctico Original
+        $event->getVisitor()->addData('resIndTacticOriginal', $res['indTacticOriginal']);
+        $event->getVisitor()->addData('imageIndTacticOriginal', $routeImage['indTacticOriginal']);
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

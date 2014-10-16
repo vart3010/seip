@@ -15,14 +15,18 @@ class GenericDataController extends SEIPController
     /**
      * Obtiene los responsable que se pueden asignar a una meta
      */
-    function getResponsibleGoalsAction($responsibleProgram)
+    function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        $repository = $this->getRepositoryById('user');
-        $user = $repository->find($responsibleProgram);
-        if(!$user){
-            throw $this->createNotFoundException();
+        $responsiblesId = $request->get('responsibles',array());
+        $results = array();
+        if(count($responsiblesId) > 0){
+            $repository = $this->getRepositoryById('user');
+            $users = $repository->findUsers($responsiblesId);
+            if(!$users){
+                throw $this->createNotFoundException();
+            }
+            $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users);
         }
-        $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($user);
         $view = $this->view();
         $view->setData($results);
         return $this->handleView($view);

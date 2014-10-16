@@ -58,7 +58,7 @@ function setValueSelect2Multiple(idSelect2,entities,data,callBack){
 
 
 angular.module('seipModule.controllers', [])
-    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter,$timeout){
+    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter,$timeout,$cookies){
         $scope.data.responsibleGoals = null;
         $scope.data.typeGoals = null;
         $scope.data.operationalObjectives = null;
@@ -190,7 +190,7 @@ angular.module('seipModule.controllers', [])
             }
         };
         var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
-        var programResponsible = angular.element('#arrangementprogram_responsible');//Responsable del programa de gestion
+        var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
         var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
         tacticalObjective.on('change',function(e){
             
@@ -201,7 +201,7 @@ angular.module('seipModule.controllers', [])
                 $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives",{idObjetiveTactical : tacticalObjetive})).success(function(data){
                     operationalObjective.append('<option value="">'+Translator.trans('pequiven.select')+'</option>');
                     angular.forEach(data,function(value){
-                        operationalObjective.append('<option value="'+value.id+'">'+value.description+'</option>');
+                        operationalObjective.append('<option value="'+value.id+'">'+value.ref+" "+value.description+'</option>');
                     });
                     operationalObjective.select2('val',e.val);
                     operationalObjective.select2('enable',true);
@@ -221,34 +221,53 @@ angular.module('seipModule.controllers', [])
                 $scope.data.responsibleGoals = [];
             }else{
                 notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibleProgram : reponsibleId})).success(function(data){
+                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibles : reponsibleId})).success(function(data){
                     $scope.data.responsibleGoals = data;
                     notificationBarService.getLoadStatus().done();
                 });
             }
         };
         
+        $scope.formReady = false;
         var form = angular.element('form');
-        form.submit(function(){
+        form.submit(function(e){
             var valid = true;
-            
-            
             //Select de asociado a
             var arrangementprogramCategoryArrangementProgram = angular.element('#arrangementprogram_categoryArrangementProgram');
             //Select de responsables
-            var arrangementprogramResponsible = angular.element('#arrangementprogram_responsible');
+            var arrangementprogramResponsible = angular.element('#arrangementprogram_responsibles');
             if(arrangementprogramResponsible){
-                if(arrangementprogramResponsible.val() == ''){
-                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person","s2id_arrangementprogram_responsible");
+                var v = arrangementprogramResponsible.val();
+                if(v == '' || v == null){
+                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person","s2id_arrangementprogram_responsibles");
                     valid = false;
                 }
             }
-            if(arrangementprogramCategoryArrangementProgram.val() == ''){
+            var v = arrangementprogramCategoryArrangementProgram.val();
+            if(v == '' || v == null){
                 $scope.sendMessageError("pequiven.validators.arrangement_program.select_category","s2id_arrangementprogram_categoryArrangementProgram");
                 valid = false;
             }
-            
-            return valid;
+            if(valid){
+                var autoOpenOnSave = angular.element('#autoOpenOnSave');
+                if($scope.goals.length > 0){
+                    $scope.openModalConfirm(Translator.trans('pequiven.modal.confirm.arrangement_program.open_on_save'),function(){
+                        autoOpenOnSave.val(1);
+                        $scope.formReady = true;
+                        form.submit();
+                    },function(){
+                        autoOpenOnSave.val(0);
+                        $scope.formReady = true;
+                        form.submit();
+                    });
+                }else{
+                    $scope.formReady = true;
+                }
+            }
+            if($scope.formReady == true){
+                return true;
+            }
+            e.preventDefault();
         });
         
         $scope.sendMessageError = function(message,id){
@@ -279,6 +298,10 @@ angular.module('seipModule.controllers', [])
         };
         
         $scope.init();
+    })
+    .controller('ReportArrangementProgramController',function($scope){
+        $scope.data = {};
+
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
         
@@ -487,7 +510,25 @@ angular.module('seipModule.controllers', [])
           }
       };
       
-    }).controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+    })
+    .controller("ObjetiveStrategicController",function($scope,notificationBarService,$http,$filter,$timeout){
+        var form = angular.element('form');
+
+        form.submit(function(){
+            var valid = true;
+            
+            //Select de Línea Estratégica
+            var selectLineStrategics = angular.element('#pequiven_objetive_strategic_registration_lineStrategics');
+            console.log('hola');
+            if(selectLineStrategics.val() == ''){
+                $scope.sendMessageError("error","s2id_pequiven_objetive_strategic_registration_lineStrategics");
+                valid = false;
+            }
+            
+            return valid;
+        });
+    })
+    .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);
@@ -506,6 +547,15 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         $scope.gerenciaSecond = null;
+        $scope.gerenciaFirst = null;
+        $scope.$watch("gerenciaFirst", function () {
+            if($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+            {
+                 $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+            }else{
+                 $scope.tableParams.$params.filter['gerencia'] = null;
+            }
+        });
         $scope.$watch("gerenciaSecond", function () {
             if($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
             {
@@ -524,11 +574,7 @@ angular.module('seipModule.controllers', [])
     .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 
     })
-    .directive('ngCustomDirective',function(index){
-        console.log('aaa');
-        return function(index2){
-            console.log(index);
-            console.log(index2);
-        }
+    .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        
     })
     ;        

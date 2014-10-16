@@ -9,6 +9,7 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    ref: Referencia
     select: Seleccione
     actions: Acciones
     form:
@@ -22,6 +23,12 @@ pequiven:
     details: Detalles
     dialog:
         confirm: Confirmar
+    advances:
+        nope: Nada
+        better: Mejor
+        complete: Completo
+    filters: Filtros
+    limit: Limite
 app:
     loading: Cargando
 

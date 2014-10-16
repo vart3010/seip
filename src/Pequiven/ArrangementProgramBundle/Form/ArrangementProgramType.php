@@ -76,8 +76,8 @@ class ArrangementProgramType extends AbstractType
             $form = $event->getForm();
             
             if($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                $form->add('responsible',null,array(
-                        'label' => 'pequiven.form.responsible',
+                $form->add('responsibles',null,array(
+                        'label' => 'pequiven.form.responsibles',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
                             'class' => "select2 input-xlarge",
@@ -103,8 +103,8 @@ class ArrangementProgramType extends AbstractType
                         
             }elseif($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
             
-                $form->add('responsible',null,array(
-                        'label' => 'pequiven.form.responsible',
+                $form->add('responsibles',null,array(
+                        'label' => 'pequiven.form.responsibles',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
                             'class' => "select2 input-xlarge",
@@ -120,8 +120,6 @@ class ArrangementProgramType extends AbstractType
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
                             'class' => "select2 input-xxlarge",
-//                            'ng-model' => 'model.arrangementProgram.tacticalObjective',
-//                            'ng-change' => 'setOperationalObjective(model.arrangementProgram.tacticalObjective)',
                         ),
                         'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
                             return $repository->findQueryObjetivesTactic();
@@ -130,8 +128,7 @@ class ArrangementProgramType extends AbstractType
                         'required' => true,
                     ))
                 ;
-//                var_dump();die;
-//                $formModifier($event,$object->getTacticalObjective());
+                $formModifier($event,$object->getTacticalObjective());
             }
             
         });

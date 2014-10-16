@@ -1,0 +1,6 @@
+Pequiven\ObjetiveBundle\Entity\Objetive:
+    properties:
+        lineStrategics:
+            - NotNull:
+                message: pequiven.validators.arrangement_program.responsible_person
+                groups: [base]

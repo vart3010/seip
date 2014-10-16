@@ -42,6 +42,10 @@ class ArrangementProgramController extends SEIPController
         }
         $form->handleRequest($request);
         if($request->isMethod('POST') && $form->isValid()){
+            $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+            if($autoOpenOnSave == true){
+                $this->setFlash('autoOpenOnSave', true);
+            }
             if($entity->getTimeline() === null){
                 $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
                 $entity->setTimeline($timeLine);
@@ -162,6 +166,10 @@ class ArrangementProgramController extends SEIPController
         $editForm->submit($request,false);
         
         if ($editForm->isValid()) {
+            $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+            if($autoOpenOnSave == true){
+                $this->setFlash('autoOpenOnSave', true);
+            }
             $timeline = $entity->getTimeline();
             if(isset($originalGoalsArray[$timeline->getId()])){
                 $goals = $originalGoalsArray[$timeline->getId()];

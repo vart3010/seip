@@ -28,7 +28,7 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
         if(!$timeline){
             return;
         }
-        $limitGoals = 3;
+        $limitGoals = 12;
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         
         //Repositorios
@@ -51,22 +51,30 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
                 $countGoals = count($goals);
                 $countArrangementPrograms = count($arrangementPrograms);
 
-                //Se suma la responsabilidad del programa actual y no se evaluan las metas
-                if($object->getResponsible() === $reposible){
-                    $countArrangementPrograms++;
-                }else{
-                    $countGoals++;//Mas 1 de la meta actual
-                    //Se evaluan las metas xq no es responsable del programa de gestion
-                    foreach ($timeline->getGoals() as $subGoal) {
-                        if($currentGoal !== $subGoal){
-                            foreach ($subGoal->getResponsibles() as $subReposible) {
-                                if($subReposible === $reposible){
-                                    $countGoals++;//Mas 1 de otras metas del mismo programa de gestion
+                    $isReposibleInProgram = false;
+                    foreach ($object->getResponsibles() as $reposibleProgram) {
+                        //Se busca a ver si es uno de los responsables del programa
+                        if($reposibleProgram === $reposible){
+                            $isReposibleInProgram = true;
+                            break;
+                        }
+                    }
+                    //Se suma la responsabilidad del programa actual y no se evaluan las metas
+                    if($isReposibleInProgram === true){
+                        $countArrangementPrograms++;
+                    }else{
+                        $countGoals++;//Mas 1 de la meta actual
+                        //Se evaluan las metas xq no es responsable del programa de gestion
+                        foreach ($timeline->getGoals() as $subGoal) {
+                            if($currentGoal !== $subGoal){
+                                foreach ($subGoal->getResponsibles() as $subReposible) {
+                                    if($subReposible === $reposible){
+                                        $countGoals++;//Mas 1 de otras metas del mismo programa de gestion
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
                 $total = $countGoals + $countArrangementPrograms;
                 if($total > $limitGoals){

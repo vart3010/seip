@@ -22,7 +22,19 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
     private $container;
     
     public function validate($object, Constraint $constraint){
-        $responsible = $object->getResponsible();
+        $responsibles = $object->getResponsibles();
+        $topLevel = 0;
+        $userTopLevel = null;
+        foreach ($responsibles as $r) {
+            foreach ($r->getGroups() as $group) {
+                if($group->getLevel() > $topLevel){
+                    $topLevel = $group->getLevel();
+                    $userTopLevel = $r;
+                }
+            }
+        }
+        
+        $responsible = $userTopLevel;
         $timeline = $object->getTimeline();
         //Sino se asigno ninguna meta al crear el programa de gestion
         if(!$timeline){
@@ -30,20 +42,22 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
         }
         $goals = $timeline->getGoals();
         $errors = array();
-        foreach ($responsible->getGroups() as $group) {
-            foreach ($goals as $goal) {
-                foreach ($goal->getResponsibles() as $goalResponsible) {
-                    foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
-                        if($groupResponsibleGoal->getLevel() > $group->getLevel()){
-                            $errors[] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+        if($responsible){
+            foreach ($responsible->getGroups() as $group) {
+                foreach ($goals as $goal) {
+                    foreach ($goal->getResponsibles() as $goalResponsible) {
+                        foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
+                            if($groupResponsibleGoal->getLevel() > $group->getLevel()){
+                                $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        foreach ($errors as $error) {
-            $this->context->addViolation($constraint->message,$error);
+
+            foreach ($errors as $error) {
+                $this->context->addViolation($constraint->message,$error);
+            }
         }
     }
     

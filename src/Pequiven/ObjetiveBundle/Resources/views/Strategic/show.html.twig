@@ -1,0 +1,86 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_objetive_menu_list_strategic') }}">{{ 'pequiven_objetive.objetive_strategic'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_objetive.objetive_strategic'|trans }} {{ entity.ref }}</legend>
+
+        <!-- Línea Estratégica que sigue el Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.lineStrategic'|trans }}</label>
+            {{ entity.lineStrategics[0].ref }} {{ entity.lineStrategics[0].description }} 
+        </p>
+        
+        <!-- Enunciado del Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.statementStrategic'|trans }}</label>
+            {{ entity.description }}
+        </p>
+        
+        <!-- ¿Evaluación por Objetivo Táctico? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByObjetiveTactic'|trans }}</label>
+            {{ entity.evalObjetive ? 'Sí' : 'No' }}
+        </p>
+        
+        <!-- Objetivos Tácticos Asociados al Objetivo Estratégico -->
+        {% if entity.childrens|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.objetiveTactics'|trans }}</label>
+                <ul>
+                {% for children in entity.childrens %}
+                    <li>{{ children.ref }} {{ children.description }}</li>
+                {% endfor  %}
+                </ul>
+            </div>
+            <br>
+        {% endif %}
+        
+        <!-- ¿Evaluación por Indicadores Estratégicos? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByIndicatorStrategic'|trans }}</label>
+            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+        </p>
+        
+        <!-- Indicadores Estratégicos Asociados al Objetivo Estratégico -->
+        {% if entity.indicators|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.indicatorStrategics'|trans }}</label>
+                <ul>
+                {% for indicator in entity.indicators %}
+                    <li>{{ indicator.ref }} {{ indicator.description }}</li>
+                {% endfor  %}
+                </ul>
+            </div>
+            <br>
+        {% endif %}
+        
+    </fieldset>
+
+<br /><br />
+
+{#<p class="button-height align-right">
+    {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+</p>#}
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+             {#$('.tables-extras').tablesorter();#}
+        });
+    </script>
+{% endblock javascript %}

@@ -54,3 +54,8 @@ select.xxlarge {
     font-weight: bold;
 }
 
+.semaphore {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}

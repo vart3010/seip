@@ -108,3 +108,19 @@ ng-table:
         prev: Anterior
         next: Siguiente
         last: Fin
+        
+monitor:
+    tabTactic: Nivel Táctico
+    tabOperative: Nivel Operativo
+    objetiveTactic: Objetivos Tácticos
+    indicatorTactic: Indicadores Tácticos
+    objetiveOperativeSupport: Objetivos Operativos Original
+    objetiveOperativeVinculant: Objetivos Operativos Vinculantes
+    indicatorOperativeSupport: Indicadores Operativos Original
+    indicatorOperativeVinculant: Indicadores Operativos Vinculantes
+    original: Original
+    vinculant: Vinculantes
+    plan: Planificados
+    real: Cargados
+    porcReal: % Cargado
+    gerencia: Gerencia
