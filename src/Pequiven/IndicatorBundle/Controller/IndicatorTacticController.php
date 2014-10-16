@@ -413,7 +413,7 @@ class IndicatorTacticController extends baseController {
 
         if (is_array($objetiveStrategicId) && is_numeric($gerenciaFirstId)) {
 
-            $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetiveStrategicId, array('fromIndicator' => true, 'gerenciaFirstId' => $gerenciaFirstId));
+            $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetiveStrategicId, array('fromIndicator' => true, 'gerenciaFirstId' => $gerenciaFirstId,'enabled' => true));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {

@@ -737,7 +737,7 @@ class ObjetiveOperativeController extends baseController {
         $objetiveStrategicId = explode(',', $request->request->get('objetiveStrategicId'));
 
         if (is_array($objetiveStrategicId)) {
-            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveStrategicId);
+            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveStrategicId,array('enabled' => true));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {

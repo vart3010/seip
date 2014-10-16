@@ -431,7 +431,7 @@ class IndicatorOperativeController extends baseController {
         $gerenciaSecondId = $securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX')) ? $user->getGerenciaSecond()->getId() : $request->request->get('gerenciaSecondId');
 
         if (is_array($objetiveTacticId) && is_numeric($gerenciaSecondId)) {
-            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveTacticId, array('fromIndicator' => true, 'gerenciaSecondId' => $gerenciaSecondId));
+            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveTacticId, array('fromIndicator' => true, 'gerenciaSecondId' => $gerenciaSecondId,'enabled' => true));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {
