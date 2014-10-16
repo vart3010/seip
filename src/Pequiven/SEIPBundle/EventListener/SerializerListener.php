@@ -36,6 +36,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeIndicator', 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoalDetails', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgram', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
         );
     }
 
@@ -48,11 +49,13 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
      * @param ObjectEvent $event
      */
     public function onPostSerializeObjetive(ObjectEvent $event) {
-        if ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
+        $object = $event->getObject();
+        if ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_ESTRATEGICO) {
             $lineStrategics = $event->getObject()->getLineStrategics();
             $event->getVisitor()->addData('groupBy', $lineStrategics[0]->getRef() . $lineStrategics[0]->getDescription());
-        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
-            $object = $event->getObject();
+            $data['self']['href'] = $this->generateUrl('objetiveStrategic_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
+        } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
             $parents = $object->getParents();
             $valueGroupBy = '';
             foreach ($parents as $parent) {
@@ -60,9 +63,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
-            $event->getContext();
-        } elseif ($event->getObject()->getObjetiveLevel() && $event->getObject()->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
-            $object = $event->getObject();
+            $data['self']['href'] = $this->generateUrl('objetiveTactic_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
+        } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_OPERATIVO) {
             $parents = $object->getParents();
             $valueGroupBy = '';
             foreach ($parents as $parent) {
@@ -70,6 +73,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
+            $data['self']['href'] = $this->generateUrl('objetiveOperative_show', array('id' => $object->getId()));
+            $event->getVisitor()->addData('_links',$data);
         }
     }
 
@@ -301,6 +306,69 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $data['advances'] = $object->getAdvances();
         $event->getVisitor()->addData('_data',$data);
         $event->getVisitor()->addData('_links',$links);
+    }
+    
+    /**
+     * Función que serializa el objeto de indicador para la vista
+     * @param ObjectEvent $event
+     */
+    public function onPostSerializeMonitor(ObjectEvent $event) {
+        $monitor = $event->getObject();
+        $range = array();
+        $filter = array();
+        $res = array();
+        $images = array();
+        $routeImage = array();
+        $images['good'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_green.png';
+        $images['middle'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_yellow.png';
+        $images['bad'] = '/seip/web/bundles/pequivenseip/logotipos/bullet_red.png';
+        
+        $range['good'] = (float)70;
+        $range['bad'] =(float)40;
+        
+        //Acomodar Data
+        
+        //Obj. Táctico Original
+        $res['objTacticOriginal'] = $monitor->getObjTacticOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getObjTacticOriginalReal() / (float)$monitor->getObjTacticOriginal()) * 100,'0',2);
+        if($res['objTacticOriginal'] >= $range['good']){
+            $filter['objTacticOriginal'] = 1;
+        } elseif ($res['objTacticOriginal'] < $range['good'] && $res['objTacticOriginal'] >= $range['bad']){
+            $filter['objTacticOriginal'] = 2;
+        } elseif($res['objTacticOriginal'] < $range['bad']){
+            $filter['objTacticOriginal'] = 3;
+        }
+        if($filter['objTacticOriginal'] == 1){
+            $routeImage['objTacticOriginal'] = $images['good'];
+        } elseif($filter['objTacticOriginal'] == 2){
+            $routeImage['objTacticOriginal'] = $images['middle'];
+        } else{
+            $routeImage['objTacticOriginal'] = $images['bad'];
+        }
+        
+        //Ind. Táctico Original
+        $res['indTacticOriginal'] = $monitor->getIndTacticOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getIndTacticOriginalReal() / (float)$monitor->getIndTacticOriginal()) * 100,'0',2);
+        if($res['indTacticOriginal'] >= $range['good']){
+            $filter['indTacticOriginal'] = 1;
+        } elseif ($res['indTacticOriginal'] < $range['good'] && $res['indTacticOriginal'] >= $range['bad']){
+            $filter['indTacticOriginal'] = 2;
+        } elseif($res['indTacticOriginal'] < $range['bad']){
+            $filter['indTacticOriginal'] = 3;
+        }
+        if($filter['indTacticOriginal'] == 1){
+            $routeImage['indTacticOriginal'] = $images['good'];
+        } elseif($filter['indTacticOriginal'] == 2){
+            $routeImage['indTacticOriginal'] = $images['middle'];
+        } else{
+            $routeImage['indTacticOriginal'] = $images['bad'];
+        }
+        
+        //Resultados
+        //Obj. Táctico Original
+        $event->getVisitor()->addData('resObjTacticOriginal', $res['objTacticOriginal']);
+        $event->getVisitor()->addData('imageObjTacticOriginal', $routeImage['objTacticOriginal']);        
+        //Ind. Táctico Original
+        $event->getVisitor()->addData('resIndTacticOriginal', $res['indTacticOriginal']);
+        $event->getVisitor()->addData('imageIndTacticOriginal', $routeImage['indTacticOriginal']);
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

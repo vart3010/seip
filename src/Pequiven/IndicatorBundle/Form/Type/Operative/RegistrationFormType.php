@@ -84,7 +84,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 10)));
         
         //Peso del Indicador
-        $builder->add('weight','percent',array('label' => 'form.weightIndicatorOperative','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array( 'class' => 'input', 'size' => 8), 'required' => false));
+        $builder->add('weight','percent',array('label' => 'form.weightIndicatorOperative','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array( 'class' => 'input validate[required]', 'size' => 8)));
         //Meta del Indicador
         //$builder->add('goal','percent',array('label' => 'form.goalIndicatorOperative','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenIndicatorBundle','attr' => array('class' => 'input validate[required]', 'size' => 8)));
         //Fórmula del indicador a crear

@@ -1,0 +1,109 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenObjetiveBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_objetive_menu_list_tactic') }}">{{ 'pequiven_objetive.objetive_tactic'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_objetive.objetive_tactic'|trans }} {{ entity.ref }}</legend>
+
+        <!-- Objetivo Estratégicos al cual o a los cuales esta Asociado el Objetivo Táctico -->
+        <div class="inline-label">
+            <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveStrategics'|trans : 'pequiven_objetive.objetive_strategic'|trans }}</label>
+            <ul>
+            {% for parent in entity.parents %}
+                <li>{{ parent.ref }} {{ parent.description }}</li>
+            {% endfor  %}
+            </ul>
+        </div>
+        <br>
+        
+        <!-- Enunciado del Objetivo Táctico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.statementTactic'|trans }}</label>
+            {{ entity.description }}
+        </p>
+        
+        <!-- Meta del Objetivo Táctico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.goalObjetiveTactic'|trans }}</label>
+            {{ entity.goal|number_format(2,',','.') }}%
+        </p>
+        
+        <!-- ¿Evaluación por Objetivo Operativo? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByObjetiveOperative'|trans }}</label>
+            {{ entity.evalObjetive ? 'Sí' : 'No' }}
+        </p>
+        
+        <!-- Gerencia 1ra Línea a la cual impacta el Objetivo Táctico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.gerenciaFirst'|trans }}</label>
+            {{ entity.gerencia.description }}
+        </p>
+        
+        <!-- Objetivos Operativos Asociados al Objetivo Táctico -->
+        {% if entity.childrens|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.objetiveOperatives'|trans }}</label>
+                <ul>
+                {% for children in entity.childrens %}
+                    <li>{{ children.ref }} {{ children.description }}</li>
+                {% endfor  %}
+                </ul>
+            </div>
+            <br>
+        {% endif %}
+        
+        <!-- ¿Evaluación por Indicadores Tácticos? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByIndicatorTactic'|trans }}</label>
+            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+        </p>
+        
+        <!-- Indicadores Tácticos Asociados al Objetivo Táctico -->
+        {% if entity.indicators|length > 0 %}
+            <div class="inline-label">
+                <label class="label">{{ 'pequiven_objetive.indicatorTactics'|trans }}</label>
+                <ul>
+                {% for indicator in entity.indicators %}
+                    <li>{{ indicator.ref }} {{ indicator.description }}</li>
+                {% endfor  %}
+                </ul>
+            </div>
+            <br>
+        {% endif %}
+        
+        <!-- ¿Evaluación por Programas de Gestión? -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
+            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+        </p>
+        
+    </fieldset>
+
+<br /><br />
+
+{#<p class="button-height align-right">
+    {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+</p>#}
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+             {#$('.tables-extras').tablesorter();#}
+        });
+    </script>
+{% endblock javascript %}

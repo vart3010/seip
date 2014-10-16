@@ -113,6 +113,12 @@ class IndicatorOperativeController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_operative_registration");
+            //var_dump($data);
+            //die();
+            if(strlen($data['gerenciaSecond']) == 0){
+                $em->getConnection()->rollback();
+                $this->get('session')->getFlashBag()->add('success', 'error falta gerencia 2da línea');
+            }
 
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative']));
             $object->setRefParent($objetive->getRef());
@@ -354,7 +360,7 @@ class IndicatorOperativeController extends baseController {
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_OPERATIVO;
 
-        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
+        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true, 'userCreatedAt' => $user));
         $totalResults = count($results);
 
         if (is_array($results) && $totalResults > 0) {

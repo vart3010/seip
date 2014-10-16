@@ -39,6 +39,32 @@ class ObjetiveStrategicController extends baseController {
         return array(
         );
     }
+    
+    /**
+     * Finds and displays a Objetive entity of level Strategic by Id.
+     *
+     * @Template("PequivenObjetiveBundle:Strategic:show.html.twig")
+     */
+    public function showAction(Request $request)
+    {
+        $id = $request->get("id");
+        //$ref = $request->get("ref");
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
+        //$entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $ref));
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Objetive entity.');
+        }
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity
+            //'delete_form' => $deleteForm->createView(),
+        );
+    }
 
     /**
      * Función que devuelve el paginador con los objetivos estratégicos
@@ -81,6 +107,7 @@ class ObjetiveStrategicController extends baseController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {

@@ -25,8 +25,11 @@
         </h1>
     </hgroup>
     
-    <form id="registerObjetiveStrategicForm" action="{{ path('pequiven_objetive_menu_add_strategic') }}" {{ form_enctype(form) }} method="POST">
-        <fieldset class="fieldset fields-list">
+    <form id="registerObjetiveStrategicForm" action="{{ path('pequiven_objetive_menu_add_strategic') }}" {{ form_enctype(form) }} method="POST" ng-controller="ObjetiveStrategicController">
+        
+        {{ form_top(form) }}
+        
+        <fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
 
             <!-- Línea Estratégica -->
@@ -87,11 +90,11 @@
                         </div>
 
                         <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
-                            <ul id="listNoEstable" class="tabs">
-                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
-                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
-                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                            <ul id="listNoEstable" class="tabs">                                                                
                                 <li id="tabRankBottom" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
                             </ul>
                             <ul id="listEstable" class="tabs">
                                 <li id="tabRankBottomBottomEstable" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
@@ -261,6 +264,7 @@
         
         jQuery(document).ready(function(){
             jQuery('#registerObjetiveStrategicForm').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+            jQuery('#registerObjetiveStrategicForm select').select2();
         });
         
         var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador

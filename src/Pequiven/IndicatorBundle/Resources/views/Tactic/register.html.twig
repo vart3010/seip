@@ -161,10 +161,10 @@
 
                         <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
                             <ul id="listNoEstable" class="tabs">
-                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a id="linkTabRankTop" style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
-                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a id="linkTabRankMiddleTop" style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
-                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a id="linkTabRankMiddleBottom" style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
                                 <li id="tabRankBottom" style="background: red;"><a id="linkTabRankBottom" style="color: #000000;" href="#rankArrangementBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a id="linkTabRankMiddleBottom" style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a id="linkTabRankMiddleTop" style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a id="linkTabRankTop" style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
                             </ul>
                             <ul id="listEstable" class="tabs">
                                 <li id="tabRankBottomBottomEstable" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
@@ -351,6 +351,7 @@
 
                  //Inicializamos el select2 de Objetivo Estratégico
                 chargeSelect2ObjetiveStrategic();
+                selectObjetiveStrategic.select2("enable",false);
 
                 //Inicializamos el select2 de Objetivo Táctico
                 selectObjetiveTactic.select2({
@@ -439,17 +440,40 @@
         })
         //Al cambiar alguna opción en el select de Línea Estratégica
         selectLineStrategic.change(function() {
-           inputRef.val("");
+            inputRef.val("");
+            $("#pequiven_indicator_tactic_registration_parents option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parents option").remove();
+            selectObjetiveStrategic.select2("val",'');
+            selectComplejo.select2("val",'');
+            selectComplejo.select2("enable",false);
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            $("#pequiven_indicator_tactic_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectObjetiveTactic.select2("enable",false);
         });
 
-        //AL seleccionar alguna opción en el select de Objetivo Estratégico
+        //Al seleccionar alguna opción en el select de Objetivo Estratégico
         selectObjetiveStrategic.on("select2-selecting", function(e) {
             if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                 selectComplejo.select2("enable",true);
             } else{
                 displayObjetiveTactic(e);
-            }                    
+            }
         })
+        
+        //Al cambiar alguna opción en el select de Objetivo Estratégico
+        selectObjetiveStrategic.change(function() {
+            inputRef.val("");
+            selectComplejo.select2("val",'');
+            selectGerencia.select2("val",'');
+            selectGerencia.select2("enable",false);
+            $("#pequiven_indicator_tactic_registration_parentTactic option[value]").remove();
+            $("#pequiven_indicator_tactic_registration_parentTactic option").remove();
+            selectObjetiveTactic.select2("val",'');
+            selectObjetiveTactic.select2("enable",false);
+        });
 
         //Al seleccionar alguna opción en el select de Localidad
         selectComplejo.on("select2-selecting", function(e) {
@@ -646,6 +670,7 @@
                             selectObjetiveStrategic.append('<option value="' + data[i].id + '">' + data[i].description + '</option>');
                         }
                         chargeSelect2ObjetiveStrategic("full");
+                        selectObjetiveStrategic.select2("enable",true);
                     } else{
                         if(typeof data[0].initial === 'undefined'){
                             chargeSelect2ObjetiveStrategic("empty");

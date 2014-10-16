@@ -1,0 +1,27 @@
+Pequiven\MasterBundle\Entity\Formula:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        userCreatedAt:
+            expose: true
+            groups: [api_details]
+        userUpdatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]
+        equation:
+            expose: true
+            groups: [api_list]
+        formulaLevel:
+            expose: true
+            groups: [api_details]
