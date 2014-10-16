@@ -6,7 +6,7 @@
         {#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
         <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
     </div>
-    {% if (app.user.getGerencia == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+    {% if (app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
         <!-- Tab Principales (Táctico y Operativo -->
         <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
             <ul class="tabs">
