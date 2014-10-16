@@ -102,6 +102,12 @@
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             });
     });
+    $(function(){
+        {% if app.session.flashbag.has('autoOpenOnSave') %}
+            {% set tmpClear = app.session.flashbag.get('autoOpenOnSave') %}
+            $('#arrangementGoalDetailsPop').click();
+        {% endif %}
+    });
 </script>
  
 

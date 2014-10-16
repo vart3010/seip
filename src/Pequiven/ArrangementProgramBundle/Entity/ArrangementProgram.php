@@ -27,7 +27,7 @@ class ArrangementProgram extends Model
      * @var string
      * @ORM\Column(name="ref",type="string",length=100)
      */
-    private $ref;
+    private $ref = 'TEMP';
 
     /**
      * Periodo.
@@ -441,6 +441,7 @@ class ArrangementProgram extends Model
      */
     public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
     {
+        $timeline->setArrangementProgram($this);
         $this->timeline = $timeline;
 
         return $this;

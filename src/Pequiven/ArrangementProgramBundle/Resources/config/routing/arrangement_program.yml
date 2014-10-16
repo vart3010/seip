@@ -22,7 +22,7 @@ pequiven_seip_arrangementprogram_show:
     methods: [GET]
     
 arrangementprogram_edit:
-    path: /{id}/edit
+    path: /{id}/update
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:editAction }
     requirements:
         id: "\d+"
@@ -43,11 +43,11 @@ arrangementprogram_approved:
     methods: [GET]
     
 arrangementprogram_update:
-    path: /{id}
+    path: /{id}/update
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:updateAction }
     requirements:
         id: "\d+"
-    methods: [PUT]
+    methods: [PUT|POST]
 arrangementprogram_delete:
     path: /{id}
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:deleteAction }
