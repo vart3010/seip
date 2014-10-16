@@ -229,6 +229,74 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $routeImage['indTacticOriginal'] = $images['bad'];
         }
         
+        //Obj. Operativo Original
+        $res['objOperativeOriginal'] = $monitor->getObjOperativeOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getObjOperativeOriginalReal() / (float)$monitor->getObjOperativeOriginal()) * 100,'0',2);
+        if($res['objOperativeOriginal'] >= $range['good']){
+            $filter['objOperativeOriginal'] = 1;
+        } elseif ($res['objOperativeOriginal'] < $range['good'] && $res['objOperativeOriginal'] >= $range['bad']){
+            $filter['objOperativeOriginal'] = 2;
+        } elseif($res['objOperativeOriginal'] < $range['bad']){
+            $filter['objOperativeOriginal'] = 3;
+        }
+        if($filter['objOperativeOriginal'] == 1){
+            $routeImage['objOperativeOriginal'] = $images['good'];
+        } elseif($filter['objOperativeOriginal'] == 2){
+            $routeImage['objOperativeOriginal'] = $images['middle'];
+        } else{
+            $routeImage['objOperativeOriginal'] = $images['bad'];
+        }
+        
+        //Obj. Operativo Vinculante
+        $res['objOperativeVinculante'] = $monitor->getObjOperativeVinculante() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getObjOperativeVinculanteReal() / (float)$monitor->getObjOperativeVinculante()) * 100,'0',2);
+        if($res['objOperativeVinculante'] >= $range['good']){
+            $filter['objOperativeVinculante'] = 1;
+        } elseif ($res['objOperativeVinculante'] < $range['good'] && $res['objOperativeVinculante'] >= $range['bad']){
+            $filter['objOperativeVinculante'] = 2;
+        } elseif($res['objOperativeVinculante'] < $range['bad']){
+            $filter['objOperativeVinculante'] = 3;
+        }
+        if($filter['objOperativeVinculante'] == 1){
+            $routeImage['objOperativeVinculante'] = $images['good'];
+        } elseif($filter['objOperativeVinculante'] == 2){
+            $routeImage['objOperativeVinculante'] = $images['middle'];
+        } else{
+            $routeImage['objOperativeVinculante'] = $images['bad'];
+        }
+        
+        //Ind. Operativo Original
+        $res['indOperativeOriginal'] = $monitor->getIndOperativeOriginal() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getIndOperativeOriginalReal() / (float)$monitor->getIndOperativeOriginal()) * 100,'0',2);
+        if($res['indOperativeOriginal'] >= $range['good']){
+            $filter['indOperativeOriginal'] = 1;
+        } elseif ($res['indOperativeOriginal'] < $range['good'] && $res['indOperativeOriginal'] >= $range['bad']){
+            $filter['indOperativeOriginal'] = 2;
+        } elseif($res['indOperativeOriginal'] < $range['bad']){
+            $filter['indOperativeOriginal'] = 3;
+        }
+        if($filter['indOperativeOriginal'] == 1){
+            $routeImage['indOperativeOriginal'] = $images['good'];
+        } elseif($filter['indOperativeOriginal'] == 2){
+            $routeImage['indOperativeOriginal'] = $images['middle'];
+        } else{
+            $routeImage['indOperativeOriginal'] = $images['bad'];
+        }
+        
+        //Ind. Operativo Vinculante
+        $res['indOperativeVinculante'] = $monitor->getIndOperativeVinculante() == 0 ? bcadd(0,'0',2) : bcadd(((float)$monitor->getIndOperativeVinculanteReal() / (float)$monitor->getIndOperativeVinculante()) * 100,'0',2);
+        if($res['indOperativeVinculante'] >= $range['good']){
+            $filter['indOperativeVinculante'] = 1;
+        } elseif ($res['indOperativeVinculante'] < $range['good'] && $res['indOperativeVinculante'] >= $range['bad']){
+            $filter['indOperativeVinculante'] = 2;
+        } elseif($res['indOperativeVinculante'] < $range['bad']){
+            $filter['indOperativeVinculante'] = 3;
+        }
+        if($filter['indOperativeVinculante'] == 1){
+            $routeImage['indobjOperativeVinculante'] = $images['good'];
+        } elseif($filter['indOperativeVinculante'] == 2){
+            $routeImage['indOperativeVinculante'] = $images['middle'];
+        } else{
+            $routeImage['indOperativeVinculante'] = $images['bad'];
+        }
+        
         //Resultados
         //Obj. Táctico Original
         $event->getVisitor()->addData('resObjTacticOriginal', $res['objTacticOriginal']);
@@ -236,6 +304,18 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         //Ind. Táctico Original
         $event->getVisitor()->addData('resIndTacticOriginal', $res['indTacticOriginal']);
         $event->getVisitor()->addData('imageIndTacticOriginal', $routeImage['indTacticOriginal']);
+        //Obj. Operativo Original
+        $event->getVisitor()->addData('resObjOperativeOriginal', $res['objOperativeOriginal']);
+        $event->getVisitor()->addData('imageObjOperativeOriginal', $routeImage['objOperativeOriginal']);        
+        //Obj. Operativo Vinculante
+        $event->getVisitor()->addData('resObjOperativeVinculante', $res['objOperativeVinculante']);
+        $event->getVisitor()->addData('imageObjOperativeVinculante', $routeImage['objOperativeVinculante']);        
+        //Ind. Operativo Original
+        $event->getVisitor()->addData('resIndOperativeOriginal', $res['indOperativeOriginal']);
+        $event->getVisitor()->addData('imageIndOperativeOriginal', $routeImage['indOperativeOriginal']);
+        //Ind. Operativo Vinculante
+        $event->getVisitor()->addData('resIndOperativeVinculante', $res['indOperativeVinculante']);
+        $event->getVisitor()->addData('imageIndOperativeVinculante', $routeImage['indOperativeVinculante']);
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

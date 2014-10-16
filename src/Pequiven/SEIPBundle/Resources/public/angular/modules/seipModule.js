@@ -554,6 +554,9 @@ angular.module('seipModule.controllers', [])
     .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         
     })
+    .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        
+    })
     .directive('ngCustomDirective',function(index){
         console.log('aaa');
         return function(index2){

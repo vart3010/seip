@@ -114,10 +114,10 @@ monitor:
     tabOperative: Nivel Operativo
     objetiveTactic: Objetivos Tácticos
     indicatorTactic: Indicadores Tácticos
-    objetiveOperativeSupport: Objetivos Operativos Original
-    objetiveOperativeVinculant: Objetivos Operativos Vinculantes
-    indicatorOperativeSupport: Indicadores Operativos Original
-    indicatorOperativeVinculant: Indicadores Operativos Vinculantes
+    objetiveOperativeOriginal: Objetivos Operativos Original
+    objetiveOperativeVinculante: Objetivos Operativos Vinculantes
+    indicatorOperativeOriginal: Indicadores Operativos Original
+    indicatorOperativeVinculante: Indicadores Operativos Vinculantes
     original: Original
     vinculant: Vinculantes
     plan: Planificados
