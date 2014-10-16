@@ -54,6 +54,14 @@
             </call>
         </service>
         
+        <!-- Repositorio de Monitor -->
+        <service id="pequiven.repository.seipmonitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
+        </service>
+        
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>

@@ -524,6 +524,15 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         $scope.gerenciaSecond = null;
+        $scope.gerenciaFirst = null;
+        $scope.$watch("gerenciaFirst", function () {
+            if($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+            {
+                 $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+            }else{
+                 $scope.tableParams.$params.filter['gerencia'] = null;
+            }
+        });
         $scope.$watch("gerenciaSecond", function () {
             if($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
             {
@@ -541,6 +550,9 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 
+    })
+    .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        
     })
     .directive('ngCustomDirective',function(index){
         console.log('aaa');

@@ -151,6 +151,12 @@ tecnocreaciones_tools:
                 
 sylius_resource:
     resources:
+        pequiven.seipmonitor:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Monitor
+                controller: Pequiven\SEIPBundle\Controller\MonitorController
+                repository: Pequiven\SEIPBundle\Repository\MonitorRepository
         #Objetivo estratégico
         pequiven.objetivestrategic:
             driver: doctrine/orm

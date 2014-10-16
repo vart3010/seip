@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
     <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
@@ -6,4 +6,91 @@
         {#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
         <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
     </div>
+    {% if (app.user.getId == 7) %}
+        <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
+            <ul class="tabs">                                                                
+                <li id="tabMonitorTactic"  class="active"><a style="color: #000000;" href="#monitorTactic">{{ 'monitor.tabTactic'|trans }}</a></li>
+                <li id="tabMonitorOperative" ><a style="color: #000000;" href="#monitorOperative">{{ 'monitor.tabOperative'|trans }}</a></li>
+            </ul>
+            <div class="tabs-content" style="min-height: 29px;">
+                <div id="monitorTactic">
+                    <div class="standard-tabs margin-bottom" id="add-tabs2" style="height: 58px;">
+                        <ul class="tabs">
+                            <li id="tabObjetiveTactic"  class="active"><a style="color: #000000;" href="#objetiveTactic">{{ 'monitor.objetiveTactic'|trans }}</a></li>
+                            <li id="tabIndicatorTactic" ><a style="color: #000000;" href="#indicatorTactic">{{ 'monitor.indicatorTactic'|trans }}</a></li>
+                        </ul>
+                        <div class="tabs-content" style="min-height: 29px;">
+                            <div ng-controller="TableFormatController" id="objetiveTactic">
+                                <div ng-controller="TableMonitorTacticController">
+                                    <div loading-container="tableParams.settings().$loading">
+                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                                            <tbody>
+                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
+                                                        <img src="{$ result.imageObjTacticOriginal $}" > &nbsp;
+                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.plan'|trans }}'">
+                                                        {$ result.objTacticOriginal $}
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.real'|trans }}'">
+                                                        {$ result.objTacticOriginalReal $}
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'" sortable="'ref'">
+                                                        {$ result.resObjTacticOriginal $}%
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-controller="TableFormatController" id="indicatorTactic">
+                                <div ng-controller="TableMonitorTacticController">
+                                    <div loading-container="tableParams.settings().$loading">
+                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                                            <tbody>
+                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
+                                                        <img src="{$ result.imageIndTacticOriginal $}" > &nbsp;
+                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.plan'|trans }}'">
+                                                        {$ result.indTacticOriginal $}
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.real'|trans }}'">
+                                                        {$ result.indTacticOriginalReal $}
+                                                    </td>
+                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'" sortable="'ref'">
+                                                        {$ result.resIndTacticOriginal $}%
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id ="monitorOperative">
+                    <a href="">Planif.</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock body %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        function getTableExtraInfo(data)
+            {
+                
+            }
+    </script>
+    
+{% endblock %}

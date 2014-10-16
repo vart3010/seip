@@ -1025,6 +1025,46 @@ class ObjetiveOperativeController extends baseController {
 
         return $response;
     }
+    
+    /**
+     * Gerencias de 1ra línea para la tabla de visualización
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaFirstAction(Request $request) {
+        $response = new JsonResponse();
+
+        $dataGerencia = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        } else {
+            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
+        }
+
+        $totalResults = count($results);
+        if (is_array($results) && $totalResults > 0) {
+            foreach ($results as $result) {
+                foreach ($result as $gerencia) {
+                    $dataGerencia[] = array(
+                        'idComplejo' => $gerencia->getComplejo()->getId(),
+                        'optGroup' => $gerencia->getComplejo()->getDescription(),
+                        'id' => $gerencia->getId(),
+                        'description' => $gerencia->getDescription()
+                    );
+                }
+            }
+        } else {
+            $dataGerencia[] = array("empty" => true);
+        }
+
+        $response->setData($dataGerencia);
+
+        return $response;
+    }
 
     /**
      * Devuelve la Referencia del Objetivo, de acuerdo a la cantidad que ya se encuentren registrados

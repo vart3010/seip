@@ -61,6 +61,12 @@ select_gerenciaFirstTactic:
     path: /arrangement_strategic/objetive/select_gerenciaFirstTactic
     defaults:
         _controller: pequiven.controller.objetivetactic:selectGerenciaFirstAction
+        
+#Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico para la vista Operativo
+select_gerenciaFirstTacticOperative:
+    path: /arrangement_strategic/objetive/select_gerenciaFirstTacticOperative
+    defaults:
+        _controller: pequiven.controller.objetiveoperative:selectGerenciaFirstAction
 
 #Select que devuelve las Gerencias en las cuales impacta el Objetivo Táctico seleccionado
 select_gerenciaFromComplejoOperative:
@@ -158,3 +164,11 @@ objetiveOperative_show:
     requirements:
         id: "\d+"
     methods: [GET]
+    
+#Devuelve el paginador con la data de los objetivos tácticos
+monitorTacticList:
+    path: /monitor/list/tactic
+    defaults: 
+        _controller: pequiven.controller.seipmonitor:monitorTacticListAction
+        _sylius:
+            method: createPaginatorTactic
