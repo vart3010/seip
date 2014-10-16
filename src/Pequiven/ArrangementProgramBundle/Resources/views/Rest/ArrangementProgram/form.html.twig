@@ -281,7 +281,7 @@
                             locked: true,
                             renderer: function (v, m, r) {
                                 var d = r.data.goal.weight;
-                                return d;
+                                return formatNumber(d) + '%';
                             },
                             summaryType: function (records, values) {
                                 var i,key,value=0,summary;
