@@ -216,11 +216,14 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                     }
                     if($disable === true){
                         $data[$planned]['isEnabled'] = false;
+                    }else{
+                        $data[$planned]['isEnabled'] = true;
                     }
                 }
             };
             
             $enableQuartes = function($months,&$data,$cuarter) use ($quarterDef) {
+                
                  foreach ($months as $planned => $monthNumber) {
                     $disable = true;
                     foreach ($quarterDef[$cuarter] as $monthQuarter) {
@@ -230,13 +233,14 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                     }
                     if($disable === false){
                         $data[$planned]['isEnabled'] = true;
+                    }else{
+                        $data[$planned]['isEnabled'] = false;
                     }
                 }
             };
             
             $disableQuartes(GoalDetails::getMonthsPlanned(),$data,$currentCuarter);
             $disableQuartes(GoalDetails::getMonthsReal(),$data,$currentCuarter);
-            $enableQuartes(GoalDetails::getMonthsReal(),$data,$currentCuarter);
             
             if($isEnabledLoadByQuarterFirst === true){
                 if($isEnabledLoadByQuarterFirstPlanned === true){
