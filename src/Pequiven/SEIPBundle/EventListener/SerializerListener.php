@@ -186,9 +186,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $res = array();
         $images = array();
         $routeImage = array();
-        $images['good'] = '/web/bundles/pequivenseip/logotipos/bullet_green.png';
-        $images['middle'] = '/web/bundles/pequivenseip/logotipos/bullet_yellow.png';
-        $images['bad'] = '/web/bundles/pequivenseip/logotipos/bullet_red.png';
+        $images['good'] = '/bundles/pequivenseip/logotipos/bullet_green.png';
+        $images['middle'] = '/bundles/pequivenseip/logotipos/bullet_yellow.png';
+        $images['bad'] = '/bundles/pequivenseip/logotipos/bullet_red.png';
         
         $range['good'] = (float)70;
         $range['bad'] =(float)40;
