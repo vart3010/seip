@@ -577,4 +577,7 @@ angular.module('seipModule.controllers', [])
     .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         
     })
+    .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        
+    })
     ;        

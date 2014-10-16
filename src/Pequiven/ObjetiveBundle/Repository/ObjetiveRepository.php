@@ -84,6 +84,9 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin('o.parents', 'p')
                 ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
                 ;
+        if(isset($options['enabled'])){
+            $query->andWhere('o.enabled = 1');
+        }
         if(isset($options['fromIndicator'])){
             if(isset($options['gerenciaFirstId'])){
                 $query->andWhere("o.gerencia = " . $options['gerenciaFirstId']);
