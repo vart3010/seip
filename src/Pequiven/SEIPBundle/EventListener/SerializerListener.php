@@ -203,6 +203,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                     break;
                 }
             }
+            /**
+             * Deshabilitar meses que no estan en el trimestre
+             */
             $disableQuartes = function ($months,&$data,$currentCuarter) use ($quarterDef) {
                 foreach ($months as $planned => $monthNumber) {
                     $disable = true;
@@ -233,6 +236,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             
             $disableQuartes(GoalDetails::getMonthsPlanned(),$data,$currentCuarter);
             $disableQuartes(GoalDetails::getMonthsReal(),$data,$currentCuarter);
+            $enableQuartes(GoalDetails::getMonthsReal(),$data,$currentCuarter);
             
             if($isEnabledLoadByQuarterFirst === true){
                 if($isEnabledLoadByQuarterFirstPlanned === true){
