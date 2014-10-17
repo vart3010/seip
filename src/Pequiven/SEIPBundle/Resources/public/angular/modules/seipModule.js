@@ -7,6 +7,15 @@ var seipModule = angular.module('seipModule', [
     'notificationBarModule',
     'ngCookies'
 ]);
+
+seipModule
+  .filter('myNumberFormat',function(){
+      return function(numberToFormat){
+          var numberFormat = $.number(numberToFormat,2,',','.');
+          return numberFormat;
+      };
+  });
+
 function confirm(){
     
 }
@@ -579,11 +588,4 @@ angular.module('seipModule.controllers', [])
     })
     .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         
-    })
-    .filter('myNumberFormat',function(){
-      return function(numberToFormat){
-          var numberFormat = $.number(numberToFormat,2,',','.');
-          return numberFormat;
-      };
-  })
-    ;        
+    });

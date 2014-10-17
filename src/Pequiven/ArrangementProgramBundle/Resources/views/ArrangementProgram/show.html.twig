@@ -35,12 +35,10 @@
             <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
             {{ entity.categoryArrangementProgram }}
         </p>
-        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-            <p class="inline-label">
-                <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
-                {{ entity.tacticalObjective }}
-            </p>
-        {% endif %}
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+            {{ entity.tacticalObjective }}
+        </p>
         {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
@@ -126,8 +124,8 @@
 <br /><br />
 
 <p class="button-height align-right">
-    {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
-    {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+    {#{{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
+    {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}#}
     {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
     {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
 </p>
