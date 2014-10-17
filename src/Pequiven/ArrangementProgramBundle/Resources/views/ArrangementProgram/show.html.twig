@@ -35,12 +35,10 @@
             <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
             {{ entity.categoryArrangementProgram }}
         </p>
-        {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-            <p class="inline-label">
-                <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
-                {{ entity.tacticalObjective }}
-            </p>
-        {% endif %}
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+            {{ entity.tacticalObjective }}
+        </p>
         {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>

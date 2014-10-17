@@ -36,7 +36,6 @@ class AppKernel extends Kernel
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             
-            //new \Ext\DirectBundle\ExtDirectBundle(),
             new \Tpg\ExtjsBundle\TpgExtjsBundle(),
             
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax

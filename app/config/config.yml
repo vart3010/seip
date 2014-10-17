@@ -107,6 +107,7 @@ tecnocreaciones_vzla_government:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
             angular_dependencies: 
+                        - 'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
                         - 'bundles/pequivenseip/angular/modules/seipModule.js'
                         - 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-cookies.min.js'
             angular_modules: ['seipModule']

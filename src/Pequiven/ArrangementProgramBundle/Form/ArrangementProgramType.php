@@ -20,6 +20,7 @@ class ArrangementProgramType extends AbstractType
     {
         $builder
             ->add('categoryArrangementProgram',null,array(
+                'label_attr' => array('class' => 'label'),
                 'label' => 'pequiven.form.category_arrangement_program',
                 'attr' => array(
                     'class' => "select2 input-large",

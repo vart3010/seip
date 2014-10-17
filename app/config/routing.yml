@@ -77,9 +77,6 @@ fos_js_routing:
 _bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    
     
-#ext_direct:
-#    resource: "@ExtDirectBundle/Resources/config/routing.yml"
-
 tpg_extjs:
   resource: "@TpgExtjsBundle/Resources/config/routing.yml"
   prefix:   /extjs

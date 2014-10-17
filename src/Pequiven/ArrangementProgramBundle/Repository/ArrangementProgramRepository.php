@@ -37,6 +37,9 @@ class ArrangementProgramRepository extends EntityRepository
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
         }
+        if(($process = $criteria->remove('ap.process'))){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('ap.process',"'%".$process."%'"));
+        }
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
