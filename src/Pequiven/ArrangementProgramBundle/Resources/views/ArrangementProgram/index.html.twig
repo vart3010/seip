@@ -67,15 +67,11 @@
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
-                            <td data-title="'{{ 'pequiven.arrangement_program.advances' | trans }}'">
+                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
                                 <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
                                 <img ng-if="result._data.summary.advances >= 50"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
                                 <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
-                                <span>
-                                    {$ result._data.summary.advances $}/{$ result._data.summary.weight $}%
-                                </span>
-                            </td>
-                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+
                                 <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'period': 'text' }">
@@ -86,6 +82,11 @@
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'" sortable="'status'" filter="{ 'status': 'select' }">
                                 {$ result.tacticalObjective.gerencia.complejo.description $}
+                            </td>
+                            <td data-title="'{{ 'monitor.porcReal'|trans({},'PequivenSEIPBundle') }}'">
+                                <span>
+                                    {$ result._data.summary.advances $}/{$ result._data.summary.weight|myNumberFormat $}%
+                                </span>
                             </td>
                         </tr>
                     </table>

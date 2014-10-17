@@ -38,8 +38,6 @@
         "knplabs/knp-menu": "~2.0@dev",
         "white-october/pagerfanta-bundle": "1.0.*",
         
-        "ghua/ext-direct-bundle": "v2.4.0",
-        
         "sylius/resource-bundle": "0.10.0",
         
         "phpoffice/phpexcel": "1.8.0",
