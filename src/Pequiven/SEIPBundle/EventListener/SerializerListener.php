@@ -319,9 +319,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $res = array();
         $images = array();
         $routeImage = array();
-        $images['good'] = '/bundles/pequivenseip/logotipos/bullet_green.png';
-        $images['middle'] = '/bundles/pequivenseip/logotipos/bullet_yellow.png';
-        $images['bad'] = '/bundles/pequivenseip/logotipos/bullet_red.png';
+        $images['good'] = $this->generateAsset('bundles/pequivenseip/logotipos/bullet_green.png');
+        $images['middle'] = $this->generateAsset('bundles/pequivenseip/logotipos/bullet_yellow.png');
+        $images['bad'] = $this->generateAsset('bundles/pequivenseip/logotipos/bullet_red.png');
         
         $range['good'] = (float)70;
         $range['bad'] =(float)40;
@@ -462,5 +462,10 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     function trans($id, $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    function generateAsset($path,$packageName = null){
+        return $this->container->get('templating.helper.assets')
+               ->getUrl($path, $packageName);
     }
 }
