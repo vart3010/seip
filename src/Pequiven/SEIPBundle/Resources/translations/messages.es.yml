@@ -9,6 +9,8 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    history: Historial
+    details: Detalles
     ref: Referencia
     select: Seleccione
     actions: Acciones
@@ -29,6 +31,12 @@ pequiven:
         complete: Completo
     filters: Filtros
     limit: Limite
+    table:
+        header:
+            event: Evento
+            user:  Usuario
+            date: Fecha
+            comment: Comentario
 app:
     loading: Cargando
 

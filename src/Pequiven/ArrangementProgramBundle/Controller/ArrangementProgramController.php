@@ -91,6 +91,8 @@ class ArrangementProgramController extends SEIPController
                 $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
                 $entity->setTimeline($timeLine);
             }
+            $entity->setDetails(new ArrangementProgram\Details());
+            
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }

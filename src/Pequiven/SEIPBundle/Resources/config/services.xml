@@ -38,6 +38,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.listener.historical" class="Pequiven\SEIPBundle\EventListener\HistoricalListerner">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         
         <!-- Servicio necesario para el SerializerListener -->
         <service id="seip.listener.serializer" class="Pequiven\SEIPBundle\EventListener\SerializerListener">

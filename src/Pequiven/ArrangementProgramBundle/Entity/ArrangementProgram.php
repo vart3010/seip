@@ -4,6 +4,7 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Programa de gestion
@@ -74,38 +75,6 @@ class ArrangementProgram extends Model
     private $process;
 
     /**
-     * Revisado por
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $reviewedBy;
-
-    /**
-     * Fecha de revision
-     * @var \DateTime
-     *
-     * @ORM\Column(name="revisionDate", type="datetime",nullable=true)
-     */
-    private $revisionDate;
-
-    /**
-     * Aprobado por
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $approvedBy;
-
-    /**
-     * Fecha de aprobacion
-     * @var \DateTime
-     *
-     * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
-     */
-    private $approvalDate;
-
-    /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *
@@ -113,9 +82,41 @@ class ArrangementProgram extends Model
      * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
- 
+    
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+    
+    /**
+     * Detalles del programa de gestion
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details",cascade={"persist","remove"})
+     * @ORM\Joincolumn(nullable=false)
+     */
+    protected $details;
+    
+    /**
+     * Historiales 
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Historical
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
+     */
+    protected $histories;
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -149,52 +150,6 @@ class ArrangementProgram extends Model
     public function getProcess()
     {
         return $this->process;
-    }
-
-    /**
-     * Set revisionDate
-     *
-     * @param \DateTime $revisionDate
-     * @return ArrangementProgram
-     */
-    public function setRevisionDate($revisionDate)
-    {
-        $this->revisionDate = $revisionDate;
-
-        return $this;
-    }
-
-    /**
-     * Get revisionDate
-     *
-     * @return \DateTime 
-     */
-    public function getRevisionDate()
-    {
-        return $this->revisionDate;
-    }
-
-    /**
-     * Set approvalDate
-     *
-     * @param \DateTime $approvalDate
-     * @return ArrangementProgram
-     */
-    public function setApprovalDate($approvalDate)
-    {
-        $this->approvalDate = $approvalDate;
-
-        return $this;
-    }
-
-    /**
-     * Get approvalDate
-     *
-     * @return \DateTime 
-     */
-    public function getApprovalDate()
-    {
-        return $this->approvalDate;
     }
 
     /**
@@ -287,52 +242,6 @@ class ArrangementProgram extends Model
     public function getOperationalObjective()
     {
         return $this->operationalObjective;
-    }
-
-    /**
-     * Set reviewedBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
-     * @return ArrangementProgram
-     */
-    public function setReviewedBy(\Pequiven\SEIPBundle\Entity\User $reviewedBy = null)
-    {
-        $this->reviewedBy = $reviewedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get reviewedBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getReviewedBy()
-    {
-        return $this->reviewedBy;
-    }
-
-    /**
-     * Set approvedBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $approvedBy
-     * @return ArrangementProgram
-     */
-    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null)
-    {
-        $this->approvedBy = $approvedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get approvedBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getApprovedBy()
-    {
-        return $this->approvedBy;
     }
 
     function getType() {
@@ -455,5 +364,107 @@ class ArrangementProgram extends Model
     public function getTimeline()
     {
         return $this->timeline;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return ArrangementProgram
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return ArrangementProgram
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set details
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details
+     * @return ArrangementProgram
+     */
+    public function setDetails(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details 
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * Add histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     * @return ArrangementProgram
+     */
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $history)
+    {
+        $this->histories->add($history);
+
+        return $this;
+    }
+
+    /**
+     * Remove histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     */
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->removeElement($histories);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHistories()
+    {
+        return $this->histories;
     }
 }

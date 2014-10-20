@@ -18,12 +18,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  * @author matias
  */
 class RegistrationListener implements EventSubscriberInterface {
-    //put your code here
     protected $container;
-    
-//    public function __construct(ContainerInterface $container) {
-//        $this->container = $container;
-//    }
     
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;

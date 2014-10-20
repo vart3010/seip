@@ -15,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
 
 /**
- * Gerencia
+ * Gerencia de segunda linea
  *
  * @ORM\Table(name="seip_c_gerencia_second")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
@@ -67,7 +67,7 @@ class GerenciaSecond extends modelGerenciaSecond {
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
-    private $description;
+    protected $description;
     
     /** Complejo
      * @var=\Pequiven\MasterBundle\Entity\Complejo
@@ -110,6 +110,14 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
+    
+    /**
+     * Configuracion de la gerencia
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
+     */
+    protected $configuration;
 
     /**
      * Get id

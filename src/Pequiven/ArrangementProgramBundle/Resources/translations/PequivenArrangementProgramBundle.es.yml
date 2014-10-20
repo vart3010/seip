@@ -4,6 +4,7 @@ pequiven:
         arrangement_program: Programa de Gestión
         period: Periodo
         process: Proceso
+        management: Gerencia
         category_arrangement_program: Progama asociado a
         tactical_objective: Objetivo táctico
         operational_objective: Objetivo operativo
@@ -22,6 +23,12 @@ pequiven:
         approval_date: Fecha de aprobación
         no_revison_date: No revisado.
         no_approval_date: No aprobado.
+        responsible_for_review: Encargado(s) de revisión
+        manager_approval: Encargado de aprobación
+        you_must_assign_responsible: Debe asignar los responsables.
+        you_must_assign_config: Debe asignar la configuración.
+        reviewed_by: Revisado por
+        approved_by: Aprobado por
         status:
             status: Estatus
             draft: Borrador
@@ -36,8 +43,6 @@ pequiven:
         questions:
             revised: ¿Desea marcar el programa de gestión como revisado?
             approved: ¿Desea aprobar el programa de gestión?
-            
-        
     form:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo Táctico

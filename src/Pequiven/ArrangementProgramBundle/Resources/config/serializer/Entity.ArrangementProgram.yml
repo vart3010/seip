@@ -22,18 +22,9 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         process:
             expose: true
             groups: [api_list]
-        reviewedBy:
-            expose: true
-            groups: [api_list]
-        revisionDate:
-            expose: true
-            groups: [api_list]
-        approvedBy:
-            expose: true
-            groups: [api_list]
-        approvalDate:
-            expose: true
-            groups: [api_list]
         createdBy:
             expose: true
             groups: [api_list]
+        details:
+            expose: true
+            groups: [details]

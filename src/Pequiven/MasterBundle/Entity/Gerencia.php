@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
 
 /**
- * Gerencia
+ * Gerencia de primera linea
  *
  * @ORM\Table(name="seip_c_gerencia")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
@@ -62,7 +62,7 @@ class Gerencia extends modelGerencia
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
-    private $description;
+    protected $description;
     
     /** 
      * Complejo
@@ -108,6 +108,13 @@ class Gerencia extends modelGerencia
      */
     private $enabled = true;
     
+    /**
+     * Configuracion de la gerencia
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
+     */
+    protected $configuration;
 
     /**
      * Get id
@@ -370,5 +377,15 @@ class Gerencia extends modelGerencia
     public function getDirection()
     {
         return $this->direction;
+    }
+    
+    function getConfiguration() {
+        return $this->configuration;
+    }
+
+    function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration) {
+        $this->configuration = $configuration;
+        
+        return $this;
     }
 }
