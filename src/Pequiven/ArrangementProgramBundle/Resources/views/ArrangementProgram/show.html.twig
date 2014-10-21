@@ -4,6 +4,12 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
+{% set configuration = entity.tacticalObjective.gerencia.configuration %}
+{% set validConfiguration = false %}
+{% if configuration != null %}
+    {% set validConfiguration = true %}
+{% endif %}
+
 {% block body -%}
 <div>
     <hgroup id="main-title" class="thin breadcrumb">
@@ -15,6 +21,11 @@
             <span class="thin">{{ 'pequiven.show'|trans({},'messages') }}</span>
         </h1>
     </hgroup>
+        
+    {% if validConfiguration == false %}
+        {% set message =  'pequiven.arrangement_program.you_must_assign_config'|trans %}
+        {{ print_error(message) }}
+    {% endif  %}
         
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
@@ -121,107 +132,8 @@
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/timelines.html.twig' %}
     
     
-    <h4>Top tabs</h4>
-
-    <div class="standard-tabs margin-bottom" id="add-tabs">
-
-            <ul class="tabs">
-                <li class="active"><a href="#tab-1">{{ 'pequiven.history'|trans({},'messages') }}</a></li>
-                <li><a href="#tab-2">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
-            </ul>
-
-            <div class="tabs-content">
-
-                    <div id="tab-1" class="with-padding">
-
-                            <table class="simple-table responsive-table tables-extras" >
-                                <thead>
-                                    <tr>
-                                        <th scope="col" width="60%">{{ 'pequiven.table.header.event'|trans({},'messages') }}</th>
-                                        <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven.table.header.user'|trans({},'messages') }}</th>
-                                        <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven.table.header.date'|trans({},'messages') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for history in entity.histories %}
-                                        <tr ng-repeat="goal in goals">
-                                            <th scope="row">
-                                                {{ history.event }}<br>
-                                                <small>{{ history.comment }}</small>
-                                            </th>
-                                            <td>
-                                                {{ history.user.firstName ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
-                                            </td>
-                                            <td>
-                                                {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-
-                    </div>
-
-                    <div id="tab-2" class="with-padding">
-                        {% set configuration = entity.tacticalObjective.gerencia.configuration %}
-                        {% set validConfiguration = false %}
-                        {% if configuration != null %}
-                            {% set validConfiguration = true %}
-                        {% endif %}
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.responsible_for_review'|trans }}</label>
-                            {% if validConfiguration == true %}
-                                {% for userReviser in configuration.arrangementProgramUserToRevisers %}
-                                    <small class="tag orange-bg">{{ userReviser }}</small>{% if loop.last == false %},{% else %}.{% endif %}
-                                {% else %}
-                                    <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
-                                {% endfor %}
-                            {% else %}
-                                <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
-                            {% endif %}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.manager_approval'|trans }}</label>
-                            {% if validConfiguration == true %}
-                                {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
-                                    {% if configuration.arrangementProgramUserToApproveTactical %}
-                                        <small class="tag">{{ configuration.arrangementProgramUserToApproveTactical }}</small>
-                                    {% else %}
-                                        <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
-                                    {% endif%}
-                                {% endif %}
-                                {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-                                    {% if configuration.arrangementProgramUserToApproveTactical %}
-                                        <small class="tag">{{ configuration.arrangementProgramUserToApproveOperative }}</small>
-                                    {% else %}
-                                        <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
-                                    {% endif%}
-                                {% endif %}
-                            {% else %}
-                                <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
-                            {% endif %}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.reviewed_by'|trans }}</label>
-                            {{ entity.details.reviewedBy ? entity.details.reviewedBy : 'pequiven.arrangement_program.no_revison_date'|trans }}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>
-                            {{ entity.details.revisionDate ? entity.details.revisionDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_revison_date'|trans }}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.approved_by'|trans }}</label>
-                            {{ entity.details.approvedBy ? entity.details.approvedBy : 'pequiven.arrangement_program.no_approval_date'|trans }}
-                        </p>
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven.arrangement_program.approval_date'|trans }}</label>
-                            {{ entity.details.approvalDate ? entity.details.approvalDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_approval_date'|trans }}
-                        </p>
-                        
-                    </div>
-            </div>
-
-    </div>
+    <h4>{{ 'pequiven.history'|trans({},'messages') }}</h4>
+    {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/history.html.twig' %}
     
 <script type="text/javascript">
     $(function() {
@@ -261,10 +173,24 @@
 <br /><br />
 
 <p class="button-height align-right">
-    {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
-    {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
-    {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
-    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+    {% if isAllowToApprove == true %}
+        {%
+             if (entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or
+                entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT')) and
+                entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED')
+        %}
+            {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
+        {% endif %}
+    {% endif %}
+    {% if isAllowToReview == true %}
+        {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') %}
+            {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+        {% endif %}
+    {% endif %}
+    {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') %}
+        {{ buttons.generic(path('arrangementprogram_edit', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+        {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
+    {% endif %}
 </p>
 
 {% endblock %}

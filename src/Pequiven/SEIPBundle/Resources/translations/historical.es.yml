@@ -1,3 +1,5 @@
 pequiven_seip:
     arrangementprogram:
         pre_create: El programa de gestión fue creado.
+        pre_revised: El programa de gestión fue revisado.
+        pre_approved: El programa de gestión fue aprobado.

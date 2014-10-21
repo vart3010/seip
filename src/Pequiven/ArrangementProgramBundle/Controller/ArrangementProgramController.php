@@ -136,10 +136,15 @@ class ArrangementProgramController extends SEIPController
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
+        
+        $isAllowToApprove = $this->isAllowToApprove($entity);
+        $isAllowToReview = $this->isAllowToReview($entity);
+        
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'isAllowToApprove' => $isAllowToApprove,
+            'isAllowToReview' => $isAllowToReview,
         );
     }
 
@@ -156,6 +161,11 @@ class ArrangementProgramController extends SEIPController
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+        }
+        //Security check
+        $user = $this->getUser();
+        if($entity->getCreatedBy() !== $user){
+            throw $this->createAccessDeniedHttpException();
         }
 
         $editForm = $this->createEditForm($entity);
@@ -189,11 +199,17 @@ class ArrangementProgramController extends SEIPController
     {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
-
+        
+        
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+        }
+        //Security check
+        $user = $this->getUser();
+        if($entity->getCreatedBy() !== $user){
+            throw $this->createAccessDeniedHttpException();
         }
         
         $originalGoalsArray = array();
@@ -242,13 +258,69 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Marca como revisado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     function revisedAction(Request $request)
     {
+        $resource = $this->findOr404($request);
         
+        if(!$this->isAllowToReview($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $resource->setStatus(ArrangementProgram::STATUS_REVISED);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setReviewedBy($user)
+                ->setRevisionDate(new \DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_revised', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'revised');
+        
+        $this->domainManager->dispatchEvent('post_revised', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
     }
+    
+    /**
+     * Marca como aprobado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     function approvedAction(Request $request)
     {
+        $resource = $this->findOr404($request);
         
+        if(!$this->isAllowToApprove($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $resource->setStatus(ArrangementProgram::STATUS_APPROVED);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setApprovedBy($user)
+                ->setApprovalDate(new \DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_approved', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'approved');
+        
+        $this->domainManager->dispatchEvent('post_approved', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
     }
     
     /**
@@ -265,5 +337,51 @@ class ArrangementProgramController extends SEIPController
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Evalua si el usuario logeado tiene permisos para revisar el programa de gestion
+     * @param ArrangementProgram $entity
+     * @return boolean
+     */
+    private function isAllowToReview(ArrangementProgram $entity) {
+        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        $valid = false;
+        if(!$configuration){
+            return $valid;
+        }
+        $user = $this->getUser();
+        
+        foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
+            if($user === $userToReviser){
+                $valid = true;
+                break;
+            }
+        }
+        return $valid;
+    }
+    
+    /**
+     * Evalua si el usuario logeado tiene permisos para aprobar el programa de gestion
+     * @param ArrangementProgram $entity
+     * @return boolean
+     */
+    private function isAllowToApprove(ArrangementProgram $entity) {
+        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        $valid = false;
+        if(!$configuration){
+            return $valid;
+        }
+        $user = $this->getUser();
+        
+        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
+            && $configuration->getArrangementProgramUserToApproveTactical() === $user){
+            $valid = true;
+        }
+        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
+            && $configuration->getArrangementProgramUserToApproveOperative() === $user){
+            $valid = true;
+        }
+        return $valid;
     }
 }

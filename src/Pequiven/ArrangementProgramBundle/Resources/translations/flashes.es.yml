@@ -3,3 +3,5 @@ pequiven_seip:
         create: Programa de gestión creado.
         update: Programa de gestión actualizado.
         delete: Programa de gestión eliminado.
+        revised: Programa de gestión revisado.
+        approved: Programa de gestión aprobado.

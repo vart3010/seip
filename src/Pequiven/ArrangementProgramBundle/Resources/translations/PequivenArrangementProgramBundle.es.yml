@@ -26,7 +26,7 @@ pequiven:
         responsible_for_review: Encargado(s) de revisión
         manager_approval: Encargado de aprobación
         you_must_assign_responsible: Debe asignar los responsables.
-        you_must_assign_config: Debe asignar la configuración.
+        you_must_assign_config: Debe configurar los responsables de los programas de gestión en la gerencia.
         reviewed_by: Revisado por
         approved_by: Aprobado por
         status:

@@ -30,34 +30,31 @@ abstract class ArrangementProgram
     const STATUS_APPROVED = 2;
     
     /**
+     * Estatus finalizado (bloqueado)
+     */
+    const STATUS_FINISH = 3;
+    
+    /**
      * Tipo de programa de gestion
      * @var integer
-     *
-     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
     
     /**
      * Responsables del programa
      * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
      */
     protected $responsibles;
     
     /**
      * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     *
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
     protected $timeline;
     
     /**
      * Estatus del programa de gestion
      * @var integer
-     *
-     * @ORM\Column(name="status", type="integer")
      */
     protected $status = self::STATUS_DRAFT;
     

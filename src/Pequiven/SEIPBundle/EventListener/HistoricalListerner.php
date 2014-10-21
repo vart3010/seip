@@ -20,22 +20,48 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
     
     public static function getSubscribedEvents() {
         return array(
-            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram'
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REVISED => 'onPreRevisedArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_APPROVED => 'onPreApprovedArrangementProgram',
         );
     }
     
+    /**
+     * Se agrega al historico cuando se creo el programa de gestion
+     * @param ResourceEvent $event
+     */
     function onPreCreateArrangementProgram(ResourceEvent $event) {
         $object = $event->getSubject();
          $this->createHistorical(
                 $object,
                 ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE
         );
-        
     }
     
-    public function setContainer(ContainerInterface $container = null) {
-        $this->container = $container;
+    /**
+     * Se agrega una entrada al historico cuando se revisa el programa de gestion
+     * @param ResourceEvent $event
+     */
+    function onPreRevisedArrangementProgram(ResourceEvent $event) {
+        $object = $event->getSubject();
+         $this->createHistorical(
+                $object,
+                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REVISED
+        );
     }
+    
+    /**
+     * Se agrega una entrada al historico cuando se aprueba el programa de gestion
+     * @param ResourceEvent $event
+     */
+    function onPreApprovedArrangementProgram(ResourceEvent $event) {
+        $object = $event->getSubject();
+         $this->createHistorical(
+                $object,
+                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_APPROVED
+        );
+    }
+    
     private function createHistorical($object,$event,array $parameters = array(),$comment = null) {
         $user = $this->getUser();
         $history = new Historical();
@@ -76,5 +102,9 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
         }
 
         return $user;
+    }
+    
+    public function setContainer(ContainerInterface $container = null) {
+        $this->container = $container;
     }
 }

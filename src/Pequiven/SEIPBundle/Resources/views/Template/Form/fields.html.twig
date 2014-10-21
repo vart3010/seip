@@ -34,10 +34,7 @@
 {% spaceless %}
     {% if errors|length > 0 %}
         {% for error in errors %}
-            <div class="alert alert-danger-seip margin-bottom wrapped anthracite-bg with-mid-padding align-center" style="min-height:20px;font-size: 19px">
-                <img src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png') }}" style="width:21px;height:21px;padding-right: 6px">
-                <span>{{ error.message }}</span>
-            </div>
+            {{ print_error(error.message) }}
             <script type="text/javascript">
                 {% set type = 'error' %}
                 $(document).ready(function(){

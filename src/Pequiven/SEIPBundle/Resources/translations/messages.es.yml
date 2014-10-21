@@ -11,6 +11,7 @@ tecnocreaciones_vzla_government:
 pequiven:
     history: Historial
     details: Detalles
+    events: Eventos
     ref: Referencia
     select: Seleccione
     actions: Acciones
