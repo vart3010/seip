@@ -167,6 +167,9 @@ class ArrangementProgramController extends SEIPController
         if($entity->getCreatedBy() !== $user){
             throw $this->createAccessDeniedHttpException();
         }
+        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+            throw $this->createAccessDeniedHttpException();
+        }
 
         $editForm = $this->createEditForm($entity);
         
@@ -209,6 +212,9 @@ class ArrangementProgramController extends SEIPController
         //Security check
         $user = $this->getUser();
         if($entity->getCreatedBy() !== $user){
+            throw $this->createAccessDeniedHttpException();
+        }
+        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
             throw $this->createAccessDeniedHttpException();
         }
         

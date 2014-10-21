@@ -28,7 +28,7 @@ class ArrangementProgram extends Model
      * @var string
      * @ORM\Column(name="ref",type="string",length=100)
      */
-    private $ref = 'TEMP';
+    private $ref = null;
 
     /**
      * Periodo.

@@ -30,10 +30,15 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
     
     public static function getSubscribedEvents() {
         return array(
-            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_DELETE => 'onPreDeleteArrangementProgram'
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_DELETE => 'onPreDeleteArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram',
         );
     }
-    
+    /**
+     * Verifica que se pueda eliminar el programa de gestion
+     * @param ResourceEvent $event
+     * @throws type
+     */
     function onPreDeleteArrangementProgram(ResourceEvent $event) {
         $object = $event->getSubject();
          //Security check
@@ -41,6 +46,16 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
         if($object->getCreatedBy() !== $user){
             throw $this->createAccessDeniedHttpException();
         }
+        if($object->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+            throw $this->createAccessDeniedHttpException();
+        }
+    }
+    
+    function onPreCreateArrangementProgram(ResourceEvent $event) {
+        $object = $event->getSubject();
+        
+        $sequenceGenerator = $this->container->get('seip.sequence_generator');
+        $object->setRef($sequenceGenerator->getNextArrangementProgram($object));
     }
     
     function trans($id, $parameters = array(), $domain = 'historical')

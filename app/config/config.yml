@@ -149,6 +149,11 @@ tecnocreaciones_tools:
         debug: false
         configuration_manager_class: Pequiven\SEIPBundle\Service\Configuration
         configuration_name_service: seip.configuration
+    sequence_generator:
+        options:
+            additional_masks:
+                - gerencia
+                - type
                 
 sylius_resource:
     resources:

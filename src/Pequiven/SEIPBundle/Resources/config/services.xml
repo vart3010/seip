@@ -81,6 +81,10 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        
+        <service id="seip.sequence_generator" class="Pequiven\SEIPBundle\Service\SequenceGenerator">
+            <call method="setSequenceGenerator">
+                <argument type="service" id="tecnocreaciones_tools.sequence_generator"  />
+            </call>
+        </service>
     </services>
 </container>
