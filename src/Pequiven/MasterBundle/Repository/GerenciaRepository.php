@@ -85,4 +85,11 @@ class GerenciaRepository extends baseEntityRepository
         
         return $this->getPaginator($queryBuilder);
     }
+    
+    function findGerencia(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

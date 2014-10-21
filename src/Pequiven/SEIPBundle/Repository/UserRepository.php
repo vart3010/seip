@@ -85,6 +85,22 @@ class UserRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    function findUsersByCriteria(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+           ->addSelect('g')
+           ->innerJoin('u.groups', 'g')
+           ->andWhere('u.enabled = :enabled')
+           ->andWhere('g.typeRol = :typeRol')
+           ->setParameter('enabled', true)
+           ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ;
+        $qb
+            ->andWhere('g.level < :level')
+            ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+        return $qb->getQuery()->getResult();
+    }
+    
     protected function getAlias() {
         return 'u';
     }

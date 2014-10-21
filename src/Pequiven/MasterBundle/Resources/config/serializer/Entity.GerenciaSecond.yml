@@ -1,16 +1,25 @@
-Pequiven\SEIPBundle\Entity\User:
+Pequiven\MasterBundle\Entity\GerenciaSecond:
     exclusion_policy: ALL
     properties:
         id:
             expose: true
             groups: [id]
-        firstName:
+        createdAt:
             expose: true
             groups: [api_list]
-        lastName:
+        updatedAt:
             expose: true
             groups: [api_list]
-        numPersonal:
+        userCreatedAt:
+            expose: true
+            groups: [api_details]
+        userUpdatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]
+        ref:
             expose: true
             groups: [api_list]
         complejo:
@@ -18,4 +27,4 @@ Pequiven\SEIPBundle\Entity\User:
             groups: [complejo]
         gerencia:
             expose: true
-            groups: [gerencia]
+            groups: [gerencia1]
