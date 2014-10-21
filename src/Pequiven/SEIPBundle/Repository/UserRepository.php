@@ -27,11 +27,11 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('g.typeRol = :typeRol')
-//            ->andWhere('u.gerencia = :gerencia')
+            ->andWhere('u.gerencia = :gerencia')
             ->setParameter('level', $level)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-//            ->setParameter('gerencia', $user->getGerencia())
+            ->setParameter('gerencia', $user->getGerencia())
             ;
         return $qb;
     }
