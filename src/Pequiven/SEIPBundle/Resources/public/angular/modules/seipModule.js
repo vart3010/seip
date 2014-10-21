@@ -319,11 +319,11 @@ angular.module('seipModule.controllers', [])
             arrangementProgramStatusLabels: null
         };
         $scope.model = {
+            complejo: null,
             tactical: null,
             operative: null,
             first_line_management: null,
             second_line_management: null,
-            complejo: null,
             responsibles: null
         };
         
@@ -350,6 +350,15 @@ angular.module('seipModule.controllers', [])
         $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
         .success(function(data){
             $scope.data.responsibles = data;
+        });
+        
+        $scope.$watch("model.complejo", function (newParams, oldParams) {
+           if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
+               
+               $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+           }else{
+               $scope.tableParams.$params.filter['complejo'] = null;
+           }
         });
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){

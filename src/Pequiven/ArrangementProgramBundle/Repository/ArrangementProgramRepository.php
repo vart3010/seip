@@ -41,11 +41,9 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.process',"'%".$process."%'"));
         }
         
-//        if(($maxResults = $criteria->remove('max_results')) != null && $maxResults > 0){
-//            $queryBuilder
-//                    ->setMaxResults($maxResults)
-//                    ;
-//        }
+        if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
+            
+        }
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
