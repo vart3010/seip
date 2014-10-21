@@ -45,6 +45,7 @@ class GenericDataController extends SEIPController
     
     /**
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
+     * 
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      * @throws type
@@ -62,6 +63,102 @@ class GenericDataController extends SEIPController
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca los objetivos operativos tacticos del usuario logueado
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws type
+     */
+    function getTacticalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $user = $this->getUser();
+        $repository = $this->get('pequiven.repository.objetiveoperative');
+        $results = $repository->findTacticalObjetives($user);
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca los objetivos operativos tacticos del usuario logueado
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @throws type
+     */
+    function getOperativesObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $user = $this->getUser();
+        $repository = $this->get('pequiven.repository.objetiveoperative');
+        $results = $repository->findOperativeObjetives($user);
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca las gerencias de primera linea
+     * @param type $param
+     */
+    function getFirstLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $repository = $this->get('pequiven.repository.gerenciafirst');
+        $results = $repository->findGerencia();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca las gerencias de segunda linea
+     * @param type $param
+     */
+    function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $repository = $this->get('pequiven.repository.gerenciasecond');
+        $results = $repository->findGerenciaSecond();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca los complejos
+     * @param type $param
+     */
+    function getComplejosAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $repository = $this->get('pequiven_seip.repository.complejo');
+        $results = $repository->findComplejos();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca los responsables
+     * @param type $param
+     */
+    function getResponsiblesAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $repository = $this->get('pequiven_seip.repository.user');
+        $results = $repository->findUsersByCriteria();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
         return $this->handleView($view);
     }
 }

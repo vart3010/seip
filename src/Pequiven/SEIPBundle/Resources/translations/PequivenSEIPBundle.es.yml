@@ -1,99 +1,103 @@
 # Login
 pequiven_seip:
-              #Index
-                seip: Sistema Estadístico de Información Petroquímica
+  #Index
+    seip: Sistema Estadístico de Información Petroquímica
 
-                #Login
-                sign_in: Ingresar
-                remind_me: Recuerdame
-                login: Iniciar sesión
-                lost_password: Recuperar contraseña
-                username: Nombre de usuario
-                password: Contraseña
-                message_remember_password: Si no recuerda su contraseña, rellene la entrada a continuación con su e-mail y le enviaremos las instrucciones para recuperarla
-                your_email: Su correo electrónico
-                enable_auto_login: Habilitar inicio de sesión automático
-                send_instructions: Enviarme las instrucciones
-                register: Registrar
-                message_register: ¿Nuevo usuario? Yay! Háganos saber un poquito acerca de usted antes de empezar
-                your_name: Su nombre
-                registration: Registro
-                clear_sorting: Borrar selección
-                reload: Refrescar
-                content: Contenido
-                export_to_csv: Exportar a CVS
-                your_personal_num: Su número de personal
+    #Login
+    sign_in: Ingresar
+    remind_me: Recuerdame
+    login: Iniciar sesión
+    lost_password: Recuperar contraseña
+    username: Nombre de usuario
+    password: Contraseña
+    message_remember_password: Si no recuerda su contraseña, rellene la entrada a continuación con su e-mail y le enviaremos las instrucciones para recuperarla
+    your_email: Su correo electrónico
+    enable_auto_login: Habilitar inicio de sesión automático
+    send_instructions: Enviarme las instrucciones
+    register: Registrar
+    message_register: ¿Nuevo usuario? Yay! Háganos saber un poquito acerca de usted antes de empezar
+    your_name: Su nombre
+    registration: Registro
+    clear_sorting: Borrar selección
+    reload: Refrescar
+    content: Contenido
+    export_to_csv: Exportar a CVS
+    your_personal_num: Su número de personal
 
-                message_header_center: Sistema Estadístico de Información Petroquímica
-                message_app_title: Sistema Estadístico de Información Petroquímica
-                message_footer: Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
+    message_header_center: Sistema Estadístico de Información Petroquímica
+    message_app_title: Sistema Estadístico de Información Petroquímica
+    message_footer: Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
 
-                logout: Salir
+    logout: Salir
 
-                login:
-                    validators:
-                        please_fill_in_your_login: Por favor, ingrese su nombre de usuario
-                        please_fill_in_your_password: Por favor, ingrese su contraseña
-                        checking_credentials: Comprobando de credenciales
-                        please_fill_in_your_email: Por favor, ingrese su correo
-                        please_fill_in_your_name: Por favor, ingrese su nombre
-                        email_is_not_valid: El correo no es correcto
-                        registering: Registrando
-                        sending_instructions: Enviando instrucciones
-                details: Detalles
-                profile:
-                    profile: Perfil
-                    details: Detalles
-                    username: Nombre de usuario
-                    first_name: Nombre
-                    last_name: Apellido
-                    email: Email
-                    registed_at: Registrado el
-                    last_login: Última visita
-                    groups: Grupos
-                    update_password: Actualizar contraseña
-                    update: Actualizar
-                    num_personal: Número de personal
+    login:
+        validators:
+            please_fill_in_your_login: Por favor, ingrese su nombre de usuario
+            please_fill_in_your_password: Por favor, ingrese su contraseña
+            checking_credentials: Comprobando de credenciales
+            please_fill_in_your_email: Por favor, ingrese su correo
+            please_fill_in_your_name: Por favor, ingrese su nombre
+            email_is_not_valid: El correo no es correcto
+            registering: Registrando
+            sending_instructions: Enviando instrucciones
+    details: Detalles
+    profile:
+        profile: Perfil
+        details: Detalles
+        username: Nombre de usuario
+        first_name: Nombre
+        last_name: Apellido
+        email: Email
+        registed_at: Registrado el
+        last_login: Última visita
+        groups: Grupos
+        update_password: Actualizar contraseña
+        update: Actualizar
+        num_personal: Número de personal
 
-                hello: Hola
+    hello: Hola
 
-                #Buttons
-                edit: Editar
-                save: Guardar
-                cancel: Cancelar
+    #Buttons
+    edit: Editar
+    save: Guardar
+    cancel: Cancelar
 
-                #Roles
-                role:
-                    super_administrator: Super Administrador
-                    administrator: Administrador
-                    directive: Ejecutivo
-                    directive_aux: Ejecutivo (Asignado)
-                    general_complejo: Gerente General Complejo %complejo%
-                    general_complejo_aux: Gerente General Complejo (Asignado)
-                    manager_first: Gerente 1ra Línea
-                    manager_first_aux: Gerente 1ra Línea (Asignado)
-                    manager_second: Gerente 2da Línea
-                    manager_second_aux: Gerente 2da Línea (Asignado)
-                    superviser: Supervisor
-                    worker_pqv: Personal PQV
-                    
-                search: Buscar
-                show: Mostrar
-                with_selected: Seleccionados 
-                entries_found: registros encontrados
-                go: Ir
-                delete: Eliminar
-                move_to_trash: Mover a la papelera
-                no: No
-                yes: Si
-                selected: Seleccionado(s)
-                all: Todos
-                search: Buscar
-                notify:
-                    one_similar_notification: Una notificación similar
-                    n_similar_notifications: %d notificaciones similares
-                    one_more_notification: Una notificación mas
-                    n_more_notifications: %d notificaciones mas
+    #Roles
+    role:
+        super_administrator: Super Administrador
+        administrator: Administrador
+        directive: Ejecutivo
+        directive_aux: Ejecutivo (Asignado)
+        general_complejo: Gerente General Complejo %complejo%
+        general_complejo_aux: Gerente General Complejo (Asignado)
+        manager_first: Gerente 1ra Línea
+        manager_first_aux: Gerente 1ra Línea (Asignado)
+        manager_second: Gerente 2da Línea
+        manager_second_aux: Gerente 2da Línea (Asignado)
+        superviser: Supervisor
+        worker_pqv: Personal PQV
+
+    search: Buscar
+    show: Mostrar
+    with_selected: Seleccionados 
+    entries_found: registros encontrados
+    go: Ir
+    delete: Eliminar
+    move_to_trash: Mover a la papelera
+    no: No
+    yes: Si
+    selected: Seleccionado(s)
+    all: Todos
+    search: Buscar
+    notify:
+        one_similar_notification: Una notificación similar
+        n_similar_notifications: %d notificaciones similares
+        one_more_notification: Una notificación mas
+        n_more_notifications: %d notificaciones mas
+    filters:
+        first_line_management: Gerencia de primera línea
+        management_second_line: Gerencia de segunda línea
+        complejo: Complejo
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

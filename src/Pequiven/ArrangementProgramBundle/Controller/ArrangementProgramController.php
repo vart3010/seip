@@ -50,7 +50,17 @@ class ArrangementProgramController extends SEIPController
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
-            $view->setData($resources);
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus
+            ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','complejo','gerencia'));
             $formatData = $request->get('_formatData','default');

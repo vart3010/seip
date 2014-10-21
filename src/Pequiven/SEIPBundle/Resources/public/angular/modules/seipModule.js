@@ -308,9 +308,58 @@ angular.module('seipModule.controllers', [])
         
         $scope.init();
     })
-    .controller('ReportArrangementProgramController',function($scope){
-        $scope.data = {};
-
+    .controller('ReportArrangementProgramController',function($scope,$http){
+        $scope.data = {
+            tacticals: null,
+            operatives: null,
+            first_line_managements: null,
+            second_line_managements: null,
+            complejos: null,
+            responsibles: null,
+            arrangementProgramStatusLabels: null
+        };
+        $scope.model = {
+            complejo: null,
+            tactical: null,
+            operative: null,
+            first_line_management: null,
+            second_line_management: null,
+            responsibles: null
+        };
+        
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
+        .success(function(data){
+            $scope.data.tacticals = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives'))
+        .success(function(data){
+            $scope.data.operatives = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+        .success(function(data){
+            $scope.data.first_line_managements = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management'))
+        .success(function(data){
+            $scope.data.second_line_managements = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
+        .success(function(data){
+            $scope.data.complejos = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
+        .success(function(data){
+            $scope.data.responsibles = data;
+        });
+        
+        $scope.$watch("model.complejo", function (newParams, oldParams) {
+           if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
+               
+               $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+           }else{
+               $scope.tableParams.$params.filter['complejo'] = null;
+           }
+        });
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
         

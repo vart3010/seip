@@ -40,6 +40,10 @@ class ArrangementProgramRepository extends EntityRepository
         if(($process = $criteria->remove('ap.process'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.process',"'%".$process."%'"));
         }
+        
+        if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
+            
+        }
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

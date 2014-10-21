@@ -2,7 +2,7 @@
 
 namespace Pequiven\MasterBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * ComplejoRepository
@@ -12,9 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class ComplejoRepository extends EntityRepository
 {
-    
-    
-    
     function getByGerencia(){
         $data = array();
         
@@ -63,5 +60,14 @@ class ComplejoRepository extends EntityRepository
 //        }
         
         return $complejos;
+    }
+    
+    function findComplejos(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        return $qb->getQuery()->getResult();
+    }
+    
+    protected function getAlias() {
+        return 'c';
     }
 }

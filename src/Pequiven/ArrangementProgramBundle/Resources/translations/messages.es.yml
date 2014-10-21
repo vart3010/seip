@@ -32,7 +32,7 @@ pequiven:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?
             arrangement_program:
-                open_on_save: ¿Desea abrir formulario de las metas luego de guardar?
+                open_on_save: ¿Desea abrir el formulario del detalle de las metas despues de guardar?
     validators:
         arrangement_program:
             select_responsible_person: Seleccione un responsable
