@@ -44,6 +44,14 @@
                 {% endif %}
             </p>
             <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.send_to_review_by'|trans }}</label>
+                {{ entity.details.sendToReviewBy ? entity.details.sendToReviewBy : 'pequiven.arrangement_program.no_send_to_review_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.send_to_review_date'|trans }}</label>
+                {{ entity.details.sendToReviewDate ? entity.details.sendToReviewDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_send_to_review_date'|trans }}
+            </p>
+            <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.reviewed_by'|trans }}</label>
                 {{ entity.details.reviewedBy ? entity.details.reviewedBy : 'pequiven.arrangement_program.no_revison_date'|trans }}
             </p>

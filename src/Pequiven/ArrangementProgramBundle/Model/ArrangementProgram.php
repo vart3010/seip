@@ -19,20 +19,26 @@ abstract class ArrangementProgram
      * Estatus borrador
      */
     const STATUS_DRAFT = 0;
+    
+    /**
+     * Estatus en revision
+     */
+    const STATUS_IN_REVIEW = 1;
+    
     /**
      * Estatus revisado
      */
-    const STATUS_REVISED = 1;
+    const STATUS_REVISED = 2;
     
     /**
      * Estatus aprobado
      */
-    const STATUS_APPROVED = 2;
+    const STATUS_APPROVED = 3;
     
     /**
-     * Estatus finalizado (bloqueado)
+     * Estatus rechazado
      */
-    const STATUS_FINISH = 3;
+    const STATUS_REJECTED = 4;
     
     /**
      * Tipo de programa de gestion
@@ -189,8 +195,10 @@ abstract class ArrangementProgram
     {
         static $labelsStatus = array(
             self::STATUS_DRAFT => 'pequiven.arrangement_program.status.draft',
+            self::STATUS_IN_REVIEW => 'pequiven.arrangement_program.status.in_review',
             self::STATUS_REVISED => 'pequiven.arrangement_program.status.revised',
             self::STATUS_APPROVED => 'pequiven.arrangement_program.status.approved',
+            self::STATUS_REJECTED => 'pequiven.arrangement_program.status.rejected',
         );
         return $labelsStatus;
     }

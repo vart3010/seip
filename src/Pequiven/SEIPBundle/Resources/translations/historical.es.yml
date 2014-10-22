@@ -3,3 +3,4 @@ pequiven_seip:
         pre_create: El programa de gestión fue creado.
         pre_revised: El programa de gestión fue revisado.
         pre_approved: El programa de gestión fue aprobado.
+        pre_send_to_review: El programa de gestión fue enviado a revisión.

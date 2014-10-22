@@ -2,13 +2,17 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use DateTime;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\ArrangementProgramBundle\Entity\Timeline;
+use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
-use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
+use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador del programa de gestion
@@ -98,7 +102,7 @@ class ArrangementProgramController extends SEIPController
                 $this->setFlash('autoOpenOnSave', true);
             }
             if($entity->getTimeline() === null){
-                $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
+                $timeLine = new Timeline();
                 $entity->setTimeline($timeLine);
             }
             $entity->setDetails(new ArrangementProgram\Details());
@@ -117,7 +121,7 @@ class ArrangementProgramController extends SEIPController
      *
      * @param ArrangementProgram $entity The entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createCreateForm(ArrangementProgram $entity,array $parameters)
     {
@@ -149,10 +153,12 @@ class ArrangementProgramController extends SEIPController
         
         $isAllowToApprove = $this->isAllowToApprove($entity);
         $isAllowToReview = $this->isAllowToReview($entity);
+        $isAllowToSendToReview = $this->isAllowToSendToReview($entity);
         
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'isAllowToSendToReview' => $isAllowToSendToReview,
             'isAllowToApprove' => $isAllowToApprove,
             'isAllowToReview' => $isAllowToReview,
         );
@@ -177,7 +183,7 @@ class ArrangementProgramController extends SEIPController
         if($entity->getCreatedBy() !== $user){
             throw $this->createAccessDeniedHttpException();
         }
-        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+        if($entity->getStatus() !== ArrangementProgram::STATUS_DRAFT){
             throw $this->createAccessDeniedHttpException();
         }
 
@@ -194,7 +200,7 @@ class ArrangementProgramController extends SEIPController
     *
     * @param ArrangementProgram $entity The entity
     *
-    * @return \Symfony\Component\Form\Form The form
+    * @return Form The form
     */
     private function createEditForm(ArrangementProgram $entity)
     {
@@ -288,14 +294,46 @@ class ArrangementProgramController extends SEIPController
         $details = $resource->getDetails();
         $details
                 ->setReviewedBy($user)
-                ->setRevisionDate(new \DateTime());
+                ->setRevisionDate(new DateTime());
         
-        $this->domainManager->dispatchEvent('pre_revised', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('pre_revised', new ResourceEvent($resource));
         
         $this->domainManager->update($resource);
         $this->flashHelper->setFlash('success', 'revised');
         
-        $this->domainManager->dispatchEvent('post_revised', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('post_revised', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Marca como revisado el programa de gestion "como en revision"
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function sendToReviewAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->isAllowToSendToReview($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setSendToReviewBy($user)
+                ->setSendToReviewDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'send_to_review');
+        
+        $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
         
         return $this->redirectHandler->redirectTo($resource);
     }
@@ -321,14 +359,14 @@ class ArrangementProgramController extends SEIPController
         $details = $resource->getDetails();
         $details
                 ->setApprovedBy($user)
-                ->setApprovalDate(new \DateTime());
+                ->setApprovalDate(new DateTime());
         
-        $this->domainManager->dispatchEvent('pre_approved', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('pre_approved', new ResourceEvent($resource));
         
         $this->domainManager->update($resource);
         $this->flashHelper->setFlash('success', 'approved');
         
-        $this->domainManager->dispatchEvent('post_approved', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('post_approved', new ResourceEvent($resource));
         
         return $this->redirectHandler->redirectTo($resource);
     }
@@ -338,7 +376,7 @@ class ArrangementProgramController extends SEIPController
      *
      * @param mixed $id The entity id
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {
@@ -395,13 +433,34 @@ class ArrangementProgramController extends SEIPController
         return $valid;
     }
     
+    /**
+     * Evalua si el usuario logeado tiene permisos para enviar el programa de gestion a revision
+     * @param ArrangementProgram $entity
+     * @return boolean
+     */
+    private function isAllowToSendToReview(ArrangementProgram $entity) {
+        $user = $this->getUser();
+        $valid = false;
+        if( $entity->getStatus() === ArrangementProgram::STATUS_DRAFT &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === false || $this->isAllowToApprove($entity) === true) 
+            ){
+            $valid = true;
+        }
+        return $valid;
+    }
+    
+    /**
+     * Evalua si el usuario logueado tiene permisos para actualizar el programa
+     * @param type $entity
+     * @throws type
+     */
     private function hasPermissionToUpdate($entity) {
         //Security check
         $user = $this->getUser();
         if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
             throw $this->createAccessDeniedHttpException();
         }
-        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+        if($entity->getStatus() === ArrangementProgram::STATUS_APPROVED || $entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
             throw $this->createAccessDeniedHttpException();
         }
     }

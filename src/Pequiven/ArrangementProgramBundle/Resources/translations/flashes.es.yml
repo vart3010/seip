@@ -5,3 +5,4 @@ pequiven_seip:
         delete: Programa de gestión eliminado.
         revised: Programa de gestión revisado.
         approved: Programa de gestión aprobado.
+        send_to_review: Programa de gestión enviado a revisión.
