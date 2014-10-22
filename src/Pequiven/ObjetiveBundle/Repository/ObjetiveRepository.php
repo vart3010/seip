@@ -337,10 +337,21 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
-                ->andWhere("g.id = :gerencia")
                 ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-                ->setParameter("gerencia", $user->getGerencia())
             ;
+        $level = 0;
+        $groups = $user->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() > $level){
+                $level = $group->getLevel();
+            }
+        }
+        if($level != \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $user->getGerencia())
+                ;
+        }
         return $qb;
     }
     
@@ -390,11 +401,22 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.gerenciaSecond","gs")
                 ->andWhere('p.id = :parent')
                 ->andWhere("ol.level = :level")
-                ->andWhere("gs.id = :gerenciaSecond")
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
-                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
             ;
+        $level = 0;
+        $groups = $user->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() > $level){
+                $level = $group->getLevel();
+            }
+        }
+        if($level != \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
+            $qb
+                ->andWhere("gs.id = :gerenciaSecond")
+                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+                ;
+        }
         return $qb;
     }
 }

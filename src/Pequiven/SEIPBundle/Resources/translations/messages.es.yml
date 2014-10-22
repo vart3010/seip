@@ -38,6 +38,8 @@ pequiven:
             user:  Usuario
             date: Fecha
             comment: Comentario
+    validations:
+        blank_text: Este campo es obligatorio
 app:
     loading: Cargando
 

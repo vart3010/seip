@@ -5,7 +5,7 @@ namespace Pequiven\MasterBundle\Model;
 use FOS\UserBundle\Entity\Group as BaseGroup;
 
 /**
- * Description of Rol
+ * Modelo de rol
  *
  * @author matias
  */
