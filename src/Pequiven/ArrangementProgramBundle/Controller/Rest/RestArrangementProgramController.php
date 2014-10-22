@@ -61,6 +61,8 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
+        $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
+        
         $form = $this->createForm(new GoalDetailsType(),$entity);
         $dataRequest = $request->request->all();
         

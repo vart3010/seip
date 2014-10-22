@@ -13,10 +13,13 @@ use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\GoalDetails;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Description of SerializerListener
@@ -90,6 +93,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     public function onPostSerializeGoalDetails(ObjectEvent $event) {
         $data = array();
         $object = $event->getObject();
+        $arrangementProgram = $object->getGoal()->getTimeline()->getArrangementProgram();
         
         $date = new DateTime();
         
@@ -102,7 +106,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         //Habilitar la carga de valores reales atrasados
         $isEnabledLoadRealLate = true;
         //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
-        $isEnabledEditByPlannedLoad = true;
+        $isEnabledEditByPlannedLoad = false;
         //Deshabilitar las celdas planeadas cuando se distribuya el 100%
         $disablePlannedOnComplete = true;
         
@@ -137,6 +141,10 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
         $isEnabledLoadByQuarterFourthReal = true;
         
+        if($arrangementProgram->getStatus() == ArrangementProgram::STATUS_APPROVED || $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REJECTED){
+            $isLoadPlannedEnabled = false;
+        }
+        
         $month = $date->format('m');
         
         if($isLoadRealEnabled === false){
@@ -151,11 +159,6 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 }
             }
         }
-        if($isLoadPlannedEnabled === false){
-            foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
-                $data[$key]['isEnabled'] = false;
-            }
-        }
         if($isEnabledLoadRealLate === false){
             foreach (GoalDetails::getMonthsReal() as $key => $monthGoal) {
                 if($month > $monthGoal){
@@ -168,7 +171,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             //Limite de porcentaje que se asigna al planeado
             $limitPlannedPercentaje = 100;
             $percentajeAcumulated = 0;
-            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            $propertyAccessor = new PropertyAccessor();
             $disable = false;
             foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
                 $percentaje = $propertyAccessor->getValue($object,$planned);
@@ -282,13 +285,19 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         }
         
         if($isEnabledEditByPlannedLoad === true){
-            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            $propertyAccessor = new PropertyAccessor();
             foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
                 $value = $propertyAccessor->getValue($object,$planned);
                 $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
                 if($value == '' || $value == '0' || $value === null){
                     $data[$monthReal]['isEnabled'] = false;
                 }
+            }
+        }
+        
+        if($isLoadPlannedEnabled === false){
+            foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
+                $data[$key]['isEnabled'] = false;
             }
         }
         
@@ -451,12 +460,12 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $event->getVisitor()->addData('imageIndOperativeVinculante', $routeImage['indOperativeVinculante']);
     }
     
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+    public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
     
     protected function generateUrl($route,array $parameters){
-        return $this->container->get('fos_rest.router')->generate($route, $parameters, \Symfony\Bundle\FrameworkBundle\Routing\Router::ABSOLUTE_URL);
+        return $this->container->get('fos_rest.router')->generate($route, $parameters, Router::ABSOLUTE_URL);
     }
     
     function trans($id, $parameters = array(), $domain = 'messages')

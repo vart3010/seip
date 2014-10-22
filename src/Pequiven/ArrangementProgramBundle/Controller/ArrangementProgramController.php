@@ -229,7 +229,7 @@ class ArrangementProgramController extends SEIPController
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
                 
-        if($request->isMethod('POST')){
+        if($request->isMethod('POST') || $request->isMethod('PUT')){
             $originalGoalsArray = array();
             $timeline = $entity->getTimeline();
             // Create an ArrayCollection of the current Tag objects in the database
