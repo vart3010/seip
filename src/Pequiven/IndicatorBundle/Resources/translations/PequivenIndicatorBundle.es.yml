@@ -102,6 +102,11 @@ form:
     evalWeightedAverage: Promedio Ponderado
     register: Registrar
     
+    question:
+        registerIndicatorStrategic: ¿Desea guardar el Indicador Estratégico?
+        registerIndicatorTactic: ¿Desea guardar el Indicador Táctico?
+        registerIndicatorOperative: ¿Desea guardar el Indicador Operativo?
+    
     info:
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo

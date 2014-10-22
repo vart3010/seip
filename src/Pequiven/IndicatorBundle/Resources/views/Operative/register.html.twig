@@ -297,6 +297,7 @@
         });
         
         var selectLineStrategic = $("#pequiven_indicator_operative_registration_lineStrategics"),//Select de Línea Estratégica
+            form = $("#registerIndicatorOperativeForm"),
             selectObjetiveStrategic = $("#pequiven_indicator_operative_registration_parents"),//Select de Objetivo Estratégico
             selectObjetiveTactic = $("#pequiven_indicator_operative_registration_parentTactic"),//Select de Objetivo Táctico
             selectObjetiveOperative = $("#pequiven_indicator_operative_registration_parentOperative"),//Select de Objetivo Operativo
@@ -354,8 +355,27 @@
             labelsRangeTop = $("#pequiven_indicator_operative_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
         ;
         
+        var valid = false;
         $(document).ready(function()
         {
+            form.submit(function(e) {
+                if(valid ==false){
+                    $.modal.confirm('{{ 'form.question.registerIndicatorOperative'|trans }}', function()
+                    {
+                        valid = true;
+                        form.submit();
+                    }, function()
+                    {
+                    }, { 'textCancel' : 'Cancelar' , 'textConfirm' : 'Aceptar' });
+                }
+                
+                if(valid == false){
+                    e.preventDefault();
+                }
+                return valid;
+                
+            });
+            
             //Llamado de la función que carga los valores por defecto de la vista
             charge();
 
