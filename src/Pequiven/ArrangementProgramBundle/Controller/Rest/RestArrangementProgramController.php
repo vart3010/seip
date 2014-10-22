@@ -61,6 +61,8 @@ class RestArrangementProgramController extends FOSRestController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
+        $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
+        
         $form = $this->createForm(new GoalDetailsType(),$entity);
         $dataRequest = $request->request->all();
         
@@ -73,15 +75,16 @@ class RestArrangementProgramController extends FOSRestController
             //Habilitar limpiar los valores reales si el planeado se establecio en cero
             $isEnabledClearRealByPlannedEmpty = true;
             //Permitir cargar valor real mayor a planificado.
-            $isAllowLoadingLongerThanPlannedRealValue = false;
-            
+            $isAllowLoadingLongerThanPlannedRealValue = true;
+            //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
+            $isEnabledEditByPlannedLoad = false;
             if($isEnabledClearRealByPlannedEmpty === true){
                 $propertyAccessor = new PropertyAccessor();
                 foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
                     $valuePlanned = $propertyAccessor->getValue($entity,$planned);
                     $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
                     $valueReal = $propertyAccessor->getValue($entity, $monthReal);
-                    if($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null){
+                    if($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)){
                         $propertyAccessor->setValue($entity, $monthReal, 0);
                     }else if($valueReal > $valuePlanned){
                         //Valida que el valor real no pueda ser mayor al planeado.

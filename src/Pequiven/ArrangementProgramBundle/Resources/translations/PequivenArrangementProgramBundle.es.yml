@@ -30,13 +30,19 @@ pequiven:
         you_must_assign_config: Debe configurar los responsables de los programas de gestión en la gerencia.
         reviewed_by: Revisado por
         approved_by: Aprobado por
+        send_to_review_by: Enviado a revisión por
+        send_to_review_date: Fecha de envio a revisión
+        no_send_to_review_date: No se ha enviado a revisión
         status:
             status: Estatus
             draft: Borrador
+            in_review: En revisión
             revised: Revisado
+            rejected: Rechazado
             approved: Aprobado
         buttons:
             revised: Revisado
+            send_to_review: Enviar a revisión
             approved: Aprobado
         type:
             tactic: Tactico
@@ -44,6 +50,7 @@ pequiven:
         questions:
             revised: ¿Desea marcar el programa de gestión como revisado?
             approved: ¿Desea aprobar el programa de gestión?
+            send_to_review: ¿Desea enviar el programa de gestión a revisión?
     form:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo Táctico

@@ -53,6 +53,22 @@ class Details
      * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
      */
     private $approvalDate;
+
+    /**
+     * Enviado a revision por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $sendToReviewBy;
+
+    /**
+     * Fecha que se envio a revision
+     * @var \DateTime
+     *
+     * @ORM\Column(name="sendToReviewDate", type="datetime",nullable=true)
+     */
+    private $sendToReviewDate;
     
     /**
      * Get id
@@ -156,4 +172,50 @@ class Details
         return $this->approvedBy;
     }
     
+
+    /**
+     * Set sendToReviewDate
+     *
+     * @param \DateTime $sendToReviewDate
+     * @return Details
+     */
+    public function setSendToReviewDate($sendToReviewDate)
+    {
+        $this->sendToReviewDate = $sendToReviewDate;
+
+        return $this;
+    }
+
+    /**
+     * Get sendToReviewDate
+     *
+     * @return \DateTime 
+     */
+    public function getSendToReviewDate()
+    {
+        return $this->sendToReviewDate;
+    }
+
+    /**
+     * Set sendToReviewBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $sendToReviewBy
+     * @return Details
+     */
+    public function setSendToReviewBy(\Pequiven\SEIPBundle\Entity\User $sendToReviewBy = null)
+    {
+        $this->sendToReviewBy = $sendToReviewBy;
+
+        return $this;
+    }
+
+    /**
+     * Get sendToReviewBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getSendToReviewBy()
+    {
+        return $this->sendToReviewBy;
+    }
 }
