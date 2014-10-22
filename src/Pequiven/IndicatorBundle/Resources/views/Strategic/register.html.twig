@@ -230,6 +230,7 @@
         });
         
         var selectLineStrategic = $("#pequiven_indicator_strategic_registration_lineStrategics"),//Select de Línea Estratégica
+            form = $("#registerIndicatorStrategicForm"),
             selectObjetiveStrategic = $("#pequiven_indicator_strategic_registration_parents"),//Select de Objetivo Estratégico
             selectFormula = $("#pequiven_indicator_strategic_registration_formula"),//Select de Fórmula
             inputRef = $("#pequiven_indicator_strategic_registration_ref"),//Input de Ref
@@ -280,8 +281,27 @@
             labelsRangeTop = $("#pequiven_indicator_strategic_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
         ;
         
+        var valid = false;
         $(document).ready(function()
         {
+            form.submit(function(e) {
+                if(valid ==false){
+                    $.modal.confirm('{{ 'form.question.registerIndicatorStrategic'|trans }}', function()
+                    {
+                        valid = true;
+                        form.submit();
+                    }, function()
+                    {
+                    }, { 'textCancel' : 'Cancelar' , 'textConfirm' : 'Aceptar' });
+                }
+                
+                if(valid == false){
+                    e.preventDefault();
+                }
+                return valid;
+                
+            });
+            
             //Llamado de la función que carga los valores por defecto de la vista
             charge();
 
