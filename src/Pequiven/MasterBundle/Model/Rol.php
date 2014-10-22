@@ -5,7 +5,7 @@ namespace Pequiven\MasterBundle\Model;
 use FOS\UserBundle\Entity\Group as BaseGroup;
 
 /**
- * Description of Rol
+ * Modelo de rol
  *
  * @author matias
  */
@@ -75,16 +75,16 @@ class Rol extends BaseGroup
      */
     static function getRolesLevel() {
         static $rolesLevel = array(
-            self::ROLE_DEFAULT => 0,
-            self::ROLE_WORKER_PQV => 1000,
-            self::ROLE_SUPERVISER => 2000,
-            self::ROLE_COORDINATOR => 3000,
-            self::ROLE_MANAGER_SECOND => 4000,
-            self::ROLE_MANAGER_FIRST => 5000,
-            self::ROLE_GENERAL_COMPLEJO => 5000,
-            self::ROLE_DIRECTIVE => 6000,
-            self::ROLE_ADMIN => 7000,
-            self::ROLE_SUPER_ADMIN => 8000,
+            self::ROLE_DEFAULT => self::ROLE_DEFAULT,
+            self::ROLE_WORKER_PQV => self::ROLE_WORKER_PQV,
+            self::ROLE_SUPERVISER => self::ROLE_SUPERVISER,
+            self::ROLE_COORDINATOR => self::ROLE_COORDINATOR,
+            self::ROLE_MANAGER_SECOND => self::ROLE_MANAGER_SECOND,
+            self::ROLE_MANAGER_FIRST => self::ROLE_MANAGER_FIRST,
+            self::ROLE_GENERAL_COMPLEJO => self::ROLE_GENERAL_COMPLEJO,
+            self::ROLE_DIRECTIVE => self::ROLE_DIRECTIVE,
+            self::ROLE_ADMIN => self::ROLE_ADMIN,
+            self::ROLE_SUPER_ADMIN => self::ROLE_SUPER_ADMIN,
         );
         
         $rolesLevel[self::ROLE_SUPERVISER_AUX] = $rolesLevel[self::ROLE_SUPERVISER];

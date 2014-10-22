@@ -20,19 +20,32 @@ class UserRepository extends EntityRepository
     function findQueryToAssingTacticArrangementProgram(){
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
+        $level = 0;
         $groups = $user->getGroups();
-        $group = $groups[0];
-        $level = $group->getLevel();
+        foreach ($groups as $group) {
+            if($group->getLevel() > $level){
+                $level = $group->getLevel();
+            }
+        }
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('g.typeRol = :typeRol')
-            ->andWhere('u.gerencia = :gerencia')
             ->setParameter('level', $level)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-            ->setParameter('gerencia', $user->getGerencia())
             ;
+        if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
+            $qb
+                ->andWhere($qb->expr()->isNotNull('u.gerencia'))
+                ->andWhere("u.gerencia != ''")
+                ;
+        }else{
+            $qb
+                ->andWhere('u.gerencia = :gerencia')
+                ->setParameter('gerencia', $user->getGerencia())
+                ;
+        }
         return $qb;
     }
     

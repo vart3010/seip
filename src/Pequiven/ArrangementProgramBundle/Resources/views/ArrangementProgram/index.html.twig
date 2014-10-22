@@ -108,7 +108,7 @@
 
                                 <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'period': 'text' }">
+                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
                                 {$ result.period.name $}
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.process'|trans }}'" sortable="'process'" filter="{ 'ap.process': 'text' }">

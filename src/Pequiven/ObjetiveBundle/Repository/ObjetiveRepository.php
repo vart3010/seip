@@ -2,6 +2,10 @@
 
 namespace Pequiven\ObjetiveBundle\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use Pequiven\MasterBundle\Entity\Rol;
+use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -36,7 +40,7 @@ class ObjetiveRepository extends EntityRepository {
         } else{//Para el campo referencia
             if(isset($options['lineStrategicId'])){
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId']);
-                $query->andWhere('o.objetiveLevel = ' . \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO);
+                $query->andWhere('o.objetiveLevel = ' . ObjetiveLevel::LEVEL_ESTRATEGICO);
             } elseif($options['type_ref'] === 'TACTIC_REF'){
                 if(isset($options['type_directive'])){
                     $query->andWhere("o.parent IN (" . $options['array_parent'] . ")");
@@ -125,7 +129,7 @@ class ObjetiveRepository extends EntityRepository {
      * 
      * @param array $criteria
      * @param array $orderBy
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
@@ -161,7 +165,7 @@ class ObjetiveRepository extends EntityRepository {
      * 
      * @param array $criteria
      * @param array $orderBy
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
         
@@ -232,7 +236,7 @@ class ObjetiveRepository extends EntityRepository {
      * 
      * @param array $criteria
      * @param array $orderBy
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
         $values = $criteria;
@@ -337,10 +341,23 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-                ->setParameter("gerencia", $user->getGerencia())
+                ->andWhere('ol.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
+        $level = 0;
+        $groups = $user->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() > $level){
+                $level = $group->getLevel();
+            }
+        }
+        if(Rol::getRoleLevel($level) != Rol::ROLE_DIRECTIVE && Rol::getRoleLevel($level) != Rol::ROLE_MANAGER_FIRST){
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $user->getGerencia())
+                ;
+        }
         return $qb;
     }
     
@@ -352,7 +369,7 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
                 ->andWhere("g.id = :gerencia")
-                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
                 ->setParameter("gerencia", $user->getGerencia())
             ;
         return $qb->getQuery()->getResult();
@@ -366,7 +383,7 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
                 ->andWhere("g.id = :gerencia")
-                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
+                ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
                 ->setParameter("gerencia", $user->getGerencia())
             ;
         return $qb->getQuery()->getResult();
@@ -376,7 +393,7 @@ class ObjetiveRepository extends EntityRepository {
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type
      */
-    function findObjetivesOperationalByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetiveTactic)
+    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic)
     {
         return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
     }
@@ -390,11 +407,24 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.gerenciaSecond","gs")
                 ->andWhere('p.id = :parent')
                 ->andWhere("ol.level = :level")
-                ->andWhere("gs.id = :gerenciaSecond")
+                ->andWhere('ol.enabled = :enabled')
+                ->setParameter('enabled', true)
                 ->setParameter('parent', $objetiveTactic)
-                ->setParameter("level", \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
-                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+                ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
+        $level = 0;
+        $groups = $user->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() > $level){
+                $level = $group->getLevel();
+            }
+        }
+        if(Rol::getRoleLevel($level) != Rol::ROLE_DIRECTIVE && Rol::getRoleLevel($level) != Rol::ROLE_MANAGER_FIRST){
+            $qb
+                ->andWhere("gs.id = :gerenciaSecond")
+                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+                ;
+        }
         return $qb;
     }
 }

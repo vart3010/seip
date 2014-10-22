@@ -140,6 +140,15 @@ angular.module('seipModule.controllers', [])
         
         //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal){
+            var responsibles = programResponsible.val();
+            if($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == ''){
+                $scope.sendMessageError(null,'s2id_arrangementprogram_categoryArrangementProgram');
+                return ;
+            }
+            if(responsibles == null){
+                $scope.sendMessageError(null,'s2id_arrangementprogram_responsibles');
+                return ;
+            }
             $scope.templateOptions.setTemplate($scope.templates[0]);
             $scope.templateOptions.setParameterCallBack(goal);
             if(goal){
@@ -201,6 +210,7 @@ angular.module('seipModule.controllers', [])
         var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
         var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
         var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
+        var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
         tacticalObjective.on('change',function(e){
             
             if(e.val){
@@ -212,8 +222,13 @@ angular.module('seipModule.controllers', [])
                     angular.forEach(data,function(value){
                         operationalObjective.append('<option value="'+value.id+'">'+value.ref+" "+value.description+'</option>');
                     });
-                    operationalObjective.select2('val',e.val);
-                    operationalObjective.select2('enable',true);
+                    if(data.length > 0){
+                        operationalObjective.select2('val',e.val);
+                        operationalObjective.select2('enable',true);
+                    }else{
+                        operationalObjective.select2('val','');
+                        operationalObjective.select2('enable',false);
+                    }
                     notificationBarService.getLoadStatus().done();
                 });
             }else{
@@ -223,8 +238,17 @@ angular.module('seipModule.controllers', [])
         });
         programResponsible.on('change',function(object){
             var reponsibleId = object.val;
+            $scope.validButtomAddGoal();
             $scope.getResponsiblesGoal(reponsibleId);
         });
+        $scope.validButtomAddGoal = function(){
+            
+            if(programResponsible.val() != null && programResponsible.val() > 0){
+                loadTemplateMetaButton.removeClass('disabled');
+            }else{
+                loadTemplateMetaButton.addClass('disabled');
+            }
+        };
         $scope.getResponsiblesGoal = function(reponsibleId){
             if(reponsibleId == ''){
                 $scope.data.responsibleGoals = [];
@@ -280,6 +304,9 @@ angular.module('seipModule.controllers', [])
         });
         
         $scope.sendMessageError = function(message,id){
+            if(message === null){
+                message= 'pequiven.validations.blank_text';
+            }
             var messageTrans = "* "+ Translator.trans(message);
             if(id == undefined){
                 id = 'message-errors';
@@ -304,6 +331,10 @@ angular.module('seipModule.controllers', [])
         
         $scope.init = function(){
             $scope.getResponsiblesGoal(programResponsible.val());
+            if(operationalObjective.val() == '' || operationalObjective.val() == null){
+                operationalObjective.select2('enable',false)
+            }
+            $scope.validButtomAddGoal();
         };
         
         $scope.init();

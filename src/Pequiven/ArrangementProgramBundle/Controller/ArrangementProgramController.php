@@ -213,61 +213,55 @@ class ArrangementProgramController extends SEIPController
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         
-        
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
-        //Security check
-        $user = $this->getUser();
-        if($entity->getCreatedBy() !== $user){
-            throw $this->createAccessDeniedHttpException();
-        }
-        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
-            throw $this->createAccessDeniedHttpException();
-        }
         
-        $originalGoalsArray = array();
-        $timeline = $entity->getTimeline();
-        // Create an ArrayCollection of the current Tag objects in the database
-        foreach ($timeline->getGoals() as $goal) {
-            $originalGoalsArray[$timeline->getId()][] = $goal;
-        }
-        
+        $this->hasPermissionToUpdate($entity);
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
-        
-        $editForm->submit($request,false);
-        
-        if ($editForm->isValid()) {
-            $autoOpenOnSave = $request->get('autoOpenOnSave',false);
-            if($autoOpenOnSave == true){
-                $this->setFlash('autoOpenOnSave', true);
-            }
+                
+        if($request->isMethod('POST')){
+            $originalGoalsArray = array();
             $timeline = $entity->getTimeline();
-            if(isset($originalGoalsArray[$timeline->getId()])){
-                $goals = $originalGoalsArray[$timeline->getId()];
-                foreach ($goals as $originalGoal) {
-                    if(false === $timeline->getGoals()->contains($originalGoal)){
-                        $timeline->getGoals()->removeElement($originalGoal);
-                        $em->remove($originalGoal);
+            // Create an ArrayCollection of the current Tag objects in the database
+            foreach ($timeline->getGoals() as $goal) {
+                $originalGoalsArray[$timeline->getId()][] = $goal;
+            }
+
+            $editForm->submit($request,false);
+
+            if ($editForm->isValid()) {
+                $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+                if($autoOpenOnSave == true){
+                    $this->setFlash('autoOpenOnSave', true);
+                }
+                $timeline = $entity->getTimeline();
+                if(isset($originalGoalsArray[$timeline->getId()])){
+                    $goals = $originalGoalsArray[$timeline->getId()];
+                    foreach ($goals as $originalGoal) {
+                        if(false === $timeline->getGoals()->contains($originalGoal)){
+                            $timeline->getGoals()->removeElement($originalGoal);
+                            $em->remove($originalGoal);
+                        }
                     }
                 }
-            }
-            $this->domainManager->update($entity);
+                $this->domainManager->update($entity);
 
-            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
-        }
+                return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
+            }
+            if($editForm->isValid() === false){
+                $data['formErrors'] = $editForm;
+            }
+        }//Fin isMethodPost
         
         $data = array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ); 
-        if($editForm->isValid() === false){
-            $data['formErrors'] = $editForm;
-        }
         
         $view = $this->view($data);
         $view->setTemplate('PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig');
@@ -391,13 +385,24 @@ class ArrangementProgramController extends SEIPController
         $user = $this->getUser();
         
         if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-            && $configuration->getArrangementProgramUserToApproveTactical() === $user){
+            && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
             $valid = true;
         }
         if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-            && $configuration->getArrangementProgramUserToApproveOperative() === $user){
+            && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
             $valid = true;
         }
         return $valid;
+    }
+    
+    private function hasPermissionToUpdate($entity) {
+        //Security check
+        $user = $this->getUser();
+        if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
+            throw $this->createAccessDeniedHttpException();
+        }
+        if($entity->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+            throw $this->createAccessDeniedHttpException();
+        }
     }
 }
