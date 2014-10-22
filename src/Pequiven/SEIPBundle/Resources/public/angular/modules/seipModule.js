@@ -236,17 +236,19 @@ angular.module('seipModule.controllers', [])
                 operationalObjective.select2('enable',false);
             }
         });
-        operationalObjective.select2('enable',false)
         programResponsible.on('change',function(object){
             var reponsibleId = object.val;
-            var val = object.val;
-            if(val.length > 0){
+            $scope.validButtomAddGoal();
+            $scope.getResponsiblesGoal(reponsibleId);
+        });
+        $scope.validButtomAddGoal = function(){
+            
+            if(programResponsible.val() != null && programResponsible.val() > 0){
                 loadTemplateMetaButton.removeClass('disabled');
             }else{
                 loadTemplateMetaButton.addClass('disabled');
             }
-            $scope.getResponsiblesGoal(reponsibleId);
-        });
+        };
         $scope.getResponsiblesGoal = function(reponsibleId){
             if(reponsibleId == ''){
                 $scope.data.responsibleGoals = [];
@@ -329,6 +331,10 @@ angular.module('seipModule.controllers', [])
         
         $scope.init = function(){
             $scope.getResponsiblesGoal(programResponsible.val());
+            if(operationalObjective.val() == '' || operationalObjective.val() == null){
+                operationalObjective.select2('enable',false)
+            }
+            $scope.validButtomAddGoal();
         };
         
         $scope.init();
