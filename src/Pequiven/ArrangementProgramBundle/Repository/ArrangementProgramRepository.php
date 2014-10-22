@@ -46,6 +46,10 @@ class ArrangementProgramRepository extends EntityRepository
         if(($process = $criteria->remove('ap.process'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.process',"'%".$process."%'"));
         }
+        if(($period = $criteria->remove('ap.period'))){
+            $queryBuilder->innerJoin('ap.period','p');
+            $queryBuilder->andWhere($queryBuilder->expr()->like('p.name',"'%".$period."%'"));
+        }
         
         if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
             $queryBuilder
