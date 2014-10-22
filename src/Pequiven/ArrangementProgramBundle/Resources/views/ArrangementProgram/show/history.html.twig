@@ -27,14 +27,14 @@
                 {% if validConfiguration == true %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
                         {% for userApprove in configuration.arrangementProgramUsersToApproveTactical %}
-                            <small class="tag">{{ userApprove }}</small>
+                            <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
                         {% endfor %}
                     {% endif %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
                         {% for userApprove in configuration.arrangementProgramUsersToApproveOperative %}
-                            <small class="tag">{{ userApprove }}</small>
+                            <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
                         {% endfor %}

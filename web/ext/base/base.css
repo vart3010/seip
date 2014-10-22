@@ -92,7 +92,8 @@ body > a:focus
 }
 
 .td-bg-disabled {
-    background-color:#eaeaea;
+    background-color: #616161;
+    color: #fefefe;
 }
 
 .bg-disabled {

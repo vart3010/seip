@@ -23,7 +23,7 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REVISED => 'onPreRevisedArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_APPROVED => 'onPreApprovedArrangementProgram',
-            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW => 'onPreApprovedArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW => 'onPreSendToReviewArrangementProgram',
         );
     }
     

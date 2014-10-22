@@ -183,6 +183,12 @@
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
+     {% if isAllowToReview == true %}
+        {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW') 
+        %}
+            {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+        {% endif %}
+    {% endif %}
     {% if isAllowToApprove == true %}
         {%
              if (entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or
@@ -192,12 +198,10 @@
             {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
         {% endif %}
     {% endif %}
-    {% if isAllowToReview == true %}
-        {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') %}
-            {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
-        {% endif %}
-    {% endif %}
-    {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') %}
+    {% if 
+        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') and
+        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED')
+    %}
         {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
     {% endif %}
