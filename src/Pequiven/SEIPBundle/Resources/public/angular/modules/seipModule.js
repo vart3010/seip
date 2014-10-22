@@ -521,21 +521,8 @@ angular.module('seipModule.controllers', [])
       
     })
     .controller("ObjetiveStrategicController",function($scope,notificationBarService,$http,$filter,$timeout){
-        var form = angular.element('form');
-
-        form.submit(function(){
-            var valid = true;
-            
-            //Select de Línea Estratégica
-            var selectLineStrategics = angular.element('#pequiven_objetive_strategic_registration_lineStrategics');
-            console.log('hola');
-            if(selectLineStrategics.val() == ''){
-                $scope.sendMessageError("error","s2id_pequiven_objetive_strategic_registration_lineStrategics");
-                valid = false;
-            }
-            
-            return valid;
-        });
+        var form = angular.element('#registerObjetiveStrategicForm');
+        
     })
     .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 //        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
@@ -584,7 +571,13 @@ angular.module('seipModule.controllers', [])
 
     })
     .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
-        
+        $scope.totalizePlan = function(data){
+            var cont = 0;
+            angular.forEach(data, function(value){
+                cont = cont + value.objTacticOriginal;
+            });
+            return cont;
+        };
     })
     .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         

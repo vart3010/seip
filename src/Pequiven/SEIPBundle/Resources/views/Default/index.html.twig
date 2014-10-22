@@ -1,12 +1,16 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
+{#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
+        <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
         {#{ 'pequiven_seip.seip'|trans }#}
         {#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
         <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
-    </div>
-    {% if (app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+{#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />#}
+        
+        </div>
+{#    </div>#}
+    {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
         <!-- Tab Principales (Táctico y Operativo -->
         <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
             <ul class="tabs">
@@ -107,8 +111,8 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
+            </div>
+        </div>
                             </div>
                             <div ng-controller="TableFormatController" id="objetiveOperativeVinculante">
                                 <div ng-controller="TableMonitorOperativeController">

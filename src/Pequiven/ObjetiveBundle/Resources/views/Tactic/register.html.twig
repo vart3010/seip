@@ -330,6 +330,7 @@
         });
 
         var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
+        form = $("#registerObjetiveTacticForm"),
             messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
             messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
             sectionIndicators = $('#indicators'),//Sección dónde esta el select de Indicadores
@@ -388,8 +389,27 @@
             labelsRangeTop = $("#pequiven_objetive_tactic_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
             ;
 
+        var valid = false;
         $(document).ready(function()
         {
+            
+            form.submit(function(e) {
+                if(valid ==false){
+                    $.modal.confirm('{{ 'form.question.registerObjetiveTactic'|trans }}', function()
+                    {
+                        valid = true;
+                        form.submit();
+                    }, function()
+                    {
+                    }, { 'textCancel' : 'Cancelar' , 'textConfirm' : 'Aceptar' });
+                }
+                
+                if(valid == false){
+                    e.preventDefault();
+                }
+                return valid;
+                
+            });
 
             //Llamado de la función que carga los valores por defecto de la vista
             charge();

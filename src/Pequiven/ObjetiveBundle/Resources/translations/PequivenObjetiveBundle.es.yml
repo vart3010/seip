@@ -229,6 +229,9 @@ form:
         allGerencias: ¿Todas las Gerencias de las localidades seleccionadas?
         allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
         allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y localidades seleccionadas?
+        registerObjetiveStrategic: ¿Desea guardar el Objetivo Estratégico?
+        registerObjetiveTactic: ¿Desea guardar el Objetivo Táctico?
+        registerObjetiveOperative: ¿Desea guardar el Objetivo Operativo?
     title:
         addObjetiveStrategic: Registro Objetivo Estratégico
         addObjetiveTactic: Registro Objetivo Táctico

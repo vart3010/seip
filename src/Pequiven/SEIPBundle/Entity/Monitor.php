@@ -194,6 +194,13 @@ class Monitor extends baseMonitor {
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
+    
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="type_group", type="string", length=4, nullable=true)
+     */
+    private $typeGroup;
 
 
     /**
@@ -733,5 +740,28 @@ class Monitor extends baseMonitor {
     public function getGerencia()
     {
         return $this->gerencia;
+    }
+
+    /**
+     * Set typeGroup
+     *
+     * @param string $typeGroup
+     * @return Monitor
+     */
+    public function setTypeGroup($typeGroup)
+    {
+        $this->typeGroup = $typeGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get typeGroup
+     *
+     * @return string 
+     */
+    public function getTypeGroup()
+    {
+        return $this->typeGroup;
     }
 }
