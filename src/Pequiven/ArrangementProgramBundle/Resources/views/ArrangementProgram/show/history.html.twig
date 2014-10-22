@@ -26,18 +26,18 @@
                 <label class="label">{{ 'pequiven.arrangement_program.manager_approval'|trans }}</label>
                 {% if validConfiguration == true %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
-                        {% if configuration.arrangementProgramUserToApproveTactical %}
-                            <small class="tag">{{ configuration.arrangementProgramUserToApproveTactical }}</small>
+                        {% for userApprove in configuration.arrangementProgramUsersToApproveTactical %}
+                            <small class="tag">{{ userApprove }}</small>
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
-                        {% endif%}
+                        {% endfor %}
                     {% endif %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-                        {% if configuration.arrangementProgramUserToApproveTactical %}
-                            <small class="tag">{{ configuration.arrangementProgramUserToApproveOperative }}</small>
+                        {% for userApprove in configuration.arrangementProgramUsersToApproveOperative %}
+                            <small class="tag">{{ userApprove }}</small>
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
-                        {% endif%}
+                        {% endfor %}
                     {% endif %}
                 {% else %}
                     <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>

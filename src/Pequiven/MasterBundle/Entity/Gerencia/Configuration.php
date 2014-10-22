@@ -53,19 +53,25 @@ class Configuration
      * Usuario que aprueba el programa de gestion tactico
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="Configuration_Approve_Tactical",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
      */
-    private $arrangementProgramUserToApproveTactical;
+    private $arrangementProgramUsersToApproveTactical;
     
     /**
      * Usuario que aprueba el programa de gestion operativo
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="Configuration_Approve_Operative",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
      */
-    private $arrangementProgramUserToApproveOperative;
+    private $arrangementProgramUsersToApproveOperative;
     
     /**
      * Constructor
@@ -73,6 +79,8 @@ class Configuration
     public function __construct()
     {
         $this->arrangementProgramUserToRevisers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramUsersToApproveTactical = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramUsersToApproveOperative = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -164,49 +172,71 @@ class Configuration
         return $this->arrangementProgramUserToRevisers;
     }
 
+    
+
     /**
-     * Set arrangementProgramUserToApproveTactical
+     * Add arrangementProgramUsersToApproveTactical
      *
-     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUserToApproveTactical
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveTactical
      * @return Configuration
      */
-    public function setArrangementProgramUserToApproveTactical(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUserToApproveTactical)
+    public function addArrangementProgramUsersToApproveTactical(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveTactical)
     {
-        $this->arrangementProgramUserToApproveTactical = $arrangementProgramUserToApproveTactical;
+        $this->arrangementProgramUsersToApproveTactical[] = $arrangementProgramUsersToApproveTactical;
 
         return $this;
     }
 
     /**
-     * Get arrangementProgramUserToApproveTactical
+     * Remove arrangementProgramUsersToApproveTactical
      *
-     * @return \Pequiven\SEIPBundle\Entity\User 
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveTactical
      */
-    public function getArrangementProgramUserToApproveTactical()
+    public function removeArrangementProgramUsersToApproveTactical(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveTactical)
     {
-        return $this->arrangementProgramUserToApproveTactical;
+        $this->arrangementProgramUsersToApproveTactical->removeElement($arrangementProgramUsersToApproveTactical);
     }
 
     /**
-     * Set arrangementProgramUserToApproveOperative
+     * Get arrangementProgramUsersToApproveTactical
      *
-     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUserToApproveOperative
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramUsersToApproveTactical()
+    {
+        return $this->arrangementProgramUsersToApproveTactical;
+    }
+
+    /**
+     * Add arrangementProgramUsersToApproveOperative
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveOperative
      * @return Configuration
      */
-    public function setArrangementProgramUserToApproveOperative(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUserToApproveOperative)
+    public function addArrangementProgramUsersToApproveOperative(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveOperative)
     {
-        $this->arrangementProgramUserToApproveOperative = $arrangementProgramUserToApproveOperative;
+        $this->arrangementProgramUsersToApproveOperative[] = $arrangementProgramUsersToApproveOperative;
 
         return $this;
     }
 
     /**
-     * Get arrangementProgramUserToApproveOperative
+     * Remove arrangementProgramUsersToApproveOperative
      *
-     * @return \Pequiven\SEIPBundle\Entity\User 
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveOperative
      */
-    public function getArrangementProgramUserToApproveOperative()
+    public function removeArrangementProgramUsersToApproveOperative(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveOperative)
     {
-        return $this->arrangementProgramUserToApproveOperative;
+        $this->arrangementProgramUsersToApproveOperative->removeElement($arrangementProgramUsersToApproveOperative);
+    }
+
+    /**
+     * Get arrangementProgramUsersToApproveOperative
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramUsersToApproveOperative()
+    {
+        return $this->arrangementProgramUsersToApproveOperative;
     }
 }

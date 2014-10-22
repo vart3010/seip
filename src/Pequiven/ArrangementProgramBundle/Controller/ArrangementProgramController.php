@@ -391,11 +391,11 @@ class ArrangementProgramController extends SEIPController
         $user = $this->getUser();
         
         if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-            && $configuration->getArrangementProgramUserToApproveTactical() === $user){
+            && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
             $valid = true;
         }
         if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-            && $configuration->getArrangementProgramUserToApproveOperative() === $user){
+            && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
             $valid = true;
         }
         return $valid;
