@@ -37,9 +37,78 @@ class ArrangementProgramRepository extends EntityRepository
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
         }
+        if(($status = $criteria->remove('status'))){
+            $queryBuilder
+                    ->andWhere('ap.status = :status')
+                    ->setParameter('status', $status)
+                    ;
+        }
         if(($process = $criteria->remove('ap.process'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.process',"'%".$process."%'"));
         }
+        
+        if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
+            $queryBuilder
+                    ->innerJoin('ap.tacticalObjective', 'to')
+                    ->innerJoin('to.gerencia', 'g')
+                    ->andWhere('g.complejo = :complejo')
+                ->setParameter('complejo', $complejo)
+                ;
+        }
+        
+        if(($responsiblesJson = $criteria->remove('responsibles')) != null && $responsiblesJson != null){
+            $responsibles = json_decode($responsiblesJson);
+            if(is_array($responsibles)){
+                $queryBuilder
+                        ->innerJoin('ap.responsibles','r')
+                        ->andWhere($queryBuilder->expr()->in('r.id', $responsibles))
+                    ;
+            }
+        }
+        if(($responsiblesGoalsJson = $criteria->remove('responsiblesGoals')) != null && $responsiblesGoalsJson != null){
+            $responsiblesGoals = json_decode($responsiblesGoalsJson);
+            if(is_array($responsiblesGoals)){
+                $queryBuilder
+                        ->innerJoin('ap.timeline','t')
+                        ->innerJoin('t.goals','g')
+                        ->innerJoin('g.responsibles','r')
+                        ->andWhere($queryBuilder->expr()->in('r.id', $responsiblesGoals))
+                    ;
+            }
+        }
+        if(($tactical = $criteria->remove('tacticalObjective')) != null){
+            $queryBuilder
+                    ->innerJoin('ap.tacticalObjective', 'to')
+                    ->andWhere('to.id = :tacticalObjective')
+                ->setParameter('tacticalObjective', $tactical)
+                ;
+        }
+        if(($operationalObjective = $criteria->remove('operationalObjective')) != null){
+            $queryBuilder
+                    ->innerJoin('ap.operationalObjective', 'oo')
+                    ->andWhere('oo.id = :operationalObjective')
+                ->setParameter('operationalObjective', $operationalObjective)
+                ;
+        }
+        //Filtro de gerencia de primera linea
+        if(($firstLineManagement = $criteria->remove('firstLineManagement')) != null){
+            $queryBuilder
+                    ->innerJoin('ap.tacticalObjective', 'to')
+                    ->innerJoin('to.gerencia', 'g')
+                    ->andWhere('g.id = :firstLineManagement')
+                ->setParameter('firstLineManagement', $firstLineManagement)
+                ;
+        }
+        //Filtro de gerencia de segunda linea
+        if(($secondLineManagement = $criteria->remove('secondLineManagement')) != null){
+            $queryBuilder
+                    ->innerJoin('ap.operationalObjective', 'oo')
+                    ->innerJoin('oo.gerenciaSecond', 'gs')
+                    ->andWhere('gs.id = :secondLineManagement')
+                ->setParameter('secondLineManagement', $secondLineManagement)
+                ;
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

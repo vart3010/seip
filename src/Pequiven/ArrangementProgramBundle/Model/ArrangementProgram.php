@@ -181,10 +181,11 @@ abstract class ArrangementProgram
     
     /**
      * Retorna las etiquetas definidas para los estatus del programa de gestion
+     * 
      * @staticvar array $labelsStatus
      * @return string
      */
-    function getLabelsStatus()
+    static function getLabelsStatus()
     {
         static $labelsStatus = array(
             self::STATUS_DRAFT => 'pequiven.arrangement_program.status.draft',

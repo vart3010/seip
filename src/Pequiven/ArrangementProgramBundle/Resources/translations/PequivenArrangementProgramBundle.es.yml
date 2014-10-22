@@ -5,6 +5,7 @@ pequiven:
         period: Periodo
         process: Proceso
         management: Gerencia
+        management_second_line: Gerencia de segunda línea
         category_arrangement_program: Progama asociado a
         tactical_objective: Objetivo táctico
         operational_objective: Objetivo operativo

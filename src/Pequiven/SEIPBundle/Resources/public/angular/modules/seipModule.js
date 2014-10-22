@@ -308,9 +308,127 @@ angular.module('seipModule.controllers', [])
         
         $scope.init();
     })
-    .controller('ReportArrangementProgramController',function($scope){
-        $scope.data = {};
-
+    .controller('ReportArrangementProgramController',function($scope,$http){
+        $scope.data = {
+            tacticals: null,
+            operatives: null,
+            first_line_managements: null,
+            second_line_managements: null,
+            complejos: null,
+            responsibles: null,
+            arrangementProgramStatusLabels: null
+        };
+        $scope.model = {
+            complejo: null,
+            arrangementProgramStatus: null,
+            responsiblesGoals: null,
+            responsibles: null,
+            tacticalObjective: null,
+            operationalObjective: null,
+            firstLineManagement: null,
+            secondLineManagement: null
+        };
+        
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
+        .success(function(data){
+            $scope.data.tacticals = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives'))
+        .success(function(data){
+            $scope.data.operatives = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+        .success(function(data){
+            $scope.data.first_line_managements = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management'))
+        .success(function(data){
+            $scope.data.second_line_managements = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
+        .success(function(data){
+            $scope.data.complejos = data;
+        });
+        $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
+        .success(function(data){
+            $scope.data.responsibles = data;
+        });
+        
+        $scope.$watch("model.complejo", function (newParams, oldParams) {
+           if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
+               
+               $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+           }else{
+               $scope.tableParams.$params.filter['complejo'] = null;
+           }
+        });
+        $scope.$watch("model.arrangementProgramStatus", function (newParams, oldParams) {
+           if($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined){
+               $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
+           }else{
+               $scope.tableParams.$params.filter['status'] = null;
+           }
+        });
+        $scope.$watch("model.responsibles", function (newParams, oldParams) {
+           if($scope.model.responsibles != null){
+               var responsibles = [],i=0;
+               angular.forEach($scope.model.responsibles,function(value){
+                   responsibles.push(value.id);
+                   i++;
+               });
+               if(i > 0){
+                   $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsibles);
+               }else{
+                   $scope.tableParams.$params.filter['responsibles'] = null;
+               }
+           }else{
+               $scope.tableParams.$params.filter['responsibles'] = null;
+           }
+        });
+        $scope.$watch("model.responsiblesGoals", function (newParams, oldParams) {
+           if($scope.model.responsiblesGoals != null){
+               var responsibles = [],i=0;
+               angular.forEach($scope.model.responsiblesGoals,function(value){
+                   responsibles.push(value.id);
+                   i++;
+               });
+               if(i > 0){
+                   $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsibles);
+               }else{
+                   $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+               }
+           }else{
+               $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+           }
+        });
+        $scope.$watch("model.tacticalObjective", function (newParams, oldParams) {
+           if($scope.model.tacticalObjective != null && $scope.model.tacticalObjective.id != undefined){
+               $scope.tableParams.$params.filter['tacticalObjective'] = $scope.model.tacticalObjective.id;
+           }else{
+               $scope.tableParams.$params.filter['tacticalObjective'] = null;
+           }
+        });
+        $scope.$watch("model.operationalObjective", function (newParams, oldParams) {
+           if($scope.model.operationalObjective != null && $scope.model.operationalObjective.id != undefined){
+               $scope.tableParams.$params.filter['operationalObjective'] = $scope.model.operationalObjective.id;
+           }else{
+               $scope.tableParams.$params.filter['operationalObjective'] = null;
+           }
+        });
+        $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
+           if($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined){
+               $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+           }else{
+               $scope.tableParams.$params.filter['firstLineManagement'] = null;
+           }
+        });
+        $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
+           if($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined){
+               $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+           }else{
+               $scope.tableParams.$params.filter['secondLineManagement'] = null;
+           }
+        });
     })
     .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
         

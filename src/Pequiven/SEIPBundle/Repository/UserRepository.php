@@ -27,11 +27,11 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('g.typeRol = :typeRol')
-//            ->andWhere('u.gerencia = :gerencia')
+            ->andWhere('u.gerencia = :gerencia')
             ->setParameter('level', $level)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-//            ->setParameter('gerencia', $user->getGerencia())
+            ->setParameter('gerencia', $user->getGerencia())
             ;
         return $qb;
     }
@@ -82,6 +82,22 @@ class UserRepository extends EntityRepository
            ->andWhere('u.enabled = :enabled')
            ->setParameter('enabled', true)
             ;
+        return $qb->getQuery()->getResult();
+    }
+    
+    function findUsersByCriteria(array $criteria = array()) {
+        $qb = $this->getQueryBuilder();
+        $qb
+           ->addSelect('g')
+           ->innerJoin('u.groups', 'g')
+           ->andWhere('u.enabled = :enabled')
+           ->andWhere('g.typeRol = :typeRol')
+           ->setParameter('enabled', true)
+           ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ;
+        $qb
+            ->andWhere('g.level < :level')
+            ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         return $qb->getQuery()->getResult();
     }
     

@@ -251,3 +251,15 @@ sylius_resource:
                 controller: Pequiven\ArrangementProgramBundle\Controller\GoalController
                 model: Pequiven\ArrangementProgramBundle\Entity\Goal
                 repository: Pequiven\ArrangementProgramBundle\Repository\GoalRepository
+        pequiven_seip.complejo:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\MasterBundle\Entity\Complejo
+                repository: Pequiven\MasterBundle\Repository\ComplejoRepository
+        pequiven_seip.user:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository

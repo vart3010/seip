@@ -77,4 +77,11 @@ class GerenciaSecondRepository extends baseEntityRepository {
         
         return $this->getPaginator($queryBuilder);
     }
+    
+    function findGerenciaSecond(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
