@@ -90,7 +90,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.secondLineManagement" ng-options="value as value.description group by value.complejo.description for (key,value) in data.second_line_managements">
+                                <select class="select2 input-xlarge" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements">
                                     <option value=''></option>
                                 </select>
                             </div>

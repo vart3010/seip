@@ -27,4 +27,4 @@ Pequiven\MasterBundle\Entity\GerenciaSecond:
             groups: [complejo]
         gerencia:
             expose: true
-            groups: [gerencia1]
+            groups: [gerencia]
