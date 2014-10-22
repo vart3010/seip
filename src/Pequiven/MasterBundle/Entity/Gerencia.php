@@ -88,6 +88,14 @@ class Gerencia extends modelGerencia
     private $ref;
     
     /**
+     * Abreviatura
+     * @var string
+     *
+     * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
+     */
+    private $abbreviation;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="modular", type="boolean", nullable=true)
@@ -387,5 +395,28 @@ class Gerencia extends modelGerencia
         $this->configuration = $configuration;
         
         return $this;
+    }
+
+    /**
+     * Set abbreviation
+     *
+     * @param string $abbreviation
+     * @return Gerencia
+     */
+    public function setAbbreviation($abbreviation)
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    /**
+     * Get abbreviation
+     *
+     * @return string 
+     */
+    public function getAbbreviation()
+    {
+        return $this->abbreviation;
     }
 }

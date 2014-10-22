@@ -91,6 +91,14 @@ class GerenciaSecond extends modelGerenciaSecond {
     private $ref;
     
     /**
+     * Abreviatura
+     * @var string
+     *
+     * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
+     */
+    private $abbreviation;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="modular", type="boolean", nullable=true)
@@ -380,5 +388,51 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getVinculante()
     {
         return $this->vinculante;
+    }
+
+    /**
+     * Set abbreviation
+     *
+     * @param string $abbreviation
+     * @return GerenciaSecond
+     */
+    public function setAbbreviation($abbreviation)
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    /**
+     * Get abbreviation
+     *
+     * @return string 
+     */
+    public function getAbbreviation()
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * Set configuration
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration
+     * @return GerenciaSecond
+     */
+    public function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration = null)
+    {
+        $this->configuration = $configuration;
+
+        return $this;
+    }
+
+    /**
+     * Get configuration
+     *
+     * @return \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }
