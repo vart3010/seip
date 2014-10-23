@@ -38,3 +38,7 @@ UPDATE  `seip_c_rol` SET  `typeRol` =  '1' WHERE  `seip_c_rol`.`id` =10;
 UPDATE  `seip_c_rol` SET  `typeRol` =  '1' WHERE  `seip_c_rol`.`id` =11;
 UPDATE  `seip_c_rol` SET  `typeRol` =  '1' WHERE  `seip_c_rol`.`id` =12;
 UPDATE  `seip_c_rol` SET  `typeRol` =  '1' WHERE  `seip_c_rol`.`id` =13;
+
+ALTER TABLE ArrangementProgramDetails ADD rejectedDate DATETIME DEFAULT NULL, ADD rejectedBy_id INT DEFAULT NULL;
+ALTER TABLE ArrangementProgramDetails ADD CONSTRAINT FK_165E90D74A8361C5 FOREIGN KEY (rejectedBy_id) REFERENCES seip_user (id);
+CREATE INDEX IDX_165E90D74A8361C5 ON ArrangementProgramDetails (rejectedBy_id);

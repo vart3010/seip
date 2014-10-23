@@ -71,6 +71,22 @@ class Details
     private $sendToReviewDate;
     
     /**
+     * Rechazado por
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
+     */
+    private $rejectedBy;
+
+    /**
+     * Fecha que se rechazo
+     * @var \DateTime
+     *
+     * @ORM\Column(name="rejectedDate", type="datetime",nullable=true)
+     */
+    private $rejectedDate;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -217,5 +233,51 @@ class Details
     public function getSendToReviewBy()
     {
         return $this->sendToReviewBy;
+    }
+
+    /**
+     * Set rejectedDate
+     *
+     * @param \DateTime $rejectedDate
+     * @return Details
+     */
+    public function setRejectedDate($rejectedDate)
+    {
+        $this->rejectedDate = $rejectedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get rejectedDate
+     *
+     * @return \DateTime 
+     */
+    public function getRejectedDate()
+    {
+        return $this->rejectedDate;
+    }
+
+    /**
+     * Set rejectedBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $rejectedBy
+     * @return Details
+     */
+    public function setRejectedBy(\Pequiven\SEIPBundle\Entity\User $rejectedBy = null)
+    {
+        $this->rejectedBy = $rejectedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get rejectedBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getRejectedBy()
+    {
+        return $this->rejectedBy;
     }
 }

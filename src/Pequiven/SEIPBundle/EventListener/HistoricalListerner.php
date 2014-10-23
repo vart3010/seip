@@ -24,6 +24,7 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REVISED => 'onPreRevisedArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_APPROVED => 'onPreApprovedArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW => 'onPreSendToReviewArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REJECTED => 'onPreRejectedArrangementProgram',
         );
     }
     
@@ -72,6 +73,18 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
          $this->createHistorical(
                 $object,
                 ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW
+        );
+    }
+    
+    /**
+     * Se agrega una entrada al historico cuando se rechaza el programa de gestion
+     * @param ResourceEvent $event
+     */
+    function onPreRejectedArrangementProgram(ResourceEvent $event) {
+        $object = $event->getSubject();
+         $this->createHistorical(
+                $object,
+                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REJECTED
         );
     }
     

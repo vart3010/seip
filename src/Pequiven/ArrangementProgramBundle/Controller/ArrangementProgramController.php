@@ -154,7 +154,7 @@ class ArrangementProgramController extends SEIPController
         $isAllowToApprove = $this->isAllowToApprove($entity);
         $isAllowToReview = $this->isAllowToReview($entity);
         $isAllowToSendToReview = $this->isAllowToSendToReview($entity);
-        
+
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
@@ -372,6 +372,39 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
+     * Marca como rechazado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function rejectAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->isAllowToApprove($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $resource->setStatus(ArrangementProgram::STATUS_REJECTED);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setRejectedBy($user)
+                ->setRejectedDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_rejected', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'rejected');
+        
+        $this->domainManager->dispatchEvent('post_rejected', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *
      * @param mixed $id The entity id
@@ -441,11 +474,12 @@ class ArrangementProgramController extends SEIPController
     private function isAllowToSendToReview(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
-        if( $entity->getStatus() === ArrangementProgram::STATUS_DRAFT &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === false || $this->isAllowToApprove($entity) === true) 
+        if( ($entity->getStatus() === ArrangementProgram::STATUS_DRAFT || $entity->getStatus() === ArrangementProgram::STATUS_REVISED ) &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
             ){
             $valid = true;
         }
+
         return $valid;
     }
     

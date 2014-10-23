@@ -33,6 +33,9 @@ pequiven:
         send_to_review_by: Enviado a revisión por
         send_to_review_date: Fecha de envio a revisión
         no_send_to_review_date: No se ha enviado a revisión
+        details:
+            rejected_by: Rechazado por
+            rejected_date: Fecha de rechazo
         status:
             status: Estatus
             draft: Borrador
@@ -43,7 +46,8 @@ pequiven:
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión
-            approved: Aprobado
+            approved: Aprobar
+            rejected: Rechazar
         type:
             tactic: Tactico
             operative: Operativo
@@ -51,6 +55,7 @@ pequiven:
             revised: ¿Desea marcar el programa de gestión como revisado?
             approved: ¿Desea aprobar el programa de gestión?
             send_to_review: ¿Desea enviar el programa de gestión a revisión?
+            rejected: ¿Desea rechazar el programa de gestión?
     form:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo Táctico

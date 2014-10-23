@@ -40,6 +40,8 @@ pequiven:
             comment: Comentario
     validations:
         blank_text: Este campo es obligatorio
+    created_by: Creado por
+    created_at: Fecha de creación
 app:
     loading: Cargando
 
