@@ -430,7 +430,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToReview(ArrangementProgram $entity) {
+    protected function isAllowToReview(ArrangementProgram $entity) {
         $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         $valid = false;
         if(!$configuration){
@@ -452,7 +452,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToApprove(ArrangementProgram $entity) {
+    protected function isAllowToApprove(ArrangementProgram $entity) {
         $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         $valid = false;
         if(!$configuration){
@@ -476,7 +476,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToSendToReview(ArrangementProgram $entity) {
+    protected function isAllowToSendToReview(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
         if( ($entity->getStatus() === ArrangementProgram::STATUS_DRAFT || $entity->getStatus() === ArrangementProgram::STATUS_REVISED ) &&
@@ -493,7 +493,7 @@ class ArrangementProgramController extends SEIPController
      * @param type $entity
      * @throws type
      */
-    private function hasPermissionToUpdate($entity) {
+    protected function hasPermissionToUpdate(ArrangementProgram $entity) {
         //Security check
         $permission = true;
         $user = $this->getUser();
