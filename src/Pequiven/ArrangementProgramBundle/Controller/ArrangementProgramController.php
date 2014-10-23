@@ -87,7 +87,7 @@ class ArrangementProgramController extends SEIPController
                 ->setType($type)
                 ->setPeriod($period)
                 ->setCreatedBy($user);
-        
+        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
         if($request->isMethod('GET')){
 //            $entity->setTimeline($timeLine);
         }

@@ -27,6 +27,11 @@ class Configuration extends ConfigurationManager
     const GENERAL_DATE_FORMAT = 'GENERAL_DATE_FORMAT';
     
     /**
+     * Valor de programa de gestion asociado a (Por defecto)
+     */
+    const ARRANGEMENT_PROGRAM_ASSOCIATED_TO = 'ARRANGEMENT_PROGRAM_ASSOCIATED_TO';
+    
+    /**
      * Obtiene el tiempo de que se tomara en cuenta para mostrar los indicadores
      * 
      * @param string $default
@@ -45,5 +50,28 @@ class Configuration extends ConfigurationManager
     {
         $this->set(self::GENERAL_DATE_FORMAT, $default,$description,$group);
         return $this;
+    }
+    
+    /**
+     * Establece valor del formulario del programa de gestion "asociado a" (Por defecto)
+     * 
+     * @param string $default
+     */
+    function setArrangementProgramAssociatedTo($default,$description = 'Valor del formulario del programa de gestion "asociado a"', Group $group = null)
+    {
+        $this->set(self::ARRANGEMENT_PROGRAM_ASSOCIATED_TO, $default,$description,$group);
+        return $this;
+    }
+    
+    /**
+     * Obtiene el valor del formulario del programa de gestion "asociado a" (Por defecto)
+     * 
+     * @param string $default
+     */
+    function getArrangementProgramAssociatedTo($default = null)
+    {
+        $id = $this->get(self::ARRANGEMENT_PROGRAM_ASSOCIATED_TO, $default);
+        $em = $this->getDoctrine()->getManager();
+        return $em->find('Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram', $id);
     }
 }
