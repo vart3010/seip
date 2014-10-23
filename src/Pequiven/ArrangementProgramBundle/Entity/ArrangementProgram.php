@@ -102,7 +102,7 @@ class ArrangementProgram extends Model
      * Proceso
      * @var string
      *
-     * @ORM\Column(name="process", type="string", length=255)
+     * @ORM\Column(name="process", type="string", length=255, nullable=true)
      */
     private $process;
 

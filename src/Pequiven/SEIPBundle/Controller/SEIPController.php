@@ -39,6 +39,7 @@ class SEIPController extends ResourceController
     }
     
     /**
+     * Configuracion global del SEIP
      * 
      * @return \Pequiven\SEIPBundle\Service\Configuration
      */

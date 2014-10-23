@@ -72,6 +72,7 @@ pequiven:
         end_date: Fecha Fin
         weight: Peso
         observations: Observaciones
+        total_weight: Total del peso distribuido
         goal:
             name: Meta
             responsible: Responsable(s) de la Meta

@@ -4,11 +4,13 @@
         {{ form_widget(goal.name) }}
         {{ form_errors(goal.name) }}
     </div>
-    <div class="field-block button-height">
-        {{ form_label(goal.typeGoal) }}
-        {{ form_widget(goal.typeGoal) }}
-        {{ form_errors(goal.typeGoal) }}
-    </div>
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div ng-if="data.typeGoals" class="field-block button-height">
+            {{ form_label(goal.typeGoal) }}
+            {{ form_widget(goal.typeGoal) }}
+            {{ form_errors(goal.typeGoal) }}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(goal.startDate) }}
         {{ form_widget(goal.startDate) }}
