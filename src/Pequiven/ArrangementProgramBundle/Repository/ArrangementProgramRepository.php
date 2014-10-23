@@ -37,7 +37,7 @@ class ArrangementProgramRepository extends EntityRepository
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
         }
-        if(($status = $criteria->remove('status'))){
+        if(($status = $criteria->remove('status')) !== null){
             $queryBuilder
                     ->andWhere('ap.status = :status')
                     ->setParameter('status', $status)
