@@ -5,7 +5,6 @@ namespace Pequiven\ArrangementProgramBundle\Controller;
 use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Timeline;
-use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -88,9 +87,6 @@ class ArrangementProgramController extends SEIPController
                 ->setPeriod($period)
                 ->setCreatedBy($user);
         $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
-        if($request->isMethod('GET')){
-//            $entity->setTimeline($timeLine);
-        }
         $form = $this->createCreateForm($entity,array('type' => $type));
         if($request->isMethod('GET')){
             $form->remove('timeline');
@@ -125,7 +121,7 @@ class ArrangementProgramController extends SEIPController
      */
     private function createCreateForm(ArrangementProgram $entity,array $parameters)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
+        $form = $this->createForm('arrangementprogram', $entity, array(
             'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
             'method' => 'POST',
         ));
@@ -206,7 +202,7 @@ class ArrangementProgramController extends SEIPController
     */
     private function createEditForm(ArrangementProgram $entity)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
+        $form = $this->createForm('arrangementprogram', $entity, array(
             'action' => $this->generateUrl('arrangementprogram_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -430,7 +426,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToReview(ArrangementProgram $entity) {
+    protected function isAllowToReview(ArrangementProgram $entity) {
         $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         $valid = false;
         if(!$configuration){
@@ -452,7 +448,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToApprove(ArrangementProgram $entity) {
+    protected function isAllowToApprove(ArrangementProgram $entity) {
         $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         $valid = false;
         if(!$configuration){
@@ -476,7 +472,7 @@ class ArrangementProgramController extends SEIPController
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    private function isAllowToSendToReview(ArrangementProgram $entity) {
+    protected function isAllowToSendToReview(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
         if( ($entity->getStatus() === ArrangementProgram::STATUS_DRAFT || $entity->getStatus() === ArrangementProgram::STATUS_REVISED ) &&
@@ -493,7 +489,7 @@ class ArrangementProgramController extends SEIPController
      * @param type $entity
      * @throws type
      */
-    private function hasPermissionToUpdate($entity) {
+    protected function hasPermissionToUpdate(ArrangementProgram $entity) {
         //Security check
         $permission = true;
         $user = $this->getUser();

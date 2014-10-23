@@ -10,7 +10,7 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
                 groups: [base]
         categoryArrangementProgram:
             - NotNull:
-                groups: [base]
+                groups: [categoryArrangementProgram]
         tacticalObjective:
             - NotNull:
                 groups: [tacticalObjective]
@@ -19,7 +19,7 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
                 groups: [operationalObjective]
         process:
             - NotNull:
-                groups: [base]
+                groups: [categoryArrangementProgram]
         type:
             - NotNull:
                 groups: [base]

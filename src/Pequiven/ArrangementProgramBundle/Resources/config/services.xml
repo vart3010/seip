@@ -39,5 +39,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="pequiven_arrangement_program.form.arrangement_program" class="Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="form.type" alias="arrangementprogram" />
+        </service>
     </services>
 </container>

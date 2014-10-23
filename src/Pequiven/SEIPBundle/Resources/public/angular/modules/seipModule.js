@@ -275,11 +275,6 @@ angular.module('seipModule.controllers', [])
                     valid = false;
                 }
             }
-            var v = arrangementprogramCategoryArrangementProgram.val();
-            if(v == '' || v == null){
-                $scope.sendMessageError("pequiven.validators.arrangement_program.select_category","s2id_arrangementprogram_categoryArrangementProgram");
-                valid = false;
-            }
             if(valid){
                 var autoOpenOnSave = angular.element('#autoOpenOnSave');
                 if($scope.goals.length > 0){
@@ -315,6 +310,14 @@ angular.module('seipModule.controllers', [])
                 jQuery('#'+id).validationEngine('hide');
             },3000);
         };
+        //Calcula el total de peso distribuido en las metas
+        $scope.getTotalWeight = function(){
+            var total = 0;
+            angular.forEach($scope.goals,function(goal){
+                total += goal.weight;
+            });
+            return total;
+        };
         
         $scope.templates = [
             {
@@ -329,7 +332,9 @@ angular.module('seipModule.controllers', [])
         $scope.templateOptions.setTemplate($scope.templates[0]);
         
         $scope.init = function(){
-            $scope.getResponsiblesGoal(programResponsible.val());
+            if(programResponsible.val() != null){
+                $scope.getResponsiblesGoal(programResponsible.val());
+            }
             if(operationalObjective.val() == '' || operationalObjective.val() == null){
                 operationalObjective.select2('enable',false)
             }
