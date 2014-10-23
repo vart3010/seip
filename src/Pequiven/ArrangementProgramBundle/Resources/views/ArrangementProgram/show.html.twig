@@ -201,7 +201,8 @@
     {% endif %}
     {% if 
         entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') and
-        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED')
+        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') and
+        hasPermissionToUpdate == true
     %}
         {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}

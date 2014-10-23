@@ -154,13 +154,15 @@ class ArrangementProgramController extends SEIPController
         $isAllowToApprove = $this->isAllowToApprove($entity);
         $isAllowToReview = $this->isAllowToReview($entity);
         $isAllowToSendToReview = $this->isAllowToSendToReview($entity);
-
+        $hasPermissionToUpdate = $this->hasPermissionToUpdate($entity);
+        
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
             'isAllowToSendToReview' => $isAllowToSendToReview,
             'isAllowToApprove' => $isAllowToApprove,
             'isAllowToReview' => $isAllowToReview,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
         );
     }
 
@@ -225,7 +227,10 @@ class ArrangementProgramController extends SEIPController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-        $this->hasPermissionToUpdate($entity);
+        if(!$this->hasPermissionToUpdate($entity)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
                 
@@ -490,12 +495,14 @@ class ArrangementProgramController extends SEIPController
      */
     private function hasPermissionToUpdate($entity) {
         //Security check
+        $permission = true;
         $user = $this->getUser();
         if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
-            throw $this->createAccessDeniedHttpException();
+            $permission = false;
         }
         if($entity->getStatus() === ArrangementProgram::STATUS_APPROVED || $entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
-            throw $this->createAccessDeniedHttpException();
+            $permission = false;
         }
+        return $permission;
     }
 }
