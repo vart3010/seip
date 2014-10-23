@@ -66,7 +66,7 @@ class ArrangementProgramController extends SEIPController
                 'labelsStatus' => $labelsStatus
             ));
         }else{
-            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','complejo','gerencia'));
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
             $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
         }

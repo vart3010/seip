@@ -7,6 +7,9 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         ref:
             expose: true
             groups: [api_list]
+        type:
+            expose: true
+            groups: [api_list]
         period:
             expose: true
             groups: [period]
