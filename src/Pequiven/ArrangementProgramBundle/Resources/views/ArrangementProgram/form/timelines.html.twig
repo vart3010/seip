@@ -4,7 +4,7 @@
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
-            <a href="" ng-click="loadTemplateMeta()" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a href="" ng-click="loadTemplateMeta(null,goals.length + 1)" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
@@ -12,7 +12,9 @@
         <thead>
             <tr>
                 <th scope="col" width="20%">{{ 'seip.table.header.name'|trans }}</th>
-                <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                {% endif%}
                 <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
                 <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
                 <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
@@ -29,7 +31,9 @@
             <tr ng-repeat="(fIndex,goal) in goals" >
                 <th scope="row">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][name]" value="{$ goal.name $}">
-                    <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
+                    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                        <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
+                    {% endif %}
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][startDate]" value="{$ goal.startDate $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][endDate]" value="{$ goal.endDate $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ fIndex $}][responsibles][]" ng-repeat="responsible in goal.responsibles" value="{$ responsible.id $}">
@@ -39,16 +43,18 @@
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
                     <small>{$ goal.observations $}</small>
                 </th>
-                <td>
-                    <span ng-if="goal.typeGoal">
-                        {$ goal.typeGoal.description $}
-                        <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.description)'></span>
-                    </span>
-                    <span ng-if="!goal.typeGoal">
-                        {$ 'pequiven.form.not_applicable'|trans $}
-                    </span>
-                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.typeGoal)'></span>
-                </td>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <td>
+                        <span ng-if="goal.typeGoal">
+                            {$ goal.typeGoal.description $}
+                            <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.description)'></span>
+                        </span>
+                        <span ng-if="!goal.typeGoal">
+                            {$ 'pequiven.form.not_applicable'|trans $}
+                        </span>
+                        <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.typeGoal)'></span>
+                    </td>
+                {% endif %}
                 <td>
                     {$ goal.startDate | myDate $}
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.startDate)'></span>
@@ -72,7 +78,7 @@
                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                         <span class="select-arrow"></span>
                         <span class="drop-down">
-                            <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                             <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                         </span>
                     </span>

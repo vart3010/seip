@@ -10,27 +10,31 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ArrangementProgramType extends AbstractType
+class ArrangementProgramType extends AbstractType implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
+    private $container;
+    
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('categoryArrangementProgram',null,array(
-                'label_attr' => array('class' => 'label'),
-                'label' => 'pequiven.form.category_arrangement_program',
-                'attr' => array(
-                    'class' => "select2 input-large",
-                    "ng-model" => "model.arrangementProgram.categoryArrangementProgram",
-                    "ng-change" => "getTypeGoal(model.arrangementProgram.categoryArrangementProgram)",
-                ),
-                'empty_value' => 'pequiven.select',
-                'required' => false,
-            ))
-            ->add('process',null,array(
+        if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
+            $builder
+                ->add('categoryArrangementProgram',null,array(
+                    'label_attr' => array('class' => 'label'),
+                    'label' => 'pequiven.form.category_arrangement_program',
+                    'attr' => array(
+                        'class' => "select2 input-large",
+                        "ng-model" => "model.arrangementProgram.categoryArrangementProgram",
+                        "ng-change" => "getTypeGoal(model.arrangementProgram.categoryArrangementProgram)",
+                    ),
+                    'empty_value' => 'pequiven.select',
+                    'required' => false,
+                ));
+        }
+        $builder->add('process',null,array(
                 'label' => 'pequiven.form.process',
                 'label_attr' => array('class' => 'label'),
                 'attr' => array(
@@ -164,11 +168,16 @@ class ArrangementProgramType extends AbstractType
             'cascade_validation' => true,
             'validation_groups' => function (\Symfony\Component\Form\FormInterface $form){
                 $data = $form->getData();
+                $groups = array();
                 if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                    return array('base','tacticalObjective');
+                    $groups = array('base','tacticalObjective');
                 }elseif($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                    return array('base','operationalObjective');
+                    $groups = array('base','operationalObjective');
                 }
+                if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
+                    $groups[] = 'categoryArrangementProgram';
+                }
+                return $groups;
             },
         ));
     }
@@ -179,5 +188,18 @@ class ArrangementProgramType extends AbstractType
     public function getName()
     {
         return 'arrangementprogram';
+    }
+
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+    
+    /**
+     * Configuracion global del SEIP
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    protected function getSeipConfiguration() {
+        return $this->container->get('seip.configuration');
     }
 }

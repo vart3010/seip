@@ -38,11 +38,11 @@ class Configuration
     private $updatedAt;
     
     /**
-     * Usuarios que revisa el programa de gestion
+     * Usuarios que revisan el programa de gestion
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinTable(name="Configuration_Reviser",
+     * @ORM\JoinTable(name="Configuration_ArrangementProgram_Reviser",
      *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      *      )
@@ -50,11 +50,11 @@ class Configuration
     private $arrangementProgramUserToRevisers;
     
     /**
-     * Usuario que aprueba el programa de gestion tactico
+     * Usuarios que aprueban el programa de gestion tactico
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinTable(name="Configuration_Approve_Tactical",
+     * @ORM\JoinTable(name="Configuration_ArrangementProgram_Approve_Tactical",
      *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      *      )
@@ -62,16 +62,28 @@ class Configuration
     private $arrangementProgramUsersToApproveTactical;
     
     /**
-     * Usuario que aprueba el programa de gestion operativo
+     * Usuarios que aprueban el programa de gestion operativo
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinTable(name="Configuration_Approve_Operative",
+     * @ORM\JoinTable(name="Configuration_ArrangementProgram_Approve_Operative",
      *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      *      )
      */
     private $arrangementProgramUsersToApproveOperative;
+    
+    /**
+     * Usuarios que notifican los avances en el programa de gestion
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\User")
+     * @ORM\JoinTable(name="Configuration_ArrangementProgram_Notify",
+     *      joinColumns={@ORM\JoinColumn(name="configuration_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $arrangementProgramUsersToNotify;
     
     /**
      * Constructor
@@ -81,6 +93,7 @@ class Configuration
         $this->arrangementProgramUserToRevisers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramUsersToApproveTactical = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementProgramUsersToApproveOperative = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementProgramUsersToNotify = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -182,7 +195,7 @@ class Configuration
      */
     public function addArrangementProgramUsersToApproveTactical(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveTactical)
     {
-        $this->arrangementProgramUsersToApproveTactical[] = $arrangementProgramUsersToApproveTactical;
+        $this->arrangementProgramUsersToApproveTactical->add($arrangementProgramUsersToApproveTactical);
 
         return $this;
     }
@@ -215,7 +228,7 @@ class Configuration
      */
     public function addArrangementProgramUsersToApproveOperative(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToApproveOperative)
     {
-        $this->arrangementProgramUsersToApproveOperative[] = $arrangementProgramUsersToApproveOperative;
+        $this->arrangementProgramUsersToApproveOperative->add($arrangementProgramUsersToApproveOperative);
 
         return $this;
     }
@@ -238,5 +251,38 @@ class Configuration
     public function getArrangementProgramUsersToApproveOperative()
     {
         return $this->arrangementProgramUsersToApproveOperative;
+    }
+
+    /**
+     * Add arrangementProgramUsersToNotify
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToNotify
+     * @return Configuration
+     */
+    public function addArrangementProgramUsersToNotify(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToNotify)
+    {
+        $this->arrangementProgramUsersToNotify->add($arrangementProgramUsersToNotify);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementProgramUsersToNotify
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToNotify
+     */
+    public function removeArrangementProgramUsersToNotify(\Pequiven\SEIPBundle\Entity\User $arrangementProgramUsersToNotify)
+    {
+        $this->arrangementProgramUsersToNotify->removeElement($arrangementProgramUsersToNotify);
+    }
+
+    /**
+     * Get arrangementProgramUsersToNotify
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementProgramUsersToNotify()
+    {
+        return $this->arrangementProgramUsersToNotify;
     }
 }

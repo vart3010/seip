@@ -6,3 +6,4 @@ pequiven_seip:
         revised: Programa de gestión revisado.
         approved: Programa de gestión aprobado.
         send_to_review: Programa de gestión enviado a revisión.
+        rejected: Programa de gestión fue rechazado.

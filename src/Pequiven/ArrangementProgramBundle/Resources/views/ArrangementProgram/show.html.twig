@@ -11,7 +11,7 @@
 {% endif %}
 
 {% block body -%}
-<div>
+<div ng-controller="ArrangementProgramController">
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
@@ -43,14 +43,14 @@
                     {{ entity.period }}
                 </p>
             </div>
-                
-            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven.arrangement_program.process'|trans }}</label>
-                    {{ entity.process }}
-                </p>
-                
-            </div>
+            {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                    <p class="inline-label">
+                        <label class="label">{{ 'pequiven.arrangement_program.process'|trans }}</label>
+                        {{ entity.process }}
+                    </p>
+                </div>
+            {% endif %}
             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.arrangement_program.category_arrangement_program'|trans }}</label>
@@ -123,8 +123,9 @@
         <br/><br/>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-            {% set summary = entity.summary %}
+            {% set summary = entity.summary({'limitMonthToNow':2}) %}
             {% set advances = summary['advances'] %}
+            {{ summary['advancesPlanned'] }}
             {% set advancesClass = 'red-gradient' %}
             {% if advances >= 50 %}
                 {% set advancesClass = 'orange-gradient' %}
@@ -134,6 +135,16 @@
             {% endif %}
             <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
         </p>
+        <br/>
+        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+             <p class="inline-label">
+               <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
+                <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
+                <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100%</span>
+                <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100%</span>
+                <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100%</span>
+            </p>
+        </div>
     </fieldset>
     
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:show/timelines.html.twig' %}
@@ -196,11 +207,13 @@
                 entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED')
         %}
             {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
+            {{ buttons.generic_confirm(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans)}) }}
         {% endif %}
     {% endif %}
     {% if 
         entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') and
-        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED')
+        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') and
+        hasPermissionToUpdate == true
     %}
         {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}

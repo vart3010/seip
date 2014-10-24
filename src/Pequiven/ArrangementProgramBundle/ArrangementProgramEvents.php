@@ -107,4 +107,26 @@ final class ArrangementProgramEvents
      * @var string
      */
     const ARRANGEMENT_PROGRAM_POST_SEND_TO_REVIEW = 'pequiven_seip.arrangementprogram.post_send_to_review';
+    
+    /**
+     * El pequiven_seip.arrangementprogram.pre_rejected evento es lanzado antes de rechazar un programa de gestion
+     * en el sistema.
+     *
+     * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const ARRANGEMENT_PROGRAM_PRE_REJECTED = 'pequiven_seip.arrangementprogram.pre_rejected';
+    
+    /**
+     * El pequiven_seip.arrangementprogram.post_rejected evento es lanzado despues de rechazar un programa de gestion
+     * en el sistema.
+     *
+     * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const ARRANGEMENT_PROGRAM_POST_REJECTED = 'pequiven_seip.arrangementprogram.post_rejected';
 }

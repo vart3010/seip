@@ -111,11 +111,15 @@
                             <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
                                 {$ result.period.name $}
                             </td>
-                            <td data-title="'{{ 'pequiven.arrangement_program.process'|trans }}'" sortable="'process'" filter="{ 'ap.process': 'text' }">
-                                {$ result.process $}
+                            <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
                             </td>
                             <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
                                 {$ result.tacticalObjective.gerencia.complejo.description $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                                {$ data.arrangementProgramStatusLabels[result.status].description $}
                             </td>
                             <td data-title="'{{ 'monitor.porcReal'|trans({},'PequivenSEIPBundle') }}'">
                                 <span>

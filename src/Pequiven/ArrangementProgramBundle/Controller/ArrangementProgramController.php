@@ -5,7 +5,6 @@ namespace Pequiven\ArrangementProgramBundle\Controller;
 use DateTime;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\ArrangementProgramBundle\Entity\Timeline;
-use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -66,7 +65,7 @@ class ArrangementProgramController extends SEIPController
                 'labelsStatus' => $labelsStatus
             ));
         }else{
-            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','complejo','gerencia'));
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
             $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
         }
@@ -87,10 +86,7 @@ class ArrangementProgramController extends SEIPController
                 ->setType($type)
                 ->setPeriod($period)
                 ->setCreatedBy($user);
-        
-        if($request->isMethod('GET')){
-//            $entity->setTimeline($timeLine);
-        }
+        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
         $form = $this->createCreateForm($entity,array('type' => $type));
         if($request->isMethod('GET')){
             $form->remove('timeline');
@@ -125,7 +121,7 @@ class ArrangementProgramController extends SEIPController
      */
     private function createCreateForm(ArrangementProgram $entity,array $parameters)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
+        $form = $this->createForm('arrangementprogram', $entity, array(
             'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
             'method' => 'POST',
         ));
@@ -151,9 +147,12 @@ class ArrangementProgramController extends SEIPController
 
         $deleteForm = $this->createDeleteForm($id);
         
-        $isAllowToApprove = $this->isAllowToApprove($entity);
-        $isAllowToReview = $this->isAllowToReview($entity);
-        $isAllowToSendToReview = $this->isAllowToSendToReview($entity);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        $isAllowToApprove = $arrangementProgramManager->isAllowToApprove($entity);
+        $isAllowToReview = $arrangementProgramManager->isAllowToReview($entity);
+        $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
+        $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         
         return array(
             'entity'      => $entity,
@@ -161,6 +160,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToSendToReview' => $isAllowToSendToReview,
             'isAllowToApprove' => $isAllowToApprove,
             'isAllowToReview' => $isAllowToReview,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
         );
     }
 
@@ -204,7 +204,7 @@ class ArrangementProgramController extends SEIPController
     */
     private function createEditForm(ArrangementProgram $entity)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
+        $form = $this->createForm('arrangementprogram', $entity, array(
             'action' => $this->generateUrl('arrangementprogram_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -225,7 +225,10 @@ class ArrangementProgramController extends SEIPController
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-        $this->hasPermissionToUpdate($entity);
+        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($entity)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
                 
@@ -372,6 +375,78 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
+     * Marca como rechazado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function rejectAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->isAllowToApprove($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $resource->setStatus(ArrangementProgram::STATUS_REJECTED);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setRejectedBy($user)
+                ->setRejectedDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_rejected', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'rejected');
+        
+        $this->domainManager->dispatchEvent('post_rejected', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Agregar una observacion al programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function addObservationAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $view = $this->view();
+        $result = array(
+            'data' => $resource,
+            'success' => false,
+            'total' => 1
+        );
+        
+        $user = $this->getUser();
+        $textObservation = $request->get('observation',null);
+        if($textObservation != null){
+            $observation = new ArrangementProgram\Observation();
+            $observation
+                    ->setCreatedBy($user)
+                    ->setDescription($textObservation)
+                    ;
+            $resource->addObservation($observation);
+            $result['success'] = true;
+            $this->save($observation,true);
+        }
+        $view->setData($result);
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));   
+        
+        return $this->handleView($view);
+    }
+    
+    /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *
      * @param mixed $id The entity id
@@ -388,80 +463,12 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
-     * Evalua si el usuario logeado tiene permisos para revisar el programa de gestion
-     * @param ArrangementProgram $entity
-     * @return boolean
+     * Manejador de programa de gestion
+     * 
+     * @return \Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager
      */
-    private function isAllowToReview(ArrangementProgram $entity) {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
-        $valid = false;
-        if(!$configuration){
-            return $valid;
-        }
-        $user = $this->getUser();
-        
-        foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
-            if($user === $userToReviser){
-                $valid = true;
-                break;
-            }
-        }
-        return $valid;
-    }
-    
-    /**
-     * Evalua si el usuario logeado tiene permisos para aprobar el programa de gestion
-     * @param ArrangementProgram $entity
-     * @return boolean
-     */
-    private function isAllowToApprove(ArrangementProgram $entity) {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
-        $valid = false;
-        if(!$configuration){
-            return $valid;
-        }
-        $user = $this->getUser();
-        
-        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-            && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
-            $valid = true;
-        }
-        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-            && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
-            $valid = true;
-        }
-        return $valid;
-    }
-    
-    /**
-     * Evalua si el usuario logeado tiene permisos para enviar el programa de gestion a revision
-     * @param ArrangementProgram $entity
-     * @return boolean
-     */
-    private function isAllowToSendToReview(ArrangementProgram $entity) {
-        $user = $this->getUser();
-        $valid = false;
-        if( $entity->getStatus() === ArrangementProgram::STATUS_DRAFT &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === false || $this->isAllowToApprove($entity) === true) 
-            ){
-            $valid = true;
-        }
-        return $valid;
-    }
-    
-    /**
-     * Evalua si el usuario logueado tiene permisos para actualizar el programa
-     * @param type $entity
-     * @throws type
-     */
-    private function hasPermissionToUpdate($entity) {
-        //Security check
-        $user = $this->getUser();
-        if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
-            throw $this->createAccessDeniedHttpException();
-        }
-        if($entity->getStatus() === ArrangementProgram::STATUS_APPROVED || $entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
-            throw $this->createAccessDeniedHttpException();
-        }
+    private function getArrangementProgramManager()
+    {
+        return $this->get('seip.arrangement_program.manager');
     }
 }

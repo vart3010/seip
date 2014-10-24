@@ -37,4 +37,13 @@ class SEIPController extends ResourceController
             $em->flush();
         }
     }
+    
+    /**
+     * Configuracion global del SEIP
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    protected function getSeipConfiguration() {
+        return $this->get('seip.configuration');
+    }
 }
