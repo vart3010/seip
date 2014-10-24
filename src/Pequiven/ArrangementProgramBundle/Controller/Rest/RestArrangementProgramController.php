@@ -47,6 +47,32 @@ class RestArrangementProgramController extends FOSRestController {
             'total' => count($data)
         );
         if ($request->get('_format') == 'html') {
+//            $date = new DateTime();
+//            $month = $date->format('m');
+//            $percentaje = 0;
+//            $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
+//            foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
+//                if($month < $monthGoal){
+//                    $percentaje = $propertyAccessor->getValue($object,$key);
+//                }
+//            }
+//            foreach ($timeline->getGoals() as $goal) {
+//                $goal->getGoalDetails()
+//            }
+//            foreach (GoalDetails::getMonthsPlanned() as $planned => $monthNumber) {
+//                    $valuePlanned = $propertyAccessor->getValue($entity, $planned);
+//                    $monthReal = GoalDetails::getMonthOfRealByMonth($monthNumber);
+//                    $valueReal = $propertyAccessor->getValue($entity, $monthReal);
+//                    if ($isEnabledEditByPlannedLoad && ($valuePlanned == '' || $valuePlanned == '0' || $valuePlanned === null)) {
+//                        $propertyAccessor->setValue($entity, $monthReal, 0);
+//                    } else if ($valueReal > $valuePlanned) {
+//                        //Valida que el valor real no pueda ser mayor al planeado.
+//                        if ($isAllowLoadingLongerThanPlannedRealValue === false) {
+//                            $propertyAccessor->setValue($entity, $monthReal, $valuePlanned);
+//                        }
+//                    }
+//                }
+//            
             $result['entity'] = $entity;
         }
         $view->setData($result);

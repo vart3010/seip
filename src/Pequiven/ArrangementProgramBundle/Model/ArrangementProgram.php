@@ -225,26 +225,37 @@ abstract class ArrangementProgram
     /**
      * Retorna el porcentaje de avance del programa de gestion
      */
-    function getSummary()
+    function getSummary(array $options = array())
     {
         $summary = array(
             'weight' => 0,
             'advances' => 0,
+            'advancesPlanned' => 0,
         );
+        $limitMonthToNow = false;
+        $month = null;
+        if(isset($options['limitMonthToNow'])){
+            $date = new \DateTime();
+            $month = $date->format('m');
+            $limitMonthToNow = (boolean)$options['limitMonthToNow'];
+        }
         $totalWeight = 0;
         $advances = 0;
+        $advancesPlanned = 0;
         $timeline = $this->getTimeline();
+        
         if($timeline){
-            $propertyAccessor = new \Symfony\Component\PropertyAccess\PropertyAccessor();
+            $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
                 $goalDetails = $goal->getGoalDetails();
                 $weight = $goalDetails->getGoal()->getWeight();
                 $totalWeight += $weight;
                 $reflection = new \ReflectionClass($goalDetails);
-                $nameMatch = '^get\w+Real$';
+                $nameMatchReal = '^get\w+Real$';
+                $nameMatchPlanned = '^get\w+Planned$';
                 foreach ($reflection->getMethods() as $method) {
                     $methodName = $method->getName();
-                    if(preg_match('/'.$nameMatch.'/i', $methodName)){
+                    if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
                         $class = $method->getDeclaringClass();
                         if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
                             continue;
@@ -252,12 +263,28 @@ abstract class ArrangementProgram
                         $real = $goalDetails->$methodName();
                         $advances +=  ($weight/100) * $real;
                     }
+                    if(preg_match('/'.$nameMatchPlanned.'/i', $methodName)){
+                        $class = $method->getDeclaringClass();
+                        if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
+                            continue;
+                        }
+                        if($limitMonthToNow === true){
+                            $plannedString = lcfirst(str_replace('get', '', $methodName));
+                            $plannedMonth = GoalDetails::getMonthOfPlanned($plannedString);
+                            if($month > $plannedMonth){
+                                continue;
+                            }
+                        }
+                        $planned = $goalDetails->$methodName();
+                        $advancesPlanned +=  ($weight/100) * $planned;
+                    }
                 }
                 
             }
         }
         $summary['advances'] = $advances;
         $summary['weight'] = $totalWeight;
+        $summary['advancesPlanned'] = $advancesPlanned;
         return $summary;
     }
     
@@ -290,6 +317,4 @@ abstract class ArrangementProgram
         }
         return $valid;
     }
-    
-    
 }

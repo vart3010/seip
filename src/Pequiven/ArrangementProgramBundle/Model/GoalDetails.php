@@ -47,7 +47,8 @@ class GoalDetails {
     const DECEMBER_REAL = 'decemberReal';
     
     /**
-     * Retorna el numero del mes que equivale el string
+     * Retorna el numero del mes que equivale el string real
+     * 
      * @staticvar array $months
      * @param type $real
      * @return int
@@ -61,6 +62,12 @@ class GoalDetails {
         return $months[$real];
     }
     
+    /**
+     * Retorna el string del mes que equivale el numero que esta pasando
+     * @param integer $monthNumber Numero de mes que se quiere saber a que corresponde
+     * @return type
+     * @throws Exception
+     */
     static function getMonthOfRealByMonth($monthNumber) {
         $months = self::getMonthsReal();
         $key = array_search($monthNumber, $months);
@@ -70,6 +77,11 @@ class GoalDetails {
         return $key;
     }
     
+    /**
+     * Devuelve un array asociativo de el string real con el mes que corresponde
+     * @staticvar array $months
+     * @return int
+     */
     static function getMonthsReal(){
         static $months = array(
             self::JANUARY_REAL => 1,
