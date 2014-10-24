@@ -1,0 +1,7 @@
+#Devuelve el paginador con la data de los objetivos tácticos por tipo de Grupo
+monitorTypeGroupList:
+    path: /monitor/list/typeGroup
+    defaults: 
+        _controller: pequiven.controller.seipmonitor:monitorTypeGroupListAction
+        _sylius:
+            method: createPaginatorTypeGroup

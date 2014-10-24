@@ -44,6 +44,19 @@ class MonitorRepository extends EntityRepository {
         return $this->getScalarPaginator($queryBuilder);
     }
     
+    public function getTotalObjetivesByGerenciaGroup(){
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->select('o.typeGroup');
+        $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
+        $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
+        $queryBuilder->groupBy('o.typeGroup');
+        
+        $q = $queryBuilder->getQuery();
+//        var_dump($q->getSQL());
+//        die();
+        return $q->getResult();
+    }
+    
     /**
      * Crea un paginador para los objetivos tácticos
      * 

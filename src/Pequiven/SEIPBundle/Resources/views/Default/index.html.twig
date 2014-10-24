@@ -1,43 +1,48 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <hgroup id="main-title" class="thin">
+        <h1>Dashboard</h1>
+        <h2>nov <strong>10</strong></h2>
+    </hgroup>
+    <div ng-controller="DashboardController" ng-init="renderChart('chartContainer',{{ categories|json_encode() }},{{ dataPlan|json_encode() }},{{ dataReal|json_encode() }},{{ dataPorc|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
 
-            <div class="columns">
+        <div class="columns">
 
-                    <div class="nine-columns twelve-columns-mobile" id="demo-chart">
-                            <!-- This div will hold the chart generated in the footer -->
-                    </div>
-
-                    <div class="three-columns twelve-columns-mobile new-row-mobile">
-                            <ul class="stats split-on-mobile">
-                                    <li><a href="javascript:void(0);">
-                                            <strong>21</strong> new <br>accounts
-                                    </a></li>
-                                    <li><a href="javascript:void(0);">
-                                            <strong>15</strong> referred new <br>accounts
-                                    </a></li>
-                                    <li>
-                                            <strong>5</strong> new <br>items
-                                    </li>
-                                    <li>
-                                            <strong>235</strong> new <br>comments
-                                    </li>
-                            </ul>
-                    </div>
-
+            <div class="nine-columns twelve-columns-mobile" id="chartContainer">
+                {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
+                <!-- This div will hold the chart generated in the footer -->
             </div>
 
+            <div class="three-columns twelve-columns-mobile new-row-mobile">
+                <ul class="stats">
+                    <li><a style="color: #ffffff;" href="javascript:void(0);">
+                            <strong>21</strong> new <br>accounts
+                        </a></li>
+                    <li><a href="javascript:void(0);">
+                            <strong>15</strong> referred new <br>accounts
+                        </a></li>
+                    <li>
+                        <strong>5</strong> new <br>items
+                    </li>
+                    <li>
+                        <strong>235</strong> new <br>comments
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
     </div>
-{#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
-        <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
+    {#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
+    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
         {#{ 'pequiven_seip.seip'|trans }#}
         {#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
-        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
-{#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />#}
-        
-        </div>
-{#    </div>#}
+        {#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />#}
+        {#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />#}
+
+    </div>
+    {#    </div>#}
     {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
         <div ng-controller="TableFormatController" id="objetiveTactic">
             <div ng-controller="TableMonitorTypeGroupController">
@@ -259,15 +264,17 @@
     {{ parent() }}
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
-    <script src="{{  asset('bundles/pequivenseip/fusioncharts/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-        function getTableExtraInfo(data)
-            {
-                
-            }
+
+
+function getTableExtraInfo(data)
+{
+
+}
     </script>
-    
+
 {% endblock %}

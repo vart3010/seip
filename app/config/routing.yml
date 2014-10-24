@@ -36,6 +36,9 @@ tecnocreaciones_template:
 pequiven_seip_menu:
     resource: "@PequivenSEIPBundle/Resources/config/routing/menu.yml"
 
+pequiven_seip_route:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/routing.yml"
+
 pequiven_master_route:
     resource: "@PequivenMasterBundle/Resources/config/routing/routing.yml"
     
