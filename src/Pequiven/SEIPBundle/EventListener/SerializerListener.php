@@ -93,14 +93,26 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     public function onPostSerializeGoalDetails(ObjectEvent $event) {
         $data = array();
         $object = $event->getObject();
-        $arrangementProgram = $object->getGoal()->getTimeline()->getArrangementProgram();
+        $goal = $object->getGoal();
         
+        $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
         $date = new DateTime();
         
         //Habilitar la carga de lo real
         $isLoadRealEnabled = true;
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = true;
+        
+        //Habilitar la carga de los planeado segun la fecha inicio y fin
+        $isForceLoadPlannedEnabled = false;
+        if(
+            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_DRAFT ||
+            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_IN_REVIEW ||
+            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REVISED
+                ){
+            $isForceLoadPlannedEnabled = true;
+        }
+        
         //Habilitar carga de valores reales de meses adelantados
         $isEnabledLoadRealFuture = false;
         //Habilitar la carga de valores reales atrasados
@@ -298,6 +310,19 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         if($isLoadPlannedEnabled === false){
             foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
                 $data[$key]['isEnabled'] = false;
+            }
+        }
+        if($isForceLoadPlannedEnabled === true){
+            $startDate = $goal->getStartDate();
+            $endDate = $goal->getEndDate();
+            $monthStart = $startDate->format('m');
+            $monthEnd = $endDate->format('m');
+            foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
+                if($monthGoal >= $monthStart && $monthGoal <= $monthEnd){
+                    $data[$key]['isEnabled'] = true;
+                }else{
+                    $data[$key]['isEnabled'] = false;
+                }
             }
         }
         

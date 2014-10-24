@@ -28,6 +28,9 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         createdBy:
             expose: true
             groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]
         details:
             expose: true
             groups: [details]
