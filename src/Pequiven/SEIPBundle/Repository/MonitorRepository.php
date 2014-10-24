@@ -23,6 +23,34 @@ class MonitorRepository extends EntityRepository {
      * @param array $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
+    function createPaginatorTypeGroup(array $criteria = null, array $orderBy = null) {
+        
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
+        $queryBuilder = $this->getCollectionQueryBuilder();
+//        $queryBuilder = $this->createQueryBuilder('o');
+//        $queryBuilder->innerJoin('o.gerencia', 'g');
+        $queryBuilder->select('o.typeGroup');
+        $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
+        $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
+        $queryBuilder->groupBy('o.typeGroup');
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+//        echo $queryBuilder->getQuery()->getSQL();
+        //echo count($queryBuilder->getQuery()->getResult());
+//        die();
+        
+        return $this->getScalarPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los objetivos tácticos
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
         
         $securityContext = $this->getSecurityContext();

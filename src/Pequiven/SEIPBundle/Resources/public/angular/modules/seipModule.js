@@ -719,6 +719,44 @@ angular.module('seipModule.controllers', [])
     .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
 
     })
+    .controller('TableMonitorTypeGroupController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
+        //Porcentaje Cargado
+        $scope.porcCargado = function(data){
+            var res = 0;
+            res =  (data.RealObjTactic / data.PlanObjTactic) * 100;
+            //res = parseFloat(res).toFixed(2);
+            return res;
+        };
+        $scope.textType = function(data){
+            
+        };
+        //Total Planificados
+        $scope.totalizePlan = function(data){
+            var cont = parseInt(0);
+            angular.forEach(data, function(value){
+                cont = cont + parseInt(value.PlanObjTactic);
+            });
+            return cont;
+        };
+        //Total Cargados
+        $scope.totalizeReal = function(data){
+            var cont = parseInt(0);
+            angular.forEach(data, function(value){
+                cont = cont + parseInt(value.RealObjTactic);
+            });
+            return cont;
+        };
+        //Porcentaje Cargados
+        $scope.totalizeCargado = function(totalPlan,totalReal){
+            var res = 0;
+            res =  (totalReal / totalPlan) * 100;
+            //res = parseFloat(res).toFixed(2);
+            return res;
+        }
+        $scope.semaforo = function(data){
+            
+        }
+    })
     .controller('TableMonitorTacticController', function($scope, ngTableParams, $http,sfTranslator,notifyService) {
         $scope.totalizePlan = function(data){
             var cont = 0;
