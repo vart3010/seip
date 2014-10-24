@@ -12,6 +12,18 @@
 
         <div id="tab-1" class="with-padding">
             <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.responsible_for_notify'|trans }}</label>
+                {% if validConfiguration == true %}
+                    {% for userNotify in configuration.arrangementProgramUsersToNotify %}
+                        <small class="tag orange-bg">{{ userNotify }}</small>{% if loop.last == false %},{% else %}.{% endif %}
+                    {% else %}
+                        <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
+                    {% endfor %}
+                {% else %}
+                    <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
+                {% endif %}
+            </p>
+            <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.responsible_for_review'|trans }}</label>
                 {% if validConfiguration == true %}
                     {% for userReviser in configuration.arrangementProgramUserToRevisers %}

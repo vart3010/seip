@@ -25,6 +25,7 @@ pequiven:
         approval_date: Fecha de aprobación
         no_revison_date: No revisado.
         no_approval_date: No aprobado.
+        responsible_for_notify: Encargado(s) de notificar
         responsible_for_review: Encargado(s) de revisión
         manager_approval: Encargado(s) de aprobación
         you_must_assign_responsible: Debe asignar los responsables.
@@ -44,12 +45,14 @@ pequiven:
             revised: Revisado
             rejected: Rechazado
             approved: Aprobado
+            finished: Finalizado
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión
             approved: Aprobar
             rejected: Rechazar
             add_comment: Añadir observación al programa
+            refresh: Refrescar
         type:
             tactic: Tactico
             operative: Operativo

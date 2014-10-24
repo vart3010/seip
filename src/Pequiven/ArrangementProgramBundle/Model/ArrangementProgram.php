@@ -41,6 +41,16 @@ abstract class ArrangementProgram
     const STATUS_REJECTED = 4;
     
     /**
+     * Estatus finalizado
+     */
+    const STATUS_FINISHED = 5;
+    
+    /**
+     * Estatus cerrado
+     */
+    const STATUS_CLOSED = 6;
+    
+    /**
      * Tipo de programa de gestion
      * @var integer
      */
@@ -199,6 +209,7 @@ abstract class ArrangementProgram
             self::STATUS_REVISED => 'pequiven.arrangement_program.status.revised',
             self::STATUS_APPROVED => 'pequiven.arrangement_program.status.approved',
             self::STATUS_REJECTED => 'pequiven.arrangement_program.status.rejected',
+            self::STATUS_FINISHED => 'pequiven.arrangement_program.status.finished',
         );
         return $labelsStatus;
     }
@@ -250,8 +261,34 @@ abstract class ArrangementProgram
         return $summary;
     }
     
-    protected function calculateAverageRowReal(){
+    /**
+     * Retorna true si se puede editar el programa de gestion
+     * 
+     * @return boolean
+     */
+    final public function isEditable()
+    {
+        $valid = true;
+        $status = array(self::STATUS_APPROVED,self::STATUS_FINISHED,self::STATUS_CLOSED);
         
+        if(in_array($this->status, $status,true)){
+            $valid = false;
+        }
+        return $valid;
+    }
+
+    /**
+     * Retorna true si se puede reportar avances en el programa de gestion
+     * 
+     * @return boolean
+     */
+    final public function isNotificable(){
+        $valid = true;
+        $status = array(self::STATUS_FINISHED,self::STATUS_CLOSED);
+        if(in_array($this->status, $status,true)){
+            $valid = false;
+        }
+        return $valid;
     }
     
     

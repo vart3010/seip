@@ -234,7 +234,7 @@
                             text: '{{ "pequiven.arrangement_program.buttons.add_comment"|trans }}',
                             iconCls: 'icon-add',
                             xtype: 'button',
-                            ui: 'default',
+{#                            ui: 'default',#}
                             handler: function(){
                                 buttonAddComment = this;
                                 if (!win) {
@@ -329,6 +329,15 @@
                                         buttonAddComment.enable();
                                     });
                                 }
+                            }
+                        },{
+                            itemId: 'refreshBtn',
+                            text: '{{ "pequiven.arrangement_program.buttons.refresh"|trans }}',
+                            iconCls: 'icon-refresh',
+                            xtype: 'button',
+{#                            ui: 'default',#}
+                            handler: function(){
+                                store.load();
                             }
                         }]
                     }],
@@ -889,6 +898,7 @@
                         }
                     ]
                 });
+               
             });
     </script>
 {% endblock javascript %}
@@ -897,6 +907,7 @@
     <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
     <br/>
     <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b> <span id="program_summary">0</span>%
+    <div id="table-summary"></div>
     <br/><br/>
     <div id="grid-example-2"></div>
 {% endblock content %}

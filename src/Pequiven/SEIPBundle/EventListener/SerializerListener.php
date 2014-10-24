@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
- * Description of SerializerListener
+ * Listerner del serializador
  *
  * @author matias
  */
@@ -100,6 +100,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         
         //Habilitar la carga de lo real
         $isLoadRealEnabled = true;
+        if(!$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram)){
+            $isLoadRealEnabled = false;
+        }
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = true;
         
@@ -159,11 +162,6 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         
         $month = $date->format('m');
         
-        if($isLoadRealEnabled === false){
-            foreach (GoalDetails::getMonthsReal() as $key => $monthGoal) {
-                $data[$key]['isEnabled'] = false;
-            }
-        }
         if($isEnabledLoadRealFuture === false){
             foreach (GoalDetails::getMonthsReal() as $key => $monthGoal) {
                 if($month < $monthGoal){
@@ -309,6 +307,11 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         
         if($isLoadPlannedEnabled === false){
             foreach (GoalDetails::getMonthsPlanned() as $key => $monthGoal) {
+                $data[$key]['isEnabled'] = false;
+            }
+        }
+        if($isLoadRealEnabled === false){
+            foreach (GoalDetails::getMonthsReal() as $key => $monthGoal) {
                 $data[$key]['isEnabled'] = false;
             }
         }
@@ -501,5 +504,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     function generateAsset($path,$packageName = null){
         return $this->container->get('templating.helper.assets')
                ->getUrl($path, $packageName);
+    }
+    
+    /**
+     * Manejador de programa de gestion
+     * 
+     * @return \Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager
+     */
+    private function getArrangementProgramManager()
+    {
+        return $this->container->get('seip.arrangement_program.manager');
     }
 }
