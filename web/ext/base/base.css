@@ -102,3 +102,7 @@ body > a:focus
 .bg-column-gray div {
     background-color:#dcdcdc;
 }
+
+.icon-add {
+    background-image: url(images/add.png) !important;
+}

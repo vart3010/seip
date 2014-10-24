@@ -24,7 +24,7 @@ class RestArrangementProgramController extends FOSRestController
     /**
      * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
-    function getGoalsDetailsAction($id) {
+    function getGoalsDetailsAction($id,Request $request) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -44,6 +44,9 @@ class RestArrangementProgramController extends FOSRestController
             'success' => true,
             'total' => count($data)
         );
+        if($request->get('_format') == 'html'){
+            $result['entity'] = $entity;
+        }
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));
         $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");

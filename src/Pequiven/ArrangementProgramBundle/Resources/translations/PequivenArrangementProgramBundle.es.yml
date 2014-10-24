@@ -19,6 +19,7 @@ pequiven:
         end_date: Fecha fin
         weight: Peso
         advances: Avances
+        advances_in_details: Avances del programa de gestión
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
@@ -48,6 +49,7 @@ pequiven:
             send_to_review: Enviar a revisión
             approved: Aprobar
             rejected: Rechazar
+            add_comment: Añadir comentario
         type:
             tactic: Tactico
             operative: Operativo

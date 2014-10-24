@@ -227,6 +227,29 @@
                             hideGroupedHeader: true,
                             enableGroupingMenu: false
                         }],
+                    dockedItems: [{
+                        xtype: 'toolbar',
+                        items: [{
+                            itemId: 'add_comment',
+                            text: '{{ "pequiven.arrangement_program.buttons.add_comment"|trans }}',
+                            iconCls: 'icon-add',
+                            handler: function(){
+                                // empty record
+                                
+                            }
+                        }, '-', {
+                            itemId: 'delete',
+                            text: 'Delete',
+                            iconCls: 'icon-delete',
+                            disabled: true,
+                            handler: function(){
+                                var selection = grid.getView().getSelectionModel().getSelection()[0];
+                                if (selection) {
+                                    store.remove(selection);
+                                }
+                            }
+                        }]
+                    }],
                     columns: [{
                             text: 'Nro',
                             width: 30,
@@ -294,7 +317,13 @@
                                         }
                                     }
                                 }
-                                return value;
+                                var span = Ext.query('#program_summary');
+                                span[0].innerText = formatNumber(value);
+                                summary = 0;
+                                for(i in values){
+                                    summary += values[i];
+                                }
+                                return summary;
                             },
                             summaryRenderer: function (value, summaryData, dataIndex) {
                                 return formatNumber(value) + '%';
@@ -782,5 +811,10 @@
     </script>
 {% endblock javascript %}
 {% block content %}
+    <br/>
+    <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
+    <br/>
+    <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b> <span id="program_summary">0</span>%
+    <br/><br/>
     <div id="grid-example-2"></div>
 {% endblock content %}
