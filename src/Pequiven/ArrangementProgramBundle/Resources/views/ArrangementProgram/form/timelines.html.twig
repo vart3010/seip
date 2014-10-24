@@ -4,7 +4,7 @@
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
-            <a href="" ng-click="loadTemplateMeta()" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a href="" ng-click="loadTemplateMeta(null,goals.length + 1)" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
@@ -78,7 +78,7 @@
                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                         <span class="select-arrow"></span>
                         <span class="drop-down">
-                            <a href ng-click="loadTemplateMeta(goal)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
                             <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
                         </span>
                     </span>

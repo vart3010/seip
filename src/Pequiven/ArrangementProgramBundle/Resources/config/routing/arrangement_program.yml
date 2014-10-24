@@ -49,6 +49,16 @@ arrangementprogram_send_to_review:
         id: "\d+"
     methods: [GET]
     
+arrangementprogram_add_observation:
+    path: /{id}/add-observation.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:addObservationAction
+        _format: json
+    requirements:
+        id: "\d+"
+        _format: json|xml
+    methods: [POST]
+    
 arrangementprogram_update:
     path: /{id}/update
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:updateAction }

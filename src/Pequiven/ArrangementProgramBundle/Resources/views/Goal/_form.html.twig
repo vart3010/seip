@@ -1,6 +1,6 @@
 <form id="goalForms">
     <div class="field-block button-height">
-        {{ form_label(goal.name) }}
+        <label class="label required ng-binding" for="goal_name">{{ 'pequiven.form.goal.name'|trans({},'PequivenArrangementProgramBundle') }}<span ng-if="model.goalCount != null">&nbsp;#{$ model.goalCount $}</span></label>
         {{ form_widget(goal.name) }}
         {{ form_errors(goal.name) }}
     </div>

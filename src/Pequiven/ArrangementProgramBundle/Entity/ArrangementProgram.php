@@ -145,10 +145,19 @@ class ArrangementProgram extends Model
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
      */
     protected $histories;
+    
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $observations;
 
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -498,5 +507,39 @@ class ArrangementProgram extends Model
     public function getHistories()
     {
         return $this->histories;
+    }
+
+    /**
+     * Add observations
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
+     * @return ArrangementProgram
+     */
+    public function addObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observation)
+    {
+        $observation->setArrangementProgram($this);
+        $this->observations->add($observation);
+
+        return $this;
+    }
+
+    /**
+     * Remove observations
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
+     */
+    public function removeObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations)
+    {
+        $this->observations->removeElement($observations);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObservations()
+    {
+        return $this->observations;
     }
 }
