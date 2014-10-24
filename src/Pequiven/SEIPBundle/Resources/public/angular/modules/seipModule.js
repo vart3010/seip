@@ -71,6 +71,7 @@ angular.module('seipModule.controllers', [])
         $scope.data.responsibleGoals = null;
         $scope.data.typeGoals = null;
         $scope.data.operationalObjectives = null;
+        $scope.model.goalCount = null;
         
         $scope.model.arrangementProgram = {
             categoryArrangementProgram: null
@@ -139,7 +140,9 @@ angular.module('seipModule.controllers', [])
         
         
         //Funcion que carga el template de la meta
-        $scope.loadTemplateMeta = function(goal){
+        $scope.loadTemplateMeta = function(goal,index){
+            console.log(index);
+            $scope.model.goalCount = index;
             var responsibles = programResponsible.val();
             if($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == ''){
                 $scope.sendMessageError(null,'s2id_arrangementprogram_categoryArrangementProgram');
