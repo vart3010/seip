@@ -31,7 +31,7 @@
         Ext.onReady(function(){
 
             Ext.tip.QuickTipManager.init();
-            
+            var win,buttonAddComment;
             var store = Ext.create('Ext.data.Store', {
                 autoLoad: true,
                 autoSync: true,
@@ -230,22 +230,104 @@
                     dockedItems: [{
                         xtype: 'toolbar',
                         items: [{
-                            itemId: 'add_comment',
+                            itemId: 'addCommentBtn',
                             text: '{{ "pequiven.arrangement_program.buttons.add_comment"|trans }}',
                             iconCls: 'icon-add',
+                            xtype: 'button',
+                            ui: 'default',
                             handler: function(){
-                                // empty record
-                                
-                            }
-                        }, '-', {
-                            itemId: 'delete',
-                            text: 'Delete',
-                            iconCls: 'icon-delete',
-                            disabled: true,
-                            handler: function(){
-                                var selection = grid.getView().getSelectionModel().getSelection()[0];
-                                if (selection) {
-                                    store.remove(selection);
+                                buttonAddComment = this;
+                                if (!win) {
+                                    var form = Ext.create('Ext.form.Panel', {
+                                        url: '{{ path('arrangementprogram_add_observation',{id: entity.id }) }}',
+                                        layout: {
+                                            type: 'vbox',
+                                            align: 'stretch'
+                                        },
+                                        border: true,
+                                        bodyPadding: 10,
+
+                                        fieldDefaults: {
+                                            labelAlign: 'top',
+                                            labelWidth: 100,
+                                            labelStyle: 'font-weight:bold'
+                                        },
+                                        items: [
+                                        {
+                                            xtype: 'textareafield',
+                                            fieldLabel: '{{ "pequiven.form.observations"|trans }}',
+                                            name: 'observation',
+                                            labelAlign: 'top',
+                                            flex: 1,
+                                            margins: '0',
+                                            height: 250,
+                                            allowBlank: false
+                                        }],
+
+                                        buttons: [{
+                                            text: '{{ 'pequiven.buttons.cancel'|trans({},'messages') }}',
+                                            handler: function() {
+                                                this.up('form').getForm().reset();
+                                                this.up('window').hide();
+                                            }
+                                        }, {
+                                            text: '{{ 'pequiven.buttons.submit'|trans({},'messages') }}',
+                                            formBind: true,
+                                            disabled: true,
+                                            handler: function() {
+                                                var form = this.up('form').getForm();
+                                                if (form.isValid()) {
+                                                    // In a real application, this would submit the form to the configured url
+                                                    form.submit({
+                                                        success: function(form, action) {
+                                                           Ext.MessageBox.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
+                                                            form.reset();
+                                                        },
+                                                        failure: function(form, action) {
+                                                            Ext.Msg.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', 'error ');
+                                                            console.log(action);
+                                                            form.reset();
+                                                        }
+                                                    });
+                                                    this.up('window').hide();
+                                                }
+                                            }
+                                        }]
+                                    });
+                                    
+                                    win = Ext.create('widget.window', {
+                                        title: '{{ 'pequiven.arrangement_program.arrangement_program'|trans }}',
+                                        header: {
+                                            titlePosition: 2,
+                                            titleAlign: 'center'
+                                        },
+                                        closable: true,
+                                        closeAction: 'hide',
+                                        maximizable: true,
+                                        animateTarget: buttonAddComment,
+                                        width: 600,
+                                        minWidth: 350,
+                                        height: 350,
+                                        tools: [{type: 'pin'}],
+                                        layout: {
+                                            type: 'border',
+                                            padding: 5
+                                        },
+                                        items: {
+                                            region: 'center',
+                                            xtype: 'container',
+                                            items: form
+                                        }
+                                    });
+                                }
+                                if (win.isVisible()) {
+                                    win.hide(this, function() {
+                                        buttonAddComment.enable();
+                                    });
+                                } else {
+                                    win.show(this, function() {
+                                        buttonAddComment.enable();
+                                    });
                                 }
                             }
                         }]

@@ -49,7 +49,7 @@ pequiven:
             send_to_review: Enviar a revisión
             approved: Aprobar
             rejected: Rechazar
-            add_comment: Añadir comentario
+            add_comment: Añadir observación al programa
         type:
             tactic: Tactico
             operative: Operativo
@@ -58,6 +58,8 @@ pequiven:
             approved: ¿Desea aprobar el programa de gestión?
             send_to_review: ¿Desea enviar el programa de gestión a revisión?
             rejected: ¿Desea rechazar el programa de gestión?
+        flash:
+            send_comment: Su observación se ha guardado.
     form:
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo Táctico
@@ -101,3 +103,4 @@ seip:
             actions: Acciones
         empty:
             goals: No Hay Metas Cargadas.
+            observations: No Hay Observaciones.

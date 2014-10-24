@@ -11,6 +11,7 @@ tecnocreaciones_vzla_government:
 pequiven:
     history: Historial
     details: Detalles
+    observations: Observaciones
     events: Eventos
     ref: Referencia
     select: Seleccione
@@ -38,10 +39,14 @@ pequiven:
             user:  Usuario
             date: Fecha
             comment: Comentario
+            observation: Observación
     validations:
         blank_text: Este campo es obligatorio
     created_by: Creado por
     created_at: Fecha de creación
+    buttons:
+        cancel: Cancelar
+        submit: Enviar
 app:
     loading: Cargando
 

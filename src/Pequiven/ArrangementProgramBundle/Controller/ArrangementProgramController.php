@@ -406,6 +406,45 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
+     * Agregar una observacion al programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function addObservationAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->hasPermissionToUpdate($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $view = $this->view();
+        $result = array(
+            'data' => $resource,
+            'success' => false,
+            'total' => 1
+        );
+        
+        $user = $this->getUser();
+        $textObservation = $request->get('observation',null);
+        if($textObservation != null){
+            $observation = new ArrangementProgram\Observation();
+            $observation
+                    ->setCreatedBy($user)
+                    ->setDescription($textObservation)
+                    ;
+            $resource->addObservation($observation);
+            $result['success'] = true;
+            $this->save($observation,true);
+        }
+        $view->setData($result);
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));   
+        
+        return $this->handleView($view);
+    }
+    
+    /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *
      * @param mixed $id The entity id
