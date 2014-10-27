@@ -67,18 +67,17 @@ function setValueSelect2Multiple(idSelect2, entities, data, callBack) {
 
 
 angular.module('seipModule.controllers', [])
-    .controller("ArrangementProgramController",function($scope,notificationBarService,$http,$filter,$timeout,$cookies){
-        $scope.data.responsibleGoals = null;
-        $scope.data.typeGoals = null;
-        $scope.data.operationalObjectives = null;
-        $scope.model.goalCount = null;
-        
-        $scope.model.arrangementProgram = {
-            categoryArrangementProgram: null
-        };
-        //Inicializar modelo de meta
-        $scope.initModelGoal = function(goal){
-            $scope.model.goal = {
+        .controller("ArrangementProgramController", function($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
+            $scope.data.responsibleGoals = null;
+            $scope.data.typeGoals = null;
+            $scope.data.operationalObjectives = null;
+
+            $scope.model.arrangementProgram = {
+                categoryArrangementProgram: null
+            };
+            //Inicializar modelo de meta
+            $scope.initModelGoal = function(goal) {
+                $scope.model.goal = {
                     name: null,
                     typeGoal: null,
                     startDate: null,
@@ -121,54 +120,53 @@ angular.module('seipModule.controllers', [])
                         $scope.initModelGoal();
                     }
                 }
-            }
-            return valid;
-        };
-        $scope.cancelEditGoal = function(){
-            return $scope.validFormTypeGoal();
-        };
-        
-        
-        //Funcion que carga el template de la meta
-        $scope.loadTemplateMeta = function(goal,index){
-            console.log(index);
-            $scope.model.goalCount = index;
-            var responsibles = programResponsible.val();
-            if($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == ''){
-                $scope.sendMessageError(null,'s2id_arrangementprogram_categoryArrangementProgram');
-                return ;
-            }
-            if(responsibles == null){
-                $scope.sendMessageError(null,'s2id_arrangementprogram_responsibles');
-                return ;
-            }
-            $scope.templateOptions.setTemplate($scope.templates[0]);
-            $scope.templateOptions.setParameterCallBack(goal);
-            if(goal){
-                $scope.templateOptions.enableModeEdit();
-                $scope.openModalAuto();
-            }else{
-                $scope.openModalAuto();
-            }
-        };
-        
-        //Setea la dta del formulario
-        $scope.setDataFormGoal = function(goal){
-            $scope.initModelGoal(goal);
-        };
-        
-        $scope.removeGoal = function(goal){
-            $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal',function(){
-                $scope.goals.remove(goal);
-            });
-        };
-        
-        $scope.getTypeGoal = function(c){
-            if(c){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal",{category : c})).success(function(data){
-                    $scope.data.typeGoals = data;
-                    notificationBarService.getLoadStatus().done();
+                return valid;
+            };
+
+            $scope.validFormTypeGoal = function() {
+                var valid = $('#goalForms').validationEngine('validate');
+                if (valid) {
+                    if ($scope.model.goal.responsibles == undefined) {
+                        $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person', 's2id_goal_responsibles');
+                        valid = false;
+                    }
+                }
+                return valid;
+            };
+            $scope.cancelEditGoal = function() {
+                return $scope.validFormTypeGoal();
+            };
+
+
+            //Funcion que carga el template de la meta
+            $scope.loadTemplateMeta = function(goal) {
+                var responsibles = programResponsible.val();
+                if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
+                    $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
+                    return;
+                }
+                if (responsibles == null) {
+                    $scope.sendMessageError(null, 's2id_arrangementprogram_responsibles');
+                    return;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(goal);
+                if (goal) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            //Setea la dta del formulario
+            $scope.setDataFormGoal = function(goal) {
+                $scope.initModelGoal(goal);
+            };
+
+            $scope.removeGoal = function(goal) {
+                $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal', function() {
+                    $scope.goals.remove(goal);
                 });
             };
 
@@ -277,57 +275,25 @@ angular.module('seipModule.controllers', [])
                         $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person", "s2id_arrangementprogram_responsibles");
                         valid = false;
                     }
-                    notificationBarService.getLoadStatus().done();
-                });
-            }else{
-                operationalObjective.select2('val','');
-                operationalObjective.select2('enable',false);
-            }
-        });
-        programResponsible.on('change',function(object){
-            var reponsibleId = object.val;
-            $scope.validButtomAddGoal();
-            $scope.getResponsiblesGoal(reponsibleId);
-        });
-        $scope.validButtomAddGoal = function(){
-            if(programResponsible.val() != null && programResponsible.val().length > 0){
-                loadTemplateMetaButton.removeClass('disabled');
-            }else{
-                loadTemplateMetaButton.addClass('disabled');
-            }
-        };
-        $scope.getResponsiblesGoal = function(reponsibleId){
-            if(reponsibleId == ''){
-                $scope.data.responsibleGoals = [];
-            }else{
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals",{responsibles : reponsibleId})).success(function(data){
-                    $scope.data.responsibleGoals = data;
-                    notificationBarService.getLoadStatus().done();
-                });
-            }
-        };
-        
-        $scope.formReady = false;
-        var form = angular.element('form');
-        form.submit(function(e){
-            var valid = true;
-            //Select de asociado a
-            var arrangementprogramCategoryArrangementProgram = angular.element('#arrangementprogram_categoryArrangementProgram');
-            //Select de responsables
-            var arrangementprogramResponsible = angular.element('#arrangementprogram_responsibles');
-            if(arrangementprogramResponsible){
-                var v = arrangementprogramResponsible.val();
-                if(v == '' || v == null){
-                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person","s2id_arrangementprogram_responsibles");
+                }
+                var v = arrangementprogramCategoryArrangementProgram.val();
+                if (v == '' || v == null) {
+                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_category", "s2id_arrangementprogram_categoryArrangementProgram");
                     valid = false;
                 }
-            }
-            if(valid){
-                var autoOpenOnSave = angular.element('#autoOpenOnSave');
-                if($scope.goals.length > 0){
-                    $scope.openModalConfirm(Translator.trans('pequiven.modal.confirm.arrangement_program.open_on_save'),function(){
-                        autoOpenOnSave.val(1);
+                if (valid) {
+                    var autoOpenOnSave = angular.element('#autoOpenOnSave');
+                    if ($scope.goals.length > 0) {
+                        $scope.openModalConfirm(Translator.trans('pequiven.modal.confirm.arrangement_program.open_on_save'), function() {
+                            autoOpenOnSave.val(1);
+                            $scope.formReady = true;
+                            form.submit();
+                        }, function() {
+                            autoOpenOnSave.val(0);
+                            $scope.formReady = true;
+                            form.submit();
+                        });
+                    } else {
                         $scope.formReady = true;
                     }
                 }
@@ -426,242 +392,136 @@ angular.module('seipModule.controllers', [])
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
                 }
-            }
-            if($scope.formReady == true){
-                return true;
-            }
-            e.preventDefault();
-        });
-        
-        $scope.sendMessageError = function(message,id){
-            if(message === null){
-                message= 'pequiven.validations.blank_text';
-            }
-            var messageTrans = "* "+ Translator.trans(message);
-            if(id == undefined){
-                id = 'message-errors';
-            }
-            jQuery('#'+id).validationEngine('showPrompt',messageTrans, 'error');
-            $timeout(function(){
-                jQuery('#'+id).validationEngine('hide');
-            },3000);
-        };
-        //Calcula el total de peso distribuido en las metas
-        $scope.getTotalWeight = function(){
-            var total = 0;
-            angular.forEach($scope.goals,function(goal){
-                total += goal.weight;
             });
-            return total;
-        };
-        
-        $scope.templates = [
-            {
-                name: 'pequiven.modal.title.goal',
-                url:urlGoal,
-                confirmCallBack: $scope.addGoal,
-                cancelCallBack: $scope.cancelEditGoal,
-                loadCallBack: $scope.setDataFormGoal,
-                initCallBack: initCallBack
-            }
-        ];
-        $scope.templateOptions.setTemplate($scope.templates[0]);
-        
-        $scope.init = function(){
-            if(programResponsible.val() != null){
-                $scope.getResponsiblesGoal(programResponsible.val());
-            }
-            if(operationalObjective.val() == '' || operationalObjective.val() == null){
-                operationalObjective.select2('enable',false)
-            }
-            $scope.validButtomAddGoal();
-        };
-        
-        $scope.init();
-    })
-    .controller('ReportArrangementProgramController',function($scope,$http){
-        $scope.data = {
-            tacticals: null,
-            operatives: null,
-            first_line_managements: null,
-            second_line_managements: null,
-            complejos: null,
-            responsibles: null,
-            arrangementProgramStatusLabels: null
-        };
-        $scope.model = {
-            complejo: null,
-            arrangementProgramStatus: null,
-            responsiblesGoals: null,
-            responsibles: null,
-            tacticalObjective: null,
-            operationalObjective: null,
-            firstLineManagement: null,
-            secondLineManagement: null
-        };
-        
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
-        .success(function(data){
-            $scope.data.tacticals = data;
-        });
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives'))
-        .success(function(data){
-            $scope.data.operatives = data;
-        });
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
-        .success(function(data){
-            $scope.data.first_line_managements = data;
-        });
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management'))
-        .success(function(data){
-            $scope.data.second_line_managements = data;
-        });
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
-        .success(function(data){
-            $scope.data.complejos = data;
-        });
-        $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
-        .success(function(data){
-            $scope.data.responsibles = data;
-        });
-        
-        $scope.$watch("model.complejo", function (newParams, oldParams) {
-           if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
-               
-               $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
-           }else{
-               $scope.tableParams.$params.filter['complejo'] = null;
-           }
-        });
-        $scope.$watch("model.arrangementProgramStatus", function (newParams, oldParams) {
-           if($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined){
-               $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
-           }else{
-               $scope.tableParams.$params.filter['status'] = null;
-           }
-        });
-        $scope.$watch("model.responsibles", function (newParams, oldParams) {
-           if($scope.model.responsibles != null){
-               var responsibles = [],i=0;
-               angular.forEach($scope.model.responsibles,function(value){
-                   responsibles.push(value.id);
-                   i++;
-               });
-               if(i > 0){
-                   $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsibles);
-               }else{
-                   $scope.tableParams.$params.filter['responsibles'] = null;
-               }
-           }else{
-               $scope.tableParams.$params.filter['responsibles'] = null;
-           }
-        });
-        $scope.$watch("model.responsiblesGoals", function (newParams, oldParams) {
-           if($scope.model.responsiblesGoals != null){
-               var responsibles = [],i=0;
-               angular.forEach($scope.model.responsiblesGoals,function(value){
-                   responsibles.push(value.id);
-                   i++;
-               });
-               if(i > 0){
-                   $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsibles);
-               }else{
-                   $scope.tableParams.$params.filter['responsiblesGoals'] = null;
-               }
-           }else{
-               $scope.tableParams.$params.filter['responsiblesGoals'] = null;
-           }
-        });
-        $scope.$watch("model.tacticalObjective", function (newParams, oldParams) {
-           if($scope.model.tacticalObjective != null && $scope.model.tacticalObjective.id != undefined){
-               $scope.tableParams.$params.filter['tacticalObjective'] = $scope.model.tacticalObjective.id;
-           }else{
-               $scope.tableParams.$params.filter['tacticalObjective'] = null;
-           }
-        });
-        $scope.$watch("model.operationalObjective", function (newParams, oldParams) {
-           if($scope.model.operationalObjective != null && $scope.model.operationalObjective.id != undefined){
-               $scope.tableParams.$params.filter['operationalObjective'] = $scope.model.operationalObjective.id;
-           }else{
-               $scope.tableParams.$params.filter['operationalObjective'] = null;
-           }
-        });
-        $scope.$watch("model.firstLineManagement", function (newParams, oldParams) {
-           if($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined){
-               $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
-           }else{
-               $scope.tableParams.$params.filter['firstLineManagement'] = null;
-           }
-        });
-        $scope.$watch("model.secondLineManagement", function (newParams, oldParams) {
-           if($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined){
-               $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
-           }else{
-               $scope.tableParams.$params.filter['secondLineManagement'] = null;
-           }
-        });
-    })
-    .controller("MainContentController",function($scope,notificationBarService,sfTranslator,$timeout){
-        
-        $scope.model = {};
-        $scope.form = {};
-        $scope.data = {};
-        $scope.dialog = {
-            confirm: {
-                title: sfTranslator.trans("pequiven.dialog.confirm")
-            }
-        };
-        $scope.setValueSelect2 = setValueSelect2;
-        //Funcion para remover un elemento de un array
-        Array.prototype.remove = function(value){
-            var idx = this.indexOf(value);
-            if(idx != -1){
-                return this.splice(idx,1);
-            }
-            return false;
-        };
-        //Verifica si existe un elemento en un array
-        Array.prototype.contains = function(value){
-            var idx = this.indexOf(value);
-            if(idx != -1){
-                return true
-            }
-            return false;
-        };
-        
-        $scope.template = {
-            name: null,
-            url: null,
-            load: false,
-            confirmCallBack: null,
-            cancelCallBack: null,
-            parameterCallBack: null,
-            loadCallBack: null,
-            initCallBack: null,
-            modeEdit: false
-        };
-        $scope.templateOptions = {};
-        $scope.templateOptions.setConfirmCallBack = function(callBack){
-            $scope.template.confirmCallBack = callBack;
-        };
-        $scope.templateOptions.enableModeEdit = function(){
-            $scope.template.modeEdit = true;
-        };
-        $scope.templateOptions.setParameterCallBack = function(parameterCallBack){
-            $scope.template.parameterCallBack = parameterCallBack;
-        };
-        $scope.templateOptions.setUrl = function(callBack){
-            $scope.template.url = callBack;
-        };
-        $scope.templateOptions.setTemplate = function(template){
-            $scope.template = template;
-        };
+            $scope.$watch("model.arrangementProgramStatus", function(newParams, oldParams) {
+                if ($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined) {
+                    $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
+                } else {
+                    $scope.tableParams.$params.filter['status'] = null;
+                }
+            });
+            $scope.$watch("model.responsibles", function(newParams, oldParams) {
+                if ($scope.model.responsibles != null) {
+                    var responsibles = [], i = 0;
+                    angular.forEach($scope.model.responsibles, function(value) {
+                        responsibles.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsibles);
+                    } else {
+                        $scope.tableParams.$params.filter['responsibles'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsibles'] = null;
+                }
+            });
+            $scope.$watch("model.responsiblesGoals", function(newParams, oldParams) {
+                if ($scope.model.responsiblesGoals != null) {
+                    var responsibles = [], i = 0;
+                    angular.forEach($scope.model.responsiblesGoals, function(value) {
+                        responsibles.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsibles);
+                    } else {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                }
+            });
+            $scope.$watch("model.tacticalObjective", function(newParams, oldParams) {
+                if ($scope.model.tacticalObjective != null && $scope.model.tacticalObjective.id != undefined) {
+                    $scope.tableParams.$params.filter['tacticalObjective'] = $scope.model.tacticalObjective.id;
+                } else {
+                    $scope.tableParams.$params.filter['tacticalObjective'] = null;
+                }
+            });
+            $scope.$watch("model.operationalObjective", function(newParams, oldParams) {
+                if ($scope.model.operationalObjective != null && $scope.model.operationalObjective.id != undefined) {
+                    $scope.tableParams.$params.filter['operationalObjective'] = $scope.model.operationalObjective.id;
+                } else {
+                    $scope.tableParams.$params.filter['operationalObjective'] = null;
+                }
+            });
+            $scope.$watch("model.firstLineManagement", function(newParams, oldParams) {
+                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                }
+            });
+            $scope.$watch("model.secondLineManagement", function(newParams, oldParams) {
+                if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+        })
+        .controller("MainContentController", function($scope, notificationBarService, sfTranslator, $timeout) {
 
-        var modalOpen,modalConfirm;
-        jQuery(document).ready(function() {
-            var angular = jQuery( "#dialog-form" );
-            if(angular){
-            modalOpen = angular.dialog({
+            $scope.model = {};
+            $scope.form = {};
+            $scope.data = {};
+            $scope.dialog = {
+                confirm: {
+                    title: sfTranslator.trans("pequiven.dialog.confirm")
+                }
+            };
+            $scope.setValueSelect2 = setValueSelect2;
+            //Funcion para remover un elemento de un array
+            Array.prototype.remove = function(value) {
+                var idx = this.indexOf(value);
+                if (idx != -1) {
+                    return this.splice(idx, 1);
+                }
+                return false;
+            };
+            //Verifica si existe un elemento en un array
+            Array.prototype.contains = function(value) {
+                var idx = this.indexOf(value);
+                if (idx != -1) {
+                    return true
+                }
+                return false;
+            };
+
+            $scope.template = {
+                name: null,
+                url: null,
+                load: false,
+                confirmCallBack: null,
+                cancelCallBack: null,
+                parameterCallBack: null,
+                loadCallBack: null,
+                initCallBack: null,
+                modeEdit: false
+            };
+            $scope.templateOptions = {};
+            $scope.templateOptions.setConfirmCallBack = function(callBack) {
+                $scope.template.confirmCallBack = callBack;
+            };
+            $scope.templateOptions.enableModeEdit = function() {
+                $scope.template.modeEdit = true;
+            };
+            $scope.templateOptions.setParameterCallBack = function(parameterCallBack) {
+                $scope.template.parameterCallBack = parameterCallBack;
+            };
+            $scope.templateOptions.setUrl = function(callBack) {
+                $scope.template.url = callBack;
+            };
+            $scope.templateOptions.setTemplate = function(template) {
+                $scope.template = template;
+            };
+
+            var modalOpen, modalConfirm;
+            jQuery(document).ready(function() {
+                var angular = jQuery("#dialog-form");
+                if (angular) {
+                    modalOpen = angular.dialog({
                         autoOpen: false,
                         height: 650,
                         width: 800,
