@@ -2,6 +2,7 @@
 
 namespace Pequiven\MasterBundle\Model;
 
+use Exception;
 use FOS\UserBundle\Entity\Group as BaseGroup;
 
 /**

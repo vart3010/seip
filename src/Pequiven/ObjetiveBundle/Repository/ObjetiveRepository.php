@@ -345,14 +345,8 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('enabled', true)
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
-        $level = 0;
-        $groups = $user->getGroups();
-        foreach ($groups as $group) {
-            if($group->getLevel() > $level){
-                $level = $group->getLevel();
-            }
-        }
-        if(Rol::getRoleLevel($level) != Rol::ROLE_DIRECTIVE && Rol::getRoleLevel($level) != Rol::ROLE_MANAGER_FIRST){
+        $level = $user->getLevelRealByGroup();
+        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
@@ -412,14 +406,8 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
-        $level = 0;
-        $groups = $user->getGroups();
-        foreach ($groups as $group) {
-            if($group->getLevel() > $level){
-                $level = $group->getLevel();
-            }
-        }
-        if(Rol::getRoleLevel($level) != Rol::ROLE_DIRECTIVE && Rol::getRoleLevel($level) != Rol::ROLE_MANAGER_FIRST){
+        $level = $user->getLevelRealByGroup();
+        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
             $qb
                 ->andWhere("gs.id = :gerenciaSecond")
                 ->setParameter("gerenciaSecond", $user->getGerenciaSecond())

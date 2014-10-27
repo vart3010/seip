@@ -63,6 +63,7 @@ class ArrangementProgramController extends SEIPController
             
             $user = $this->getUser();
             
+            
             $view->setData(array(
                 'labelsStatus' => $labelsStatus
             ));
