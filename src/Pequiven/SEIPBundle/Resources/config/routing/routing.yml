@@ -5,3 +5,9 @@ monitorTypeGroupList:
         _controller: pequiven.controller.seipmonitor:monitorTypeGroupListAction
         _sylius:
             method: createPaginatorTypeGroup
+            
+#
+monitorTacticTypeGroup:
+    path: /tactic/{typeGroup}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayObjetiveTacticAction

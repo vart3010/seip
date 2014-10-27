@@ -130,3 +130,6 @@ monitor:
     real: Cargados
     porcReal: % Cargado
     gerencia: Gerencia
+    
+principal:
+    title: Principal

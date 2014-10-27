@@ -2,37 +2,48 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
     <hgroup id="main-title" class="thin">
-        <h1>Dashboard</h1>
-        <h2>nov <strong>10</strong></h2>
+        <h1>{{ "principal.title"|trans }}</h1>
+        <h2>{{ "now"|date("d/m/Y") }}</h2>
     </hgroup>
-    <div ng-controller="DashboardController" ng-init="renderChart('chartContainer',{{ categories|json_encode() }},{{ dataPlan|json_encode() }},{{ dataReal|json_encode() }},{{ dataPorc|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
-
-        <div class="columns">
-
-            <div class="nine-columns twelve-columns-mobile" id="chartContainer">
+    <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }});renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+        <p class="button-height">
+            <a href="javascript:showTactic()" class="button red-gradient">T&aacute;ctico</a>
+            <a href="javascript:showOperative()" class="button red-gradient">Operativo</a>
+        </p>
+        <div id="chartTactic" class="columns">
+            <div class="nine-columns twelve-columns-mobile" id="chartContainerTactic">
                 {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
                 <!-- This div will hold the chart generated in the footer -->
             </div>
-
             <div class="three-columns twelve-columns-mobile new-row-mobile">
                 <ul class="stats">
-                    <li><a style="color: #ffffff;" href="javascript:void(0);">
-                            <strong>21</strong> new <br>accounts
-                        </a></li>
-                    <li><a href="javascript:void(0);">
-                            <strong>15</strong> referred new <br>accounts
-                        </a></li>
-                    <li>
-                        <strong>5</strong> new <br>items
-                    </li>
-                    <li>
-                        <strong>235</strong> new <br>comments
-                    </li>
+                    {% for data in dataLinkTactic %}
+                        <li>
+                            <a style="color: #ffffff;" href="javascript:void(0);">
+                                {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
+                            </a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
-
         </div>
-
+        <div id="chartOperative" class="columns">
+            <div class="nine-columns twelve-columns-mobile" id="chartContainerOperative">
+                {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
+                <!-- This div will hold the chart generated in the footer -->
+            </div>
+            <div class="three-columns twelve-columns-mobile new-row-mobile">
+                <ul class="stats">
+                    {% for data in dataLinkOperative %}
+                        <li>
+                            <a style="color: #ffffff;" href="javascript:void(0);">
+                                {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
     {#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
     <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
@@ -44,7 +55,7 @@
     </div>
     {#    </div>#}
     {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
-        <div ng-controller="TableFormatController" id="objetiveTactic">
+        {#<div ng-controller="TableFormatController" id="objetiveTactic">
             <div ng-controller="TableMonitorTypeGroupController">
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTypeGroupList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
@@ -74,7 +85,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div>#}
         <!-- Tab Principales (Táctico y Operativo -->
         {#<div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
             <ul class="tabs">
@@ -262,14 +273,23 @@
 {% endblock body %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
 {% endblock %}
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
 
+function showTactic(){
+    $("#chartTactic").show();
+    $("#chartOperative").hide();
+}
+
+function showOperative(){
+    $("#chartTactic").hide();
+    $("#chartOperative").show();
+}
 
 function getTableExtraInfo(data)
 {

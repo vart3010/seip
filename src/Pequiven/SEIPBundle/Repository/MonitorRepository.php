@@ -44,11 +44,32 @@ class MonitorRepository extends EntityRepository {
         return $this->getScalarPaginator($queryBuilder);
     }
     
-    public function getTotalObjetivesByGerenciaGroup(){
+    /**
+     * Función que retorna el total de Objetivos Tácticos por grupos de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getTotalObjetivesTacticByGerenciaGroup(){
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->select('o.typeGroup');
         $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
         $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
+        $queryBuilder->groupBy('o.typeGroup');
+        
+        $q = $queryBuilder->getQuery();
+//        var_dump($q->getSQL());
+//        die();
+        return $q->getResult();
+    }
+    
+    /**
+     * Función que retorna el total de Objetivos Operativos por grupos de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getTotalObjetivesOperativeByGerenciaGroup(){
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->select('o.typeGroup');
+        $queryBuilder->addSelect('SUM(o.objOperativeOriginal) AS PlanObjOperative');
+        $queryBuilder->addSelect('SUM(o.objOperativeOriginalReal) AS RealObjOperative');
         $queryBuilder->groupBy('o.typeGroup');
         
         $q = $queryBuilder->getQuery();

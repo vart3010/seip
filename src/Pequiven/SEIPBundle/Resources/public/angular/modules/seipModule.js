@@ -768,7 +768,7 @@ angular.module('seipModule.controllers', [])
         })
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-            $scope.renderChart = function(id,categories,dataPlan,dataReal,dataPorc) {
+            $scope.renderChartTactic = function(id,categories,dataPlanTactic,dataRealTactic,dataPorcTactic) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "mscolumn3dlinedy",
@@ -777,7 +777,7 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": Translator.trans('chart.captionIndex'),
+                                "caption": Translator.trans('chart.captionObjTactic'),
                                 "xAxisName": "Gerencias",
                                 "pYAxisName": "N° de Objetivos",
                                 "sYAxisName": "% Carga",
@@ -788,6 +788,9 @@ angular.module('seipModule.controllers', [])
                                 "valueFontColor": "#000000",
                                 "rotateValues": "0",
                                 "sNumberSuffix": "%",
+                                "bgAlpha" : "0,0",
+                                "baseFontColor" : "#ffffff",
+                                "outCnvBaseFontColor" : "#ffffff",
                                 "theme": "fint"
                             },
                             "categories": [
@@ -799,23 +802,79 @@ angular.module('seipModule.controllers', [])
                                 {
                                     "seriesname": "Plan",
                                     "parentYAxis": "P",
-                                    "data": dataPlan
+                                    "data": dataPlanTactic
                                 },
                                 {
                                     "seriesname": "Real",
                                     "parentYAxis": "P",
-                                    "data": dataReal
+                                    "data": dataRealTactic
                                 },
                                 {
                                     "seriesname": "Porc",
                                     "parentYAxis": "S",
                                     "renderas": "column",
-                                    "data": dataPorc
+                                    "data": dataPorcTactic
                                 }
                             ]
                         }
                     });
-
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            
+            $scope.renderChartOperative = function(id,categories,dataPlanOperative,dataRealOperative,dataPorcOperative) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        "renderAt": id,
+                        "width": "600",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": Translator.trans('chart.captionObjOperative'),
+                                "xAxisName": "Gerencias",
+                                "pYAxisName": "N° de Objetivos",
+                                "sYAxisName": "% Carga",
+                                "sYAxisMaxValue": "100",
+                                "sYAxisMinValue": "0",
+                                "showValues" : "1",
+                                "placeValuesInside": "0",
+                                "valueFontColor": "#000000",
+                                "rotateValues": "0",
+                                "sNumberSuffix": "%",
+                                "bgAlpha" : "0,0",
+                                "baseFontColor" : "#ffffff",
+                                "outCnvBaseFontColor" : "#ffffff",
+                                "theme": "fint"
+                            },
+                            "categories": [
+                                {
+                                    "category": categories
+                                }
+                            ],
+                            "dataset":[
+                                {
+                                    "seriesname": "Plan",
+                                    "parentYAxis": "P",
+                                    "data": dataPlanOperative
+                                },
+                                {
+                                    "seriesname": "Real",
+                                    "parentYAxis": "P",
+                                    "data": dataRealOperative
+                                },
+                                {
+                                    "seriesname": "Porc",
+                                    "parentYAxis": "S",
+                                    "renderas": "column",
+                                    "data": dataPorcOperative
+                                }
+                            ]
+                        }
+                    });
+                    
+                    revenueChart.setTransparent(true);
                     revenueChart.render();
                 })
             };

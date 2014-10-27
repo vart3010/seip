@@ -125,4 +125,9 @@ class MonitorController extends baseController {
         }
         return $this->handleView($view);
     }
+    
+    
+    public function displayObjetiveTacticAction(Request $request){
+        
+    }
 }
