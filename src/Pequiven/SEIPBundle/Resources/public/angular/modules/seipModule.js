@@ -330,7 +330,9 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
-                $scope.getResponsiblesGoal(programResponsible.val());
+                if(programResponsible.val() != undefined && programResponsible.val() != ''){
+                    $scope.getResponsiblesGoal(programResponsible.val());
+                }
                 if (operationalObjective.val() == '' || operationalObjective.val() == null) {
                     operationalObjective.select2('enable', false)
                 }

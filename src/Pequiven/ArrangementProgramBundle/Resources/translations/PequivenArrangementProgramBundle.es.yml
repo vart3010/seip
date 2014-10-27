@@ -19,7 +19,7 @@ pequiven:
         end_date: Fecha fin
         weight: Peso
         advances: Avances
-        advances_in_details: Avances del programa de gestión
+        advances_in_details: Avances del programa de gestión hasta la fecha
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
