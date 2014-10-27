@@ -24,12 +24,31 @@
                             <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" {% if isAllowFilterComplejo == false %}ng-init="model.complejo = 5"{% endif %} >
                                     <option value=''></option>
                                 </select>
                             </div>
                         </div>
                         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.firstLineManagement" ng-options="value as value.description group by value.complejo.description for (key,value) in data.first_line_managements">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                             <label class="bold">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
                             <br/>
                             <div class="with-mid-padding">
@@ -38,26 +57,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_pg'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsibles" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
-                                    <option value=''></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_goals'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsiblesGoals" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
-                                    <option value=''></option>
-                                </select>
-                            </div>
-                        </div>
                             
-                        <div class="new-row-mobile-portrait six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile-portrait">
+                            
+                        <div class="new-row new-row-mobile-portrait six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile-portrait">
                             <label class="bold">{{ 'pequiven.arrangement_program.tactical_objective'|trans({},'PequivenArrangementProgramBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
@@ -76,21 +78,21 @@
                                 </select>
                             </div>
                         </div>
-                                
+                            
                         <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_pg'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.firstLineManagement" ng-options="value as value.description group by value.complejo.description for (key,value) in data.first_line_managements">
+                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsibles" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
                                     <option value=''></option>
                                 </select>
                             </div>
                         </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_goals'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements">
+                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsiblesGoals" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
                                     <option value=''></option>
                                 </select>
                             </div>

@@ -62,10 +62,29 @@ class ArrangementProgramController extends SEIPController
             }
             
             $user = $this->getUser();
-            
+            $level = $user->getLevelRealByGroup();
+            $isAllowFilterComplejo = false;//Filtro de localidad
+            $isAllowFilterFirstLineManagement = false;//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = false;//Filtro de gerencia de segunda linea
+            if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
+                $isAllowFilterComplejo = true;
+                $isAllowFilterFirstLineManagement = true;
+                $isAllowFilterManagementSecondLine = true;
+            }else if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+                $isAllowFilterComplejo = false;
+                $isAllowFilterFirstLineManagement = false;
+                $isAllowFilterManagementSecondLine = true;
+            }else if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+                $isAllowFilterComplejo = false;
+                $isAllowFilterFirstLineManagement = false;
+                $isAllowFilterManagementSecondLine = false;
+            }
             
             $view->setData(array(
-                'labelsStatus' => $labelsStatus
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
             ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));

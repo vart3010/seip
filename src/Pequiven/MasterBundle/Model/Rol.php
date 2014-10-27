@@ -26,6 +26,9 @@ class Rol extends BaseGroup
     const ROLE_SUPERVISER = 2000;
     const ROLE_COORDINATOR = 2500;
     const ROLE_MANAGER_SECOND = 3000;
+    /**
+     * Gerencia de primera linea
+     */
     const ROLE_MANAGER_FIRST = 4000;
     const ROLE_GENERAL_COMPLEJO = 5000;
     const ROLE_DIRECTIVE = 6000;

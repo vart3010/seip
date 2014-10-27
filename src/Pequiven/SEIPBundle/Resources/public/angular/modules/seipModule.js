@@ -19,6 +19,21 @@ seipModule
 function confirm() {
 
 }
+
+function getMappingModel(data,idEntity){
+//    console.log("getMappingModel");
+    //console.log(idEntity);
+    var selected = null;
+    angular.forEach(data,function(val,i){
+        if(val != undefined){
+            if(val.id == idEntity){
+                selected = val;
+            }
+        }
+    });
+    return selected;
+}
+
 //Establece el valor de un select2
 function setValueSelect2(idSelect2, idEntity, data, callBack) {
     var selected = null;
@@ -381,6 +396,13 @@ angular.module('seipModule.controllers', [])
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
+                
+                        if($scope.model.complejo != null){
+                            setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
+                                $scope.model.complejo = selected;
+                                console.log($scope.model.complejo);
+                            });
+                        }
                     });
             $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
                     .success(function(data) {
