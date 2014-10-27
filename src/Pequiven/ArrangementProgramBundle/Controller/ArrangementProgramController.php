@@ -27,7 +27,7 @@ class ArrangementProgramController extends SEIPController
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginator',
+                'createPaginatorByRol',
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -60,6 +60,8 @@ class ArrangementProgramController extends SEIPController
                     'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
                 );
             }
+            
+            $user = $this->getUser();
             
             $view->setData(array(
                 'labelsStatus' => $labelsStatus
