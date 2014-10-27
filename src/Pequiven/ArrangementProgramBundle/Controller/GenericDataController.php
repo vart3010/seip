@@ -103,14 +103,19 @@ class GenericDataController extends SEIPController
     }
     
     /**
-     * Busca las gerencias de primera linea
+     * Busca las gerencias de primera linea del usuario
+     * 
      * @param type $param
      */
     function getFirstLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $user = $this->getUser();
+        $criteria = array();
+        if($this->getUserManager()->isAllowFilterComplejo($user) === false){
+            $criteria['complejo'] =  $user->getComplejo();
+        }
         $repository = $this->get('pequiven.repository.gerenciafirst');
-        $results = $repository->findGerencia();
+        $results = $repository->findGerencia($criteria);
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
@@ -124,8 +129,12 @@ class GenericDataController extends SEIPController
     function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $user = $this->getUser();
+        $criteria = array();
+        if($this->getUserManager()->isAllowFilterFirstLineManagement($user) === false){
+            $criteria['gerencia'] =  $user->getGerencia();
+        }
         $repository = $this->get('pequiven.repository.gerenciasecond');
-        $results = $repository->findGerenciaSecond();
+        $results = $repository->findGerenciaSecond($criteria);
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list','gerencia','complejo'));
@@ -160,5 +169,14 @@ class GenericDataController extends SEIPController
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
         return $this->handleView($view);
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->get('seip.user_manager');
     }
 }

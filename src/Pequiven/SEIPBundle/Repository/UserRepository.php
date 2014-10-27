@@ -20,13 +20,7 @@ class UserRepository extends EntityRepository
     function findQueryToAssingTacticArrangementProgram(){
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
-        $level = 0;
-        $groups = $user->getGroups();
-        foreach ($groups as $group) {
-            if($group->getLevel() > $level){
-                $level = $group->getLevel();
-            }
-        }
+        $level = $user->getLevelRealByGroup();
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
@@ -58,11 +52,8 @@ class UserRepository extends EntityRepository
         $level = 0;
         $usersId = array();
         foreach ($users as $user) {
-            $groups = $user->getGroups();
-            foreach ($groups as $group) {
-                if($group->getLevel() > $level){
-                    $level = $group->getLevel();
-                }
+            if($user->getLevelRealByGroup() > $level){
+                $level = $user->getLevelRealByGroup();
             }
             $usersId[] = $user->getId();
         }
