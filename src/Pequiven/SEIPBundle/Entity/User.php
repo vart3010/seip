@@ -557,21 +557,28 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      */
     public function getLevelByGroup()
     {
-        $level = 0;
-        $groups = $this->getGroups();
-        foreach ($groups as $group) {
-            if($group->getLevel() > $level){
-                $level = $group->getLevel();
+        if(!isset($this->levelByGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level){
+                    $level = $group->getLevel();
+                }
             }
+            $this->levelByGroup = $level;
         }
-        return $level;
+        return $this->levelByGroup;
     }
     
     /**
      * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
+     * 
      * @return integer
      */
     public function getLevelRealByGroup(){
-        return Rol::getRoleLevel($this->getLevelByGroup());
+        if(!isset($this->levelRealByGroup)){
+            $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup());
+        }
+        return $this->levelRealByGroup;
     }
 }

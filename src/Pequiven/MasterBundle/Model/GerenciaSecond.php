@@ -220,6 +220,15 @@ class GerenciaSecond {
     
     protected $refName = array();
     
+    /**
+     * Tipo de gerencia modular
+     */
+    const TYPE_MANAGEMENT_MODULAR = 1;
+    /**
+     * Tipo de gerencia vinculante
+     */
+    const TYPE_MANAGEMENT_BINDING = 2;
+    
     public function __construct() {
         //Morón
         $this->refName[self::REF_GERENCIA_PRODUCCION_CPM] = 'GERENCIA_PRODUCCION_CPM';
