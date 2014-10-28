@@ -105,7 +105,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         }
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = true;
-        
+                
         //Habilitar la carga de los planeado segun la fecha inicio y fin
         $isForceLoadPlannedEnabled = false;
         if(
@@ -114,6 +114,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REVISED
                 ){
             $isForceLoadPlannedEnabled = true;
+        }
+        //Sino tiene permisos para modificar el programa de gestion
+        if(
+            !$this->getArrangementProgramManager()->isAllowToApprove($arrangementProgram) &&
+            !$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram) && 
+            !$this->getArrangementProgramManager()->isAllowToReview($arrangementProgram)
+            ){
+            $isLoadPlannedEnabled = false;
+            $isForceLoadPlannedEnabled = false;
         }
         
         //Habilitar carga de valores reales de meses adelantados
@@ -126,7 +135,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $disablePlannedOnComplete = true;
         
         //Habilitar la carga por trimestre
-        $isEnabledLoadByQuarter = true;
+        $isEnabledLoadByQuarter = false;
         
         //Habilitar la carga del primer trimestre (Requiere isEnabledLoadByQuarter)
         $isEnabledLoadByQuarterFirst = false;
