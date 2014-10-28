@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * User model
@@ -549,5 +550,35 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getGoals()
     {
         return $this->goals;
+    }
+    /**
+     * Devuelve el nivel del rol asignado
+     * @return integer
+     */
+    public function getLevelByGroup()
+    {
+        if(!isset($this->levelByGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level){
+                    $level = $group->getLevel();
+                }
+            }
+            $this->levelByGroup = $level;
+        }
+        return $this->levelByGroup;
+    }
+    
+    /**
+     * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
+     * 
+     * @return integer
+     */
+    public function getLevelRealByGroup(){
+        if(!isset($this->levelRealByGroup)){
+            $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup());
+        }
+        return $this->levelRealByGroup;
     }
 }

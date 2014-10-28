@@ -27,7 +27,7 @@ class ArrangementProgramController extends SEIPController
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginator',
+                'createPaginatorByRol',
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -61,8 +61,33 @@ class ArrangementProgramController extends SEIPController
                 );
             }
             
+            $user = $this->getUser();
+            $level = $user->getLevelRealByGroup();
+            $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
+            $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+//            if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE){
+//                $isAllowFilterComplejo = true;
+//                $isAllowFilterFirstLineManagement = true;
+//                $isAllowFilterManagementSecondLine = true;
+//            }else if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+//                $isAllowFilterComplejo = false;
+//                $isAllowFilterFirstLineManagement = false;
+//                $isAllowFilterManagementSecondLine = true;
+//            }else if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+//                $isAllowFilterComplejo = false;
+//                $isAllowFilterFirstLineManagement = false;
+//                $isAllowFilterManagementSecondLine = false;
+//            }
+            
             $view->setData(array(
-                'labelsStatus' => $labelsStatus
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'user' => $user
             ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
@@ -470,5 +495,14 @@ class ArrangementProgramController extends SEIPController
     private function getArrangementProgramManager()
     {
         return $this->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->get('seip.user_manager');
     }
 }

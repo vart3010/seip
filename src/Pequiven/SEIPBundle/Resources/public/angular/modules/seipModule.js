@@ -19,6 +19,21 @@ seipModule
 function confirm() {
 
 }
+
+function getMappingModel(data,idEntity){
+//    console.log("getMappingModel");
+    //console.log(idEntity);
+    var selected = null;
+    angular.forEach(data,function(val,i){
+        if(val != undefined){
+            if(val.id == idEntity){
+                selected = val;
+            }
+        }
+    });
+    return selected;
+}
+
 //Establece el valor de un select2
 function setValueSelect2(idSelect2, idEntity, data, callBack) {
     var selected = null;
@@ -71,6 +86,7 @@ angular.module('seipModule.controllers', [])
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
+        $scope.model.goalCount = null;
 
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
@@ -139,7 +155,8 @@ angular.module('seipModule.controllers', [])
 
 
             //Funcion que carga el template de la meta
-            $scope.loadTemplateMeta = function(goal) {
+        $scope.loadTemplateMeta = function(goal,index){
+            $scope.model.goalCount = index;
                 var responsibles = programResponsible.val();
                 if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
                     $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
@@ -265,8 +282,6 @@ angular.module('seipModule.controllers', [])
             var form = angular.element('form');
             form.submit(function(e) {
                 var valid = true;
-                //Select de asociado a
-                var arrangementprogramCategoryArrangementProgram = angular.element('#arrangementprogram_categoryArrangementProgram');
                 //Select de responsables
                 var arrangementprogramResponsible = angular.element('#arrangementprogram_responsibles');
                 if (arrangementprogramResponsible) {
@@ -276,12 +291,7 @@ angular.module('seipModule.controllers', [])
                         valid = false;
                     }
                 }
-                var v = arrangementprogramCategoryArrangementProgram.val();
-                if (v == '' || v == null) {
-                    $scope.sendMessageError("pequiven.validators.arrangement_program.select_category", "s2id_arrangementprogram_categoryArrangementProgram");
-                    valid = false;
-                }
-                if (valid) {
+            if(valid){
                     var autoOpenOnSave = angular.element('#autoOpenOnSave');
                     if ($scope.goals.length > 0) {
                         $scope.openModalConfirm(Translator.trans('pequiven.modal.confirm.arrangement_program.open_on_save'), function() {
@@ -316,6 +326,14 @@ angular.module('seipModule.controllers', [])
                     jQuery('#' + id).validationEngine('hide');
                 }, 3000);
             };
+            //Calcula el total de peso distribuido en las metas
+            $scope.getTotalWeight = function(){
+                var total = 0;
+                angular.forEach($scope.goals,function(goal){
+                    total += goal.weight;
+                });
+                return total;
+            };
 
             $scope.templates = [
                 {
@@ -330,7 +348,9 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
-                $scope.getResponsiblesGoal(programResponsible.val());
+                if(programResponsible.val() != undefined && programResponsible.val() != ''){
+                    $scope.getResponsiblesGoal(programResponsible.val());
+                }
                 if (operationalObjective.val() == '' || operationalObjective.val() == null) {
                     operationalObjective.select2('enable', false)
                 }
@@ -357,7 +377,8 @@ angular.module('seipModule.controllers', [])
                 tacticalObjective: null,
                 operationalObjective: null,
                 firstLineManagement: null,
-                secondLineManagement: null
+                secondLineManagement: null,
+                typeManagement: null
             };
 
             $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
@@ -371,14 +392,30 @@ angular.module('seipModule.controllers', [])
             $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
                     .success(function(data) {
                         $scope.data.first_line_managements = data;
+                        if($scope.model.firstLineManagement != null){
+                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
+                                $scope.model.firstLineManagement = selected;
+                            });
+                        }
                     });
             $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management'))
                     .success(function(data) {
                         $scope.data.second_line_managements = data;
+                        if($scope.model.secondLineManagement != null){
+                            $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function(selected) {
+                                $scope.model.secondLineManagement = selected;
+                            });
+                        }
                     });
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
+                
+                        if($scope.model.complejo != null){
+                            $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
+                                $scope.model.complejo = selected;
+                            });
+                        }
                     });
             $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
                     .success(function(data) {
@@ -471,7 +508,34 @@ angular.module('seipModule.controllers', [])
                     title: sfTranslator.trans("pequiven.dialog.confirm")
                 }
             };
-            $scope.setValueSelect2 = setValueSelect2;
+            //Establece el valor de un select2
+            $scope.setValueSelect2 = function setValueSelect2(idSelect2, idEntity, data, callBack) {
+                var selected = null;
+                var i = 0, j = null;
+                angular.forEach(data, function(val, i) {
+                    if (val != undefined) {
+                        if (val.id == idEntity) {
+                            selected = val;
+                            j = i;
+                        }
+                    }
+                    i++;
+                });
+            //    console.log(idSelect2);
+            //    console.log(idEntity);
+            //    console.log(j);
+            //    $("#"+idSelect2).select2("destroy");
+            //    $("#"+idSelect2).val(j);
+            //    $("#"+idSelect2).select2();
+                $("#" + idSelect2).select2('val', j);
+                if (callBack) {
+                    callBack(data[j]);
+                }
+                $timeout(function(){
+                    $("#"+idSelect2).trigger("change");
+                });
+//                    $("#"+idSelect2).trigger("select2-selecting");
+            };
             //Funcion para remover un elemento de un array
             Array.prototype.remove = function(value) {
                 var idx = this.indexOf(value);

@@ -19,7 +19,7 @@ pequiven:
         end_date: Fecha fin
         weight: Peso
         advances: Avances
-        advances_in_details: Avances del programa de gestión
+        advances_in_details: Avances del programa de gestión hasta la fecha
         observations: Observaciones
         revision_date: Fecha de revisión
         approval_date: Fecha de aprobación
@@ -35,6 +35,10 @@ pequiven:
         send_to_review_by: Enviado a revisión por
         send_to_review_date: Fecha de envio a revisión
         no_send_to_review_date: No se ha enviado a revisión
+        type_management:
+            type_management: Tipo de gerencia
+            modular: Modular
+            binding: Vinculante
         details:
             rejected_by: Rechazado por
             rejected_date: Fecha de rechazo

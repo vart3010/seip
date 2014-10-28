@@ -123,9 +123,8 @@
         <br/><br/>
         <p class="inline-label">
             <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
-            {% set summary = entity.summary({'limitMonthToNow':2}) %}
+            {% set summary = entity.summary() %}
             {% set advances = summary['advances'] %}
-            {{ summary['advancesPlanned'] }}
             {% set advancesClass = 'red-gradient' %}
             {% if advances >= 50 %}
                 {% set advancesClass = 'orange-gradient' %}

@@ -16,8 +16,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseE
  * @author matias
  */
 class GerenciaSecondRepository extends baseEntityRepository {
-    //put your code here
-    
     
     public function getGerenciaSecondOptions($options = array()){
         $data = array();
@@ -81,7 +79,14 @@ class GerenciaSecondRepository extends baseEntityRepository {
     function findGerenciaSecond(array $criteria = null)
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($gerencia = $criteria->remove('gerencia')) != null){
+            $queryBuilder
+                    ->innerJoin('o.gerencia', 'g')
+                    ->andWhere('g.id = :gerencia')
+                    ->setParameter('gerencia', $gerencia)
+                ;
+        }
         return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -2,8 +2,11 @@
 
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
+{% set summary = entity.summary({'limitMonthToNow':true}) %}
+
 {% block stylesheet %}
     {{ parent() }}
+    
     <style type="text/css" media="screen">
         .x-grid-row-summary .x-grid-cell-inner {
             font-weight: bold;
@@ -14,11 +17,36 @@
         .x-group-hd-container {
             display:none;
         }
+        /* Tags */
+        .tag {
+            padding: 0 4px 2px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+	}
+	.ie9 .tag {
+		padding: 1px 4px;
+	}
+	small.tag {
+		font-size: 10px;
+		line-height: 14px;
+		text-transform: uppercase;
+		padding: 0 2px;
+		vertical-align: 1px;
+		border-width: 1px;
+		border-style: solid;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
+        
     </style>
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">
 {% endblock %}
 
 {% block javascript %}
     <script type="text/javascript">
+        var advancesPlanned = {{ summary['advancesPlanned'] }};
         Ext.require([
             'Ext.grid.*',
             'Ext.data.*',
@@ -408,8 +436,20 @@
                                         }
                                     }
                                 }
-                                var span = Ext.query('#program_summary');
-                                span[0].innerText = formatNumber(value);
+                                var spanProgramSummary = Ext.query('#program_summary');
+                                spanProgramSummary[0].innerText = formatNumber(value);
+                                var tenPercentage = advancesPlanned - ( advancesPlanned * 0.10);
+                                var classSummary = '';
+                                if(value >= advancesPlanned){
+                                    classSummary = 'green-bg';
+                                }else if(value >= tenPercentage && value < advancesPlanned){
+                                    classSummary = 'orange-bg';
+                                }else if(value < tenPercentage){
+                                    classSummary = 'red-bg';
+                                }
+
+                                var spanProgramSummaryContainer = Ext.query('#program_summary_container');
+                                spanProgramSummaryContainer[0].className='tag '+classSummary;
                                 summary = 0;
                                 for(i in values){
                                     summary += values[i];
@@ -906,7 +946,7 @@
     <br/>
     <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
     <br/>
-    <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b> <span id="program_summary">0</span>%
+    <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b>&nbsp;<small class="tag" id="program_summary_container"><span id="program_summary">0</span>/{{ summary['advancesPlanned'] }}%</small>
     <div id="table-summary"></div>
     <br/><br/>
     <div id="grid-example-2"></div>

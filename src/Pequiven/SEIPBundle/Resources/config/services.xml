@@ -86,5 +86,10 @@
                 <argument type="service" id="tecnocreaciones_tools.sequence_generator"  />
             </call>
         </service>
+        <service id="seip.user_manager" class="Pequiven\SEIPBundle\Model\UserManager">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>

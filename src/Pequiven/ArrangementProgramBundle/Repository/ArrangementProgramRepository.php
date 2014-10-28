@@ -32,8 +32,18 @@ class ArrangementProgramRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
+        $this->getUser();
+        return parent::createPaginator($criteria, $orderBy);
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        $queryBuilder
+                    ->leftJoin('ap.tacticalObjective', 'to')
+                    ->leftJoin('to.gerencia', 'g')
+                ;
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
         }
@@ -53,8 +63,6 @@ class ArrangementProgramRepository extends EntityRepository
         
         if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
             $queryBuilder
-                    ->innerJoin('ap.tacticalObjective', 'to')
-                    ->innerJoin('to.gerencia', 'g')
                     ->andWhere('g.complejo = :complejo')
                 ->setParameter('complejo', $complejo)
                 ;
@@ -82,7 +90,6 @@ class ArrangementProgramRepository extends EntityRepository
         }
         if(($tactical = $criteria->remove('tacticalObjective')) != null){
             $queryBuilder
-                    ->innerJoin('ap.tacticalObjective', 'to')
                     ->andWhere('to.id = :tacticalObjective')
                 ->setParameter('tacticalObjective', $tactical)
                 ;
@@ -97,8 +104,7 @@ class ArrangementProgramRepository extends EntityRepository
         //Filtro de gerencia de primera linea
         if(($firstLineManagement = $criteria->remove('firstLineManagement')) != null){
             $queryBuilder
-                    ->innerJoin('ap.tacticalObjective', 'to')
-                    ->innerJoin('to.gerencia', 'g')
+                    
                     ->andWhere('g.id = :firstLineManagement')
                 ->setParameter('firstLineManagement', $firstLineManagement)
                 ;
