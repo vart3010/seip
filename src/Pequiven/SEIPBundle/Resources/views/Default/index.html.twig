@@ -2,12 +2,12 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
     <hgroup id="main-title" class="thin">
-        <h1>{{ "principal.title"|trans }}</h1>
+        <h1>{{ "principal.title.principal"|trans }}</h1>
         <h2>{{ "now"|date("d/m/Y") }}</h2>
     </hgroup>
-    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }});renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
-            <a href="" class="button red-gradient">{{ "principal.button.operative"|trans }}</a>
+            <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.operative"|trans }}</a>
             <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
         </p>
         <div id="chartTactic" class="columns">
@@ -19,24 +19,7 @@
                 <ul class="stats">
                     {% for data in dataLinkTactic %}
                         <li>
-                            <a style="color: #ffffff;" href="javascript:void(0);">
-                                {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div id="chartOperative" class="columns">
-            <div class="nine-columns twelve-columns-mobile" id="chartContainerOperative">
-                {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
-                <!-- This div will hold the chart generated in the footer -->
-            </div>
-            <div class="three-columns twelve-columns-mobile new-row-mobile">
-                <ul class="stats">
-                    {% for data in dataLinkOperative %}
-                        <li>
-                            <a style="color: #ffffff;" href="javascript:void(0);">
+                            <a style="color: #ffffff;" href="{{ data.linkTypeGroup }}">
                                 {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
                             </a>
                         </li>

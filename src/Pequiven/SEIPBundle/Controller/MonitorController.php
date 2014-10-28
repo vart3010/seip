@@ -126,8 +126,110 @@ class MonitorController extends baseController {
         return $this->handleView($view);
     }
     
-    
-    public function displayObjetiveTacticAction(Request $request){
+    /**
+     * Función que renderiza el Monitor de Objetivos Operativos
+     * @Template("PequivenSEIPBundle:Monitor:Operative/objetiveGerenciaFirstGroup.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function displayObjetiveOperativeAction(Request $request){
+        $categories = array();
+        $categories[] = array('label' => "Comercializadoras");
+        $categories[] = array('label' => "Complejos");
+        $categories[] = array('label' => "Sede Corporativa");
+        $categories[] = array('label' => "Proyectos");
         
+        $datas = $this->getDataObjetiveOperativeGroupChart();
+        
+        $i = 0;
+        foreach($datas['dataLinkOperative'] as $data){
+            $datas['dataLinkOperative'][$i]['typeGroup'] = $categories[$i]['label'];
+            $i++;
+        }
+        
+        return array(
+            'dataPlanOperative' => $datas['dataPlanOperative'],
+            'dataRealOperative' => $datas['dataRealOperative'],
+            'dataPorcOperative' => $datas['dataPorcOperative'],
+            'dataLinkOperative' => $datas['dataLinkOperative'],
+            'categories' => $categories
+        );
+    }
+    
+    /**
+     * Función que renderiza el Monitor de Objetivos Tácticos por Tipo de Grupo de Gerencia de 1ra Línea
+     * @Template("PequivenSEIPBundle:Monitor:Tactic/objetiveGerenciaFirstByGroup.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    
+    public function displayObjetiveTacticByGroupAction(Request $request){
+        $typeGroup = $request->get("typeGroup");
+        
+        
+        
+        return array(
+            
+        );
+    }
+    
+    /**
+     * Función que obtiene los objetivos operativos agrupados por tipo de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getDataObjetiveOperativeGroupChart(){
+        $em = $this->getDoctrine()->getManager();
+        $datas = array();
+        $dataRealOperative = array();
+        $dataPlanOperative = array();
+        $dataPorcOperative = array();
+        $dataLinkOperative = array();
+        
+        //Resultados Operativos
+        $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesOperativeByGerenciaGroup();
+        
+        foreach($resultsOperatives as $resultOperative){
+            $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
+            $dataPorcOperative[] = array('value' => $resOperative);
+            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
+            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
+            $dataLinkOperative[] = array('typeGroup' => $resultOperative['typeGroup'],'porcCarga' => $resOperative);
+        }
+        $datas['dataPorcOperative'] = $dataPorcOperative;
+        $datas['dataPlanOperative'] = $dataPlanOperative;
+        $datas['dataRealOperative'] = $dataRealOperative;
+        $datas['dataLinkOperative'] = $dataLinkOperative;
+        
+        return $datas;
+    }
+    
+    /**
+     * Función que obtiene los Objetivos Tácticos agrupados por tipo de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getDataObjetiveTacticByGroupChart(){
+        $em = $this->getDoctrine()->getManager();
+        $datas = array();
+        $dataRealTactic = array();
+        $dataPlanTactic = array();
+        $dataPorcOperative = array();
+        $dataLinkOperative = array();
+        
+        //Resultados Operativos
+        $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesOperativeByGerenciaGroup();
+        
+        foreach($resultsOperatives as $resultOperative){
+            $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
+            $dataPorcOperative[] = array('value' => $resOperative);
+            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
+            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
+            $dataLinkOperative[] = array('typeGroup' => $resultOperative['typeGroup'],'porcCarga' => $resOperative);
+        }
+        $datas['dataPorcOperative'] = $dataPorcOperative;
+        $datas['dataPlanOperative'] = $dataPlanOperative;
+        $datas['dataRealOperative'] = $dataRealOperative;
+        $datas['dataLinkOperative'] = $dataLinkOperative;
+        
+        return $datas;
     }
 }

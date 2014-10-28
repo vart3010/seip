@@ -132,7 +132,9 @@ monitor:
     gerencia: Gerencia
     
 principal:
-    title: Principal
+    title: 
+        principal: Principal
+        objTactic: Objetivos Operativos
     button:
         tactic: Táctico
         operative: Operativo

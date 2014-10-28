@@ -48,12 +48,18 @@ class MonitorRepository extends EntityRepository {
      * Función que retorna el total de Objetivos Tácticos por grupos de Gerencia de 1ra Línea
      * @return type
      */
-    public function getTotalObjetivesTacticByGerenciaGroup(){
+    public function getTotalObjetivesTacticByGerenciaGroup($options = array()){
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->select('o.typeGroup');
-        $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
-        $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
-        $queryBuilder->groupBy('o.typeGroup');
+        
+        if(!isset($options['typeGroup'])){
+            $queryBuilder->select('o.typeGroup');
+            $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
+            $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
+            $queryBuilder->groupBy('o.typeGroup');
+        } else{
+            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,objTacticOriginalReal AS RealObjTactic');
+            $queryBuilder->andWhere("o.typeGroup = '" . $options['typeGroup'] . "'");
+        }
         
         $q = $queryBuilder->getQuery();
 //        var_dump($q->getSQL());
