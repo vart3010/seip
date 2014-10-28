@@ -43,6 +43,8 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder
                     ->leftJoin('ap.tacticalObjective', 'to')
                     ->leftJoin('to.gerencia', 'g')
+                    ->leftJoin('ap.operationalObjective', 'oo')
+                    ->leftJoin('oo.gerenciaSecond', 'gs')
                 ;
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
@@ -72,8 +74,8 @@ class ArrangementProgramRepository extends EntityRepository
             $responsibles = json_decode($responsiblesJson);
             if(is_array($responsibles)){
                 $queryBuilder
-                        ->innerJoin('ap.responsibles','r')
-                        ->andWhere($queryBuilder->expr()->in('r.id', $responsibles))
+                        ->innerJoin('ap.responsibles','ap_r')
+                        ->andWhere($queryBuilder->expr()->in('ap_r.id', $responsibles))
                     ;
             }
         }
@@ -82,9 +84,9 @@ class ArrangementProgramRepository extends EntityRepository
             if(is_array($responsiblesGoals)){
                 $queryBuilder
                         ->innerJoin('ap.timeline','t')
-                        ->innerJoin('t.goals','g')
-                        ->innerJoin('g.responsibles','r')
-                        ->andWhere($queryBuilder->expr()->in('r.id', $responsiblesGoals))
+                        ->innerJoin('t.goals','go')
+                        ->innerJoin('go.responsibles','go_r')
+                        ->andWhere($queryBuilder->expr()->in('go_r.id', $responsiblesGoals))
                     ;
             }
         }
@@ -96,7 +98,6 @@ class ArrangementProgramRepository extends EntityRepository
         }
         if(($operationalObjective = $criteria->remove('operationalObjective')) != null){
             $queryBuilder
-                    ->innerJoin('ap.operationalObjective', 'oo')
                     ->andWhere('oo.id = :operationalObjective')
                 ->setParameter('operationalObjective', $operationalObjective)
                 ;
@@ -112,10 +113,21 @@ class ArrangementProgramRepository extends EntityRepository
         //Filtro de gerencia de segunda linea
         if(($secondLineManagement = $criteria->remove('secondLineManagement')) != null){
             $queryBuilder
-                    ->innerJoin('ap.operationalObjective', 'oo')
-                    ->innerJoin('oo.gerenciaSecond', 'gs')
                     ->andWhere('gs.id = :secondLineManagement')
                 ->setParameter('secondLineManagement', $secondLineManagement)
+                ;
+        }
+        //Filtro de gerencia de segunda linea modular y vinculante
+        if(($typeManagement = $criteria->remove('typeManagement')) != null){
+            if($typeManagement == \Pequiven\MasterBundle\Model\GerenciaSecond::TYPE_MANAGEMENT_MODULAR){
+                $queryBuilder
+                        ->andWhere('gs.modular = :typeManagement');
+            }else{
+                $queryBuilder
+                        ->andWhere('gs.vinculante = :typeManagement');
+            }
+            $queryBuilder
+                    ->setParameter('typeManagement', true)
                 ;
         }
         

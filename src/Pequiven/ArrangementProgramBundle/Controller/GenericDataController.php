@@ -85,7 +85,7 @@ class GenericDataController extends SEIPController
     }
     
     /**
-     * Busca los objetivos operativos tacticos del usuario logueado
+     * Busca los objetivos operativos del usuario logueado
      * 
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
@@ -93,9 +93,10 @@ class GenericDataController extends SEIPController
      */
     function getOperativesObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
         $repository = $this->get('pequiven.repository.objetiveoperative');
-        $results = $repository->findOperativeObjetives($user);
+        $results = $repository->findOperativeObjetives($user,$criteria);
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -127,9 +128,8 @@ class GenericDataController extends SEIPController
      * @param type $param
      */
     function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
-        
+        $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
-        $criteria = array();
         if($this->getUserManager()->isAllowFilterFirstLineManagement($user) === false){
             $criteria['gerencia'] =  $user->getGerencia();
         }

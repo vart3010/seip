@@ -80,7 +80,25 @@ class GerenciaSecondRepository extends baseEntityRepository {
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if(($gerencia = $criteria->remove('gerencia')) != null){
+        
+        //Filtro de gerencia de segunda linea modular y vinculante
+        if(($typeManagement = $criteria->remove('typeManagement')) != null){
+            $complejo = $criteria->remove('complejo');
+            $queryBuilder
+                        ->andWhere('o.complejo = :complejo');
+            
+            if($typeManagement == \Pequiven\MasterBundle\Model\GerenciaSecond::TYPE_MANAGEMENT_MODULAR){
+                $queryBuilder
+                        ->andWhere('o.modular = :typeManagement');
+            }else{
+                $queryBuilder
+                        ->andWhere('o.vinculante = :typeManagement');
+            }
+            $queryBuilder
+                    ->setParameter('typeManagement', true)
+                    ->setParameter('complejo', $complejo)
+                ;
+        }else if(($gerencia = $criteria->remove('gerencia')) != null){
             $queryBuilder
                     ->innerJoin('o.gerencia', 'g')
                     ->andWhere('g.id = :gerencia')

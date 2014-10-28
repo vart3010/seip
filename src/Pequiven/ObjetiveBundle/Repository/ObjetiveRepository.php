@@ -336,7 +336,7 @@ class ObjetiveRepository extends EntityRepository {
     function findQueryObjetivesTactic()
     {
         $user = $this->getUser();
-        $qb = $this->getQueryBuilder();
+        $qb = $this->getQueryAllEnabled();
         $qb
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerencia","g")
@@ -357,29 +357,47 @@ class ObjetiveRepository extends EntityRepository {
     
     function findTacticalObjetives($user)
     {
-        $qb = $this->getQueryBuilder();
+        $qb = $this->getQueryAllEnabled();
         $qb
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
-                ->andWhere("g.id = :gerencia")
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
-                ->setParameter("gerencia", $user->getGerencia())
             ;
+        $level = $user->getLevelRealByGroup();
+        if($level != Rol::ROLE_DIRECTIVE){
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $user->getGerencia())
+                ;
+        }
         return $qb->getQuery()->getResult();
     }
     
-    function findOperativeObjetives($user)
+    function findOperativeObjetives($user,array $criteria = array())
     {
-        $qb = $this->getQueryBuilder();
+        $qb = $this->getQueryAllEnabled();
         $qb
-                ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerencia","g")
-                ->andWhere("ol.level = :level")
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
-                ->setParameter("gerencia", $user->getGerencia())
+            ->innerJoin("o.objetiveLevel","ol")
+            ->innerJoin("o.gerencia","g")
+            ->andWhere("ol.level = :level")
+            ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($objetiveTactical = $criteria->remove('objetiveTactical')) != null){
+            $qb
+                ->innerJoin('o.parents', 'p')
+                ->andWhere('p.id = :objetiveTactical')
+                ->setParameter('objetiveTactical', $objetiveTactical)
+                ;
+        }
+        $level = $user->getLevelRealByGroup();
+        if($level != Rol::ROLE_DIRECTIVE){
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $user->getGerencia())
+                ;
+        }
         return $qb->getQuery()->getResult();
     }
     
@@ -394,15 +412,13 @@ class ObjetiveRepository extends EntityRepository {
     
     function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic) {
         $user = $this->getUser();
-        $qb = $this->getQueryBuilder();
+        $qb = $this->getQueryAllEnabled();
         $qb
                 ->innerJoin("o.parents","p")
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerenciaSecond","gs")
                 ->andWhere('p.id = :parent')
                 ->andWhere("ol.level = :level")
-                ->andWhere('ol.enabled = :enabled')
-                ->setParameter('enabled', true)
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
@@ -413,6 +429,14 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
                 ;
         }
+        return $qb;
+    }
+    
+    protected function getQueryAllEnabled(){
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('o.enabled = :enabled')
+            ->setParameter('enabled', true);
         return $qb;
     }
 }
