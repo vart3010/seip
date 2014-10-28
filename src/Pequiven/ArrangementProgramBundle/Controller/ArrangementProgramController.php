@@ -80,13 +80,21 @@ class ArrangementProgramController extends SEIPController
 //                $isAllowFilterFirstLineManagement = false;
 //                $isAllowFilterManagementSecondLine = false;
 //            }
-            
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            //PequivenArrangementProgramBundle
             $view->setData(array(
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
                 'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
                 'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
                 'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
                 'user' => $user
             ));
         }else{

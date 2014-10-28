@@ -367,7 +367,8 @@ angular.module('seipModule.controllers', [])
                 second_line_managements: null,
                 complejos: null,
                 responsibles: null,
-                arrangementProgramStatusLabels: null
+                arrangementProgramStatusLabels: null,
+                typesManagement: null
             };
             $scope.model = {
                 complejo: null,
@@ -385,10 +386,21 @@ angular.module('seipModule.controllers', [])
                     .success(function(data) {
                         $scope.data.tacticals = data;
                     });
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives'))
-                    .success(function(data) {
-                        $scope.data.operatives = data;
-                    });
+            //objetiveTactical
+            $scope.getOperatives = function(objetiveTactical){
+                var parameters = {
+                    filter: {}
+                };
+                if(objetiveTactical != undefined){
+                    parameters.filter['objetiveTactical'] = objetiveTactical;
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives',parameters))
+                .success(function(data) {
+                    $scope.data.operatives = data;
+                });
+            };
+            $scope.getOperatives();
+            
             $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
                     .success(function(data) {
                         $scope.data.first_line_managements = data;
@@ -398,7 +410,19 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management'))
+            //Busca las gerencias de segunda linea
+            $scope.getSecondLineManagement = function(gerencia){
+                var parameters = {
+                    filter: {}
+                };
+                if($scope.model.firstLineManagement != null){
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                }
+                if($scope.model.typeManagement != null){
+                    parameters.filter['typeManagement'] = $scope.model.typeManagement.id;
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management',parameters))
                     .success(function(data) {
                         $scope.data.second_line_managements = data;
                         if($scope.model.secondLineManagement != null){
@@ -407,6 +431,8 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
+            };
+            $scope.getSecondLineManagement();
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
@@ -495,6 +521,14 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+            //Filtro de modular y vinculante
+            $scope.$watch("model.typeManagement", function(newParams, oldParams) {
+                if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
+                } else {
+                    $scope.tableParams.$params.filter['typeManagement'] = null;
                 }
             });
         })
