@@ -59,3 +59,9 @@ select.xxlarge {
     height: 30px;
     vertical-align: middle;
 }
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}

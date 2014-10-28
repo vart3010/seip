@@ -133,3 +133,7 @@ monitor:
     
 principal:
     title: Principal
+    button:
+        tactic: Táctico
+        operative: Operativo
+        arrangementProgram: Programas de Gestión

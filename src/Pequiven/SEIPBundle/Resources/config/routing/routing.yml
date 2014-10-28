@@ -6,8 +6,13 @@ monitorTypeGroupList:
         _sylius:
             method: createPaginatorTypeGroup
             
-#
-monitorTacticTypeGroup:
-    path: /tactic/{typeGroup}
+#Monitor de Objetivos Operativos por Grupo de Gerencia de 1ra línea
+monitorObjetiveOperative:
+    path: /monitor/operative
     defaults:
-        _controller: pequiven.controller.seipmonitor:displayObjetiveTacticAction
+        _controller: pequiven.controller.seipmonitor:displayObjetiveOperativeAction
+        
+monitorArrangementProgram:
+    path: /monitor/arrangementProgram
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayArrangementProgramAction

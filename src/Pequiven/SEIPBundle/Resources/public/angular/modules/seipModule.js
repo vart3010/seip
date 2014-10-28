@@ -770,7 +770,7 @@ angular.module('seipModule.controllers', [])
 
             $scope.renderChartTactic = function(id,categories,dataPlanTactic,dataRealTactic,dataPorcTactic) {
                 FusionCharts.ready(function() {
-                    var revenueChart = new FusionCharts({
+                    var revenueChartTactic = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
                         "width": "600",
@@ -818,14 +818,14 @@ angular.module('seipModule.controllers', [])
                             ]
                         }
                     });
-                    revenueChart.setTransparent(true);
-                    revenueChart.render();
+                    revenueChartTactic.setTransparent(true);
+                    revenueChartTactic.render();
                 })
             };
             
             $scope.renderChartOperative = function(id,categories,dataPlanOperative,dataRealOperative,dataPorcOperative) {
                 FusionCharts.ready(function() {
-                    var revenueChart = new FusionCharts({
+                    var revenueChartOperative = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
                         "width": "600",
@@ -846,6 +846,7 @@ angular.module('seipModule.controllers', [])
                                 "bgAlpha" : "0,0",
                                 "baseFontColor" : "#ffffff",
                                 "outCnvBaseFontColor" : "#ffffff",
+                                "visible" : "0",
                                 "theme": "fint"
                             },
                             "categories": [
@@ -874,11 +875,10 @@ angular.module('seipModule.controllers', [])
                         }
                     });
                     
-                    revenueChart.setTransparent(true);
-                    revenueChart.render();
+                    revenueChartOperative.setTransparent(true);
+                    revenueChartOperative.render();
                 })
             };
-
         })
         .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 

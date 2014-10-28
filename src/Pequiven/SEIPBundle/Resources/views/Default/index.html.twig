@@ -5,10 +5,10 @@
         <h1>{{ "principal.title"|trans }}</h1>
         <h2>{{ "now"|date("d/m/Y") }}</h2>
     </hgroup>
-    <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }});renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }});renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
-            <a href="javascript:showTactic()" class="button red-gradient">T&aacute;ctico</a>
-            <a href="javascript:showOperative()" class="button red-gradient">Operativo</a>
+            <a href="" class="button red-gradient">{{ "principal.button.operative"|trans }}</a>
+            <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
         </p>
         <div id="chartTactic" class="columns">
             <div class="nine-columns twelve-columns-mobile" id="chartContainerTactic">
@@ -46,13 +46,12 @@
         </div>
     </div>
     {#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
-    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
-        {#{ 'pequiven_seip.seip'|trans }#}
-        {#        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />#}
-        {#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />#}
-        {#        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />#}
-
-    </div>
+    {#<div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
+        {{ 'pequiven_seip.seip'|trans }}
+        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />
+        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
+        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />
+    </div>#}
     {#    </div>#}
     {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
         {#<div ng-controller="TableFormatController" id="objetiveTactic">
@@ -86,186 +85,28 @@
                 </div>
             </div>
         </div>#}
-        <!-- Tab Principales (Táctico y Operativo -->
-        {#<div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
-            <ul class="tabs">
-                <li id="tabMonitorTactic"  class="active"><a style="color: #000000;" href="#monitorTactic">{{ 'monitor.tabTactic'|trans }}</a></li>
-                <li id="tabMonitorOperative" ><a style="color: #000000;" href="#monitorOperative">{{ 'monitor.tabOperative'|trans }}</a></li>
-            </ul>
-            <div class="tabs-content" style="min-height: 29px;">
-                <div id="monitorTactic">
-                    <!-- Tabs Nivel Táctico -->
-                    <div class="standard-tabs margin-bottom" id="add-tabs2" style="height: 58px;">
-                        <ul class="tabs">
-                            <li id="tabObjetiveTactic"  class="active"><a style="color: #000000;" href="#objetiveTactic">{{ 'monitor.objetiveTactic'|trans }}</a></li>
-                            <li id="tabIndicatorTactic" ><a style="color: #000000;" href="#indicatorTactic">{{ 'monitor.indicatorTactic'|trans }}</a></li>
-                        </ul>
-                        <div class="tabs-content" style="min-height: 29px;">
-                            <div ng-controller="TableFormatController" id="objetiveTactic">
-                                <div ng-controller="TableMonitorTacticController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageObjTacticOriginal $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objTacticOriginal'">
-                                                        {$ result.objTacticOriginal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objTacticOriginalReal'">
-                                                        {$ result.objTacticOriginalReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'">
-                                                        {$ result.resObjTacticOriginal $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-controller="TableFormatController" id="indicatorTactic">
-                                <div ng-controller="TableMonitorTacticController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageIndTacticOriginal $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'indTacticOriginal'">
-                                                        {$ result.indTacticOriginal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'indTacticOriginalReal'">
-                                                        {$ result.indTacticOriginalReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'">
-                                                        {$ result.resIndTacticOriginal $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id ="monitorOperative">
-                    <!-- Tabs Nivel Operativo -->
-                    <div class="standard-tabs margin-bottom" id="add-tabs2" style="height: 58px;">
-                        <ul class="tabs">
-                            <li id="tabObjetiveOperativeOriginal"  class="active"><a style="color: #000000;" href="#objetiveOperativeOriginal">{{ 'monitor.objetiveOperativeOriginal'|trans }}</a></li>
-                            <li id="tabObjetiveOperativeVinculante"  class="active"><a style="color: #000000;" href="#objetiveOperativeVinculante">{{ 'monitor.objetiveOperativeVinculante'|trans }}</a></li>
-                            <li id="tabIndicatorOperativeOriginal" ><a style="color: #000000;" href="#indicatorOperativeOriginal">{{ 'monitor.indicatorOperativeOriginal'|trans }}</a></li>
-                            <li id="tabIndicatorOperativeVinculante" ><a style="color: #000000;" href="#indicatorOperativeVinculante">{{ 'monitor.indicatorOperativeVinculante'|trans }}</a></li>
-                        </ul>
-                        <div class="tabs-content" style="min-height: 29px;">
-                            <div ng-controller="TableFormatController" id="objetiveOperativeOriginal">
-                                <div ng-controller="TableMonitorOperativeController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageObjOperativeOriginal $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objOperativeOriginal'">
-                                                        {$ result.objOperativeOriginal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objOperativeOriginalReal'">
-                                                        {$ result.objOperativeOriginalReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'">
-                                                        {$ result.resObjOperativeOriginal $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-            </div>
-        </div>
-                            </div>
-                            <div ng-controller="TableFormatController" id="objetiveOperativeVinculante">
-                                <div ng-controller="TableMonitorOperativeController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageObjOperativeVinculante $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objOperativeVinculante'">
-                                                        {$ result.objOperativeVinculante $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objOperativeVinculanteReal'">
-                                                        {$ result.objOperativeVinculanteReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'" sortable="'ref'">
-                                                        {$ result.resObjOperativeVinculante $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-controller="TableFormatController" id="indicatorOperativeOriginal">
-                                <div ng-controller="TableMonitorOperativeController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageIndOperativeOriginal $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'indOperativeOriginal'">
-                                                        {$ result.indOperativeOriginal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'indOperativeOriginalReal'">
-                                                        {$ result.indOperativeOriginalReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'">
-                                                        {$ result.resIndOperativeOriginal $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div ng-controller="TableFormatController" id="indicatorOperativeVinculante">
-                                <div ng-controller="TableMonitorOperativeController">
-                                    <div loading-container="tableParams.settings().$loading">
-                                        <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                                            <tbody>
-                                                <tr ng-repeat="result in $data" data="{$ result|json $}">
-                                                    <td data-title="'{{ 'monitor.gerencia'|trans }}'">
-                                                        <img src="{$ result.imageIndOperativeVinculante $}" > &nbsp;
-                                                        <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'indOperativeVinculante'">
-                                                        {$ result.indOperativeVinculante $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'indOperativeVinculanteReal'">
-                                                        {$ result.indOperativeVinculanteReal $}
-                                                    </td>
-                                                    <td data-title="'{{ 'monitor.porcReal'|trans }}'">
-                                                        {$ result.resIndOperativeVinculante $}%
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        {#<div ng-controller="TableFormatController" id="objetiveTactic">
+            <div ng-controller="TableMonitorTacticController">
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tbody>
+                            <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                <td data-title="'{{ 'monitor.gerencia'|trans }}'">
+                                    <img src="{$ result.imageObjTacticOriginal $}" > &nbsp;
+                                    <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
+                                </td>
+                                <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objTacticOriginal'">
+                                    {$ result.objTacticOriginal $}
+                                </td>
+                                <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objTacticOriginalReal'">
+                                    {$ result.objTacticOriginalReal $}
+                                </td>
+                                <td data-title="'{{ 'monitor.porcReal'|trans }}'">
+                                    {$ result.resObjTacticOriginal $}%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>#}
@@ -281,20 +122,10 @@
     {{ parent() }}
     <script type="text/javascript">
 
-function showTactic(){
-    $("#chartTactic").show();
-    $("#chartOperative").hide();
-}
+        function getTableExtraInfo(data)
+        {
 
-function showOperative(){
-    $("#chartTactic").hide();
-    $("#chartOperative").show();
-}
-
-function getTableExtraInfo(data)
-{
-
-}
+        }
     </script>
 
 {% endblock %}
