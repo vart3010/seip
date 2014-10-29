@@ -1,0 +1,7 @@
+pequiven_gerenciafirst_show:
+    path: /adminMaster/gerencia-first/{id}
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:showAction
+    requirements:
+        id: "\d+"
+    methods: [GET]

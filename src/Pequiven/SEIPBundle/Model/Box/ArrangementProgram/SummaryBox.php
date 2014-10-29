@@ -20,9 +20,15 @@ class SummaryBox extends GenericBox
     }
     
     public function getParameters() {
-        $em = $this->getDoctrine()->getManager();
+        $repository = $this->get('pequiven_seip.repository.arrangementprogram');
         
-        return array('parame' => 'ass');
+        $summaryTactical = $repository->findGroupByType(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC);
+        $summaryOperative = $repository->findGroupByType(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE);
+        
+        return array(
+            'summaryTactical' => $summaryTactical,
+            'summaryOperative' => $summaryOperative,
+        );
     }
 
 }

@@ -2,6 +2,7 @@ pequiven:
     select: Seleccione
     arrangement_program:
         arrangement_program: Programa de Gestión
+        arrangement_programs: Programas de Gestión
         period: Periodo
         process: Proceso
         management: Gerencia
@@ -59,7 +60,9 @@ pequiven:
             refresh: Refrescar
         type:
             tactic: Tactico
+            tactics: Tacticos
             operative: Operativo
+            operatives: Operativos
         questions:
             revised: ¿Desea marcar el programa de gestión como revisado?
             approved: ¿Desea aprobar el programa de gestión?

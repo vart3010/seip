@@ -32,6 +32,18 @@ class ArrangementProgramRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    function findGroupByType($type,array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('ap.type = :type')
+            ->setParameter('type',$type)
+//            ->andWhere('ap.status = :status')  
+//            ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REVISED)
+            ;
+        return $qb->getQuery()->getResult();
+    }
+    
     public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
         $this->getUser();
         return parent::createPaginator($criteria, $orderBy);
