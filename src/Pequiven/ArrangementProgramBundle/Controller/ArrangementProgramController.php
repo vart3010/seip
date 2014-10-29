@@ -352,8 +352,9 @@ class ArrangementProgramController extends SEIPController
     function sendToReviewAction(Request $request)
     {
         $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
         
-        if(!$this->isAllowToSendToReview($resource)){
+        if(!$arrangementProgramManager->isAllowToSendToReview($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
