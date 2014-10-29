@@ -259,8 +259,8 @@ angular.module('seipModule.controllers', [])
                 $scope.getResponsiblesGoal(reponsibleId);
             });
             $scope.validButtomAddGoal = function() {
-
-                if (programResponsible.val() != null && programResponsible.val() > 0) {
+                
+                if (programResponsible.val() != null && programResponsible.val().length > 0) {
                     loadTemplateMetaButton.removeClass('disabled');
                 } else {
                     loadTemplateMetaButton.addClass('disabled');

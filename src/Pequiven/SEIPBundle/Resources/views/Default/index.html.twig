@@ -1,5 +1,7 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
 {% trans_default_domain 'PequivenSEIPBundle' %}
+
 {% block body %}
     <hgroup id="main-title" class="thin">
         <h1>{{ "principal.title.objTactic"|trans }}</h1>
@@ -19,8 +21,9 @@
                 <ul class="stats">
                     {% for data in dataLinkTactic %}
                         <li>
-                            <a style="color: #ffffff;" href="{{ data.linkTypeGroup }}">
-                                {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
+                            <a href="{{ data.linkTypeGroup }}">
+                                {{ data.typeGroup }}<br>
+                                <b style="font-size:25px">{{ data.porcCarga }}%</b>
                             </a>
                         </li>
                     {% endfor %}
@@ -94,13 +97,31 @@
             </div>
         </div>#}
     {% endif %}
+    
+    <div class="with-padding">
+        <div class="columns">
+            <div class="new-row-mobile four-columns six-columns-tablet twelve-columns-mobile">
+                {{ boxRender.renderBox('pequiven_seip_box_arrangementprogram_summary')|raw }}
+            </div>
+        </div>
+    </div>
+
+    
 {% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
 {% block javascripts %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
     <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
 {% endblock %}
+
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">

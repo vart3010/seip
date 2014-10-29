@@ -18,14 +18,16 @@ class DefaultController extends Controller {
         
         $datas = $this->getDataObjetivesChart();
         
+        $boxRender = $this->get('tecnocreaciones_box.render');
         return array(
             'dataPlanTactic' => $datas['dataPlanTactic'],
             'dataRealTactic' => $datas['dataRealTactic'],
             'dataPorcTactic' => $datas['dataPorcTactic'],
             'dataLinkTactic' => $datas['dataLinkTactic'],
             'optionsChart' => $datas['optionsChart'],
-            'categories' => $datas['categories']
-                );
+            'categories' => $datas['categories'],
+            'boxRender' => $boxRender,
+        );
     }
 
     /**
