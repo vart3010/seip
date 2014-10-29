@@ -320,8 +320,8 @@ class ArrangementProgramController extends SEIPController
     function revisedAction(Request $request)
     {
         $resource = $this->findOr404($request);
-        
-        if(!$this->isAllowToReview($resource)){
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToReview($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         $resource->setStatus(ArrangementProgram::STATUS_REVISED);
@@ -385,8 +385,8 @@ class ArrangementProgramController extends SEIPController
     function approvedAction(Request $request)
     {
         $resource = $this->findOr404($request);
-        
-        if(!$this->isAllowToApprove($resource)){
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToApprove($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         
@@ -418,8 +418,9 @@ class ArrangementProgramController extends SEIPController
     function rejectAction(Request $request)
     {
         $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
         
-        if(!$this->isAllowToApprove($resource)){
+        if(!$arrangementProgramManager->isAllowToApprove($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         

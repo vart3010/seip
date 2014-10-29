@@ -30,7 +30,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  * @author matias
  */
 class ObjetiveTacticController extends baseController {
-    //put your code here
 
     /**
      * Función que retorna la vista con la lista de los objetivos tácticos
@@ -45,26 +44,18 @@ class ObjetiveTacticController extends baseController {
     /**
      * Finds and displays a Objetive entity of level Tactic by Id.
      *
-     * @Template("PequivenObjetiveBundle:Tactic:show.html.twig")
      */
     public function showAction(Request $request) {
-        $id = $request->get("id");
-        //$ref = $request->get("ref");
-        $em = $this->getDoctrine()->getManager();
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
+            ->setTemplateVar('entity')
+            ->setData($this->findOr404($request))
+        ;
 
-        $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
-        //$entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $ref));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Objetive entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity
-                //'delete_form' => $deleteForm->createView(),
-        );
+        $groups = array_merge(array('api_list','gerencia'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
+        return $this->handleView($view);
     }
 
     /**

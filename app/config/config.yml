@@ -174,7 +174,7 @@ sylius_resource:
         #Objetivo táctico
         pequiven.objetivetactic:
             driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Tactic:list.html.twig
+            templates: PequivenObjetiveBundle:Tactic
             classes:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController

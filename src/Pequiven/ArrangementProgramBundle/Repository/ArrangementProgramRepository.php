@@ -38,8 +38,8 @@ class ArrangementProgramRepository extends EntityRepository
         $qb
             ->andWhere('ap.type = :type')
             ->setParameter('type',$type)
-//            ->andWhere('ap.status = :status')  
-//            ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REVISED)
+            ->andWhere('ap.status = :status')  
+            ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REVISED)
             ;
         return $qb->getQuery()->getResult();
     }

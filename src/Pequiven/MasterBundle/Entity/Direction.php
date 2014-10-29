@@ -283,4 +283,8 @@ class Direction extends modelDirection {
     {
         return $this->complejo;
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }
