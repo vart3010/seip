@@ -83,6 +83,8 @@ function setValueSelect2Multiple(idSelect2, entities, data, callBack) {
 
 angular.module('seipModule.controllers', [])
         .controller("ArrangementProgramController", function($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
+            $scope.entity = null;
+            $scope.complejo = null;
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
@@ -204,8 +206,11 @@ angular.module('seipModule.controllers', [])
                 return false;
             };
 
+            var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
+            var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
+            var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
+            var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             $scope.setOperationalObjective = function(tacticalObjetive, selected) {
-                var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
@@ -224,34 +229,40 @@ angular.module('seipModule.controllers', [])
                     operationalObjective.select2('enable', false);
                 }
             };
-            var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
-            var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
-            var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
-            var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             tacticalObjective.on('change', function(e) {
-
                 if (e.val) {
-                    var tacticalObjetive = e.val;
-                    operationalObjective.find('option').remove().end();
-                    notificationBarService.getLoadStatus().loading();
-                    $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
-                        operationalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
-                        angular.forEach(data, function(value) {
-                            operationalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + '</option>');
+                    if($scope.entity.type == 1){
+                        $scope.getLocationByTactical(e.val);
+                    }else{
+                        var tacticalObjetive = e.val;
+                        operationalObjective.find('option').remove().end();
+                        notificationBarService.getLoadStatus().loading();
+                        $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
+                            operationalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
+                            angular.forEach(data, function(value) {
+                                operationalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + '</option>');
+                            });
+                            if (data.length > 0) {
+                                operationalObjective.select2('val', e.val);
+                                operationalObjective.select2('enable', true);
+                            } else {
+                                operationalObjective.select2('val', '');
+                                operationalObjective.select2('enable', false);
+                            }
+                            notificationBarService.getLoadStatus().done();
                         });
-                        if (data.length > 0) {
-                            operationalObjective.select2('val', e.val);
-                            operationalObjective.select2('enable', true);
-                        } else {
-                            operationalObjective.select2('val', '');
-                            operationalObjective.select2('enable', false);
-                        }
-                        notificationBarService.getLoadStatus().done();
-                    });
+                    }
                 } else {
                     operationalObjective.select2('val', '');
                     operationalObjective.select2('enable', false);
                 }
+            });
+            operationalObjective.on('change',function(){
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("objetiveOperative_show", {id: operationalObjective.val(),_format: 'json',_groups:['complejo'] })).success(function(data) {
+                    $scope.complejo = data.complejo;
+                    notificationBarService.getLoadStatus().done();
+                });
             });
             programResponsible.on('change', function(object) {
                 var reponsibleId = object.val;
@@ -276,6 +287,14 @@ angular.module('seipModule.controllers', [])
                         notificationBarService.getLoadStatus().done();
                     });
                 }
+            };
+            $scope.getLocationByTactical = function(value){
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                    console.log(data);
+                    $scope.complejo = data.gerencia.complejo;
+                    notificationBarService.getLoadStatus().done();
+                });
             };
 
             $scope.formReady = false;

@@ -1,10 +1,14 @@
 pequiven_gerenciafirst_show:
-    path: /{id}
+    path: /{id}.{_format}
     defaults:
         _controller: pequiven.controller.gerenciafirst:showAction
+        _format: html
     requirements:
         id: "\d+"
+        _format: html|json
     methods: [GET]
+    options:
+        expose: true
     
 pequiven_gerenciafirst_update:
     path: /{id}/update
