@@ -91,5 +91,8 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
+            <tag name="tecnocreaciones_box.box" alias="pequiven_seip_user_registration" />
+        </service>
     </services>
 </container>

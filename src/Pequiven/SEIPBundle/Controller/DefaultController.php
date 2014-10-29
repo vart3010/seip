@@ -27,14 +27,15 @@ class DefaultController extends Controller {
             $datas['dataLinkTactic'][$i]['typeGroup'] = $categories[$i]['label'];
             $i++;
         }
-        
+        $boxRender = $this->get('tecnocreaciones_box.render');
         return array(
             'dataPlanTactic' => $datas['dataPlanTactic'],
             'dataRealTactic' => $datas['dataRealTactic'],
             'dataPorcTactic' => $datas['dataPorcTactic'],
             'dataLinkTactic' => $datas['dataLinkTactic'],
-            'categories' => $categories
-                );
+            'categories' => $categories,
+            'boxRender' => $boxRender,
+        );
     }
 
     /**
