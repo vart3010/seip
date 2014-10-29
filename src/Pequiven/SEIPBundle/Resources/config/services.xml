@@ -94,7 +94,12 @@
         <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Modelo de Caja Indicadores Tácticos Agrupados por Grupo de Gerencia de 1ra Línea -->
         <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Operativos Agrupados por Grupo de Gerencia de 1ra Línea -->
+        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
     </services>

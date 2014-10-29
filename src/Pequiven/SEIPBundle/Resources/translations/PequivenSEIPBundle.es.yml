@@ -143,3 +143,9 @@ principal:
     chart:
         captionObjTactic: Objetivos Tacticos
         captionObjOperative: Objetivos Operativos
+    box:
+        indicatorTactic: Indicadores Tácticos
+        indicatorOperative: Indicadores Operativos
+        indicatorPlan: Plan
+        indicatorReal: Real
+        indicatorPorc: % Carga

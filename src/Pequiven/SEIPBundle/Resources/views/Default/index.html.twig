@@ -97,12 +97,12 @@
             </div>
         </div>#}
     {% endif %}
-    
+    <hgroup id="main-title" class="thin">
+        <h1>{{ "principal.box.indicatorTactic"|trans }}</h1>
+    </hgroup>
     <div class="with-padding">
         <div class="columns">
-            <div class="new-row-mobile four-columns six-columns-tablet twelve-columns-mobile">
-                {{ boxRender.renderBox('pequiven_seip_box_tactic_summaryindicatorcharged')|raw }}
-            </div>
+            {{ boxRender.renderBox('pequiven_seip_box_tactic_summaryindicatorcharged')|raw }}
         </div>
     </div>
 

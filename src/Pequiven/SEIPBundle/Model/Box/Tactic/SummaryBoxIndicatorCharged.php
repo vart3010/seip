@@ -28,12 +28,8 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $em = $this->getDoctrine()->getManager();
         
         $datas = $this->getDataIndicatorTacticGroup();
-        
         return array(
-            'dataRealTactic' => $datas['dataRealTactic'],
-            'dataPlanTactic' => $datas['dataPlanTactic'],
-            'dataPorcTactic' => $datas['dataPorcTactic'],
-            'categories' => $datas['categories'],
+            'indicatorTactic' => $datas['indicatorTactic']
             );
     }
     
@@ -45,29 +41,26 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $em = $this->getDoctrine()->getManager();
         
         $datas = array();
-        $dataRealTactic = array();
-        $dataPlanTactic = array();
-        $dataPorcTactic = array();
+        $indicatorTactic = array();
         $dataLinkTactic = array();
-        $categories = array();
         
         //Resultados Operativos
         $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorTacticByGerenciaGroup();
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanIndTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealIndTactic'] / (float)$resultTactic['PlanIndTactic']) * 100,'0',2);
-            $dataPorcTactic[] = array('value' => $resTactic);
-            $dataPlanTactic[] = array('value' => $resultTactic['PlanIndTactic']);
-            $dataRealTactic[] = array('value' => $resultTactic['RealIndTactic']);
+            $indicatorTactic[] = array(
+                'description' => $resultTactic['Descripcion'],
+                'realTactic' => $resultTactic['RealIndTactic'],
+                'planTactic' => $resultTactic['PlanIndTactic'],
+                'porcTactic' => $resTactic,
+                'res' => (float)$resTactic
+            );
             $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic,'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo'])));
-            $categories[] = array('label' => $resultTactic['Descripcion']);
         }
         
-        $datas['dataPorcTactic'] = $dataPorcTactic;
-        $datas['dataPlanTactic'] = $dataPlanTactic;
-        $datas['dataRealTactic'] = $dataRealTactic;
         $datas['dataLinkTactic'] = $dataLinkTactic;
-        $datas['categories'] = $categories;
+        $datas['indicatorTactic'] = $indicatorTactic;
         
         return $datas;
     }

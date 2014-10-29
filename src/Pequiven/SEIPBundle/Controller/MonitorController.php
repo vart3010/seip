@@ -135,14 +135,15 @@ class MonitorController extends baseController {
     public function displayObjetiveOperativeAction(Request $request){
         
         $datas = $this->getDataObjetiveOperativeGroupChart();
-        
+        $boxRender = $this->get('tecnocreaciones_box.render');
         return array(
             'dataPlanOperative' => $datas['dataPlanOperative'],
             'dataRealOperative' => $datas['dataRealOperative'],
             'dataPorcOperative' => $datas['dataPorcOperative'],
             'dataLinkOperative' => $datas['dataLinkOperative'],
             'optionsChart' => $datas['optionsChart'],
-            'categories' => $datas['categories']
+            'categories' => $datas['categories'],
+            'boxRender' => $boxRender,
         );
     }
     

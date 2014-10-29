@@ -1,5 +1,5 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-{% for indicator in indicatorTactic %}
+{% for indicator in indicatorOperative %}
     <div class="new-row-mobile four-columns six-columns-tablet twelve-columns-mobile">
         <div class="block large-margin-bottom">
             <div class="block-title">
@@ -22,9 +22,9 @@
                         <span class="event-date red"><img src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}"></span>
                     {% endif %}
                     <a href="javascript:void(0);" class="event-description">
-                        <p>{{ "principal.box.indicatorPlan"|trans }}: {{ indicator.planTactic }}<br>
-                            {{ "principal.box.indicatorReal"|trans }}: {{ indicator.realTactic }}<br>
-                            {{ "principal.box.indicatorPorc"|trans }}: {{ indicator.porcTactic }}
+                        <p>{{ "principal.box.indicatorPlan"|trans }}: {{ indicator.planOperative }}<br>
+                            {{ "principal.box.indicatorReal"|trans }}: {{ indicator.realOperative }}<br>
+                            {{ "principal.box.indicatorPorc"|trans }}: {{ indicator.porcOperative }}
                         </p>
                     </a>
                 </li>
