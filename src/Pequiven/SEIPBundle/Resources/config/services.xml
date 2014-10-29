@@ -92,7 +92,10 @@
             </call>
         </service>
         <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
-            <tag name="tecnocreaciones_box.box" alias="pequiven_seip_user_registration" />
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
+            <tag name="tecnocreaciones_box.box" />
         </service>
     </services>
 </container>

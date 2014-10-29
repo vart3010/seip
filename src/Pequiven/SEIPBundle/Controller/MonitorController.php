@@ -152,7 +152,6 @@ class MonitorController extends baseController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
-    
     public function displayObjetiveTacticByGroupAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $typeGroup = $request->get("typeGroup");
@@ -199,7 +198,7 @@ class MonitorController extends baseController {
     }
     
     /**
-     * Función que obtiene los objetivos operativos agrupados por tipo de Gerencia de 1ra Línea
+     * Función que obtiene los Objetivos Operativos agrupados por tipo de Gerencia de 1ra Línea
      * @return type
      */
     public function getDataObjetiveOperativeGroupChart(){
@@ -258,7 +257,6 @@ class MonitorController extends baseController {
             $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
             $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic);
             if($resultTactic['Grupo'] == 'CORP'){
-//                $categories[] = array('label' => '<a href="'.$this->generateUrl('pequiven_seip_menu_home').'">'.$resultTactic['Ref'].'</a>');
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultTactic['Ref'], 'toolText' => $resultTactic['Gerencia']);
             } else{
@@ -300,7 +298,6 @@ class MonitorController extends baseController {
             $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
             $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative);
             if($resultOperative['Grupo'] == 'CORP'){
-//                $categories[] = array('label' => '<a href="'.$this->generateUrl('pequiven_seip_menu_home').'">'.$resultTactic['Ref'].'</a>');
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultOperative['Ref'], 'toolText' => $resultOperative['Gerencia']);
             } else{
