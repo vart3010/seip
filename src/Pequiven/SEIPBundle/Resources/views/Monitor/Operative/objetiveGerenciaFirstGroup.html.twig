@@ -2,11 +2,11 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
     <hgroup id="main-title" class="thin">
-        <h1>{{ "principal.title.objTactic"|trans }}</h1>
+        <h1>{{ "principal.title.objOperative"|trans }}</h1>
         <h2>{{ "now"|date("d/m/Y") }}</h2>
     </hgroup>
         
-    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }})" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }},'{{ "principal.chart.captionObjOperative"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
     <p class="button-height">
         <a href="{{ path('pequiven_seip_menu_home') }}" class="button red-gradient">{{ "principal.button.tactic"|trans }}</a>
         <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
@@ -20,7 +20,7 @@
             <ul class="stats">
                 {% for data in dataLinkOperative %}
                     <li>
-                        <a style="color: #ffffff;" href="javascript:void(0);">
+                        <a style="color: #ffffff;" href="{{ data.linkTypeGroup }}">
                             {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
                         </a>
                     </li>

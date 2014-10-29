@@ -56,3 +56,7 @@ Update: Actualización
 chart:
     captionObjTactic: Objetivos Tácticos
     captionObjOperative: Objetivos Operativos
+    objetives:
+        xAxisName: Gerencias
+        pYAxisName: N° de Objetivos
+        sYAxisName: % Carga

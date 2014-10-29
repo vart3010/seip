@@ -196,9 +196,9 @@ class Monitor extends baseMonitor {
     private $gerencia;
     
     /**
-     * @var string
-     * 
-     * @ORM\Column(name="type_group", type="string", length=4, nullable=true)
+     @var \Pequiven\MasterBundle\Entity\GerenciaGroup
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaGroup")
+     * @ORM\JoinColumn(name="fk_type_group", referencedColumnName="id")
      */
     private $typeGroup;
 
@@ -742,13 +742,14 @@ class Monitor extends baseMonitor {
         return $this->gerencia;
     }
 
+
     /**
      * Set typeGroup
      *
-     * @param string $typeGroup
+     * @param \Pequiven\MasterBundle\Entity\GerenciaGroup $typeGroup
      * @return Monitor
      */
-    public function setTypeGroup($typeGroup)
+    public function setTypeGroup(\Pequiven\MasterBundle\Entity\GerenciaGroup $typeGroup = null)
     {
         $this->typeGroup = $typeGroup;
 
@@ -758,7 +759,7 @@ class Monitor extends baseMonitor {
     /**
      * Get typeGroup
      *
-     * @return string 
+     * @return \Pequiven\MasterBundle\Entity\GerenciaGroup 
      */
     public function getTypeGroup()
     {

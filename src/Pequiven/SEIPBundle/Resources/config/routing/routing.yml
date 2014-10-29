@@ -23,3 +23,10 @@ monitorObjetiveTacticByGroup:
     defaults:
         _controller: pequiven.controller.seipmonitor:displayObjetiveTacticByGroupAction
     methods: [GET]
+
+#Monitor de Objetivos Operativos por Grupo de Gerencia de 1ra Línea
+monitorObjetiveOperativeByGroup:
+    path: /monitor/operative/{typeGroup}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayObjetiveOperativeByGroupAction
+    methods: [GET]

@@ -866,25 +866,26 @@ angular.module('seipModule.controllers', [])
         })
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
-            $scope.renderChartTactic = function(id,categories,dataPlanTactic,dataRealTactic,dataPorcTactic) {
+            $scope.renderChartTactic = function(id,categories,dataPlanTactic,dataRealTactic,dataPorcTactic,caption,typeLabelDisplay) {
                 FusionCharts.ready(function() {
                     var revenueChartTactic = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
-                        "width": "600",
+                        "width": "100%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": Translator.trans('chart.captionObjTactic'),
-                                "xAxisName": "Gerencias",
-                                "pYAxisName": "N° de Objetivos",
-                                "sYAxisName": "% Carga",
+                                "caption": caption,
+                                "xAxisName": Translator.trans('chart.objetives.xAxisName'),
+                                "pYAxisName": Translator.trans('chart.objetives.pYAxisName'),
+                                "sYAxisName": Translator.trans('chart.objetives.sYAxisName'),
                                 "sYAxisMaxValue": "100",
                                 "sYAxisMinValue": "0",
                                 "showValues" : "1",
                                 "placeValuesInside": "0",
                                 "valueFontColor": "#000000",
                                 "rotateValues": "0",
+                                "labelDisplay": typeLabelDisplay,
                                 "sNumberSuffix": "%",
                                 "bgAlpha" : "0,0",
                                 "baseFontColor" : "#ffffff",
@@ -908,7 +909,7 @@ angular.module('seipModule.controllers', [])
                                     "data": dataRealTactic
                                 },
                                 {
-                                    "seriesname": "Porc",
+                                    "seriesname": "Carg",
                                     "parentYAxis": "S",
                                     "renderas": "column",
                                     "data": dataPorcTactic
@@ -921,25 +922,26 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartOperative = function(id,categories,dataPlanOperative,dataRealOperative,dataPorcOperative) {
+            $scope.renderChartOperative = function(id,categories,dataPlanOperative,dataRealOperative,dataPorcOperative,caption,typeLabelDisplay) {
                 FusionCharts.ready(function() {
                     var revenueChartOperative = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
-                        "width": "600",
+                        "width": "100%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": Translator.trans('chart.captionObjOperative'),
-                                "xAxisName": "Gerencias",
-                                "pYAxisName": "N° de Objetivos",
-                                "sYAxisName": "% Carga",
+                                "caption": caption,
+                                "xAxisName": Translator.trans('chart.objetives.xAxisName'),
+                                "pYAxisName": Translator.trans('chart.objetives.pYAxisName'),
+                                "sYAxisName": Translator.trans('chart.objetives.sYAxisName'),
                                 "sYAxisMaxValue": "100",
                                 "sYAxisMinValue": "0",
                                 "showValues" : "1",
                                 "placeValuesInside": "0",
                                 "valueFontColor": "#000000",
                                 "rotateValues": "0",
+                                "labelDisplay": typeLabelDisplay,
                                 "sNumberSuffix": "%",
                                 "bgAlpha" : "0,0",
                                 "baseFontColor" : "#ffffff",
@@ -964,7 +966,7 @@ angular.module('seipModule.controllers', [])
                                     "data": dataRealOperative
                                 },
                                 {
-                                    "seriesname": "Porc",
+                                    "seriesname": "Carg",
                                     "parentYAxis": "S",
                                     "renderas": "column",
                                     "data": dataPorcOperative

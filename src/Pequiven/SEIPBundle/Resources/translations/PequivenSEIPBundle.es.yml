@@ -134,8 +134,12 @@ monitor:
 principal:
     title: 
         principal: Principal
-        objTactic: Objetivos Operativos
+        objTactic: Objetivos Tácticos
+        objOperative: Objetivos Operativos
     button:
         tactic: Táctico
         operative: Operativo
         arrangementProgram: Programas de Gestión
+    chart:
+        captionObjTactic: Objetivos Tacticos
+        captionObjOperative: Objetivos Operativos

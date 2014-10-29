@@ -52,13 +52,16 @@ class MonitorRepository extends EntityRepository {
         $queryBuilder = $this->getCollectionQueryBuilder();
         
         if(!isset($options['typeGroup'])){
-            $queryBuilder->select('o.typeGroup');
+            $queryBuilder->select('gg.description AS Descripcion,gg.groupName AS Grupo');
             $queryBuilder->addSelect('SUM(o.objTacticOriginal) AS PlanObjTactic');
             $queryBuilder->addSelect('SUM(o.objTacticOriginalReal) AS RealObjTactic');
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->groupBy('o.typeGroup');
         } else{
-            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,objTacticOriginalReal AS RealObjTactic');
-            $queryBuilder->andWhere("o.typeGroup = '" . $options['typeGroup'] . "'");
+            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,o.objTacticOriginalReal AS RealObjTactic,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo');
+            $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->innerJoin('o.gerencia', 'g');
         }
         
         $q = $queryBuilder->getQuery();
@@ -71,12 +74,21 @@ class MonitorRepository extends EntityRepository {
      * Función que retorna el total de Objetivos Operativos por grupos de Gerencia de 1ra Línea
      * @return type
      */
-    public function getTotalObjetivesOperativeByGerenciaGroup(){
+    public function getTotalObjetivesOperativeByGerenciaGroup($options = array()){
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->select('o.typeGroup');
-        $queryBuilder->addSelect('SUM(o.objOperativeOriginal) AS PlanObjOperative');
-        $queryBuilder->addSelect('SUM(o.objOperativeOriginalReal) AS RealObjOperative');
-        $queryBuilder->groupBy('o.typeGroup');
+        
+        if(!isset($options['typeGroup'])){
+            $queryBuilder->select('gg.description AS Descripcion,gg.groupName AS Grupo');
+            $queryBuilder->addSelect('SUM(o.objOperativeOriginal) AS PlanObjOperative');
+            $queryBuilder->addSelect('SUM(o.objOperativeOriginalReal) AS RealObjOperative');
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->groupBy('o.typeGroup');
+        } else{
+            $queryBuilder->select('o.objOperativeOriginal AS PlanObjOperative,o.objOperativeOriginalReal AS RealObjOperative,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo');
+            $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->innerJoin('o.gerencia', 'g');
+        }
         
         $q = $queryBuilder->getQuery();
 //        var_dump($q->getSQL());

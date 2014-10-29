@@ -15,25 +15,16 @@ class DefaultController extends Controller {
      * @Template()
      */
     public function indexAction() {
-        $categories = array();
-        $categories[] = array('label' => "Comercializadoras");
-        $categories[] = array('label' => "Complejos");
-        $categories[] = array('label' => "Sede Corporativa");
-        $categories[] = array('label' => "Proyectos");
         
         $datas = $this->getDataObjetivesChart();
-        $i = 0;
-        foreach($datas['dataLinkTactic'] as $data){
-            $datas['dataLinkTactic'][$i]['typeGroup'] = $categories[$i]['label'];
-            $i++;
-        }
         
         return array(
             'dataPlanTactic' => $datas['dataPlanTactic'],
             'dataRealTactic' => $datas['dataRealTactic'],
             'dataPorcTactic' => $datas['dataPorcTactic'],
             'dataLinkTactic' => $datas['dataLinkTactic'],
-            'categories' => $categories
+            'optionsChart' => $datas['optionsChart'],
+            'categories' => $datas['categories']
                 );
     }
 
@@ -48,21 +39,27 @@ class DefaultController extends Controller {
         $dataPlanTactic = array();
         $dataPorcTactic = array();
         $dataLinkTactic = array();
+        $categories = array();
         
         //Resultados Tácticos
         $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesTacticByGerenciaGroup();
-        //var_dump($results);
+        
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
             $dataPorcTactic[] = array('value' => $resTactic);
             $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic']);
             $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
-            $dataLinkTactic[] = array('typeGroup' => $resultTactic['typeGroup'],'porcCarga' => $resTactic, 'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['typeGroup'])));
+            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic, 'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo'])));
+            $categories[] = array('label' => $resultTactic['Descripcion']);
         }
+        $optionsChart = array('typeLabel' => 'auto');
+        
         $datas['dataPorcTactic'] = $dataPorcTactic;
         $datas['dataPlanTactic'] = $dataPlanTactic;
         $datas['dataRealTactic'] = $dataRealTactic;
         $datas['dataLinkTactic'] = $dataLinkTactic;
+        $datas['categories'] = $categories;
+        $datas['optionsChart'] = $optionsChart;
         
         return $datas;
     }
