@@ -21,12 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
- * Description of GerenciaSecondController
+ * Controlador de gerencia de primera linea
  *
  * @author matias
  */
 class GerenciaController extends baseController {
-    //put your code here
     
     /**
      * @Template("PequivenMasterBundle:Gerencia:list.html.twig")
