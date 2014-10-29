@@ -14,27 +14,22 @@ class ConfigurationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $parametersUser = array(
+            'class' => 'Pequiven\SEIPBundle\Entity\User',
+                'property' => 'fullNameUser',
+                'attr' => array(
+                    'class' => 'select2 input-xlarge'
+                ),
+                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
+                    return $qb->findQueryUsersByCriteria();
+                },
+                'multiple' => true,
+        );
         $builder
-            ->add('arrangementProgramUserToRevisers',null,array(
-                'attr' => array(
-                    'class' => 'select2 input-xlarge'
-                )
-            ))
-            ->add('arrangementProgramUsersToApproveTactical',null,array(
-                'attr' => array(
-                    'class' => 'select2 input-xlarge'
-                )
-            ))
-            ->add('arrangementProgramUsersToApproveOperative',null,array(
-                'attr' => array(
-                    'class' => 'select2 input-xlarge'
-                )
-            ))
-            ->add('arrangementProgramUsersToNotify',null,array(
-                'attr' => array(
-                    'class' => 'select2 input-xlarge'
-                )
-            ))
+            ->add('arrangementProgramUserToRevisers','entity',$parametersUser)
+            ->add('arrangementProgramUsersToApproveTactical',null,$parametersUser)
+            ->add('arrangementProgramUsersToApproveOperative',null,$parametersUser)
+            ->add('arrangementProgramUsersToNotify',null,$parametersUser)
         ;
     }
     

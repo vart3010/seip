@@ -16,13 +16,10 @@ class GerenciaType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('ref')
             ->add('abbreviation')
             ->add('modular')
             ->add('vinculante')
             ->add('enabled')
-            ->add('userCreatedAt')
-            ->add('userUpdatedAt')
             ->add('complejo')
             ->add('direction')
             ->add('configuration',new Gerencia\ConfigurationType())

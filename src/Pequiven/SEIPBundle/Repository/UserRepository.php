@@ -90,6 +90,10 @@ class UserRepository extends EntityRepository
     }
     
     function findUsersByCriteria(array $criteria = array()) {
+        return $this->findQueryUsersByCriteria($criteria)->getQuery()->getResult();
+    }
+    
+    function findQueryUsersByCriteria(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
         $qb
            ->addSelect('g')
@@ -102,7 +106,7 @@ class UserRepository extends EntityRepository
         $qb
             ->andWhere('g.level < :level')
             ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
     
     protected function getAlias() {

@@ -3,7 +3,6 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
-    {{ dump(_context|keys)}}
     <form action="{{ path('pequiven_gerenciafirst_update',{id:gerenciafirst.id} ) }}" method="POST" >
         <input type="hidden" name="_method" value="PUT">
         {{ form_widget(form) }}
