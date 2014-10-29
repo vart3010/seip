@@ -1,7 +1,17 @@
 pequiven_gerenciafirst_show:
-    path: /adminMaster/gerencia-first/{id}
+    path: /{id}
     defaults:
         _controller: pequiven.controller.gerenciafirst:showAction
     requirements:
         id: "\d+"
     methods: [GET]
+    
+pequiven_gerenciafirst_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.gerenciafirst:updateAction
+        _sylius:
+            form: pequiven_masterbundle_gerencia
+    requirements:
+        id: "\d+"
+    methods: [GET|POST|PUT]

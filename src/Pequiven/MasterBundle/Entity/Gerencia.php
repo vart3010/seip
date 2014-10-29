@@ -120,7 +120,7 @@ class Gerencia extends modelGerencia
      * Configuracion de la gerencia
      * 
      * @var \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
-     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
+     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration",cascade={"persist","remove"})
      */
     protected $configuration;
 
