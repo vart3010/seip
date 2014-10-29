@@ -25,8 +25,9 @@
                     <ul class="stats">
                         {% for data in dataLinkOperative %}
                             <li>
-                                <a style="color: #ffffff;" href="javascript:void(0);">
-                                    {{ data.typeGroup }}: <h2>{{ data.porcCarga }}%</h2>
+                                <a href="javascript:void(0);">
+                                    {{ data.typeGroup }}<br>
+                                    <b style="font-size:25px">{{ data.porcCarga }}%</b>
                                 </a>
                             </li>
                         {% endfor %}
@@ -36,6 +37,11 @@
         </div>
     </div>
 {% endblock body %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
