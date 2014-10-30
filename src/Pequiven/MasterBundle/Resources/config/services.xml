@@ -38,6 +38,10 @@
         <service id="pequiven.repository.type_goal" class="Pequiven\MasterBundle\Repository\ArrangementProgram\TypeGoalRepository">
             <tag name="app.repository" class="Pequiven\MasterBundle\Entity\ArrangementProgram\TypeGoal" />
         </service>
+        
+        <service id="pequiven.form.gerencia_type" class="Pequiven\MasterBundle\Form\GerenciaType">
+            <tag name="form.type" alias="pequiven_masterbundle_gerencia" />
+        </service>
     </services>
     
 </container>

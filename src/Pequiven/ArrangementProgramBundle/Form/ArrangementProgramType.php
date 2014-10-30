@@ -53,7 +53,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                         'label' => 'pequiven.form.operational_objective',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
-                            'class' => "select2 input-xxlarge",
+                            'class' => "select2 input-xlarge",
 //                            'disabled' => 'disabled',
 //                            'ng-model' => 'model.arrangementProgram.operationalObjective',
 //                            'ng-options' => 'value as value.description for (key,value) in data.operationalObjectives',
@@ -97,7 +97,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                         'label' => 'pequiven.form.tactical_objective',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
-                            'class' => "select2 input-xxlarge"
+                            'class' => "select2 input-xlarge",
                         ),
                         'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
                             return $repository->findQueryObjetivesTactic();
@@ -124,7 +124,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                         'label' => 'pequiven.form.tactical_objective',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
-                            'class' => "select2 input-xxlarge",
+                            'class' => "select2 input-xlarge",
                         ),
                         'query_builder' => function(\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository){
                             return $repository->findQueryObjetivesTactic();

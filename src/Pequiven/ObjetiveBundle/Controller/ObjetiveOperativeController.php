@@ -42,27 +42,18 @@ class ObjetiveOperativeController extends baseController {
     /**
      * Finds and displays a Objetive entity of level Operative by Id.
      *
-     * @Template("PequivenObjetiveBundle:Operative:show.html.twig")
      */
     public function showAction(Request $request)
     {
-        $id = $request->get("id");
-        //$ref = $request->get("ref");
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
-        //$entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $ref));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Objetive entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity
-            //'delete_form' => $deleteForm->createView(),
-        );
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
+            ->setTemplateVar('entity')
+            ->setData($this->findOr404($request))
+        ;
+        $groups = array_merge(array('api_list','gerencia'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
+        return $this->handleView($view);
     }
 
     /**

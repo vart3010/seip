@@ -148,22 +148,31 @@ objetiveStrategic_show:
             
 #Muestra un Objetivo Táctico
 objetiveTactic_show:
-    path: /arrangement_strategic_objetive/tactic/show/{id}
+    path: /arrangement_strategic_objetive/tactic/show/{id}.{_format}
     defaults: 
         _controller: pequiven.controller.objetivetactic:showAction
+        _format: html
     requirements:
         id: "\d+"
+        _format: html|json|xml
     methods: [GET]
+    options:
+        expose:
+            true
             
 #Muestra un Objetivo Operativo
 objetiveOperative_show:
-    path: /arrangement_strategic_objetive/operative/show/{id}
+    path: /arrangement_strategic_objetive/operative/show/{id}.{_format}
     defaults: 
         _controller: pequiven.controller.objetiveoperative:showAction
+        _format: html
     requirements:
         id: "\d+"
+        _format: html|json|xml
     methods: [GET]
-    
+    options:
+        expose:
+            true
 #Devuelve el paginador con la data de los objetivos tácticos
 monitorTacticList:
     path: /monitor/list/tactic
