@@ -5,7 +5,7 @@
 <fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
     <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
     
-    <div class="field-block button-height" ng-init="entity = {{ entity|serialize }}">
+    <div class="field-block button-height" ng-init="setEntity({{ entity|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }})">
         <label class="label">{{ "pequiven.form.period"|trans }}</label>
         <b>{{ entity.period }}</b>
     </div>

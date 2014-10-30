@@ -229,6 +229,7 @@ angular.module('seipModule.controllers', [])
                     operationalObjective.select2('enable', false);
                 }
             };
+            
             tacticalObjective.on('change', function(e) {
                 if (e.val) {
                     if($scope.entity.type == 1){
@@ -258,11 +259,7 @@ angular.module('seipModule.controllers', [])
                 }
             });
             operationalObjective.on('change',function(){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("objetiveOperative_show", {id: operationalObjective.val(),_format: 'json',_groups:['complejo'] })).success(function(data) {
-                    $scope.complejo = data.complejo;
-                    notificationBarService.getLoadStatus().done();
-                });
+                $scope.getLocationByOperative(operationalObjective.val());
             });
             programResponsible.on('change', function(object) {
                 var reponsibleId = object.val;
@@ -296,7 +293,24 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().done();
                 });
             };
-
+            $scope.getLocationByOperative = function(val){
+                notificationBarService.getLoadStatus().loading();
+                $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                    $scope.complejo = data.complejo;
+                    notificationBarService.getLoadStatus().done();
+                });
+            };
+            
+            $scope.setEntity = function (entity){
+                $scope.entity = entity;
+                if($scope.entity.type == 1){
+                    $scope.getLocationByTactical(tacticalObjective.val());
+                }
+                if($scope.entity.type == 2){
+                    $scope.getLocationByOperative(operationalObjective.val());
+                }
+            };
+            
             $scope.formReady = false;
             var form = angular.element('form');
             form.submit(function(e) {
