@@ -100,7 +100,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         
         //Habilitar la carga de lo real
         $isLoadRealEnabled = true;
-        if(!$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram)){
+        if(!$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram) && 
+            !$this->getArrangementProgramManager()->isAllowToApprove($arrangementProgram)
+            ){
             $isLoadRealEnabled = false;
         }
         //Habilitar la carga de los planeado
@@ -126,7 +128,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         }
         
         //Habilitar carga de valores reales de meses adelantados
-        $isEnabledLoadRealFuture = false;
+        $isEnabledLoadRealFuture = true;
         //Habilitar la carga de valores reales atrasados
         $isEnabledLoadRealLate = true;
         //Habilitar edicion del valor real dependiendo si la planeada no esta vacia
