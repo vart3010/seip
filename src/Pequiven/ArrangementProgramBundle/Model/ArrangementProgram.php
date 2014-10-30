@@ -271,7 +271,7 @@ abstract class ArrangementProgram
                         if($limitMonthToNow === true){
                             $plannedString = lcfirst(str_replace('get', '', $methodName));
                             $plannedMonth = GoalDetails::getMonthOfPlanned($plannedString);
-                            if($month > $plannedMonth){
+                            if($plannedMonth > $month){
                                 continue;
                             }
                         }

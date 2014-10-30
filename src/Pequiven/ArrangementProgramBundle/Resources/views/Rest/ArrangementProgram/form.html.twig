@@ -47,6 +47,7 @@
 {% block javascript %}
     <script type="text/javascript">
         var advancesPlanned = {{ summary['advancesPlanned'] }};
+        var month = '{{ 'now'|date('m') }}';
         Ext.require([
             'Ext.grid.*',
             'Ext.data.*',
@@ -124,7 +125,10 @@
                     }
                     return value;
                 };
-                
+                var monthsPlanned = {{ monthsPlanned | json_encode()|raw }};
+                var getMonthOfPlanned = function(key){
+                    return monthsPlanned[key];
+                };
                 var summaryTypeOfSummary  = function (records,property){
                     var i, length, data, average, total, subAverage;
                                 length = records.length;
@@ -426,7 +430,7 @@
                                 return formatNumber(d) + '%';
                             },
                             summaryType: function (records, values) {
-                                var i,key,value=0,summary;
+                                var i,key,value=0,summary,valuePlanned = 0,plannedMonth = 0;
                                 for(i=0 ; i < 1; i++){
                                     var data = records[i].data;
                                     for(key in data){
@@ -434,8 +438,16 @@
                                             summary = calculateSummaryRenderer(records, values, key);
                                             value = value + summary;
                                         }
+                                        if (key.match('Planned')) {
+                                            plannedMonth  = getMonthOfPlanned(key);
+                                            if(!(plannedMonth > month)){
+                                                summary = calculateSummaryRenderer(records, values, key);
+                                                valuePlanned = valuePlanned + summary;
+                                            }
+                                        }
                                     }
                                 }
+                                advancesPlanned = valuePlanned;
                                 var spanProgramSummary = Ext.query('#program_summary');
                                 spanProgramSummary[0].innerText = formatNumber(value);
                                 var tenPercentage = advancesPlanned - ( advancesPlanned * 0.10);
@@ -447,8 +459,13 @@
                                 }else if(value < tenPercentage){
                                     classSummary = 'red-bg';
                                 }
+                                if(advancesPlanned == 0){
+                                    classSummary = '';
+                                }
 
                                 var spanProgramSummaryContainer = Ext.query('#program_summary_container');
+                                var spanProgramPlannedContainer = Ext.query('#program_planned');
+                                spanProgramPlannedContainer[0].innerText = formatNumber(advancesPlanned);
                                 spanProgramSummaryContainer[0].className='tag '+classSummary;
                                 summary = 0;
                                 for(i in values){
@@ -946,7 +963,7 @@
     <br/>
     <b>{{ 'pequiven.ref'|trans({},'messages') }}:</b> {{ entity.ref }}
     <br/>
-    <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b>&nbsp;<small class="tag" id="program_summary_container"><span id="program_summary">0</span>/{{ summary['advancesPlanned'] }}%</small>
+    <b>{{ "pequiven.arrangement_program.advances_in_details"|trans }}:</b>&nbsp;<small class="tag" id="program_summary_container"><span id="program_summary">0</span>/<span id="program_planned">0</span>%</small>
     <div id="table-summary"></div>
     <br/><br/>
     <div id="grid-example-2"></div>
