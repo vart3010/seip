@@ -30,3 +30,12 @@ monitorObjetiveOperativeByGroup:
     defaults:
         _controller: pequiven.controller.seipmonitor:displayObjetiveOperativeByGroupAction
     methods: [GET]
+    
+#Lista de Objetivos Tácticos por Gerencia de 1ra Línea
+listObjetiveTacticByGroup:
+    path: /list/tactic/{idGerencia}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:listObjetiveTacticByGroupAction
+    requirements:
+        idGerencia: "\d+"
+    methods: [GET]

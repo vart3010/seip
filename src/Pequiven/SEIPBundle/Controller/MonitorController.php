@@ -318,4 +318,20 @@ class MonitorController extends baseController {
         
         return $datas;
     }
+    
+    /**
+     * Función que retorna la vista con la lista de los objetivos tácticos
+     * @Template("PequivenSEIPBundle:Monitor:Tactic/viewObjetiveByGerenciaFirst.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function listObjetiveTacticByGroupAction(Request $request){
+        $idGerencia = $request->get('idGerencia');
+        
+        $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idgerencia)));
+        
+        return array(
+            'url' => $url
+        );
+    }
 }
