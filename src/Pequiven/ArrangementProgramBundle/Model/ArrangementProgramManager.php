@@ -122,7 +122,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
     public function hasPermissionToNotify(ArrangementProgram $entity) {
         //Security check
         $permission = true;
-        if ($entity->isNotificable() === false || $this->isAllowToNotity($entity) === false) {
+        if ($entity->isNotificable() === false || ($this->isAllowToNotity($entity) === false && $this->isAllowToApprove($entity) && $this->isAllowToReview($entity))) {
             $permission = false;
         }
         return $permission;
