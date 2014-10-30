@@ -10,10 +10,10 @@
 
         <li>
             <span class="event-date orange">{{ summaryTactical|length }}</span>
-            <a href="javascript:void(0);" class="event-description">
+            <span class="event-description">
                 <h4>{{ 'pequiven.arrangement_program.type.tactics'|trans }}</h4>
                 <p>Programas tacticos pendiente de aprobación</p>
-            </a>
+            </span>
         </li>
 
         <li>
@@ -24,7 +24,7 @@
             </span>
         </li>
 
-        <li>
+        {#<li>
             <span class="event-date with-month">
                {{ (summaryTactical|length)+(summaryOperative|length) }} <span class="event-month">Total</span>
             </span>
@@ -35,7 +35,7 @@
                 <span class="button-icon"><span class="icon-tick"></span></span>
                 Aprobar
             </a>
-        </li>
+        </li>#}
 
     </ul>
 </div>

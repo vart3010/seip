@@ -41,6 +41,19 @@ class ArrangementProgramRepository extends EntityRepository
             ->andWhere('ap.status = :status')  
             ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REVISED)
             ;
+        $qb
+            ->innerJoin('ap.tacticalObjective','to')
+            ->innerJoin('to.gerencia','to_g')
+            ->innerJoin('to_g.configuration','to_g_c');
+        if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            $qb->innerJoin('to_g_c.arrangementProgramUsersToApproveTactical', 'to_g_c_apt')
+               ->andWhere('to_g_c_apt.id = :user');
+        }else if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            $qb->innerJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap')
+               ->andWhere('to_g_c_ap.id = :user');
+        }
+        $qb->setParameter('user', $this->getUser());
+        
         return $qb->getQuery()->getResult();
     }
     
