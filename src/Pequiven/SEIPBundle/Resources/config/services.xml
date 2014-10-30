@@ -98,8 +98,16 @@
         <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Modelo de Caja Indicadores Tácticos por Grupo de Gerencia de 1ra Línea -->
+        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorChargedByGroup">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         <!-- Modelo de Caja Indicadores Operativos Agrupados por Grupo de Gerencia de 1ra Línea -->
         <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorCharged">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
+        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
     </services>

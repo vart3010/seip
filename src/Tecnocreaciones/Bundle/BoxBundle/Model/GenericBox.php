@@ -37,6 +37,17 @@ abstract class GenericBox implements ContainerAwareInterface,BoxInterface
         $this->container = $container;
     }
     
+    /**
+     * Shortcut to return the request service.
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     *
+     */
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+    
    /**
      * Shortcut to return the Doctrine Registry service.
      *

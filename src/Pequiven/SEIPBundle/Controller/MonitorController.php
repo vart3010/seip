@@ -160,7 +160,7 @@ class MonitorController extends baseController {
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('groupName' => $typeGroup));
 
         $datas = $this->getDataObjetiveTacticByGroupChart($typeGroup);
-        
+        $boxRender = $this->get('tecnocreaciones_box.render');
         return array(
             'dataPlanTactic' => $datas['dataPlanTactic'],
             'dataRealTactic' => $datas['dataRealTactic'],
@@ -168,6 +168,7 @@ class MonitorController extends baseController {
             'dataLinkTactic' => $datas['dataLinkTactic'],
             'categories' => $datas['categories'],
             'gerenciaGroup' => $objectGerenciaGroup,
+            'boxRender' => $boxRender,
             'optionsChart' => $datas['optionsChart']
         );
     }
@@ -186,6 +187,7 @@ class MonitorController extends baseController {
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('groupName' => $typeGroup));
 
         $datas = $this->getDataObjetiveOperativeByGroupChart($typeGroup);
+        $boxRender = $this->get('tecnocreaciones_box.render');
         
         return array(
             'dataPlanOperative' => $datas['dataPlanOperative'],
@@ -194,6 +196,7 @@ class MonitorController extends baseController {
             'dataLinkOperative' => $datas['dataLinkOperative'],
             'categories' => $datas['categories'],
             'gerenciaGroup' => $objectGerenciaGroup,
+            'boxRender' => $boxRender,
             'optionsChart' => $datas['optionsChart']
         );
     }
