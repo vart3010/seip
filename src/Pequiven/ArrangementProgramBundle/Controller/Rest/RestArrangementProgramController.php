@@ -72,7 +72,8 @@ class RestArrangementProgramController extends FOSRestController {
 //                        }
 //                    }
 //                }
-//            
+//          
+            $result['monthsPlanned'] = GoalDetails::getMonthsPlanned();
             $result['entity'] = $entity;
         }
         $view->setData($result);

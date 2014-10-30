@@ -232,7 +232,7 @@ angular.module('seipModule.controllers', [])
             
             tacticalObjective.on('change', function(e) {
                 if (e.val) {
-                    if($scope.entity.type == 1){
+                    if($scope.entityType == 1){
                         $scope.getLocationByTactical(e.val);
                     }else{
                         var tacticalObjetive = e.val;
@@ -286,27 +286,30 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.getLocationByTactical = function(value){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                    console.log(data);
-                    $scope.complejo = data.gerencia.complejo;
-                    notificationBarService.getLoadStatus().done();
-                });
+                if(value != ''){
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                        $scope.complejo = data.gerencia.complejo;
+                        notificationBarService.getLoadStatus().done();
+                    });
+                }
             };
             $scope.getLocationByOperative = function(val){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                    $scope.complejo = data.complejo;
-                    notificationBarService.getLoadStatus().done();
-                });
+                if(val != ''){
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                        $scope.complejo = data.complejo;
+                        notificationBarService.getLoadStatus().done();
+                    });
+                }
             };
             
-            $scope.setEntity = function (entity){
-                $scope.entity = entity;
-                if($scope.entity.type == 1){
+            $scope.setEntityType = function (entity){
+                $scope.entityType = entity;
+                if($scope.entityType == 1){
                     $scope.getLocationByTactical(tacticalObjective.val());
                 }
-                if($scope.entity.type == 2){
+                if($scope.entityType == 2){
                     $scope.getLocationByOperative(operationalObjective.val());
                 }
             };

@@ -248,7 +248,11 @@ abstract class ArrangementProgram
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
                 $goalDetails = $goal->getGoalDetails();
-                $weight = $goalDetails->getGoal()->getWeight();
+                $weight = 0;
+                if($goalDetails !== null && $goalDetails->getGoal() !== null){
+                    $weight = $goalDetails->getGoal()->getWeight();
+                    
+                }
                 $totalWeight += $weight;
                 $reflection = new \ReflectionClass($goalDetails);
                 $nameMatchReal = '^get\w+Real$';
@@ -271,7 +275,7 @@ abstract class ArrangementProgram
                         if($limitMonthToNow === true){
                             $plannedString = lcfirst(str_replace('get', '', $methodName));
                             $plannedMonth = GoalDetails::getMonthOfPlanned($plannedString);
-                            if($month > $plannedMonth){
+                            if($plannedMonth > $month){
                                 continue;
                             }
                         }
