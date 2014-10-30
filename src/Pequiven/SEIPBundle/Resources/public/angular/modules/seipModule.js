@@ -286,19 +286,22 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.getLocationByTactical = function(value){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                    console.log(data);
-                    $scope.complejo = data.gerencia.complejo;
-                    notificationBarService.getLoadStatus().done();
-                });
+                if(value != ''){
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                        $scope.complejo = data.gerencia.complejo;
+                        notificationBarService.getLoadStatus().done();
+                    });
+                }
             };
             $scope.getLocationByOperative = function(val){
-                notificationBarService.getLoadStatus().loading();
-                $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                    $scope.complejo = data.complejo;
-                    notificationBarService.getLoadStatus().done();
-                });
+                if(val != ''){
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
+                        $scope.complejo = data.complejo;
+                        notificationBarService.getLoadStatus().done();
+                    });
+                }
             };
             
             $scope.setEntity = function (entity){
