@@ -232,7 +232,7 @@ angular.module('seipModule.controllers', [])
             
             tacticalObjective.on('change', function(e) {
                 if (e.val) {
-                    if($scope.entity.type == 1){
+                    if($scope.entityType == 1){
                         $scope.getLocationByTactical(e.val);
                     }else{
                         var tacticalObjetive = e.val;
@@ -304,12 +304,12 @@ angular.module('seipModule.controllers', [])
                 }
             };
             
-            $scope.setEntity = function (entity){
-                $scope.entity = entity;
-                if($scope.entity.type == 1){
+            $scope.setEntityType = function (entity){
+                $scope.entityType = entity;
+                if($scope.entityType == 1){
                     $scope.getLocationByTactical(tacticalObjective.val());
                 }
-                if($scope.entity.type == 2){
+                if($scope.entityType == 2){
                     $scope.getLocationByOperative(operationalObjective.val());
                 }
             };
