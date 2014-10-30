@@ -935,17 +935,17 @@ angular.module('seipModule.controllers', [])
                             ],
                             "dataset":[
                                 {
-                                    "seriesname": "Plan",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNamePlan"),
                                     "parentYAxis": "P",
                                     "data": dataPlanTactic
                                 },
                                 {
-                                    "seriesname": "Real",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNameReal"),
                                     "parentYAxis": "P",
                                     "data": dataRealTactic
                                 },
                                 {
-                                    "seriesname": "Carg",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNameCarga"),
                                     "parentYAxis": "S",
                                     "renderas": "column",
                                     "data": dataPorcTactic
@@ -992,17 +992,17 @@ angular.module('seipModule.controllers', [])
                             ],
                             "dataset":[
                                 {
-                                    "seriesname": "Plan",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNamePlan"),
                                     "parentYAxis": "P",
                                     "data": dataPlanOperative
                                 },
                                 {
-                                    "seriesname": "Real",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNameReal"),
                                     "parentYAxis": "P",
                                     "data": dataRealOperative
                                 },
                                 {
-                                    "seriesname": "Carg",
+                                    "seriesname": Translator.trans("chart.objetives.seriesNameCarga"),
                                     "parentYAxis": "S",
                                     "renderas": "column",
                                     "data": dataPorcOperative
