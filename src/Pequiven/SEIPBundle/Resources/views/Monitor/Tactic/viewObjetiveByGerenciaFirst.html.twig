@@ -23,7 +23,7 @@
     <div ng-controller="TableGroupingFormatController">
         <div ng-controller="TableObjetiveTacticController">
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ url }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody ng-repeat="group in $groups">
                         <tr class="ng-table-group">
                             <td colspan="{$ $columns.length $}">
