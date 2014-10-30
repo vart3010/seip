@@ -86,7 +86,7 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->groupBy('o.typeGroup');
         } else{
-            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,o.objTacticOriginalReal AS RealObjTactic,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo');
+            $queryBuilder->select('o.objTacticOriginal AS PlanObjTactic,o.objTacticOriginalReal AS RealObjTactic,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia');
             $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->innerJoin('o.gerencia', 'g');

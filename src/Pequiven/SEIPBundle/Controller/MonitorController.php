@@ -256,10 +256,10 @@ class MonitorController extends baseController {
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-            $dataPorcTactic[] = array('value' => $resTactic);
+            $dataPorcTactic[] = array('value' => $resTactic, 'link' => 'N-'.$this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
             $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic']);
             $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
-            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic);
+            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic, 'urlGerencia' => $this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
             if($resultTactic['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultTactic['Ref'], 'toolText' => $resultTactic['Gerencia']);
@@ -326,9 +326,9 @@ class MonitorController extends baseController {
      * @return type
      */
     public function listObjetiveTacticByGroupAction(Request $request){
-        $idGerencia = $request->get('idGerencia');
+        $idGerencia = $request->get("idGerencia");
         
-        $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idgerencia)));
+        $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
         
         return array(
             'url' => $url
