@@ -125,3 +125,8 @@ END WHILE;
 END$$
 
 DELIMITER ;
+
+--
+-- Actualización de la tabla seip_c_gerencia
+--
+UPDATE  `seip_c_gerencia` SET  `ref` =  '' WHERE  `seip_c_gerencia`.`id` =13;
