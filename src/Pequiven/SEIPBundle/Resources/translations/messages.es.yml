@@ -60,3 +60,6 @@ chart:
         xAxisName: Gerencias
         pYAxisName: N° de Objetivos
         sYAxisName: % Carga
+        seriesNamePlan: Plan
+        seriesNameReal: Real
+        seriesNameCarga: % Carga

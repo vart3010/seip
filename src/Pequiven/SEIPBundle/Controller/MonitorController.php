@@ -297,10 +297,10 @@ class MonitorController extends baseController {
         
         foreach($resultsOperatives as $resultOperative){
             $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
-            $dataPorcOperative[] = array('value' => $resOperative);
+            $dataPorcOperative[] = array('value' => $resOperative, 'link' => 'N-'.$this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
             $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
             $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
-            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative);
+            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative, 'urlGerencia' => $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
             if($resultOperative['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultOperative['Ref'], 'toolText' => $resultOperative['Gerencia']);
@@ -320,7 +320,7 @@ class MonitorController extends baseController {
     }
     
     /**
-     * Función que retorna la vista con la lista de los objetivos tácticos
+     * Función que retorna la vista con la lista de los Objetivos Tácticos
      * @Template("PequivenSEIPBundle:Monitor:Tactic/viewObjetiveByGerenciaFirst.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
@@ -329,6 +329,22 @@ class MonitorController extends baseController {
         $idGerencia = $request->get("idGerencia");
         
         $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        
+        return array(
+            'url' => $url
+        );
+    }
+    
+    /**
+     * Función que retorna la vista con la lista de los Objetivos Operativos
+     * @Template("PequivenSEIPBundle:Monitor:Operative/viewObjetiveByGerenciaFirst.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function listObjetiveOperativeByGroupAction(Request $request){
+        $idGerencia = $request->get("idGerencia");
+        
+        $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
         
         return array(
             'url' => $url

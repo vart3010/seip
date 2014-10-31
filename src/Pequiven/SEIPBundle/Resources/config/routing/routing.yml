@@ -39,3 +39,12 @@ listObjetiveTacticByGroup:
     requirements:
         idGerencia: "\d+"
     methods: [GET]
+    
+#Lista de Objetivos Operativos por Gerencia de 1ra Línea
+listObjetiveOperativeByGroup:
+    path: /list/operative/{idGerencia}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:listObjetiveOperativeByGroupAction
+    requirements:
+        idGerencia: "\d+"
+    methods: [GET]
