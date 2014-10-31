@@ -57,11 +57,24 @@ class ArrangementProgramRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
     public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
         $this->getUser();
         return parent::createPaginator($criteria, $orderBy);
     }
     
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para revision o aprobacion
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
     public function createPaginatorByAssigned(array $criteria = null, array $orderBy = null) {
         $user = $this->getUser();
         
