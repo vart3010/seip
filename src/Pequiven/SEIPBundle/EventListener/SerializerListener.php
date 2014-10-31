@@ -75,7 +75,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 $valueGroupBy.= $parent->getRef() . $parent->getDescription();
             }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
-            $event->getVisitor()->addData('gerenciaSecond', $object->getGerenciaSecond()->getDescription());
+//            $event->getVisitor()->addData('gerenciaSecond', $object->getGerenciaSecond()->getDescription());
             $event->getVisitor()->addData('totalParents', count($parents));
             $data['self']['href'] = $this->generateUrl('objetiveOperative_show', array('id' => $object->getId()));
             $event->getVisitor()->addData('_links',$data);
