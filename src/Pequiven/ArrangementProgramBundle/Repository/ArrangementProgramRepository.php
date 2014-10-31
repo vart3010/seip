@@ -74,7 +74,13 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder
             ->innerJoin('to_g.configuration','to_g_c');
         
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUserToRevisers', 'to_g_c_apr');
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveTactical', 'to_g_c_apt');
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap');
         
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apr.id = :user','to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
+           
+        $queryBuilder->setParameter('user', $user);
         return $this->getPaginator($queryBuilder);
     }
     
