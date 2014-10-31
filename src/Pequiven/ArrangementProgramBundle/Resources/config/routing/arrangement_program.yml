@@ -7,6 +7,15 @@ pequiven_seip_arrangementprogram_index:
         _format: html|json|xml
     methods: [GET]
     
+pequiven_seip_arrangementprogram_assigned:
+    path: /assigned.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:assignedAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
 pequiven_arrangementprogram_create:
     path: /{type}/create
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:createAction }
@@ -28,6 +37,20 @@ arrangementprogram_revised:
         id: "\d+"
     methods: [GET]
     
+arrangementprogram_send_to_draft:
+    path: /{id}/send-to-draft
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:sendToDraftAction }
+    requirements:
+        id: "\d+"
+    methods: [POST]
+    
+arrangementprogram_return_to_review:
+    path: /{id}/return-to-review
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:returnToReviewAction }
+    requirements:
+        id: "\d+"
+    methods: [POST]
+    
 arrangementprogram_approved:
     path: /{id}/approved
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:approvedAction }
@@ -40,7 +63,7 @@ arrangementprogram_reject:
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:rejectAction }
     requirements:
         id: "\d+"
-    methods: [GET]
+    methods: [POST]
     
 arrangementprogram_send_to_review:
     path: /{id}/send-to-review

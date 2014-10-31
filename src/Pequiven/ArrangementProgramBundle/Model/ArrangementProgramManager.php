@@ -47,6 +47,9 @@ class ArrangementProgramManager implements ContainerAwareInterface
         if(!$configuration){
             return $valid;
         }
+        if($entity->getStatus() == ArrangementProgram::STATUS_REJECTED){
+            return $valid;
+        }
         $user = $this->getUser();
         
         if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
@@ -68,7 +71,41 @@ class ArrangementProgramManager implements ContainerAwareInterface
     public function isAllowToSendToReview(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
-        if( ($entity->getStatus() === ArrangementProgram::STATUS_DRAFT || $entity->getStatus() === ArrangementProgram::STATUS_REVISED ) &&
+        if( ($entity->getStatus() === ArrangementProgram::STATUS_DRAFT) &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
+            ){
+            $valid = true;
+        }
+
+        return $valid;
+    }
+    
+    /**
+     * Evalua si el usuario logeado tiene permisos para regresar el programa de gestion a borrador
+     * @param ArrangementProgram $entity
+     * @return boolean
+     */
+    public function isAllowToSendToDraft(ArrangementProgram $entity) {
+        $user = $this->getUser();
+        $valid = false;
+        if( ($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
+            ){
+            $valid = true;
+        }
+
+        return $valid;
+    }
+    
+    /**
+     * Evalua si el usuario logeado tiene permisos para regresar el programa de gestion a borrador
+     * @param ArrangementProgram $entity
+     * @return boolean
+     */
+    public function isAllowReturnToReview(ArrangementProgram $entity) {
+        $user = $this->getUser();
+        $valid = false;
+        if( ($entity->getStatus() === ArrangementProgram::STATUS_REVISED) &&
                 ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
             ){
             $valid = true;
@@ -93,6 +130,21 @@ class ArrangementProgramManager implements ContainerAwareInterface
             $permission = false;
         }
         return $permission;
+    }
+    
+    /**
+     * Verifica que se pueba aprobar un programa de gestion
+     * @param \Pequiven\ArrangementProgramBundle\Model\ArrangementProgram $entity
+     * @return boolean
+     */
+    public function isYouCanApprove(ArrangementProgram $entity)
+    {
+        $summary = $entity->getSummary();
+        $valid = false;
+        if($summary['advancesPlanned'] == 100){
+            $valid = true;
+        }
+        return $valid;
     }
     
     /**
@@ -122,7 +174,32 @@ class ArrangementProgramManager implements ContainerAwareInterface
     public function hasPermissionToNotify(ArrangementProgram $entity) {
         //Security check
         $permission = true;
-        if ($entity->isNotificable() === false || ($this->isAllowToNotity($entity) === false && $this->isAllowToApprove($entity) && $this->isAllowToReview($entity))) {
+        $user = $this->getUser();
+        if ($entity->isNotificable() === false || 
+            ($this->isAllowToNotity($entity) === false && 
+                $this->isAllowToApprove($entity) === false && 
+                $this->isAllowToReview($entity) === false && 
+                $entity->getCreatedBy() !== $user) === true ) {
+            $permission = false;
+        }
+        return $permission;
+    }
+
+    /**
+     * Evalua si el usuario logueado tiene permisos para notificar en el programa
+     * @param type $entity
+     * @throws type
+     */
+    public function hasPermissionToPlanned(ArrangementProgram $entity) {
+        //Security check
+        $user = $this->getUser();
+        $permission = true;
+        if (
+                $entity->isPlanneable() === false || 
+                ($this->isAllowToNotity($entity) === false && 
+                        $this->isAllowToApprove($entity) == false && 
+                        $this->isAllowToReview($entity) == false && 
+                        $entity->getCreatedBy() !== $user) === true) {
             $permission = false;
         }
         return $permission;

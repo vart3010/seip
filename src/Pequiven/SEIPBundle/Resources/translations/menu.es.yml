@@ -41,6 +41,7 @@ app:
                     arrangement_programs:
                         main: Programas de Gestión
                         list: Lista
+                        assigned: Asignados
                         add:
                             main: Añadir
                             tactic: Táctico

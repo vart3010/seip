@@ -95,7 +95,9 @@ class RestArrangementProgramController extends FOSRestController {
         }
         $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
 
-        if (!$this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram)) {
+        if (!$this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram)
+                && !$this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
+                ) {
             throw new AccessDeniedException();
         }
 
@@ -104,7 +106,24 @@ class RestArrangementProgramController extends FOSRestController {
 
         unset($dataRequest['id']);
         unset($dataRequest['null']);
-
+        
+        foreach ($dataRequest as $property => $value) {
+            $permission = true;
+            if(GoalDetails::isPlannedProperty($property) === true
+                && $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram) === false
+            ){
+                $permission = false;
+            }
+            if($arrangementProgram->isNotificable() == true && GoalDetails::isRealProperty($property) === true && 
+                    $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === false)
+            {
+                $permission = false;
+            }
+            if($permission === false){
+                throw new AccessDeniedException();
+            }
+        }
+        
         $form->submit($dataRequest, false);
         $success = false;
         if ($form->isValid()) {

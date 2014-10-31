@@ -62,12 +62,28 @@ class ArrangementProgramRepository extends EntityRepository
         return parent::createPaginator($criteria, $orderBy);
     }
     
+    public function createPaginatorByAssigned(array $criteria = null, array $orderBy = null) {
+        $user = $this->getUser();
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        $queryBuilder
+            ->innerJoin('to_g.configuration','to_g_c');
+        
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
         $queryBuilder
                     ->leftJoin('ap.tacticalObjective', 'to')
-                    ->leftJoin('to.gerencia', 'g')
+                    ->leftJoin('to.gerencia', 'to_g')
                     ->leftJoin('ap.operationalObjective', 'oo')
                     ->leftJoin('oo.gerenciaSecond', 'gs')
                 ;
@@ -90,7 +106,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         if(($complejo = $criteria->remove('complejo')) != null && $complejo > 0){
             $queryBuilder
-                    ->andWhere('g.complejo = :complejo')
+                    ->andWhere('to_g.complejo = :complejo')
                 ->setParameter('complejo', $complejo)
                 ;
         }
@@ -131,7 +147,7 @@ class ArrangementProgramRepository extends EntityRepository
         if(($firstLineManagement = $criteria->remove('firstLineManagement')) != null){
             $queryBuilder
                     
-                    ->andWhere('g.id = :firstLineManagement')
+                    ->andWhere('to_g.id = :firstLineManagement')
                 ->setParameter('firstLineManagement', $firstLineManagement)
                 ;
         }

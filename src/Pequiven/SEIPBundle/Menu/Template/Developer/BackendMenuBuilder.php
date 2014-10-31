@@ -356,14 +356,19 @@ class BackendMenuBuilder extends MenuBuilder
                         'uri' => null,
                         'labelAttributes' => array('icon' => 'icon-book',),
                     ))
-                    )
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.main', $section)));
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.main', $section)));
 
             $child
                 ->addChild('arrangement_programs.list', array(
                     'route' => 'pequiven_seip_arrangementprogram_index',
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.list', $section)));
+            
+            $child
+                ->addChild('arrangement_programs.assigned', array(
+                    'route' => 'pequiven_seip_arrangementprogram_assigned',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.assigned', $section)));
             
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(

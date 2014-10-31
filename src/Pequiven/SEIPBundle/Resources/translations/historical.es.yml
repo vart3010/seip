@@ -5,3 +5,5 @@ pequiven_seip:
         pre_approved: El programa de gestión fue aprobado.
         pre_send_to_review: El programa de gestión fue enviado a revisión.
         pre_rejected: El programa de gestión fue rechazado.
+        pre_send_to_draft: El programa de gestión se regreso a borrador.
+        pre_return_to_review: El programa de gestión se regreso a revisión.

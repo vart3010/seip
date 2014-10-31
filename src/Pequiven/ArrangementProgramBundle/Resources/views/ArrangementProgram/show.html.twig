@@ -135,14 +135,25 @@
             <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
         </p>
         <br/>
-        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-             <p class="inline-label">
-               <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
-                <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
-                <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100%</span>
-                <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100%</span>
-                <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100%</span>
-            </p>
+        <div class="columns">
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                 <p class="inline-label">
+                   <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
+                    <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
+                    <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100%</span>
+                    <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100%</span>
+                    <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100%</span>
+                </p>
+            </div>
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet" ng-init="totalPlanned={{ summary['advancesPlanned'] }}">
+                 <p class="inline-label">
+                   <label class="label">{{ "pequiven.arrangement_program.total_planned"|trans }}</label>
+                    <span ng-if="totalPlanned == 0" class="tag">{$ totalPlanned $}/100 %</span>
+                    <span ng-if="totalPlanned > 0 && totalPlanned < 100" class="tag orange-bg">{$ totalPlanned $}/100%</span>
+                    <span ng-if="totalPlanned == 100" class="tag green-bg">{$ totalPlanned $}/100%</span>
+                    <span ng-if="totalPlanned > 100" class="tag red-bg">{$ totalPlanned $}/100%</span>
+                </p>
+            </div>
         </div>
     </fieldset>
     
@@ -190,24 +201,23 @@
 <br /><br />
 
 <p class="button-height align-right">
+    {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
      {% if isAllowToReview == true %}
         {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW') 
         %}
-            {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+            {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'gradient':'green-gradient','icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+            {{ buttons.generic_modal(path('arrangementprogram_send_to_draft', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_draft'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.send_to_draft'|trans) ~ filedObservation}) }}
         {% endif %}
     {% endif %}
     {% if isAllowToApprove == true %}
-        {%
-             if (entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or
-                entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT')) and
-                entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED')
-        %}
-            {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
-            {{ buttons.generic_confirm(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans)}) }}
+        {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') %}
+            {{ buttons.generic_modal(path('arrangementprogram_return_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.return_to_review'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.return_to_review'|trans) ~ filedObservation}) }}
         {% endif %}
+        {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
+        {{ buttons.generic_modal(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans) ~ filedObservation}) }}
     {% endif %}
     {% if 
         entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') and

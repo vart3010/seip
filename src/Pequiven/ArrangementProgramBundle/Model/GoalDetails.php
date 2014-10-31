@@ -136,4 +136,47 @@ class GoalDetails {
         );
         return $months;
     }
+    
+    /**
+     * Evalua si la propiedad es una planificada
+     * @staticvar array $expressions
+     * @param type $property
+     * @return boolean
+     */
+    static function isPlannedProperty($property)
+    {
+        static $expressions = array(
+            '\w+Planned$',
+            '^get\w+Planned$'
+        );
+        $isPlanned = false;
+        foreach ($expressions as $expression) {
+            if(preg_match('/'.$expression.'/i', $property)){
+                $isPlanned = true;
+                break;
+            }
+        }
+        return $isPlanned;
+    }
+    /**
+     * Evalua si la propiedad es una real
+     * @staticvar array $expressions
+     * @param type $property
+     * @return boolean
+     */
+    static function isRealProperty($property)
+    {
+        static $expressions = array(
+            '\w+Real$',
+            '^get\w+Real$'
+        );
+        $isReal = false;
+        foreach ($expressions as $expression) {
+            if(preg_match('/'.$expression.'/i', $property)){
+                $isReal = true;
+                break;
+            }
+        }
+        return $isReal;
+    }
 }

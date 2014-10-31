@@ -314,8 +314,22 @@ abstract class ArrangementProgram
      * @return boolean
      */
     final public function isNotificable(){
+        $valid = false;
+        $status = array(self::STATUS_APPROVED);
+        if(in_array($this->status, $status,true)){
+            $valid = true;
+        }
+        return $valid;
+    }
+
+    /**
+     * Retorna true si se puede planificar en el programa de gestion
+     * 
+     * @return boolean
+     */
+    final public function isPlanneable(){
         $valid = true;
-        $status = array(self::STATUS_FINISHED,self::STATUS_CLOSED);
+        $status = array(self::STATUS_FINISHED,self::STATUS_CLOSED,self::STATUS_APPROVED,self::STATUS_REJECTED);
         if(in_array($this->status, $status,true)){
             $valid = false;
         }

@@ -99,14 +99,13 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $date = new DateTime();
         
         //Habilitar la carga de lo real
-        $isLoadRealEnabled = true;
-        if(!$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram) && 
-            !$this->getArrangementProgramManager()->isAllowToApprove($arrangementProgram)
+        $isLoadRealEnabled = false;
+        if($this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === true
             ){
-            $isLoadRealEnabled = false;
+            $isLoadRealEnabled = true;
         }
         //Habilitar la carga de los planeado
-        $isLoadPlannedEnabled = true;
+        $isLoadPlannedEnabled = false;
                 
         //Habilitar la carga de los planeado segun la fecha inicio y fin
         $isForceLoadPlannedEnabled = false;
@@ -117,14 +116,12 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
                 ){
             $isForceLoadPlannedEnabled = true;
         }
-        //Sino tiene permisos para modificar el programa de gestion
+        //Sino tiene permisos para planificar en el programa de gestion
         if(
-            !$this->getArrangementProgramManager()->isAllowToApprove($arrangementProgram) &&
-            !$this->getArrangementProgramManager()->isAllowToNotity($arrangementProgram) && 
-            !$this->getArrangementProgramManager()->isAllowToReview($arrangementProgram)
+            $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
             ){
-            $isLoadPlannedEnabled = false;
-            $isForceLoadPlannedEnabled = false;
+            $isLoadPlannedEnabled = true;
+            $isForceLoadPlannedEnabled = true;
         }
         
         //Habilitar carga de valores reales de meses adelantados
