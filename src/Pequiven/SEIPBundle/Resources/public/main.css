@@ -1,0 +1,67 @@
+.empty_row {
+    height: 70px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #e6e6e6;
+    font-size: 20px;
+}
+
+.input-mini,
+input.mini,
+textarea.mini,
+select.mini {
+  width: 60px;
+}
+.input-small,
+input.small,
+textarea.small,
+select.small {
+  width: 90px;
+}
+.input-medium,
+input.medium,
+textarea.medium,
+select.medium {
+  width: 150px;
+}
+.input-large,
+input.large,
+textarea.large,
+select.large {
+  width: 210px;
+}
+.input-xlarge,
+input.xlarge,
+textarea.xlarge,
+select.xlarge {
+  width: 270px;
+  min-width: 270px;
+}
+.input-xxlarge,
+input.xxlarge,
+textarea.xxlarge,
+select.xxlarge {
+  width: 530px;
+}
+
+.pull-right {
+    float: right;
+}
+
+.alert-danger-seip {
+    color: white;
+    font-weight: bold;
+}
+
+.semaphore {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}

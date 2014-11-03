@@ -9,10 +9,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
 
 /**
- * Gerencia
+ * Gerencia de primera linea
  *
  * @ORM\Table(name="seip_c_gerencia")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
+ * @author matias
  */
 class Gerencia extends modelGerencia
 {
@@ -56,26 +57,72 @@ class Gerencia extends modelGerencia
     private $userUpdatedAt;
 
     /**
+     * Descripción
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
-    private $description;
+    protected $description;
     
-    /** Complejo
+    /** 
+     * Complejo
      * @var=\Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
-    private $Complejo;
+    private $complejo;
+    
+    /** 
+     * Dirección
+     * @var \Pequiven\MasterBundle\Entity\Direction
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
+     * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
+     */
+    private $direction;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=100, nullable=true)
+     */
+    private $ref;
+    
+    /**
+     * Abreviatura
+     * @var string
+     *
+     * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
+     */
+    private $abbreviation;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="modular", type="boolean", nullable=true)
+     */
+    private $modular = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vinculante", type="boolean", nullable=true)
+     */
+    private $vinculante = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled;
+    private $enabled = true;
     
+    /**
+     * Configuracion de la gerencia
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration",cascade={"persist","remove"})
+     */
+    protected $configuration;
 
     /**
      * Get id
@@ -233,7 +280,7 @@ class Gerencia extends modelGerencia
      */
     public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
     {
-        $this->Complejo = $complejo;
+        $this->complejo = $complejo;
 
         return $this;
     }
@@ -245,6 +292,131 @@ class Gerencia extends modelGerencia
      */
     public function getComplejo()
     {
-        return $this->Complejo;
+        return $this->complejo;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     * @return Gerencia
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string 
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
+     * Set modular
+     *
+     * @param boolean $modular
+     * @return Gerencia
+     */
+    public function setModular($modular)
+    {
+        $this->modular = $modular;
+
+        return $this;
+    }
+
+    /**
+     * Get modular
+     *
+     * @return boolean 
+     */
+    public function getModular()
+    {
+        return $this->modular;
+    }
+
+    /**
+     * Set vinculante
+     *
+     * @param boolean $vinculante
+     * @return Gerencia
+     */
+    public function setVinculante($vinculante)
+    {
+        $this->vinculante = $vinculante;
+
+        return $this;
+    }
+
+    /**
+     * Get vinculante
+     *
+     * @return boolean 
+     */
+    public function getVinculante()
+    {
+        return $this->vinculante;
+    }
+
+    /**
+     * Set direction
+     *
+     * @param \Pequiven\MasterBundle\Entity\Direction $direction
+     * @return Gerencia
+     */
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
+    {
+        $this->direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return \Pequiven\MasterBundle\Entity\Direction 
+     */
+    public function getDirection()
+    {
+        return $this->direction;
+    }
+    
+    function getConfiguration() {
+        return $this->configuration;
+    }
+
+    function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration) {
+        $this->configuration = $configuration;
+        
+        return $this;
+    }
+
+    /**
+     * Set abbreviation
+     *
+     * @param string $abbreviation
+     * @return Gerencia
+     */
+    public function setAbbreviation($abbreviation)
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    /**
+     * Get abbreviation
+     *
+     * @return string 
+     */
+    public function getAbbreviation()
+    {
+        return $this->abbreviation;
     }
 }

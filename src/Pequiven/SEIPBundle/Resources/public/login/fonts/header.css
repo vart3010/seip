@@ -4,16 +4,19 @@
 }
 
 .header-seip{
-    font-family: 'Neuropol';
+    font-family: Open Sans Light;
     color: #FF0000;    
-    font-size: 1.2em;
+    font-size: 1.8em;
     font-weight: bold;
-    top: 50%;
+    font-variant: small-caps;
+    font-style: oblique;
 }
 
 .footer-seip{
-    font-family: 'Neuropol';
+    font-family: Open Sans Light;
     color: #FF0000;
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: bold;
+    font-variant: small-caps;
+    font-style: oblique;
 }

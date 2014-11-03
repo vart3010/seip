@@ -1,0 +1,74 @@
+{#% extends "::base.html.twig" %#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenMasterBundle' %}
+{% block title %}- {{ 'pequiven_master.gerencia_second'|trans }}{% endblock %}
+
+{% set route_index = 'pequiven_master_menu_list_gerenciaSecond' %}
+{% if allow_create is not defined %}
+    {% set allow_create = false %}
+{% endif %}
+
+{% block body %}
+    
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path(route_index) }}">{{ 'pequiven_master.gerencia_second'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven_master.list'|trans }}</span>
+            <!--
+            {% if allow_create %}
+                <p class="button-height align-right">
+                    <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
+                            <span class="button-icon anthracite-gradient"><span class="icon-star"></span></span>
+                            {{ 'sigtec.create'|trans }}
+                    </a>
+                </p>
+            {% endif %}
+            -->
+        </h1>
+    </hgroup>
+    
+    <div ng-controller="TableFormatController">
+        <!--<div ng-controller="ObjetiveTacticController">-->
+                {% set filterYesNo = [
+                    { 'id':0,'name': ('sigtec.no'|trans)},
+                    { 'id':1,'name': ('sigtec.yes'|trans)},
+                ] %}
+                {% set filterActiveInactive = [
+                    { 'id':1,'name': ('sigtec.active'|trans)},
+                    { 'id':0,'name': ('sigtec.inactive'|trans)},
+                ] %}
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaSecondList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
+                            <td data-title="'{{ 'form.complejo'|trans }}'" >
+                                <a href="{$ result._links.self.href $}">{$result.gerencia.complejo.description$}</a>
+                            </td>
+                            <td data-title="'{{ 'form.gerencia_first'|trans }}'" >
+                                <a href="{$ result._links.self.href $}">{$result.gerencia.description$}</a>
+                            </td>
+                            <td data-title="'{{ 'form.gerencia_second'|trans }}'" sortable="'description'" filter="{ 'description': 'text' }">
+                                <a href="{$ result._links.self.href $}">{$result.description$}</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            <!--</div>-->
+        </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <!--
+    <script type="text/javascript">
+        function getTableExtraInfo(data)
+            {
+                return  '<strong>{{ 'sigtec.name'|trans }}:</strong> ' + data.name + '<br>' +
+                        '<strong>{{ 'sigtec.date_of_previous_technical_report_created'|trans({},'CoramerSigtecReportTechnicalBundle') }}:</strong> ' + (data.last_technical_report_date_created ? data.last_technical_report_date_created: '{{ 'sigtec.none'|trans }}') + '<br>' +
+                        '<strong>{{ 'sigtec.created_at' |trans }}:</strong> ' + data.created_at + '<br>' +
+                        '<strong>{{ 'sigtec.updated_at' | trans }}:</strong> ' + data.updated_at + '<br>'
+                        ;
+            }
+    </script>
+    -->
+{% endblock %}

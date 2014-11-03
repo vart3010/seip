@@ -1,6 +1,134 @@
-{% extends "::base.html.twig" %}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
 {% trans_default_domain 'PequivenSEIPBundle' %}
+
 {% block body %}
-    Plantilla developer implementada en Symfony2
-    <p>{{ 'pequiven_seip.seip'|trans }}</p>
+{% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+    <hgroup id="main-title" class="thin">
+        <h1>{{ "principal.title.objTactic"|trans }}</h1>
+        <h2>{{ "now"|date("d/m/Y") }}</h2>
+    </hgroup>
+    <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ "principal.chart.captionObjTactic"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+        <p class="button-height">
+            <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.operative"|trans }}</a>
+{#            <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>#}
+        </p>
+        <div id="chartTactic" class="columns">
+            <div class="nine-columns twelve-columns-mobile" id="chartContainerTactic">
+                {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
+                <!-- This div will hold the chart generated in the footer -->
+            </div>
+            <div class="three-columns twelve-columns-mobile new-row-mobile">
+                <ul class="stats">
+                    {% for data in dataLinkTactic %}
+                        <li>
+                            <a href="{{ data.linkTypeGroup }}">
+                                {{ data.typeGroup }}<br>
+                                <b style="font-size:25px">{{ data.porcCarga }}%</b>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
+    {#    </div>#}
+    
+        {#<div ng-controller="TableFormatController" id="objetiveTactic">
+            <div ng-controller="TableMonitorTypeGroupController">
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTypeGroupList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tbody>
+                            <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                <td data-title="'{{ 'monitor.gerencia'|trans }}'">
+                                    <img src="{$ result.imageObjTacticOriginal $}" > &nbsp;
+                                    <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
+                                </td>
+                                <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objTacticOriginal'">
+                                    {$ result.PlanObjTactic $}
+                                </td>
+                                <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objTacticOriginalReal'">
+                                    {$ result.RealObjTactic $}
+                                </td>
+                                <td data-title="'{{ 'monitor.porcReal'|trans }}'">
+                                    {$ porcCargado(result)|myNumberFormat $}%
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>{$ totalizePlan($data) $}</td>
+                                <td>{$ totalizeReal($data) $}</td>
+                                <td>{$ totalizeCargado(totalizePlan($data),totalizeReal($data))|myNumberFormat $}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>#}
+        {#<div ng-controller="TableFormatController" id="objetiveTactic">
+            <div ng-controller="TableMonitorTacticController">
+                <div loading-container="tableParams.settings().$loading">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('monitorTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                        <tbody>
+                            <tr ng-repeat="result in $data" data="{$ result|json $}">
+                                <td data-title="'{{ 'monitor.gerencia'|trans }}'">
+                                    <img src="{$ result.imageObjTacticOriginal $}" > &nbsp;
+                                    <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
+                                </td>
+                                <td data-title="'{{ 'monitor.plan'|trans }}'" sortable="'objTacticOriginal'">
+                                    {$ result.objTacticOriginal $}
+                                </td>
+                                <td data-title="'{{ 'monitor.real'|trans }}'" sortable="'objTacticOriginalReal'">
+                                    {$ result.objTacticOriginalReal $}
+                                </td>
+                                <td data-title="'{{ 'monitor.porcReal'|trans }}'">
+                                    {$ result.resObjTacticOriginal $}%
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>#}
+    
+    <hgroup id="main-title" class="thin">
+        <h1>{{ "principal.box.indicatorTactic"|trans }}</h1>
+    </hgroup>
+    <div class="with-padding">
+        <div class="columns">
+            {{ boxRender.renderBox('pequiven_seip_box_tactic_summaryindicatorcharged')|raw }}
+        </div>
+    </div>
+{% else %}
+    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
+        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
+    </div>
+{% endif %}
+    
 {% endblock body %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+        function getTableExtraInfo(data)
+        {
+
+        }
+    </script>
+
+{% endblock %}

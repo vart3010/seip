@@ -1,0 +1,45 @@
+goal:
+    path: /
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:indexAction
+    methods: [GET]
+    
+goal_create:
+    path: /
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:createAction
+    methods: [POST]
+    
+goal_new:
+    path: /new
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:newAction
+    methods: [GET]
+    
+goal_show:
+    path: /{id}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:showAction
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    
+goal_get_form:
+    path: /get-form
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:getFormAction
+    methods: [GET]
+    options:
+        expose: true
+        
+goal_update:
+    path: /{id}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:updateAction
+    methods: [PUT]
+    
+goal_delete:
+    path: /{id}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_goal:deleteAction
+    methods: [DELETE]

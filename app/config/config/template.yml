@@ -2,7 +2,7 @@ lunetics_locale:
     allowed_locales:
         - es
         - en
-    strict_mode: false # defaults to false
+    strict_mode: true # defaults to false
     guessing_order:
         - query
         - router
@@ -23,9 +23,13 @@ fos_user:
     profile:
         form:
             type: pequiven_seip_user_profile
+    group:
+        group_class: Pequiven\MasterBundle\Entity\Rol
     
 
 fos_rest:
+    service:
+        serializer: tpg_extjs.serializer
     allowed_methods_listener: true
     routing_loader:
         default_format: json
@@ -34,6 +38,7 @@ fos_rest:
     access_denied_listener:
         # all requests using the 'json' format will return a 403 on an access denied violation
         json: true
+    param_fetcher_listener: true
         
 sensio_framework_extra:
     view:    { annotations: false }

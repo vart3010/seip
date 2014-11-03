@@ -53,4 +53,16 @@ class DemoController extends Controller
 
         return array('form' => $form->createView());
     }
+    
+    public function getRolesAction()
+  {
+    $data = $this->getDoctrine()
+                 ->getRepository('PequivenMasterBundle:Rol')
+                 ->createQueryBuilder('rol')
+                 ->getQuery()
+                 ->getArrayResult();
+    var_dump($data);
+    die();
+    return $data;
+    }
 }

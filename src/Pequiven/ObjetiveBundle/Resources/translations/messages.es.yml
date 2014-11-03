@@ -1,0 +1,3 @@
+form:
+    messages:
+        selectLineStrategicFormatSelectionTooBig: Sólo puede seleccionar %maxsize% línea estratégica

@@ -2,14 +2,33 @@
 
 {% macro create(url) %}
 <div class="field-block button-height">
+    <button type="submit" class="button glossy mid-margin-right save">
+        <span class="button-icon"><span class="icon-tick"></span></span>
+        {{ 'pequiven_seip.register'|trans }}
+    </button>
+    <a href="{{ url ? url : app.request.headers.get('referer') }}" class="button glossy cancel">
+        <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
+        {{ 'pequiven_seip.cancel'|trans }}
+    </a>
+</div>
+{% endmacro %}
+
+{% macro create_formModal(url) %}
+<div class="field-block button-height">
     <button type="submit" class="button glossy mid-margin-right">
         <span class="button-icon"><span class="icon-tick"></span></span>
         {{ 'pequiven_seip.register'|trans }}
     </button>
-    <a href="{{ app.request.headers.get('referer', url) }}" class="button glossy">
+    <button type="button" class="button glossy" onclick="closeFormModal()">
         <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
         {{ 'pequiven_seip.cancel'|trans }}
-    </a>
+    </button>
+    <script>
+        function closeFormModal(){
+            closeIFrame();
+            //$("#modals",window.parent.document).remove();
+        }
+    </script>
 </div>
 {% endmacro %}
 
@@ -48,11 +67,11 @@
 
 {% macro update(url) %}
 <div class="field-block button-height">
-    <button type="submit" class="button glossy mid-margin-right">
+    <button type="submit" class="button glossy mid-margin-right save">
         <span class="button-icon"><span class="icon-tick"></span></span>
         {{ 'pequiven_seip.save'|trans }}
     </button>
-    <a href="{{ app.request.headers.get('referer', url) }}" class="button glossy">
+    <a href="{{ url ? url : app.request.headers.get('referer') }}" class="button glossy cancel">
         <span class="button-icon red-gradient"><span class="icon-cross-round"></span></span>
         {{ 'pequiven_seip.cancel'|trans }}
     </a>

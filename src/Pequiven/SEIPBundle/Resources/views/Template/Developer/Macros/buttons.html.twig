@@ -46,10 +46,58 @@
         <script type="text/javascript">
             function openPopUp_{{ idForm }}(idForm){
                 var content = '<form action="{{ url }}" id="{{ idForm }}" method="post" novalidate>{{ content|raw }}</form>';
-                //$.modal.showForm(area,confirmFormModal,cancelFormModal,options);
-                $.modal.showForm(content,function(){
-                    $('#'+idForm).submit();
-                },null,{title: '{{ message|trans({},translation_domain) }}' });
+                    //$.modal.showForm(area,confirmFormModal,cancelFormModal,options);
+                     $.modal.confirm(content,function(){
+                            $('#'+idForm).submit();
+                        },function(){
+
+                        },
+                        {
+                            title: ' ',
+                            textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans({},'messages') }}',
+                            textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans({},'messages') }}',
+                        }
+                    );   
+            }
+        </script>
+{% endmacro %}
+
+{% macro generic_confirm(url, message='generic', parameters = {}) %}
+    {% set gradient = 'blue-gradient' %}
+    {% set translation_domain = 'messages' %}
+    {% set icon = 'icon-pencil' %}
+    {% set content = 'messages' %}
+    {% if parameters['content'] is defined %}
+        {% set content = parameters['content'] %}
+    {% endif  %}
+    {% if parameters['translation_domain'] is defined %}
+        {% set translation_domain = parameters['translation_domain'] %}
+    {% endif  %}
+    {% if parameters['gradient'] is defined %}
+        {% set gradient = parameters['gradient'] %}
+    {% endif  %}
+    {% if parameters['icon'] is defined %}
+        {% set icon = parameters['icon'] %}
+    {% endif  %}
+    {% set idForm = (url ~ message)|hash %}
+        <button type="button" class="button" onclick="openPopUpConfirm_{{ idForm }}('{{ idForm }}')">
+            <span class="button-icon left-side {{ gradient }}"><span class="{{ icon }}"></span></span>
+            {{ message|trans({},translation_domain) }}
+        </button>
+        <script type="text/javascript">
+            function openPopUpConfirm_{{ idForm }}(){
+                $.modal.confirm('{{ content|trans({},translation_domain) }}',
+                    function(){
+                        window.location.href = '{{ url }}';
+                    }, 
+                    function(){                    
+                    },
+                    {
+                        textConfirm: '{{ 'tecnocreaciones_vzla_government.yes'|trans({},'messages') }}',
+                        textCancel: '{{ 'tecnocreaciones_vzla_government.no'|trans({},'messages') }}',
+                        title: ' '
+                    }
+                );
             }
         </script>
 {% endmacro %}

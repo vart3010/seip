@@ -1,0 +1,50 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% block body %}
+    <div class="three-columns four-columns-tablet six-columns-mobile" style="margin-bottom: -3px; margin-top: 4px"     
+        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />
+    </div>
+    
+    <input type="hidden" id="notification" name="notification" value="{{ notification }}" >
+    <input type="hidden" id="action" name="action" value="{{ action }}" >
+    <input type="hidden" id="typeObject" name="typeObject" value="{{ type }}" >
+    
+    <div id="top-notifications">
+        <ul id="notifications-top-center">
+            <li class="notification" style="display: list-item;">
+                <div>
+                    <h3><span id="messageNotification"></span></h3>
+                </div>
+                <span class="close show">x</span>
+            </li>
+        </ul>
+    </div>
+{% endblock body %}
+{% block javascript %}
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+        var sectionMessage = $("#messageNotification"),//Sección donde se setea el mensaje de la notificación
+            sectionNotification = $("#top-notifications"),//Sección dónde se mostrará la notificación
+            inputHiddenNotification = $("#notification"),//Input Hidden de notificación
+            inputHiddenTypeObject = $("#typeObject"),//Input Hidden del tipo de objeto de dónde proviene el request
+            inputHiddenAction = $("#action")//Input Hidden del tipo de acción
+        ;
+        
+        if(inputHiddenNotification.val() == 1){
+            if(inputHiddenAction.val() === "REGISTER_SUCCESSFULL"){
+                if(inputHiddenTypeObject.val() === "indicatorStrategic"){
+                    sectionMessage.html("{{ 'action.registerIndicatorStrategicSuccessfull'|trans }}");
+                } else if (inputHiddenTypeObject.val() === "indicatorTactic"){
+                    sectionMessage.html("{{ 'action.registerIndicatorTacticSuccessfull'|trans }}");
+                } else if (inputHiddenTypeObject.val() === "indicatorOperative"){
+                    sectionMessage.html("{{ 'action.registerIndicatorOperativeSuccessfull'|trans }}");
+                }
+            }
+            sectionNotification.show();
+        } else{
+            sectionNotification.hide();
+        }
+    });
+    </script>
+{% endblock javascript %}

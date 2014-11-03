@@ -1,0 +1,165 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="standard-tabs margin-bottom" id="add-tabs">
+
+    <ul class="tabs">
+        <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
+        <li><a href="#tab-2">{{ 'pequiven.events'|trans({},'messages') }}</a></li>
+        <li><a href="#tab-3">{{ 'pequiven.observations'|trans({},'messages') }}</a></li>
+    </ul>
+
+    <div class="tabs-content">
+
+        <div id="tab-1" class="with-padding">
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.responsible_for_notify'|trans }}</label>
+                {% if validConfiguration == true %}
+                    {% for userNotify in configuration.arrangementProgramUsersToNotify %}
+                        <small class="tag orange-bg">{{ userNotify }}</small>{% if loop.last == false %},{% else %}.{% endif %}
+                    {% else %}
+                        <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
+                    {% endfor %}
+                {% else %}
+                    <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
+                {% endif %}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.responsible_for_review'|trans }}</label>
+                {% if validConfiguration == true %}
+                    {% for userReviser in configuration.arrangementProgramUserToRevisers %}
+                        <small class="tag orange-bg">{{ userReviser }}</small>{% if loop.last == false %},{% else %}.{% endif %}
+                    {% else %}
+                        <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
+                    {% endfor %}
+                {% else %}
+                    <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
+                {% endif %}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.manager_approval'|trans }}</label>
+                {% if validConfiguration == true %}
+                    {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+                        {% for userApprove in configuration.arrangementProgramUsersToApproveTactical %}
+                            <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
+                        {% else %}
+                            <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
+                        {% endfor %}
+                    {% endif %}
+                    {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                        {% for userApprove in configuration.arrangementProgramUsersToApproveOperative %}
+                            <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
+                        {% else %}
+                            <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_config'|trans }}</small>
+                {% endif %}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_by'|trans({},'messages') }}</label>
+                {{ entity.createdBy }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_at'|trans({},'messages') }}</label>
+                {{ entity.createdAt|date(appConfiguration.generalDateFormat) }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.send_to_review_by'|trans }}</label>
+                {{ entity.details.sendToReviewBy ? entity.details.sendToReviewBy : 'pequiven.arrangement_program.no_send_to_review_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.send_to_review_date'|trans }}</label>
+                {{ entity.details.sendToReviewDate ? entity.details.sendToReviewDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_send_to_review_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.reviewed_by'|trans }}</label>
+                {{ entity.details.reviewedBy ? entity.details.reviewedBy : 'pequiven.arrangement_program.no_revison_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.revision_date'|trans }}</label>
+                {{ entity.details.revisionDate ? entity.details.revisionDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_revison_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.approved_by'|trans }}</label>
+                {{ entity.details.approvedBy ? entity.details.approvedBy : 'pequiven.arrangement_program.no_approval_date'|trans }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.arrangement_program.approval_date'|trans }}</label>
+                {{ entity.details.approvalDate ? entity.details.approvalDate|date(appConfiguration.generalDateFormat) : 'pequiven.arrangement_program.no_approval_date'|trans }}
+            </p>
+            {% if entity.details.rejectedBy != null %}
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.rejected_by'|trans }}</label>
+                    {{ entity.details.rejectedBy }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.rejected_date'|trans }}</label>
+                    {{ entity.details.rejectedDate ? entity.details.rejectedDate|date(appConfiguration.generalDateFormat) : ''|trans }}
+                </p>
+            {% endif %}
+        </div>
+
+        <div id="tab-2" class="with-padding">
+            <table class="simple-table responsive-table tables-extras" >
+                <thead>
+                    <tr>
+                        <th scope="col" width="60%">{{ 'pequiven.table.header.event'|trans({},'messages') }}</th>
+                        <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven.table.header.user'|trans({},'messages') }}</th>
+                        <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven.table.header.date'|trans({},'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for history in entity.histories %}
+                        <tr>
+                            <th scope="row">
+                                {{ history.event }}<br>
+                                <small>{{ history.comment }}</small>
+                            </th>
+                            <td>
+                                {{ history.user.firstName ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                            </td>
+                            <td>
+                                {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+                
+        <div id="tab-3" class="with-padding">
+            <table class="simple-table responsive-table tables-extras" >
+                <thead>
+                    <tr>
+                        <th scope="col" width="60%">{{ 'pequiven.table.header.observation'|trans({},'messages') }}</th>
+                        <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven.table.header.user'|trans({},'messages') }}</th>
+                        <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven.table.header.date'|trans({},'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for observation in entity.observations %}
+                        <tr>
+                            <th scope="row">
+                                {{ observation.description }}
+                            </th>
+                            <td>
+                                {{ observation.createdBy.firstName ~ " "~ observation.createdBy.lastName }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                            </td>
+                            <td>
+                                {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="empty_row">
+                                {{ "seip.table.empty.observations"|trans }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

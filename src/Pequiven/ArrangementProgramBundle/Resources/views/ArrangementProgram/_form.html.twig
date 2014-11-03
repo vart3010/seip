@@ -1,0 +1,65 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{{ form_top(form) }}
+
+<fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
+    <legend class="legend">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ entity.getTypeLabel|trans }}</b></legend>
+    
+    <div class="field-block button-height"ng-init="setEntityType({{ entity.type }})" >
+        <label class="label">{{ "pequiven.form.period"|trans }}</label>
+        <b>{{ entity.period }}</b>
+    </div>
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div class="field-block button-height">
+            {{ form_label(form.categoryArrangementProgram) }}
+            {{ form_widget(form.categoryArrangementProgram) }}
+            {{ form_errors(form.categoryArrangementProgram) }}
+        </div>
+    {% else%}
+        <div class="field-block button-height">
+            <label class="label">{{ "pequiven.form.category_arrangement_program"|trans }}</label>
+            {{ entity.categoryArrangementProgram }}
+        </div>
+    {% endif %}
+    {% if form.tacticalObjective is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.tacticalObjective) }}
+            {{ form_widget(form.tacticalObjective) }}
+            {{ form_errors(form.tacticalObjective) }}
+        </div>
+    {% endif %}
+    {% if form.operationalObjective is defined %}
+        <div class="field-block button-height">
+            {{ form_label(form.operationalObjective) }}
+            {{ form_widget(form.operationalObjective) }}
+            {{ form_errors(form.operationalObjective) }}
+        </div>
+    {% endif %}
+    <div class="field-block button-height">
+        <label class="label">{{ "pequiven.form.location"|trans }}</label>
+        <span ng-if="!complejo" class="tag orange-bg">Seleccione el objetivo</span>
+        {$ complejo.description $}
+    </div>
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div class="field-block button-height">
+            {{ form_label(form.process) }}
+            {{ form_widget(form.process) }}
+            {{ form_errors(form.process) }}
+        </div>
+    {% endif %}
+    <div class="field-block button-height">
+        {{ form_label(form.responsibles) }}
+        {{ form_widget(form.responsibles) }}
+        {{ form_errors(form.responsibles) }}
+    </div>
+    <div class="field-block button-height">
+        <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
+        <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100 %</span>
+    </div>
+</fieldset>
+    {% include 'PequivenArrangementProgramBundle:ArrangementProgram:form/timelines.html.twig' %}
+<input type="hidden" name="autoOpenOnSave" id="autoOpenOnSave" value="0" />
+{{ form_row(form._token) }}

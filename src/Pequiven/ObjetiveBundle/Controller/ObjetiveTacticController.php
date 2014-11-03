@@ -12,196 +12,758 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\ObjetiveBundle\Form\Type\Tactic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+
 /**
  * Description of ObjetiveController
  *
  * @author matias
  */
-class ObjetiveTacticController extends Controller{
-    //put your code here
-    
-    /**
-     * @Route("/")
-     * @Template()
-     */
-    public function indexAction($name)
-    {
-        return array('name' => $name);
-    }
-    
-    public function listAction(){
-        return array();
-    }
-    
-    public function createAction(Request $request){
+class ObjetiveTacticController extends baseController {
 
-        $form = $this->createForm(new BaseFormType());
-        $form->handleRequest($request);
-        $nameObject = 'object';
-        
-        $em = $this->getDoctrine()->getManager();
-        $objetiveLevel = new ObjetiveLevel();
+    /**
+     * Función que retorna la vista con la lista de los objetivos tácticos
+     * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
+     * @return type
+     */
+    public function listAction() {
+        return array(
+        );
+    }
+
+    /**
+     * Finds and displays a Objetive entity of level Tactic by Id.
+     *
+     */
+    public function showAction(Request $request) {
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
+            ->setTemplateVar('entity')
+            ->setData($this->findOr404($request))
+        ;
+
+        $groups = array_merge(array('api_list','gerencia'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
+        return $this->handleView($view);
+    }
+
+    /**
+     * Función que devuelve el paginador con los objetivos tácticos
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function objetiveListAction(Request $request) {
+
+//        $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        //Obtenemos el valor del nivel del objetivo
-        $objectObjLevel = $objetiveLevel->typeObjetiveLevel($securityContext,array('em' => $em));
-        
-        $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
-        $complejoNameArray = $complejoObject->getComplejoNameArray();
-        
-        $em->getConnection()->beginTransaction();
-        if($form->isValid()){
-            $object = $form->getData();
-            $data =  $this->container->get('request')->get("pequiven_objetive_tactic_registration");
-            //var_dump($data);
-            //die();
-            $object->setWeight(bcadd(str_replace(',', '.',$data['weight']),'0',3));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']),'0',3));
-            $object->setRankTop(bcadd(str_replace(',', '.', $data['rankTop']),'0',3));
-            $object->setRankMiddleTop(bcadd(str_replace(',', '.', $data['rankMiddleTop']),'0',3));
-            $object->setRankMiddleBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottom']),'0',3));
-            $object->setRankBottom(bcadd(str_replace(',', '.', $data['rankBottom']),'0',3));
 
-            $securityContext = $this->container->get('security.context');
-            $object->setUserCreatedAt($user);
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parent']));
-            if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-                for($i = 0; $i < count($data['complejo']); $i++){
-                    ${$nameObject.$i} = clone $object;
-                    $complejo = $em->getRepository('PequivenMasterBundle:Complejo')->findOneBy(array('id' => $data['complejo'][$i]));
-                    $parent = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('lineStrategic' => $data['lineStrategic'], 'complejo' => $data['complejo'][$i], 'ref' => $objetive->getRef()));
-                    ${$nameObject.$i}->setComplejo($complejo);
-                    ${$nameObject.$i}->setParent($parent);
-                    $em->persist(${$nameObject.$i});
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_TACTICO;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorTactic', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
                 }
-            } else{
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('list.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id', 'api_list', 'indicators', 'formula'));
+        if ($request->get('_format') == 'html') {
+            $view->setData($resources);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+//            var_dump($this->config->getRedirectRoute('objetiveTacticList'));
+//            die();
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
+
+    /**
+     * Función que registra un objetivo táctico
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Template("PequivenObjetiveBundle:Tactic:register.html.twig")
+     * @return type
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function createAction(Request $request) {
+
+        $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
+
+        $nameObject = 'object';
+        $em = $this->getDoctrine()->getManager();
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $role = $user->getRoles();
+
+        $em->getConnection()->beginTransaction();
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $object = $form->getData();
+            $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
+
+//            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
+            $data['tendency'] = (int) $data['tendency'];
+            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
+            $ref = $data['ref'];
+
+            //Obtenemos y Seteamos el nivel del objetivo
+            $objetiveLevel = $em->getRepository('PequivenObjetiveBundle:ObjetiveLevel')->findOneBy(array('level' => ObjetiveLevel::LEVEL_TACTICO));
+            $object->setObjetiveLevel($objetiveLevel);
+
+            $object->setUserCreatedAt($user);
+
+            //Si el usuario tiene rol Directivo
+            if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+                //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
+                if (!isset($data['check_gerencia'])) {
+                    $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($data['gerencia'])));
+                    if($totalRef[0] != $data['ref']){
+                        $this->updateIndicatorRef($data, $totalRef);
+                    }
+                    if (isset($data['indicators'])) {
+                        $respIndicator = $this->createIndicator($data, array('totalGerencia' => count($data['gerencia'])), $totalRef);
+                    }
+                    for ($i = 0; $i < count($data['gerencia']); $i++) {
+                        ${$nameObject . $i} = clone $object;
+                        ${$nameObject . $i}->resetIndicators();
+                        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
+                        ${$nameObject . $i}->setGerencia($gerencia);
+                        ${$nameObject . $i}->setRef($totalRef[$i]);
+                        if (isset($data['indicators'])) {
+                            foreach ($data['indicators'] as $value) {
+                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator->setTmp(false);
+                                $em->persist($indicator);
+                                ${$nameObject . $i}->addIndicator($indicator);
+                            }
+                        }
+                        $em->persist(${$nameObject . $i});
+                    }
+                } else {//En caso de que las gerencias a impactar, sean todas la de las localidades seleccionadas
+                    $j = 0;
+                    for ($i = 0; $i < count($data['complejo']); $i++) {//Recorremos todas las localidades seleccionadas
+                        //Obtenemos todas las gerencias de 1ra línea de las localidades seleccionadas
+                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
+                        $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($gerencias)));
+                        if($totalRef[0] != $data['ref']){
+                            $this->updateIndicatorRef($data, $totalRef);
+                        }
+                        if (isset($data['indicators'])) {
+                            $respIndicator = $this->createIndicator($data, count($gerencias), $totalRef);
+                        }
+                        foreach ($gerencias as $gerencia) {//Recorremos todos los resultados de las gerencias obtenidas
+                            ${$nameObject . $j} = clone $object;
+                            ${$nameObject . $j}->resetIndicators();
+                            ${$nameObject . $j}->setGerencia($gerencia);
+                            ${$nameObject . $j}->setRef($totalRef[$j]);
+                            if (isset($data['indicators'])) {
+                                foreach ($data['indicators'] as $value) {
+                                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    $indicator->setTmp(false);
+                                    $em->persist($indicator);
+                                    ${$nameObject . $j}->addIndicator($indicator);
+                                }
+                            }
+                            $em->persist(${$nameObject . $j});
+                            $j++;
+                        }
+                    }
+                }
+                //Si el usuario tiene rol Gerente General de Complejo o Gerente 1ra línea
+            } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
+                $object->setGerencia($user->getGerencia());
+                $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
+                if($totalRef[0] != $data['ref']){
+                    $this->updateIndicatorRef($data, $totalRef);
+                }
+                $object->setRef($totalRef[0]);
+                if (isset($data['indicators'])) {
+                    foreach ($data['indicators'] as $value) {
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
+                        $object->addIndicator($indicator);
+                    }
+                }
+                $em->persist($object);
+            } else {
+                $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
+                if($totalRef[0] != $data['ref']){
+                    $this->updateIndicatorRef($data, $totalRef);
+                }
+                $object->setRef($totalRef[0]);
+                if (isset($data['indicators'])) {
+                    foreach ($data['indicators'] as $value) {
+                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator->setTmp(false);
+                        $em->persist($indicator);
+                        $object->addIndicator($indicator);
+                    }
+                }
                 $em->persist($object);
             }
-            
-            try{
-            $em->flush();
-            $em->getConnection()->commit();
-            } catch (Exception $e){
+
+            try {
+                $em->flush();
+                $em->getConnection()->commit();
+            } catch (Exception $e) {
                 $em->getConnection()->rollback();
                 throw $e;
             }
-            
-            return $this->redirect($this->generateUrl('pequiven_objetive_home', array('type' => 'tactic')));
-//                    $this->forward('PequivenObjetiveBundle:Objetive:redirectObjetive', array(
-//               'message' => 'Objetivo Táctico creado exitosamente'
-//            ));
-//            return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-//                array('form' => $form->createView(),
-//                    'object' => $objectObjLevel,
-//                    'action' => 'successful'
-//                    ));
+
+            //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
+            foreach ($totalRef as $value) {
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $this->createArrangementRange($objetives, $data);
+            }
+
+            if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+                if (isset($data['indicators'])) {
+                    $this->removeIndicators($totalRef);
+                    $this->addIndicators($totalRef);
+                    $this->addIndicatorArrangementRange($totalRef);
+                }
+            }
+
+            $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.registerObjetiveTacticSuccessfull', array(), 'PequivenObjetiveBundle'));
+            return $this->redirect($this->generateUrl('pequiven_objetive_menu_list_tactic', array(
+                                    )
+            ));
         }
-        
-        return $this->container->get('templating')->renderResponse('PequivenObjetiveBundle:Tactic:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                'object' => $objectObjLevel
-                ));
+
+        return array(
+            'form' => $form->createView(),
+            'role_name' => $role[0]
+        );
     }
-    
+
+    /**
+     * Función que remueve los indicadores asociados a los objetivos de más
+     * @param type $totalRef
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function removeIndicators($totalRef = array()) {
+
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => '1.3.10.'));
+        //$indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => '1.3.9.'));
+        $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $j = 1;
+        foreach ($totalRef as $refObjetive) {//Recorremos todas las referencias de los objetivos creados
+            if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
+                $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
+                foreach ($indicators as $indicator) {
+                    $objetive->removeIndicator($indicator);
+                    $em->persist($objetive);
+                }
+            }
+            $j++;
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
+     * Función que agrega los indicadores reales a cada objetivo creado de más
+     * @param type $totalRef
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addIndicators($totalRef = array()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        $j = 1;
+        foreach ($totalRef as $refObjetive) {//Recorremos todas las referencias de los objetivos creados
+            if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
+                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
+                foreach ($indicators as $indicator) {
+                    $objetive->addIndicator($indicator);
+                    $em->persist($objetive);
+                }
+            }
+            $j++;
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
+     * Función que sirve para crear los rango para los Indicadores Tácticos creados de más
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addIndicatorArrangementRange($totalRef) {
+        $nameObject = 'object';
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+
+        //Obtenemos los Indicatores Tácticos creados originalmente desde el formulario de Objetivos Tácticos
+        $indicatorsOriginals = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $arrangementRangeOriginals = array();
+        $k = 0;
+        foreach ($indicatorsOriginals as $indicatorOriginal) {//Recorremos los Indicadores Tácticos creados originalmente desde el formulario de Objetivos Tácticos
+            //Obtenemos los Rangos de Gestión de los Indicadores Tácticos creados originalmente
+            $arrangementRangeOriginals[$k] = $em->getRepository('PequivenArrangementBundle:ArrangementRange')->findOneBy(array('indicator' => $indicatorOriginal));
+            $k++;
+        }
+
+        $j = 1;
+        $i = 0;
+        foreach ($totalRef as $refObjetive) {
+            if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
+                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $p = 0;
+                foreach ($indicators as $indicator) {
+                    ${$nameObject . $i} = new ArrangementRange();
+                    ${$nameObject . $i}->setIndicator($indicator);
+                    ${$nameObject . $i}->setTypeRangeTop($arrangementRangeOriginals[$p]->getTypeRangeTop());
+                    ${$nameObject . $i}->setTypeRangeMiddleTop($arrangementRangeOriginals[$p]->getTypeRangeMiddleTop());
+                    ${$nameObject . $i}->setTypeRangeMiddleBottom($arrangementRangeOriginals[$p]->getTypeRangeMiddleBottom());
+                    ${$nameObject . $i}->setTypeRangeBottom($arrangementRangeOriginals[$p]->getTypeRangeBottom());
+                    ${$nameObject . $i}->setRankTopBasic($arrangementRangeOriginals[$p]->getRankTopBasic());
+                    ${$nameObject . $i}->setRankTopMixedTop($arrangementRangeOriginals[$p]->getRankTopMixedTop());
+                    ${$nameObject . $i}->setRankTopMixedBottom($arrangementRangeOriginals[$p]->getRankTopMixedBottom());
+                    ${$nameObject . $i}->setRankMiddleTopBasic($arrangementRangeOriginals[$p]->getRankMiddleTopBasic());
+                    ${$nameObject . $i}->setRankMiddleTopMixedTop($arrangementRangeOriginals[$p]->getRankMiddleTopMixedTop());
+                    ${$nameObject . $i}->setRankMiddleTopMixedBottom($arrangementRangeOriginals[$p]->getRankMiddleTopMixedBottom());
+                    ${$nameObject . $i}->setRankMiddleBottomBasic($arrangementRangeOriginals[$p]->getRankMiddleBottomBasic());
+                    ${$nameObject . $i}->setRankMiddleBottomMixedTop($arrangementRangeOriginals[$p]->getRankMiddleBottomMixedTop());
+                    ${$nameObject . $i}->setRankMiddleBottomMixedBottom($arrangementRangeOriginals[$p]->getRankMiddleBottomMixedBottom());
+                    ${$nameObject . $i}->setRankBottomBasic($arrangementRangeOriginals[$p]->getRankBottomBasic());
+                    ${$nameObject . $i}->setRankBottomMixedTop($arrangementRangeOriginals[$p]->getRankBottomMixedTop());
+                    ${$nameObject . $i}->setRankBottomMixedBottom($arrangementRangeOriginals[$p]->getRankBottomMixedBottom());
+                    ${$nameObject . $i}->setOpRankTopBasic($arrangementRangeOriginals[$p]->getOpRankTopBasic());
+                    ${$nameObject . $i}->setOpRankTopMixedTop($arrangementRangeOriginals[$p]->getOpRankTopMixedTop());
+                    ${$nameObject . $i}->setOpRankTopMixedBottom($arrangementRangeOriginals[$p]->getOpRankTopMixedBottom());
+                    ${$nameObject . $i}->setOprankMiddleTopBasic($arrangementRangeOriginals[$p]->getOprankMiddleTopBasic());
+                    ${$nameObject . $i}->setOpRankMiddleTopMixedTop($arrangementRangeOriginals[$p]->getOpRankMiddleTopMixedTop());
+                    ${$nameObject . $i}->setOpRankMiddleTopMixedBottom($arrangementRangeOriginals[$p]->getOpRankMiddleTopMixedBottom());
+                    ${$nameObject . $i}->setOprankMiddleBottomBasic($arrangementRangeOriginals[$p]->getOprankMiddleBottomBasic());
+                    ${$nameObject . $i}->setOpRankMiddleBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankMiddleBottomMixedTop());
+                    ${$nameObject . $i}->setOpRankMiddleBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankMiddleBottomMixedBottom());
+                    ${$nameObject . $i}->setOprankBottomBasic($arrangementRangeOriginals[$p]->getOprankBottomBasic());
+                    ${$nameObject . $i}->setOpRankBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankBottomMixedTop());
+                    ${$nameObject . $i}->setOpRankBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankBottomMixedBottom());
+
+                    $em->persist(${$nameObject . $i});
+                    $i++;
+                    $p++;
+                }
+            }
+            $j++;
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        } return true;
+    }
+
+    /**
+     * Función que crea los Indicadores Tácticos para los Objetivos Tácticos que serán creados de más (cuando se selecciona más de una Gerencia de 1ra Línea)
+     * @param type $data
+     * @param type $options
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function createIndicator($data = array(), $options = array(), $totalRef = array()) {
+
+        $nameObject = 'object';
+        $totalGerencias = $options['totalGerencia']; //Total de Gerencias de 1ra Línea que abarca el Objetivo Táctico a crear
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        $j = 0; //Contador de Indicadores Tácticos asociados al Objetivo Táctico
+        for ($i = 0; $i < $totalGerencias; $i++) {//Recorremos las Gerencias Seleccionada            
+            if ($i >= 1) {//Consultamos en caso de que exista más de una Gerencia de 1ra Línea
+                $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
+                foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
+                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    ${$nameObject . $j} = new Indicator();
+                    ${$nameObject . $j}->setRef('IT-' . $totalRef[$i] . $k);
+                    ${$nameObject . $j}->setRefParent($totalRef[$i]);
+                    ${$nameObject . $j}->setTmp(false);
+                    ${$nameObject . $j}->setWeight($indicator->getWeight());
+                    ${$nameObject . $j}->setIndicatorLevel($indicator->getIndicatorLevel());
+                    ${$nameObject . $j}->setFormula($indicator->getFormula());
+                    ${$nameObject . $j}->setTendency($indicator->getTendency());
+                    ${$nameObject . $j}->setDescription($indicator->getDescription());
+                    ${$nameObject . $j}->setUserCreatedAt($user);
+                    $em->persist(${$nameObject . $j});
+                    $j++;
+                    $k++;
+                }
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
+     * Función que guarda en la tabla intermedia el rango de gestión (semáforo) del objetivo creado
+     * @param type $objetives
+     * @param type $data
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function createArrangementRange($objetives = array(), $data = array()) {
+        $arrangementRange = new ArrangementRange();
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        $totalObjetives = count($objetives);
+
+        //Seteamos los valores de rango alto
+        $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
+        if ($data['typeArrangementRangeTypeTop'] == 'TOP_BASIC') {
+            $arrangementRange->setRankTopBasic(bcadd(str_replace(',', '.', $data['rankTopBasic']), '0', 3));
+            $arrangementRange->setOpRankTopBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopBasic'])));
+        } else if ($data['typeArrangementRangeTypeTop'] == 'TOP_MIXED') {
+            $arrangementRange->setRankTopMixedTop(bcadd(str_replace(',', '.', $data['rankTopMixedTop']), '0', 3));
+            $arrangementRange->setOpRankTopMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopMixedTop'])));
+            $arrangementRange->setRankTopMixedBottom(bcadd(str_replace(',', '.', $data['rankTopMixedBottom']), '0', 3));
+            $arrangementRange->setOpRankTopMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankTopMixedBottom'])));
+        }
+
+        //Seteamos los valores de rango medio alto
+        $arrangementRange->setTypeRangeMiddleTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeMiddleTop'])));
+        if ($data['typeArrangementRangeTypeMiddleTop'] == 'MIDDLE_TOP_BASIC') {
+            $arrangementRange->setRankMiddleTopBasic(bcadd(str_replace(',', '.', $data['rankMiddleTopBasic']), '0', 3));
+            $arrangementRange->setOpRankMiddleTopBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopBasic'])));
+        } else if ($data['typeArrangementRangeTypeMiddleTop'] == 'MIDDLE_TOP_MIXED') {
+            $arrangementRange->setRankMiddleTopMixedTop(bcadd(str_replace(',', '.', $data['rankMiddleTopMixedTop']), '0', 3));
+            $arrangementRange->setOpRankMiddleTopMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopMixedTop'])));
+            $arrangementRange->setRankMiddleTopMixedBottom(bcadd(str_replace(',', '.', $data['rankMiddleTopMixedBottom']), '0', 3));
+            $arrangementRange->setOpRankMiddleTopMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleTopMixedBottom'])));
+        }
+
+        //Seteamos los valores de rango medio bajo
+        $arrangementRange->setTypeRangeMiddleBottom($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeMiddleBottom'])));
+        if ($data['typeArrangementRangeTypeMiddleBottom'] == 'MIDDLE_BOTTOM_BASIC') {
+            $arrangementRange->setRankMiddleBottomBasic(bcadd(str_replace(',', '.', $data['rankMiddleBottomBasic']), '0', 3));
+            $arrangementRange->setOpRankMiddleBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomBasic'])));
+        } else if ($data['typeArrangementRangeTypeMiddleBottom'] == 'MIDDLE_BOTTOM_MIXED') {
+            $arrangementRange->setRankMiddleBottomMixedTop(bcadd(str_replace(',', '.', $data['rankMiddleBottomMixedTop']), '0', 3));
+            $arrangementRange->setOpRankMiddleBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomMixedTop'])));
+            $arrangementRange->setRankMiddleBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankMiddleBottomMixedBottom']), '0', 3));
+            $arrangementRange->setOpRankMiddleBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankMiddleBottomMixedBottom'])));
+        }
+
+        //Seteamos los valores de rango bajo
+        $arrangementRange->setTypeRangeBottom($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeBottom'])));
+        if ($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_BASIC') {
+            $arrangementRange->setRankBottomBasic(bcadd(str_replace(',', '.', $data['rankBottomBasic']), '0', 3));
+            $arrangementRange->setOpRankBottomBasic($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBasic'])));
+        } else if ($data['typeArrangementRangeTypeBottom'] == 'BOTTOM_MIXED') {
+            if ($data['tendency'] < 3) {//Comportamiento No Estable
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomMixedTop']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedTop'])));
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomMixedBottom']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomMixedBottom'])));
+            } else { //Comportamiento Estable
+                //Rango Bajo-Alto
+                $arrangementRange->setRankBottomMixedTop(bcadd(str_replace(',', '.', $data['rankBottomTopBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedTop($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomTopBasic'])));
+                //Rango Bajo-Bajo
+                $arrangementRange->setRankBottomMixedBottom(bcadd(str_replace(',', '.', $data['rankBottomBottomBasic']), '0', 3));
+                $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
+            }
+        }
+
+        if ($totalObjetives > 0) {
+            foreach ($objetives as $objetive) {
+                $objectArrangementRange = clone $arrangementRange;
+                $objectArrangementRange->setObjetive($objetive);
+                $em->persist($objectArrangementRange);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
     /**
      * Devuelve los Objetivos Estratégicos de acuerdo a la Línea Estratégica seleccionada
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function selectObjetiveStrategicFromLineStrategicAction(Request $request){
+    public function selectObjetiveStrategicFromLineStrategicAction(Request $request) {
         $response = new JsonResponse();
-        $data = array();
+
         $objetiveChildrenStrategic = array();
         $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-        $complejoObject = new \Pequiven\MasterBundle\Entity\Complejo();
-        $complejoNameArray = $complejoObject->getComplejoNameArray();
-        
+
         $lineStrategicId = $request->request->get('lineStrategicId');
-        $objetiveLevelId = ObjetiveLevel::LEVEL_ESTRATEGICO;
-        
-        if($user->getComplejo()->getComplejoName() === $complejoNameArray[\Pequiven\MasterBundle\Entity\Complejo::COMPLEJO_ZIV]){
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC_ZIV','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId));
-        } else{
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByOptionGroupRef(array('type' => 'TACTIC','lineStrategicId' => $lineStrategicId, 'objetiveLevelId' => $objetiveLevelId, 'complejoId' => $user->getComplejo()->getId()));
+        $lineStrategicArray = explode(',', $lineStrategicId);
+
+        //En caso de que la variable de línea estratégica sea un número
+        if (is_array($lineStrategicArray)) {
+            //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategics' => $lineStrategicArray,'objetiveLevel' => $objetiveLevelId));
+            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLineStrategic($lineStrategicArray);
+            $totalResults = count($results);
+            if (is_array($results) && $totalResults > 0) {
+                foreach ($results as $result) {
+                    $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
+                }
+            } else {
+                $objetiveChildrenStrategic[] = array("empty" => true);
+            }
+        } else {
+            $objetiveChildrenStrategic[] = array("empty" => true, "initial" => true);
         }
-        foreach ($results as $result){
-            $objetiveChildrenStrategic[] = array("id" => $result->getId(), "description" => $result->getRef() . ' ' . $result->getDescription());
-        }
-        
         $response->setData($objetiveChildrenStrategic);
-        
+
         return $response;
     }
-    
+
     /**
-     * Devuelve los Complejos de acuerdo al Objetivo Estratégico seleccionado
+     * Devuelve las Gerencias de acuerdo a los Complejos seleccionados (Sólo para el caso de que el usuario sea rol directivo)
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function selectComplejoFromObjetiveStrategicAction(Request $request){
+    public function selectGerenciaFromComplejoAction(Request $request) {
         $response = new JsonResponse();
-        $complejoChildren = array();
+        $dataGerencia = array();
+        $complejos = $request->request->get('complejos');
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
+
+        foreach ($results as $result) {
+            foreach ($result as $gerencia) {
+                $dataGerencia[] = array(
+                    'idComplejo' => $gerencia->getComplejo()->getId(),
+                    'optGroup' => $gerencia->getComplejo()->getDescription(),
+                    'id' => $gerencia->getId(),
+                    'description' => $gerencia->getDescription()
+                );
+            }
+        }
+
+        $response->setData($dataGerencia);
+
+        return $response;
+    }
+
+    /**
+     * Gerencias de 1ra línea para la tabla de visualización
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaFirstAction(Request $request) {
+        $response = new JsonResponse();
+
+        $dataGerencia = array();
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        
-        $lineStrategicId = $request->request->get('lineStrategicId');
-        $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $objetiveObject = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id'=>$objetiveStrategicId));
-        
-        $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $objetiveObject->getRef(), 'lineStrategic' => $lineStrategicId));
-        foreach ($results as $result){
-            $complejoChildren[] = array("id" => $result->getComplejo()->getId(), "description" => $result->getComplejo()->getDescription());
+
+        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        } else {
+            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
         }
-        
-        $response->setData($complejoChildren);
-                
+
+        $totalResults = count($results);
+        if (is_array($results) && $totalResults > 0) {
+            foreach ($results as $result) {
+                foreach ($result as $gerencia) {
+                    $dataGerencia[] = array(
+                        'idComplejo' => $gerencia->getComplejo()->getId(),
+                        'optGroup' => $gerencia->getComplejo()->getDescription(),
+                        'id' => $gerencia->getId(),
+                        'description' => $gerencia->getDescription()
+                    );
+                }
+            }
+        } else {
+            $dataGerencia[] = array("empty" => true);
+        }
+
+        $response->setData($dataGerencia);
+
         return $response;
     }
-    
-    public function testComplejoAction(){
-        $response = new JsonResponse();
-        $complejoChildren = array();
-        
-        for($i = 1; $i<=6; $i++){
-            $complejoChildren[] = array("id" => $i, "description" => 'Complejo '.$i);
-        }
-        
-        $response->setData($complejoChildren);
-        return $response;
-    }
-    
+
     /**
      * Devuelve la Referencia del Objetivo, de acuerdo a la cantidad que ya se encuentren registrados
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function displayRefObjetiveAction(Request $request){
+    public function displayRefObjetiveAction(Request $request) {
         $response = new JsonResponse();
-        $objetive = new Objetive();
+
         $data = array();
         $options = array();
-        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        
+
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $options['objetiveStrategicId'] = $objetiveStrategicId;
-        $options['type'] = 'TACTIC';
-        $options['type_ref'] = 'TACTIC_REF';
-        
-        $ref = $objetive->setNewRef($options);
-        
+        $options['objetiveStrategics'] = $objetiveStrategicId;
+
+        $ref = $this->setNewRef($options);
+
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
     }
+
+    /**
+     * Función que devuelve la referencia del objetivo táctico que se esta creando
+     * @param array $options
+     */
+    public function setNewRef($options = array()) {
+        $em = $this->getDoctrine()->getManager();
+        $objetivesStrategics = explode(',', $options['objetiveStrategics']);
+        $totalObjetivesStrategics = count($objetivesStrategics);
+
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $refObjetiveStrategic = $objetiveStrategic->getRef();
+
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true));
+        $total = count($results);
+
+        if (is_array($results) && $total > 0) {
+            $ref = $refObjetiveStrategic . ($total + 1) . '.';
+        } else {
+            $ref = $refObjetiveStrategic . '1.';
+        }
+
+        //En caso de que el objetivo tenga varios padres
+        if ($totalObjetivesStrategics > 1) {
+            $ref.='m';
+        }
+
+        return $ref;
+    }
+
+    /**
+     * Función que devuelve la referencia del objetivo táctico que se esta creando
+     * @param array $options
+     */
+    public function setRef($options = array()) {
+        $em = $this->getDoctrine()->getManager();
+        $objetivesStrategics = $options['objetiveStrategics'];
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        $totalRef = array();
+
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $refObjetiveStrategic = $objetiveStrategic->getRef();
+
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true));
+        $total = count($results);
+
+        for ($i = 0; $i < $options['totalGerencias']; $i++) {
+            $totalRef[$i] = $refObjetiveStrategic . ($total + ($i + 1)) . '.';
+            //En caso de que el objetivo tenga varios padres
+            if ($totalObjetivesStrategics > 1) {
+                $totalRef[$i].='m';
+            }
+        }
+
+        return $totalRef;
+    }
+    
+    /**
+     * Función que actualiza la referencia de los Indicadores, en caso de que se creen dos Objetivos Tácticos por diferente usuarios al mismo tiempo
+     * @param type $data
+     * @param type $totalRef
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function updateIndicatorRef($data = array(), $totalRef = array()){
+        $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
+        
+        $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
+        foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
+            $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+            $indicator->setRef('IT-' . $totalRef[0] . $k);
+            $indicator->setRefParent($totalRef[0]);
+            $em->persist($indicator);
+            $k++;
+        }
+        
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
+    }
+
 }

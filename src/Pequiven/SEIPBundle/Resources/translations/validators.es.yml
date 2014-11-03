@@ -1,3 +1,5 @@
 fos_user:
     password:
         mismatch: Las contraseñas introducidas no coinciden
+
+'The CSRF token is invalid. Please try to resubmit the form.': Este formulario no es valido, por favor, pruebe de enviar nuevamente el formulario.

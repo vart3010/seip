@@ -1,0 +1,23 @@
+{# empty Twig template #}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/formLayoutModal.html.twig" %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <!-- JavaScript at the bottom for fast page loading -->
+    <!-- Scripts -->
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% block body %}
+        {% block javascript %}
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                window.parent.indicatorsRegisterSuccessful();
+            });
+        </script>
+    {% endblock javascript %}
+    {#% include 'PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig' %#}
+    
+{% endblock body %}

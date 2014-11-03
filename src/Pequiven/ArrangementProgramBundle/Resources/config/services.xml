@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!--
+    <parameters>
+        <parameter key="pequiven_arrangement_program.example.class">Pequiven\ArrangementProgramBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="pequiven_arrangement_program.example" class="%pequiven_arrangement_program.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+    <services>
+        <service id="pequiven_seip.repository.arrangementprogram" class="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository">
+            <tag name="app.repository" class="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram" />
+        </service>
+        <service id="pequiven.orm.validator.maximum_goal_responsible" class="Pequiven\ArrangementProgramBundle\Validator\Constraints\MaximumGoalResponsibleValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.maximum_goal_responsible" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="pequiven.orm.validator.arrangement_program.level_roles_responsible" class="Pequiven\ArrangementProgramBundle\Validator\Constraints\LevelRolesResponsibleValidator">
+            <tag name="validator.constraint_validator" alias="pequiven.orm.validator.arrangement_program.level_roles_responsible" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.arrangement_program.listener.event_listerner" class="Pequiven\ArrangementProgramBundle\EventListener\EventListerner">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.arrangement_program.manager" class="Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="pequiven_arrangement_program.form.arrangement_program" class="Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="form.type" alias="arrangementprogram" />
+        </service>
+    </services>
+</container>

@@ -1,0 +1,158 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_assigned') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.arrangement_program.assigned'|trans({},'PequivenArrangementProgramBundle') }}</span>
+        </h1>
+    </hgroup>
+    
+   <div ng-controller="TableFormatController">
+       <div ng-controller="ReportArrangementProgramController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                    
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-change="getSecondLineManagement()" ng-options="value as value.description group by value.complejo.description for (key,value) in data.first_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.arrangementProgramStatus" ng-options="value as value.description for (key,value) in data.arrangementProgramStatusLabels">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                            
+                        <div class="new-row new-row-mobile-portrait six-columns twelve-columns-tablet twelve-columns-mobile-landscape twelve-columns-mobile-portrait">
+                            <label class="bold">{{ 'pequiven.arrangement_program.tactical_objective'|trans({},'PequivenArrangementProgramBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.tacticalObjective" ng-change="getOperatives(model.tacticalObjective.id)" ng-options="value as (value.ref + ' ' + value.description) for (key,value) in data.tacticals">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="new-row-mobile six-columns twelve-columns-tablet twelve-columns-mobile">
+                            <label class="bold">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.operationalObjective" ng-options="value as (value.ref + ' ' + value.description) group by value.groupBy for (key,value) in data.operatives">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                            
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_pg'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsibles" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.responsibles_goals'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" multiple='multiple' ng-model="model.responsiblesGoals" ng-options="value as (value.firstName +' '+value.lastName+' ('+value.numPersonal+')' ) group by value.gerencia.description for (key,value) in data.responsibles">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        {% if isAllowFilterTypeManagement == true %}
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven.arrangement_program.type_management.type_management'|trans({},'PequivenArrangementProgramBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" ng-model="model.typeManagement" ng-change="getSecondLineManagement()" ng-init="data.typesManagement = {{ typesManagement|json_encode() }}" ng-options="value as value.label for (key,value) in data.typesManagement">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </details>
+                <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_assigned',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                                <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances >= 50 && result._data.summary.advances < 100"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
+
+                                <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
+                                {$ result.period.name $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
+                                {$ result.tacticalObjective.gerencia.complejo.description $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                                {$ data.arrangementProgramStatusLabels[result.status].description $}
+                            </td>
+                            <td data-title="'{{ 'monitor.porcReal'|trans({},'PequivenSEIPBundle') }}'">
+                                <span>
+                                    {$ result._data.summary.advances|myNumberFormat $}/{$ result._data.summary.weight|myNumberFormat $}%
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascripts %}

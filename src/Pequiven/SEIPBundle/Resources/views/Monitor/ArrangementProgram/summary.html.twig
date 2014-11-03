@@ -1,0 +1,41 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="block large-margin-bottom">
+    <div class="block-title">
+        <h3>{{ 'pequiven.arrangement_program.arrangement_programs'|trans }}</h3>
+        <span class="ribbon"><span class="ribbon-inner">{{ (summaryTactical|length)+(summaryOperative|length) }} Rev.</span></span>
+    </div>
+
+    <ul class="events">
+
+        <li>
+            <span class="event-date orange">{{ summaryTactical|length }}</span>
+            <span class="event-description">
+                <h4>{{ 'pequiven.arrangement_program.type.tactics'|trans }}</h4>
+                <p>Programas tacticos pendiente de aprobación</p>
+            </span>
+        </li>
+
+        <li>
+            <span class="event-date">{{ summaryOperative|length }}</span>
+            <span class="event-description">
+                <h4>{{ 'pequiven.arrangement_program.type.operatives'|trans }}</h4>
+                <p>Programas operativos pendiente de aprobación</p>
+            </span>
+        </li>
+
+        {#<li>
+            <span class="event-date with-month">
+               {{ (summaryTactical|length)+(summaryOperative|length) }} <span class="event-month">Total</span>
+            </span>
+            <p>
+                Esta accion aprueba todos los programas revisados
+            </p>
+            <a href="javascript:void(0)" class="button tiny">
+                <span class="button-icon"><span class="icon-tick"></span></span>
+                Aprobar
+            </a>
+        </li>#}
+
+    </ul>
+</div>

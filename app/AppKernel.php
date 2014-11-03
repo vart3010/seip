@@ -26,19 +26,31 @@ class AppKernel extends Kernel
             
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
             new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Generado de rutas javascript
             
             new JMS\SerializerBundle\JMSSerializerBundle(),//Serializador de objetos en json y xml
             new JMS\TranslationBundle\JMSTranslationBundle(),//Traductor optimizado
             
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),//Traduccion disponible en javascript
             
+            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            
+            new \Tpg\ExtjsBundle\TpgExtjsBundle(),
+            
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
             new Tecnocreaciones\Bundle\InstallBundle\TecnocreacionesInstallBundle(),
+            new Tecnocreaciones\Bundle\ToolsBundle\TecnocreacionesToolsBundle(),
+            
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),
+            new Pequiven\IndicatorBundle\PequivenIndicatorBundle(),
+            new Pequiven\ArrangementBundle\PequivenArrangementBundle(),
+            new Pequiven\ArrangementProgramBundle\PequivenArrangementProgramBundle(),
+            new Tecnocreaciones\Bundle\BoxBundle\TecnocreacionesBoxBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

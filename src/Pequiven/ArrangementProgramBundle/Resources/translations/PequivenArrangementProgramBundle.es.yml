@@ -1,0 +1,123 @@
+pequiven:
+    select: Seleccione
+    arrangement_program:
+        assigned: Asignados
+        total_planned: Total planificado
+        write_observation: Escriba una observación
+        arrangement_program: Programa de Gestión
+        arrangement_programs: Programas de Gestión
+        period: Periodo
+        process: Proceso
+        management: Gerencia
+        management_second_line: Gerencia de segunda línea
+        category_arrangement_program: Progama asociado a
+        tactical_objective: Objetivo táctico
+        operational_objective: Objetivo operativo
+        operating_indicator: Indicador operativo
+        location: Localidad
+        process: Proceso
+        responsibles: Responsable(s)
+        type_goal: Tipo de actividad
+        not_applicable: No aplica
+        start_date: Fecha inicio
+        end_date: Fecha fin
+        weight: Peso
+        advances: Avances
+        advances_in_details: Avances del programa de gestión hasta la fecha
+        observations: Observaciones
+        revision_date: Fecha de revisión
+        approval_date: Fecha de aprobación
+        no_revison_date: No revisado.
+        no_approval_date: No aprobado.
+        responsible_for_notify: Encargado(s) de notificar
+        responsible_for_review: Encargado(s) de revisión
+        manager_approval: Encargado(s) de aprobación
+        you_must_assign_responsible: Debe asignar los responsables.
+        you_must_assign_config: Debe configurar los responsables de los programas de gestión en la gerencia.
+        reviewed_by: Revisado por
+        approved_by: Aprobado por
+        send_to_review_by: Enviado a revisión por
+        send_to_review_date: Fecha de envio a revisión
+        no_send_to_review_date: No se ha enviado a revisión
+        type_management:
+            type_management: Tipo de gerencia
+            modular: Modular
+            binding: Vinculante
+        details:
+            rejected_by: Rechazado por
+            rejected_date: Fecha de rechazo
+        status:
+            status: Estatus
+            draft: Borrador
+            in_review: En revisión
+            revised: Revisado
+            rejected: Rechazado
+            approved: Aprobado
+            finished: Finalizado
+        buttons:
+            revised: Revisado
+            send_to_review: Enviar a revisión
+            send_to_draft: Regresar a borrador
+            return_to_review: Regresar a revisión
+            approved: Aprobar
+            rejected: Rechazar
+            add_comment: Añadir observación al programa
+            refresh: Refrescar
+        type:
+            tactic: Tactico
+            tactics: Tacticos
+            operative: Operativo
+            operatives: Operativos
+        questions:
+            revised: ¿Desea marcar el programa de gestión como revisado?
+            approved: ¿Desea aprobar el programa de gestión?
+            send_to_review: ¿Desea enviar el programa de gestión a revisión?
+            rejected: ¿Desea rechazar el programa de gestión?
+            send_to_draft: ¿Desea regresar el programa de gestión al estatus "borrador"?
+            return_to_review: ¿Desea regresar el programa de gestión al estatus "revisión"?
+        flash:
+            send_comment: Su observación se ha guardado.
+    form:
+        category_arrangement_program: Asociado a
+        tactical_objective: Objetivo Táctico
+        operational_objective: Objetivo Operativo
+        operating_indicator: Indicador Operativo
+        location: Localidad
+        process: Proceso
+        responsibles: Responsable(s)
+        period: Periodo
+        name: Nombre
+        type_goal: Tipo de Actividad
+        not_applicable: No Aplica
+        start_date: Fecha Inicio
+        end_date: Fecha Fin
+        weight: Peso
+        observations: Observaciones
+        total_weight: Total del peso distribuido
+        goal:
+            name: Meta
+            responsible: Responsable(s) de la Meta
+    goals:
+        goal: Meta
+        goals: Meta(s)
+        goals_only: Metas
+        add_goal: Añadir Meta
+        delete_this_goal: Eliminar esta meta
+        abbr_planned: P
+        abbr_real: R
+        summary: Avances
+seip:
+    table:
+        header:
+            name: Nombre
+            type_goal: Tipo de Actividad
+            start_date: Fecha Inicio
+            end_date: Fecha Fin
+            responsible: Responsable(s)
+            responsible_goal: Responsable(s) de la Meta
+            weight: Peso
+            observations: Observaciones
+            actions: Acciones
+        empty:
+            goals: No Hay Metas Cargadas.
+            observations: No Hay Observaciones.

@@ -76,13 +76,37 @@ class Personal extends modelPersonal
      */
     private $numPersonal;
     
+    /** 
+     * Complejo
+     * @var=\Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
+     */
+    private $complejo;
+    
+    /**
+     * Gerencia
+     * @var=\Pequiven\MasterBundle\Entity\Gerencia
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
+     * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
+     */
+    private $gerencia;
+    
+    /**
+     * GerenciaSecond
+     * @var=\Pequiven\MasterBundle\Entity\GerenciaSecond
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
+     */
+    private $gerenciaSecond;
+    
     /**
      * Cargo
      * @var \Pequiven\MasterBundle\Entity\Cargo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Cargo")
      * @ORM\JoinColumn(name="fk_cargo", referencedColumnName="id")
      */
-    private $Cargo;
+    private $cargo;
 
     /**
      * @var boolean
@@ -294,7 +318,7 @@ class Personal extends modelPersonal
      */
     public function setCargo(\Pequiven\MasterBundle\Entity\Cargo $cargo = null)
     {
-        $this->Cargo = $cargo;
+        $this->cargo = $cargo;
 
         return $this;
     }
@@ -306,6 +330,75 @@ class Personal extends modelPersonal
      */
     public function getCargo()
     {
-        return $this->Cargo;
+        return $this->cargo;
+    }
+
+    /**
+     * Set complejo
+     *
+     * @param \Pequiven\MasterBundle\Entity\Complejo $complejo
+     * @return Personal
+     */
+    public function setComplejo(\Pequiven\MasterBundle\Entity\Complejo $complejo = null)
+    {
+        $this->complejo = $complejo;
+
+        return $this;
+    }
+
+    /**
+     * Get complejo
+     *
+     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     */
+    public function getComplejo()
+    {
+        return $this->complejo;
+    }
+
+    /**
+     * Set gerencia
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
+     * @return Personal
+     */
+    public function setGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia = null)
+    {
+        $this->gerencia = $gerencia;
+
+        return $this;
+    }
+
+    /**
+     * Get gerencia
+     *
+     * @return \Pequiven\MasterBundle\Entity\Gerencia 
+     */
+    public function getGerencia()
+    {
+        return $this->gerencia;
+    }
+
+    /**
+     * Set gerenciaSecond
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond
+     * @return Personal
+     */
+    public function setGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond = null)
+    {
+        $this->gerenciaSecond = $gerenciaSecond;
+
+        return $this;
+    }
+
+    /**
+     * Get gerenciaSecond
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaSecond 
+     */
+    public function getGerenciaSecond()
+    {
+        return $this->gerenciaSecond;
     }
 }
