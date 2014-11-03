@@ -42,19 +42,21 @@ class RegistrationListener implements EventSubscriberInterface {
         
         $em = $this->container->get('doctrine')->getManager();
         $personal = $em->getRepository('PequivenMasterBundle:Personal');
+        $rolRepository = $em->getRepository('Pequiven\MasterBundle\Entity\Rol');
         $num_personal = $user->getNumPersonal();
         
         //Consultamos si el usuario registrado se encuentra en la tabla maestra "personal"
         if(is_array($results = $personal->getByNumPersonal($num_personal)) && count($results) > 0){
             foreach($results as $result){
-                $user->addRole($rol->rol_name[Rol::ROLE_MANAGER_SECOND]);
+                
+                $user->addGroup(Rol::getRoleName(Rol::ROLE_WORKER_PQV));
                 //TODO: Hacer llamado a función (por crear) para determinar el rol del usuario registrado automáticamente
                 //var_dump($result->getNomPersonal());
             }
         } else{
-            $user->addRole($rol->rol_name[Rol::ROLE_DEFAULT]);//Asignamos el Rol por defecto
-            var_dump($user);
-            die();
+            $group = $rolRepository->findOneByName(Rol::getRoleName(Rol::ROLE_WORKER_PQV));
+            $user->addGroup($group);//Asignamos el Rol por defecto
+            
         }
         
         //var_dump($user.'<br>adios');
@@ -65,5 +67,21 @@ class RegistrationListener implements EventSubscriberInterface {
 //        }
 
         //die();
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    private function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 }
