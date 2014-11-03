@@ -106,6 +106,57 @@ class ObjetiveOperativeController extends baseController {
         }
         return $this->handleView($view);
     }
+    
+    /**
+     * Función que devuelve el paginador con los objetivos operativos vinculantes a un complejo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function objetiveVinculantListAction(Request $request) {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+
+        $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_OPERATIVO;
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorOperativeVinculant', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('viewObjetiveVinculant.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula'));
+        if ($request->get('_format') == 'html') {
+            $view->setData($resources);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
 
     /**
      * Función que registra un objetivo operativo

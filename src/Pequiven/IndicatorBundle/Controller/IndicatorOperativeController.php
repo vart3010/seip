@@ -80,6 +80,7 @@ class IndicatorOperativeController extends baseController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {

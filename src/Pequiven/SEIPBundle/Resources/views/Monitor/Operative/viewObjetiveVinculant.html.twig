@@ -3,23 +3,19 @@
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 {% block title %}- {{ 'pequiven_objetive.objetive_operative'|trans }}{% endblock %}
 
-{% set route_index = 'pequiven_objetive_menu_list_operative' %}
+{% set route_index = 'pequiven_objetive_menu_list_operative' %} 
 {% if allow_create is not defined %}
     {% set allow_create = false %}
 {% endif %}
 
 {% block body %}
-    {% if (gerenciaGroup.groupName == 'COMP') %}
-        <p class="button-height">
-            <a href="{{ urlVinculant }}" class="button red-gradient">{{ "principal.button.vinculant"|trans ({},'PequivenSEIPBundle') }}</a>
-        </p>
-    {% endif %}
+    <p class="button-height">
+        <a href="{{ urlMedular }}" class="button red-gradient">{{ "principal.button.medular"|trans ({},'PequivenSEIPBundle') }}</a>
+    </p>
     
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ gerencia.getDescription() }}</span>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
         </h1>
