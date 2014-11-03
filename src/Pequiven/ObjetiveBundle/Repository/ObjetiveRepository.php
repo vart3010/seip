@@ -277,6 +277,47 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
+     * Crea un paginador para los objetivos operativos vinculantes a un complejo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return QueryBuilder
+     */
+    function createPaginatorOperativeVinculant(array $criteria = null, array $orderBy = null) {
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->innerJoin('o.parents', 'p');
+        $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
+        $queryBuilder->andWhere('gs.vinculante = 1 ');
+        $queryBuilder->andWhere('gs.modular = 0');
+        
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere('gs.complejo = ' . $criteria['complejo']);
+        }
+        //Filtro Objetivo Operativo
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
+//        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
      * Retorna un query builder de los objetivos tacticos asociados a la gerencia
      * @return type
      */
