@@ -25,7 +25,7 @@
                     <ul class="stats">
                         {% for data in dataLinkOperative %}
                             <li>
-                                <a href="javascript:void(0);">
+                                <a href="{{ data.urlGerencia }}">
                                     {{ data.typeGroup }}<br>
                                     <b style="font-size:25px">{{ data.porcCarga }}%</b>
                                 </a>
