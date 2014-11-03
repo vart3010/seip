@@ -24,3 +24,7 @@ gerenciaSecondList:
         _controller: pequiven.controller.gerenciasecond:gerenciaSecondListAction
         _sylius:
             method: createPaginatorGerenciaSecond
+            
+pequiven_gerenciafirst:
+    resource: "@PequivenMasterBundle/Resources/config/routing/gerenciafirst.yml"
+    prefix: /master/gerencia-first

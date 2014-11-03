@@ -36,6 +36,7 @@ input.xlarge,
 textarea.xlarge,
 select.xlarge {
   width: 270px;
+  min-width: 270px;
 }
 .input-xxlarge,
 input.xxlarge,
@@ -46,4 +47,21 @@ select.xxlarge {
 
 .pull-right {
     float: right;
+}
+
+.alert-danger-seip {
+    color: white;
+    font-weight: bold;
+}
+
+.semaphore {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
 }

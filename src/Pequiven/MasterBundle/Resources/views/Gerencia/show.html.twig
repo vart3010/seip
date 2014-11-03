@@ -1,0 +1,6 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% block body %}
+Gerencia: <b>{{ gerenciafirst }}</b>
+<br/>
+<a href="{{ path('pequiven_gerenciafirst_update',{id: gerenciafirst.id }) }}" class="btn">Editar</a>
+{% endblock body %}

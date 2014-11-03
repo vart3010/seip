@@ -24,7 +24,7 @@
         </h1>
     </hgroup>
 
-    <form action="{{ path('pequiven_indicator_add_strategic_from_objetive') }}" {{ form_enctype(form) }} method="POST">
+    <form id="registerIndicatorStrategicFOForm" action="{{ path('pequiven_indicator_add_strategic_from_objetive') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
 
@@ -33,14 +33,14 @@
                 {{ form_widget(form.refObjetive) }}
             </div>
 
-            <!-- Descripción del indicador -->
+            <!-- Nombre del indicador -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.nameIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -51,18 +51,7 @@
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
-                </span>
-            </div>
-
-            <!-- Meta del Objetivo -->
-            <div class="field-block button-height">
-                {{ form_label(form.goal) }}
-                {{ form_widget(form.goal) }}
-                {{ form_errors(form.goal) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.refIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -73,7 +62,7 @@
                 {{ form_errors(form.formula) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.formula'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.formulaIndicatorStrategic'|trans }}</span>
                 </span>
             </div>
 
@@ -81,7 +70,7 @@
 
             <!-- Rango de Gestión -->
             <details class="details margin-bottom">
-                <summary>{{ 'form.rankArrangement'|trans }}</summary>
+                <summary>{{ 'form.rankArrangementIndicatorStrategic'|trans }}</summary>
                 <div class="with-padding">
                     <div class="field-block button-height">
                         {{form_label(form.tendency)}}
@@ -90,10 +79,10 @@
 
                     <div class="standard-tabs margin-bottom" id="add-tabs-fo" style="height: 200px;">
                         <ul id="listNoEstable" class="tabs">
-                            <li id="tabRankTop-fo" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop-fo">{{ 'form.rankArrangementTop'|trans }}</a></li>
-                            <li id="tabRankMiddleTop-fo" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop-fo">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
-                            <li id="tabRankMiddleBottom-fo" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom-fo">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
                             <li id="tabRankBottom-fo" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottom-fo">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                            <li id="tabRankMiddleBottom-fo" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom-fo">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                            <li id="tabRankMiddleTop-fo" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop-fo">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                            <li id="tabRankTop-fo" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop-fo">{{ 'form.rankArrangementTop'|trans }}</a></li>
                         </ul>
                         <ul id="listEstable" class="tabs">
                             <li id="tabRankBottomBottomEstable-fo" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomBottom-fo">{{ 'form.rankArrangementBottom'|trans }}</a></li>
@@ -208,60 +197,79 @@
     <script type="text/javascript">
 
         var selectFormula = $("#pequiven_indicator_strategicfo_registration_formula"), //Select de Fórmula
-            inputRef = $("#pequiven_indicator_strategicfo_registration_ref"), //Input de Ref
-            inputGoal = $("#pequiven_indicator_strategicfo_registration_goal"), //Input de Meta
-            inputHiddenRefParent = $("#pequiven_indicator_strategicfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo Estratégico            
-            selectTendency = $("#pequiven_indicator_strategicfo_registration_tendency"), //Select de Tendencia del indicador
-            selectArrangementRangeTypeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop"), //Select de Tipo de Rango Alto
-            selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeMiddleTop"), //Select de Tipo de Rango Medio Alto
-            selectArrangementRangeTypeMiddleBottom = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeMiddleBottom"), //Select de Tipo de Rango Medio Bajo
-            selectArrangementRangeTypeBottom = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeBottom"), //Select de Tipo de Rango Bajo
-            tabRankTop = $("#tabRankTop-fo"), //Tab de Rango Alto
-            tabRankMiddleTop = $("#tabRankMiddleTop-fo"), //Tab de Rango Medio Alto
-            tabRankMiddleBottom = $("#tabRankMiddleBottom-fo"), //Tab de Rango Medio Bajo
-            tabRankBottom = $("#tabRankBottom-fo"), //Tab de Rango Bajo
-            tabRankTopEstable = $("#tabRankTopEstable-fo"), //Tab de Rango Alto Estable
-            tabRankMiddleTopEstable = $("#tabRankMiddleTopEstable-fo"), //Tab de Rango Medio Alto Estable
-            tabRankMiddleBottomEstable = $("#tabRankMiddleBottomEstable-fo"), //Tab de Rango Medio Bajo Estable
-            tabRankBottomTopEstable = $("#tabRankBottomTopEstable-fo"), //Tab de Rango Bajo Alto Estable
-            tabRankBottomBottomEstable = $("#tabRankBottomBottomEstable-fo"), //Tab de Rango Bajo Bajo Estable
-            sectionTopBasic = $("#sectionTopBasic-fo"), //Sección de Rango de Gestión Alto Básico
-            sectionTopMixed = $("#sectionTopMixed-fo"), //Sección de Rango de Gestión Alto Mixto
-            sectionMiddleTopBasic = $("#sectionMiddleTopBasic-fo"), //Sección de Rango de Gestión Medio Alto Básico
-            sectionMiddleTopMixed = $("#sectionMiddleTopMixed-fo"), //Sección de Rango de Gestión Medio Alto Mixto
-            sectionMiddleBottomBasic = $("#sectionMiddleBottomBasic-fo"), //Sección de Rango de Gestión Medio Bajo Básico
-            sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed-fo"), //Sección de Rango de Gestión Medio Bajo Mixto
-            sectionBottomBasic = $("#sectionBottomBasic-fo"), //Sección de Rango de Gestión Bajo Básico
-            sectionBottomMixed = $("#sectionBottomMixed-fo"), //Sección de Rango de Gestión Bajo Mixto
-            inputRefParent = $("#pequiven_objetive_strategic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo
-            inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeTop"), //Input Hidden del tipo de rango de gestión alto
-            inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeMiddleTop"), //Input Hidden del tipo de rango de gestión medio alto
-            inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeMiddleBottom"), //Input Hidden del tipo de rango de gestión medio bajo
-            inputHiddenTypeArrangementRangeBottom = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeBottom"), //Input Hidden del tipo de rango de gestión bajo
-            inputRankTopBasic = $("#pequiven_indicator_strategicfo_registration_rankTopBasic"), //Input de rankTopBasic
-            inputRankTopMixedTop = $("#pequiven_indicator_strategicfo_registration_rankTopMixedTop"), //Input de rankTopMixedTop
-            inputRankTopMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankTopMixedBottom"), //Input de rankTopMixedBottom
-            inputRankMiddleTopBasic = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopBasic"), //Input de rankMiddleTopBasic
-            inputRankMiddleTopMixedTop = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopMixedTop"), //Input de rankMiddleTopMixedTop
-            inputRankMiddleTopMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopMixedBottom"), //Input de rankMiddleTopMixedBottom
-            inputRankMiddleBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomBasic"), //Input de rankMiddleBottomBasic
-            inputRankMiddleBottomMixedTop = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomMixedTop"), //Input de rankMiddleBottomMixedTop
-            inputRankMiddleBottomMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomMixedBottom"), //Input de rankMiddleBottomMixedBottom
-            inputRankBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomBasic"), //Input de rankBottomBasic
-            inputRankBottomTopBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomTopBasic"), //Input de rankBottomMixedTop
-            inputRankBottomBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomBottomBasic"), //Input de rankBottomMixedBottom
-            inputRankBottomMixedTop = $("#pequiven_indicator_strategicfo_registration_rankBottomMixedTop"), //Input de rankBottomMixedTop
-            inputRankBottomMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankBottomMixedBottom"), //Input de rankBottomMixedBottom
-            labelsRangeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
-            ;
+                form = $("#registerIndicatorStrategicFOForm"),
+                inputRef = $("#pequiven_indicator_strategicfo_registration_ref"), //Input de Ref
+                inputHiddenRefParent = $("#pequiven_indicator_strategicfo_registration_refObjetive"), //Input Hidden de la Referencia del Objetivo Estratégico            
+                selectTendency = $("#pequiven_indicator_strategicfo_registration_tendency"), //Select de Tendencia del indicador
+                selectArrangementRangeTypeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop"), //Select de Tipo de Rango Alto
+                selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeMiddleTop"), //Select de Tipo de Rango Medio Alto
+                selectArrangementRangeTypeMiddleBottom = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeMiddleBottom"), //Select de Tipo de Rango Medio Bajo
+                selectArrangementRangeTypeBottom = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeBottom"), //Select de Tipo de Rango Bajo
+                tabRankTop = $("#tabRankTop-fo"), //Tab de Rango Alto
+                tabRankMiddleTop = $("#tabRankMiddleTop-fo"), //Tab de Rango Medio Alto
+                tabRankMiddleBottom = $("#tabRankMiddleBottom-fo"), //Tab de Rango Medio Bajo
+                tabRankBottom = $("#tabRankBottom-fo"), //Tab de Rango Bajo
+                tabRankTopEstable = $("#tabRankTopEstable-fo"), //Tab de Rango Alto Estable
+                tabRankMiddleTopEstable = $("#tabRankMiddleTopEstable-fo"), //Tab de Rango Medio Alto Estable
+                tabRankMiddleBottomEstable = $("#tabRankMiddleBottomEstable-fo"), //Tab de Rango Medio Bajo Estable
+                tabRankBottomTopEstable = $("#tabRankBottomTopEstable-fo"), //Tab de Rango Bajo Alto Estable
+                tabRankBottomBottomEstable = $("#tabRankBottomBottomEstable-fo"), //Tab de Rango Bajo Bajo Estable
+                sectionTopBasic = $("#sectionTopBasic-fo"), //Sección de Rango de Gestión Alto Básico
+                sectionTopMixed = $("#sectionTopMixed-fo"), //Sección de Rango de Gestión Alto Mixto
+                sectionMiddleTopBasic = $("#sectionMiddleTopBasic-fo"), //Sección de Rango de Gestión Medio Alto Básico
+                sectionMiddleTopMixed = $("#sectionMiddleTopMixed-fo"), //Sección de Rango de Gestión Medio Alto Mixto
+                sectionMiddleBottomBasic = $("#sectionMiddleBottomBasic-fo"), //Sección de Rango de Gestión Medio Bajo Básico
+                sectionMiddleBottomMixed = $("#sectionMiddleBottomMixed-fo"), //Sección de Rango de Gestión Medio Bajo Mixto
+                sectionBottomBasic = $("#sectionBottomBasic-fo"), //Sección de Rango de Gestión Bajo Básico
+                sectionBottomMixed = $("#sectionBottomMixed-fo"), //Sección de Rango de Gestión Bajo Mixto
+                inputRefParent = $("#pequiven_objetive_strategic_registration_ref", window.parent.document), //Input de Referencia de la ventana Padre del Objetivo
+                inputHiddenTypeArrangementRangeTop = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeTop"), //Input Hidden del tipo de rango de gestión alto
+                inputHiddenTypeArrangementRangeMiddleTop = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeMiddleTop"), //Input Hidden del tipo de rango de gestión medio alto
+                inputHiddenTypeArrangementRangeMiddleBottom = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeMiddleBottom"), //Input Hidden del tipo de rango de gestión medio bajo
+                inputHiddenTypeArrangementRangeBottom = $("#pequiven_indicator_strategicfo_registration_typeArrangementRangeTypeBottom"), //Input Hidden del tipo de rango de gestión bajo
+                inputRankTopBasic = $("#pequiven_indicator_strategicfo_registration_rankTopBasic"), //Input de rankTopBasic
+                inputRankTopMixedTop = $("#pequiven_indicator_strategicfo_registration_rankTopMixedTop"), //Input de rankTopMixedTop
+                inputRankTopMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankTopMixedBottom"), //Input de rankTopMixedBottom
+                inputRankMiddleTopBasic = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopBasic"), //Input de rankMiddleTopBasic
+                inputRankMiddleTopMixedTop = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopMixedTop"), //Input de rankMiddleTopMixedTop
+                inputRankMiddleTopMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankMiddleTopMixedBottom"), //Input de rankMiddleTopMixedBottom
+                inputRankMiddleBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomBasic"), //Input de rankMiddleBottomBasic
+                inputRankMiddleBottomMixedTop = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomMixedTop"), //Input de rankMiddleBottomMixedTop
+                inputRankMiddleBottomMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankMiddleBottomMixedBottom"), //Input de rankMiddleBottomMixedBottom
+                inputRankBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomBasic"), //Input de rankBottomBasic
+                inputRankBottomTopBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomTopBasic"), //Input de rankBottomMixedTop
+                inputRankBottomBottomBasic = $("#pequiven_indicator_strategicfo_registration_rankBottomBottomBasic"), //Input de rankBottomMixedBottom
+                inputRankBottomMixedTop = $("#pequiven_indicator_strategicfo_registration_rankBottomMixedTop"), //Input de rankBottomMixedTop
+                inputRankBottomMixedBottom = $("#pequiven_indicator_strategicfo_registration_rankBottomMixedBottom"), //Input de rankBottomMixedBottom
+                labelsRangeTop = $("#pequiven_indicator_strategicfo_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
+                ;
 
         //Función que cierra el formulario
         function closeIFrame() {
             $("#modals", window.parent.document).remove();
         }
 
+        var valid = false;
         $(document).ready(function()
         {
+            form.submit(function(e) {
+                if (valid == false) {
+                    $.modal.confirm('{{ 'form.question.registerIndicatorStrategic'|trans ({}, 'PequivenIndicatorBundle') }}', function()
+                    {
+                        valid = true;
+                        form.submit();
+                    }, function()
+                    {
+                    }, {'textCancel': 'Cancelar', 'textConfirm': 'Aceptar'});
+                }
+
+                if (valid == false) {
+                    e.preventDefault();
+                }
+                return valid;
+
+            });
+
             $("#listEstable").hide();
             charge();
 
@@ -270,9 +278,6 @@
                 $("#add-tabs-fo").attr('style', 'height:210px;');
                 //Inicializamos el select2 de Fórmula
                 chargeSelect2Formula();
-
-                //Incializamos el formato numerico para el input de Meta
-                inputGoal.number(true, 2, ',', '.');
 
                 inputHiddenTypeArrangementRangeTop.val("TOP_BASIC");
                 inputHiddenTypeArrangementRangeMiddleTop.val("MIDDLE_TOP_BASIC");
@@ -323,9 +328,9 @@
                 $("input[id='pequiven_indicator_strategicfo_registration_arrangementRangeTypeBottom_4']").attr("checked", "checked");
                 //sectionBottomBasic.hide();
                 sectionBottomMixed.hide();
-                
+
                 //Cargamos por defecto el color verde en la tab de Rango Alto
-                $("#tabRankTop-fo a").attr("style","color: #000000; background: #00FF00;");
+                $("#tabRankTop-fo a").attr("style", "color: #000000; background: #00FF00;");
             }
         });
         //Fin document.ready
@@ -334,66 +339,66 @@
         tabRankTop.click(function() {
             if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_1']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #00FF00;");
-                $("#tabRankTop-fo a").attr("style","color: #000000; background: #00FF00;");
+                $("#tabRankTop-fo a").attr("style", "color: #000000; background: #00FF00;");
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
-                $("#tabRankTop-fo a").attr("style","color: #000000; background: red;");
+                $("#tabRankTop-fo a").attr("style", "color: #000000; background: red;");
             }
         });
         //Al hacer click sobre la tab de Rango Alto Estable
         tabRankTopEstable.click(function() {
             $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #00FF00;");
-            $("#tabRankTopEstable-fo a").attr("style","color: #000000; background: #00FF00;");
+            $("#tabRankTopEstable-fo a").attr("style", "color: #000000; background: #00FF00;");
         });
         //Al hacer click sobre la tab de Rango Medio Alto para Comportamiento No Estable
         tabRankMiddleTop.click(function() {
             if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_1']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffe326;");
-                $("#tabRankMiddleTop-fo a").attr("style","color: #000000; background: #ffe326;");
+                $("#tabRankMiddleTop-fo a").attr("style", "color: #000000; background: #ffe326;");
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffb900;");
-                $("#tabRankMiddleTop-fo a").attr("style","color: #000000; background: #ffb900;");
+                $("#tabRankMiddleTop-fo a").attr("style", "color: #000000; background: #ffb900;");
             }
         });
         //Al hacer click sobre la tab de Rango Medio Alto Estable
         tabRankMiddleTopEstable.click(function() {
             $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffe326;");
-            $("#tabRankMiddleTopEstable-fo a").attr("style","color: #000000; background: #ffe326;");
+            $("#tabRankMiddleTopEstable-fo a").attr("style", "color: #000000; background: #ffe326;");
         });
         //Al hacer click sobre la tab de Rango Medio Bajo No Estable
         tabRankMiddleBottom.click(function() {
             if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_1']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffb900;");
-                $("#tabRankMiddleBottom-fo a").attr("style","color: #000000; background: #ffb900;");
+                $("#tabRankMiddleBottom-fo a").attr("style", "color: #000000; background: #ffb900;");
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffe326;");
-                $("#tabRankMiddleBottom-fo a").attr("style","color: #000000; background: #ffe326;");
+                $("#tabRankMiddleBottom-fo a").attr("style", "color: #000000; background: #ffe326;");
             }
         });
         //Al hacer click sobre la tab de Rango Medio Bajo Estable
         tabRankMiddleBottomEstable.click(function() {
             $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #ffb900;");
-            $("#tabRankMiddleBottomEstable-fo a").attr("style","color: #000000; background: #ffb900;");
+            $("#tabRankMiddleBottomEstable-fo a").attr("style", "color: #000000; background: #ffb900;");
         });
         //Al hacer click sobre la tab de Rango Bajo para Comportamiento No Estable
         tabRankBottom.click(function() {
             if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_1']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
-                $("#tabRankBottom-fo a").attr("style","color: #000000; background: red;");
+                $("#tabRankBottom-fo a").attr("style", "color: #000000; background: red;");
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
                 $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #00FF00;");
-                $("#tabRankBottom-fo a").attr("style","color: #000000; background: #00FF00;");
+                $("#tabRankBottom-fo a").attr("style", "color: #000000; background: #00FF00;");
             }
         });
         //Al hacer click sobre la tab de Rango Bajo-Bajo (Rango Bajo) para Comportamiento Estable
         tabRankBottomTopEstable.click(function() {
             $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
-            $("#tabRankBottomTopEstable-fo a").attr("style","color: #000000; background: red;");
+            $("#tabRankBottomTopEstable-fo a").attr("style", "color: #000000; background: red;");
         });
         //Al hacer click sobre la tab de Rango Bajo-Alto (Rango Alto) para Comportamiento Estable
         tabRankBottomBottomEstable.click(function() {
             $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
-            $("#tabRankBottomBottomEstable-fo a").attr("style","color: #000000; background: red;");
+            $("#tabRankBottomBottomEstable-fo a").attr("style", "color: #000000; background: red;");
         });
 
         //Al seleccionar el Rango de Gestión Alto
@@ -470,15 +475,15 @@
                 } else if (tabRankBottom.hasClass("active")) {
                     $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
                 }
-                $("#tabRankTop-fo a").attr("style","color: #000000; background: #00FF00;");
-                $("#tabRankMiddleTop-fo a").attr("style","color: #000000; background: #ffe326;");
-                $("#tabRankMiddleBottom-fo a").attr("style","color: #000000; background: #ffb900;");
-                $("#tabRankBottom-fo a").attr("style","color: #000000; background: red;");
+                $("#tabRankTop-fo a").attr("style", "color: #000000; background: #00FF00;");
+                $("#tabRankMiddleTop-fo a").attr("style", "color: #000000; background: #ffe326;");
+                $("#tabRankMiddleBottom-fo a").attr("style", "color: #000000; background: #ffb900;");
+                $("#tabRankBottom-fo a").attr("style", "color: #000000; background: red;");
                 tabRankTop.attr('style', 'background: #00FF00;');
                 tabRankMiddleTop.attr('style', 'background: #ffe326;');
                 tabRankMiddleBottom.attr('style', 'background: #ffb900;');
                 tabRankBottom.attr('style', 'background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_2']").is(':checked')) {
@@ -497,15 +502,15 @@
                 } else if (tabRankBottom.hasClass("active")) {
                     $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: #00FF00;");
                 }
-                $("#tabRankTop-fo a").attr("style","color: #000000; background: red;");
-                $("#tabRankMiddleTop-fo a").attr("style","color: #000000; background: #ffb900;");
-                $("#tabRankMiddleBottom-fo a").attr("style","color: #000000; background: #ffe326;");
-                $("#tabRankBottom-fo a").attr("style","color: #000000; background: #00FF00;");
+                $("#tabRankTop-fo a").attr("style", "color: #000000; background: red;");
+                $("#tabRankMiddleTop-fo a").attr("style", "color: #000000; background: #ffb900;");
+                $("#tabRankMiddleBottom-fo a").attr("style", "color: #000000; background: #ffe326;");
+                $("#tabRankBottom-fo a").attr("style", "color: #000000; background: #00FF00;");
                 tabRankTop.attr('style', 'background: red;');
                 tabRankMiddleTop.attr('style', 'background: #ffb900;');
                 tabRankMiddleBottom.attr('style', 'background: #ffe326;');
                 tabRankBottom.attr('style', 'background: #00FF00;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTop'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopNoEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopNoEstableMixed'|trans }}';
             } else if ($("input[id='pequiven_indicator_strategicfo_registration_tendency_3']").is(':checked')) {
@@ -528,17 +533,17 @@
                 if (tabRankBottomBottomEstable.hasClass("active")) {
                     $(".tabs-content span.tabs-back").attr("style", "color: #000000; background: red;");
                 }
-                $("#tabRankTopEstable-fo a").attr("style","color: #000000; background: #00FF00;");
-                $("#tabRankMiddleTopEstable-fo a").attr("style","color: #000000; background: #ffe326;");
-                $("#tabRankMiddleBottomEstable-fo a").attr("style","color: #000000; background: #ffb900;");
-                $("#tabRankBottomTopEstable-fo a").attr("style","color: #000000; background: red;");
-                $("#tabRankBottomBottomEstable-fo a").attr("style","color: #000000; background: red;");
+                $("#tabRankTopEstable-fo a").attr("style", "color: #000000; background: #00FF00;");
+                $("#tabRankMiddleTopEstable-fo a").attr("style", "color: #000000; background: #ffe326;");
+                $("#tabRankMiddleBottomEstable-fo a").attr("style", "color: #000000; background: #ffb900;");
+                $("#tabRankBottomTopEstable-fo a").attr("style", "color: #000000; background: red;");
+                $("#tabRankBottomBottomEstable-fo a").attr("style", "color: #000000; background: red;");
                 tabRankTopEstable.attr('style', 'background: #00FF00;');
                 tabRankMiddleTopEstable.attr('style', 'background: #ffe326;');
                 tabRankMiddleBottomEstable.attr('style', 'background: #ffb900;');
                 tabRankBottomTopEstable.attr('style', 'background: red;');
                 tabRankBottomBottomEstable.attr('style', 'background: red;');
-                $("#rankArrangementTop label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
+                $("#rankArrangementTop-fo label.label").text('{{ 'form.arrangementRangeTypeTopEstable'|trans }}');
                 labelsRangeTop[0].innerHTML = '{{ 'form.rankTopEstableBasic'|trans }}';
                 labelsRangeTop[1].innerHTML = '{{ 'form.rankTopEstableMixed'|trans }}';
             }

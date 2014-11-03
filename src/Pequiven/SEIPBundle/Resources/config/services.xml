@@ -4,10 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="pequiven_seip.example.class">Pequiven\SEIPBundle\Example</parameter>
+        <parameter key="jms_serializer.serialized_name_annotation_strategy.class">JMS\Serializer\Naming\IdenticalPropertyNamingStrategy</parameter>
     </parameters>
+<!--
 
     <services>
         <service id="pequiven_seip.example" class="%pequiven_seip.example.class%">
@@ -38,10 +38,19 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.listener.historical" class="Pequiven\SEIPBundle\EventListener\HistoricalListerner">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         
         <!-- Servicio necesario para el SerializerListener -->
         <service id="seip.listener.serializer" class="Pequiven\SEIPBundle\EventListener\SerializerListener">
             <tag name="jms_serializer.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
         
         <!-- Servicio necesario para el CommonObject -->
@@ -51,9 +60,55 @@
             </call>
         </service>
         
+        <!-- Repositorio de Monitor -->
+        <service id="pequiven.repository.seipmonitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
+        </service>
+        
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
-        
+        <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Period" />
+        </service>
+        <service id="twig.extension.seip.core" class="Pequiven\SEIPBundle\Twig\Extension\CoreExtension" public="false">
+            <tag name="twig.extension" />
+            <argument type="service" id="twig.loader" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.sequence_generator" class="Pequiven\SEIPBundle\Service\SequenceGenerator">
+            <call method="setSequenceGenerator">
+                <argument type="service" id="tecnocreaciones_tools.sequence_generator"  />
+            </call>
+        </service>
+        <service id="seip.user_manager" class="Pequiven\SEIPBundle\Model\UserManager">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Tácticos Agrupados por Grupo de Gerencia de 1ra Línea -->
+        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Tácticos por Grupo de Gerencia de 1ra Línea -->
+        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorChargedByGroup">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Operativos Agrupados por Grupo de Gerencia de 1ra Línea -->
+        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorCharged">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
+        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
     </services>
 </container>

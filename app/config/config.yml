@@ -29,6 +29,9 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:
+            - 'PequivenSEIPBundle:Template:Form/fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -103,13 +106,23 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            angular_dependencies: ['bundles/pequivenseip/angular/modules/seipModule.js']
+            angular_dependencies: 
+                        - 'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
+                        - 'bundles/pequivenseip/angular/modules/seipModule.js'
+                        - 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-cookies.min.js'
             angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'
 
-ext_direct:
-    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+#ext_direct:
+#    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
+
+tpg_extjs:
+    entities:
+        - @PequivenArrangementProgramBundle/Entity/
+    remoting:
+        bundles:
+            - PequivenArrangementProgramBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -117,7 +130,7 @@ bazinga_js_translation:
 jms_serializer:
     handlers:
         datetime:
-            default_format: "Y-m-d H:m:s" # ISO8601
+            default_format: "Y-m-d H:i:s" # ISO8601
     metadata:
         debug: "%kernel.debug%"
         auto_detection: true
@@ -129,9 +142,27 @@ jms_serializer:
 tecnocreaciones_install:
     credentials:
         username: superAdmin
+        
+tecnocreaciones_tools:
+    configuration:
+        enable: true
+        debug: false
+        configuration_manager_class: Pequiven\SEIPBundle\Service\Configuration
+        configuration_name_service: seip.configuration
+    sequence_generator:
+        options:
+            additional_masks:
+                - gerencia
+                - type
                 
 sylius_resource:
     resources:
+        pequiven.seipmonitor:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\Monitor
+                controller: Pequiven\SEIPBundle\Controller\MonitorController
+                repository: Pequiven\SEIPBundle\Repository\MonitorRepository
         #Objetivo estratégico
         pequiven.objetivestrategic:
             driver: doctrine/orm
@@ -143,7 +174,7 @@ sylius_resource:
         #Objetivo táctico
         pequiven.objetivetactic:
             driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Tactic:list.html.twig
+            templates: PequivenObjetiveBundle:Tactic
             classes:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
@@ -181,7 +212,7 @@ sylius_resource:
         #Maestro gerencia 1ra línea
         pequiven.gerenciafirst:
             driver: doctrine/orm
-            templates: PequivenMasterBundle:Gerencia:list.html.twig
+            templates: PequivenMasterBundle:Gerencia
             classes:
                 model: Pequiven\MasterBundle\Entity\Gerencia
                 controller: Pequiven\MasterBundle\Controller\GerenciaController
@@ -201,3 +232,34 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserPermissionController
                 model: Pequiven\SEIPBundle\Entity\UserPermission
                 repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository
+        pequiven_seip.arrangementprogram:
+            driver: doctrine/orm
+            templates: PequivenArrangementProgramBundle:ArrangementProgram
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\ArrangementProgramController
+                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
+        pequiven_seip.arrangementprogram_data:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
+        pequiven_seip.arrangementprogram_goal:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GoalController
+                model: Pequiven\ArrangementProgramBundle\Entity\Goal
+                repository: Pequiven\ArrangementProgramBundle\Repository\GoalRepository
+        pequiven_seip.complejo:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\MasterBundle\Entity\Complejo
+                repository: Pequiven\MasterBundle\Repository\ComplejoRepository
+        pequiven_seip.user:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * User model
@@ -82,6 +83,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $parent;
     
     /** 
+     * Dirección
+     * @var \Pequiven\MasterBundle\Entity\Direction
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Direction")
+     * @ORM\JoinColumn(name="fk_direction", referencedColumnName="id")
+     */
+    private $direction;
+    
+    /** 
      * Complejo
      * 
      * @var \Pequiven\MasterBundle\Entity\Complejo
@@ -93,7 +102,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     /**
      * Gerencia
      * 
-     * @var=\Pequiven\MasterBundle\Entity\Gerencia
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
@@ -118,6 +127,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $cargo;
     
     /**
+     * @var \Pequiven\MasterBundle\Entity\Rol
      * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Rol")
      * @ORM\JoinTable(name="fos_user_user_rol",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -125,6 +135,33 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * )
      */
     protected $groups;
+    
+    /**
+     * Programas de gestion
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * @ORM\ManyToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="responsibles")
+     */
+    protected $arrangementPrograms;
+
+    /**
+     * Metas
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Goal
+     * @ORM\ManyToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="responsibles")
+     */
+    private $goals;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
     /**
      * Get id
@@ -296,14 +333,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     {
         return $this->numPersonal;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add children
@@ -453,7 +482,107 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         return $this->gerenciaSecond;
     }
     
+    /**
+     * Set direction
+     *
+     * @param \Pequiven\MasterBundle\Entity\Direction $direction
+     * @return Gerencia
+     */
+    public function setDirection(\Pequiven\MasterBundle\Entity\Direction $direction = null)
+    {
+        $this->direction = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Get direction
+     *
+     * @return \Pequiven\MasterBundle\Entity\Direction 
+     */
+    public function getDirection()
+    {
+        return $this->direction;
+    }
+    
     public function __toString() {
-        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getUsername());
+        return sprintf("%s %s (%s)",$this->getFirstName(),$this->getLastName(),$this->getNumPersonal());
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Add goals
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
+     * @return User
+     */
+    public function addGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
+    {
+        $this->goals[] = $goals;
+
+        return $this;
+    }
+
+    /**
+     * Remove goals
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Goal $goals
+     */
+    public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
+    {
+        $this->goals->removeElement($goals);
+    }
+
+    /**
+     * Get goals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGoals()
+    {
+        return $this->goals;
+    }
+    /**
+     * Devuelve el nivel del rol asignado
+     * @return integer
+     */
+    public function getLevelByGroup()
+    {
+        if(!isset($this->levelByGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level){
+                    $level = $group->getLevel();
+                }
+            }
+            $this->levelByGroup = $level;
+        }
+        return $this->levelByGroup;
+    }
+    
+    /**
+     * Devuelve el nivel real del rol asignado, nunca devuelve rol auxiliar
+     * 
+     * @return integer
+     */
+    public function getLevelRealByGroup(){
+        if(!isset($this->levelRealByGroup)){
+            $this->levelRealByGroup = Rol::getRoleLevel($this->getLevelByGroup());
+        }
+        return $this->levelRealByGroup;
+    }
+    
+    public function getFullNameUser(){
+        return $this->firstName . ' '.$this->lastName. ' ('.$this->numPersonal.' | '.$this->username.')';
     }
 }

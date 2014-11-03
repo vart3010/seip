@@ -2,59 +2,206 @@
 
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use DateTime;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\ArrangementProgramBundle\Entity\Timeline;
+use Pequiven\SEIPBundle\Controller\SEIPController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
-use Pequiven\ArrangementProgramBundle\Form\ArrangementProgramType;
+use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador del programa de gestion
  *
- * @Route("/arrangementprogram")
  */
-class ArrangementProgramController extends Controller
+class ArrangementProgramController extends SEIPController
 {
+    public function indexAction(Request $request) {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
 
-    /**
-     * Lists all ArrangementProgram entities.
-     *
-     * @Route("/", name="pequiven_arrangementprogram")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByRol',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
 
-        $entities = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findAll();
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('index.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $user = $this->getUser();
+            $level = $user->getLevelRealByGroup();
+            $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
+            $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
 
-        return array(
-            'entities' => $entities,
-        );
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            //PequivenArrangementProgramBundle
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user
+            ));
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
+        }
+        return $this->handleView($view);
     }
+    
+    public function assignedAction(Request $request) {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByAssigned',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('assignedIndex.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $user = $this->getUser();
+            $level = $user->getLevelRealByGroup();
+            $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
+            $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            //PequivenArrangementProgramBundle
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user
+            ));
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
     /**
      * Creates a new ArrangementProgram entity.
      *
-     * @Route("/", name="pequiven_arrangementprogram_create")
-     * @Method("POST")
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:new.html.twig")
+     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:create.html.twig")
      */
     public function createAction(Request $request)
     {
+        $type = $request->get("type");
         $entity = new ArrangementProgram();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('arrangementprogram_show', array('id' => $entity->getId())));
+        $user = $this->getUser();
+        $period = $this->getRepositoryById('period')->findOneActive();
+        $entity
+                ->setType($type)
+                ->setPeriod($period)
+                ->setCreatedBy($user);
+        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+        $form = $this->createCreateForm($entity,array('type' => $type));
+        if($request->isMethod('GET')){
+            $form->remove('timeline');
         }
-
+        $form->handleRequest($request);
+        if($request->isMethod('POST') && $form->isValid()){
+            $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+            if($autoOpenOnSave == true){
+                $this->setFlash('autoOpenOnSave', true);
+            }
+            if($entity->getTimeline() === null){
+                $timeLine = new Timeline();
+                $entity->setTimeline($timeLine);
+            }
+            $entity->setDetails(new ArrangementProgram\Details());
+            
+            $this->domainManager->create($entity);
+            return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
+        }
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -66,12 +213,12 @@ class ArrangementProgramController extends Controller
      *
      * @param ArrangementProgram $entity The entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
-    private function createCreateForm(ArrangementProgram $entity)
+    private function createCreateForm(ArrangementProgram $entity,array $parameters)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
-            'action' => $this->generateUrl('pequiven_arrangementprogram_create'),
+        $form = $this->createForm('arrangementprogram', $entity, array(
+            'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
             'method' => 'POST',
         ));
 
@@ -79,36 +226,13 @@ class ArrangementProgramController extends Controller
     }
 
     /**
-     * Displays a form to create a new ArrangementProgram entity.
-     *
-     * @Route("/new", name="pequiven_arrangementprogram_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new ArrangementProgram();
-        $timeLine = new \Pequiven\ArrangementProgramBundle\Entity\Timeline();
-        //$timeLine->addGoal(new \Pequiven\ArrangementProgramBundle\Entity\Goal());
-        $entity->addTimeline($timeLine);
-        
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
      * Finds and displays a ArrangementProgram entity.
      *
-     * @Route("/{id}", name="arrangementprogram_show")
-     * @Method("GET")
      * @Template()
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
@@ -118,18 +242,27 @@ class ArrangementProgramController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-
+        
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        $isAllowToApprove = $arrangementProgramManager->isAllowToApprove($entity);
+        $isAllowToReview = $arrangementProgramManager->isAllowToReview($entity);
+        $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
+        $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
+        
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'isAllowToSendToReview' => $isAllowToSendToReview,
+            'isAllowToApprove' => $isAllowToApprove,
+            'isAllowToReview' => $isAllowToReview,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
         );
     }
 
     /**
      * Displays a form to edit an existing ArrangementProgram entity.
      *
-     * @Route("/{id}/edit", name="arrangementprogram_edit")
-     * @Method("GET")
      * @Template()
      */
     public function editAction($id)
@@ -141,14 +274,20 @@ class ArrangementProgramController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
+        //Security check
+        $user = $this->getUser();
+        if($entity->getCreatedBy() !== $user){
+            throw $this->createAccessDeniedHttpException();
+        }
+        if($entity->getStatus() !== ArrangementProgram::STATUS_DRAFT){
+            throw $this->createAccessDeniedHttpException();
+        }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
         
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -157,11 +296,11 @@ class ArrangementProgramController extends Controller
     *
     * @param ArrangementProgram $entity The entity
     *
-    * @return \Symfony\Component\Form\Form The form
+    * @return Form The form
     */
     private function createEditForm(ArrangementProgram $entity)
     {
-        $form = $this->createForm(new ArrangementProgramType(), $entity, array(
+        $form = $this->createForm('arrangementprogram', $entity, array(
             'action' => $this->generateUrl('arrangementprogram_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
@@ -170,107 +309,358 @@ class ArrangementProgramController extends Controller
     /**
      * Edits an existing ArrangementProgram entity.
      *
-     * @Route("/{id}", name="arrangementprogram_update")
-     * @Method("PUT")
-     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
+        $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
-
+        
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
         
-    
-        $originalTimelines = new \Doctrine\Common\Collections\ArrayCollection();
-        // Create an ArrayCollection of the current Tag objects in the database
-        foreach ($entity->getTimelines() as $timeline) {
-            foreach ($timeline->getGoals() as $goal) {
-//                var_dump($goal);
-            }
-            $originalTimelines->add($timeline);
+        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($entity)){
+            throw $this->createAccessDeniedHttpException();
         }
         
         $deleteForm = $this->createDeleteForm($id);
-        
         $editForm = $this->createEditForm($entity);
-        $editForm->submit($request);
+                
+        if($request->isMethod('POST') || $request->isMethod('PUT')){
+            $originalGoalsArray = array();
+            $timeline = $entity->getTimeline();
+            // Create an ArrayCollection of the current Tag objects in the database
+            foreach ($timeline->getGoals() as $goal) {
+                $originalGoalsArray[$timeline->getId()][] = $goal;
+            }
 
-        if ($editForm->isValid()) {
-            $timelines = $entity->getTimelines();
-//            var_dump($timelines[0]);
-//            var_dump($_POST['arrangementprogram']['timelines']['0']['goals']);
-            foreach ($originalTimelines as $originalTimeline) {
-                if(false === $entity->getTimelines()->contains($originalTimeline)){
-                    $entity->getTimelines()->removeElement($originalTimeline);
-                    $em->remove($originalTimeline);
-                }else{
-                    $timeline = $entity->getTimelines()->get($entity->getTimelines()->indexOf($originalTimeline));
-                    //var_dump($timeline->getGoals());
-                    foreach ($originalTimeline->getGoals() as $originalGoal) {
-//                        var_dump($timeline->getGoals()->contains($originalGoal));
+            $editForm->submit($request,false);
+
+            if ($editForm->isValid()) {
+                $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+                if($autoOpenOnSave == true){
+                    $this->setFlash('autoOpenOnSave', true);
+                }
+                $timeline = $entity->getTimeline();
+                if(isset($originalGoalsArray[$timeline->getId()])){
+                    $goals = $originalGoalsArray[$timeline->getId()];
+                    foreach ($goals as $originalGoal) {
                         if(false === $timeline->getGoals()->contains($originalGoal)){
                             $timeline->getGoals()->removeElement($originalGoal);
                             $em->remove($originalGoal);
                         }
                     }
                 }
-                
+                $this->domainManager->update($entity);
+
+                return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $id)));
             }
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('arrangementprogram_edit', array('id' => $id)));
-        }
-
-        return array(
+            if($editForm->isValid() === false){
+                $data['formErrors'] = $editForm;
+            }
+        }//Fin isMethodPost
+        
+        $data = array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        );
+        ); 
+        
+        $view = $this->view($data);
+        $view->setTemplate('PequivenArrangementProgramBundle:ArrangementProgram:edit.html.twig');
+        return $this->handleView($view);
     }
+    
     /**
-     * Deletes a ArrangementProgram entity.
-     *
-     * @Route("/{id}", name="arrangementprogram_delete")
-     * @Method("DELETE")
+     * Marca como revisado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
      */
-    public function deleteAction(Request $request, $id)
+    function revisedAction(Request $request)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToReview($resource)){
+            throw $this->createAccessDeniedHttpException();
         }
-
-        return $this->redirect($this->generateUrl('arrangementprogram'));
+        $resource->setStatus(ArrangementProgram::STATUS_REVISED);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setReviewedBy($user)
+                ->setRevisionDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_revised', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'revised');
+        
+        $this->domainManager->dispatchEvent('post_revised', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
     }
+    
+    /**
+     * Marca como revisado el programa de gestion "como en revision"
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function sendToReviewAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToSendToReview($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
+        
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        $details
+                ->setSendToReviewBy($user)
+                ->setSendToReviewDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'send_to_review');
+        
+        $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Regresa el programa de gestion a "borrador"
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function sendToDraftAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToSendToDraft($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $observation = $request->get('observation');
+        if(empty($observation)){
+            $this->flashHelper->setFlash('error', 'error_observation');
+        }else{
+            $resource->setStatus(ArrangementProgram::STATUS_DRAFT);
+            $this->addObservation($resource, $observation);
+                    
+            $this->domainManager->dispatchEvent('pre_send_to_draft', new ResourceEvent($resource));
 
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'send_to_draft');
+
+            $this->domainManager->dispatchEvent('pre_send_to_draft', new ResourceEvent($resource));
+        }
+        
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Regresa el programa de gestion a "revision"
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function returnToReviewAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowReturnToReview($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $observation = $request->get('observation');
+        if(empty($observation)){
+            $this->flashHelper->setFlash('error', 'error_observation');
+        }else{
+            $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
+            $this->addObservation($resource, $observation);
+                    
+            $this->domainManager->dispatchEvent('pre_return_to_review', new ResourceEvent($resource));
+
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'return_to_review');
+
+            $this->domainManager->dispatchEvent('post_return_to_review', new ResourceEvent($resource));
+        }
+        
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Marca como aprobado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function approvedAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToApprove($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        if($arrangementProgramManager->isYouCanApprove($resource) === true){
+            $resource->setStatus(ArrangementProgram::STATUS_APPROVED);
+
+            $user = $this->getUser();
+            $details = $resource->getDetails();
+            $details
+                    ->setApprovedBy($user)
+                    ->setApprovalDate(new DateTime());
+
+            $this->domainManager->dispatchEvent('pre_approved', new ResourceEvent($resource));
+
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'approved');
+
+            $this->domainManager->dispatchEvent('post_approved', new ResourceEvent($resource));
+        }else{
+            $this->flashHelper->setFlash('error', 'planned_not_complete');
+        }
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Marca como rechazado el programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function rejectAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToApprove($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $observation = $request->get('observation');
+        if(empty($observation)){
+            $this->flashHelper->setFlash('error', 'error_observation');
+        }else{
+            $resource->setStatus(ArrangementProgram::STATUS_REJECTED);
+            $this->addObservation($resource, $observation);
+            
+            $user = $this->getUser();
+            $details = $resource->getDetails();
+            $details
+                    ->setRejectedBy($user)
+                    ->setRejectedDate(new DateTime());
+
+            $this->domainManager->dispatchEvent('pre_rejected', new ResourceEvent($resource));
+
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'rejected');
+
+            $this->domainManager->dispatchEvent('post_rejected', new ResourceEvent($resource));
+        }
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * Agregar una observacion al programa de gestion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    function addObservationAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $view = $this->view();
+        $result = array(
+            'data' => $resource,
+            'success' => false,
+            'total' => 1
+        );
+        
+        $user = $this->getUser();
+        $textObservation = $request->get('observation',null);
+        if($textObservation != null){
+            $observation = new ArrangementProgram\Observation();
+            $observation
+                    ->setCreatedBy($user)
+                    ->setDescription($textObservation)
+                    ;
+            $resource->addObservation($observation);
+            $result['success'] = true;
+            $this->save($observation,true);
+        }
+        $view->setData($result);
+        $view->getSerializationContext()->setGroups(array('id','api_list','goal','goalDetails'));   
+        
+        return $this->handleView($view);
+    }
+    
     /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *
      * @param mixed $id The entity id
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('arrangementprogram_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Manejador de programa de gestion
+     * 
+     * @return \Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager
+     */
+    private function getArrangementProgramManager()
+    {
+        return $this->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->get('seip.user_manager');
+    }
+    
+    private function addObservation(ArrangementProgram $entity,$description) {
+        $observation = new ArrangementProgram\Observation();
+            $observation
+                ->setDescription($description)
+                ->setCreatedBy($this->getUser())
+                ;
+            $entity->addObservation($observation);
     }
 }

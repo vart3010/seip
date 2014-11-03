@@ -103,4 +103,8 @@ class Gerencia {
     public function getRefNameArray() {
         return $this->refName ;
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }

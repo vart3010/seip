@@ -1,5 +1,5 @@
 pequiven_arrangement_program:
-    resource: "@PequivenArrangementProgramBundle/Controller/"
+    resource: "@PequivenArrangementProgramBundle/Controller/Rest"
     type:     annotation
     prefix:   /
 
@@ -36,6 +36,9 @@ tecnocreaciones_template:
 pequiven_seip_menu:
     resource: "@PequivenSEIPBundle/Resources/config/routing/menu.yml"
 
+pequiven_seip_route:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/routing.yml"
+
 pequiven_master_route:
     resource: "@PequivenMasterBundle/Resources/config/routing/routing.yml"
     
@@ -44,6 +47,9 @@ pequiven_objetive_route:
 
 pequiven_indicator_route:
     resource: "@PequivenIndicatorBundle/Resources/config/routing/routing.yml"
+    
+pequiven_arrangement_program_yml:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/main.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
@@ -74,5 +80,6 @@ fos_js_routing:
 _bazinga_jstranslation:
     resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"    
     
-ext_direct:
-    resource: "@ExtDirectBundle/Resources/config/routing.yml"
+tpg_extjs:
+  resource: "@TpgExtjsBundle/Resources/config/routing.yml"
+  prefix:   /extjs

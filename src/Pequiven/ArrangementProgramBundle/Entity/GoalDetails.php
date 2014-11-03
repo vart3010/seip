@@ -3,14 +3,18 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tpg\ExtjsBundle\Annotation as Extjs;
+use Pequiven\ArrangementProgramBundle\Model\GoalDetails as Base;
 
 /**
  * Detalles de la meta
  *
+ * @Extjs\Model
+ * @Extjs\ModelProxy("/api/goals/details")
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalDetailsRepository")
  */
-class GoalDetails
+class GoalDetails extends Base
 {
     /**
      * @var integer
@@ -23,192 +27,192 @@ class GoalDetails
 
     /**
      * Planificado para enero
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="januaryPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="januaryPlanned", type="float",nullable=true)
      */
     private $januaryPlanned;
 
     /**
      * Real de enero
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="januaryReal", type="integer",nullable=true)
+     * @ORM\Column(name="januaryReal", type="float",nullable=true)
      */
     private $januaryReal;
 
     /**
      * Planificado para febrero
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="februaryPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="februaryPlanned", type="float",nullable=true)
      */
     private $februaryPlanned;
 
     /**
      * Real de febrero
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="februaryReal", type="integer",nullable=true)
+     * @ORM\Column(name="februaryReal", type="float",nullable=true)
      */
     private $februaryReal;
 
     /**
      * Planificado para marzo
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="marchPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="marchPlanned", type="float",nullable=true)
      */
     private $marchPlanned;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="marchReal", type="integer",nullable=true)
+     * @ORM\Column(name="marchReal", type="float",nullable=true)
      */
     private $marchReal;
 
     /**
      * Planificado para abril
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="aprilPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="aprilPlanned", type="float",nullable=true)
      */
     private $aprilPlanned;
 
     /**
      * Real de abril
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="aprilReal", type="integer",nullable=true)
+     * @ORM\Column(name="aprilReal", type="float",nullable=true)
      */
     private $aprilReal;
 
     /**
      * Planificado para mayo
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="mayPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="mayPlanned", type="float",nullable=true)
      */
     private $mayPlanned;
 
     /**
      * Real de mayo
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="mayReal", type="integer",nullable=true)
+     * @ORM\Column(name="mayReal", type="float",nullable=true)
      */
     private $mayReal;
 
     /**
      * Planificado para junio
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="junePlanned", type="integer",nullable=true)
+     * @ORM\Column(name="junePlanned", type="float",nullable=true)
      */
     private $junePlanned;
 
     /**
      * Real de junio
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="juneReal", type="integer",nullable=true)
+     * @ORM\Column(name="juneReal", type="float",nullable=true)
      */
     private $juneReal;
 
     /**
      * Planificado para julio
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="julyPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="julyPlanned", type="float",nullable=true)
      */
     private $julyPlanned;
 
     /**
      * Real de julio
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="julyReal", type="integer",nullable=true)
+     * @ORM\Column(name="julyReal", type="float",nullable=true)
      */
     private $julyReal;
 
     /**
      * Planificado para agosto
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="augustPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="augustPlanned", type="float",nullable=true)
      */
     private $augustPlanned;
 
     /**
      * Real de agosto
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="augustReal", type="integer",nullable=true)
+     * @ORM\Column(name="augustReal", type="float",nullable=true)
      */
     private $augustReal;
 
     /**
      * Planificado para septiembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="septemberPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="septemberPlanned", type="float",nullable=true)
      */
     private $septemberPlanned;
 
     /**
      * Real de septiembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="septemberReal", type="integer",nullable=true)
+     * @ORM\Column(name="septemberReal", type="float",nullable=true)
      */
     private $septemberReal;
 
     /**
      * Planificado para octubre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="octoberPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="octoberPlanned", type="float",nullable=true)
      */
     private $octoberPlanned;
 
     /**
      * Real de octubre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="octoberReal", type="integer",nullable=true)
+     * @ORM\Column(name="octoberReal", type="float",nullable=true)
      */
     private $octoberReal;
 
     /**
      * Planificado para noviembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="novemberPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="novemberPlanned", type="float",nullable=true)
      */
     private $novemberPlanned;
 
     /**
      * Real de noviembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="novemberReal", type="integer",nullable=true)
+     * @ORM\Column(name="novemberReal", type="float",nullable=true)
      */
     private $novemberReal;
 
     /**
      * Planificado para diciembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="decemberPlanned", type="integer",nullable=true)
+     * @ORM\Column(name="decemberPlanned", type="float",nullable=true)
      */
     private $decemberPlanned;
 
     /**
      * Real de diciembre
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="decemberReal", type="integer",nullable=true)
+     * @ORM\Column(name="decemberReal", type="float",nullable=true)
      */
     private $decemberReal;
 
@@ -227,6 +231,25 @@ class GoalDetails
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Goal",mappedBy="goalDetails")
      */
     private $goal;
+    
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="int",mapping="goal.weight")
+     */
+    private $goalWeight;
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="date",mapping="goal.startDate")
+     */
+    private $goalDateStart;
+    /**
+     *
+     * @var type 
+     * @Extjs\Model\Field(type="date",mapping="goal.endDate")
+     */
+    private $goalDateEnd;
 
     /**
      * Get id

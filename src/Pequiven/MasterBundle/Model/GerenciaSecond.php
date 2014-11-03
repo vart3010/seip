@@ -220,6 +220,15 @@ class GerenciaSecond {
     
     protected $refName = array();
     
+    /**
+     * Tipo de gerencia modular
+     */
+    const TYPE_MANAGEMENT_MODULAR = 1;
+    /**
+     * Tipo de gerencia vinculante
+     */
+    const TYPE_MANAGEMENT_BINDING = 0;
+    
     public function __construct() {
         //Morón
         $this->refName[self::REF_GERENCIA_PRODUCCION_CPM] = 'GERENCIA_PRODUCCION_CPM';
@@ -379,5 +388,18 @@ class GerenciaSecond {
      */
     public function getRefNameArray() {
         return $this->refName ;
+    }
+    
+    public function __toString() {
+        return $this->description;
+    }
+    
+    static function getTypesManagement() 
+    {
+        static $typeManagement = array(
+            self::TYPE_MANAGEMENT_MODULAR => 'pequiven.arrangement_program.type_management.modular',
+            self::TYPE_MANAGEMENT_BINDING => 'pequiven.arrangement_program.type_management.binding',
+        );
+        return $typeManagement;
     }
 }

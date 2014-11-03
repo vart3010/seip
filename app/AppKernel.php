@@ -36,7 +36,7 @@ class AppKernel extends Kernel
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             
-            new \Ext\DirectBundle\ExtDirectBundle(),
+            new \Tpg\ExtjsBundle\TpgExtjsBundle(),
             
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
@@ -50,6 +50,7 @@ class AppKernel extends Kernel
             new Pequiven\IndicatorBundle\PequivenIndicatorBundle(),
             new Pequiven\ArrangementBundle\PequivenArrangementBundle(),
             new Pequiven\ArrangementProgramBundle\PequivenArrangementProgramBundle(),
+            new Tecnocreaciones\Bundle\BoxBundle\TecnocreacionesBoxBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

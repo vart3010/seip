@@ -119,7 +119,6 @@ class IndicatorTacticController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -191,7 +190,6 @@ class IndicatorTacticController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -357,7 +355,7 @@ class IndicatorTacticController extends baseController {
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_TACTICO;
 
-        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
+        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true, 'userCreatedAt' => $user));
         $totalResults = count($results);
 
         if (is_array($results) && $totalResults > 0) {
@@ -415,7 +413,7 @@ class IndicatorTacticController extends baseController {
 
         if (is_array($objetiveStrategicId) && is_numeric($gerenciaFirstId)) {
 
-            $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetiveStrategicId, array('fromIndicator' => true, 'gerenciaFirstId' => $gerenciaFirstId));
+            $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetiveStrategicId, array('fromIndicator' => true, 'gerenciaFirstId' => $gerenciaFirstId,'enabled' => true));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {

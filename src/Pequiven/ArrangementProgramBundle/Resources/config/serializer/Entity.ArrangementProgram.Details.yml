@@ -1,0 +1,18 @@
+Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        reviewedBy:
+            expose: true
+            groups: [api_list]
+        revisionDate:
+            expose: true
+            groups: [api_list]
+        approvedBy:
+            expose: true
+            groups: [api_list]
+        approvalDate:
+            expose: true
+            groups: [api_list]

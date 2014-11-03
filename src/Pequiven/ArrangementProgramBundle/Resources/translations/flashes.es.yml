@@ -1,0 +1,13 @@
+pequiven_seip:
+    arrangementprogram:
+        create: Programa de gestión creado.
+        update: Programa de gestión actualizado.
+        delete: Programa de gestión eliminado.
+        revised: Programa de gestión revisado.
+        approved: Programa de gestión aprobado.
+        send_to_review: Programa de gestión enviado a revisión.
+        rejected: Programa de gestión fue rechazado.
+        send_to_draft: El programa de gestión se regreso al estatus de borrador.
+        return_to_review: El programa de gestión se regreso al estatus de revisión.
+        error_observation: La acción que esta realizando requiere que ingrese una observación.
+        planned_not_complete: Todas las metas del programa de gestión deben tener un planificado de 100%.

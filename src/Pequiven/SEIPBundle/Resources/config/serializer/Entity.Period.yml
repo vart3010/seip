@@ -1,0 +1,18 @@
+Pequiven\SEIPBundle\Entity\Period:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        dateStart:
+            expose: true
+            groups: [api_list]
+        dateEnd:
+            expose: true
+            groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]

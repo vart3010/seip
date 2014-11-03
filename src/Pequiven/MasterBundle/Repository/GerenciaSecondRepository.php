@@ -16,8 +16,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseE
  * @author matias
  */
 class GerenciaSecondRepository extends baseEntityRepository {
-    //put your code here
-    
     
     public function getGerenciaSecondOptions($options = array()){
         $data = array();
@@ -76,5 +74,37 @@ class GerenciaSecondRepository extends baseEntityRepository {
         $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
+    }
+    
+    function findGerenciaSecond(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        //Filtro de gerencia de segunda linea modular y vinculante
+        if(($typeManagement = $criteria->remove('typeManagement')) != null){
+            $complejo = $criteria->remove('complejo');
+            $queryBuilder
+                        ->andWhere('o.complejo = :complejo');
+            
+            if($typeManagement == \Pequiven\MasterBundle\Model\GerenciaSecond::TYPE_MANAGEMENT_MODULAR){
+                $queryBuilder
+                        ->andWhere('o.modular = :typeManagement');
+            }else{
+                $queryBuilder
+                        ->andWhere('o.vinculante = :typeManagement');
+            }
+            $queryBuilder
+                    ->setParameter('typeManagement', true)
+                    ->setParameter('complejo', $complejo)
+                ;
+        }else if(($gerencia = $criteria->remove('gerencia')) != null){
+            $queryBuilder
+                    ->innerJoin('o.gerencia', 'g')
+                    ->andWhere('g.id = :gerencia')
+                    ->setParameter('gerencia', $gerencia)
+                ;
+        }
+        return $queryBuilder->getQuery()->getResult();
     }
 }

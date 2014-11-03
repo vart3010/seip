@@ -1,0 +1,99 @@
+pequiven_arrangementprogram_data_responsible_goals:
+    path: /responsible-goals.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getResponsibleGoalsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+        responsibleProgram: "\d+"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_type_goal:
+    path: /{category}/type-goal.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getTypeGoalAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_operational_objectives:
+    path: /{idObjetiveTactical}/operational-objectives.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getOperationalObjectivesAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_tactical_objectives:
+    path: /tactical-objectives.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getTacticalObjectivesAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_operatives_objectives:
+    path: /operatives-objectives.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getOperativesObjectivesAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_first_line_management:
+    path: /first-line-management.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getFirstLineManagementAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_second_line_management:
+    path: /second-line-management.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getSecondLineManagementAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_complejos:
+    path: /complejos.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getComplejosAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_arrangementprogram_data_responsibles:
+    path: /responsibles.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getResponsiblesAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

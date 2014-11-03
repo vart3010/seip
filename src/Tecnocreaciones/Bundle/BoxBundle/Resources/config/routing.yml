@@ -1,0 +1,9 @@
+#- Import the bundle's routing resource in the app main routing file:
+#
+#    TecnocreacionesBoxBundle:
+#        resource: "@TecnocreacionesBoxBundle/Resources/config/routing.yml"
+#        prefix:   /
+
+tecnocreaciones_box_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: TecnocreacionesBoxBundle:Default:index }

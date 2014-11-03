@@ -15,6 +15,7 @@
         }
       </style>
       <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/jquery-1.8.2.min.js') }}"></script>
+      <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.notify.js') }}"></script>
     {% block head_base '' %}
     {% block head '' %}
         
@@ -48,7 +49,8 @@
         {% if app.debug %}
             <link href='{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/fonts/font.css?v=1') }}' rel='stylesheet' type='text/css'>
         {% else %}
-            <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+            <link href='{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/fonts/font.css?v=1') }}' rel='stylesheet' type='text/css'>
+{#            <link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>#}
         {% endif  %}
 
         <!-- Additional styles -->
@@ -120,6 +122,7 @@
                 <span ng-cloak>{$ notificationBarService.getLoadStatus().text $}</span>
                 <span class="loader"></span>
         </div>
+        <div id="message-errors"></div>
         <!-- Main content -->
         <section ng-cloak ng-controller="MainContentController" role="main" id="main" class="block main-frontend">
             <noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
@@ -139,6 +142,9 @@
                 {% block after_body '' %}
             </div>
             {% include 'PequivenSEIPBundle:Block:footer.html.twig' %}
+            <div id="dialog-confirm" style="display: none;" title="{$ dialog.confirm.title $}">
+                <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>{$ dialog.confirm.content $}</p>
+            </div>
             <div id="dialog-form">
                 <div ng-include="template.url" onload="templateLoad(template)"></div>
             </div>
@@ -146,7 +152,8 @@
         <!-- End main content -->
         
         <!-- Side tabs shortcuts -->
-        {# include 'TecnocreacionesVzlaGovernmentBundle:Template/Developer/Layout:_side-tabs-shortcuts.html.twig' #}
+{#        {% include 'TecnocreacionesVzlaGovernmentBundle:Template/Developer/Layout:_side-tabs-shortcuts.html.twig' %}#}
+
         
         <!-- Sidebar/drop-down menu -->
         {% include 'PequivenSEIPBundle:Template/Developer/Layout:_sidebar-drop-down-menu.html.twig' %}
@@ -171,7 +178,6 @@
             {# Template base functions #}
             {% block javascripts_base '' %}
             <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js') }}"></script>
-            <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.notify.js') }}"></script>
             <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.scroll.js') }}"></script>
             <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tooltip.js') }}"></script>
             <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.modal.js') }}"></script>

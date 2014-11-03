@@ -13,7 +13,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Pequiven\MasterBundle\Entity\FormulaLevel;
-use Pequiven\MasterBundle\Entity\Formula;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -86,13 +85,19 @@ class AddFormulaFieldListener implements EventSubscriberInterface {
         
         $formOptions = array(
             'class' => 'PequivenMasterBundle:Formula',
-            'label' => 'form.formula',
             'label_attr' => array('class' => 'label'),
             'translation_domain' => 'PequivenIndicatorBundle',
             'property' => 'equation',
             'required' => false,
             'mapped' => false
         );
+        if($this->typeStrategic){
+            $formOptions['label'] = 'form.formulaIndicatorStrategic';
+        } elseif($this->typeTactic){
+            $formOptions['label'] = 'form.formulaIndicatorTactic';
+        } elseif($this->typeOperative){
+            $formOptions['label'] = 'form.formulaIndicatorOperative';
+        }
         $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Formula')->findBy(array('formulaLevel' => $this->levelFormula));
         $formOptions['attr'] = array('class' => 'populate placeholder select2-offscreen', 'style' => 'width:300px','required' => false);
         if($formula){

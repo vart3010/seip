@@ -132,7 +132,8 @@ class Objetive extends modelObjetive {
     private $enabled = true;
 
     /**
-     * ObjetiveLevel
+     * Nivel de objetivo
+     * 
      * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel
      * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel")
      * @ORM\JoinColumn(name="fk_objetive_level", referencedColumnName="id")
@@ -141,6 +142,7 @@ class Objetive extends modelObjetive {
 
     /**
      * LineStrategic
+     * 
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="objetives")
      * @ORM\JoinTable(name="seip_objetives_linestrategics")
@@ -149,6 +151,7 @@ class Objetive extends modelObjetive {
 
     /**
      * Complejo
+     * 
      * @var \Pequiven\MasterBundle\Entity\Complejo
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
@@ -157,6 +160,7 @@ class Objetive extends modelObjetive {
 
     /**
      * Gerencia
+     * 
      * @var \Pequiven\MasterBundle\Entity\Gerencia
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")

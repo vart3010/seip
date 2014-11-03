@@ -3,6 +3,8 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Programa de gestion
@@ -10,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
-class ArrangementProgram
+class ArrangementProgram extends Model
 {
     /**
      * @var integer
@@ -22,10 +24,18 @@ class ArrangementProgram
     private $id;
 
     /**
+     * Referencia del programa de gestion
+     * @var string
+     * @ORM\Column(name="ref",type="string",length=100)
+     */
+    private $ref = null;
+
+    /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -34,9 +44,42 @@ class ArrangementProgram
      * @var \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $categoryArrangementProgram;
-
+    
+    /**
+     * Tipo de programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer", nullable=false)
+     */
+    protected $type;
+    
+    /**
+     * Responsables del programa
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
+     */
+    protected $responsibles;
+    
+    /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $timeline;
+    
+    /**
+     * Estatus del programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status = self::STATUS_DRAFT;
+    
     /**
      * Objetivo táctico
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
@@ -56,88 +99,65 @@ class ArrangementProgram
     private $operationalObjective;
 
     /**
-     * Indicador operativo
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator")
-     */
-    private $operatingIndicator;
-
-    /**
-     * Localidad
-     * @var \Pequiven\MasterBundle\Entity\Complejo
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Complejo")
-     */
-    private $location;
-
-    /**
      * Proceso
      * @var string
      *
-     * @ORM\Column(name="process", type="string", length=255)
+     * @ORM\Column(name="process", type="string", length=255, nullable=true)
      */
     private $process;
 
     /**
-     * Responsable
+     * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_responsible_id")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $responsible;
-
+    private $createdBy;
+    
     /**
-     * Lineas de tiempo
-     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     *
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
-     */
-    private $timelines;
-
-    /**
-     * Revisado por
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $reviewedBy;
-
-    /**
-     * Fecha de revision
      * @var \DateTime
-     *
-     * @ORM\Column(name="revisionDate", type="datetime",nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="createdAt", type="datetime")
      */
-    private $revisionDate;
+    private $createdAt;
 
     /**
-     * Aprobado por
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $approvedBy;
-
-    /**
-     * Fecha de aprobacion
      * @var \DateTime
-     *
-     * @ORM\Column(name="approvalDate", type="datetime",nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updatedAt", type="datetime")
      */
-    private $approvalDate;
-
+    private $updatedAt;
+    
     /**
-     * Estatus del programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="integer")
+     * Detalles del programa de gestion
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details",cascade={"persist","remove"})
+     * @ORM\Joincolumn(nullable=false)
      */
-    private $status = 0;
+    protected $details;
+    
+    /**
+     * Historiales 
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Historical
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
+     */
+    protected $histories;
+    
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation",mappedBy="arrangementProgram",cascade={"persist","remove"})
+     */
+    protected $observations;
 
     public function __construct() {
-        $this->timelines = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -171,75 +191,6 @@ class ArrangementProgram
     public function getProcess()
     {
         return $this->process;
-    }
-
-    /**
-     * Set revisionDate
-     *
-     * @param \DateTime $revisionDate
-     * @return ArrangementProgram
-     */
-    public function setRevisionDate($revisionDate)
-    {
-        $this->revisionDate = $revisionDate;
-
-        return $this;
-    }
-
-    /**
-     * Get revisionDate
-     *
-     * @return \DateTime 
-     */
-    public function getRevisionDate()
-    {
-        return $this->revisionDate;
-    }
-
-    /**
-     * Set approvalDate
-     *
-     * @param \DateTime $approvalDate
-     * @return ArrangementProgram
-     */
-    public function setApprovalDate($approvalDate)
-    {
-        $this->approvalDate = $approvalDate;
-
-        return $this;
-    }
-
-    /**
-     * Get approvalDate
-     *
-     * @return \DateTime 
-     */
-    public function getApprovalDate()
-    {
-        return $this->approvalDate;
-    }
-
-    /**
-     * Set status
-     *
-     * @param integer $status
-     * @return ArrangementProgram
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**
@@ -334,152 +285,261 @@ class ArrangementProgram
         return $this->operationalObjective;
     }
 
+    function getType() {
+        return $this->type;
+    }
+
+    function setType($type) {
+        $this->type = $type;
+        
+        return $this;
+    }
+    
+    function getCreatedBy() {
+        return $this->createdBy;
+    }
+
+    function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy) {
+        $this->createdBy = $createdBy;
+        return $this;
+    }
+
     /**
-     * Set operatingIndicator
+     * Set ref
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $operatingIndicator
+     * @param string $ref
      * @return ArrangementProgram
      */
-    public function setOperatingIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $operatingIndicator = null)
+    public function setRef($ref)
     {
-        $this->operatingIndicator = $operatingIndicator;
+        $this->ref = $ref;
 
         return $this;
     }
 
     /**
-     * Get operatingIndicator
+     * Get ref
      *
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     * @return string 
      */
-    public function getOperatingIndicator()
+    public function getRef()
     {
-        return $this->operatingIndicator;
+        return $this->ref;
     }
 
     /**
-     * Set location
+     * Set status
      *
-     * @param \Pequiven\MasterBundle\Entity\Complejo $location
+     * @param integer $status
      * @return ArrangementProgram
      */
-    public function setLocation(\Pequiven\MasterBundle\Entity\Complejo $location = null)
+    public function setStatus($status)
     {
-        $this->location = $location;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get location
+     * Get status
      *
-     * @return \Pequiven\MasterBundle\Entity\Complejo 
+     * @return integer 
      */
-    public function getLocation()
+    public function getStatus()
     {
-        return $this->location;
+        return $this->status;
     }
 
     /**
-     * Set responsible
+     * Add responsibles
      *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsible
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      * @return ArrangementProgram
      */
-    public function setResponsible(\Pequiven\SEIPBundle\Entity\User $responsible = null)
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
     {
-        $this->responsible = $responsible;
+        $this->responsibles[] = $responsibles;
 
         return $this;
     }
 
     /**
-     * Get responsible
+     * Remove responsibles
      *
-     * @return \Pequiven\SEIPBundle\Entity\User 
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
      */
-    public function getResponsible()
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
     {
-        return $this->responsible;
+        $this->responsibles->removeElement($responsibles);
     }
 
     /**
-     * Set reviewedBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $reviewedBy
-     * @return ArrangementProgram
-     */
-    public function setReviewedBy(\Pequiven\SEIPBundle\Entity\User $reviewedBy = null)
-    {
-        $this->reviewedBy = $reviewedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get reviewedBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getReviewedBy()
-    {
-        return $this->reviewedBy;
-    }
-
-    /**
-     * Set approvedBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $approvedBy
-     * @return ArrangementProgram
-     */
-    public function setApprovedBy(\Pequiven\SEIPBundle\Entity\User $approvedBy = null)
-    {
-        $this->approvedBy = $approvedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get approvedBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getApprovedBy()
-    {
-        return $this->approvedBy;
-    }
-
-    /**
-     * Add timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     * @return ArrangementProgram
-     */
-    public function addTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $timelines->setArrangementProgram($this);
-        $this->timelines->add($timelines);
-
-        return $this;
-    }
-
-    /**
-     * Remove timelines
-     *
-     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines
-     */
-    public function removeTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timelines)
-    {
-        $this->timelines->removeElement($timelines);
-    }
-
-    /**
-     * Get timelines
+     * Get responsibles
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTimelines()
+    public function getResponsibles()
     {
-        return $this->timelines;
+        return $this->responsibles;
+    }
+
+    /**
+     * Set timeline
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline
+     * @return ArrangementProgram
+     */
+    public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
+    {
+        $timeline->setArrangementProgram($this);
+        $this->timeline = $timeline;
+
+        return $this;
+    }
+
+    /**
+     * Get timeline
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\Timeline 
+     */
+    public function getTimeline()
+    {
+        return $this->timeline;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return ArrangementProgram
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return ArrangementProgram
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set details
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details
+     * @return ArrangementProgram
+     */
+    public function setDetails(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details $details)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Details 
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+
+    /**
+     * Add histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     * @return ArrangementProgram
+     */
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $history)
+    {
+        $this->histories->add($history);
+
+        return $this;
+    }
+
+    /**
+     * Remove histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     */
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->removeElement($histories);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHistories()
+    {
+        return $this->histories;
+    }
+
+    /**
+     * Add observations
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
+     * @return ArrangementProgram
+     */
+    public function addObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observation)
+    {
+        $observation->setArrangementProgram($this);
+        $this->observations->add($observation);
+
+        return $this;
+    }
+
+    /**
+     * Remove observations
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations
+     */
+    public function removeObservation(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation $observations)
+    {
+        $this->observations->removeElement($observations);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObservations()
+    {
+        return $this->observations;
     }
 }

@@ -9,7 +9,57 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    history: Historial
+    details: Detalles
+    observations: Observaciones
+    events: Eventos
+    ref: Referencia
+    select: Seleccione
+    actions: Acciones
+    form:
+        not_applicable: No aplica
     list: Lista
     add: Añadir
+    update: Actualizar
+    edit: Editar
+    delete: Eliminar
+    show: Ver
+    details: Detalles
+    dialog:
+        confirm: Confirmar
+    advances:
+        nope: Nada
+        better: Mejor
+        complete: Completo
+    filters: Filtros
+    limit: Limite
+    table:
+        header:
+            event: Evento
+            user:  Usuario
+            date: Fecha
+            comment: Comentario
+            observation: Observación
+    validations:
+        blank_text: Este campo es obligatorio
+    created_by: Creado por
+    created_at: Fecha de creación
+    buttons:
+        cancel: Cancelar
+        submit: Enviar
 app:
     loading: Cargando
+
+Updated: actualizado(a)
+Update: Actualización
+
+chart:
+    captionObjTactic: Objetivos Tácticos
+    captionObjOperative: Objetivos Operativos
+    objetives:
+        xAxisName: Gerencias
+        pYAxisName: N° de Objetivos
+        sYAxisName: % Carga
+        seriesNamePlan: Plan
+        seriesNameReal: Real
+        seriesNameCarga: % Carga

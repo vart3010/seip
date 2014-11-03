@@ -1,0 +1,84 @@
+Pequiven\ArrangementProgramBundle\Entity\GoalDetails:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        januaryPlanned:
+            expose: true
+            groups: [api_list]
+        januaryReal:
+            expose: true
+            groups: [api_list]
+        februaryPlanned:
+            expose: true
+            groups: [api_list]
+        februaryReal:
+            expose: true
+            groups: [api_list]
+        marchPlanned:
+            expose: true
+            groups: [api_list]
+        marchReal:
+            expose: true
+            groups: [api_list]
+        aprilPlanned:
+            expose: true
+            groups: [api_list]
+        aprilReal:
+            expose: true
+            groups: [api_list]
+        mayPlanned:
+            expose: true
+            groups: [api_list]
+        mayReal:
+            expose: true
+            groups: [api_list]
+        junePlanned:
+            expose: true
+            groups: [api_list]
+        juneReal:
+            expose: true
+            groups: [api_list]
+        julyPlanned:
+            expose: true
+            groups: [api_list]
+        julyReal:
+            expose: true
+            groups: [api_list]
+        augustPlanned:
+            expose: true
+            groups: [api_list]
+        augustReal:
+            expose: true
+            groups: [api_list]
+        septemberPlanned:
+            expose: true
+            groups: [api_list]
+        septemberReal:
+            expose: true
+            groups: [api_list]
+        octoberPlanned:
+            expose: true
+            groups: [api_list]
+        octoberReal:
+            expose: true
+            groups: [api_list]
+        novemberPlanned:
+            expose: true
+            groups: [api_list]
+        novemberReal:
+            expose: true
+            groups: [api_list]
+        decemberPlanned:
+            expose: true
+            groups: [api_list]
+        decemberReal:
+            expose: true
+            groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]
+        goal:
+            expose: true
+            groups: [goal]

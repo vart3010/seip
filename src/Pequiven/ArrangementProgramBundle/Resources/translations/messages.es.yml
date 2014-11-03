@@ -1,7 +1,39 @@
 pequiven:
+    months:
+        january: Ene
+        february: Feb
+        march: Mar
+        april: Abr
+        may: May
+        june: Jun
+        july: Jul
+        august: Ago
+        september: Sep
+        october: Oct
+        november: Nov
+        december: Dic
+    quarter:
+        first: I Trimestre
+        second: II Trimestre
+        third: III Trimestre
+        fourth: IV Trimestre
+    name: Nombre
+    start_date: Fecha inicio
+    end_date: Fecha fin
+    weight: Peso de la meta
+    weight_goal: Peso
     actions:
         edit: Editar
         delete: Eliminar
     modal:
         title:
             goal: Meta
+        confirm:
+            goal:
+                delete_this_goal: ¿Desea eliminar esta meta?
+            arrangement_program:
+                open_on_save: ¿Desea abrir el formulario del detalle de las metas despues de guardar?
+    validators:
+        arrangement_program:
+            select_responsible_person: Seleccione un responsable
+            select_category: Seleccione una categoria

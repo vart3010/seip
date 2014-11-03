@@ -123,14 +123,14 @@
                 {% endif %}
             </div>
                 
-            <!-- Descripción del objetivo -->
+            <!-- Nombre del objetivo -->
             <div class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
                 <span class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.description'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.nameObjetiveOperative'|trans }}</span>
                 </span>
             </div>
                 
@@ -141,7 +141,7 @@
                 {{ form_errors(form.ref) }}
                 <span id="ref_info" class="info-spot">
                     <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.ref'|trans }}</span>
+                    <span class="info-bubble">{{ 'form.info.refObjetiveOperative'|trans }}</span>
                 </span>
             </div>
             
@@ -163,7 +163,7 @@
                     {{ form_errors(form.goal) }}
                     <span class="info-spot">
                         <span class="icon-info-round"></span>
-                        <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
+                        <span class="info-bubble">{{ 'form.info.goalObjetiveOperative'|trans }}</span>
                     </span>
             </div>
                     
@@ -181,10 +181,10 @@
 
                         <div class="standard-tabs margin-bottom" id="add-tabs" style="height: 58px;">
                             <ul id="listNoEstable" class="tabs">
-                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
-                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
-                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
                                 <li id="tabRankBottom" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleBottom" style="background: #ffb900;"><a style="color: #000000;" href="#rankArrangementMiddleBottom">{{ 'form.rankArrangementMiddleBottom'|trans }}</a></li>
+                                <li id="tabRankMiddleTop" style="background: #ffe326;"><a style="color: #000000;" href="#rankArrangementMiddleTop">{{ 'form.rankArrangementMiddleTop'|trans }}</a></li>
+                                <li id="tabRankTop" style="background: #00FF00;" class="active"><a style="color: #000000;" href="#rankArrangementTop">{{ 'form.rankArrangementTop'|trans }}</a></li>
                             </ul>
                             <ul id="listEstable" class="tabs">
                                 <li id="tabRankBottomBottomEstable" style="background: red;"><a style="color: #000000;" href="#rankArrangementBottomBottom">{{ 'form.rankArrangementBottom'|trans }}</a></li>
@@ -328,7 +328,7 @@
                             {{ form_errors(form.indicators) }}
                             <span class="info-spot">
                                 <span class="icon-info-round"></span>
-                                <span class="info-bubble">{{ 'form.info.indicators'|trans }}</span>
+                                <span class="info-bubble">{{ 'form.info.indicatorsOperative'|trans }}</span>
                             </span>
                         </span>
                     </div>
@@ -361,6 +361,7 @@
         });
         
         var buttonAddIndicator = $('#button_add_indicator'),//Botón de Añadir Indicador
+            form = $("#registerObjetiveOperativeForm"),
             messageLineStrategicCheckIndicator = $('#choice_line_strategic'),//Mensaje en caso de que no se haya seleccionado una Línea Estratégica
             messageObjetiveStrategicCheckIndicator = $('#choice_objetive_strategic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Estratégico
             messageObjetiveTacticCheckIndicator = $('#choice_objetive_tactic'),//Mensaje en caso de que no se haya seleccionado un Objetivo Táctico
@@ -422,8 +423,27 @@
             labelsRangeTop = $("#pequiven_objetive_operative_registration_arrangementRangeTypeTop").children('label')//Etiquetas de Rango Alto
             ;
         
+        var valid = false;
         $(document).ready(function()
         {
+            form.submit(function(e) {
+                if(valid ==false){
+                    $.modal.confirm('{{ 'form.question.registerObjetiveOperative'|trans }}', function()
+                    {
+                        valid = true;
+                        form.submit();
+                    }, function()
+                    {
+                    }, { 'textCancel' : 'Cancelar' , 'textConfirm' : 'Aceptar' });
+                }
+                
+                if(valid == false){
+                    e.preventDefault();
+                }
+                return valid;
+                
+            });
+            
             //Llamado de la función que carga los valores por defecto de la vista
             change();
 

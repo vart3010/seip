@@ -15,7 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
 
 /**
- * Gerencia
+ * Gerencia de segunda linea
  *
  * @ORM\Table(name="seip_c_gerencia_second")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaSecondRepository")
@@ -67,7 +67,7 @@ class GerenciaSecond extends modelGerenciaSecond {
      *
      * @ORM\Column(name="description", type="string", length=100)
      */
-    private $description;
+    protected $description;
     
     /** Complejo
      * @var=\Pequiven\MasterBundle\Entity\Complejo
@@ -91,6 +91,14 @@ class GerenciaSecond extends modelGerenciaSecond {
     private $ref;
     
     /**
+     * Abreviatura
+     * @var string
+     *
+     * @ORM\Column(name="abbreviation", type="string", length=100, nullable=true)
+     */
+    private $abbreviation;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="modular", type="boolean", nullable=true)
@@ -110,6 +118,14 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
+    
+    /**
+     * Configuracion de la gerencia
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
+     */
+    protected $configuration;
 
     /**
      * Get id
@@ -372,5 +388,51 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getVinculante()
     {
         return $this->vinculante;
+    }
+
+    /**
+     * Set abbreviation
+     *
+     * @param string $abbreviation
+     * @return GerenciaSecond
+     */
+    public function setAbbreviation($abbreviation)
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    /**
+     * Get abbreviation
+     *
+     * @return string 
+     */
+    public function getAbbreviation()
+    {
+        return $this->abbreviation;
+    }
+
+    /**
+     * Set configuration
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration
+     * @return GerenciaSecond
+     */
+    public function setConfiguration(\Pequiven\MasterBundle\Entity\Gerencia\Configuration $configuration = null)
+    {
+        $this->configuration = $configuration;
+
+        return $this;
+    }
+
+    /**
+     * Get configuration
+     *
+     * @return \Pequiven\MasterBundle\Entity\Gerencia\Configuration 
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }

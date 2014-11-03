@@ -76,9 +76,9 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         //Referencia del objetivo a crear
         $builder->add('ref','text',array('label' => 'form.ref', 'label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'read_only' => true,'attr' => array('class' => 'input','size' => 5)));        
         //Peso del Objetivo
-        $builder->add('weight','percent',array('label' => 'form.weight','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('placeholder' => "100",'class' => 'input', 'size' => 8), 'required' => false));
+        $builder->add('weight','percent',array('label' => 'form.weightObjetiveOperative','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input', 'size' => 8), 'required' => false));
         //Meta del Objetivo
-        $builder->add('goal','percent',array('label' => 'form.goal','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input validate[required]', 'size' => 8)));
+        $builder->add('goal','percent',array('label' => 'form.goalObjetiveOperative','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle','attr' => array('class' => 'input validate[required]', 'size' => 8)));
         
         //Rango de Gestión
             $objectArrangementRangeType = new ArrangementRangeType();
@@ -96,12 +96,12 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('arrangementRangeTypeTop','entity',array('label' => 'form.arrangementRangeTypeTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeTop,'mapped' => false,'data' => '1'));
             $builder->add('typeArrangementRangeTypeTop','hidden',array('data' => '','mapped' => false));
             //Rango Alto Básico
-                $builder->add('rankTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false, 'data' => 1));
+                $builder->add('rankTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false, 'data' => 1));
                 $builder->add('opRankTopBasic','entity',array('label_attr' => array('class' => 'label'),'attr' => array('style' => 'border-radius:6px;'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false,'data' => $operatorHigherEqualThan));
             //Rango Alto Mixto
-                $builder->add('rankTopMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankTopMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankTopMixedTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-                $builder->add('rankTopMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankTopMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankTopMixedBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
 
             //Rango de Gestión Medio Alto
@@ -109,12 +109,12 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('arrangementRangeTypeMiddleTop','entity',array('label' => 'form.arrangementRangeTypeMiddleTop','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeMiddleTop,'mapped' => false));
             $builder->add('typeArrangementRangeTypeMiddleTop','hidden',array('data' => '','mapped' => false));
             //Rango Medio Alto Básico
-                $builder->add('rankMiddleTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false, 'data' => 0.99));
+                $builder->add('rankMiddleTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false, 'data' => 0.99));
                 $builder->add('opRankMiddleTopBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
             //Rango Medio Alto Mixto
-                $builder->add('rankMiddleTopMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleTopMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankMiddleTopMixedTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-                $builder->add('rankMiddleTopMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleTopMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankMiddleTopMixedBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
             
             //Rango de Gestión Medio Bajo
@@ -122,12 +122,12 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('arrangementRangeTypeMiddleBottom','entity',array('label' => 'form.arrangementRangeTypeMiddleBottom','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'expanded' => true, 'multiple' => false, 'property' => 'description','class' => 'PequivenMasterBundle:ArrangementRangeType','empty_value' => false, 'required' => false,'choices' => $selectRangeTypeMiddleBottom,'mapped' => false));
             $builder->add('typeArrangementRangeTypeMiddleBottom','hidden',array('data' => '','mapped' => false));
             //Rango Medio Bajo Básico
-                $builder->add('rankMiddleBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false, 'data' => 0.9));
+                $builder->add('rankMiddleBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false, 'data' => 0.9));
                 $builder->add('opRankMiddleBottomBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorHigherEqualThan));
             //Rango Medio Bajo Mixto
-                $builder->add('rankMiddleBottomMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleBottomMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankMiddleBottomMixedTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-                $builder->add('rankMiddleBottomMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankMiddleBottomMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8', 'class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankMiddleBottomMixedBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
         
             //Rango de Gestión Bajo
@@ -136,19 +136,19 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('typeArrangementRangeTypeBottom','hidden',array('data' => '','mapped' => false,'mapped' => false));
         //Comportamiento No Estable
             //Rango Bajo Básico
-                $builder->add('rankBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
+                $builder->add('rankBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
                 $builder->add('opRankBottomBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
             //Rango Bajo Mixto
-                $builder->add('rankBottomMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankBottomMixedTop','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankBottomMixedTop','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
-                $builder->add('rankBottomMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false));
+                $builder->add('rankBottomMixedBottom','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false));
                 $builder->add('opRankBottomMixedBottom','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false));
         //Comportamiento Estable
             //Rango Bajo Básico Alto
-                $builder->add('rankBottomTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
+                $builder->add('rankBottomTopBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
                 $builder->add('opRankBottomTopBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
             //Rango Bajo Básico Bajo
-                $builder->add('rankBottomBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('placeholder' => "100",'size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
+                $builder->add('rankBottomBottomBasic','percent',array('label_attr' => array('class' => 'label'),'attr' => array('size' => '8','class' => 'input'), 'required' => false,'mapped' => false,'data' => 0.89));
                 $builder->add('opRankBottomBottomBasic','entity',array('label_attr' => array('class' => 'label'),'property' => 'ref','class' => 'PequivenMasterBundle:Operator','empty_value' => '', 'required' => false,'mapped' => false, 'data' => $operatorSmallerEqualThan));
         
         //Tipo de Evaluación
@@ -158,7 +158,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             $builder->add('evalArrangementProgram','checkbox',array('label' => 'form.evalArrangementProgram','label_attr' => array('class' => 'label'), 'translation_domain' => 'PequivenObjetiveBundle', 'required' => false));
         
             //Indicadores asociados al objetivo a crear
-            $builder->addEventSubscriber(new AddIndicatorStrategicFieldListener());
+            $builder->addEventSubscriber(new AddIndicatorStrategicFieldListener($this->container,array('typeOperative' => true)));
     }
     
     public function getName(){

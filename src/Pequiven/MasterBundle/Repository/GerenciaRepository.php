@@ -71,7 +71,7 @@ class GerenciaRepository extends baseEntityRepository
         if(isset($criteria['description'])){
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$description."%'"));
         }
 //        if(isset($criteria['rif'])){
 //            $rif = $criteria['rif'];
@@ -84,5 +84,23 @@ class GerenciaRepository extends baseEntityRepository
         $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
+    }
+    
+    function findGerencia(array $criteria = null)
+    {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($complejo = $criteria->remove('complejo'))){
+            $queryBuilder
+                    ->innerJoin('g.complejo', 'c')
+                    ->andWhere('c.id = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
+        }
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    protected function getAlias() {
+        return 'g';
     }
 }

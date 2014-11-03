@@ -1,0 +1,35 @@
+Pequiven\ArrangementProgramBundle\Entity\Goal:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        typeGoal:
+            expose: true
+        startDate:
+            expose: true
+            groups: [api_list]
+        endDate:
+            expose: true
+            groups: [api_list]
+        responsibles:
+            expose: true
+            groups: [responsibles]
+        weight:
+            expose: true
+            groups: [api_list]
+        observations:
+            expose: true
+            groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]
+        timeline:
+            expose: true
+            groups: [details]
+        goalDetails:
+            expose: true
+            groups: [goalDetails]

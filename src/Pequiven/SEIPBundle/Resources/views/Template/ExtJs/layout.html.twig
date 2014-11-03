@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>{% block title ''%}</title>
+    
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset("ext/base/base.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset("ext/build/packages/ext-theme-gray/build/resources/ext-theme-gray-all.css") }}" />
+    {% block stylesheets '' %}
+    {% block stylesheet '' %}
+    <script type="text/javascript" src="{{ asset("ext/build/ext-all.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("ext/build/packages/ext-locale/build/ext-locale-" ~ app.request.locale ~ ".js") }}"></script>
+    
+    <script type="text/javascript" src="{{ asset("ext/base/toolbar.js") }}"></script>
+    <script type="text/javascript" src="{{ path("extjs_generate_model") }}"></script>
+    <script type="text/javascript">
+        var injectScriptElement = Ext.Loader.injectScriptElement,
+            queue = [],
+            timer = false;
+
+        Ext.Loader.injectScriptElement = function(url, onLoad, onError, scope) {
+            queue.push(Array.prototype.slice.call(arguments));
+            startProcessQueue();
+        };
+
+        function startProcessQueue() {
+            if (!timer) {
+                timer = setInterval(requireNext, 1);
+            }
+        }
+
+        function requireNext() {
+            var item = queue.shift();
+
+            if (item) {
+                injectScriptElement.apply(Ext.Loader, item);
+            }
+        }
+
+        Ext.onReady(function() {
+            clearInterval(timer);
+{#            console.log("loaded");#}
+        });
+    </script>
+    {% block javascript '' %}
+</head>
+<body>
+    {% block content %}
+        
+    {% endblock content %}
+</body>
+</html>

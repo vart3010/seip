@@ -1,28 +1,54 @@
 # Login
 pequiven_objetive:
-                #Registrar
-                objetives: Objetivos
-                add: Añadir
-                list: Lista
-                strategic: Estratégico
-                tactic: Táctico
-                operative: Operativo
-                registerIndicator: Registrar Indicador
-                objetive_strategic: Objetivo Estratégico
-                objetive_tactic: Objetivo Táctico
-                objetive_operative: Objetivo Operativo
-                
-                popup:
-                    description: Descripción
-                    lineStrategic: Línea Estratégica
-                    indicators: Indicadores
-                    created_at: Creado el
-                    updated_at: Actualizado el
+    #Registrar
+    yes: Sí
+    no: No
+    objetives: Objetivos
+    add: Añadir
+    list: Lista
+    strategic: Estratégico
+    tactic: Táctico
+    operative: Operativo
+    registerIndicator: Registrar Indicador
+    objetive_strategic: Objetivo Estratégico
+    objetive_tactic: Objetivo Táctico
+    objetive_operative: Objetivo Operativo
+    lineStrategic: Línea Estratégica
+    statementStrategic: Enunciado del Objetivo Estratégico
+    statementTactic: Enunciado del Objetivo Táctico
+    statementOperative: Enunciado del Objetivo Operativo
+    goalObjetiveStrategic: Meta del Objetivo Estratégico
+    goalObjetiveTactic: Meta del Objetivo Táctico
+    goalObjetiveOperative: Meta del Objetivo Operativo
+    weightObjetiveTactic: Peso del Objetivo Táctico
+    weightObjetiveOperative: Peso del Objetivo Operativo
+    evalByObjetiveTactic: ¿Será evaluado por Objetivos Tácticos?
+    evalByObjetiveOperative: ¿Será evaluado por Objetivos Operativos?
+    evalByIndicatorStrategic: ¿Será evaluado por Indicadores Estratégicos?
+    evalByIndicatorTactic: ¿Será evaluado por Indicadores Tácticos?
+    evalByIndicatorOperative: ¿Será evaluado por Indicadores Operativos?
+    evalByArrangementProgram: ¿Será evaluado por Programas de Gestión?
+    objetiveStrategics: Objetivos Estratégicos
+    objetiveTactics: Objetivos Tácticos
+    objetiveOperatives: Objetivos Operativos
+    indicatorStrategics: Indicadores Estratégicos
+    indicatorTactics: Indicadores Tácticos
+    indicatorOperatives: Indicadores Operativos
+    complejo: Localidad
+    gerenciaFirst: Gerencia 1ra Línea
+    gerenciaSecond: Gerencia 2da Línea
 
-                #Buttons
-                edit: Editar
-                save: Guardar
-                cancel: Cancelar
+    popup:
+        description: Descripción
+        lineStrategic: Línea Estratégica
+        indicators: Indicadores
+        created_at: Creado el
+        updated_at: Actualizado el
+
+    #Buttons
+    edit: Editar
+    save: Guardar
+    cancel: Cancelar
 
 form:
     ref: Nro. de Referencia
@@ -43,7 +69,13 @@ form:
     parent_tactic: Objetivo Táctico
     parent_operative: Objetivo Operativo
     weight: Peso
+    weightObjetiveStrategic: Peso del Objetivo Estratégico
+    weightObjetiveTactic: Peso del Objetivo Táctico
+    weightObjetiveOperative: Peso del Objetivo Operativo
     goal: Meta
+    goalObjetiveStrategic: Meta del Objetivo Estratégico
+    goalObjetiveTactic: Meta del Objetivo Táctico
+    goalObjetiveOperative: Meta del Objetivo Operativo
     conduct: Comportamiento
     
     arrangementRangeType: Tipo de Rango
@@ -98,6 +130,9 @@ form:
     evalSimpleAverage: Promedio Simple
     evalWeightedAverage: Promedio Ponderado
     indicators: Indicadores
+    indicatorsStrategic: Indicadores Estratégicos
+    indicatorsTactic: Indicadores Tácticos
+    indicatorsOperative: Indicadores Operativos
     addIndicators: Añadir Indicadores
     register: Registrar
     ref_info: Nro. de Referencia del objetivo
@@ -123,14 +158,27 @@ form:
         gerenciaFirst: Gerencia de 1ra línea dónde tendrá impacto el objetivo
         gerenciaSecond: Gerencia de 2da línea dónde tendrá impacto el objetivo
         description: Nombre del objetivo
+        nameObjetiveStrategic: Enunciado del Objetivo Estratégico
+        nameObjetiveTactic: Enunciado del Objetivo Táctico
+        nameObjetiveOperative: Enunciado del Objetivo Operativo
         ref: Nro. de referencia del objetivo
+        refObjetiveStrategic: Nro. de referencia del Objetivo Estratégico
+        refObjetiveTactic: Nro. de referencia del Objetivo Táctico
+        refObjetiveOperative: Nro. de referencia del Objetivo Operativo
         weight: Peso del objetivo
         goal: Meta del objetivo
+        goalObjetiveStrategic: Meta del Objetivo Estratégico
+        goalObjetiveTactic: Meta del Objetivo Táctico
+        goalObjetiveOperative: Meta del Objetivo Operativo
         arrangementRangeType: Seleccione el tipo de rango
         arrangementRangeTypeTop: Seleccione el tipo de rango Alto
         arrangementRangeTypeMiddleTop: Seleccione el tipo de rango Medio Alto
         arrangementRangeTypeMiddleBottom: Seleccione el tipo de rango Medio Bajo
         arrangementRangeTypeBottom: Seleccione el tipo de rango Bajo
+        
+        conductCreciente: Creciente= Si el comportamiento tiende a Maximizar
+        conductDecreciente: Decreciente= Si el comportamiento tiende a Minimizar
+        conductEstable: Estable= Si el comportamiento tiende a 
         
         rankTopTop: Rango alto-alto del semáforo de evaluación de gestión
         rankTopBottom: Rango alto-bajo del semáforo de evaluación de gestión
@@ -157,6 +205,9 @@ form:
         evalSimpleAverage: Seleccione si el resultado será obtenido por un promedio simple
         evalWeightedAverage: Seleccione si el resultado será obtenido por el promedio ponderado (peso)
         indicators: Indicadores que serán parte de la evaluación del objetivo a crear
+        indicatorsStrategic: Indicadores Estratégicos que serán parte de la evaluación del Objetivo Estratégico a crear
+        indicatorsTactic: Indicadores Tácticos que serán parte de la evaluación del Objetivo Táctico a crear
+        indicatorsOperative: Indicadores Operativos que serán parte de la evaluación del Objetivo Operativo a crear
     rankTop_info: Valor alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleTop_info: Valor medio alto del semáforo de evaluación de gestión. El valor decimal es ".".
     rankMiddleBottom_info: Valor medio bajo del semáforo de evaluación de gestión. El valor decimal es ".".
@@ -175,9 +226,12 @@ form:
     evalWeightedAverage_info: Seleccione si el resultado será obtenido por el promedio ponderado (peso).
     indicators_info: Indicadores que serán parte de la evaluación del objetivo a crear
     question:
-        allGerencias: ¿Todas las Gerencias de las localidades seleccionados?
+        allGerencias: ¿Todas las Gerencias de las localidades seleccionadas?
         allGerenciasSecond: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea seleccionada?
         allGerenciasSecondFull: ¿Todas las Gerencias de 2da línea asociadas a la gerencia de 1ra línea y localidades seleccionadas?
+        registerObjetiveStrategic: ¿Desea guardar el Objetivo Estratégico?
+        registerObjetiveTactic: ¿Desea guardar el Objetivo Táctico?
+        registerObjetiveOperative: ¿Desea guardar el Objetivo Operativo?
     title:
         addObjetiveStrategic: Registro Objetivo Estratégico
         addObjetiveTactic: Registro Objetivo Táctico

@@ -6,5 +6,16 @@ Pequiven\SEIPBundle\Entity\User:
             groups: [id]
         firstName:
             expose: true
+            groups: [api_list]
         lastName:
             expose: true
+            groups: [api_list]
+        numPersonal:
+            expose: true
+            groups: [api_list]
+        complejo:
+            expose: true
+            groups: [complejo]
+        gerencia:
+            expose: true
+            groups: [gerencia]

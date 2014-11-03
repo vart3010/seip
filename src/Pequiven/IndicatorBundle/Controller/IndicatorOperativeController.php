@@ -113,13 +113,18 @@ class IndicatorOperativeController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_operative_registration");
+            //var_dump($data);
+            //die();
+            if(strlen($data['gerenciaSecond']) == 0){
+                $em->getConnection()->rollback();
+                $this->get('session')->getFlashBag()->add('success', 'error falta gerencia 2da línea');
+            }
 
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative']));
             $object->setRefParent($objetive->getRef());
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -190,7 +195,6 @@ class IndicatorOperativeController extends baseController {
             $object->setTmp(true);
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
-            $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
             $object->setUserCreatedAt($user);
 
             //Obtenemos y seteamos el nivel del indicador
@@ -356,7 +360,7 @@ class IndicatorOperativeController extends baseController {
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_OPERATIVO;
 
-        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
+        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true, 'userCreatedAt' => $user));
         $totalResults = count($results);
 
         if (is_array($results) && $totalResults > 0) {
@@ -427,7 +431,7 @@ class IndicatorOperativeController extends baseController {
         $gerenciaSecondId = $securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX')) ? $user->getGerenciaSecond()->getId() : $request->request->get('gerenciaSecondId');
 
         if (is_array($objetiveTacticId) && is_numeric($gerenciaSecondId)) {
-            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveTacticId, array('fromIndicator' => true, 'gerenciaSecondId' => $gerenciaSecondId));
+            $results = $this->get('pequiven.repository.objetiveoperative')->getByParent($objetiveTacticId, array('fromIndicator' => true, 'gerenciaSecondId' => $gerenciaSecondId,'enabled' => true));
 
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {

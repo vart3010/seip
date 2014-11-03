@@ -1,14 +1,16 @@
 <form id="goalForms">
     <div class="field-block button-height">
-        {{ form_label(goal.name) }}
+        <label class="label required ng-binding" for="goal_name">{{ 'pequiven.form.goal.name'|trans({},'PequivenArrangementProgramBundle') }}<span ng-if="model.goalCount != null">&nbsp;#{$ model.goalCount $}</span></label>
         {{ form_widget(goal.name) }}
         {{ form_errors(goal.name) }}
     </div>
-    <div class="field-block button-height">
-        {{ form_label(goal.typeGoal) }}
-        {{ form_widget(goal.typeGoal) }}
-        {{ form_errors(goal.typeGoal) }}
-    </div>
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div ng-if="data.typeGoals" class="field-block button-height">
+            {{ form_label(goal.typeGoal) }}
+            {{ form_widget(goal.typeGoal) }}
+            {{ form_errors(goal.typeGoal) }}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(goal.startDate) }}
         {{ form_widget(goal.startDate) }}
@@ -20,9 +22,9 @@
         {{ form_errors(goal.endDate) }}
     </div>
     <div class="field-block button-height">
-        {{ form_label(goal.responsible) }}
-        {{ form_widget(goal.responsible) }}
-        {{ form_errors(goal.responsible) }}
+        {{ form_label(goal.responsibles) }}
+        {{ form_widget(goal.responsibles) }}
+        {{ form_errors(goal.responsibles) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(goal.weight) }}
@@ -37,7 +39,26 @@
 </form>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false},{showOneMessage:true});
+        jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
         jQuery('#goalForms select').select2();
+        
+        $( "#goal_startDate" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "yy-mm-dd",
+            onClose: function( selectedDate ) {
+              $( "#goal_endDate" ).datepicker( "option", "minDate", selectedDate );
+            }
+          });
+          $( "#goal_endDate" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            numberOfMonths: 1,
+            dateFormat: "yy-mm-dd",
+            onClose: function( selectedDate ) {
+              $( "#goal_startDate" ).datepicker( "option", "maxDate", selectedDate );
+            }
+          });
     });
 </script>

@@ -21,12 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
- * Description of GerenciaSecondController
+ * Controlador de gerencia de primera linea
  *
  * @author matias
  */
 class GerenciaController extends baseController {
-    //put your code here
     
     /**
      * @Template("PequivenMasterBundle:Gerencia:list.html.twig")
@@ -151,6 +150,18 @@ class GerenciaController extends baseController {
 
             $view->setData($resources->toArray('',array(),$formatData));
         }
+        return $this->handleView($view);
+    }
+    
+    public function showAction(Request $request) {
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('show.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($this->findOr404($request))
+        ;
+        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
+        $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
     }
 }
