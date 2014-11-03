@@ -17831,15 +17831,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         // Gerencia 27
 
         $personal = new Personal();
-        $personal->setCedula('13830934');
-        $personal->setNomPersonal('MOLERO B. , JOHANA A.');
-        $personal->setNumPersonal('10016256');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-914'));
-        $this->addReference('Personal-10016256', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
         $personal->setCedula('8611758');
         $personal->setNomPersonal('YEPEZ A , JOSE H');
         $personal->setNumPersonal('10017869');
@@ -24105,15 +24096,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($personal);
 
         $personal = new Personal();
-        $personal->setCedula('18200808');
-        $personal->setNomPersonal('MANRIQUE G. , JONATHAN');
-        $personal->setNumPersonal('10022066');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1250'));
-        $this->addReference('Personal-10022066', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
         $personal->setCedula('17089789');
         $personal->setNomPersonal('RIVAS S , WALTER J');
         $personal->setNumPersonal('10022057');
@@ -24147,15 +24129,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $personal->setEnabled(true);
         $personal->setCargo($this->getReference('Cargo-1252'));
         $this->addReference('Personal-10023021', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('18801510');
-        $personal->setNomPersonal('ANDRADE P. , EMMY D.');
-        $personal->setNumPersonal('10022068');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1252'));
-        $this->addReference('Personal-10022068', $personal);
             $manager->persist($personal);
 
         $personal = new Personal();
@@ -33195,33 +33168,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($personal);
 
         $personal = new Personal();
-        $personal->setCedula('14999048');
-        $personal->setNomPersonal('CARPIO L , JULIO C');
-        $personal->setNumPersonal('10021041');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1576'));
-        $this->addReference('Personal-10021041', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('14126161');
-        $personal->setNomPersonal('GUARACHE V , JUAN E');
-        $personal->setNumPersonal('10017361');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1577'));
-        $this->addReference('Personal-10017361', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('11767056');
-        $personal->setNomPersonal('ALTAMIRANDA N , JULIO C');
-        $personal->setNumPersonal('10015038');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1578'));
-        $this->addReference('Personal-10015038', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
         $personal->setCedula('5972682');
         $personal->setNomPersonal('DE SALVADOR M , MARIA DEL P');
         $personal->setNumPersonal('10002444');
@@ -34583,16 +34529,7 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $personal->setEnabled(true);
         $personal->setCargo($this->getReference('Cargo-1668'));
         $this->addReference('Personal-10019134', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('14688051');
-        $personal->setNomPersonal('CORREA S , ANGIEMAR R');
-        $personal->setNumPersonal('10021466');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1669'));
-        $this->addReference('Personal-10021466', $personal);
-            $manager->persist($personal);
+            $manager->persist($personal
 
         $personal = new Personal();
         $personal->setCedula('3956309');
@@ -35070,15 +35007,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($personal);
 
         // Gerencia 61
-
-        $personal = new Personal();
-        $personal->setCedula('14173582');
-        $personal->setNomPersonal('LAREZ B , SCARLET C');
-        $personal->setNumPersonal('10020558');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1704'));
-        $this->addReference('Personal-10020558', $personal);
-            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('11709577');
@@ -37309,15 +37237,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($personal);
 
         $personal = new Personal();
-        $personal->setCedula('14382778');
-        $personal->setNomPersonal('MORILLO  R. , ANA  M.');
-        $personal->setNumPersonal('10020560');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1852'));
-        $this->addReference('Personal-10020560', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
         $personal->setCedula('17987970');
         $personal->setNomPersonal('MOLINA C , JOSE A');
         $personal->setNumPersonal('10023063');
@@ -39176,16 +39095,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
             $manager->persist($personal);
 
         $personal = new Personal();
-        $personal->setCedula('14754189');
-        $personal->setNomPersonal('AZUAJE G , SORILENA DEL C');
-        $personal->setNumPersonal('10021189');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1974'));
-        $this->addReference('Personal-10021189', $personal);
-            $manager->persist($personal);
-
-
-        $personal = new Personal();
         $personal->setCedula('12111319');
         $personal->setNomPersonal('MEJIA D , NESTOR J');
         $personal->setNumPersonal('10025193');
@@ -40214,77 +40123,77 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 
         // Gerencia 79
 
-        $personal = new Personal();
-        $personal->setCedula('14536202');
-        $personal->setNomPersonal('CASTILLO U , GIOVANNA L');
-        $personal->setNumPersonal('10019016');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2025'));
-        $this->addReference('Personal-10019016', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('14536202');
+//        $personal->setNomPersonal('CASTILLO U , GIOVANNA L');
+//        $personal->setNumPersonal('10019016');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2025'));
+//        $this->addReference('Personal-10019016', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('15481942');
-        $personal->setNomPersonal('GONZALEZ  A. , JOSE   P.');
-        $personal->setNumPersonal('10020462');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2025'));
-        $this->addReference('Personal-10020462', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('15481942');
+//        $personal->setNomPersonal('GONZALEZ  A. , JOSE   P.');
+//        $personal->setNumPersonal('10020462');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2025'));
+//        $this->addReference('Personal-10020462', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('11231431');
-        $personal->setNomPersonal('ADRIAN V , JONATHAN J.');
-        $personal->setNumPersonal('10020061');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2026'));
-        $this->addReference('Personal-10020061', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('11231431');
+//        $personal->setNomPersonal('ADRIAN V , JONATHAN J.');
+//        $personal->setNumPersonal('10020061');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2026'));
+//        $this->addReference('Personal-10020061', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13510348');
-        $personal->setNomPersonal('COLMENAREZ P , GAUDYBETH R');
-        $personal->setNumPersonal('10019999');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2027'));
-        $this->addReference('Personal-10019999', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13510348');
+//        $personal->setNomPersonal('COLMENAREZ P , GAUDYBETH R');
+//        $personal->setNumPersonal('10019999');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2027'));
+//        $this->addReference('Personal-10019999', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('17394915');
-        $personal->setNomPersonal('GUEDEZ L , NORWIS E');
-        $personal->setNumPersonal('10017701');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2028'));
-        $this->addReference('Personal-10017701', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('17394915');
+//        $personal->setNomPersonal('GUEDEZ L , NORWIS E');
+//        $personal->setNumPersonal('10017701');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2028'));
+//        $this->addReference('Personal-10017701', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('17014162');
-        $personal->setNomPersonal('LEUNG F , YOHANA');
-        $personal->setNumPersonal('10018516');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2029'));
-        $this->addReference('Personal-10018516', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('17014162');
+//        $personal->setNomPersonal('LEUNG F , YOHANA');
+//        $personal->setNumPersonal('10018516');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2029'));
+//        $this->addReference('Personal-10018516', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('18364136');
-        $personal->setNomPersonal('MAGUIÑA B , JOSE A');
-        $personal->setNumPersonal('10018922');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2029'));
-        $this->addReference('Personal-10018922', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('18364136');
+//        $personal->setNomPersonal('MAGUIÑA B , JOSE A');
+//        $personal->setNumPersonal('10018922');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2029'));
+//        $this->addReference('Personal-10018922', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13516820');
-        $personal->setNomPersonal('ALVARADO G , DAVID R');
-        $personal->setNumPersonal('10021906');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2030'));
-        $this->addReference('Personal-10021906', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13516820');
+//        $personal->setNomPersonal('ALVARADO G , DAVID R');
+//        $personal->setNumPersonal('10021906');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2030'));
+//        $this->addReference('Personal-10021906', $personal);
+//            $manager->persist($personal);
 
 //        $personal = new Personal();
 //        $personal->setCedula('13298404');
@@ -40295,23 +40204,23 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 //        $this->addReference('Personal-10018925', $personal);
 //            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('4867439');
-        $personal->setNomPersonal('TORRES B , HECTOR A');
-        $personal->setNumPersonal('10019832');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2032'));
-        $this->addReference('Personal-10019832', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('4867439');
+//        $personal->setNomPersonal('TORRES B , HECTOR A');
+//        $personal->setNumPersonal('10019832');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2032'));
+//        $this->addReference('Personal-10019832', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13891435');
-        $personal->setNomPersonal('BENITES P , ALBERTO J');
-        $personal->setNumPersonal('10020277');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2033'));
-        $this->addReference('Personal-10020277', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13891435');
+//        $personal->setNomPersonal('BENITES P , ALBERTO J');
+//        $personal->setNumPersonal('10020277');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2033'));
+//        $this->addReference('Personal-10020277', $personal);
+//            $manager->persist($personal);
 
 //        $personal = new Personal();
 //        $personal->setCedula('11814405');
@@ -40322,77 +40231,77 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 //        $this->addReference('Personal-10021125', $personal);
 //            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('12967929');
-        $personal->setNomPersonal('MARQUEZ M , ANA C');
-        $personal->setNumPersonal('10017744');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2035'));
-        $this->addReference('Personal-10017744', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('12967929');
+//        $personal->setNomPersonal('MARQUEZ M , ANA C');
+//        $personal->setNumPersonal('10017744');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2035'));
+//        $this->addReference('Personal-10017744', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13818630');
-        $personal->setNomPersonal('MELENDEZ T , SIMON E');
-        $personal->setNumPersonal('10021905');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2036'));
-        $this->addReference('Personal-10021905', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13818630');
+//        $personal->setNomPersonal('MELENDEZ T , SIMON E');
+//        $personal->setNumPersonal('10021905');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2036'));
+//        $this->addReference('Personal-10021905', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('16318047');
-        $personal->setNomPersonal('LEON T , JUAN F');
-        $personal->setNumPersonal('10021702');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2037'));
-        $this->addReference('Personal-10021702', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('16318047');
+//        $personal->setNomPersonal('LEON T , JUAN F');
+//        $personal->setNumPersonal('10021702');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2037'));
+//        $this->addReference('Personal-10021702', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('15753687');
-        $personal->setNomPersonal('NAVARRO A , XISMAR M');
-        $personal->setNumPersonal('10021704');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2037'));
-        $this->addReference('Personal-10021704', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('15753687');
+//        $personal->setNomPersonal('NAVARRO A , XISMAR M');
+//        $personal->setNumPersonal('10021704');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2037'));
+//        $this->addReference('Personal-10021704', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('12534344');
-        $personal->setNomPersonal('MORENO P , MAYRA A');
-        $personal->setNumPersonal('10019391');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2037'));
-        $this->addReference('Personal-10019391', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('12534344');
+//        $personal->setNomPersonal('MORENO P , MAYRA A');
+//        $personal->setNumPersonal('10019391');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2037'));
+//        $this->addReference('Personal-10019391', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('16090627');
-        $personal->setNomPersonal('LUCENA CH , KARLA M');
-        $personal->setNumPersonal('10021687');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2037'));
-        $this->addReference('Personal-10021687', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('16090627');
+//        $personal->setNomPersonal('LUCENA CH , KARLA M');
+//        $personal->setNumPersonal('10021687');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2037'));
+//        $this->addReference('Personal-10021687', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13499083');
-        $personal->setNomPersonal('GUZMAN G , XIOLYMAR');
-        $personal->setNumPersonal('10016662');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2037'));
-        $this->addReference('Personal-10016662', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13499083');
+//        $personal->setNomPersonal('GUZMAN G , XIOLYMAR');
+//        $personal->setNumPersonal('10016662');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2037'));
+//        $this->addReference('Personal-10016662', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('15260085');
-        $personal->setNomPersonal('AVILA C , LEONER J');
-        $personal->setNumPersonal('10015648');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2038'));
-        $this->addReference('Personal-10015648', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('15260085');
+//        $personal->setNomPersonal('AVILA C , LEONER J');
+//        $personal->setNumPersonal('10015648');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2038'));
+//        $this->addReference('Personal-10015648', $personal);
+//            $manager->persist($personal);
 
 //        $personal = new Personal();
 //        $personal->setCedula('9688155');
@@ -40403,151 +40312,250 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 //        $this->addReference('Personal-10016012', $personal);
 //            $manager->persist($personal);
 
+//        $personal = new Personal();
+//        $personal->setCedula('15059269');
+//        $personal->setNomPersonal('GELVIS V , OSCAR J');
+//        $personal->setNumPersonal('10016691');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2040'));
+//        $this->addReference('Personal-10016691', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('14576275');
+//        $personal->setNomPersonal('ZERPA S , RICARDO M');
+//        $personal->setNumPersonal('10025358');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2041'));
+//        $this->addReference('Personal-10025358', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('14833643');
+//        $personal->setNomPersonal('FUENMAYOR S. , LUDAVI M.');
+//        $personal->setNumPersonal('10016285');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2041'));
+//        $this->addReference('Personal-10016285', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('8835283');
+//        $personal->setNomPersonal('CORDERO M , RAFAEL R');
+//        $personal->setNumPersonal('10016113');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2042'));
+//        $this->addReference('Personal-10016113', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('7561546');
+//        $personal->setNomPersonal('HERRERA G , JORGE L');
+//        $personal->setNumPersonal('10018599');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2042'));
+//        $this->addReference('Personal-10018599', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('12662155');
+//        $personal->setNomPersonal('ROJAS G , SOANNY D');
+//        $personal->setNumPersonal('10016663');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2043'));
+//        $this->addReference('Personal-10016663', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('7129263');
+//        $personal->setNomPersonal('HERNANDEZ C , JUAN C');
+//        $personal->setNumPersonal('10020367');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2043'));
+//        $this->addReference('Personal-10020367', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('11548728');
+//        $personal->setNomPersonal('CEBALLOS P , OSCAR S');
+//        $personal->setNumPersonal('10020772');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10020772', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('12384073');
+//        $personal->setNomPersonal('FERNANDEZ A , EDUARDO J');
+//        $personal->setNumPersonal('10021845');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10021845', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('16110261');
+//        $personal->setNomPersonal('GUEVARA DI , ANTONIO A');
+//        $personal->setNumPersonal('10020593');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10020593', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('8107122');
+//        $personal->setNomPersonal('ROVIRA P , JOSE G');
+//        $personal->setNumPersonal('10022794');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10022794', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('13666676');
+//        $personal->setNomPersonal('PACHECO S , LEANDRO J');
+//        $personal->setNumPersonal('10017536');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10017536', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('9477466');
+//        $personal->setNomPersonal('TORRES V , YANEHT C');
+//        $personal->setNumPersonal('10021983');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2044'));
+//        $this->addReference('Personal-10021983', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('15258228');
+//        $personal->setNomPersonal('DIB P. , SAMIR C');
+//        $personal->setNumPersonal('10019915');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2045'));
+//        $this->addReference('Personal-10019915', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('8773338');
+//        $personal->setNomPersonal('PRIMERA B , MIRVIC DEL V');
+//        $personal->setNumPersonal('10015846');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2046'));
+//        $this->addReference('Personal-10015846', $personal);
+//            $manager->persist($personal);
+
+
+//        $personal = new Personal();
+//        $personal->setCedula('5539845');
+//        $personal->setNomPersonal('VELASQUEZ T , VIVIAN DEL C');
+//        $personal->setNumPersonal('10002207');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2047'));
+//        $this->addReference('Personal-10002207', $personal);
+//            $manager->persist($personal);
+
+//        $personal = new Personal();
+//        $personal->setCedula('14754189');
+//        $personal->setNomPersonal('AZUAJE G , SORILENA DEL C');
+//        $personal->setNumPersonal('10021189');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1974'));
+//        $this->addReference('Personal-10021189', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('13830934');
+//        $personal->setNomPersonal('MOLERO B. , JOHANA A.');
+//        $personal->setNumPersonal('10016256');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-914'));
+//        $this->addReference('Personal-10016256', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('11767056');
+//        $personal->setNomPersonal('ALTAMIRANDA N , JULIO C');
+//        $personal->setNumPersonal('10015038');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1578'));
+//        $this->addReference('Personal-10015038', $personal);
+//            $manager->persist($personal);    
+        
+//        $personal = new Personal();
+//        $personal->setCedula('14999048');
+//        $personal->setNomPersonal('CARPIO L , JULIO C');
+//        $personal->setNumPersonal('10021041');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1576'));
+//        $this->addReference('Personal-10021041', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('14126161');
+//        $personal->setNomPersonal('GUARACHE V , JUAN E');
+//        $personal->setNumPersonal('10017361');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1577'));
+//        $this->addReference('Personal-10017361', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('14688051');
+//        $personal->setNomPersonal('CORREA S , ANGIEMAR R');
+//        $personal->setNumPersonal('10021466');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1669'));
+//        $this->addReference('Personal-10021466', $personal);
+//            $manager->persist($personal);
+            
+//                $personal = new Personal();
+//        $personal->setCedula('18801510');
+//        $personal->setNomPersonal('ANDRADE P. , EMMY D.');
+//        $personal->setNumPersonal('10022068');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1252'));
+//        $this->addReference('Personal-10022068', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('18200808');
+//        $personal->setNomPersonal('MANRIQUE G. , JONATHAN');
+//        $personal->setNumPersonal('10022066');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1250'));
+//        $this->addReference('Personal-10022066', $personal);
+//            $manager->persist($personal);
+            
+//        $personal = new Personal();
+//        $personal->setCedula('14382778');
+//        $personal->setNomPersonal('MORILLO  R. , ANA  M.');
+//        $personal->setNumPersonal('10020560');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1852'));
+//        $this->addReference('Personal-10020560', $personal);
+//            $manager->persist($personal);
+        
+//        $personal = new Personal();
+//        $personal->setCedula('17024088');
+//        $personal->setNomPersonal('GARBAN C , LISBETH DEL C');
+//        $personal->setNumPersonal('10023414');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2155'));
+//        $this->addReference('Personal-10023414', $personal);
+//            $manager->persist($personal);
+            
         $personal = new Personal();
-        $personal->setCedula('15059269');
-        $personal->setNomPersonal('GELVIS V , OSCAR J');
-        $personal->setNumPersonal('10016691');
+        $personal->setCedula('14173582');
+        $personal->setNomPersonal('LAREZ B , SCARLET C');
+        $personal->setNumPersonal('10020558');
         $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2040'));
-        $this->addReference('Personal-10016691', $personal);
+        $personal->setCargo($this->getReference('Cargo-1704'));
+        $this->addReference('Personal-10020558', $personal);
             $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('14576275');
-        $personal->setNomPersonal('ZERPA S , RICARDO M');
-        $personal->setNumPersonal('10025358');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2041'));
-        $this->addReference('Personal-10025358', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('14833643');
-        $personal->setNomPersonal('FUENMAYOR S. , LUDAVI M.');
-        $personal->setNumPersonal('10016285');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2041'));
-        $this->addReference('Personal-10016285', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('8835283');
-        $personal->setNomPersonal('CORDERO M , RAFAEL R');
-        $personal->setNumPersonal('10016113');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2042'));
-        $this->addReference('Personal-10016113', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('7561546');
-        $personal->setNomPersonal('HERRERA G , JORGE L');
-        $personal->setNumPersonal('10018599');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2042'));
-        $this->addReference('Personal-10018599', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('12662155');
-        $personal->setNomPersonal('ROJAS G , SOANNY D');
-        $personal->setNumPersonal('10016663');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2043'));
-        $this->addReference('Personal-10016663', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('7129263');
-        $personal->setNomPersonal('HERNANDEZ C , JUAN C');
-        $personal->setNumPersonal('10020367');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2043'));
-        $this->addReference('Personal-10020367', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('11548728');
-        $personal->setNomPersonal('CEBALLOS P , OSCAR S');
-        $personal->setNumPersonal('10020772');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10020772', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('12384073');
-        $personal->setNomPersonal('FERNANDEZ A , EDUARDO J');
-        $personal->setNumPersonal('10021845');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10021845', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('16110261');
-        $personal->setNomPersonal('GUEVARA DI , ANTONIO A');
-        $personal->setNumPersonal('10020593');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10020593', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('8107122');
-        $personal->setNomPersonal('ROVIRA P , JOSE G');
-        $personal->setNumPersonal('10022794');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10022794', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('13666676');
-        $personal->setNomPersonal('PACHECO S , LEANDRO J');
-        $personal->setNumPersonal('10017536');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10017536', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('9477466');
-        $personal->setNomPersonal('TORRES V , YANEHT C');
-        $personal->setNumPersonal('10021983');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2044'));
-        $this->addReference('Personal-10021983', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('15258228');
-        $personal->setNomPersonal('DIB P. , SAMIR C');
-        $personal->setNumPersonal('10019915');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2045'));
-        $this->addReference('Personal-10019915', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('8773338');
-        $personal->setNomPersonal('PRIMERA B , MIRVIC DEL V');
-        $personal->setNumPersonal('10015846');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2046'));
-        $this->addReference('Personal-10015846', $personal);
-            $manager->persist($personal);
-
-
-        $personal = new Personal();
-        $personal->setCedula('5539845');
-        $personal->setNomPersonal('VELASQUEZ T , VIVIAN DEL C');
-        $personal->setNumPersonal('10002207');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2047'));
-        $this->addReference('Personal-10002207', $personal);
-            $manager->persist($personal);
-
+            
         // Gerencia 80
 
         $personal = new Personal();
@@ -41980,15 +41988,6 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $personal->setEnabled(true);
         $personal->setCargo($this->getReference('Cargo-2155'));
         $this->addReference('Personal-10024049', $personal);
-            $manager->persist($personal);
-
-        $personal = new Personal();
-        $personal->setCedula('17024088');
-        $personal->setNomPersonal('GARBAN C , LISBETH DEL C');
-        $personal->setNumPersonal('10023414');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2155'));
-        $this->addReference('Personal-10023414', $personal);
             $manager->persist($personal);
 
         $personal = new Personal();
