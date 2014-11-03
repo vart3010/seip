@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author matias
  */
-class RolRepository extends EntityRepository{
-    //put your code here
+class RolRepository extends EntityRepository
+{
     
 }
