@@ -256,7 +256,7 @@ class MonitorController extends baseController {
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-            $dataPorcTactic[] = array('value' => $resTactic, 'link' => 'N-'.$this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
+            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
             $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic']);
             $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
             $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic, 'urlGerencia' => $this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
@@ -297,7 +297,7 @@ class MonitorController extends baseController {
         
         foreach($resultsOperatives as $resultOperative){
             $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
-            $dataPorcOperative[] = array('value' => $resOperative, 'link' => 'N-'.$this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
+            $dataPorcOperative[] = array('value' => $resOperative, 'link' => $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
             $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
             $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
             $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative, 'urlGerencia' => $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
