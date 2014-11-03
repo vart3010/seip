@@ -3,6 +3,7 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block body %}
+{% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
     <hgroup id="main-title" class="thin">
         <h1>{{ "principal.title.objTactic"|trans }}</h1>
         <h2>{{ "now"|date("d/m/Y") }}</h2>
@@ -32,14 +33,8 @@
         </div>
     </div>
     {#    <div class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a)">#}
-    {#<div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
-        {{ 'pequiven_seip.seip'|trans }}
-        <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv.gif') }}" />
-        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
-        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos/mapavenezuela2.jpg') }}" style="margin-left: 15%" />
-    </div>#}
     {#    </div>#}
-    {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+    
         {#<div ng-controller="TableFormatController" id="objetiveTactic">
             <div ng-controller="TableMonitorTypeGroupController">
                 <div loading-container="tableParams.settings().$loading">
@@ -96,7 +91,7 @@
                 </div>
             </div>
         </div>#}
-    {% endif %}
+    
     <hgroup id="main-title" class="thin">
         <h1>{{ "principal.box.indicatorTactic"|trans }}</h1>
     </hgroup>
@@ -105,7 +100,11 @@
             {{ boxRender.renderBox('pequiven_seip_box_tactic_summaryindicatorcharged')|raw }}
         </div>
     </div>
-
+{% else %}
+    <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
+        <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
+    </div>
+{% endif %}
     
 {% endblock body %}
 
