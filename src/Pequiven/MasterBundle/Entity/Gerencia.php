@@ -11,7 +11,7 @@ use Pequiven\MasterBundle\Model\Gerencia as modelGerencia;
 /**
  * Gerencia de primera linea
  *
- * @ORM\Table(name="seip_c_gerencia")
+ * @ORM\Table(name="seip_c_gerencia",uniqueConstraints={@ORM\UniqueConstraint(name="abbreviation_idx", columns={"abbreviation"})})
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\GerenciaRepository")
  * @author matias
  */

@@ -137,6 +137,12 @@ objetiveOperativeList:
         _sylius:
             method: createPaginatorOperative
             
+#Devuelve el paginador con la data de los objetivos operativos vinculantes
+objetiveVinculantOperativeList:
+    path: /arrangement_strategic_objetive/list/operativeVinculant
+    defaults: 
+        _controller: pequiven.controller.objetiveoperative:objetiveVinculantListAction
+            
 #Muestra un Objetivo Estratégico
 objetiveStrategic_show:
     path: /arrangement_strategic_objetive/strategic/show/{id}

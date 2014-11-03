@@ -343,11 +343,43 @@ class MonitorController extends baseController {
      */
     public function listObjetiveOperativeByGroupAction(Request $request){
         $idGerencia = $request->get("idGerencia");
+        $em = $this->getDoctrine()->getManager();
+        $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
+        $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         
         $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $urlVinculant = $this->generateUrl('listObjetiveOperativeVinculant', array('idGerencia' => $idGerencia,'idComplejo' => $gerencia->getComplejo()->getId()));
         
         return array(
-            'url' => $url
+            'url' => $url,
+            'urlVinculant' => $urlVinculant,
+            'gerenciaGroup' => $objectGerenciaGroup,
+            'gerencia' => $gerencia
+        );
+    }
+    
+    /**
+     * Función que retorna la vista con la lista de los Objetivos Operativos VInculantes a un Complejo
+     * @Template("PequivenSEIPBundle:Monitor:Operative/viewObjetiveVinculant.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function listObjetiveOperativeVinculantAction(Request $request){
+        $idGerencia = $request->get("idGerencia");
+        $idComplejo = $request->get("idComplejo");
+        $em = $this->getDoctrine()->getManager();
+        
+        $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
+        $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
+        
+        $url = $this->generateUrl('objetiveVinculantOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia,'complejo' => $idComplejo)));
+        $urlMedular = $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $idGerencia));
+        
+        return array(
+            'url' => $url,
+            'urlMedular' => $urlMedular,
+            'gerenciaGroup' => $objectGerenciaGroup,
         );
     }
 }
