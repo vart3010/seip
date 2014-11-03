@@ -140,6 +140,8 @@ principal:
         tactic: Táctico
         operative: Operativo
         arrangementProgram: Programas de Gestión
+        vinculant: Vinculantes
+        medular: Medulares
     chart:
         captionObjTactic: Objetivos Tacticos
         captionObjOperative: Objetivos Operativos

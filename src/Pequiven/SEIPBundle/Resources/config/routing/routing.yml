@@ -48,3 +48,12 @@ listObjetiveOperativeByGroup:
     requirements:
         idGerencia: "\d+"
     methods: [GET]
+    
+#Lista de Objetivos Operativos Vinculantes del Complejo
+listObjetiveOperativeVinculant:
+    path: /list/operativeVinculant/{idGerencia}/{idComplejo}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:listObjetiveOperativeVinculantAction
+    requirements:
+        idGerencia: "\d+"
+    methods: [GET]
