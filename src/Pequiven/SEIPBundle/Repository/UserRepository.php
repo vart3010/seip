@@ -24,8 +24,10 @@ class UserRepository extends EntityRepository
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
+            ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
             ->setParameter('level', $level)
+            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_SUPERVISER)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
             ;
