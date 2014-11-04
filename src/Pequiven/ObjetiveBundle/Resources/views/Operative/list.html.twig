@@ -32,7 +32,7 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveOperativeList',{_format:'json',filter:app.request.get('filter',{})}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX') %}
+                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
                             <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                         {% endif %}
                         {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST_AUX') %}
@@ -75,7 +75,15 @@
             
             function charge(){
                 chargeSelectGerenciaFirst();
-                chargeSelectGerenciaSecond();
+                
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                   selectGerenciaSecond.select2({
+                       
+                   });
+                   selectGerenciaSecond.select2("enable",false);
+               } else{
+                   chargeSelectGerenciaSecond();
+               }
             }
         });
         
@@ -147,11 +155,17 @@
         }
         
         function chargeSelectGerenciaSecond(){
-            var data = {
-            };
+            var data = '';
+            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                data = {
+                };
+            } else{
+                data = {
+                };
+            }
             $.ajax({
                 type: 'post',
-                url: '{{ path("select_gerenciaSecondOperative") }}',
+                url: '{{ path("select_gerenciaSecondOperativeList") }}',
                 data: data,
                 success: function(data) {
                     {#$('#gerenciaFirst option[value]').remove();

@@ -19,7 +19,7 @@ UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperati
 -- ESTIMACIÓN DE COSTOS
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 2, objOperativeOriginal = 15, indOperativeOriginal = 17 WHERE fk_gerencia = 11;
 -- FINANZAS
-UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 4, objOperativeOriginal = 24, indOperativeOriginal = 24 WHERE fk_gerencia = 22;
+UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 4, objOperativeOriginal = 61, indOperativeOriginal = 60 WHERE fk_gerencia = 22;
 -- P.C.P.
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 4, objOperativeOriginal = 108, indOperativeOriginal = 135 WHERE fk_gerencia = 24;
 -- PROYECTOS INTERNACIONALES
@@ -45,7 +45,7 @@ UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 3, objOperati
 -- COMERCIO EXTERIOR / IPSL
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 6, indOperativeOriginal = 6 WHERE fk_gerencia = 6;
 -- LOGÍSTICA
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 5, indOperativeOriginal = 11 WHERE fk_gerencia = 5;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 6, indOperativeOriginal = 12 WHERE fk_gerencia = 5;
 -- PROYECTO MORON
 UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperativeOriginal = 28, indOperativeOriginal = 28 WHERE fk_gerencia = 4;
 -- PROYECTO TERMINAL MARÍTIMO
