@@ -12,16 +12,22 @@
         <thead>
                 <tr>
                     <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                        <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                    {% endif %}
                     <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
                     <th scope="col" width="25%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
                 </tr>
         </thead>
+        {% set colspan = 5 %}
+        {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+            {% set colspan = 6 %}
+        {% endif %}
         <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
             <tr ng-if="goals.length == 0">
-                <td colspan="6" class="empty_row">
+                <td colspan="{{ colspan }}" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}
                 </td>
             </tr>
@@ -30,14 +36,16 @@
                     {$ goal.name $}<br>
                     <small>{$ goal.observations $}</small>
                 </th>
-                <td>
-                    <span ng-if="goal.typeGoal">
-                        {$ goal.typeGoal.description $}
-                    </span>
-                    <span ng-if="!goal.typeGoal">
-                        {$ 'pequiven.form.not_applicable'|trans $}
-                    </span>
-                </td>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <td>
+                        <span ng-if="goal.typeGoal">
+                            {$ goal.typeGoal.description $}
+                        </span>
+                        <span ng-if="!goal.typeGoal">
+                            {$ 'pequiven.form.not_applicable'|trans $}
+                        </span>
+                    </td>
+                {% endif %}
                 <td>{$ goal.startDate | myDate $}</td>
                 <td>{$ goal.endDate| myDate $}</td>
                 <td>{$ goal.weight $}%</td>
