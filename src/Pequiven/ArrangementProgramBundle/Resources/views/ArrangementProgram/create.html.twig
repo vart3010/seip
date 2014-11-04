@@ -20,7 +20,7 @@
         </h1>
     </hgroup>
         
-    {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
+    {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramController",'id':'formArrangementProgram' } }) }}
        {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_form.html.twig' %}
        <br /><br />
        {{ actions.create() }}

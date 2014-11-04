@@ -22,7 +22,7 @@
         </h1>
     </hgroup>
 
-    {{ form_start(edit_form,{'attr':{ 'ng-controller':"ArrangementProgramController" } }) }}
+    {{ form_start(edit_form,{'attr':{ 'ng-controller':"ArrangementProgramController",'id':'formArrangementProgram' } }) }}
        {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_form.html.twig' with {'form':edit_form} %}
        <br/><br/>
        {{ actions.update(path('pequiven_seip_arrangementprogram_show',{id:entity.id})) }}

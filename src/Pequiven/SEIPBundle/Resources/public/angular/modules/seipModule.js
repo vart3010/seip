@@ -315,7 +315,7 @@ angular.module('seipModule.controllers', [])
             };
             
             $scope.formReady = false;
-            var form = angular.element('form');
+            var form = angular.element('#formArrangementProgram');
             form.submit(function(e) {
                 var valid = true;
                 //Select de responsables
