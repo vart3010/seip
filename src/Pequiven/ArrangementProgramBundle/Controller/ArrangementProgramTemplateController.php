@@ -11,6 +11,49 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  */
 class ArrangementProgramTemplateController extends SEIPController
 {
+    public function indexAction(\Symfony\Component\HttpFoundation\Request $request) {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginator',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('index.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            $view->getSerializationContext()->setGroups(array('id','api_list'));
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
     public function createAction(\Symfony\Component\HttpFoundation\Request $request) {
         $type = $request->get("type");
         $entity = new \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate();

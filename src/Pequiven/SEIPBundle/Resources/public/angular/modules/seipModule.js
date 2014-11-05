@@ -554,6 +554,15 @@ angular.module('seipModule.controllers', [])
             $scope.templateOptions.setTemplate($scope.templates[0]);
 
         })
+        .controller('ReportArrangementProgramTemplateController',function($scope,$http){
+            $scope.createProgramFrom = function(arrangementProgramTemplate){
+                var url = Routing.generate('pequiven_arrangementprogram_create',{
+                    type: arrangementProgramTemplate.type,
+                    templateSource: arrangementProgramTemplate.id
+                });
+                document.location = url;
+            };
+        })
         .controller('ReportArrangementProgramController', function($scope, $http) {
             $scope.data = {
                 tacticals: null,

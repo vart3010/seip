@@ -67,17 +67,7 @@ abstract class ArrangementProgram
      */
     protected $type;
     
-    /**
-     * Linea de tiempo
-     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     *
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",cascade={"persist","remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $timeline;
-    
     function getTypeLabel() {
-        
         $labels = array(
             self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
             self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'pequiven.arrangement_program.type.operative',

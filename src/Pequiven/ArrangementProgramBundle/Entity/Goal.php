@@ -375,4 +375,12 @@ class Goal
     public function __toString() {
         return $this->name;
     }
+    
+    public function __clone() {
+        if($this->id > 0){
+           $this->id = null; 
+           $this->goalDetails = clone($this->goalDetails);
+           $this->goalDetails->setGoal($this);
+        }
+    }
 }

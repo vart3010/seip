@@ -54,6 +54,15 @@ class ArrangementProgramTemplate extends Model
     private $updatedAt;
     
     /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",inversedBy="arrangementProgramTemplate",cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $timeline;
+    
+    /**
      * Get id
      *
      * @return integer 

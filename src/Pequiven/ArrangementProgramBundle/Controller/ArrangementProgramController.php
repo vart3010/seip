@@ -257,6 +257,18 @@ class ArrangementProgramController extends SEIPController
                 ->setPeriod($period)
                 ->setCreatedBy($user);
         $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+        if(($templateSourceId = $request->get('templateSource',null)) !== null){
+            $templateSource = $this->get('pequiven_seip.repository.arrangementprogram_template')->find($templateSourceId);
+            if(!$templateSource){
+                throw $this->createNotFoundException('TemplateSource not found!');
+            }
+            $srcTimeline = $templateSource->getTimeline();
+            $timeLine = new Timeline();
+            foreach ($srcTimeline->getGoals() as $srcGoal) {
+                $timeLine->addGoal(clone($srcGoal));
+            }
+            $entity->setTimeline($timeLine);
+        }
         $form = $this->createCreateForm($entity,array('type' => $type));
         if($request->isMethod('GET')){
             $form->remove('timeline');

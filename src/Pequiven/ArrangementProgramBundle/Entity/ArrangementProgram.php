@@ -82,6 +82,15 @@ class ArrangementProgram extends Model
     protected $responsibles;
     
     /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",inversedBy="arrangementProgram",cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $timeline;
+    
+    /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
      *

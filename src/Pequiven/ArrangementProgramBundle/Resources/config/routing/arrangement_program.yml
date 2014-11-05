@@ -31,6 +31,8 @@ pequiven_arrangementprogram_create:
     requirements:
         type: 1|2
     methods: [GET|POST]
+    options:
+        expose: true
     
 pequiven_seip_arrangementprogram_show:
     path: /{id}
