@@ -1,13 +1,13 @@
 {% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <hgroup id="main-title" class="thin">
+    <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path('monitorObjetiveOperative') }}">{{ "principal.button.operative"|trans }}</a>
+            <a href="{{ path('monitorObjetiveOperative') }}">{{ "principal.title.objOperative"|trans }}</a>
             <span class="icon-forward"></span>
-            {{ gerenciaGroup.description }}
+            <span class="thin">{{ gerenciaGroup.description }}</span>
+            <span class="thin absolute-right">{{ "now"|date("d/m/Y") }}</span>
         </h1>
-        <h2>{{ "now"|date("d/m/Y") }}</h2>
     </hgroup>
     <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }},'{{ gerenciaGroup.description }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
@@ -37,11 +37,11 @@
         </div>
     </div>
             
-    <hgroup id="main-title" class="thin">
+    <hgroup id="main-title" class="thin breadcrumb">
         <h1>
             {{ "principal.box.indicatorOperative"|trans }}
             <span class="icon-forward"></span>
-            {{ gerenciaGroup.description }}
+            <span class="thin">{{ gerenciaGroup.description }}</span>
         </h1>
     </hgroup>
     <div class="with-padding">

@@ -996,7 +996,7 @@ class ObjetiveOperativeController extends baseController {
             $gerencias = $request->request->get('gerencias');
             $gerenciasArray = explode(',', $gerencias);
             $complejosArray = explode(',', $complejos);
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
             $gerenciasObjectArray = $gerenciasArray;
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
             $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
@@ -1040,7 +1040,7 @@ class ObjetiveOperativeController extends baseController {
     }
     
     /**
-     * Función que devuelve la(s) gerencias de 2da línea asociadaa a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
+     * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
@@ -1053,12 +1053,13 @@ class ObjetiveOperativeController extends baseController {
         $gerenciasObjectArray = array();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-            $complejos = $request->request->get('complejos');
-            $gerencias = $request->request->get('gerencias');
-            $gerenciasArray = explode(',', $gerencias);
-            $complejosArray = explode(',', $complejos);
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
-            $gerenciasObjectArray = $gerenciasArray;
+            $gerencia = $request->request->get('gerencia');
+            
+            if((int)$gerencia == 0){
+                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+            } else{
+                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
+            }
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
             $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
         } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {

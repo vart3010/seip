@@ -65,7 +65,7 @@
         
         var selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
             selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
-            inputHiddenRoleName = $("rolUser")//
+            inputHiddenRoleName = $("#rolUser")//
         ;
         
         $(document).ready(function()
@@ -88,6 +88,7 @@
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
+            chargeSelectGerenciaSecond(e);
             //chargeList(e);
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
         })
@@ -154,10 +155,11 @@
             });
         }
         
-        function chargeSelectGerenciaSecond(){
+        function chargeSelectGerenciaSecond(e){
             var data = '';
             if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
                 data = {
+                    gerencia: $.trim(e.val),
                 };
             } else{
                 data = {
@@ -170,6 +172,9 @@
                 success: function(data) {
                     {#$('#gerenciaFirst option[value]').remove();
                     $('#gerenciaFirst').select2("val",'');#}
+                                    
+                    $("#selectGerenciaSecond optgroup").remove();
+                    $("#selectGerenciaSecond option[value]").remove();
 
                     if(typeof data[0].empty === 'undefined'){
                         var cantidad = data.length;
@@ -193,7 +198,10 @@
                         }
                         //selectGerenciaFirst.append("<option></option>");
                         selectGerenciaSecond.append(text);
-                        chargeSelect2GerenciaSecond("full");
+                        selectGerenciaSecond.select2({
+                        });
+                        selectGerenciaSecond.select2("enable",true);
+{#                        chargeSelect2GerenciaSecond("full");#}
                     } else{
                         chargeSelect2GerenciaSecond("empty");
                     }

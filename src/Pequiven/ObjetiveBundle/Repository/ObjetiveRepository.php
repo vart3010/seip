@@ -233,17 +233,17 @@ class ObjetiveRepository extends EntityRepository {
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             if(isset($criteria['gerenciaSecond'])){
-                if((int)$criteria['gerenciaSecond'] == 0){
+                if((int)$criteria['gerenciaSecond'] == 0){//En el caso que seleccione todas las Gerencias de 2da Línea
                     $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());;
                 }
             } else{
                 $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
             }
         } elseif($securityContext->isGranted('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX')){
-            $queryBuilder->andWhere('o.gerenciaSecond = '.$user->getGerenciaSecond()->getId());
+            $queryBuilder->andWhere('o.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
         } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
             if(isset($criteria['gerenciaSecond'])){
-                if((int)$criteria['gerenciaSecond'] == 0){
+                if((int)$criteria['gerenciaSecond'] == 0){//En caso que seleccione todas las Gerencias de 2da Línea
                     $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
                     $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
                     $queryBuilder->andWhere('gs.modular =:modular');
@@ -254,6 +254,14 @@ class ObjetiveRepository extends EntityRepository {
                 $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
+            }
+        } elseif ($securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
+            if(isset($criteria['gerencia'])){
+                if((int)$criteria['gerencia'] == 0){
+                    
+                } else{
+                    $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
+                }
             }
         }
         
@@ -270,8 +278,10 @@ class ObjetiveRepository extends EntityRepository {
         }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        print_r($queryBuilder->getQuery()->getSQL());
+//        die();
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
