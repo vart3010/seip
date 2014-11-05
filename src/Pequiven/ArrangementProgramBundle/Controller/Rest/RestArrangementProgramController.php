@@ -21,10 +21,10 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @Route("/api/arrangement-program")
  */
-class RestArrangementProgramController extends FOSRestController {
-
+class RestArrangementProgramController extends FOSRestController 
+{
     /**
-     * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function getGoalsDetailsAction($id, Request $request) {
         $em = $this->getDoctrine()->getManager();

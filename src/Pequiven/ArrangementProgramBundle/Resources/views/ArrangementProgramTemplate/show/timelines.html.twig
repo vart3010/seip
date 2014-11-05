@@ -4,7 +4,7 @@
     <div class="block-title">
         <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
         <div class="button-group absolute-right compact">
-            <a id="arrangementGoalDetailsPop" class="button icon-list showPopup" href="{{ path('get_arrangementprogram_rest_restarrangementprogram_putgoalsdetails',{id:app.request.get('id'),_format:'html'}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.details'|trans({},'messages') }}</a>
+            <a id="arrangementGoalDetailsPop" class="button icon-list showPopup" href="{{ path('get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails',{id:app.request.get('id'),_format:'html'}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.details'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
