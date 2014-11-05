@@ -1,0 +1,36 @@
+pequiven_seip_arrangementprogram_template_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram_template:indexAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_arrangementprogram_template_create:
+    path: /{type}/create
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram_template:createAction }
+    requirements:
+        type: 1|2
+    methods: [GET|POST]
+    
+pequiven_seip_arrangementprogram_template_show:
+    path: /{id}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram_template:showAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    
+arrangementprogram_template_update:
+    path: /{id}/update
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram_template:updateAction }
+    requirements:
+        id: "\d+"
+    methods: [GET|PUT|POST]
+    
+arrangementprogram_template_delete:
+    path: /{id}
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram_template:deleteAction }
+    requirements:
+        id: "\d+"
+    methods: [DELETE]

@@ -239,6 +239,13 @@ sylius_resource:
                 controller: Pequiven\ArrangementProgramBundle\Controller\ArrangementProgramController
                 model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
                 repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
+        pequiven_seip.arrangementprogram_template:
+            driver: doctrine/orm
+            templates: PequivenArrangementProgramBundle:ArrangementProgramTemplate
+            classes:
+                controller: Pequiven\ArrangementProgramBundle\Controller\ArrangementProgramTemplateController
+                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate
+                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramTemplateRepository
         pequiven_seip.arrangementprogram_data:
             driver: doctrine/orm
             classes:

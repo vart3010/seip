@@ -25,9 +25,12 @@ goal_show:
     methods: [GET]
     
 goal_get_form:
-    path: /get-form
+    path: /get-form/{typeForm}
     defaults: 
         _controller: pequiven_seip.controller.arrangementprogram_goal:getFormAction
+        typeForm: full
+    requirements:
+        typeForm: full|template
     methods: [GET]
     options:
         expose: true

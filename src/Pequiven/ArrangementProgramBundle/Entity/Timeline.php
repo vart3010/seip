@@ -38,14 +38,6 @@ class Timeline
     private $status = 0;
 
     /**
-     * Programa de gestion
-     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     * 
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timeline")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $arrangementProgram;
-    /**
      * Constructor
      */
     public function __construct()

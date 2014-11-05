@@ -2,6 +2,9 @@
 
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
+const GOAL_TYPE_FORM = 'full';
+const GOAL_TYPE_TEMPLATE = 'template';
+
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
 

@@ -1,6 +1,10 @@
 pequiven_seip_arrangementprogram_routes:
     resource: "@PequivenArrangementProgramBundle/Resources/config/routing/arrangement_program.yml"
     prefix:   /arrangementprogram
+    
+pequiven_seip_arrangementprogram_template_routes:
+    resource: "@PequivenArrangementProgramBundle/Resources/config/routing/arrangement_program_template.yml"
+    prefix:   /template/arrangementprogram
 
 pequiven_seip_arrangementprogram_data:
     resource: "@PequivenArrangementProgramBundle/Resources/config/routing/generic_data.yml"

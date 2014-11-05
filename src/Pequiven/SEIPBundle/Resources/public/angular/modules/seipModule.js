@@ -124,7 +124,6 @@ angular.module('seipModule.controllers', [])
                             $scope.model.goal.responsibles = selected;
                         });
                     }
-//                $scope.$apply();
                 }
             };
             //Metas
@@ -156,7 +155,7 @@ angular.module('seipModule.controllers', [])
             };
 
 
-            //Funcion que carga el template de la meta
+        //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal,index){
             $scope.model.goalCount = index;
                 var responsibles = programResponsible.val();
@@ -394,6 +393,166 @@ angular.module('seipModule.controllers', [])
             };
 
             $scope.init();
+        })
+        .controller("ArrangementProgramTemplateController", function($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
+            $scope.entity = null;
+            $scope.complejo = null;
+            $scope.data.responsibleGoals = null;
+            $scope.data.typeGoals = null;
+            $scope.data.operationalObjectives = null;
+        $scope.model.goalCount = null;
+
+            $scope.model.arrangementProgram = {
+                categoryArrangementProgram: null
+            };
+            //Inicializar modelo de meta
+            $scope.initModelGoal = function(goal) {
+                $scope.model.goal = {
+                    name: null,
+                    typeGoal: null,
+                    startDate: null,
+                    endDate: null,
+                    weight: null,
+                    observations: null
+                };
+                $("#goalForms select").each(function() {
+                    $(this).select2("val", "");
+                });
+                if (goal) {
+                    $scope.model.goal = goal;
+                    $scope.model.goal.startDate = $filter('myDate')(goal.startDate);
+                    $scope.model.goal.endDate = $filter('myDate')(goal.endDate);
+                    var setTypeGoalCall = function(selected) {
+                        $scope.model.goal.typeGoal = selected;
+                    };
+                    if (goal.typeGoal != undefined && goal.typeGoal.id != undefined) {
+                        setValueSelect2("goal_typeGoal", goal.typeGoal.id, $scope.data.typeGoals, setTypeGoalCall);
+                    } else {
+                        setValueSelect2("goal_typeGoal", null, $scope.data.typeGoals, setTypeGoalCall);
+                    }
+                }
+            };
+            //Metas
+            $scope.goals = [];
+            $scope.initModelGoal();
+            $scope.addGoal = function() {
+                var valid = $scope.validFormTypeGoal();
+                if (valid) {
+                    if (!$scope.goals.contains($scope.model.goal)) {
+                        $scope.goals.push($scope.model.goal);
+                        $scope.initModelGoal();
+                    }
+                }
+                return valid;
+            };
+
+            $scope.validFormTypeGoal = function() {
+                var valid = true;
+                return valid;
+            };
+            $scope.cancelEditGoal = function() {
+                return $scope.validFormTypeGoal();
+            };
+
+
+            //Funcion que carga el template de la meta
+        $scope.loadTemplateMeta = function(goal,index){
+            $scope.model.goalCount = index;
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(goal);
+                if (goal) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+
+            //Setea la dta del formulario
+            $scope.setDataFormGoal = function(goal) {
+                $scope.initModelGoal(goal);
+            };
+
+            $scope.removeGoal = function(goal) {
+                $scope.openModalConfirm('pequiven.modal.confirm.goal.delete_this_goal', function() {
+                    $scope.goals.remove(goal);
+                });
+            };
+
+            $scope.getTypeGoal = function(c) {
+                if (c) {
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("pequiven_arrangementprogram_data_type_goal", {category: c})).success(function(data) {
+                        $scope.data.typeGoals = data;
+                        notificationBarService.getLoadStatus().done();
+                    });
+                } else {
+                    $scope.data.typeGoals = null;
+                }
+            };
+
+            var urlGoal = Routing.generate("goal_get_form", {typeForm:'template'}, true);
+            var initCallBack = function() {
+                return false;
+            };
+
+            $scope.formReady = false;
+            var form = angular.element('#formArrangementProgram');
+            form.submit(function(e) {
+                    var autoOpenOnSave = angular.element('#autoOpenOnSave');
+                    if ($scope.goals.length > 0) {
+                        $scope.openModalConfirm(Translator.trans('pequiven.modal.confirm.arrangement_program.open_on_save'), function() {
+                            autoOpenOnSave.val(1);
+                            $scope.formReady = true;
+                            form.submit();
+                        }, function() {
+                            autoOpenOnSave.val(0);
+                            $scope.formReady = true;
+                            form.submit();
+                        });
+                    } else {
+                        $scope.formReady = true;
+                    }
+                if ($scope.formReady == true) {
+                    return true;
+                }
+                e.preventDefault();
+            });
+
+            $scope.sendMessageError = function(message, id) {
+                if (message === null) {
+                    message = 'pequiven.validations.blank_text';
+                }
+                var messageTrans = "* " + Translator.trans(message);
+                if (id == undefined) {
+                    id = 'message-errors';
+                }
+                jQuery('#' + id).validationEngine('showPrompt', messageTrans, 'error');
+                $timeout(function() {
+                    jQuery('#' + id).validationEngine('hide');
+                }, 3000);
+            };
+            //Calcula el total de peso distribuido en las metas
+            $scope.getTotalWeight = function(){
+                var total = 0;
+                angular.forEach($scope.goals,function(goal){
+                    total += goal.weight;
+                });
+                return total;
+            };
+
+            $scope.templates = [
+                {
+                    name: 'pequiven.modal.title.goal',
+                    url: urlGoal,
+                    confirmCallBack: $scope.addGoal,
+                    cancelCallBack: $scope.cancelEditGoal,
+                    loadCallBack: $scope.setDataFormGoal,
+                    initCallBack: initCallBack
+                }
+            ];
+            $scope.templateOptions.setTemplate($scope.templates[0]);
+
         })
         .controller('ReportArrangementProgramController', function($scope, $http) {
             $scope.data = {

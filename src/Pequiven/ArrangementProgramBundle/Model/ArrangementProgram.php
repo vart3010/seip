@@ -51,28 +51,30 @@ abstract class ArrangementProgram
     const STATUS_CLOSED = 6;
     
     /**
+     * Programa de gestión asociada.
+     * @var \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $categoryArrangementProgram;
+    
+    /**
      * Tipo de programa de gestion
      * @var integer
+     *
+     * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
     
     /**
-     * Responsables del programa
-     * @var \Pequiven\SEIPBundle\Entity\User
-     */
-    protected $responsibles;
-    
-    /**
      * Linea de tiempo
      * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $timeline;
-    
-    /**
-     * Estatus del programa de gestion
-     * @var integer
-     */
-    protected $status = self::STATUS_DRAFT;
     
     function getTypeLabel() {
         
@@ -116,7 +118,6 @@ abstract class ArrangementProgram
      */
     public function setTimeline(\Pequiven\ArrangementProgramBundle\Entity\Timeline $timeline = null)
     {
-        $timeline->setArrangementProgram($this);
         $this->timeline = $timeline;
 
         return $this;
@@ -133,36 +134,36 @@ abstract class ArrangementProgram
     }
     
     /**
-     * Add responsibles
+     * Set categoryArrangementProgram
      *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram
      * @return ArrangementProgram
      */
-    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    public function setCategoryArrangementProgram(\Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram = null)
     {
-        $this->responsibles->add($responsibles);
+        $this->categoryArrangementProgram = $categoryArrangementProgram;
 
         return $this;
     }
 
     /**
-     * Remove responsibles
+     * Get categoryArrangementProgram
      *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @return \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram 
      */
-    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    public function getCategoryArrangementProgram()
     {
-        $this->responsibles->removeElement($responsibles);
+        return $this->categoryArrangementProgram;
+    }
+    
+    function getType() {
+        return $this->type;
     }
 
-    /**
-     * Get responsibles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getResponsibles()
-    {
-        return $this->responsibles;
+    function setType($type) {
+        $this->type = $type;
+        
+        return $this;
     }
     
     /**
