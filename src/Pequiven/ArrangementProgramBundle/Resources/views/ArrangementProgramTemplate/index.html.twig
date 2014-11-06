@@ -1,0 +1,83 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.arrangement_program.list_template'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+   <div ng-controller="TableFormatController">
+       <div ng-controller="ReportArrangementProgramTemplateController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.type_template'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </details>
+                <div loading-container="tableParams.settings().$loading" >
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_template_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven.description'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                                <a href="{$ result._links.self.href $}">{$ result.description $}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven_seip.filters.type_template'|trans({},'PequivenSEIPBundle') }}'">
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">TACTICO</span>
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">OPERATIVO</span>
+                            </td>
+                            <td data-title="'{{ 'pequiven.created_at'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                                {$ result.createdAt|myDateTime $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                                <span class="select compact expandable-list">
+                                    <a href="" class="select-value form-edit">Acciones</a>
+                                    <span class="select-arrow"></span>
+                                    <span class="drop-down">
+                                        <a href ng-click="createProgramFrom(result)"  class="button icon-pages">Crear a partir de plantilla</a>
+                                    </span>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <p class="button-height align-right">
+            <a href="{{ path('pequiven_arrangementprogram_template_create',{'type': constant('Pequiven\\ArrangementProgramBundle\\Model\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC')}) }}" class="button">
+                <span class="button-icon"><span class="icon-star"></span></span>
+                {{ 'pequiven.arrangement_program.buttons.add_template_tactic'|trans }}
+            </a>
+            <a href="{{ path('pequiven_arrangementprogram_template_create',{'type': constant('Pequiven\\ArrangementProgramBundle\\Model\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE')}) }}" class="button">
+                <span class="button-icon"><span class="icon-star"></span></span>
+                {{ 'pequiven.arrangement_program.buttons.add_template_operative'|trans }}
+            </a>
+        </p>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascripts %}

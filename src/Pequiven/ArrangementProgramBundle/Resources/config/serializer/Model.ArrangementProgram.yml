@@ -1,0 +1,12 @@
+Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
+    exclusion_policy: ALL
+    properties:
+        type:
+            expose: true
+            groups: [api_list]
+        period:
+            expose: true
+            groups: [period]
+        categoryArrangementProgram:
+            expose: true
+            groups: [api_list]

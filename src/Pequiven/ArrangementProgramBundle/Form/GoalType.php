@@ -8,7 +8,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class GoalType extends AbstractType
 {
-        /**
+    private $typeForm;
+    
+    function __construct($typeForm = \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM) {
+        $this->typeForm = $typeForm;
+    }
+
+    
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -57,21 +64,26 @@ class GoalType extends AbstractType
                 'widget' => 'single_text',
                 'required' => true,
                 'format' => 'yyyy-MM-dd'
-            ))
-            ->add('responsibles',null,array(
-                'label' => 'pequiven.form.goal.responsible',
-                'label_attr' => array('class' => 'label'),
-                'attr' => array(
-                    'class' => "select2 input-xlarge",
-                    'ng-model' => 'model.goal.responsibles',
-                    'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
-                    'style' => 'width: 270px',
-                    'multiple' => 'multiple'
-                ),
-                'multiple' => true,
-                'empty_value' => 'Seleccione',
-                'required' => true,
-            ))
+            ));
+        if($this->typeForm == \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM){
+            $builder
+                ->add('responsibles',null,array(
+                    'label' => 'pequiven.form.goal.responsible',
+                    'label_attr' => array('class' => 'label'),
+                    'attr' => array(
+                        'class' => "select2 input-xlarge",
+                        'ng-model' => 'model.goal.responsibles',
+                        'ng-options' => 'value as (value.firstName + " "+ value.lastName + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
+                        'style' => 'width: 270px',
+                        'multiple' => 'multiple'
+                    ),
+                    'multiple' => true,
+                    'empty_value' => 'Seleccione',
+                    'required' => true,
+                ));
+        }
+        
+        $builder
             ->add('weight','integer',array(
                 'label' => 'pequiven.form.weight',
                 'label_attr' => array('class' => 'label'),

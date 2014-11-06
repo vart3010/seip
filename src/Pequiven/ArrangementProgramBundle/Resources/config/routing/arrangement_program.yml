@@ -7,6 +7,15 @@ pequiven_seip_arrangementprogram_index:
         _format: html|json|xml
     methods: [GET]
     
+pequiven_seip_arrangementprogram_list_template:
+    path: /list-template.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:listTemplateAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
 pequiven_seip_arrangementprogram_assigned:
     path: /assigned.{_format}
     defaults:
@@ -20,8 +29,10 @@ pequiven_arrangementprogram_create:
     path: /{type}/create
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:createAction }
     requirements:
-        type: 1|2|3
+        type: 1|2
     methods: [GET|POST]
+    options:
+        expose: true
     
 pequiven_seip_arrangementprogram_show:
     path: /{id}

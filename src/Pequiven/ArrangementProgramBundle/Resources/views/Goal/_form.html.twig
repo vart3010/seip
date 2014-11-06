@@ -21,11 +21,13 @@
         {{ form_widget(goal.endDate) }}
         {{ form_errors(goal.endDate) }}
     </div>
-    <div class="field-block button-height">
-        {{ form_label(goal.responsibles) }}
-        {{ form_widget(goal.responsibles) }}
-        {{ form_errors(goal.responsibles) }}
-    </div>
+    {% if goal.responsibles is defined %}
+        <div class="field-block button-height">
+            {{ form_label(goal.responsibles) }}
+            {{ form_widget(goal.responsibles) }}
+            {{ form_errors(goal.responsibles) }}
+        </div>
+    {% endif %}
     <div class="field-block button-height">
         {{ form_label(goal.weight) }}
         {{ form_widget(goal.weight) }}

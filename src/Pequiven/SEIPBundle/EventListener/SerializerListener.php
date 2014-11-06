@@ -39,6 +39,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeIndicator', 'class' => 'Pequiven\IndicatorBundle\Entity\Indicator', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoalDetails', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgram', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgramTemplate', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
         );
     }
@@ -101,26 +102,34 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         
         //Habilitar la carga de lo real
         $isLoadRealEnabled = false;
-        if($this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === true
-            ){
-            $isLoadRealEnabled = true;
-        }
         //Habilitar la carga de los planeado
         $isLoadPlannedEnabled = false;
                 
         //Habilitar la carga de los planeado segun la fecha inicio y fin
         $isForceLoadPlannedEnabled = false;
-        if(
-            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_DRAFT ||
-            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_IN_REVIEW ||
-            $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REVISED
-                ){
-            $isForceLoadPlannedEnabled = true;
-        }
-        //Sino tiene permisos para planificar en el programa de gestion
-        if(
-            $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
+        if($arrangementProgram != null){
+            if($this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === true
             ){
+                $isLoadRealEnabled = true;
+            }
+            if(
+                $arrangementProgram->getStatus() == ArrangementProgram::STATUS_DRAFT ||
+                $arrangementProgram->getStatus() == ArrangementProgram::STATUS_IN_REVIEW ||
+                $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REVISED
+                    ){
+                $isForceLoadPlannedEnabled = true;
+            }
+            //Sino tiene permisos para planificar en el programa de gestion
+            if(
+                $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
+                ){
+                $isLoadPlannedEnabled = true;
+                $isForceLoadPlannedEnabled = true;
+            }
+            if($arrangementProgram->getStatus() == ArrangementProgram::STATUS_APPROVED || $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REJECTED){
+                $isLoadPlannedEnabled = false;
+            }
+        }else{
             $isLoadPlannedEnabled = true;
             $isForceLoadPlannedEnabled = true;
         }
@@ -164,10 +173,6 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $isEnabledLoadByQuarterFourthPlanned = true;
         //Habilitar la carga de valores reales del cuarto trimestre (Requiere isEnabledLoadByQuarterFourth)
         $isEnabledLoadByQuarterFourthReal = true;
-        
-        if($arrangementProgram->getStatus() == ArrangementProgram::STATUS_APPROVED || $arrangementProgram->getStatus() == ArrangementProgram::STATUS_REJECTED){
-            $isLoadPlannedEnabled = false;
-        }
         
         $month = $date->format('m');
         
@@ -351,6 +356,16 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         }
         $data['summary'] = $object->getSummary();
         $event->getVisitor()->addData('_data',$data);
+        $event->getVisitor()->addData('_links',$links);
+    }
+    
+    public function onPostSerializeArrangementProgramTemplate(ObjectEvent $event) {
+        $links = array();
+        $object = $event->getObject();
+        if($object->getId() > 0){
+            $links['self']['href'] = $this->generateUrl('pequiven_seip_arrangementprogram_template_show', array('id' => $object->getId()));
+            $links['self']['edit']['href'] = $this->generateUrl('arrangementprogram_template_update', array('id' => $object->getId()));
+        }
         $event->getVisitor()->addData('_links',$links);
     }
     

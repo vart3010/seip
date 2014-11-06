@@ -40,47 +40,6 @@ class ArrangementProgram extends Model
     private $period;
     
     /**
-     * Programa de gestión asociada.
-     * @var \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $categoryArrangementProgram;
-    
-    /**
-     * Tipo de programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="type", type="integer", nullable=false)
-     */
-    protected $type;
-    
-    /**
-     * Responsables del programa
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
-     */
-    protected $responsibles;
-    
-    /**
-     * Linea de tiempo
-     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
-     *
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",mappedBy="arrangementProgram",cascade={"persist","remove"})
-     */
-    protected $timeline;
-    
-    /**
-     * Estatus del programa de gestion
-     * @var integer
-     *
-     * @ORM\Column(name="status", type="integer")
-     */
-    protected $status = self::STATUS_DRAFT;
-    
-    /**
      * Objetivo táctico
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
      *
@@ -105,7 +64,32 @@ class ArrangementProgram extends Model
      * @ORM\Column(name="process", type="string", length=255, nullable=true)
      */
     private $process;
-
+    
+    /**
+     * Estatus del programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status = self::STATUS_DRAFT;
+    
+    /**
+     * Responsables del programa
+     * @var \Pequiven\SEIPBundle\Entity\User
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="arrangementPrograms")
+     */
+    protected $responsibles;
+    
+    /**
+     * Linea de tiempo
+     * @var \Pequiven\ArrangementProgramBundle\Entity\Timeline
+     *
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\Timeline",inversedBy="arrangementProgram",cascade={"persist","remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $timeline;
+    
     /**
      * Creado por
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -217,29 +201,6 @@ class ArrangementProgram extends Model
     }
 
     /**
-     * Set categoryArrangementProgram
-     *
-     * @param \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram
-     * @return ArrangementProgram
-     */
-    public function setCategoryArrangementProgram(\Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram = null)
-    {
-        $this->categoryArrangementProgram = $categoryArrangementProgram;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryArrangementProgram
-     *
-     * @return \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram 
-     */
-    public function getCategoryArrangementProgram()
-    {
-        return $this->categoryArrangementProgram;
-    }
-
-    /**
      * Set tacticalObjective
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjective
@@ -285,16 +246,6 @@ class ArrangementProgram extends Model
         return $this->operationalObjective;
     }
 
-    function getType() {
-        return $this->type;
-    }
-
-    function setType($type) {
-        $this->type = $type;
-        
-        return $this;
-    }
-    
     function getCreatedBy() {
         return $this->createdBy;
     }
@@ -348,39 +299,6 @@ class ArrangementProgram extends Model
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Add responsibles
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
-     * @return ArrangementProgram
-     */
-    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
-        $this->responsibles[] = $responsibles;
-
-        return $this;
-    }
-
-    /**
-     * Remove responsibles
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
-     */
-    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
-    {
-        $this->responsibles->removeElement($responsibles);
-    }
-
-    /**
-     * Get responsibles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getResponsibles()
-    {
-        return $this->responsibles;
     }
 
     /**
@@ -541,5 +459,38 @@ class ArrangementProgram extends Model
     public function getObservations()
     {
         return $this->observations;
+    }
+    
+    /**
+     * Add responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     * @return ArrangementProgram
+     */
+    public function addResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->add($responsibles);
+
+        return $this;
+    }
+
+    /**
+     * Remove responsibles
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $responsibles
+     */
+    public function removeResponsible(\Pequiven\SEIPBundle\Entity\User $responsibles)
+    {
+        $this->responsibles->removeElement($responsibles);
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles()
+    {
+        return $this->responsibles;
     }
 }

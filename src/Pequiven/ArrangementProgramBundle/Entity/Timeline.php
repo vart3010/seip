@@ -36,15 +36,23 @@ class Timeline
      * @ORM\Column(name="status", type="integer")
      */
     private $status = 0;
-
+    
     /**
      * Programa de gestion
-     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
      * 
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",inversedBy="timeline")
-     * @ORM\JoinColumn(nullable=false)
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="timeline")
      */
     private $arrangementProgram;
+    
+    /**
+     * Plantilla de programa de gestion
+     * 
+     * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate",mappedBy="timeline")
+     */
+    private $arrangementProgramTemplate;
+
     /**
      * Constructor
      */
@@ -152,5 +160,28 @@ class Timeline
     public function getArrangementProgram()
     {
         return $this->arrangementProgram;
+    }
+
+    /**
+     * Set arrangementProgramTemplate
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate $arrangementProgram
+     * @return Timeline
+     */
+    public function setArrangementProgramTemplate(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate $arrangementProgram = null)
+    {
+        $this->arrangementProgramTemplate = $arrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementProgramTemplate
+     *
+     * @return \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate
+     */
+    public function getArrangementProgramTemplate()
+    {
+        return $this->arrangementProgramTemplate;
     }
 }
