@@ -46,6 +46,8 @@
 
 {% block javascript %}
     <script type="text/javascript">
+        var formatPhp = "Y-m-d H:i:s";
+        
         var advancesPlanned = {{ summary['advancesPlanned'] }};
         var month = '{{ 'now'|date('m') }}';
         Ext.require([
@@ -367,7 +369,6 @@
                             text: '{{ "pequiven.arrangement_program.buttons.refresh"|trans }}',
                             iconCls: 'icon-refresh',
                             xtype: 'button',
-{#                            ui: 'default',#}
                             handler: function(){
                                 store.load();
                             }
@@ -404,6 +405,9 @@
                             locked: true,
                             renderer: function (v, m, r) {
                                 var d = r.data.goal.startDate;
+                                if(!(d instanceof Date)){
+                                    d = Ext.Date.parse(d, formatPhp, true);
+                                }
                                 return Ext.util.Format.date(d, 'Y-m-d');
                             },
                             summaryType: 'min',
@@ -416,6 +420,9 @@
                             locked: true,
                             renderer: function (v, m, r) {
                                 var d = r.data.goal.endDate;
+                                if(!(d instanceof Date)){
+                                    d = Ext.Date.parse(d, formatPhp, true);
+                                }
                                 return Ext.util.Format.date(d, 'Y-m-d');
                             },
                             summaryType: 'max',
