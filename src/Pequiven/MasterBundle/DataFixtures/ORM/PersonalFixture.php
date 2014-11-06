@@ -905,14 +905,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10020330', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('5549937');
-        $personal->setNomPersonal('GONZALEZ DE L , NEREA');
-        $personal->setNumPersonal('10002209');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-59'));
-        $this->addReference('Personal-10002209', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('5549937');
+//        $personal->setNomPersonal('GONZALEZ DE L , NEREA');
+//        $personal->setNumPersonal('10002209');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-59'));
+//        $this->addReference('Personal-10002209', $personal);
+//            $manager->persist($personal);
 
         // Gerencia 04
 
@@ -15497,14 +15497,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10017229', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('7107169');
-        $personal->setNomPersonal('AVILA B , MARCOS R');
-        $personal->setNumPersonal('10019266');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-767'));
-        $this->addReference('Personal-10019266', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('7107169');
+//        $personal->setNomPersonal('AVILA B , MARCOS R');
+//        $personal->setNumPersonal('10019266');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-767'));
+//        $this->addReference('Personal-10019266', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('13769309');
@@ -32980,14 +32980,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10020565', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('5536092');
-        $personal->setNomPersonal('CASAÑAS A. , SEBASTIAN');
-        $personal->setNumPersonal('10016111');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1556'));
-        $this->addReference('Personal-10016111', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('5536092');
+//        $personal->setNomPersonal('CASAÑAS A. , SEBASTIAN');
+//        $personal->setNumPersonal('10016111');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1556'));
+//        $this->addReference('Personal-10016111', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('7888010');
@@ -36500,14 +36500,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10015626', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('3896275');
-        $personal->setNomPersonal('SILVA R , SAUL O');
-        $personal->setNumPersonal('10018451');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1796'));
-        $this->addReference('Personal-10018451', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('3896275');
+//        $personal->setNomPersonal('SILVA R , SAUL O');
+//        $personal->setNumPersonal('10018451');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1796'));
+//        $this->addReference('Personal-10018451', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('13147535');
@@ -37182,14 +37182,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10020799', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('10736800');
-        $personal->setNomPersonal('MONTERO O , JORGE L');
-        $personal->setNumPersonal('10016088');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1846'));
-        $this->addReference('Personal-10016088', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('10736800');
+//        $personal->setNomPersonal('MONTERO O , JORGE L');
+//        $personal->setNumPersonal('10016088');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1846'));
+//        $this->addReference('Personal-10016088', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('7310689');
@@ -37209,23 +37209,23 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10001139', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('4793283');
-        $personal->setNomPersonal('BOULANGER L , JOSE A');
-        $personal->setNumPersonal('10001757');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1849'));
-        $this->addReference('Personal-10001757', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('4793283');
+//        $personal->setNomPersonal('BOULANGER L , JOSE A');
+//        $personal->setNumPersonal('10001757');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1849'));
+//        $this->addReference('Personal-10001757', $personal);
+//            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('10732437');
-        $personal->setNomPersonal('MONQUE  C , CARMEN D.');
-        $personal->setNumPersonal('10020858');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1850'));
-        $this->addReference('Personal-10020858', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('10732437');
+//        $personal->setNomPersonal('MONQUE  C , CARMEN D.');
+//        $personal->setNumPersonal('10020858');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1850'));
+//        $this->addReference('Personal-10020858', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('10034753');
@@ -38244,14 +38244,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10023286', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('14802254');
-        $personal->setNomPersonal('MORA R , JESUS A');
-        $personal->setNumPersonal('10021743');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1917'));
-        $this->addReference('Personal-10021743', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('14802254');
+//        $personal->setNomPersonal('MORA R , JESUS A');
+//        $personal->setNumPersonal('10021743');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1917'));
+//        $this->addReference('Personal-10021743', $personal);
+//            $manager->persist($personal);
 
         // Gerencia 74
 
@@ -38975,14 +38975,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10021685', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('9881673');
-        $personal->setNomPersonal('HERNANDEZ F , ALDRIN A');
-        $personal->setNumPersonal('10017405');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1963'));
-        $this->addReference('Personal-10017405', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('9881673');
+//        $personal->setNomPersonal('HERNANDEZ F , ALDRIN A');
+//        $personal->setNumPersonal('10017405');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1963'));
+//        $this->addReference('Personal-10017405', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('10323398');
@@ -40576,14 +40576,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10022281', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('12102450');
-        $personal->setNomPersonal('ABDOUCHE T , JOSE J');
-        $personal->setNumPersonal('10017550');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2050'));
-        $this->addReference('Personal-10017550', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('12102450');
+//        $personal->setNomPersonal('ABDOUCHE T , JOSE J');
+//        $personal->setNumPersonal('10017550');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2050'));
+//        $this->addReference('Personal-10017550', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('7166972');
@@ -41144,14 +41144,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 //        $this->addReference('Personal-10019618', $personal);
 //            $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('7173728');
-        $personal->setNomPersonal('AVINZANO G , FELIPE');
-        $personal->setNumPersonal('10019814');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2080'));
-        $this->addReference('Personal-10019814', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('7173728');
+//        $personal->setNomPersonal('AVINZANO G , FELIPE');
+//        $personal->setNumPersonal('10019814');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2080'));
+//        $this->addReference('Personal-10019814', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('11979067');
@@ -41808,14 +41808,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10015707', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('5071441');
-        $personal->setNomPersonal('CASTILLO R , ANDRES R');
-        $personal->setNumPersonal('10004527');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2138'));
-        $this->addReference('Personal-10004527', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('5071441');
+//        $personal->setNomPersonal('CASTILLO R , ANDRES R');
+//        $personal->setNumPersonal('10004527');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2138'));
+//        $this->addReference('Personal-10004527', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('9964126');
@@ -42044,14 +42044,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
 //        $this->addReference('Personal-10019081', $personal);
 //            $manager->persist($personal);
 
-//        $personal = new Personal();
-//        $personal->setCedula('8242913');
-//        $personal->setNomPersonal('GUARARIMA F , ADILIA M');
-//        $personal->setNumPersonal('10003393');
-//        $personal->setEnabled(true);
-//        $personal->setCargo($this->getReference('Cargo-2160'));
-//        $this->addReference('Personal-10003393', $personal);
-//            $manager->persist($personal);
+        $personal = new Personal();
+        $personal->setCedula('8242913');
+        $personal->setNomPersonal('GUARARIMA F , ADILIA M');
+        $personal->setNumPersonal('10003393');
+        $personal->setEnabled(true);
+        $personal->setCargo($this->getReference('Cargo-2160'));
+        $this->addReference('Personal-10003393', $personal);
+            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('4135901');
@@ -42190,14 +42190,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10024316', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('13448427');
-        $personal->setNomPersonal('MARQUEZ P , DANIEL E');
-        $personal->setNumPersonal('10020572');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2175'));
-        $this->addReference('Personal-10020572', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('13448427');
+//        $personal->setNomPersonal('MARQUEZ P , DANIEL E');
+//        $personal->setNumPersonal('10020572');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2175'));
+//        $this->addReference('Personal-10020572', $personal);
+//            $manager->persist($personal);
 
         // Gerencia 86
 
@@ -42255,14 +42255,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10021523', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('4054805');
-        $personal->setNomPersonal('DIAZ  R , CARLOS M');
-        $personal->setNumPersonal('10019276');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-2178'));
-        $this->addReference('Personal-10019276', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('4054805');
+//        $personal->setNomPersonal('DIAZ  R , CARLOS M');
+//        $personal->setNumPersonal('10019276');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-2178'));
+//        $this->addReference('Personal-10019276', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('10665659');
