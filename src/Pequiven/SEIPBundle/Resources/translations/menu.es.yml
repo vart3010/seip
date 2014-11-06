@@ -42,6 +42,7 @@ app:
                         main: Programas de Gestión
                         list: Lista
                         assigned: Asignados
+                        temaplate: Desde plantilla
                         add:
                             main: Añadir
                             tactic: Táctico

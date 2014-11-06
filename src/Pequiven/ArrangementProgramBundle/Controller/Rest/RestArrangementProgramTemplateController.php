@@ -4,7 +4,7 @@ namespace Pequiven\ArrangementProgramBundle\Controller\Rest;
 
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
-use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate;
 use Pequiven\ArrangementProgramBundle\Form\GoalDetailsType;
 use Pequiven\ArrangementProgramBundle\Model\GoalDetails;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -19,20 +19,20 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * Controlador rest de los programas de gestion
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
- * @Route("/api/arrangement-program")
+ * @Route("/api/template/arrangement-program")
  */
-class RestArrangementProgramController extends FOSRestController 
+class RestArrangementProgramTemplateController extends FOSRestController 
 {
     /**
-     * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_restarrangementprogram_getgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Get("/{id}/goals-details.{_format}",name="get_arrangementprogram_rest_arrangementprogram_template_goalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function getGoalsDetailsAction($id, Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgramTemplate')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
+            throw $this->createNotFoundException('Unable to find ArrangementProgramTemplate entity.');
         }
         $timeline = $entity->getTimeline();
         $data = array();
@@ -74,11 +74,10 @@ class RestArrangementProgramController extends FOSRestController
 //                }
 //          
             $result['monthsPlanned'] = GoalDetails::getMonthsPlanned();
-            $result['entity'] = $entity;
         }
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
-        $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
+        $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgramTemplate/form.html.twig");
         return $view;
     }
 
@@ -95,9 +94,7 @@ class RestArrangementProgramController extends FOSRestController
         }
         $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
 
-        if (!$this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram)
-                && !$this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
-                ) {
+        if ($arrangementProgram !== null) {
             throw new AccessDeniedException();
         }
 
@@ -106,23 +103,6 @@ class RestArrangementProgramController extends FOSRestController
 
         unset($dataRequest['id']);
         unset($dataRequest['null']);
-        
-        foreach ($dataRequest as $property => $value) {
-            $permission = true;
-            if(GoalDetails::isPlannedProperty($property) === true
-                && $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram) === false
-            ){
-                $permission = false;
-            }
-            if($arrangementProgram->isNotificable() == true && GoalDetails::isRealProperty($property) === true && 
-                    $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === false)
-            {
-                $permission = false;
-            }
-            if($permission === false){
-                throw new AccessDeniedException();
-            }
-        }
         
         $form->submit($dataRequest, false);
         $success = false;
@@ -188,7 +168,7 @@ class RestArrangementProgramController extends FOSRestController
         );
         $view->setData($result);
         $view->getSerializationContext()->setGroups(array('id', 'api_list', 'goal', 'goalDetails'));
-        $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgram/form.html.twig");
+        $view->setTemplate("PequivenArrangementProgramBundle:Rest:ArrangementProgramTemplate/form.html.twig");
         return $view;
     }
     

@@ -39,6 +39,8 @@ pequiven:
         send_to_review_by: Enviado a revisión por
         send_to_review_date: Fecha de envio a revisión
         no_send_to_review_date: No se ha enviado a revisión
+        list_template: Lista de plantillas
+        template: Plantilla
         type_management:
             type_management: Tipo de gerencia
             modular: Modular
@@ -63,6 +65,8 @@ pequiven:
             rejected: Rechazar
             add_comment: Añadir observación al programa
             refresh: Refrescar
+            add_template_tactic: Añadir plantilla (tactico)
+            add_template_operative: Añadir plantilla (operativo)
         type:
             tactic: Tactico
             tactics: Tacticos
@@ -78,6 +82,7 @@ pequiven:
         flash:
             send_comment: Su observación se ha guardado.
     form:
+        template_description: Descripción de la plantilla
         category_arrangement_program: Asociado a
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo

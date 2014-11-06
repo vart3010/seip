@@ -858,4 +858,11 @@ class GoalDetails extends Base
     {
         return $this->goal;
     }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->goal = null;
+        }
+    }
 }

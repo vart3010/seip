@@ -62,9 +62,9 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Goal $entity)
+    private function createCreateForm(Goal $entity,$typeForm = \Pequiven\ArrangementProgramBundle\Entity\GOAL_TYPE_FORM)
     {
-        $form = $this->createForm(new GoalType(), $entity, array(
+        $form = $this->createForm(new GoalType($typeForm), $entity, array(
             'action' => $this->generateUrl('goal_create'),
             'method' => 'POST',
         ));
@@ -118,10 +118,10 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
      *
      * @Template("PequivenArrangementProgramBundle:Goal:_form.html.twig")
      */
-    public function getFormAction()
+    public function getFormAction($typeForm)
     {
         $entity = new Goal();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity,$typeForm);
         return array(
             'goal' => $form->createView(),
         );

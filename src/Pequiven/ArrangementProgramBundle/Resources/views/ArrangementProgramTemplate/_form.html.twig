@@ -1,0 +1,43 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{{ form_top(form) }}
+
+<fieldset class="fieldset fields-list" {% if formErrors is defined %}ng-init="form={{formErrors|serialize}}"{% endif %}>
+    <legend class="legend" ng-init="setEntityType({{ arrangementprogram_template.type }})">
+        {{ 'pequiven.arrangement_program.arrangement_program'|trans }}&nbsp;<b>{{ arrangementprogram_template.getTypeLabel|trans }}</b>
+    </legend>
+    <div class="field-block button-height">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description) }}
+        {{ form_errors(form.description) }}
+    </div>
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div class="field-block button-height">
+            {{ form_label(form.categoryArrangementProgram) }}
+            {{ form_widget(form.categoryArrangementProgram) }}
+            {{ form_errors(form.categoryArrangementProgram) }}
+        </div>
+    {% else%}
+        <div class="field-block button-height">
+            <label class="label">{{ "pequiven.form.category_arrangement_program"|trans }}</label>
+            {{ arrangementprogram_template.categoryArrangementProgram }}
+        </div>
+    {% endif %}
+    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+        <div class="field-block button-height">
+            {{ form_label(form.process) }}
+            {{ form_widget(form.process) }}
+            {{ form_errors(form.process) }}
+        </div>
+    {% endif %}
+    <div class="field-block button-height">
+        <label class="label">{{ "pequiven.form.total_weight"|trans }}</label>
+        <span ng-if="getTotalWeight() == 0" class="tag">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() > 0 && getTotalWeight() < 100" class="tag orange-bg">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() == 100" class="tag green-bg">{$ getTotalWeight() $}/100 %</span>
+        <span ng-if="getTotalWeight() > 100" class="tag red-bg">{$ getTotalWeight() $}/100 %</span>
+    </div>
+</fieldset>
+    {% include 'PequivenArrangementProgramBundle:ArrangementProgramTemplate:form/timelines.html.twig' %}
+<input type="hidden" name="autoOpenOnSave" id="autoOpenOnSave" value="0" />
+{{ form_row(form._token) }}

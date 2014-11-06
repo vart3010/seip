@@ -1,0 +1,81 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.arrangement_program.list_template'|trans }}</span>
+        </h1>
+    </hgroup>
+    
+   <div ng-controller="TableFormatController">
+       <div ng-controller="ReportArrangementProgramController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                    
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.type'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+
+                            
+                    </div>
+                </div>
+            </details>
+                <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
+                        <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                            <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                                <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances >= 50 && result._data.summary.advances < 100"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
+                                <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
+
+                                <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
+                                {$ result.period.name $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
+                                <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
+                                {$ result.tacticalObjective.gerencia.complejo.description $}
+                            </td>
+                            <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                                {$ data.arrangementProgramStatusLabels[result.status].description $}
+                            </td>
+                            <td data-title="'{{ 'monitor.porcReal'|trans({},'PequivenSEIPBundle') }}'">
+                                <span>
+                                    {$ result._data.summary.advances|myNumberFormat $}/{$ result._data.summary.weight|myNumberFormat $}%
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascripts %}

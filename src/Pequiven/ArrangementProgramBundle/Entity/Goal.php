@@ -2,6 +2,9 @@
 
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
+const GOAL_TYPE_FORM = 'full';
+const GOAL_TYPE_TEMPLATE = 'template';
+
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
 
@@ -371,5 +374,13 @@ class Goal
     
     public function __toString() {
         return $this->name;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+           $this->id = null; 
+           $this->goalDetails = clone($this->goalDetails);
+           $this->goalDetails->setGoal($this);
+        }
     }
 }
