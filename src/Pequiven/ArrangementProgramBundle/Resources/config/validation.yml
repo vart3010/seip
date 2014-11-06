@@ -33,6 +33,11 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
                 message: pequiven.validators.arrangement_program.incorrect_responsibles
                 groups: [base]
 
+Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate:
+    properties:
+        description:
+            - NotNull: ~
+            
 Pequiven\ArrangementProgramBundle\Entity\Goal:
     properties:
         name:

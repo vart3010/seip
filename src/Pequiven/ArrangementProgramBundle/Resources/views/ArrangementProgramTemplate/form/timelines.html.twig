@@ -1,0 +1,82 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+                
+<div class="block" ng-init="{% if arrangementprogram_template.categoryArrangementProgram %}getTypeGoal('{{ arrangementprogram_template.categoryArrangementProgram.id }}');model.arrangementProgram.categoryArrangementProgram={{ arrangementprogram_template.categoryArrangementProgram.id }}{% endif %} ">
+    <div class="block-title">
+        <h3>{$ goals.length $} {{ 'pequiven.goals.goals'|trans }}</h3>
+        <div class="button-group absolute-right compact">
+            <a href="" ng-click="loadTemplateMeta(null,goals.length + 1)" id="loadTemplateMeta" class="button icon-list-add">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table" id="sorting-example2">
+        <thead>
+            <tr>
+                <th scope="col" width="20%">{{ 'seip.table.header.name'|trans }}</th>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
+                {% endif%}
+                <th scope="col" width="15%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                <th scope="col" width="15%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                <th scope="col" width="10%" class="align-right">{{ 'seip.table.header.actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody ng-init="{% if arrangementprogram_template.timeline %}goals={{ arrangementprogram_template.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
+            <tr ng-if="goals.length == 0">
+                <td colspan="7" class="empty_row">
+                    {{ "seip.table.empty.goals"|trans }}
+                </td>
+            </tr>
+            <tr ng-repeat="(fIndex,goal) in goals" >
+                <th scope="row">
+                    <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][name]" value="{$ goal.name $}">
+                    {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                        <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][typeGoal]" value="{$ goal.typeGoal.id $}">
+                    {% endif %}
+                    <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][startDate]" value="{$ goal.startDate $}">
+                    <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][endDate]" value="{$ goal.endDate $}">
+                    <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
+                    <input type="hidden" name="pequiven_seip_arrangementprogram_template[timeline][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
+                    {$ goal.name $}<br>
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
+                    <small>{$ goal.observations $}</small>
+                </th>
+                {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+                    <td>
+                        <span ng-if="goal.typeGoal">
+                            {$ goal.typeGoal.description $}
+                            <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.description)'></span>
+                        </span>
+                        <span ng-if="!goal.typeGoal">
+                            {$ 'pequiven.form.not_applicable'|trans $}
+                        </span>
+                        <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.typeGoal)'></span>
+                    </td>
+                {% endif %}
+                <td>
+                    {$ goal.startDate | myDate $}
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.startDate)'></span>
+                </td>
+                <td>
+                    {$ goal.endDate | myDate $}
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.endDate)'></span>
+                </td>
+                <td>
+                    {$ goal.weight $}%
+                    <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.weight)'></span>
+                </td>
+                <td class="align-right vertical-center">
+                    <span class="select compact" tabindex="0">
+                        <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                        <span class="select-arrow"></span>
+                        <span class="drop-down">
+                            <a href ng-click="loadTemplateMeta(goal,fIndex + 1)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                            <a href ng-click="removeGoal(goal)" class="button icon-trash with-tooltip confirm">{{ "pequiven.actions.delete"|trans({},"messages") }}</a>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>

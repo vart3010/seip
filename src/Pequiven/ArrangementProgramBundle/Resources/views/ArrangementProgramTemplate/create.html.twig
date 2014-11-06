@@ -1,0 +1,30 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block body -%}
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            <a href="{{ path('pequiven_seip_arrangementprogram_index') }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
+            <span class="icon-forward"></span>
+            <span class="thin"><a href="{{ path('pequiven_seip_arrangementprogram_template_index') }}">{{ 'pequiven.arrangement_program.template'|trans({}) }}</a></span>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ arrangementprogram_template.getTypeLabel|trans }}</span>
+            <span class="icon-forward"></span>
+            <span class="thin">{{ 'pequiven.add'|trans({},'messages') }}</span>
+        </h1>
+    </hgroup>
+        
+    {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramTemplateController",'id':'formArrangementProgram' } }) }}
+       {% include 'PequivenArrangementProgramBundle:ArrangementProgramTemplate:_form.html.twig' %}
+       <br /><br />
+       {{ actions.create() }}
+    </form>
+{% endblock %}

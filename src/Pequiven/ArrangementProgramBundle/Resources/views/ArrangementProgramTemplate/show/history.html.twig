@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="standard-tabs margin-bottom" id="add-tabs">
+
+    <ul class="tabs">
+        <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
+    </ul>
+
+    <div class="tabs-content">
+
+        <div id="tab-1" class="with-padding">
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_by'|trans({},'messages') }}</label>
+                {{ arrangementprogram_template.createdBy }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_at'|trans({},'messages') }}</label>
+                {{ arrangementprogram_template.createdAt|date(appConfiguration.generalDateFormat) }}
+            </p>
+        </div>
+           
+       
+    </div>
+
+</div>

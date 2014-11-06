@@ -9,6 +9,7 @@ tecnocreaciones_vzla_government:
                             question:
                                     delete: Desea eliminar este elemento
 pequiven:
+    description: Descripción
     history: Historial
     details: Detalles
     observations: Observaciones
