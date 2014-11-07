@@ -32,6 +32,10 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
             - "True":
                 message: pequiven.validators.arrangement_program.incorrect_responsibles
                 groups: [base]
+        validResponsiblesGoals:
+            - "True":
+                message: pequiven.validators.goals_details.min_responsibles
+                groups: [base]
 
 Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate:
     properties:

@@ -43,6 +43,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 'required' => true,
             ))
             ->add('timeline',new TimelineType(),array(
+                'cascade_validation' => true,
             ))
         ;
         
