@@ -71,6 +71,7 @@ class ObjetiveOperativeController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_OPERATIVO;
+        $criteria['gerencia'] = $request->get('gerencia');
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(

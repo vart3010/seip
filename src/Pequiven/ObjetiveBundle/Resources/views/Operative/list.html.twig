@@ -93,6 +93,10 @@
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
         })
         
+        selectGerenciaFirst.change(function(){
+            selectGerenciaSecond.select2("val",'');
+        });
+        
         selectGerenciaSecond.on("select2-selecting", function(e) {
             //chargeList(e);
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos

@@ -217,13 +217,14 @@ class ObjetiveRepository extends EntityRepository {
      * @return QueryBuilder
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
-        $values = $criteria;
+        
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
         $queryBuilder->innerJoin('o.parents', 'p');
-        
+//        var_dump($criteria);
+//        die();
         //Filtro Objetivo Operativo
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -255,13 +256,14 @@ class ObjetiveRepository extends EntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
-        } elseif ($securityContext->isGranted('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')){
-            if(isset($criteria['gerencia'])){
-                if((int)$criteria['gerencia'] == 0){
-                    
-                } else{
-                    $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
-                }
+        }
+        
+        if(isset($criteria['gerenciaFirst'])){
+//            var_dump('hola');
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
             }
         }
         
