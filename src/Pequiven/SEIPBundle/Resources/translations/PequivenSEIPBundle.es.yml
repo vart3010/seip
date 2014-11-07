@@ -58,6 +58,8 @@ pequiven_seip:
     hello: Hola
 
     #Buttons
+    buttons:
+        export_xls: Exportar
     edit: Editar
     save: Guardar
     cancel: Cancelar
