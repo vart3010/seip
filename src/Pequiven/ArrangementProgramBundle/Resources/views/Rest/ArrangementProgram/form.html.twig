@@ -455,8 +455,9 @@
                                     }
                                 }
                                 advancesPlanned = valuePlanned;
-                                var spanProgramSummary = Ext.query('#program_summary');
-                                spanProgramSummary[0].innerText = formatNumber(value);
+                                var programSummary = document.getElementById("program_summary");
+                                programSummary.innerHTML = formatNumber(value);
+                                
                                 var tenPercentage = advancesPlanned - ( advancesPlanned * 0.10);
                                 var classSummary = '';
                                 if(value >= advancesPlanned){
@@ -470,10 +471,12 @@
                                     classSummary = '';
                                 }
 
-                                var spanProgramSummaryContainer = Ext.query('#program_summary_container');
-                                var spanProgramPlannedContainer = Ext.query('#program_planned');
-                                spanProgramPlannedContainer[0].innerText = formatNumber(advancesPlanned);
-                                spanProgramSummaryContainer[0].className='tag '+classSummary;
+                                var programPlanned = document.getElementById("program_planned");
+                                var programSummaryContainer = document.getElementById("program_summary_container");
+                                
+                                programPlanned.innerHTML = formatNumber(advancesPlanned);
+                                
+                                programSummaryContainer.className ='tag '+classSummary;
                                 summary = 0;
                                 for(i in values){
                                     summary += values[i];
