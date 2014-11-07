@@ -115,7 +115,6 @@ class Timeline
      */
     public function removeGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goals)
     {
-        //$goals->setTimeline(null);
         $this->goals->removeElement($goals);
     }
 

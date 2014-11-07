@@ -257,7 +257,7 @@ class ArrangementProgramController extends SEIPController
                 ->setPeriod($period)
                 ->setCreatedBy($user);
         $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
-        if(($templateSourceId = $request->get('templateSource',null)) !== null){
+        if($request->isMethod('GET') === true && ($templateSourceId = $request->get('templateSource',null)) !== null){
             $templateSource = $this->get('pequiven_seip.repository.arrangementprogram_template')->find($templateSourceId);
             if(!$templateSource){
                 throw $this->createNotFoundException('TemplateSource not found!');
@@ -282,6 +282,24 @@ class ArrangementProgramController extends SEIPController
             if($entity->getTimeline() === null){
                 $timeLine = new Timeline();
                 $entity->setTimeline($timeLine);
+            }
+            if(($templateSourceId = $request->get('templateSource',null)) !== null){
+                $templateSource = $this->get('pequiven_seip.repository.arrangementprogram_template')->find($templateSourceId);
+                if(!$templateSource){
+                    throw $this->createNotFoundException('TemplateSource not found!');
+                }
+                $srcTimeline = $templateSource->getTimeline();
+                $timeLine = new Timeline();
+                $timeline = $entity->getTimeline();
+                foreach ($timeline->getGoals() as $goal) {
+                    foreach ($srcTimeline->getGoals() as $srcGoal) {
+                        if($goal->getName() == $srcGoal->getName()){
+                            $goalDetails = clone($srcGoal->getGoalDetails());
+                            $goal->setGoalDetails($goalDetails);
+                            break;
+                        }
+                    }
+                }
             }
             $entity->setDetails(new ArrangementProgram\Details());
             
