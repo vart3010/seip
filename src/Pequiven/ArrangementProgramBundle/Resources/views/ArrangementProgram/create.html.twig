@@ -21,6 +21,9 @@
     </hgroup>
         
     {{ form_start(form,{'attr':{ 'ng-controller':"ArrangementProgramController",'id':'formArrangementProgram' } }) }}
+       {% if app.request.get('templateSource') != null %}
+           <input type="hidden" name="templateSource" value="{{ app.request.get('templateSource') }}">
+       {% endif %}
        {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_form.html.twig' %}
        <br /><br />
        {{ actions.create() }}

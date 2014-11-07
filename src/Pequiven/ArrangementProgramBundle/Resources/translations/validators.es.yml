@@ -12,3 +12,4 @@ pequiven:
         goals_details:
             min_value: El valor minimo permitido es cero.
             max_value: El valor maximo permitido es cien.
+            min_responsibles: Debe asignar por lo menos un responsable a cada meta.

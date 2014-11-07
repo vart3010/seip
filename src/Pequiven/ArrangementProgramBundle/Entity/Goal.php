@@ -315,6 +315,7 @@ class Goal
      */
     public function setGoalDetails(\Pequiven\ArrangementProgramBundle\Entity\GoalDetails $goalDetails = null)
     {
+        $goalDetails->setGoal($this);
         $this->goalDetails = $goalDetails;
 
         return $this;
@@ -335,7 +336,9 @@ class Goal
      */
     public function prePersist()
     {
-        $this->goalDetails = new GoalDetails();
+        if($this->goalDetails == null){
+            $this->goalDetails = new GoalDetails();
+        }
     }
 
     /**

@@ -177,6 +177,27 @@ abstract class ArrangementProgram
         return true;
     }
     
+    /**
+     * Valida que cada meta tenga por lo menos un reponsable
+     * @return boolean
+     */
+    function isValidResponsiblesGoals()
+    {
+        $timeline = $this->getTimeline();
+        //Sino se asigno ninguna meta al crear el programa de gestion
+        if(!$timeline){
+            return ;
+        }
+        $valid = true;
+        foreach ($timeline->getGoals() as $goal) {
+            if($goal->getResponsibles()->count() == 0){
+                $valid = false;
+                break;
+            }
+        }
+        return $valid;
+    }
+    
     function isValidResponsibles()
     {
         $responsibles = $this->getResponsibles();
