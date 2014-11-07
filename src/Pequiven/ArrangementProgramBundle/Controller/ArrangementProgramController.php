@@ -724,6 +724,173 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function exportAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        $categoryArrangementProgram = (string)$resource->getCategoryArrangementProgram();
+        
+        $tacticalObjective = (string)$resource->getTacticalObjective();
+        $operationalObjective = (string)$resource->getOperationalObjective();
+        
+        $location = '';
+        if($resource->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            $location = (string)$resource->getTacticalObjective()->getGerencia()->getComplejo();
+        }else if($resource->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            $location = (string)$resource->getOperationalObjective()->getGerencia()->getComplejo();
+        }
+        
+        $management = (string)$resource->getTacticalObjective()->getGerencia();
+        
+        $responsibles = '';
+        
+        foreach ($resource->getResponsibles() as $responsible) {
+            $responsibles .= $responsible;
+            $responsibles .= ',';
+        }
+        $responsiblesLen = strlen($responsibles);
+        if($responsiblesLen > 0){
+            $responsibles[strlen($responsibles) - 1 ] = '.';
+        }
+        
+        $path = $this->get('kernel')->locateResource('@PequivenArrangementProgramBundle/Resources/skeleton/programa_de_gestion.xls');
+        
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+        $objPHPExcel->getProperties()->setCreator("SEIP");
+        $objPHPExcel
+                ->setActiveSheetIndex(0)
+                ->setCellValue('B5',  $categoryArrangementProgram)
+                ->setCellValue('F5',  $tacticalObjective)
+                ->setCellValue('J5',  $operationalObjective)
+                ->setCellValue('B7',  $location)
+                ->setCellValue('F7',  $management)
+                ->setCellValue('J7',  $responsibles)
+            ;
+        
+        $timeline = $resource->getTimeline();
+        $countGoals = 1;
+        $rowGoal = 11;
+        $goals = $timeline->getGoals();
+        if($goals->count() > 13){
+            $totalDiff = $goals->count() - 13;
+            $objPHPExcel
+                ->getActiveSheet()
+                ->insertNewRowBefore(24,$totalDiff);
+        }
+        foreach ($goals as $goal) {
+            $startDate = $goal->getStartDate() ? $goal->getStartDate()->format('Y-m-d') : '';
+            $endDate = $goal->getEndDate() ? $goal->getEndDate()->format('Y-m-d') : '';
+            
+            $responsiblesGoal = '';
+            foreach ($goal->getResponsibles() as $responsible) {
+                $responsiblesGoal .= ' '.$responsible;
+                $responsiblesGoal .= ',';
+            }
+            $responsiblesLen = strlen($responsiblesGoal);
+            if($responsiblesLen > 0){
+                $responsiblesGoal[strlen($responsiblesGoal) - 1 ] = '.';
+            }
+            $responsiblesGoal = ucwords(strtolower($responsiblesGoal));
+            
+            $weight = $goal->getWeight();
+            $goalDetails = $goal->getGoalDetails();
+            
+            $januaryPlanned = $goalDetails->getJanuaryPlanned();
+            $januaryReal = $goalDetails->getJanuaryReal();
+            
+            $februaryPlanned = $goalDetails->getFebruaryPlanned();
+            $februaryReal = $goalDetails->getFebruaryReal();
+            
+            $marchPlanned = $goalDetails->getMarchPlanned();
+            $marchReal = $goalDetails->getMarchReal();
+            
+            $aprilPlanned = $goalDetails->getAprilPlanned();
+            $aprilReal = $goalDetails->getAprilReal();
+            
+            $mayPlanned = $goalDetails->getMayPlanned();
+            $mayReal = $goalDetails->getMayReal();
+            
+            $junePlanned = $goalDetails->getJunePlanned();
+            $juneReal = $goalDetails->getJuneReal();
+            
+            $julyPlanned = $goalDetails->getJulyPlanned();
+            $julyReal = $goalDetails->getJulyReal();
+            
+            $augustPlanned = $goalDetails->getAugustPlanned();
+            $augustReal = $goalDetails->getAugustReal();
+            
+            $septemberPlanned = $goalDetails->getSeptemberPlanned();
+            $septemberReal = $goalDetails->getSeptemberReal();
+            
+            $octoberPlanned = $goalDetails->getOctoberPlanned();
+            $octoberReal = $goalDetails->getOctoberReal();
+            
+            $novemberPlanned = $goalDetails->getNovemberPlanned();
+            $novemberReal = $goalDetails->getNovemberReal();
+            
+            $decemberPlanned = $goalDetails->getDecemberPlanned();
+            $decemberReal = $goalDetails->getDecemberReal();
+            
+            $goalObservations = $goal->getObservations();
+            $activeSheet = $objPHPExcel->getActiveSheet();
+            $activeSheet
+                ->setCellValue('B'.$rowGoal,$countGoals)
+                ->setCellValue('C'.$rowGoal,$goal->getName())
+                ->setCellValue('G'.$rowGoal,$startDate)
+                ->setCellValue('H'.$rowGoal,$endDate)
+                ->setCellValue('I'.$rowGoal,$responsiblesGoal)
+                ->setCellValue('J'.$rowGoal,$weight)
+                ->setCellValue('K'.$rowGoal,$januaryPlanned)
+                ->setCellValue('L'.$rowGoal,$januaryReal)
+                ->setCellValue('M'.$rowGoal,$februaryPlanned)
+                ->setCellValue('N'.$rowGoal,$februaryReal)    
+                ->setCellValue('O'.$rowGoal,$marchPlanned)
+                ->setCellValue('P'.$rowGoal,$marchReal)
+                ->setCellValue('Q'.$rowGoal,$aprilPlanned)
+                ->setCellValue('R'.$rowGoal,$aprilReal)
+                ->setCellValue('S'.$rowGoal,$mayPlanned)
+                ->setCellValue('T'.$rowGoal,$mayReal)
+                ->setCellValue('U'.$rowGoal,$junePlanned)
+                ->setCellValue('V'.$rowGoal,$juneReal)
+                ->setCellValue('W'.$rowGoal,$julyPlanned)
+                ->setCellValue('X'.$rowGoal,$julyReal)
+                ->setCellValue('Y'.$rowGoal,$augustPlanned)
+                ->setCellValue('Z'.$rowGoal,$augustReal)
+                ->setCellValue('AA'.$rowGoal,$septemberPlanned)
+                ->setCellValue('AB'.$rowGoal,$septemberReal)
+                ->setCellValue('AC'.$rowGoal,$octoberPlanned)
+                ->setCellValue('AD'.$rowGoal,$octoberReal)
+                ->setCellValue('AE'.$rowGoal,$novemberPlanned)
+                ->setCellValue('AF'.$rowGoal,$novemberReal)
+                ->setCellValue('AG'.$rowGoal,$decemberPlanned)
+                ->setCellValue('AH'.$rowGoal,$decemberReal)
+                ->setCellValue('AI'.$rowGoal,$goalObservations)
+            ;
+            if($countGoals > 13){
+                $activeSheet->mergeCells(sprintf('C%s:F%s',$rowGoal,$rowGoal));
+            }
+            
+            $countGoals++;
+            $rowGoal++;
+        }
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ReporteTecnico.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
+    }
+    
     /**
      * Creates a form to delete a ArrangementProgram entity by id.
      *

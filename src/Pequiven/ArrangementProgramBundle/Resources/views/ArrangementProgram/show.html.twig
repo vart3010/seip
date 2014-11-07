@@ -205,6 +205,12 @@
 
 <p class="button-height align-right">
     {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+    
+    <a href="{{ path('arrangementprogram_export',{ id: entity.id }) }}" class="button">
+        <span class="button-icon"><span class="icon-download"></span></span>
+        {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
+    </a>
+    
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
