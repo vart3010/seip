@@ -33,7 +33,7 @@ monitorObjetiveOperativeByGroup:
     
 #Lista de Objetivos Tácticos por Gerencia de 1ra Línea
 listObjetiveTacticByGroup:
-    path: /list/tactic/{idGerencia}
+    path: /list/tactic/{typeGroup}/{idGerencia}
     defaults:
         _controller: pequiven.controller.seipmonitor:listObjetiveTacticByGroupAction
     requirements:

@@ -256,10 +256,11 @@ class MonitorController extends baseController {
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
-            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic']);
-            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
-            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic, 'urlGerencia' => $this->generateUrl('listObjetiveTacticByGroup', array('idGerencia' => $resultTactic['idGerencia'])));
+            $urlGerencia = $this->generateUrl('listObjetiveTacticByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $resultTactic['idGerencia']));
+            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $urlGerencia);
+            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic'], 'link' => $urlGerencia);
+            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic'], 'link' => $urlGerencia);
+            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic, 'urlGerencia' => $urlGerencia);
             if($resultTactic['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultTactic['Ref'], 'toolText' => $resultTactic['Gerencia']);
@@ -326,12 +327,19 @@ class MonitorController extends baseController {
      * @return type
      */
     public function listObjetiveTacticByGroupAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        
         $idGerencia = $request->get("idGerencia");
+        $typeGroup = $request->get("typeGroup");
         
         $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $urlReturn = $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $typeGroup));
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         
         return array(
-            'url' => $url
+            'url' => $url,
+            'urlReturn' => $urlReturn,
+            'gerencia' => $gerencia
         );
     }
     
@@ -348,7 +356,7 @@ class MonitorController extends baseController {
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         
-        $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerenciaFirst' => $idGerencia)));
         $urlVinculant = $this->generateUrl('listObjetiveOperativeVinculant', array('idGerencia' => $idGerencia,'idComplejo' => $gerencia->getComplejo()->getId()));
         
         return array(

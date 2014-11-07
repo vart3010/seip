@@ -259,7 +259,6 @@ class ObjetiveRepository extends EntityRepository {
         }
         
         if(isset($criteria['gerenciaFirst'])){
-//            var_dump('hola');
             if((int)$criteria['gerenciaFirst'] == 0){
 
             } else{
