@@ -47,7 +47,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
         if(!$configuration){
             return $valid;
         }
-        if($entity->getStatus() == ArrangementProgram::STATUS_REJECTED){
+        if($entity->getStatus() == ArrangementProgram::STATUS_REJECTED || $entity->getStatus() == ArrangementProgram::STATUS_APPROVED){
             return $valid;
         }
         $user = $this->getUser();
@@ -203,6 +203,22 @@ class ArrangementProgramManager implements ContainerAwareInterface
             $permission = false;
         }
         return $permission;
+    }
+    
+    /**
+     * Evalua si tiene permiso para eliminar el programa de gestion
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Model\ArrangementProgram $entity
+     * @return boolean
+     */
+    function isAllowToDelete(ArrangementProgram $entity) {
+         //Security check
+        $user = $this->getUser();
+        $valid = false;
+        if($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT){
+            $valid = true;
+        }
+        return $valid;
     }
     
     /**

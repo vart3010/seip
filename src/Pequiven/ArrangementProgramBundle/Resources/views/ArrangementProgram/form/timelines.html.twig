@@ -11,6 +11,7 @@
         <table class="simple-table responsive-table" id="sorting-example2">
         <thead>
             <tr>
+                <th scope="col" width="2%">{{ 'seip.table.header.nro'|trans }}</th>
                 <th scope="col" width="20%">{{ 'seip.table.header.name'|trans }}</th>
                 {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
                     <th scope="col" width="10%" class="hide-on-mobile">{{ 'seip.table.header.type_goal'|trans }}</th>
@@ -22,13 +23,18 @@
                 <th scope="col" width="10%" class="align-right">{{ 'seip.table.header.actions'|trans }}</th>
             </tr>
         </thead>
+        {% set colspan = 7 %}
+        {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
+            {% set colspan = 8 %}
+        {% endif %}
         <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
             <tr ng-if="goals.length == 0">
-                <td colspan="7" class="empty_row">
+                <td colspan="{{ colspan }}" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}
                 </td>
             </tr>
             <tr ng-repeat="(fIndex,goal) in goals" >
+                <td>{$ $index + 1 $}</td>
                 <th scope="row">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][name]" value="{$ goal.name $}">
                     {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
@@ -39,7 +45,7 @@
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ fIndex $}][responsibles][]" ng-repeat="responsible in goal.responsibles" value="{$ responsible.id $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
-                    {$ goal.name $}<br>
+                    <a href ng-click="loadTemplateMeta(goal,fIndex + 1)">{$ goal.name $}</a><br>
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
                     <small>{$ goal.observations $}</small>
                 </th>
