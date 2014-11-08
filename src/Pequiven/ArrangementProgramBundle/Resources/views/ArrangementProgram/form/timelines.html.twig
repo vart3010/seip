@@ -45,7 +45,7 @@
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ fIndex $}][responsibles][]" ng-repeat="responsible in goal.responsibles" value="{$ responsible.id $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][weight]" value="{$ goal.weight $}">
                     <input type="hidden" name="arrangementprogram[timeline][goals][{$ $index $}][observations]" value="{$ goal.observations $}">
-                    {$ goal.name $}<br>
+                    <a href ng-click="loadTemplateMeta(goal,fIndex + 1)">{$ goal.name $}</a><br>
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.name)'></span>
                     <small>{$ goal.observations $}</small>
                 </th>
