@@ -114,6 +114,7 @@ pequiven:
 seip:
     table:
         header:
+            nro: '#'
             name: Nombre
             type_goal: Tipo de Actividad
             start_date: Fecha Inicio
