@@ -849,7 +849,9 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('G'.$rowGoal,$startDate)
                 ->setCellValue('H'.$rowGoal,$endDate)
                 ->setCellValue('I'.$rowGoal,$responsiblesGoal)
-                ->setCellValue('J'.$rowGoal,$weight)
+                ->setCellValue('J'.$rowGoal,$weight);
+            //Valores planeado y real de la meta
+            $activeSheet
                 ->setCellValue('K'.$rowGoal,$januaryPlanned)
                 ->setCellValue('L'.$rowGoal,$januaryReal)
                 ->setCellValue('M'.$rowGoal,$februaryPlanned)
@@ -880,22 +882,53 @@ class ArrangementProgramController extends SEIPController
             $countGoals++;
             $rowGoal++;
         }
-        // Redirect output to a client’s web browser (Excel5)
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="ReporteTecnico.xls"');
+        
+        //	Change these values to select the Rendering library that you wish to use
+        //		and its directory location on your server
+        //$rendererName = PHPExcel_Settings::PDF_RENDERER_TCPDF;
+        $rendererName = \PHPExcel_Settings::PDF_RENDERER_MPDF;
+        //$rendererName = PHPExcel_Settings::PDF_RENDERER_DOMPDF;
+        //$rendererLibrary = 'tcPDF5.9';
+        $rendererLibrary = 'mPDF5.4';
+        //$rendererLibrary = 'domPDF0.6.0beta3';
+        $rendererLibraryPath = dirname(__FILE__).'/../../../libraries/PDF/' . $rendererLibrary;
+        
+        if (!\PHPExcel_Settings::setPdfRenderer(
+		$rendererName,
+		$rendererLibraryPath
+	)) {
+                die(
+                        'NOTICE: Please set the $rendererName and $rendererLibraryPath values' .
+                        '<br />' .
+                        'at the top of this script as appropriate for your directory structure'
+                );
+        }
+        
+        // Redirect output to a client’s web browser (PDF)
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment;filename="01simple.pdf"');
         header('Cache-Control: max-age=0');
-        // If you're serving to IE 9, then the following may be needed
-        header('Cache-Control: max-age=1');
 
-        // If you're serving to IE over SSL, then the following may be needed
-        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-        header ('Pragma: public'); // HTTP/1.0
-
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
         $objWriter->save('php://output');
         exit;
+        
+//        // Redirect output to a client’s web browser (Excel5)
+//        header('Content-Type: application/vnd.ms-excel');
+//        header('Content-Disposition: attachment;filename="ReporteTecnico.xls"');
+//        header('Cache-Control: max-age=0');
+//        // If you're serving to IE 9, then the following may be needed
+//        header('Cache-Control: max-age=1');
+//
+//        // If you're serving to IE over SSL, then the following may be needed
+//        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+//        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+//        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+//        header ('Pragma: public'); // HTTP/1.0
+//
+//        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+//        $objWriter->save('php://output');
+//        exit;
     }
     
     /**

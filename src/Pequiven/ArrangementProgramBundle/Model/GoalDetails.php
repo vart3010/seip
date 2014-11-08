@@ -179,4 +179,13 @@ class GoalDetails {
         }
         return $isReal;
     }
+    /**
+     * Retorna el nombre de la propiedad a la que hace referencia el metodo
+     * @param type $methodName
+     * @return type
+     */
+    static function getRealNameProperty($methodName){
+        $nameProperty = lcfirst(str_replace('get', '', $methodName));
+        return $nameProperty;
+    }
 }
