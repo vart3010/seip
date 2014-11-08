@@ -724,6 +724,10 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Exportar el reporte tecnico
+     * @param Request $request
+     */
     public function exportAction(Request $request)
     {
         $resource = $this->findOr404($request);
@@ -832,7 +836,13 @@ class ArrangementProgramController extends SEIPController
             $decemberReal = $goalDetails->getDecemberReal();
             
             $goalObservations = $goal->getObservations();
+            
             $activeSheet = $objPHPExcel->getActiveSheet();
+            if($countGoals > 13){
+                $activeSheet->mergeCells(sprintf('C%s:F%s',$rowGoal,$rowGoal));
+                $activeSheet->mergeCells(sprintf('AI%s:AL%s',$rowGoal,$rowGoal));
+            }
+            
             $activeSheet
                 ->setCellValue('B'.$rowGoal,$countGoals)
                 ->setCellValue('C'.$rowGoal,$goal->getName())
@@ -866,9 +876,6 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
-            if($countGoals > 13){
-                $activeSheet->mergeCells(sprintf('C%s:F%s',$rowGoal,$rowGoal));
-            }
             
             $countGoals++;
             $rowGoal++;
