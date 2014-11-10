@@ -12,7 +12,7 @@
 (function(){'use strict';function d(a){return function(){var c=arguments[0],b,c="["+(a?a+":":"")+c+"] http://errors.angularjs.org/1.2.21/"+(a?a+"/":"")+c;for(b=1;b<arguments.length;b++)c=c+(1==b?"?":"&")+"p"+(b-1)+"="+encodeURIComponent("function"==typeof arguments[b]?arguments[b].toString().replace(/ \{[\s\S]*$/,""):"undefined"==typeof arguments[b]?"undefined":"string"!=typeof arguments[b]?JSON.stringify(arguments[b]):arguments[b]);return Error(c)}}(function(a){var c=d("$injector"),b=d("ng");a=a.angular||
 (a.angular={});a.$$minErr=a.$$minErr||d;return a.module||(a.module=function(){var a={};return function(e,d,f){if("hasOwnProperty"===e)throw b("badname","module");d&&a.hasOwnProperty(e)&&(a[e]=null);return a[e]||(a[e]=function(){function a(c,d,e){return function(){b[e||"push"]([c,d,arguments]);return g}}if(!d)throw c("nomod",e);var b=[],h=[],k=a("$injector","invoke"),g={_invokeQueue:b,_runBlocks:h,requires:d,name:e,provider:a("$provide","provider"),factory:a("$provide","factory"),service:a("$provide",
 "service"),value:a("$provide","value"),constant:a("$provide","constant","unshift"),animation:a("$animateProvider","register"),filter:a("$filterProvider","register"),controller:a("$controllerProvider","register"),directive:a("$compileProvider","directive"),config:k,run:function(a){h.push(a);return this}};f&&k(f);return g}())}}())})(window)})(window);
-//# sourceMappingURL={{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-loader.min.js.map') }}
+//# sourceMappingURL={{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-loader/angular-loader.min.js.map') }}
 
         // include a third-party async loader library
         /*!
@@ -26,11 +26,11 @@
         var baseDependecies = [
           '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
           '{{ url('bazinga_jstranslation_js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/ng-table/ng-table.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/ng-table-export/0.1.0/ng-table-export.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-route.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-sanitize.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular-resource.min.js') }}'
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.min.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js') }}',
+          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js') }}'
         ];
         var dependencies = [
             {# En desarrollo se cargan individuales y en produccion se combinan en uno, hay un bug que da error combinandolos en desarrollo #}
@@ -68,7 +68,7 @@
         joinDependencias = joinDependencias.concat(baseDependecies);
         joinDependencias = joinDependencias.concat(myDependencies);
         joinDependencias = joinDependencias.concat(dependencies);
-        $script('{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/lib/angular/angular.min.js') }}','base');
+        $script('{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular/angular.min.js') }}','base');
         
         var extraAngularDependencies = {{ templateConfig.getTemplateOption('developer','angular_modules')|json_encode()|raw }};
         $script.ready('base',function(){

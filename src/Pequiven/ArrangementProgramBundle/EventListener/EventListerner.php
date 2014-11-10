@@ -42,11 +42,7 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
     function onPreDeleteArrangementProgram(ResourceEvent $event) {
         $object = $event->getSubject();
          //Security check
-        $user = $this->getUser();
-        if($object->getCreatedBy() !== $user){
-            throw $this->createAccessDeniedHttpException();
-        }
-        if($object->getStatus() !== \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_DRAFT){
+        if($this->getArrangementProgramManager()->isAllowToDelete($object) === false){
             throw $this->createAccessDeniedHttpException();
         }
     }
@@ -110,4 +106,13 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
     
+    /**
+     * Manejador de programa de gestion
+     * 
+     * @return \Pequiven\ArrangementProgramBundle\Model\ArrangementProgramManager
+     */
+    private function getArrangementProgramManager()
+    {
+        return $this->get('seip.arrangement_program.manager');
+    }
 }

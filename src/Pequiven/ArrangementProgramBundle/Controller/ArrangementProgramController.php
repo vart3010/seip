@@ -353,6 +353,7 @@ class ArrangementProgramController extends SEIPController
         $isAllowToReview = $arrangementProgramManager->isAllowToReview($entity);
         $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
+        $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
         
         return array(
             'entity'      => $entity,
@@ -361,6 +362,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToApprove' => $isAllowToApprove,
             'isAllowToReview' => $isAllowToReview,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
+            'isAllowToDelete' => $isAllowToDelete,
         );
     }
 
@@ -724,12 +726,17 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Exportar el reporte tecnico
+     * @param Request $request
+     */
     public function exportAction(Request $request)
     {
         $resource = $this->findOr404($request);
+        $details = $resource->getDetails();
+        $summary = $resource->getSummary();
         
         $categoryArrangementProgram = (string)$resource->getCategoryArrangementProgram();
-        
         $tacticalObjective = (string)$resource->getTacticalObjective();
         $operationalObjective = (string)$resource->getOperationalObjective();
         
@@ -752,31 +759,47 @@ class ArrangementProgramController extends SEIPController
         if($responsiblesLen > 0){
             $responsibles[strlen($responsibles) - 1 ] = '.';
         }
-        
+        $responsibles = ucwords(strtolower($responsibles));
         $path = $this->get('kernel')->locateResource('@PequivenArrangementProgramBundle/Resources/skeleton/programa_de_gestion.xls');
         
+        $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
-        $objPHPExcel->getProperties()->setCreator("SEIP");
         $objPHPExcel
-                ->setActiveSheetIndex(0)
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Programa de gestion')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+                ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        
+        //Setear informacion base
+        $activeSheet
                 ->setCellValue('B5',  $categoryArrangementProgram)
                 ->setCellValue('F5',  $tacticalObjective)
                 ->setCellValue('J5',  $operationalObjective)
                 ->setCellValue('B7',  $location)
                 ->setCellValue('F7',  $management)
                 ->setCellValue('J7',  $responsibles)
+                ->setCellValue('AJ5',  $now->format('Y'))
+                ->setCellValue('AK5',  $now->format('m'))
+                ->setCellValue('AL5',  $now->format('d'))
             ;
         
         $timeline = $resource->getTimeline();
         $countGoals = 1;
         $rowGoal = 11;
         $goals = $timeline->getGoals();
+        //Agregar las filas faltantes
         if($goals->count() > 13){
             $totalDiff = $goals->count() - 13;
-            $objPHPExcel
-                ->getActiveSheet()
+            $activeSheet
                 ->insertNewRowBefore(24,$totalDiff);
         }
+        //Setear las metas
         foreach ($goals as $goal) {
             $startDate = $goal->getStartDate() ? $goal->getStartDate()->format('Y-m-d') : '';
             $endDate = $goal->getEndDate() ? $goal->getEndDate()->format('Y-m-d') : '';
@@ -832,14 +855,21 @@ class ArrangementProgramController extends SEIPController
             $decemberReal = $goalDetails->getDecemberReal();
             
             $goalObservations = $goal->getObservations();
-            $activeSheet = $objPHPExcel->getActiveSheet();
+            
+            if($countGoals > 13){
+                $activeSheet->mergeCells(sprintf('C%s:F%s',$rowGoal,$rowGoal));
+                $activeSheet->mergeCells(sprintf('AI%s:AL%s',$rowGoal,$rowGoal));
+            }
+            
             $activeSheet
                 ->setCellValue('B'.$rowGoal,$countGoals)
                 ->setCellValue('C'.$rowGoal,$goal->getName())
                 ->setCellValue('G'.$rowGoal,$startDate)
                 ->setCellValue('H'.$rowGoal,$endDate)
                 ->setCellValue('I'.$rowGoal,$responsiblesGoal)
-                ->setCellValue('J'.$rowGoal,$weight)
+                ->setCellValue('J'.$rowGoal,$weight);
+            //Valores planeado y real de la meta
+            $activeSheet
                 ->setCellValue('K'.$rowGoal,$januaryPlanned)
                 ->setCellValue('L'.$rowGoal,$januaryReal)
                 ->setCellValue('M'.$rowGoal,$februaryPlanned)
@@ -866,16 +896,67 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
-            if($countGoals > 13){
-                $activeSheet->mergeCells(sprintf('C%s:F%s',$rowGoal,$rowGoal));
-            }
             
             $countGoals++;
             $rowGoal++;
         }
+        $rowSummary = $rowGoal;
+        $detailsAdvancesPlanned = $summary['detailsAdvancesPlanned'];
+        $detailsAdvancesReal = $summary['detailsAdvancesReal'];
+        $totalWeight = $summary['weight'];
+        //Setear el peso total distribuido
+        $activeSheet->setCellValue('J'.$rowSummary,$totalWeight);
+        //Setear avances del programa
+        $activeSheet
+                ->setCellValue('K'.$rowSummary,$detailsAdvancesPlanned['januaryPlanned'])
+                ->setCellValue('L'.$rowSummary,$detailsAdvancesReal['januaryReal'])
+                ->setCellValue('M'.$rowSummary,$detailsAdvancesPlanned['februaryPlanned'])
+                ->setCellValue('N'.$rowSummary,$detailsAdvancesReal['februaryReal'])
+                ->setCellValue('O'.$rowSummary,$detailsAdvancesPlanned['marchPlanned'])
+                ->setCellValue('P'.$rowSummary,$detailsAdvancesReal['marchReal'])
+                ->setCellValue('Q'.$rowSummary,$detailsAdvancesPlanned['aprilPlanned'])
+                ->setCellValue('R'.$rowSummary,$detailsAdvancesReal['aprilReal'])
+                ->setCellValue('S'.$rowSummary,$detailsAdvancesPlanned['mayPlanned'])
+                ->setCellValue('T'.$rowSummary,$detailsAdvancesReal['mayReal'])
+                ->setCellValue('U'.$rowSummary,$detailsAdvancesPlanned['junePlanned'])
+                ->setCellValue('V'.$rowSummary,$detailsAdvancesReal['juneReal'])
+                ->setCellValue('W'.$rowSummary,$detailsAdvancesPlanned['julyPlanned'])
+                ->setCellValue('X'.$rowSummary,$detailsAdvancesReal['julyReal'])
+                ->setCellValue('Y'.$rowSummary,$detailsAdvancesPlanned['augustPlanned'])
+                ->setCellValue('Z'.$rowSummary,$detailsAdvancesReal['augustReal'])
+                ->setCellValue('AA'.$rowSummary,$detailsAdvancesPlanned['septemberPlanned'])
+                ->setCellValue('AB'.$rowSummary,$detailsAdvancesReal['septemberReal'])
+                ->setCellValue('AC'.$rowSummary,$detailsAdvancesPlanned['octoberPlanned'])
+                ->setCellValue('AD'.$rowSummary,$detailsAdvancesReal['octoberReal'])
+                ->setCellValue('AE'.$rowSummary,$detailsAdvancesPlanned['novemberPlanned'])
+                ->setCellValue('AF'.$rowSummary,$detailsAdvancesReal['novemberReal'])
+                ->setCellValue('AG'.$rowSummary,$detailsAdvancesPlanned['decemberPlanned'])
+                ->setCellValue('AH'.$rowSummary,$detailsAdvancesReal['decemberReal'])
+                ;
+        
+        //Agregar los detalles del programa de gestion
+        $sendToReviewBy = ucwords(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
+        
+        $approvedBy = ucwords(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
+        $approvalDate = $details->getApprovalDate() ? $details->getApprovalDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_approval_date');
+        if($rowSummary > 24){
+            $rowDetails = $rowSummary + 2;
+        }else{
+            $rowDetails = 26;
+        }
+        $activeSheet
+                ->setCellValue('B'.$rowDetails,$sendToReviewBy)
+                ->setCellValue('I'.$rowDetails,$revisionDate)
+                ->setCellValue('L'.$rowDetails,$approvedBy)
+                ->setCellValue('AI'.$rowDetails,$approvalDate)
+                ;
+        
+        
+        $fileName = sprintf('SEIP-Programa-De-Gestion-%s.xls',$now->format('Ymd-His'));
         // Redirect output to a client’s web browser (Excel5)
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="ReporteTecnico.xls"');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
         header('Cache-Control: max-age=0');
         // If you're serving to IE 9, then the following may be needed
         header('Cache-Control: max-age=1');
@@ -933,5 +1014,9 @@ class ArrangementProgramController extends SEIPController
                 ->setCreatedBy($this->getUser())
                 ;
             $entity->addObservation($observation);
+    }
+    
+    protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
+        return parent::trans($id, $parameters, $domain);
     }
 }

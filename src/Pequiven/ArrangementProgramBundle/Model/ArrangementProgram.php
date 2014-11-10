@@ -198,6 +198,10 @@ abstract class ArrangementProgram
         return $valid;
     }
     
+    /**
+     * Valida si el programa de gestion tiene asignados los responsables
+     * @return boolean
+     */
     function isValidResponsibles()
     {
         $responsibles = $this->getResponsibles();
@@ -226,6 +230,10 @@ abstract class ArrangementProgram
         return $labelsStatus;
     }
     
+    /**
+     * Retorna la etiqueta que corresponde a un estatus del programa de gestion
+     * @return string
+     */
     function getLabelStatus()
     {
         $labels = $this->getLabelsStatus();
@@ -252,9 +260,11 @@ abstract class ArrangementProgram
             $limitMonthToNow = (boolean)$options['limitMonthToNow'];
         }
         $totalWeight = 0;
-        $advances = 0;
+        $advancesReal = 0;
         $advancesPlanned = 0;
         $timeline = $this->getTimeline();
+        $advancesGoalDetailsReal = array();
+        $advancesGoalDetailsPlanned = array();
         
         if($timeline){
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
@@ -277,7 +287,13 @@ abstract class ArrangementProgram
                             continue;
                         }
                         $real = $goalDetails->$methodName();
-                        $advances +=  ($weight/100) * $real;
+                        $advanceReal = ($weight/100) * $real;
+                        $nameProperty = GoalDetails::getRealNameProperty($methodName);
+                        if(!isset($advancesGoalDetailsReal[$nameProperty])){
+                            $advancesGoalDetailsReal[$nameProperty] = 0;
+                        }
+                        $advancesGoalDetailsReal[$nameProperty] += $advanceReal;
+                        $advancesReal +=  $advanceReal;
                     }
                     if(preg_match('/'.$nameMatchPlanned.'/i', $methodName)){
                         $class = $method->getDeclaringClass();
@@ -292,15 +308,24 @@ abstract class ArrangementProgram
                             }
                         }
                         $planned = $goalDetails->$methodName();
-                        $advancesPlanned +=  ($weight/100) * $planned;
+                        $advancePlanned = ($weight/100) * $planned;
+                        
+                        $nameProperty = GoalDetails::getRealNameProperty($methodName);
+                        if(!isset($advancesGoalDetailsPlanned[$nameProperty])){
+                            $advancesGoalDetailsPlanned[$nameProperty] = 0;
+                        }
+                        $advancesGoalDetailsPlanned[$nameProperty] += $advancePlanned;
+                        $advancesPlanned +=  $advancePlanned;
                     }
                 }
                 
             }
         }
-        $summary['advances'] = $advances;
+        $summary['advances'] = $advancesReal;
         $summary['weight'] = $totalWeight;
         $summary['advancesPlanned'] = $advancesPlanned;
+        $summary['detailsAdvancesPlanned'] = $advancesGoalDetailsPlanned;
+        $summary['detailsAdvancesReal'] = $advancesGoalDetailsReal;
         return $summary;
     }
     
