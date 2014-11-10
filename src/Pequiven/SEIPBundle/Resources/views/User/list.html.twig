@@ -13,7 +13,7 @@
     </hgroup>
     
     <div ng-controller="TableFormatController">
-        <div ng-controller=p"TableUserController">
+        <div ng-controller="TableUserController">
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('userList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody>
