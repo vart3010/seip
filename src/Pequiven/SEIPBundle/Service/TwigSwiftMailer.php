@@ -23,8 +23,12 @@ class TwigSwiftMailer {
      * @param string $fromEmail
      * @param string $toEmail
      */
-    public function sendMessage($templateName, $context, $fromEmail, $toEmail)
+    public function sendMessage($templateName, array $context, $fromEmail, $toEmail)
     {
+        if($fromEmail === null){
+            $fromEmail ='seip@pequiven.com';
+        }
+        
         $template = $this->twig->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);

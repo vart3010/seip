@@ -1,0 +1,38 @@
+{% extends "PequivenSEIPBundle:Core:email/base.html.twig" %}
+
+{% block contet_html %}
+    El usuario {{ user.fullname }} acaba aprobar el programa de gestión 
+    <a href="{{ path('',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a>.
+    
+    Los responsables del programa de gestión son:
+    <br/>
+    {% for responsible in  arrangementProgram.responsibles %}
+        {{ responsible }}
+    {% endfor %}
+    <br/>
+    
+    {% set timeline = arrangementProgram.timeline %}
+    Las metas y sus responsables son:
+    <br/>
+    <table>
+        <tr>
+            <th>Meta</th>
+            <th>Responsable(s)</th>
+        </tr>
+        {% for goal in timeline.goals %}
+            <tr>
+                <td>
+                    {{ goal.name }}
+                </td>
+                <td>
+                    {% for responsible in  arrangementProgram.responsibles %}
+                        {{ responsible }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <br/>
+    Para mayor información visualice el programa de gestión haciendo click <a href="{{ path('',{id: arrangementProgram.id }) }}">aqui</a>.
+{% endblock contet_html %}

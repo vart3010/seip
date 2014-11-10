@@ -102,7 +102,7 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
      *
      * @return \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
+    protected function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
     {
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
