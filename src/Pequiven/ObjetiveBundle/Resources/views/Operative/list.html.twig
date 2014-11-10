@@ -32,7 +32,7 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveOperativeList',{_format:'json',filter:app.request.get('filter',{})}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX') %}
+                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
                             <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                         {% endif %}
                         {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST_AUX') %}
@@ -65,7 +65,7 @@
         
         var selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
             selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
-            inputHiddenRoleName = $("rolUser")//
+            inputHiddenRoleName = $("#rolUser")//
         ;
         
         $(document).ready(function()
@@ -75,14 +75,27 @@
             
             function charge(){
                 chargeSelectGerenciaFirst();
-                chargeSelectGerenciaSecond();
+                
+                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                   selectGerenciaSecond.select2({
+                       
+                   });
+                   selectGerenciaSecond.select2("enable",false);
+               } else{
+                   chargeSelectGerenciaSecond();
+               }
             }
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
+            chargeSelectGerenciaSecond(e);
             //chargeList(e);
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
         })
+        
+        selectGerenciaFirst.change(function(){
+            selectGerenciaSecond.select2("val",'');
+        });
         
         selectGerenciaSecond.on("select2-selecting", function(e) {
             //chargeList(e);
@@ -146,16 +159,26 @@
             });
         }
         
-        function chargeSelectGerenciaSecond(){
-            var data = {
-            };
+        function chargeSelectGerenciaSecond(e){
+            var data = '';
+            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                data = {
+                    gerencia: $.trim(e.val),
+                };
+            } else{
+                data = {
+                };
+            }
             $.ajax({
                 type: 'post',
-                url: '{{ path("select_gerenciaSecondOperative") }}',
+                url: '{{ path("select_gerenciaSecondOperativeList") }}',
                 data: data,
                 success: function(data) {
                     {#$('#gerenciaFirst option[value]').remove();
                     $('#gerenciaFirst').select2("val",'');#}
+                                    
+                    $("#selectGerenciaSecond optgroup").remove();
+                    $("#selectGerenciaSecond option[value]").remove();
 
                     if(typeof data[0].empty === 'undefined'){
                         var cantidad = data.length;
@@ -179,7 +202,10 @@
                         }
                         //selectGerenciaFirst.append("<option></option>");
                         selectGerenciaSecond.append(text);
-                        chargeSelect2GerenciaSecond("full");
+                        selectGerenciaSecond.select2({
+                        });
+                        selectGerenciaSecond.select2("enable",true);
+{#                        chargeSelect2GerenciaSecond("full");#}
                     } else{
                         chargeSelect2GerenciaSecond("empty");
                     }

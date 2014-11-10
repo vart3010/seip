@@ -82,7 +82,7 @@ class RestArrangementProgramTemplateController extends FOSRestController
     }
 
     /**
-     * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_putgoalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
+     * @Annotations\Put("/{id}/goals-details.{_format}/{slug}",name="put_arrangementprogram_rest_restarrangementprogram_template_goalsdetails",requirements={"_format"="html|json|xml"},defaults={"_format"="html"})
      */
     function putGoalsDetailsAction($id, Request $request, $slug) {
         $em = $this->getDoctrine()->getManager();

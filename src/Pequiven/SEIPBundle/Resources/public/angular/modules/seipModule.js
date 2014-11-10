@@ -995,12 +995,17 @@ angular.module('seipModule.controllers', [])
         .controller('TableObjetiveOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
             $scope.gerenciaSecond = null;
             $scope.gerenciaFirst = null;
+            var gerencia = 0;
             $scope.$watch("gerenciaFirst", function() {
                 if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
                 {
-                    $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+                    if(gerencia != $scope.gerenciaFirst){
+                        gerencia = $scope.gerenciaFirst;
+                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                    }
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
                 } else {
-                    $scope.tableParams.$params.filter['gerencia'] = null;
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
                 }
             });
             $scope.$watch("gerenciaSecond", function() {

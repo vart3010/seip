@@ -205,6 +205,12 @@
 
 <p class="button-height align-right">
     {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+    
+    <a href="{{ path('arrangementprogram_export',{ id: entity.id }) }}" class="button">
+        <span class="button-icon"><span class="icon-download"></span></span>
+        {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
+    </a>
+    
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
@@ -222,12 +228,10 @@
         {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
         {{ buttons.generic_modal(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans) ~ filedObservation}) }}
     {% endif %}
-    {% if 
-        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') and
-        entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') and
-        hasPermissionToUpdate == true
-    %}
+    {% if  hasPermissionToUpdate == true %}
         {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+    {% endif %}
+    {% if isAllowToDelete == true %}
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
     {% endif %}
 </p>

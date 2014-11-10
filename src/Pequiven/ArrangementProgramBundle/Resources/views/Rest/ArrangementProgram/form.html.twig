@@ -220,6 +220,9 @@
                                     }
                                 }
                             }
+                            if(context.value == 0){
+                                context.value = '';
+                            }
                             return true;
                         }
                     }
@@ -242,15 +245,6 @@
                     iconCls: 'icon-user',
                     listeners: {
                         beforeedit: function (editor, context, eOpts) {
-        {#context.grid.columns[4].field.xtype="displayfield";
-        context.grid.columns[5].field.xtype="displayfield";#}
-                            //context.grid.columns[5].disable();
-                            //context.grid.reconfigure();
-
-        {#console.log(editor);
-        console.log(context);
-        console.log(eOpts);
-        console.log(editor.form);#}
                             //return false;
                         }
                     },

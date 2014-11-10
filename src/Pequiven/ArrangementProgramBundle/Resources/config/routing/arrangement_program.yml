@@ -106,3 +106,10 @@ arrangementprogram_delete:
     requirements:
         id: "\d+"
     methods: [DELETE]
+    
+arrangementprogram_export:
+    path: /{id}/export
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:exportAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
