@@ -29,6 +29,14 @@ pequiven_seip:
     message_footer: Gerencia Corporativa de Planificación Estratégica y Nuevos Desarrollos
 
     logout: Salir
+    
+    complejo: Localidad
+    gerenciaFirst: Gerencia 1ra Línea
+    gerenciaSecond: Gerencia 2da Línea
+    firstName: Nombre
+    lastName: Apellido
+    numPersonal: Número de Personal
+    rol: Rol
 
     login:
         validators:

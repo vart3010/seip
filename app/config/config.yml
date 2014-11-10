@@ -266,7 +266,8 @@ sylius_resource:
                 repository: Pequiven\MasterBundle\Repository\ComplejoRepository
         pequiven_seip.user:
             driver: doctrine/orm
+            templates: PequivenSEIPBundle:User
             classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
+                controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository

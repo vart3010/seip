@@ -14,3 +14,6 @@ FOS\UserBundle\Model\User:
             expose: false
         salt:
             expose: false
+        groups:
+            expose: true
+            groups: [rol]

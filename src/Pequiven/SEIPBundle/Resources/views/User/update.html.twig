@@ -1,0 +1,12 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block body -%}
+    <form action="{{ path('pequiven_user_update',{id:user.id} ) }}" method="POST" >
+        <input type="hidden" name="_method" value="PUT">
+        {{ form_widget(form) }}
+    
+        {{ actions.update() }}
+    </form>
+{% endblock %}

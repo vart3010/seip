@@ -111,6 +111,25 @@ class UserRepository extends EntityRepository
         return $qb;
     }
     
+    /**
+     * Crea un paginador para los usuarios
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return QueryBuilder
+     */
+    function createPaginatorUser(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->innerJoin('u.groups', 'g');
+        $queryBuilder->andWhere('g.level <=:maxLevel');
+        $queryBuilder->setParameter('maxLevel', 6000);
+        
+        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
     protected function getAlias() {
         return 'u';
     }

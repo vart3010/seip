@@ -69,6 +69,9 @@
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
         <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
@@ -109,6 +112,17 @@
         <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
         <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
+        </service>
+        
+        <!-- Servicio de USER -->
+        <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
+        </service>
+        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
+            <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>
     </services>
 </container>
