@@ -32,6 +32,7 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
         return array(
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_DELETE => 'onPreDeleteArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_CREATE => 'onPreCreateArrangementProgram',
         );
     }
     /**
@@ -101,7 +102,7 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
      *
      * @return \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
+    protected function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
     {
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
