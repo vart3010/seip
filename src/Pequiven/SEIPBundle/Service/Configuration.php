@@ -37,6 +37,11 @@ class Configuration extends ConfigurationManager
     const SUPPORT_INTEGRATED_MANAGEMENT_SYSTEM = 'SUPPORT_INTEGRATED_MANAGEMENT_SYSTEM';
     
     /**
+     * Habilitar el envio de correo electronico en los eventos del programa de gestion
+     */
+    const ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS = 'ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS';
+    
+    /**
      * Obtiene el tiempo de que se tomara en cuenta para mostrar los indicadores
      * 
      * @param string $default
@@ -65,6 +70,27 @@ class Configuration extends ConfigurationManager
     function setArrangementProgramAssociatedTo($default,$description = 'Valor del formulario del programa de gestion "asociado a"', Group $group = null)
     {
         $this->set(self::ARRANGEMENT_PROGRAM_ASSOCIATED_TO, $default,$description,$group);
+        return $this;
+    }
+    /**
+     * Establece valor del formulario del programa de gestion "asociado a" (Por defecto)
+     * 
+     * @param string $default
+     */
+    function setArrangementProgramSendEmailNotifications($default,$description = 'Habilitar el envio de correos en notificacion de eventos del programa de gestion', Group $group = null)
+    {
+        $this->set(self::ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS, $default,$description,$group);
+        return $this;
+    }
+    
+    /**
+     * Recupera valor del formulario del programa de gestion "asociado a" (Por defecto)
+     * 
+     * @param string $default
+     */
+    function isArrangementProgramSendEmailNotifications($default = false)
+    {
+        $this->get(self::ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS, $default);
         return $this;
     }
     

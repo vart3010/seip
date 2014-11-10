@@ -81,6 +81,9 @@ class MailerEventListerner extends BaseEventListerner
      * @param type $methodEmailList
      */
     private function sendEmail(ResourceEvent $event,$templateName,$methodEmailList) {
+        if($this->getSeipConfiguration()->isArrangementProgramSendEmailNotifications() == false){
+            return ;
+        }
         $object = $event->getSubject();
         $template = $this->getPathForTemplate($templateName);
         $context = array(
