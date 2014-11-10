@@ -48,10 +48,11 @@ class DefaultController extends Controller {
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-            $dataPorcTactic[] = array('value' => $resTactic);
-            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic']);
-            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic']);
-            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic, 'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo'])));
+            $urlTypeGroup =  $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo']));
+            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $urlTypeGroup);
+            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic'], 'link' => $urlTypeGroup);
+            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic'], 'link' => $urlTypeGroup);
+            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic, 'linkTypeGroup' => $urlTypeGroup);
             $categories[] = array('label' => $resultTactic['Descripcion']);
         }
         $optionsChart = array('typeLabel' => 'auto');
