@@ -43,7 +43,7 @@ UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperati
 -- UNOP
 UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 3, objOperativeOriginal = 13, indOperativeOriginal = 7 WHERE fk_gerencia = 8;
 -- COMERCIO EXTERIOR / IPSL
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 6, indOperativeOriginal = 6 WHERE fk_gerencia = 6;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 24, indOperativeOriginal = 24 WHERE fk_gerencia = 6;
 -- LOGÍSTICA
 UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 2, objOperativeOriginal = 6, indOperativeOriginal = 12 WHERE fk_gerencia = 5;
 -- PROYECTO MORON
