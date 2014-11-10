@@ -32,6 +32,7 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
         return array(
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_DELETE => 'onPreDeleteArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_CREATE => 'onPreCreateArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_CREATE => 'onPreCreateArrangementProgram',
         );
     }
     /**
