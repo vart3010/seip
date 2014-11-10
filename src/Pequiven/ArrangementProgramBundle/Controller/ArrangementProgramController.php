@@ -900,7 +900,10 @@ class ArrangementProgramController extends SEIPController
             $countGoals++;
             $rowGoal++;
         }
-        $rowSummary = $rowGoal;
+        $rowSummary = 24;
+        if($rowGoal > $rowSummary){
+            $rowSummary = $rowGoal;
+        }
         $detailsAdvancesPlanned = $summary['detailsAdvancesPlanned'];
         $detailsAdvancesReal = $summary['detailsAdvancesReal'];
         $totalWeight = $summary['weight'];
