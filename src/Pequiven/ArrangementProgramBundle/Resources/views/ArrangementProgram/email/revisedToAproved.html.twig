@@ -1,7 +1,7 @@
 {% extends "PequivenSEIPBundle:Core:email/base.html.twig" %}
 
 {% block contet_html %}
-    El usuario {{ user.fullname }} acaba aprobar el programa de gestión 
+    El usuario {{ user.getFullNameUser }} acaba aprobar el programa de gestión 
     <a href="{{ path('',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a> donde usted se encuetra involucrado.
     
     Los responsables del programa de gestión son:
@@ -33,6 +33,5 @@
         {% endfor %}
     </table>
     
-    <br/>
-    Para mayor información visualice el programa de gestión haciendo click <a href="{{ path('',{id: arrangementProgram.id }) }}">aqui</a>.
+   {% include 'PequivenArrangementProgramBundle:ArrangementProgram:email/detailsArrangementProgram.html.twig' %}
 {% endblock contet_html %}

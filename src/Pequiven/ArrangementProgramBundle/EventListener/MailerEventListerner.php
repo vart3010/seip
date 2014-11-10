@@ -6,9 +6,6 @@ use Pequiven\ArrangementProgramBundle\ArrangementProgramEvents;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\EventListener\BaseEventListerner;
 use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Captura los eventos del programa de gestion y envia los correos
@@ -22,6 +19,8 @@ class MailerEventListerner extends BaseEventListerner
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_SEND_TO_REVIEW => 'onArrangementProgramPostSendToReview',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_REVISED => 'onArrangementProgramPostRevised',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_APPROVED => 'onArrangementProgramPostApproved',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_RETURN_TO_REVIEW => 'onArrangementProgramPostReturnToReview',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_RETURN_TO_DRAFT => 'onArrangementProgramPostReturnToDraft',
         );
     }
     
@@ -52,6 +51,26 @@ class MailerEventListerner extends BaseEventListerner
     function onArrangementProgramPostApproved(ResourceEvent $event) {
         $templateName = 'revisedToAproved';
         $methodEmailList = 'getEmailsAllResponsibles';
+        $this->sendEmail($event, $templateName, $methodEmailList);
+    }
+    
+    /**
+     * Envia un correo de notificacion a las personas involucradas en el programa de gestion que se regreso a revision
+     * @param ResourceEvent $event
+     */
+    function onArrangementProgramPostReturnToReview(ResourceEvent $event) {
+        $templateName = 'returnRevisedToInRevision';
+        $methodEmailList = 'getEmailsToReviser';
+        $this->sendEmail($event, $templateName, $methodEmailList);
+    }
+    
+    /**
+     * Envia un correo de notificacion a las personas involucradas en el programa de gestion que se regreso a borrador
+     * @param ResourceEvent $event
+     */
+    function onArrangementProgramPostReturnToDraft(ResourceEvent $event) {
+        $templateName = 'returnInRevisionToDraft';
+        $methodEmailList = 'getEmailsToReturnDraft';
         $this->sendEmail($event, $templateName, $methodEmailList);
     }
     
@@ -173,6 +192,28 @@ class MailerEventListerner extends BaseEventListerner
         return $emails;
     }
     
+    /**
+     * Retorna el correo de la persona que creo el programa y que lo envio a revision
+     * 
+     * @param ArrangementProgram $entity
+     * @return type
+     */
+    private function getEmailsToReturnDraft(ArrangementProgram $entity)
+    {
+        $users = array();
+        $users[] = $entity->getCreatedBy();
+        if($entity->getDetails()->getSendToReviewBy() != null){
+            $users[] = $entity->getDetails()->getSendToReviewBy();
+        }
+        return $this->getEmailsInString($users);
+    }
+
+
+    /**
+     * Retorna un array asociativo con los correos y usuarios
+     * @param array $users
+     * @return type
+     */
     private function getEmailsInString(array $users) {
         $emails = array();
         foreach ($users as $user) {
@@ -181,7 +222,11 @@ class MailerEventListerner extends BaseEventListerner
         return $emails;
     }
 
-
+    /**
+     * Contruye el path del template twig del contenido del email
+     * @param type $templateName
+     * @return type
+     */
     private function getPathForTemplate($templateName) {
         return sprintf('PequivenArrangementProgramBundle:ArrangementProgram:email/%s.html.twig',$templateName);
     }

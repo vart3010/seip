@@ -1,0 +1,30 @@
+<br/>
+Detalles del programa de gestión:
+<br/>
+<table>
+    <tr>
+        <th>Periodo</th>
+        <th>Localidad</th>
+        <th>Gerencia</th>
+            {% if arrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <th>Gerencia de segunda linea</th>
+            {% endif %}
+    </tr>
+    <tr>
+        <td>{{ arrangementProgram.period }}</td>
+        <td>
+            {% if arrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
+                {{ arrangementProgram.tacticalObjective.gerencia.complejo }}
+            {% endif %}
+            {% if arrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+                {{ arrangementProgram.operationalObjective.gerencia.complejo }}
+            {% endif %}
+        </td>
+        {% if arrangementProgram.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
+            <td>{{ arrangementProgram.operationalObjective.gerenciaSecond }}</td>
+        {% endif %}
+    </tr>
+</table>
+<br/>
+Para mayor información, visualice el programa de gestión haciendo click <a href="{{ path('',{id: arrangementProgram.id }) }}">aqui</a>.
+    

@@ -551,7 +551,7 @@ class ArrangementProgramController extends SEIPController
      * @return type
      * @throws type
      */
-    function sendToDraftAction(Request $request)
+    function returnToDraftAction(Request $request)
     {
         $resource = $this->findOr404($request);
         $arrangementProgramManager = $this->getArrangementProgramManager();
@@ -566,12 +566,12 @@ class ArrangementProgramController extends SEIPController
             $resource->setStatus(ArrangementProgram::STATUS_DRAFT);
             $this->addObservation($resource, $observation);
                     
-            $this->domainManager->dispatchEvent('pre_send_to_draft', new ResourceEvent($resource));
+            $this->domainManager->dispatchEvent('pre_return_to_draft', new ResourceEvent($resource));
 
             $this->domainManager->update($resource);
-            $this->flashHelper->setFlash('success', 'send_to_draft');
+            $this->flashHelper->setFlash('success', 'return_to_draft');
 
-            $this->domainManager->dispatchEvent('pre_send_to_draft', new ResourceEvent($resource));
+            $this->domainManager->dispatchEvent('post_return_to_draft', new ResourceEvent($resource));
         }
         
         
