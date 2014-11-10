@@ -952,7 +952,10 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AI'.$rowDetails,$approvalDate)
                 ;
         
-        $activeSheet->getProtection()->setSheet(true);
+        $activeSheet->getProtection()
+                    ->setSheet(true)
+                    ->setPassword('SEIP-PG-P1A-2014')
+                ;
         
         $fileName = sprintf('SEIP-Programa-De-Gestion-%s.xls',$now->format('Ymd-His'));
         // Redirect output to a client’s web browser (Excel5)
