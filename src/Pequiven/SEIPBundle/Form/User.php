@@ -32,13 +32,11 @@ class User extends AbstractType {
             ->add('firstName')
             ->add('lastName')
             ->add('numPersonal')
-            ->add('complejo')
-            ->add('gerencia')
-            ->add('gerenciaSecond')
+            ->add('complejo','entity',array('class' => 'Pequiven\MasterBundle\Entity\Complejo','property' => 'description','attr' => array('class' => 'select2 input-xlarge')))
+            ->add('gerencia','entity',array('class' => 'Pequiven\MasterBundle\Entity\Gerencia','property' => 'description','attr' => array('class' => 'select2 input-xlarge')))
+            ->add('gerenciaSecond','entity',array('class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond','property' => 'description','attr' => array('class' => 'select2 input-xlarge')))
             ->add('direction')
             ->add('groups','entity',$parametersUser)
-            ->add('username')
-            ->add('usernameCanonical')
         ;
     }
     
