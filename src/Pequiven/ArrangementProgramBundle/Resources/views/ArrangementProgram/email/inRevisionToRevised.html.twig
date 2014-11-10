@@ -1,6 +1,6 @@
 {% extends "PequivenSEIPBundle:Core:email/base.html.twig" %}
 {% block contet_html %}
-    El usuario {{ user.fullname }} acaba revisar el programa de gestión 
+    El usuario {{ user.fullname }} acaba de revisar el programa de gestión 
     <a href="{{ path('',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a>.
     
     <br/>
