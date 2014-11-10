@@ -1,0 +1,21 @@
+Pequiven\MasterBundle\Entity\Rol:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_list]
+        userCreatedAt:
+            expose: true
+            groups: [api_details]
+        userUpdatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]

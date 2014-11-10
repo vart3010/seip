@@ -1,0 +1,6 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+{% block body %}
+Usuario: <b>{{ user }}</b>
+<br/>
+<a href="{{ path('pequiven_user_update',{id: user.id }) }}" class="btn">Editar</a>
+{% endblock body %}

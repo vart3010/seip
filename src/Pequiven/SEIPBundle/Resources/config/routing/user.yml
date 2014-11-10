@@ -1,0 +1,35 @@
+pequiven_user_list:
+    path: /view
+    defaults:
+        _controller: pequiven_seip.controller.user:listAction
+    methods: [GET]
+        
+#Devuelve el paginador con la data de los objetivos operativos
+userList:
+    path: /list
+    defaults: 
+        _controller: pequiven_seip.controller.user:userListAction
+        _sylius:
+            method: createPaginatorUser
+
+pequiven_seip_user_show:
+    path: /{id}.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.user:showAction
+        _format: html
+    requirements:
+        id: "\d+"
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true
+    
+pequiven_user_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven_seip.controller.user:updateAction
+        _sylius:
+            form: pequiven_seipbundle_user
+    requirements:
+        id: "\d+"
+    methods: [GET|POST|PUT]

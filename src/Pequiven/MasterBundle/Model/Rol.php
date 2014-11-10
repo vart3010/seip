@@ -10,22 +10,23 @@ use FOS\UserBundle\Entity\Group as BaseGroup;
  *
  * @author matias
  */
-class Rol extends BaseGroup
-{
+class Rol extends BaseGroup {
+
     /**
      * Propietario
      */
     const TYPE_ROL_OWNER = 0;
+
     /**
      * Auxiliar
      */
     const TYPE_ROL_AUX = 1;
-    
     const ROLE_DEFAULT = 0;
     const ROLE_WORKER_PQV = 1000;
     const ROLE_SUPERVISER = 2000;
     const ROLE_COORDINATOR = 2500;
     const ROLE_MANAGER_SECOND = 3000;
+
     /**
      * Gerencia de primera linea
      */
@@ -39,11 +40,11 @@ class Rol extends BaseGroup
     const ROLE_MANAGER_FIRST_AUX = 11000;
     const ROLE_GENERAL_COMPLEJO_AUX = 12000;
     const ROLE_DIRECTIVE_AUX = 13000;
-    
+
     public function __construct() {
-        parent::__construct(null,array());
+        parent::__construct(null, array());
     }
-    
+
     /**
      * Devuelve el nombre del rol
      * @param type $role
@@ -52,12 +53,12 @@ class Rol extends BaseGroup
      */
     static function getRoleName($role) {
         $rolesNames = self::getRolesNames();
-        if(!isset($rolesNames[$role])){
-            throw new Exception(sprintf("Role name '%s' dont exists",$role));
+        if (!isset($rolesNames[$role])) {
+            throw new Exception(sprintf("Role name '%s' dont exists", $role));
         }
         return $rolesNames[$role];
     }
-    
+
     /**
      * Devuelve el nivel del rol
      * @param type $role
@@ -66,12 +67,12 @@ class Rol extends BaseGroup
      */
     static function getRoleLevel($role) {
         $rolesLevel = self::getRolesLevel();
-        if(!isset($rolesLevel[$role])){
-            throw new Exception(sprintf("Role level '%s' dont exists",$role));
+        if (!isset($rolesLevel[$role])) {
+            throw new Exception(sprintf("Role level '%s' dont exists", $role));
         }
         return $rolesLevel[$role];
     }
-    
+
     /**
      * Devuelve el nivel de los roles
      * @staticvar array $rolesLevel
@@ -90,16 +91,16 @@ class Rol extends BaseGroup
             self::ROLE_ADMIN => self::ROLE_ADMIN,
             self::ROLE_SUPER_ADMIN => self::ROLE_SUPER_ADMIN,
         );
-        
+
         $rolesLevel[self::ROLE_SUPERVISER_AUX] = $rolesLevel[self::ROLE_SUPERVISER];
         $rolesLevel[self::ROLE_MANAGER_SECOND_AUX] = $rolesLevel[self::ROLE_MANAGER_SECOND];
         $rolesLevel[self::ROLE_MANAGER_FIRST_AUX] = $rolesLevel[self::ROLE_MANAGER_FIRST];
         $rolesLevel[self::ROLE_GENERAL_COMPLEJO_AUX] = $rolesLevel[self::ROLE_GENERAL_COMPLEJO];
         $rolesLevel[self::ROLE_DIRECTIVE_AUX] = $rolesLevel[self::ROLE_DIRECTIVE];
-        
+
         return $rolesLevel;
     }
-    
+
     /**
      * Devuelve el nombre de los roles
      * @staticvar array $rolesNames
@@ -125,4 +126,5 @@ class Rol extends BaseGroup
         );
         return $rolesNames;
     }
+
 }

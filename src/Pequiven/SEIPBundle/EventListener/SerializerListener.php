@@ -41,6 +41,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgram', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgramTemplate', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeUser', 'class' => 'Pequiven\SEIPBundle\Entity\User', 'format' => 'json'),
         );
     }
 
@@ -510,6 +511,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         //Ind. Operativo Vinculante
         $event->getVisitor()->addData('resIndOperativeVinculante', $res['indOperativeVinculante']);
         $event->getVisitor()->addData('imageIndOperativeVinculante', $routeImage['indOperativeVinculante']);
+    }
+    
+    public function onPostSerializeUser(ObjectEvent $event) {
+        $links = array();
+        $object = $event->getObject();
+        $roles = $object->getGroups();
+        $links['self']['href'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
+        $event->getVisitor()->addData('_links',$links);
+        $event->getVisitor()->addData('rol',$roles[0]->getDescription());
     }
     
     public function setContainer(ContainerInterface $container = null) {

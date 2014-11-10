@@ -19,3 +19,6 @@ Pequiven\SEIPBundle\Entity\User:
         gerencia:
             expose: true
             groups: [gerencia]
+        gerenciaSecond:
+            expose: true
+            groups: [gerencia_second]
