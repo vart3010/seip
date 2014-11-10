@@ -1,0 +1,11 @@
+{% block subject '' %}
+    
+{% block body_text '' %}
+    
+{% block body_html %}
+    {% include 'PequivenSEIPBundle:Core:email/base.html.twig' %}
+    <br/>
+        {% block contet_html '' %}
+    <br/>
+    {% include 'PequivenSEIPBundle:Core:email/footer.html.twig' %}
+{% endblock body_html %}
