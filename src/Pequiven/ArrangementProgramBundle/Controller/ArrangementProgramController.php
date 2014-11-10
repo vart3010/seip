@@ -776,17 +776,15 @@ class ArrangementProgramController extends SEIPController
                 ->setActiveSheetIndex(0);
         $activeSheet = $objPHPExcel->getActiveSheet();
         
+        $activeSheet->getDefaultRowDimension()->setRowHeight();
         //Setear informacion base
         $activeSheet
                 ->setCellValue('B5',  $categoryArrangementProgram)
                 ->setCellValue('F5',  $tacticalObjective)
-                ->setCellValue('J5',  $operationalObjective)
+                ->setCellValue('Q5',  $operationalObjective)
                 ->setCellValue('B7',  $location)
                 ->setCellValue('F7',  $management)
                 ->setCellValue('J7',  $responsibles)
-                ->setCellValue('AJ5',  $now->format('Y'))
-                ->setCellValue('AK5',  $now->format('m'))
-                ->setCellValue('AL5',  $now->format('d'))
             ;
         
         $timeline = $resource->getTimeline();
@@ -896,7 +894,6 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
-            
             $countGoals++;
             $rowGoal++;
         }
@@ -937,16 +934,33 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowSummary,$detailsAdvancesReal['decemberReal'])
                 ;
         
+        //Observaciones del programa.
+        $rowObservation = $rowSummary + 2;
+        $observations = $resource->getObservations();
+        $observationString = '';
+        foreach ($observations as $observation) {
+            $observationString .= sprintf('%s,',$observation->getDescription());
+        }
+        $observationsLen = strlen($observationString);
+        if($observationsLen > 0){
+            $observationString[strlen($observationString) - 1 ] = '.';
+            $observationString = ucfirst(strtolower($observationString));
+        }else{
+            $observationString = 'Ninguna.';
+        }
+        $activeSheet
+                ->setCellValue('B'.$rowObservation,$observationString);
+        
         //Agregar los detalles del programa de gestion
-        $sendToReviewBy = ucwords(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $sendToReviewBy = ucfirst(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
         $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
         
-        $approvedBy = ucwords(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
+        $approvedBy = ucfirst(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
         $approvalDate = $details->getApprovalDate() ? $details->getApprovalDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_approval_date');
-        if($rowSummary > 24){
-            $rowDetails = $rowSummary + 2;
+        if($rowObservation > 26){
+            $rowDetails = $rowObservation + 2;
         }else{
-            $rowDetails = 26;
+            $rowDetails = 28;
         }
         $activeSheet
                 ->setCellValue('B'.$rowDetails,$sendToReviewBy)
@@ -954,6 +968,9 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('L'.$rowDetails,$approvedBy)
                 ->setCellValue('AI'.$rowDetails,$approvalDate)
                 ;
+        
+        $activeSheet->calculateColumnWidths();
+        $activeSheet->getRowDimension('1');
         
         $activeSheet->getProtection()
                     ->setSheet(true)
