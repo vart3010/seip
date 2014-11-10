@@ -48,9 +48,9 @@ arrangementprogram_revised:
         id: "\d+"
     methods: [GET]
     
-arrangementprogram_send_to_draft:
+arrangementprogram_return_to_draft:
     path: /{id}/send-to-draft
-    defaults: { _controller: pequiven_seip.controller.arrangementprogram:sendToDraftAction }
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:returnToDraftAction }
     requirements:
         id: "\d+"
     methods: [POST]

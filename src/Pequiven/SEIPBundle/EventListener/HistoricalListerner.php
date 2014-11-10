@@ -25,7 +25,7 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_APPROVED => 'onPreApprovedArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW => 'onPreSendToReviewArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REJECTED => 'onPreRejectedArrangementProgram',
-            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_DRAFT => 'onPreSendToDraftArrangementProgram',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_DRAFT => 'onPreSendToDraftArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_REVIEW => 'onPreReturnToReviewArrangementProgram',
         );
     }
@@ -98,7 +98,7 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
         $object = $event->getSubject();
          $this->createHistorical(
                 $object,
-                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_DRAFT
+                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_DRAFT
         );
     }
     

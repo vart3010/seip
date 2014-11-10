@@ -142,7 +142,7 @@ final class ArrangementProgramEvents
     const ARRANGEMENT_PROGRAM_POST_REJECTED = 'pequiven_seip.arrangementprogram.post_rejected';
     
     /**
-     * El pequiven_seip.arrangementprogram.pre_send_to_draft evento es lanzado antes de regresar un programa de gestion a borrador
+     * El pequiven_seip.arrangementprogram.pre_return_to_draft evento es lanzado antes de regresar un programa de gestion a borrador
      * en el sistema.
      *
      * The event listener receives an
@@ -150,10 +150,10 @@ final class ArrangementProgramEvents
      *
      * @var string
      */
-    const ARRANGEMENT_PROGRAM_PRE_SEND_TO_DRAFT = 'pequiven_seip.arrangementprogram.pre_send_to_draft';
+    const ARRANGEMENT_PROGRAM_PRE_RETURN_TO_DRAFT = 'pequiven_seip.arrangementprogram.pre_return_to_draft';
     
     /**
-     * El pequiven_seip.arrangementprogram.post_send_to_draft evento es lanzado cuando se regresa un programa de gestion a borrador
+     * El pequiven_seip.arrangementprogram.post_return_to_draft evento es lanzado cuando se regresa un programa de gestion a borrador
      * en el sistema.
      *
      * The event listener receives an
@@ -161,7 +161,7 @@ final class ArrangementProgramEvents
      *
      * @var string
      */
-    const ARRANGEMENT_PROGRAM_POST_SEND_TO_DRAFT = 'pequiven_seip.arrangementprogram.post_send_to_draft';
+    const ARRANGEMENT_PROGRAM_POST_RETURN_TO_DRAFT = 'pequiven_seip.arrangementprogram.post_return_to_draft';
     
     /**
      * El pequiven_seip.arrangementprogram.pre_return_to_review evento es lanzado cuando se regresa un programa de gestion a revision

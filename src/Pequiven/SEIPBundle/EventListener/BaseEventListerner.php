@@ -73,6 +73,15 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
     
+    /**
+     * Configuracion global del SEIP
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    protected function getSeipConfiguration() {
+        return $this->get('seip.configuration');
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
