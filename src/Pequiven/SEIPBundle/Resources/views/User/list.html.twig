@@ -18,10 +18,10 @@
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('userList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
-                            <td data-title="'{{ 'pequiven_seip.firstName'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.firstName'|trans }}'" filter="{'firstName' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.firstName $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven_seip.lastName'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.lastName'|trans }}'" filter="{'lastName' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.lastName $}</a>
                             </td>
                             <td data-title="'{{ 'pequiven_seip.numPersonal'|trans }}'" filter="{'numPersonal' : 'text'}">
