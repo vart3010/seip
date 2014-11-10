@@ -37,6 +37,7 @@ pequiven_seip:
     lastName: Apellido
     numPersonal: Número de Personal
     rol: Rol
+    users: Usuarios SEIP
 
     login:
         validators:
