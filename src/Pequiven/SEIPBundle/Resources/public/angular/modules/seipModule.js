@@ -173,6 +173,7 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
+                    applyDatePickerDatePG();
                     $scope.openModalAuto();
                 }
             };
