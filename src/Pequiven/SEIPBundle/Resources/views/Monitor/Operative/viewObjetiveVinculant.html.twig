@@ -3,7 +3,7 @@
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 {% block title %}- {{ 'pequiven_objetive.objetive_operative'|trans }}{% endblock %}
 
-{% set route_index = 'pequiven_objetive_menu_list_operative' %} 
+{% set route_index = urlReturn %} 
 {% if allow_create is not defined %}
     {% set allow_create = false %}
 {% endif %}
@@ -15,7 +15,7 @@
     
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-            <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
+            <a href="{{ route_index }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
         </h1>

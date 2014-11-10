@@ -42,7 +42,7 @@ listObjetiveTacticByGroup:
     
 #Lista de Objetivos Operativos por Gerencia de 1ra Línea
 listObjetiveOperativeByGroup:
-    path: /list/operative/{idGerencia}
+    path: /list/operative/{typeGroup}/{idGerencia}
     defaults:
         _controller: pequiven.controller.seipmonitor:listObjetiveOperativeByGroupAction
     requirements:
@@ -51,7 +51,7 @@ listObjetiveOperativeByGroup:
     
 #Lista de Objetivos Operativos Vinculantes del Complejo
 listObjetiveOperativeVinculant:
-    path: /list/operativeVinculant/{idGerencia}/{idComplejo}
+    path: /list/operativeVinculant/{typeGroup}/{idGerencia}/{idComplejo}
     defaults:
         _controller: pequiven.controller.seipmonitor:listObjetiveOperativeVinculantAction
     requirements:

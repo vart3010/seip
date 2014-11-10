@@ -298,10 +298,11 @@ class MonitorController extends baseController {
         
         foreach($resultsOperatives as $resultOperative){
             $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
-            $dataPorcOperative[] = array('value' => $resOperative, 'link' => $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
-            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
-            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
-            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative, 'urlGerencia' => $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $resultOperative['idGerencia'])));
+            $urlGerencia = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $resultOperative['idGerencia']));
+            $dataPorcOperative[] = array('value' => $resOperative, 'link' => $urlGerencia);
+            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative'], 'link' => $urlGerencia);
+            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative'], 'link' => $urlGerencia);
+            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative, 'urlGerencia' => $urlGerencia);
             if($resultOperative['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
                 $categories[] = array('label' => $resultOperative['Ref'], 'toolText' => $resultOperative['Gerencia']);
@@ -351,17 +352,20 @@ class MonitorController extends baseController {
      */
     public function listObjetiveOperativeByGroupAction(Request $request){
         $idGerencia = $request->get("idGerencia");
+        $typeGroup = $request->get("typeGroup");
         $em = $this->getDoctrine()->getManager();
         $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         
         $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerenciaFirst' => $idGerencia)));
-        $urlVinculant = $this->generateUrl('listObjetiveOperativeVinculant', array('idGerencia' => $idGerencia,'idComplejo' => $gerencia->getComplejo()->getId()));
+        $urlReturn = $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $typeGroup));
+        $urlVinculant = $this->generateUrl('listObjetiveOperativeVinculant', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia,'idComplejo' => $gerencia->getComplejo()->getId()));
         
         return array(
             'url' => $url,
             'urlVinculant' => $urlVinculant,
+            'urlReturn' => $urlReturn,
             'gerenciaGroup' => $objectGerenciaGroup,
             'gerencia' => $gerencia
         );
@@ -376,17 +380,20 @@ class MonitorController extends baseController {
     public function listObjetiveOperativeVinculantAction(Request $request){
         $idGerencia = $request->get("idGerencia");
         $idComplejo = $request->get("idComplejo");
+        $typeGroup = $request->get("typeGroup");
         $em = $this->getDoctrine()->getManager();
         
         $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
         
         $url = $this->generateUrl('objetiveVinculantOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia,'complejo' => $idComplejo)));
-        $urlMedular = $this->generateUrl('listObjetiveOperativeByGroup', array('idGerencia' => $idGerencia));
+        $urlMedular = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia));
+        $urlReturn = $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $typeGroup));
         
         return array(
             'url' => $url,
             'urlMedular' => $urlMedular,
+            'urlReturn' => $urlReturn,
             'gerenciaGroup' => $objectGerenciaGroup,
         );
     }
