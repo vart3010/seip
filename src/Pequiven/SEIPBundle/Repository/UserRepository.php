@@ -124,8 +124,12 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('g.level <=:maxLevel');
         $queryBuilder->setParameter('maxLevel', 6000);
         
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+        if(isset($criteria['firstName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        }
+        if(isset($criteria['lastName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        }
         
         return $this->getPaginator($queryBuilder);
     }

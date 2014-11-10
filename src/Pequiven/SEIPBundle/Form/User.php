@@ -37,6 +37,8 @@ class User extends AbstractType {
             ->add('gerenciaSecond')
             ->add('direction')
             ->add('groups','entity',$parametersUser)
+            ->add('username')
+            ->add('usernameCanonical')
         ;
     }
     
