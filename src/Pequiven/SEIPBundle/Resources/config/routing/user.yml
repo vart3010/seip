@@ -3,14 +3,27 @@ pequiven_user_list:
     defaults:
         _controller: pequiven_seip.controller.user:listAction
     methods: [GET]
+
+pequiven_user_aux_list:
+    path: /view/aux
+    defaults:
+        _controller: pequiven_seip.controller.user:listAuxAction
+    methods: [GET]
         
-#Devuelve el paginador con la data de los objetivos operativos
+#Devuelve el paginador con la data de los usuarios
 userList:
     path: /list
     defaults: 
         _controller: pequiven_seip.controller.user:userListAction
         _sylius:
             method: createPaginatorUser
+
+userAuxList:
+    path: /list/aux
+    defaults: 
+        _controller: pequiven_seip.controller.user:userListAuxAction
+        _sylius:
+            method: createPaginatorUserAux
 
 pequiven_seip_user_show:
     path: /{id}.{_format}
