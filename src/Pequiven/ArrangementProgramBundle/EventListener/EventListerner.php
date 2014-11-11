@@ -114,6 +114,6 @@ class EventListerner implements EventSubscriberInterface, ContainerAwareInterfac
      */
     private function getArrangementProgramManager()
     {
-        return $this->get('seip.arrangement_program.manager');
+        return $this->container->get('seip.arrangement_program.manager');
     }
 }
