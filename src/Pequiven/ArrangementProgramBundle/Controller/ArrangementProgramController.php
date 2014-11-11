@@ -170,12 +170,17 @@ class ArrangementProgramController extends SEIPController
     public function assignedAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
+        
+        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $criteria['ap.period'] = $period;
+        $criteria['ap.user'] = $this->getUser();
+        
         $repository = $this->getRepository();
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByAssigned',
+                'createPaginatorByAssignedResponsibles',
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
