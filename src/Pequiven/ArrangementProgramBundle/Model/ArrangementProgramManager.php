@@ -215,7 +215,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
          //Security check
         $user = $this->getUser();
         $valid = false;
-        if($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT){
+        if(($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT) || $this->getSecurityConext()->isGranted('ROLE_SUPER_ADMIN')){
             $valid = true;
         }
         return $valid;
@@ -249,5 +249,19 @@ class ArrangementProgramManager implements ContainerAwareInterface
     
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\Security\Core\SecurityContext
+     * @throws \LogicException
+     */
+    private function getSecurityConext()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context');
     }
 }
