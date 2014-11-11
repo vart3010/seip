@@ -28,7 +28,7 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
         if(!$timeline){
             return;
         }
-        $limitGoals = 12;
+        $limitItems = $this->container->get('seip.configuration')->getGeneralLimitItems();
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         
         //Repositorios
@@ -43,12 +43,37 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
         foreach ($timeline->getGoals() as $currentGoal) {
             $reposibles = $currentGoal->getResponsibles();
             foreach ($reposibles as $reposible) {
+                $level = $reposible->getLevelRealByGroup();
+                $countObjetives = 0;
+                
+                if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+                    $gerenciaFirst = $reposible->getGerencia();
+                    if($gerenciaFirst){
+                        $tacticalObjectives = $gerenciaFirst->getTacticalObjectives();
+                        foreach ($tacticalObjectives as $tacticalObjective) {
+                            if($tacticalObjective->isEnabled() == true){
+                                $countObjetives++;
+                            }
+                        }
+                    }
+                }else if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_SECOND){
+                    $gerenciaSecond = $reposible->getGerenciaSecond();
+                    if($gerenciaSecond){
+                        $operationalObjectives = $gerenciaSecond->getOperationalObjectives();
+                        foreach ($operationalObjectives as $operationalObjective) {
+                            if($operationalObjective->isEnabled() == true){
+                                $countObjetives++;
+                            }
+                        }
+                    }
+                }
+                
                 //Metas de otros programa de gestion donde no es reponsable
                 $goals = $goalRepository->findGoalsByUserAndPeriod($reposible,$period,$criteria);
-                //Programas de gestion donde es responsable
+                //Programas de gestion donde es responsable en las metas
                 $arrangementPrograms = $arrangementProgramRepository->findByUserAndPeriodNotGoals($reposible,$period,$criteria);
 
-                $countGoals = count($goals);
+                $countGoals = count($goals) + $countObjetives;
                 $countArrangementPrograms = count($arrangementPrograms);
 
                     $isReposibleInProgram = false;
@@ -77,11 +102,11 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
                     }
 
                 $total = $countGoals + $countArrangementPrograms;
-                if($total > $limitGoals){
+                if($total > $limitItems){
                     $errors[$reposible->getId()] = array(
                         '%user%' => $reposible,
                         '%goals%' => $countGoals,
-                        '%limit%'=> $limitGoals,
+                        '%limit%'=> $limitItems,
                         '%period%' => $period,
                         '%arrangementPrograms%' => $countArrangementPrograms,
                         '%total%' => ($countArrangementPrograms + $countGoals)

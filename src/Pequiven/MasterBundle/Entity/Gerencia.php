@@ -125,6 +125,22 @@ class Gerencia extends modelGerencia
     protected $configuration;
 
     /**
+     * Objetivos operativos de la gerencia de primera linea
+     * 
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive
+     * @ORM\OneToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="gerencia")
+     */
+    private $tacticalObjectives;
+    
+        /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tacticalObjectives = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -418,5 +434,38 @@ class Gerencia extends modelGerencia
     public function getAbbreviation()
     {
         return $this->abbreviation;
+    }
+
+    /**
+     * Add tacticalObjectives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives
+     * @return Gerencia
+     */
+    public function addTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives)
+    {
+        $this->tacticalObjectives->add($tacticalObjectives);
+
+        return $this;
+    }
+
+    /**
+     * Remove tacticalObjectives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives
+     */
+    public function removeTacticalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $tacticalObjectives)
+    {
+        $this->tacticalObjectives->removeElement($tacticalObjectives);
+    }
+
+    /**
+     * Get tacticalObjectives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTacticalObjectives()
+    {
+        return $this->tacticalObjectives;
     }
 }
