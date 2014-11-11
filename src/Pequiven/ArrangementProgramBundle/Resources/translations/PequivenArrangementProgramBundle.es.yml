@@ -59,7 +59,7 @@ pequiven:
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión
-            send_to_draft: Regresar a borrador
+            return_to_draft: Regresar a borrador
             return_to_review: Regresar a revisión
             approved: Aprobar
             rejected: Rechazar
@@ -77,7 +77,7 @@ pequiven:
             approved: ¿Desea aprobar el programa de gestión?
             send_to_review: ¿Desea enviar el programa de gestión a revisión?
             rejected: ¿Desea rechazar el programa de gestión?
-            send_to_draft: ¿Desea regresar el programa de gestión al estatus "borrador"?
+            return_to_draft: ¿Desea regresar el programa de gestión al estatus "borrador"?
             return_to_review: ¿Desea regresar el programa de gestión al estatus "revisión"?
         flash:
             send_comment: Su observación se ha guardado.
