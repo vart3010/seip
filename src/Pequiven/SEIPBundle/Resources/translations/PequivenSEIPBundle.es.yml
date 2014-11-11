@@ -36,6 +36,7 @@ pequiven_seip:
     firstName: Nombre
     lastName: Apellido
     numPersonal: Número de Personal
+    direction: Dirección
     rol: Rol
     users: Usuarios SEIP
 
@@ -78,15 +79,16 @@ pequiven_seip:
         super_administrator: Super Administrador
         administrator: Administrador
         directive: Ejecutivo
-        directive_aux: Ejecutivo (Asignado)
+        directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%
-        general_complejo_aux: Gerente General Complejo (Asignado)
+        general_complejo_aux: Gerente General Complejo (Usuario Temporal)
         manager_first: Gerente 1ra Línea
-        manager_first_aux: Gerente 1ra Línea (Asignado)
+        manager_first_aux: Gerente 1ra Línea (Usuario Temporal)
         manager_second: Gerente 2da Línea
-        manager_second_aux: Gerente 2da Línea (Asignado)
+        manager_second_aux: Gerente 2da Línea (Usuario Temporal)
         superviser: Supervisor
         worker_pqv: Personal PQV
+        chargeArrangementProgram: Usuario de Carga de Prog. Gest.
 
     search: Buscar
     show: Mostrar

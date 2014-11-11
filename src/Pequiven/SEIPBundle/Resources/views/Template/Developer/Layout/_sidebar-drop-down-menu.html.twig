@@ -19,7 +19,11 @@
             {% elseif app.user.hasRole('ROLE_MANAGER_FIRST') %}
                 {{ 'pequiven_seip.role.manager_first'|trans }}
             {% elseif app.user.hasRole('ROLE_MANAGER_FIRST_AUX') %}
-                {{ 'pequiven_seip.role.manager_first_aux'|trans }}
+                {% if app.user.username matches '/_cpg$/' %}
+                    {{ 'pequiven_seip.role.chargeArrangementProgram'|trans }}
+                {% else %}
+                    {{ 'pequiven_seip.role.manager_first_aux'|trans }}
+                {% endif %}
             {% elseif app.user.hasRole('ROLE_MANAGER_SECOND') %}
                 {{ 'pequiven_seip.role.manager_second'|trans }}
             {% elseif app.user.hasRole('ROLE_MANAGER_SECOND_AUX') %}
