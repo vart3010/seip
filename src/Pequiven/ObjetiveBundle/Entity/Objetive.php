@@ -162,15 +162,16 @@ class Objetive extends modelObjetive {
      * Gerencia
      * 
      * @var \Pequiven\MasterBundle\Entity\Gerencia
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia",inversedBy="tacticalObjectives")
      * @ORM\JoinColumn(name="fk_gerencia", referencedColumnName="id")
      */
     private $gerencia;
     
     /**
-     * GerenciaSecond
+     * Gerencia de segunda linea
+     * 
      * @var \Pequiven\MasterBundle\Entity\GerenciaSecond
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaSecond",inversedBy="operationalObjectives")
      * @ORM\JoinColumn(name="fk_gerencia_second", referencedColumnName="id")
      */
     private $gerenciaSecond;
@@ -344,6 +345,15 @@ class Objetive extends modelObjetive {
      * @return boolean 
      */
     public function getEnabled() {
+        return $this->enabled;
+    }
+
+    /**
+     * Is enabled
+     *
+     * @return boolean 
+     */
+    public function isEnabled() {
         return $this->enabled;
     }
 

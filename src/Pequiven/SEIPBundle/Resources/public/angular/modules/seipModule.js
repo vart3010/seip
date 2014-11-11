@@ -176,6 +176,7 @@ angular.module('seipModule.controllers', [])
                     applyDatePickerDatePG();
                     $scope.openModalAuto();
                 }
+                applyDatePickerDatePG();
             };
 
             //Setea la dta del formulario
