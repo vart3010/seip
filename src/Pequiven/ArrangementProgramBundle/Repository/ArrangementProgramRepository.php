@@ -97,6 +97,44 @@ class ArrangementProgramRepository extends EntityRepository
         return $this->getPaginator($queryBuilder);
     }
     
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para revision o aprobacion
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAssignedResponsibles(array $criteria = null, array $orderBy = null) {
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('ap.responsibles', 'ap_r')
+            ->innerJoin('ap.timeline', 't')
+            ->innerJoin('t.goals', 't_g')
+            ->innerJoin('t_g.responsibles', 't_g_r')
+            ;
+        
+        if(($period = $criteria->remove('ap.period')) != null){
+            $qb
+                ->andWhere('ap.period = :period')
+                ->setParameter('period', $period)
+                ;
+        }
+        if(($user = $criteria->remove('ap.user')) != null){
+            $qb
+               ->andWhere($qb->expr()->orX('ap_r.id = :responsible','t_g_r.id = :responsible'))
+               ->setParameter('responsible', $user)
+                ;
+        }
+        
+        $this->applyCriteria($qb,$criteria->toArray());
+        $this->applySorting($qb, $orderBy);
+        
+        return $this->getPaginator($qb);
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
