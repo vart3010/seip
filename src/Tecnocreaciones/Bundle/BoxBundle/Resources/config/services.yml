@@ -16,3 +16,10 @@ services:
         calls:
             - [setContainer,[@service_container]]
             - [setBoxRender,[@tecnocreaciones_box.render]]
+    twig.extension.tecnocreaciones.render:
+        class: Tecnocreaciones\Bundle\BoxBundle\Twig\Extension\BoxBundleExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+        calls:
+            - [setContainer,[@service_container]]

@@ -23,18 +23,58 @@ class AreaRender implements ContainerAwareInterface
     private $areas;
             
     public function __construct() {
-        ;
+        $this->areas = array();
     }
     
-    function addArea($areaName,$boxName) {
+    /**
+     * Agrega un boxe a una area
+     * @param type $areaName
+     * @param type $boxName
+     * @param type $position
+     * @return \Tecnocreaciones\Bundle\BoxBundle\Service\AreaRender
+     */
+    function addArea($areaName,$boxName,$position = 0) {
         if($this->boxRender->hasBox($boxName)){
+            if(!isset($this->areas[$areaName])){
+                $this->areas[$areaName] = array();
+            }
+            if(!isset($this->areas[$areaName][$position])){
+                $this->areas[$areaName][$position] = array();
+            }
+            if(!array_search($boxName, $this->areas[$areaName][$position])){
+                $this->areas[$areaName][$position][] = $boxName;
+            }
             
+            return $this;
         }
     }
     
-    function renderArea($name)
+    /**
+     * Retorna el area a renderizar
+     * @param type $areaName Nombre del area
+     * @return array
+     */
+    function getArea($areaName)
     {
-        
+        $areas = array();
+        if(isset($this->areas[$areaName])){
+            $areas = $this->areas[$areaName];
+        }
+        return $areas;
+    }
+    
+    /**
+     * Renderiza un area
+     * @param type $areaName
+     */
+    function renderArea($areaName)
+    {
+        $positions = $this->getArea($areaName);
+        foreach ($positions as $boxName) {
+            if($this->getBoxRender()->hasBox($boxName)){
+                $this->getBoxRender()->getBox($boxName);
+            }
+        }
     }
     
     /**
