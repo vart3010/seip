@@ -745,6 +745,22 @@ class ArrangementProgramController extends SEIPController
         $tacticalObjective = (string)$resource->getTacticalObjective();
         $operationalObjective = (string)$resource->getOperationalObjective();
         
+         $styleArrayBordersContent = array(
+          'borders' => array(
+            'allborders' => array(
+              'style' => \PHPExcel_Style_Border::BORDER_THIN
+            )
+          ),
+          'font' => array(
+              'bold' => false
+          ),
+          'alignment' => array(
+              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+              'wrap' => true
+          )
+        );
+        
         $location = '';
         if($resource->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
             $location = (string)$resource->getTacticalObjective()->getGerencia()->getComplejo();
@@ -899,6 +915,19 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
+            
+            $activeSheet->getStyle(sprintf('C%s:I%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('AI%s:AL%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $rowHeight = 50;
+            $responsiblesGoalLen = strlen($responsiblesGoal);
+            $goalObservationsLen = strlen($goalObservations);
+            if($responsiblesGoalLen > $rowHeight){
+                $rowHeight = $responsiblesGoalLen;
+            }
+            if($goalObservationsLen > $responsiblesGoalLen){
+                $rowHeight = $goalObservationsLen;
+            }
+            $activeSheet->getRowDimension($rowGoal)->setRowHeight($rowHeight);
             $countGoals++;
             $rowGoal++;
         }
