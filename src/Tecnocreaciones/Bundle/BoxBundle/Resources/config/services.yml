@@ -1,6 +1,7 @@
 parameters:
 #    tecnocreaciones_box.example.class: Tecnocreaciones\Bundle\BoxBundle\Example
     tecnocreaciones_box.render.class: Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender
+    tecnocreaciones_box.area_render.class: Tecnocreaciones\Bundle\BoxBundle\Service\AreaRender
 
 services:
 #    tecnocreaciones_box.example:
@@ -10,3 +11,8 @@ services:
         class: %tecnocreaciones_box.render.class%
         calls:
             - [setContainer,[@service_container]]
+    tecnocreaciones_box.area.render:
+        class: %tecnocreaciones_box.area_render.class%
+        calls:
+            - [setContainer,[@service_container]]
+            - [setBoxRender,[@tecnocreaciones_box.render]]
