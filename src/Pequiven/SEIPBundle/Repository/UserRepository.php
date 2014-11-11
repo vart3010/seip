@@ -124,8 +124,41 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('g.level <=:maxLevel');
         $queryBuilder->setParameter('maxLevel', 6000);
         
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+        if(isset($criteria['firstName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        }
+        if(isset($criteria['lastName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        }
+        if(isset($criteria['username'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
+        }
+        
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
+     * Crea un paginador para los usuarios
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return QueryBuilder
+     */
+    function createPaginatorUserAux(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->innerJoin('u.groups', 'g');
+        $queryBuilder->andWhere('g.typeRol =:typeRol');
+        $queryBuilder->setParameter('typeRol', 1);
+        
+        if(isset($criteria['firstName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        }
+        if(isset($criteria['lastName'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        }
+        if(isset($criteria['username'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
+        }
         
         return $this->getPaginator($queryBuilder);
     }
