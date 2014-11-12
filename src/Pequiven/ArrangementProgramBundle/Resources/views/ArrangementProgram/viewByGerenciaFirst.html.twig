@@ -24,7 +24,7 @@
 
     <div ng-controller="TableFormatController">
         <div ng-controller="ReportArrangementProgramController">
-            <div loading-container="tableParams.settings().$loading" >
+            <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}" >
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ url }}" export-csv="csv" class="table table-responsive">
                     <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                         <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
