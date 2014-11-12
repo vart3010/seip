@@ -4,7 +4,7 @@
 
     <h3 class="relative thin">
         {{ 'pequiven.arrangement_program.my_arrangement_program'|trans }}
-        <a href="{{ path('pequiven_seip_arrangementprogram_assigned') }}" title="Messages"><span class="icon-list"></span><span class="count">{{ result._embedded.paginator.getNbResults }}</span></a>
+        <a href="{{ path('pequiven_seip_arrangementprogram_assigned') }}" title="{{ 'pequiven.arrangement_program.assigned'|trans }}"><span class="icon-list"></span><span class="count">{{ result._embedded.paginator.getNbResults }}</span></a>
     </h3>
 
     <ul class="list spaced">
