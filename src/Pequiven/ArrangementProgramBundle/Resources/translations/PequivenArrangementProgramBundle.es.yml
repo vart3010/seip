@@ -1,6 +1,8 @@
 pequiven:
     select: Seleccione
     arrangement_program:
+        my_arrangement_program: Mis programas de gestión
+        not_arrangement_program_assigned: No tiene programas de gestión asignados.
         assigned: Asignados
         total_planned: Total planificado
         write_observation: Escriba una observación

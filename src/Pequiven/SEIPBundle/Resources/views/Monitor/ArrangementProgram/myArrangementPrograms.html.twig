@@ -1,0 +1,41 @@
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+<div class="four-columns six-columns-tablet twelve-columns-mobile">
+
+    <h3 class="relative thin">
+        {{ 'pequiven.arrangement_program.my_arrangement_program'|trans }}
+        <a href="{{ path('pequiven_seip_arrangementprogram_assigned') }}" title="Messages"><span class="icon-list"></span><span class="count">{{ result._embedded.paginator.getNbResults }}</span></a>
+    </h3>
+
+    <ul class="list spaced">
+        {% for arrangementProgram in result._embedded.results %}
+            {% set summary = arrangementProgram.summary() %}
+{#            Avances del programa#}
+            {% set advances = summary['advances'] %}
+{#            Total planificado#}
+            {% set advancesPlanned = summary['advancesPlanned'] %}
+            
+            {% if arrangementProgram.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or
+              arrangementProgram.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') %}
+                {% set avancedUsed = advances %}
+            {% else %}
+                {% set avancedUsed = advancesPlanned %}
+            {% endif %}
+        <li>
+            <a href="{{ path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id} ) }}" class="list-link icon-read with-tooltip" title="{{ 'pequiven_seip.tooltips.click_to_show'|trans({},'PequivenSEIPBundle') }} ({{ avancedUsed }}/100%)">
+                <span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+
+                <strong>{{ arrangementProgram.ref }}</strong> {{ arrangementProgram.labelStatus|trans }}
+            </a>
+        </li>
+        {% else %}
+            <li>
+                <p class="wrapped " style="height: 45px">
+                    <b>{{ 'pequiven.arrangement_program.not_arrangement_program_assigned'|trans }}</b>
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

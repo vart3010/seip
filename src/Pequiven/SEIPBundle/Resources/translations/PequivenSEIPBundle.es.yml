@@ -114,6 +114,8 @@ pequiven_seip:
         responsibles_pg: Responsable(s) del programa de gestión
         responsibles_goals: Responsable(s) del las metas
         type_template: Tipo de plantilla
+    tooltips:
+        click_to_show: Click para ver
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
