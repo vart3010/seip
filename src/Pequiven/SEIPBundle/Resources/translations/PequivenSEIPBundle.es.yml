@@ -147,6 +147,7 @@ monitor:
     plan: Planificados
     real: Cargados
     porcReal: % Cargado
+    advances: % Avances
     gerencia: Gerencia
     
 principal:
