@@ -24,6 +24,7 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         $criteria['ap.user'] = $this->getUser();
         
         $resources = $repository->createPaginatorByAssignedResponsibles($criteria,$orderBy);
+        $resources->setMaxPerPage(5);
         return array(
             'result'  => $resources->toArray()
         );

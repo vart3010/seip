@@ -312,8 +312,7 @@
                                                             form.reset();
                                                         },
                                                         failure: function(form, action) {
-                                                            Ext.Msg.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', 'error ');
-                                                            console.log(action);
+                                                            Ext.Msg.alert('{{ 'pequiven.arrangement_program.arrangement_program'|trans }}', '{{ 'pequiven.arrangement_program.flash.no_send_comment'|trans({},'PequivenArrangementProgramBundle') }}');
                                                             form.reset();
                                                         }
                                                     });

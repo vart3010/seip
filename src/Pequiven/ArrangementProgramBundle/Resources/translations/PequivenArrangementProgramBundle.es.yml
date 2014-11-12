@@ -84,6 +84,7 @@ pequiven:
             return_to_review: ¿Desea regresar el programa de gestión al estatus "revisión"?
         flash:
             send_comment: Su observación se ha guardado.
+            no_send_comment: Su observación no se pudo guardar.
     form:
         template_description: Descripción de la plantilla
         category_arrangement_program: Asociado a
