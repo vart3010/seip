@@ -11,8 +11,8 @@
     </hgroup>
     <div ng-controller="DashboardController" ng-init="renderChartArrangementProgram('chartContainer',{{ categories|json_encode() }},{{ dataPlan|json_encode() }},{{ dataReal|json_encode() }},{{ dataPorc|json_encode() }},'{{ gerenciaGroup.description }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
-            <a href="{{ path('pequiven_seip_menu_home') }}" class="button red-gradient">{{ "principal.button.objTactic"|trans }}</a>
-            <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>
+            <a href="{{ path('monitorObjetiveTacticByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.objTactic"|trans }}</a>
+            <a href="{{ path('monitorObjetiveOperativeByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>
         </p>
         <div id="chart" class="columns">
             {% if (gerenciaGroup.groupName == "CORP")%}

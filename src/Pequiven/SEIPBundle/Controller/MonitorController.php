@@ -423,7 +423,7 @@ class MonitorController extends baseController {
         
         foreach($results as $result){
             $res = $result['PlanArrPro'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$result['RealArrPro'] / (float)$result['PlanArrPro']) * 100,'0',2);
-            $urlGerencia = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $result['idGerencia']));
+            $urlGerencia = $this->generateUrl('listArrangementProgramByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $result['idGerencia']));
             $dataPorc[] = array('value' => $res, 'link' => $urlGerencia);
             $dataPlan[] = array('value' => $result['PlanArrPro'], 'link' => $urlGerencia);
             $dataReal[] = array('value' => $result['RealArrPro'], 'link' => $urlGerencia);
@@ -525,7 +525,7 @@ class MonitorController extends baseController {
     
     /**
      * Función que retorna la vista con la lista de los Programas de Gestión
-     * @Template("PequivenSEIPBundle:Monitor:ArrangementProgram/viewByGerenciaFirst.html.twig")
+     * @Template("PequivenArrangementProgramBundle:ArrangementProgram:viewByGerenciaFirst.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
@@ -535,7 +535,7 @@ class MonitorController extends baseController {
         $idGerencia = $request->get("idGerencia");
         $typeGroup = $request->get("typeGroup");
         
-        $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
         $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         

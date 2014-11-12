@@ -66,6 +66,15 @@ listObjetiveOperativeVinculant:
         idGerencia: "\d+"
     methods: [GET]
     
+#Lista de Programas de Gestión por Gerencia de 1ra Línea
+listArrangementProgramByGroup:
+    path: /list/arrangementProgram/{typeGroup}/{idGerencia}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:listArrangementProgramByGroupAction
+    requirements:
+        idGerencia: "\d+"
+    methods: [GET]
+    
 pequiven_seip_user_routes:
     resource: "@PequivenSEIPBundle/Resources/config/routing/user.yml"
     prefix:   /user
