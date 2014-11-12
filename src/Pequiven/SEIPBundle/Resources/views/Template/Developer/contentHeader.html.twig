@@ -1,0 +1,27 @@
+<hgroup id="main-title" class="thin breadcrumb">
+    <h1>
+        {% for breadcrumb in breadcrumbs %}
+            {% if breadcrumb.link != null %}
+                {% if loop.first == true %}
+                    <a href="{{ breadcrumb.link }}">{{ breadcrumb.label }}</a>
+                {% else %}
+                    <span class="thin">
+                        <a href="{{ breadcrumb.link }}">{{ breadcrumb.label }}</a>
+                    </span>
+                {% endif %}
+            {% else %}
+                {% if loop.first == true %}
+                    {{ breadcrumb.label }}
+                {% else %}
+                    <span class="{% if loop.first == false %}thin{% endif %}">{{ breadcrumb.label }}</span>
+                {% endif %}
+            {% endif %}
+            {% if loop.last  == false %}
+                <span class="icon-forward"></span>
+            {% endif %}
+        {% endfor %}
+    </h1>
+    <h2>
+        <strong>{{ period }}</strong>
+    </h2>
+</hgroup>
