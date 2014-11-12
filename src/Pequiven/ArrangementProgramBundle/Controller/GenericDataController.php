@@ -171,6 +171,35 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
+    function getTemplateEmailAction(\Symfony\Component\HttpFoundation\Request $request) {
+        $entity = $this->get('pequiven_seip.repository.arrangementprogram')->find($request->get('id'));
+        if(!$entity){
+            throw $this->createNotFoundException(sprintf('Programa de gestion %s, no encontrado',$request->get('id')));
+        }
+        $view = $this->view();
+        $templateName = 'PequivenArrangementProgramBundle:ArrangementProgram:email/draftToInRevision.html.twig';
+        $context = array(
+            'arrangementProgram' => $entity,
+            'user' => $this->getUser(),
+        );
+        
+        $view->setTemplate($templateName);
+        $view->setData($context);
+        
+        $toEmail = array(
+            'rarias@pequiven.com' => 'Richard Arias',
+            'gaudybeth.colmenarez@pequiven.com' => 'Gaudybeth Colmenarez',
+            'inhack20@gmail.com' => 'Carlos Mendoza',
+        );
+//        $toEmail = 'gautybeth.colmenarez@pequiven.com';
+//        $toEmail = 'rarias@pequiven.com';
+        
+        $fromEmail = 'seip@pequiven.com';
+        
+        $this->container->get('pequiven_seip.mailer.twig_swift')->sendMessage($templateName, $context, $fromEmail, $toEmail);
+        return $this->handleView($view);
+    }
+    
     /**
      * Manejador de usuario o administrador
      * @return \Pequiven\SEIPBundle\Model\UserManager

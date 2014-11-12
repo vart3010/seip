@@ -97,3 +97,10 @@ pequiven_arrangementprogram_data_responsibles:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_arrangementprogram_data_template_email:
+    path: /template-email/{id}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getTemplateEmailAction
+        _format: html
+    methods: [GET]
