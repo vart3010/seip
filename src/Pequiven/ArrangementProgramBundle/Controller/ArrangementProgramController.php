@@ -170,12 +170,17 @@ class ArrangementProgramController extends SEIPController
     public function assignedAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
+        
+        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $criteria['ap.period'] = $period;
+        $criteria['ap.user'] = $this->getUser();
+        
         $repository = $this->getRepository();
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByAssigned',
+                'createPaginatorByAssignedResponsibles',
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -740,6 +745,22 @@ class ArrangementProgramController extends SEIPController
         $tacticalObjective = (string)$resource->getTacticalObjective();
         $operationalObjective = (string)$resource->getOperationalObjective();
         
+         $styleArrayBordersContent = array(
+          'borders' => array(
+            'allborders' => array(
+              'style' => \PHPExcel_Style_Border::BORDER_THIN
+            )
+          ),
+          'font' => array(
+              'bold' => false
+          ),
+          'alignment' => array(
+              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+              'wrap' => true
+          )
+        );
+        
         $location = '';
         if($resource->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
             $location = (string)$resource->getTacticalObjective()->getGerencia()->getComplejo();
@@ -894,6 +915,19 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
+            
+            $activeSheet->getStyle(sprintf('C%s:I%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('AI%s:AL%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $rowHeight = 50;
+            $responsiblesGoalLen = strlen($responsiblesGoal);
+            $goalObservationsLen = strlen($goalObservations);
+            if($responsiblesGoalLen > $rowHeight){
+                $rowHeight = $responsiblesGoalLen;
+            }
+            if($goalObservationsLen > $responsiblesGoalLen){
+                $rowHeight = $goalObservationsLen;
+            }
+            $activeSheet->getRowDimension($rowGoal)->setRowHeight($rowHeight);
             $countGoals++;
             $rowGoal++;
         }

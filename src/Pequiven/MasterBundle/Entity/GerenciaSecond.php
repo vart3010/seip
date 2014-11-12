@@ -1,16 +1,9 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\MasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\GerenciaSecond as modelGerenciaSecond;
 
@@ -126,7 +119,20 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\OneToOne(targetEntity="Pequiven\MasterBundle\Entity\Gerencia\Configuration")
      */
     protected $configuration;
+    
+    /**
+     * Objetivos operativos de la gerencia de segunda linea
+     * 
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive
+     * @ORM\OneToMany(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="gerenciaSecond")
+     */
+    private $operationalObjectives;
 
+    public function __construct() {
+        parent::__construct();
+        $this->operationalObjectives = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -434,5 +440,38 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * Add operationalObjectives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives
+     * @return GerenciaSecond
+     */
+    public function addOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives)
+    {
+        $this->operationalObjectives->add($operationalObjectives);
+
+        return $this;
+    }
+
+    /**
+     * Remove operationalObjectives
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives
+     */
+    public function removeOperationalObjective(\Pequiven\ObjetiveBundle\Entity\Objetive $operationalObjectives)
+    {
+        $this->operationalObjectives->removeElement($operationalObjectives);
+    }
+
+    /**
+     * Get operationalObjectives
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOperationalObjectives()
+    {
+        return $this->operationalObjectives;
     }
 }

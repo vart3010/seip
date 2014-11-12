@@ -132,6 +132,17 @@ angular.module('seipModule.controllers', [])
             $scope.addGoal = function() {
                 var valid = $scope.validFormTypeGoal();
                 if (valid) {
+                    var startDate = angular.element('#goal_startDate').val();
+                    var endDate = angular.element('#goal_endDate').val();
+                    $scope.model.goal.startDate = startDate;
+                    $scope.model.goal.endDate = endDate;
+                    
+                    if(startDate == endDate){
+                        $scope.model.goal.endDate = $scope.model.goal.startDate;
+                    }
+                    $timeout(function(){
+                        $scope.$apply();
+                    });
                     if (!$scope.goals.contains($scope.model.goal)) {
                         $scope.goals.push($scope.model.goal);
                         $scope.initModelGoal();
@@ -176,6 +187,7 @@ angular.module('seipModule.controllers', [])
                     applyDatePickerDatePG();
                     $scope.openModalAuto();
                 }
+                applyDatePickerDatePG();
             };
 
             //Setea la dta del formulario
@@ -912,14 +924,19 @@ angular.module('seipModule.controllers', [])
                                 if ($scope.template.confirmCallBack) {
                                     if ($scope.template.confirmCallBack()) {
                                         modalOpen.dialog("close");
-                                        $scope.$apply();
                                     }
                                 } else {
                                     modalOpen.dialog("close");
                                 }
+                                $timeout(function(){
+                                    $scope.$apply();
+                                });
                             }},
                         {text: "Cancelar", click: function() {
                                 modalOpen.dialog("close");
+                                $timeout(function(){
+                                    $scope.$apply();
+                                });
                             }
                         }
                     ]);

@@ -16,7 +16,7 @@ use Tecnocreaciones\Bundle\ToolsBundle\Entity\Configuration\BaseGroup as Group;
 
 /**
  * Configuracion del sistema
- *
+ * Service seip.configuration
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  */
 class Configuration extends ConfigurationManager
@@ -30,6 +30,11 @@ class Configuration extends ConfigurationManager
      * Valor de programa de gestion asociado a (Por defecto)
      */
     const ARRANGEMENT_PROGRAM_ASSOCIATED_TO = 'ARRANGEMENT_PROGRAM_ASSOCIATED_TO';
+    
+    /**
+     * Limite de items en el periodo
+     */
+    const GENERAL_LIMIT_ITEMS = 'GENERAL_LIMIT_ITEMS';
     
     /**
      * Habilitar compatibilidad con el sistema integrado de gestion (SIG)
@@ -49,6 +54,25 @@ class Configuration extends ConfigurationManager
     function getGeneralDateFormat($default = 'Y-m-d h:i a')
     {
         return $this->get(self::GENERAL_DATE_FORMAT, $default);
+    }
+    
+    /**
+     * Obtiene el limite de items establecido en el periodo
+     * @param string $default
+     */
+    function getGeneralLimitItems($default = 40)
+    {
+        return $this->get(self::GENERAL_LIMIT_ITEMS, $default);
+    }
+    
+    /**
+     * Establece el limite de items establecido en el periodo
+     * @param string $default
+     */
+    function setGeneralLimitItems($default = 40,$description = null, Group $group = null)
+    {
+        $this->set(self::GENERAL_LIMIT_ITEMS, $default,$description,$group);
+        return $this;
     }
     
     /**

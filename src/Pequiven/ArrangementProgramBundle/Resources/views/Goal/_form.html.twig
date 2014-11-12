@@ -48,24 +48,28 @@
         applyDatePickerDatePG = function(){
             var defaultStartDate = '{{ 'now'|date('Y') }}-01-01';
             var defaultEndDate = '{{ 'now'|date('Y') }}-12-31';
-            $( "#goal_startDate" ).datepicker({
+            jQuery( "#goal_startDate" ).datepicker({
                 defaultDate: defaultStartDate,
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "yy-mm-dd",
                 onClose: function( selectedDate ) {
-                  $( "#goal_endDate" ).datepicker( "option", "minDate", selectedDate );
+                  jQuery( "#goal_endDate" ).datepicker( "option", "minDate", selectedDate );
                 }
               });
-              $( "#goal_endDate" ).datepicker({
+              jQuery( "#goal_endDate" ).datepicker({
                 defaultDate: defaultEndDate,
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: "yy-mm-dd",
                 onClose: function( selectedDate ) {
-                  $( "#goal_startDate" ).datepicker( "option", "maxDate", selectedDate );
+                  jQuery( "#goal_startDate" ).datepicker( "option", "maxDate", selectedDate );
                 }
               });
+              
+              jQuery( "#goal_startDate" ).datepicker( "option", "maxDate", defaultEndDate );
+              jQuery( "#goal_endDate" ).datepicker( "option", "minDate", defaultStartDate );
+              
         };
         applyDatePickerDatePG();
     });
