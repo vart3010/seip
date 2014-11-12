@@ -703,7 +703,7 @@ class ArrangementProgramController extends SEIPController
     {
         $resource = $this->findOr404($request);
         
-        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($resource)){
+        if(!$this->getArrangementProgramManager()->hasPermissionToAddComment($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         $view = $this->view();
