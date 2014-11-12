@@ -44,9 +44,8 @@ class AreaRender implements ContainerAwareInterface
             if(!array_search($boxName, $this->areas[$areaName][$position])){
                 $this->areas[$areaName][$position][] = $boxName;
             }
-            
-            return $this;
         }
+        return $this;
     }
     
     /**
