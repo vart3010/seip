@@ -175,4 +175,30 @@ class MonitorRepository extends EntityRepository {
 
         return $q->getResult();
     }
+    
+    /**
+     * Función que retorna el total de Programas de Gestión por grupos de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getTotalArrangementProgramByGerenciaGroup($options = array()){
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        if(!isset($options['typeGroup'])){
+            $queryBuilder->select('gg.description AS Descripcion,gg.groupName AS Grupo');
+            $queryBuilder->addSelect('SUM(o.arrangementProgramTactic + o.arrangementProgramOperative) AS PlanArrPro');
+            $queryBuilder->addSelect('SUM(o.arrangementProgramTacticReal + o.arrangementProgramOperativeReal) AS RealArrPro');
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->groupBy('o.typeGroup');
+        } else{
+            $queryBuilder->select('SUM(o.arrangementProgramTactic + o.arrangementProgramOperative) AS PlanArrPro,SUM(o.arrangementProgramTacticReal + o.arrangementProgramOperativeReal) AS RealArrPro,g.description AS Gerencia,g.ref AS Ref,gg.groupName AS Grupo,g.id AS idGerencia');
+            $queryBuilder->andWhere("gg.groupName = '" . $options['typeGroup'] . "'");
+            $queryBuilder->innerJoin('o.typeGroup', 'gg');
+            $queryBuilder->innerJoin('o.gerencia', 'g');
+            $queryBuilder->groupBy('o.gerencia');
+        }
+        
+        $q = $queryBuilder->getQuery();
+
+        return $q->getResult();
+    }
 }

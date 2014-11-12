@@ -43,6 +43,7 @@ pequiven:
         no_send_to_review_date: No se ha enviado a revisión
         list_template: Lista de plantillas
         template: Plantilla
+        list: Lista
         type_management:
             type_management: Tipo de gerencia
             modular: Modular

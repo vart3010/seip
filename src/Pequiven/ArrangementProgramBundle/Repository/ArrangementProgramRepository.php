@@ -69,6 +69,27 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
+        $this->getUser();
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
+        if(isset($criteria['gerencia'])){
+            $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
+        }
+        
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
      * Retorna los programas de gestion los cuales tengo asignados para revision o aprobacion
      * 
      * @param array $criteria
