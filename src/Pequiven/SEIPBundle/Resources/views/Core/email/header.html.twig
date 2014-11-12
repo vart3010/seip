@@ -1,2 +1,16 @@
-{# empty Twig template #}
-Header
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<table>
+    <tr>
+        <td>
+            <img src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png') }}" style="width: 73px" />
+        </td>
+        <td>
+            <span class="header-seip">{{ 'pequiven_seip.message_header_center'|trans|raw }}</span>
+        </td>
+        <td>
+            <img class="resize-img-140" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_pqv3.gif') }}" style="width: 73px; float: right" />
+        </td>
+    </tr>
+</table>
+    
+<hr class="hr-line-vzla-red" style="margin-top:0px;margin-bottom: 4px;color: red" />
