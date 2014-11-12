@@ -20,3 +20,4 @@ composer.lock
 /web/css/
 /web/js/
 *.~lock*
+/app/spool/
