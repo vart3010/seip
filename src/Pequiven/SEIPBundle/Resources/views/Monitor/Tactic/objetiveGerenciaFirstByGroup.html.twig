@@ -1,14 +1,11 @@
 {% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block body %}
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ path('pequiven_seip_menu_home') }}">{{ "principal.title.objTactic"|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ gerenciaGroup.description }}</span>
-            <span class="thin absolute-right">{{ "now"|date("d/m/Y") }}</span>
-        </h1>
-    </hgroup>
+        {#    {{ contentHeader('principal.title.objTactic','fff',{'aaaa':'bbbb'},'ccc','dddd',{'hhhh':'ggggggg'}) }}#}
+    {{ contentHeader(
+        {(path('pequiven_seip_menu_home')):("principal.title.objTactic"|trans)},
+        (gerenciaGroup.description)
+    ) }}
     <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ gerenciaGroup.description }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
             <a href="{{ path('monitorObjetiveOperativeByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>

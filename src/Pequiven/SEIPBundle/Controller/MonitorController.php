@@ -511,6 +511,7 @@ class MonitorController extends baseController {
         
         $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
         
         $url = $this->generateUrl('objetiveVinculantOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia,'complejo' => $idComplejo)));
         $urlMedular = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia));
@@ -521,6 +522,7 @@ class MonitorController extends baseController {
             'urlMedular' => $urlMedular,
             'urlReturn' => $urlReturn,
             'gerenciaGroup' => $objectGerenciaGroup,
+            'gerencia' => $gerencia
         );
     }
     

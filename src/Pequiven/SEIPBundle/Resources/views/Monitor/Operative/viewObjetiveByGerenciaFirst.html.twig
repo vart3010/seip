@@ -14,16 +14,12 @@
             <a href="{{ urlVinculant }}" class="button red-gradient">{{ "principal.button.vinculant"|trans ({},'PequivenSEIPBundle') }}</a>
         </p>
     {% endif %}
-    
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ route_index }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ gerencia.getDescription() }}</span>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
-        </h1>
-    </hgroup>
+        
+    {{ contentHeader(
+        {(route_index):("pequiven_objetive.objetive_operative"|trans)},
+        (gerencia.getDescription),
+        ('pequiven_objetive.list'|trans)
+    ) }}
         
     <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
 
