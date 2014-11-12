@@ -22300,14 +22300,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10012796', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('11450422');
-        $personal->setNomPersonal('GRANADILLO B , ORLANDO J');
-        $personal->setNumPersonal('10016489');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1169'));
-        $this->addReference('Personal-10016489', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('11450422');
+//        $personal->setNomPersonal('GRANADILLO B , ORLANDO J');
+//        $personal->setNumPersonal('10016489');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1169'));
+//        $this->addReference('Personal-10016489', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('15281829');
@@ -28003,14 +28003,14 @@ class PersonalFixture extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('Personal-10004180', $personal);
             $manager->persist($personal);
 
-        $personal = new Personal();
-        $personal->setCedula('17544953');
-        $personal->setNomPersonal('ADRIANZA M , PEDRO S');
-        $personal->setNumPersonal('10015604');
-        $personal->setEnabled(true);
-        $personal->setCargo($this->getReference('Cargo-1344'));
-        $this->addReference('Personal-10015604', $personal);
-            $manager->persist($personal);
+//        $personal = new Personal();
+//        $personal->setCedula('17544953');
+//        $personal->setNomPersonal('ADRIANZA M , PEDRO S');
+//        $personal->setNumPersonal('10015604');
+//        $personal->setEnabled(true);
+//        $personal->setCargo($this->getReference('Cargo-1344'));
+//        $this->addReference('Personal-10015604', $personal);
+//            $manager->persist($personal);
 
         $personal = new Personal();
         $personal->setCedula('12466336');
