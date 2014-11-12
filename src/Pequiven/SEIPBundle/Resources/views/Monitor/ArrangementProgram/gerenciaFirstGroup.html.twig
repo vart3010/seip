@@ -3,24 +3,23 @@
 {% block body %}
     <hgroup id="main-title" class="thin breadcrumb">
         <h1>
-        {{ "monitor.objetiveOperative"|trans }}
+        {{ "monitor.arrangementProgram"|trans }}
         <span class="thin absolute-right">{{ "now"|date("d/m/Y") }}</span>
         </h1>
     </hgroup>
         
-    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }},'{{ "principal.chart.captionObjOperative"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <div ng-controller="DashboardController" ng-init="renderChartArrangementProgram('chartContainer',{{ categories|json_encode() }},{{ dataPlan|json_encode() }},{{ dataReal|json_encode() }},{{ dataPorc|json_encode() }},'{{ "principal.chart.captionArrangementProgram"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
     <p class="button-height">
         <a href="{{ path('pequiven_seip_menu_home') }}" class="button red-gradient">{{ "principal.button.objTactic"|trans }}</a>
-{#        <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>#}
+        <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>
     </p>
-    <div id="chartOperative" class="columns">
-        <div class="nine-columns twelve-columns-mobile" id="chartContainerOperative">
-            {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
+    <div id="chartTactic" class="columns">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainer">
             <!-- This div will hold the chart generated in the footer -->
         </div>
         <div class="three-columns twelve-columns-mobile new-row-mobile">
             <ul class="stats">
-                {% for data in dataLinkOperative %}
+                {% for data in dataLink%}
                     <li>
                         <a href="{{ data.linkTypeGroup }}">
                             {{ data.typeGroup }}<br>
@@ -33,14 +32,6 @@
     </div>
 </div>
                 
-<hgroup id="main-title" class="thin">
-    <h1>{{ "principal.box.indicatorOperative"|trans }}</h1>
-</hgroup>
-<div class="with-padding">
-    <div class="columns">
-        {{ boxRender.renderBox('pequiven_seip_box_operative_summaryindicatorcharged')|raw }}
-    </div>
-</div>
 {% endblock body %}
 {% block stylesheets %}
     {{ parent() }}

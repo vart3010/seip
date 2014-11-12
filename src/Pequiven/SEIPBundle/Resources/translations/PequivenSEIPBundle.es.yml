@@ -133,6 +133,8 @@ monitor:
     tabTactic: Nivel Táctico
     tabOperative: Nivel Operativo
     objetiveTactic: Objetivos Tácticos
+    objetiveOperative: Objetivos Operativos
+    arrangementProgram: Programas de Gestión
     indicatorTactic: Indicadores Tácticos
     objetiveOperativeOriginal: Objetivos Operativos Original
     objetiveOperativeVinculante: Objetivos Operativos Vinculantes
@@ -151,14 +153,15 @@ principal:
         objTactic: Objetivos Tácticos
         objOperative: Objetivos Operativos
     button:
-        tactic: Táctico
-        operative: Operativo
+        objTactic: Obj. Táctico
+        objOperative: Obj. Operativo
         arrangementProgram: Programas de Gestión
         vinculant: Vinculantes
         medular: Medulares
     chart:
         captionObjTactic: Objetivos Tacticos
         captionObjOperative: Objetivos Operativos
+        captionArrangementProgram: Programas de Gestión
     box:
         indicatorTactic: Indicadores Tácticos
         indicatorOperative: Indicadores Operativos

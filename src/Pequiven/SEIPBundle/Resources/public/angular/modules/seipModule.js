@@ -1189,6 +1189,63 @@ angular.module('seipModule.controllers', [])
                     revenueChartOperative.render();
                 })
             };
+            
+            $scope.renderChartArrangementProgram = function(id,categories,dataPlan,dataReal,dataPorc,caption,typeLabelDisplay) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        "renderAt": id,
+                        "width": "100%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": caption,
+                                "xAxisName": Translator.trans('chart.arrangementPrograms.xAxisName'),
+                                "pYAxisName": Translator.trans('chart.arrangementPrograms.pYAxisName'),
+                                "sYAxisName": Translator.trans('chart.arrangementPrograms.sYAxisName'),
+                                "sYAxisMaxValue": "100",
+                                "sYAxisMinValue": "0",
+                                "showValues" : "1",
+                                "placeValuesInside": "0",
+                                "valueFontColor": "#000000",
+                                "rotateValues": "0",
+                                "labelDisplay": typeLabelDisplay,
+                                "sNumberSuffix": "%",
+                                "bgAlpha" : "0,0",
+                                "baseFontColor" : "#ffffff",
+                                "outCnvBaseFontColor" : "#ffffff",
+                                "visible" : "0",
+                                "theme": "fint"
+                            },
+                            "categories": [
+                                {
+                                    "category": categories
+                                }
+                            ],
+                            "dataset":[
+                                {
+                                    "seriesname": Translator.trans("chart.arrangementPrograms.seriesNamePlan"),
+                                    "parentYAxis": "P",
+                                    "data": dataPlan
+                                },
+                                {
+                                    "seriesname": Translator.trans("chart.arrangementPrograms.seriesNameReal"),
+                                    "parentYAxis": "P",
+                                    "data": dataReal
+                                },
+                                {
+                                    "seriesname": Translator.trans("chart.arrangementPrograms.seriesNameCarga"),
+                                    "parentYAxis": "S",
+                                    "renderas": "column",
+                                    "data": dataPorc
+                                }
+                            ]
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
         })
         .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 

@@ -148,6 +148,25 @@ class MonitorController extends baseController {
     }
     
     /**
+     * Función que renderiza el Monitor de Programas de Gestión
+     * @Template("PequivenSEIPBundle:Monitor:ArrangementProgram/gerenciaFirstGroup.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function displayArrangementProgramAction(Request $request){
+        
+        $datas = $this->getDataArrangementProgramGroupChart();
+        return array(
+            'dataPlan' => $datas['dataPlan'],
+            'dataReal' => $datas['dataReal'],
+            'dataPorc' => $datas['dataPorc'],
+            'dataLink' => $datas['dataLink'],
+            'optionsChart' => $datas['optionsChart'],
+            'categories' => $datas['categories'],
+        );
+    }
+    
+    /**
      * Función que renderiza el Monitor de Objetivos Tácticos por Tipo de Grupo de Gerencia de 1ra Línea
      * @Template("PequivenSEIPBundle:Monitor:Tactic/objetiveGerenciaFirstByGroup.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -202,6 +221,32 @@ class MonitorController extends baseController {
     }
     
     /**
+     * Función que renderiza el Monitor de Programas de Gestión por Tipo de Grupo de Gerencia de 1ra Línea
+     * @Template("PequivenSEIPBundle:Monitor:ArrangementProgram/gerenciaFirstByGroup.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    
+    public function displayArrangementProgramByGroupAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $typeGroup = $request->get("typeGroup");
+        
+        $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('groupName' => $typeGroup));
+
+        $datas = $this->getDataArrangementProgramByGroupChart($typeGroup);
+        
+        return array(
+            'dataPlan' => $datas['dataPlan'],
+            'dataReal' => $datas['dataReal'],
+            'dataPorc' => $datas['dataPorc'],
+            'dataLink' => $datas['dataLink'],
+            'categories' => $datas['categories'],
+            'gerenciaGroup' => $objectGerenciaGroup,
+            'optionsChart' => $datas['optionsChart']
+        );
+    }
+    
+    /**
      * Función que obtiene los Objetivos Operativos agrupados por tipo de Gerencia de 1ra Línea
      * @return type
      */
@@ -218,11 +263,12 @@ class MonitorController extends baseController {
         $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesOperativeByGerenciaGroup();
         
         foreach($resultsOperatives as $resultOperative){
+            $linkGrupo = $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $resultOperative['Grupo']));
             $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
-            $dataPorcOperative[] = array('value' => $resOperative);
-            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative']);
-            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative']);
-            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Descripcion'],'porcCarga' => $resOperative,'linkTypeGroup' => $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $resultOperative['Grupo'])));
+            $dataPorcOperative[] = array('value' => $resOperative, 'link' => $linkGrupo);
+            $dataPlanOperative[] = array('value' => $resultOperative['PlanObjOperative'], 'link' => $linkGrupo);
+            $dataRealOperative[] = array('value' => $resultOperative['RealObjOperative'], 'link' => $linkGrupo);
+            $dataLinkOperative[] = array('typeGroup' => $resultOperative['Descripcion'],'porcCarga' => $resOperative,'linkTypeGroup' => $linkGrupo);
             $categories[] = array('label' => $resultOperative['Descripcion']);
         }
         $optionsChart = array('typeLabel' => 'auto');
@@ -231,6 +277,43 @@ class MonitorController extends baseController {
         $datas['dataPlanOperative'] = $dataPlanOperative;
         $datas['dataRealOperative'] = $dataRealOperative;
         $datas['dataLinkOperative'] = $dataLinkOperative;
+        $datas['optionsChart'] = $optionsChart;
+        $datas['categories'] = $categories;
+        
+        return $datas;
+    }
+    
+    /**
+     * Función que obtiene los Programas de Gestión agrupados por tipo de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getDataArrangementProgramGroupChart(){
+        $em = $this->getDoctrine()->getManager();
+        $datas = array();
+        $dataReal = array();
+        $dataPlan= array();
+        $dataPorc= array();
+        $dataLink= array();
+        $categories = array();
+        
+        //Resultados
+        $results = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalArrangementProgramByGerenciaGroup();
+        
+        foreach($results as $result){
+            $linkGrupo = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $result['Grupo']));
+            $res = $result['PlanArrPro'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$result['RealArrPro'] / (float)$result['PlanArrPro']) * 100,'0',2);
+            $dataPorc[] = array('value' => $res , 'link' => $linkGrupo);
+            $dataPlan[] = array('value' => $result['PlanArrPro'], 'link' => $linkGrupo);
+            $dataReal[] = array('value' => $result['RealArrPro'], 'link' => $linkGrupo);
+            $dataLink[] = array('typeGroup' => $result['Descripcion'],'porcCarga' => $res ,'linkTypeGroup' => $linkGrupo);
+            $categories[] = array('label' => $result['Descripcion']);
+        }
+        $optionsChart = array('typeLabel' => 'auto');
+        
+        $datas['dataPorc'] = $dataPorc;
+        $datas['dataPlan'] = $dataPlan;
+        $datas['dataReal'] = $dataReal;
+        $datas['dataLink'] = $dataLink;
         $datas['optionsChart'] = $optionsChart;
         $datas['categories'] = $categories;
         
@@ -322,6 +405,48 @@ class MonitorController extends baseController {
     }
     
     /**
+     * Función que obtiene los Programas de Gestión agrupados por tipo de Gerencia de 1ra Línea
+     * @return type
+     */
+    public function getDataArrangementProgramByGroupChart($typeGroup){
+        $em = $this->getDoctrine()->getManager();
+        $datas = array();
+        $dataReal = array();
+        $dataPlan= array();
+        $dataPorc= array();
+        $dataLink= array();
+        $categories = array();
+        $optionsChart = array();
+        
+        //Resultados
+        $results = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalArrangementProgramByGerenciaGroup(array('typeGroup' => $typeGroup));
+        
+        foreach($results as $result){
+            $res = $result['PlanArrPro'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$result['RealArrPro'] / (float)$result['PlanArrPro']) * 100,'0',2);
+            $urlGerencia = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $result['idGerencia']));
+            $dataPorc[] = array('value' => $res, 'link' => $urlGerencia);
+            $dataPlan[] = array('value' => $result['PlanArrPro'], 'link' => $urlGerencia);
+            $dataReal[] = array('value' => $result['RealArrPro'], 'link' => $urlGerencia);
+            $dataLink[] = array('typeGroup' => $result['Gerencia'],'porcCarga' => $res, 'urlGerencia' => $urlGerencia);
+            if($result['Grupo'] == 'CORP'){
+                $optionsChart = array('typeLabel' => 'stagger');
+                $categories[] = array('label' => $result['Ref'], 'toolText' => $result['Gerencia']);
+            } else{
+                $optionsChart = array('typeLabel' => 'auto');
+                $categories[] = array('label' => $result['Gerencia']);
+            }
+        }
+        $datas['dataPorc'] = $dataPorc;
+        $datas['dataPlan'] = $dataPlan;
+        $datas['dataReal'] = $dataReal;
+        $datas['dataLink'] = $dataLink;
+        $datas['categories'] = $categories;
+        $datas['optionsChart'] = $optionsChart;
+        
+        return $datas;
+    }
+    
+    /**
      * Función que retorna la vista con la lista de los Objetivos Tácticos
      * @Template("PequivenSEIPBundle:Monitor:Tactic/viewObjetiveByGerenciaFirst.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -395,6 +520,29 @@ class MonitorController extends baseController {
             'urlMedular' => $urlMedular,
             'urlReturn' => $urlReturn,
             'gerenciaGroup' => $objectGerenciaGroup,
+        );
+    }
+    
+    /**
+     * Función que retorna la vista con la lista de los Programas de Gestión
+     * @Template("PequivenSEIPBundle:Monitor:ArrangementProgram/viewByGerenciaFirst.html.twig")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function listArrangementProgramByGroupAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        
+        $idGerencia = $request->get("idGerencia");
+        $typeGroup = $request->get("typeGroup");
+        
+        $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
+        
+        return array(
+            'url' => $url,
+            'urlReturn' => $urlReturn,
+            'gerencia' => $gerencia
         );
     }
 }

@@ -57,6 +57,14 @@ Update: Actualización
 chart:
     captionObjTactic: Objetivos Tácticos
     captionObjOperative: Objetivos Operativos
+    captionArrangementPrograms: Programas de Gestión
+    arrangementPrograms:
+        xAxisName: Gerencias
+        pYAxisName: N° de Programas de Gestión
+        sYAxisName: % Carga
+        seriesNamePlan: Plan
+        seriesNameReal: Real
+        seriesNameCarga: % Carga
     objetives:
         xAxisName: Gerencias
         pYAxisName: N° de Objetivos

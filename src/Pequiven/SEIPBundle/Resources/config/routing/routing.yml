@@ -11,7 +11,8 @@ monitorObjetiveOperative:
     path: /monitor/operative
     defaults:
         _controller: pequiven.controller.seipmonitor:displayObjetiveOperativeAction
-#Monitor de Programas de Gestión        
+        
+#Monitor de Programas de Gestión
 monitorArrangementProgram:
     path: /monitor/arrangementProgram
     defaults:
@@ -29,6 +30,13 @@ monitorObjetiveOperativeByGroup:
     path: /monitor/operative/{typeGroup}
     defaults:
         _controller: pequiven.controller.seipmonitor:displayObjetiveOperativeByGroupAction
+    methods: [GET]
+
+#Monitor de Programs de Gestión por Grupo de Gerencia de 1ra Línea
+monitorArrangementProgramByGroup:
+    path: /monitor/arrangementProgram/{typeGroup}
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayArrangementProgramByGroupAction
     methods: [GET]
     
 #Lista de Objetivos Tácticos por Gerencia de 1ra Línea
