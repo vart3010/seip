@@ -59,6 +59,7 @@
             </div>
         </div>
         <br />
+        {% if is_granted('ROLE_WORKER_PLANNING') %}
         <p class="button-height align-right">
             <a href="{{ path('pequiven_arrangementprogram_template_create',{'type': constant('Pequiven\\ArrangementProgramBundle\\Model\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC')}) }}" class="button">
                 <span class="button-icon"><span class="icon-star"></span></span>
@@ -69,6 +70,7 @@
                 {{ 'pequiven.arrangement_program.buttons.add_template_operative'|trans }}
             </a>
         </p>
+        {% endif %}
 {% endblock %}
 
 {% block javascripts %}

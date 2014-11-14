@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Controller;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Controlador de las plantillas del programa de gestion
@@ -54,7 +55,15 @@ class ArrangementProgramTemplateController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * 
+     * Security("is_granted('ROLE_WORKER_PLANNING')")
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
     public function createAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
         $type = $request->get("type");
         $entity = new \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate();
         $user = $this->getUser();
@@ -94,6 +103,16 @@ class ArrangementProgramTemplateController extends SEIPController
             ))
         ;
         return $this->handleView($view);
+    }
+    
+    /**
+     * @Security("is_granted('ROLE_WORKER_PLANNING')")
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function updateAction(\Symfony\Component\HttpFoundation\Request $request) {
+        return parent::updateAction($request);
     }
     
     /**

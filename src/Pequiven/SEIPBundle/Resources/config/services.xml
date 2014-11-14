@@ -34,6 +34,10 @@
             <tag name="form.type" alias="pequiven_seip_user_profile" />
             <argument>%fos_user.model.user.class%</argument>
         </service>
+        <service id="pequiven_seip.profile.group.form.type" class="Pequiven\SEIPBundle\Form\Type\GroupFormType">
+            <tag name="form.type" alias="seip_user_group" />
+            <argument>%fos_user.model.group.class%</argument>
+        </service>
         
         <!-- Servicio necesario para el RegistrationListener -->
         <service id="seip.listener.registration" class="Pequiven\SEIPBundle\EventListener\RegistrationListener">
