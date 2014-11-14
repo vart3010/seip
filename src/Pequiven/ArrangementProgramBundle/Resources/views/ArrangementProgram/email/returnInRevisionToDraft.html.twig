@@ -6,7 +6,7 @@
 
 {% block contet_html %}
     El usuario <b>{{ user.getFullNameUser }}</b> acaba de retornar el programa de gestión 
-    <a href="{{ path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true) }}">{{ arrangementProgram.ref }}</a> a borrador.
+    <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true)) }}">{{ arrangementProgram.ref }}</a> a borrador.
     
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:email/detailsArrangementProgram.html.twig' %}
 {% endblock contet_html %}
