@@ -116,6 +116,15 @@ class ArrangementProgramTemplateController extends SEIPController
     }
     
     /**
+     * @Security("is_granted('ROLE_WORKER_PLANNING')")
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) {
+        parent::deleteAction($request);
+    }
+    
+    /**
      * Creates a form to create a \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate entity.
      *
      * @param ArrangementProgram $entity The entity

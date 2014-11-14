@@ -103,10 +103,12 @@
 
 <br /><br />
 
-<p class="button-height align-right">
-    {{ buttons.generic(path('arrangementprogram_template_update', { 'id': arrangementprogram_template.id }),('pequiven.edit'|trans({},'messages'))) }}
-    {{ buttons.delete(path('arrangementprogram_template_delete', { 'id': arrangementprogram_template.id })) }}
-</p>
+{% if is_granted('ROLE_WORKER_PLANNING') %}
+    <p class="button-height align-right">
+        {{ buttons.generic(path('arrangementprogram_template_update', { 'id': arrangementprogram_template.id }),('pequiven.edit'|trans({},'messages'))) }}
+        {{ buttons.delete(path('arrangementprogram_template_delete', { 'id': arrangementprogram_template.id })) }}
+    </p>
+{% endif %}
 
 {% endblock %}
 
