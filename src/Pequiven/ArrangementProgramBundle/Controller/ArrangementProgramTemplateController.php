@@ -121,7 +121,7 @@ class ArrangementProgramTemplateController extends SEIPController
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) {
-        parent::deleteAction($request);
+        return parent::deleteAction($request);
     }
     
     /**
