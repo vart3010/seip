@@ -133,6 +133,24 @@ class ArrangementProgramManager implements ContainerAwareInterface
     }
     
     /**
+     * Evalua si el usuario logueado tiene permisos para actualizar el programa
+     * @param type $entity
+     * @throws type
+     */
+    public function hasPermissionToAddComment(ArrangementProgram $entity) {
+        //Security check
+        $permission = true;
+        $user = $this->getUser();
+        if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
+            $permission = false;
+        }
+        if($entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
+            $permission = false;
+        }
+        return $permission;
+    }
+    
+    /**
      * Verifica que se pueba aprobar un programa de gestion
      * @param \Pequiven\ArrangementProgramBundle\Model\ArrangementProgram $entity
      * @return boolean

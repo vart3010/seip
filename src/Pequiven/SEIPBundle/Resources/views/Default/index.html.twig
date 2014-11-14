@@ -3,20 +3,16 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block body %}
+{#    {{ contentHeader('principal.title.objTactic','fff',{'aaaa':'bbbb'},'ccc','dddd',{'hhhh':'ggggggg'}) }}#}
 {% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>{{ "principal.title.objTactic"|trans }}
-        <span class="thin absolute-right" >{{ "now"|date("d/m/Y") }}</span>
-        </h1>
-    </hgroup>
+    {{ contentHeader(("principal.title.objTactic"|trans)) }}
     <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ "principal.chart.captionObjTactic"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
-            <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.operative"|trans }}</a>
-{#            <a href="" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>#}
+            <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>
+            <a href="{{ path('monitorArrangementProgram') }}" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
         </p>
         <div id="chartTactic" class="columns">
             <div class="nine-columns twelve-columns-mobile" id="chartContainerTactic">
-                {#                        <div id="chartContainer">FusionCharts XT will load here!</div>#}
                 <!-- This div will hold the chart generated in the footer -->
             </div>
             <div class="three-columns twelve-columns-mobile new-row-mobile">
@@ -92,18 +88,25 @@
                 </div>
             </div>
         </div>#}
-    
+    {{ renderArea('seip.home') }}
     <hgroup id="main-title" class="thin">
         <h1>{{ "principal.box.indicatorTactic"|trans }}</h1>
     </hgroup>
     <div class="with-padding">
         <div class="columns">
             {{ boxRender.renderBox('pequiven_seip_box_tactic_summaryindicatorcharged')|raw }}
+            {{ boxRender.renderBox('pequiven_seip_box_my_arrangementprogram_summary')|raw }}
         </div>
     </div>
 {% else %}
+    {{ contentHeader() }}
     <div class="four-columns-tablet six-columns-mobile" style="max-width:100%; margin-bottom: -3px; margin-top: 4px" >
         <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />
+    </div>
+    <div class="with-padding">
+        <div class="columns">
+            {{ boxRender.renderBox('pequiven_seip_box_my_arrangementprogram_summary')|raw }}
+        </div>
     </div>
 {% endif %}
     

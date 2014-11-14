@@ -114,6 +114,8 @@ pequiven_seip:
         responsibles_pg: Responsable(s) del programa de gestión
         responsibles_goals: Responsable(s) del las metas
         type_template: Tipo de plantilla
+    tooltips:
+        click_to_show: Click para ver
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -133,6 +135,8 @@ monitor:
     tabTactic: Nivel Táctico
     tabOperative: Nivel Operativo
     objetiveTactic: Objetivos Tácticos
+    objetiveOperative: Objetivos Operativos
+    arrangementProgram: Programas de Gestión
     indicatorTactic: Indicadores Tácticos
     objetiveOperativeOriginal: Objetivos Operativos Original
     objetiveOperativeVinculante: Objetivos Operativos Vinculantes
@@ -143,6 +147,7 @@ monitor:
     plan: Planificados
     real: Cargados
     porcReal: % Cargado
+    advances: % Avances
     gerencia: Gerencia
     
 principal:
@@ -151,14 +156,15 @@ principal:
         objTactic: Objetivos Tácticos
         objOperative: Objetivos Operativos
     button:
-        tactic: Táctico
-        operative: Operativo
+        objTactic: Obj. Táctico
+        objOperative: Obj. Operativo
         arrangementProgram: Programas de Gestión
         vinculant: Vinculantes
         medular: Medulares
     chart:
         captionObjTactic: Objetivos Tacticos
         captionObjOperative: Objetivos Operativos
+        captionArrangementProgram: Programas de Gestión
     box:
         indicatorTactic: Indicadores Tácticos
         indicatorOperative: Indicadores Operativos

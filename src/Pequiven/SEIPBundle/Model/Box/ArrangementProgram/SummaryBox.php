@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Model\Box\ArrangementProgram;
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
- * Description of SummaryBox
+ * Resumen de los programas de gestion que tengo pendiente por aprobar
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */

@@ -1,6 +1,7 @@
 parameters:
 #    tecnocreaciones_box.example.class: Tecnocreaciones\Bundle\BoxBundle\Example
     tecnocreaciones_box.render.class: Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender
+    tecnocreaciones_box.area_render.class: Tecnocreaciones\Bundle\BoxBundle\Service\AreaRender
 
 services:
 #    tecnocreaciones_box.example:
@@ -8,5 +9,17 @@ services:
 #        arguments: [@service_id, "plain_value", %parameter%]
     tecnocreaciones_box.render:
         class: %tecnocreaciones_box.render.class%
+        calls:
+            - [setContainer,[@service_container]]
+    tecnocreaciones_box.area.render:
+        class: %tecnocreaciones_box.area_render.class%
+        calls:
+            - [setContainer,[@service_container]]
+            - [setBoxRender,[@tecnocreaciones_box.render]]
+    twig.extension.tecnocreaciones.render:
+        class: Tecnocreaciones\Bundle\BoxBundle\Twig\Extension\BoxBundleExtension
+        public: false
+        tags:
+            - { name: twig.extension }
         calls:
             - [setContainer,[@service_container]]

@@ -21,6 +21,41 @@ class CoreExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('form_top', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
             new \Twig_SimpleFunction('print_error', array($this,'printError'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('contentHeader', array($this,'contentHeader'), array('is_safe' => array('html'))),
+        );
+    }
+    
+    function contentHeader() {
+        $parameters = array();
+        $args = func_get_args();
+        foreach ($args as $key => $arg) {
+            if(empty($arg)){
+                continue;
+            }
+            $item = new \stdClass();
+            $item->link = null;
+            $item->label = null;
+            if(is_array($arg)){
+                $count = count($arg);
+                if($count > 1){
+                    throw new \LogicException('The array elment must be one, count');
+                }
+                foreach ($arg as $key => $value) {
+                    $item->link = $key;
+                    $item->label = $value;
+                }
+            }else{
+                $item->label = $arg;
+            }
+            $parameters[] = $item;
+        }
+        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        
+        return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
+            array(
+                'breadcrumbs' => $parameters,
+                'period' => $period
+            )
         );
     }
     

@@ -93,6 +93,54 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    public function arrangementProgramByGerenciaAction(Request $request) {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByGerencia',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('viewByGerenciaFirst.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
     public function listTemplateAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
@@ -703,7 +751,7 @@ class ArrangementProgramController extends SEIPController
     {
         $resource = $this->findOr404($request);
         
-        if(!$this->getArrangementProgramManager()->hasPermissionToUpdate($resource)){
+        if(!$this->getArrangementProgramManager()->hasPermissionToAddComment($resource)){
             throw $this->createAccessDeniedHttpException();
         }
         $view = $this->view();
@@ -744,6 +792,22 @@ class ArrangementProgramController extends SEIPController
         $categoryArrangementProgram = (string)$resource->getCategoryArrangementProgram();
         $tacticalObjective = (string)$resource->getTacticalObjective();
         $operationalObjective = (string)$resource->getOperationalObjective();
+        
+         $styleArrayBordersContent = array(
+          'borders' => array(
+            'allborders' => array(
+              'style' => \PHPExcel_Style_Border::BORDER_THIN
+            )
+          ),
+          'font' => array(
+              'bold' => false
+          ),
+          'alignment' => array(
+              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+              'wrap' => true
+          )
+        );
         
         $location = '';
         if($resource->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
@@ -899,6 +963,19 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AH'.$rowGoal,$decemberReal)
                 ->setCellValue('AI'.$rowGoal,$goalObservations)
             ;
+            
+            $activeSheet->getStyle(sprintf('C%s:I%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('AI%s:AL%s',$rowGoal,$rowGoal))->applyFromArray($styleArrayBordersContent);
+            $rowHeight = 50;
+            $responsiblesGoalLen = strlen($responsiblesGoal);
+            $goalObservationsLen = strlen($goalObservations);
+            if($responsiblesGoalLen > $rowHeight){
+                $rowHeight = $responsiblesGoalLen;
+            }
+            if($goalObservationsLen > $responsiblesGoalLen){
+                $rowHeight = $goalObservationsLen;
+            }
+            $activeSheet->getRowDimension($rowGoal)->setRowHeight($rowHeight);
             $countGoals++;
             $rowGoal++;
         }

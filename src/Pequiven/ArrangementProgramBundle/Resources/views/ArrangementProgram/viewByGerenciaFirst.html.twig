@@ -1,0 +1,114 @@
+{#% extends "::base.html.twig" %#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+{% block title %}- {{ 'pequiven.arrangement_program.arrangement_programs'|trans }}{% endblock %}
+
+{% set route_index = urlReturn %}
+{% if allow_create is not defined %}
+    {% set allow_create = false %}
+{% endif %}
+
+{% block body %}
+        
+    {{ contentHeader(
+        {(route_index):("pequiven.arrangement_program.arrangement_programs"|trans)},
+        (gerencia.getDescription),
+        ('pequiven.arrangement_program.list'|trans)
+    ) }}
+        
+    <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
+
+    <div ng-controller="TableFormatController">
+        <div ng-controller="ReportArrangementProgramController">
+            <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}" >
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ url }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
+                            <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">
+                            <img ng-if="result._data.summary.advances >= 50 && result._data.summary.advances < 100"src="{{ asset('bundles/pequivenseip/logotipos/bullet_yellow.png') }}" class="semaphore">
+                            <img ng-if="result._data.summary.advances == 100" src="{{ asset('bundles/pequivenseip/logotipos/bullet_green.png') }}" class="semaphore">
+
+                            <a href="{$ result._links.self.href $}">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.period'|trans }}'" sortable="'period'" filter="{ 'ap.period': 'text' }">
+                            {$ result.period.name $}
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.management'|trans }}'">
+                            <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') }}">{$ result.tacticalObjective.gerencia.description $}</span>
+                            <span ng-if="result.type == {{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') }}">{$ result.operationalObjective.gerenciaSecond.description $}</span>
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.location'|trans }}'">
+                            {$ result.tacticalObjective.gerencia.complejo.description $}
+                        </td>
+                        <td data-title="'{{ 'pequiven.arrangement_program.status.status'|trans }}'" sortable="'status'" >
+                            {$ data.arrangementProgramStatusLabels[result.status].description $}
+                        </td>
+                        <td data-title="'{{ 'monitor.porcReal'|trans({},'PequivenSEIPBundle') }}'">
+                            <span>
+                                {$ result._data.summary.advances|myNumberFormat $}/{$ result._data.summary.weight|myNumberFormat $}%
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        $(document).ready(function()
+        {
+            
+            charge();
+            
+            function charge(){
+               
+            }
+        });
+        
+        function getTableExtraInfo(data)
+            {
+                var response = '';
+
+                response = response + '<strong>¿Será evaluado por Objetivos Operativos?: </strong>';
+                if(data.evalObjetive === true){
+                    response = response + 'Sí';
+                } else{
+                    response = response + 'No';
+                }
+                response = response + '<br>';
+                
+                response = response + '<strong>¿Será evaluado por Programas de Gestión?: </strong>';
+                if(data.evalArrangementProgram === true){
+                    response = response + 'Sí';
+                } else{
+                    response = response + 'No';
+                }
+                response = response + '<br>';
+
+                response = response + '<strong>¿Será evaluado por Indicadores Tácticos?: </strong>';
+                var totalIndicators = data.indicators.length;
+                if(totalIndicators > 0){
+                    response = response + 'Sí';
+                } else{
+                    response = response + 'No';
+                }
+                response = response + '<br>';
+                
+                if(totalIndicators > 0){
+                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
+                    for(var i = 0; i < totalIndicators; i++){
+                        response = response + data.indicators[i].ref + data.indicators[i].description;
+                        if(data.indicators[i].formula){
+                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
+                        }
+                        response = response + '<br>';
+                    }
+                }
+                return response;
+            }
+    </script>
+{% endblock %}

@@ -1,8 +1,12 @@
-{% extends "PequivenSEIPBundle:Core:email/base.html.twig" %}
+{% extends "PequivenArrangementProgramBundle:ArrangementProgram:email/base.html.twig" %}
+
+{% block subject %}
+    El programa de gestión {{ arrangementProgram.ref }} fue aprobado - SEIP
+{% endblock subject %}
 
 {% block contet_html %}
-    El usuario {{ user.getFullNameUser }} acaba aprobar el programa de gestión 
-    <a href="{{ path('',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a> donde usted se encuetra involucrado.
+    El usuario <b>{{ user.getFullNameUser }}</b> acaba aprobar el programa de gestión 
+    <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true)) }}">{{ arrangementProgram.ref }}</a> donde usted se encuetra involucrado.
     
     Los responsables del programa de gestión son:
     <br/>
