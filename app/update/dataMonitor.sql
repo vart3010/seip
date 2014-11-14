@@ -25,7 +25,7 @@ UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 4, objOperati
 -- PROYECTOS INTERNACIONALES
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 3, indOperativeOriginal = 3, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 16;
 -- RECURSOS HUMANOS
-UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 93, indOperativeOriginal = 42, arrangementProgramTactic = 0, arrangementProgramOperative = 14 WHERE fk_gerencia = 18;
+UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 94, indOperativeOriginal = 42, arrangementProgramTactic = 0, arrangementProgramOperative = 14 WHERE fk_gerencia = 18;
 -- SALUD
 UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 3, objOperativeOriginal = 24, indOperativeOriginal = 24, arrangementProgramTactic = 0, arrangementProgramOperative = 12 WHERE fk_gerencia = 25;
 -- SEGUIM. Y CONTROL DE PROYECTOS
@@ -49,7 +49,7 @@ UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 2, objOperati
 -- PROYECTO MORON
 UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperativeOriginal = 28, indOperativeOriginal = 28, arrangementProgramTactic = 0, arrangementProgramOperative = 33 WHERE fk_gerencia = 4;
 -- PROYECTO TERMINAL MARÍTIMO
-UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 5, indOperativeOriginal = 5, arrangementProgramTactic = 0, arrangementProgramOperative = 5 WHERE fk_gerencia = 17;
+UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 9, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 5 WHERE fk_gerencia = 17;
 -- PROYECTO NAVAY
 UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 0, objOperativeOriginal = 20, indOperativeOriginal = 20, arrangementProgramTactic = 0, arrangementProgramOperative = 20 WHERE fk_gerencia = 10;
 -- CPM
