@@ -59,6 +59,18 @@ class Variable
     private $createdBy;
     
     /**
+     * Formulas que usan esta variable
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Formula
+     * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula", mappedBy="variables")
+     */
+    protected $formulas;
+    
+    public function __construct() {
+        $this->variables = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -112,5 +124,107 @@ class Variable
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Variable
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Variable
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
+     * @return Variable
+     */
+    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User 
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Add formulas
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula $formulas
+     * @return Variable
+     */
+    public function addFormula(\Pequiven\MasterBundle\Entity\Formula $formulas)
+    {
+        $this->formulas[] = $formulas;
+
+        return $this;
+    }
+
+    /**
+     * Remove formulas
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula $formulas
+     */
+    public function removeFormula(\Pequiven\MasterBundle\Entity\Formula $formulas)
+    {
+        $this->formulas->removeElement($formulas);
+    }
+
+    /**
+     * Get formulas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormulas()
+    {
+        return $this->formulas;
     }
 }
