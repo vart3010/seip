@@ -25,6 +25,8 @@ fos_user:
             type: pequiven_seip_user_profile
     group:
         group_class: Pequiven\MasterBundle\Entity\Rol
+        form:
+            type: seip_user_group
     
 
 fos_rest:

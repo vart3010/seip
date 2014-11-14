@@ -3,7 +3,7 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_VIEW: ROLE_WORKER_PQV
+        ROLE_VIEW: [ROLE_WORKER_PQV,ROLE_WORKER_PLANNING]
         ROLE_ADMIN: ROLE_DIRECTIVE,ROLE_DIRECTIVE_AUX,ROLE_MANAGER_FIRST,ROLE_MANAGER_FIRST_AUX,ROLE_MANAGER_SECOND,ROLE_MANAGER_SECOND_AUX,ROLE_SUPERVISER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN,ROLE_ALLOWED_TO_SWITCH]
 
@@ -38,4 +38,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/planning/, role: ROLE_WORKER_PLANNING }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }

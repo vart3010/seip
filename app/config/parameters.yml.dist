@@ -13,3 +13,4 @@ parameters:
 
     locale:            es
     secret:            ThisTokenIsNotSoSecretChangeIt
+    main_cdn: http://seip.pequiven.com
