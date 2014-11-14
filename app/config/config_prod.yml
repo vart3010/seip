@@ -1,7 +1,10 @@
 imports:
     - { resource: config.yml }
 
-#framework:
+framework:
+    templating:
+        assets_base_urls: 
+            http:   [http://seip.pequiven.com]
 #    validation:
 #        cache: apc
 
