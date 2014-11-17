@@ -77,6 +77,9 @@ class BackendMenuBuilder extends MenuBuilder
         
     //$menu->setCurrent($this->request->getRequestUri());
         
+        if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){
+            $this->addPlanningMenu($menu, $section);
+        }
         if($this->securityContext->isGranted('ROLE_SUPER_ADMIN')){
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
@@ -147,6 +150,51 @@ class BackendMenuBuilder extends MenuBuilder
                 
                 $child->addChild($subchild);
                 
+        $menu->addChild($child);
+    }
+    
+    /**
+     * Agregando menu de planificacion
+     * 
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    function addPlanningMenu(ItemInterface $menu, $section) 
+    {
+        $child = $this->factory->createItem('planning',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'icon-calendar',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
+                
+        $subchild = $this->factory->createItem('planning.indicators',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.main', $section)));
+        
+        $subchild->addChild('planning.indicators.strategic', array(
+//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
+                ;
+        $subchild->addChild('planning.indicators.tactic', array(
+//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
+                ;
+        $subchild->addChild('planning.indicators.operative', array(
+//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
+                ;
+        
+        $child->addChild($subchild);
+        
         $menu->addChild($child);
     }
     
