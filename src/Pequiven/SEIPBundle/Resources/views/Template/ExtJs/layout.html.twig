@@ -12,7 +12,7 @@
     {% block stylesheets '' %}
     {% block stylesheet '' %}
     <script type="text/javascript" src="{{ asset("ext/build/ext-all.js") }}"></script>
-    <script type="text/javascript" src="{{ asset("ext/build/packages/ext-locale/build/ext-locale-" ~ app.request.locale ~ ".js") }}"></script>
+    <script type="text/javascript" src="{{ asset("ext/build/packages/ext-locale/build/ext-locale-" ~ app.session.locale ~ ".js") }}"></script>
     
     <script type="text/javascript" src="{{ asset("ext/base/toolbar.js") }}"></script>
     <script type="text/javascript" src="{{ path("extjs_generate_model") }}"></script>
