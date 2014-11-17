@@ -1,14 +1,12 @@
 lunetics_locale:
     allowed_locales:
         - es
-        - en
     strict_mode: true # defaults to false
     guessing_order:
         - query
         - router
         - session
         - cookie
-        - browser
     switcher:
         show_current_locale: true
 
