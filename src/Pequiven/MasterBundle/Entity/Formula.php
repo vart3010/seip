@@ -361,4 +361,8 @@ class Formula extends modelFormula
     {
         return $this->equationReal;
     }
+    
+    public function __toString() {
+        return $this->getDescription()?: '-';
+    }
 }

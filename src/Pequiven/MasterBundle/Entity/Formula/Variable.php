@@ -50,14 +50,6 @@ class Variable
      */
     private $updatedAt;
 
-     /**
-     * Usuario que creo la variable
-     * @var \Pequiven\SEIPBundle\Entity\User
-     * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(referencedColumnName="id",nullable=false)
-     */
-    private $createdBy;
-    
     /**
      * Formulas que usan esta variable
      * 
@@ -173,29 +165,6 @@ class Variable
     }
 
     /**
-     * Set createdBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
-     * @return Variable
-     */
-    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Add formulas
      *
      * @param \Pequiven\MasterBundle\Entity\Formula $formulas
@@ -226,5 +195,10 @@ class Variable
     public function getFormulas()
     {
         return $this->formulas;
+    }
+    
+    public function __toString()
+    {
+        return $this->getName()?: '-';
     }
 }

@@ -1,0 +1,21 @@
+services:
+    sonata.admin.formula:
+        class: Pequiven\MasterBundle\Admin\FormulaAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Formula" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Formula
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.formula.variable:
+        class: Pequiven\MasterBundle\Admin\Formula\VariableAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Variable de Formula" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Formula\Variable
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

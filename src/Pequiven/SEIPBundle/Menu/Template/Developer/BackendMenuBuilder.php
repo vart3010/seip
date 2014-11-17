@@ -76,6 +76,14 @@ class BackendMenuBuilder extends MenuBuilder
 //            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
         
     //$menu->setCurrent($this->request->getRequestUri());
+        
+        if($this->securityContext->isGranted('ROLE_SUPER_ADMIN')){
+            $menu->addChild('admin', array(
+                'route' => 'sonata_admin_dashboard',
+                'labelAttributes' => array('icon' => 'icon-card'),
+                //'linkAttributes' => array('target' => '_blank'),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main',$section)));
+        }
         return $menu;
     }
     

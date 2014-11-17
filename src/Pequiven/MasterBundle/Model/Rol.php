@@ -3,7 +3,7 @@
 namespace Pequiven\MasterBundle\Model;
 
 use Exception;
-use FOS\UserBundle\Entity\Group as BaseGroup;
+use Sonata\UserBundle\Entity\BaseGroup as BaseGroup;
 
 /**
  * Modelo de rol
