@@ -133,6 +133,9 @@ class UserRepository extends EntityRepository
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
         }
+        if(isset($criteria['numPersonal'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$criteria['numPersonal']."%'"));
+        }
         
         return $this->getPaginator($queryBuilder);
     }
@@ -158,6 +161,9 @@ class UserRepository extends EntityRepository
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
+        }
+        if(isset($criteria['numPersonal'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$criteria['numPersonal']."%'"));
         }
         
         return $this->getPaginator($queryBuilder);
