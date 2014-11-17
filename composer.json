@@ -42,7 +42,15 @@
         
         "phpoffice/phpexcel": "1.8.0",
         
-        "tecnocreaciones/extjs-bundle": "dev-master"
+        "tecnocreaciones/extjs-bundle": "dev-master",
+        
+        "sonata-project/admin-bundle": "~2.3",
+        "sonata-project/core-bundle": "~2.2",
+        "sonata-project/doctrine-orm-admin-bundle": "@stable",
+        "sonata-project/easy-extends-bundle": "~2.1",
+        "sonata-project/doctrine-extensions": "~1",
+        "sonata-project/block-bundle": "~2.2",
+        "sonata-project/user-bundle": "~2.2"
        
     },
     "scripts": {
