@@ -29,3 +29,13 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.indicator.indicator:
+        class: Pequiven\MasterBundle\Admin\IndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

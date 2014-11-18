@@ -43,7 +43,7 @@
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.weight'|trans }}</label>
-                    <span class="tag">{{ indicator.weight?:('form.no_appy'|trans) }}%</span>
+                    <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
                 </p>
              </div>
              <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -56,6 +56,16 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
                     {{ indicator.typeOfCalculationLabel|trans }}
+                </p>
+             </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
+                    {% if indicator.frequencyNotificationIndicator != null %}
+                        {{ indicator.frequencyNotificationIndicator }}
+                    {% else %}
+                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                    {% endif %}
                 </p>
              </div>
              <div class="new-row new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">

@@ -12,26 +12,21 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Indicator 
 {
     /**
-     * Tipo de calculo simple.
-     */
-    const TYPE_CALCULATION_SIMPLE = 0;
-    
-    /**
      * Tipo de calculo por formula y valores de las variables manuales
      */
-    const TYPE_CALCULATION_FORMULA_MANUALLY = 1;
+    const TYPE_CALCULATION_FORMULA_MANUALLY = 0;
     
     /**
      * Tipo de calculo por formula y valores de las variables automaticos
      */
-    const TYPE_CALCULATION_FORMULA_AUTOMATIC = 2;
+    const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
     
     /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
      */
-    protected $typeOfCalculation = self::TYPE_CALCULATION_SIMPLE;
+    protected $typeOfCalculation = self::TYPE_CALCULATION_FORMULA_MANUALLY;
     
     /**
      * IndicatorLevel
@@ -47,7 +42,7 @@ abstract class Indicator
      * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
      * @return Indicator
      */
-    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel = null)
+    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel)
     {
         $this->indicatorLevel = $indicatorLevel;
 
@@ -94,7 +89,6 @@ abstract class Indicator
     static function getTypesOfCalculation()
     {
         static $typesOfCalculation = array(
-            self::TYPE_CALCULATION_SIMPLE => 'pequiven_indicator.type_calculation.simple',
             self::TYPE_CALCULATION_FORMULA_MANUALLY => 'pequiven_indicator.type_calculation.formula_manually',
             self::TYPE_CALCULATION_FORMULA_AUTOMATIC => 'pequiven_indicator.type_calculation.formula_automatic',
         );

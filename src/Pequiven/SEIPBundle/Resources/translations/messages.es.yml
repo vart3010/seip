@@ -17,6 +17,7 @@ pequiven:
     ref: Referencia
     select: Seleccione
     actions: Acciones
+    no_assigned: No asignado.
     form:
         not_applicable: No aplica
     list: Lista

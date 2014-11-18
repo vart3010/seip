@@ -135,20 +135,20 @@ class Indicator extends modelIndicator
     private $period;
     
     /**
-     * Valores simples del indicador
+     * Valores del indicador
      * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\SimpleValueIndicator
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\SimpleValueIndicator",mappedBy="indicator")
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator")
      */
-    protected $simpleValuesIndicator;
+    protected $valuesIndicator;
     
     /**
-     * Valor del indicador
+     * Valor (Evaluado a partir de todos los valores y formula)
      * 
      * @var decimal
-     * @ORM\Column(name="valueOfIndicator", type="decimal",precision = 3)
+     * @ORM\Column(name="valueFinal", type="decimal",precision = 3)
      */
-    protected $valueOfIndicator;
+    protected $valueFinal;
     
     /**
      * Frecuencia de notificacion del indicador
@@ -165,7 +165,7 @@ class Indicator extends modelIndicator
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->simpleValuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -564,27 +564,93 @@ class Indicator extends modelIndicator
         return $this->period;
     }
     
-    /**
-     * Set valueOfIndicator
+   /**
+     * Set frequencyNotificationIndicator
      *
-     * @param string $valueOfIndicator
-     * @return SimpleValueIndicator
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator
+     * @return Indicator
      */
-    public function setValueOfIndicator($valueOfIndicator)
+    public function setFrequencyNotificationIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator = null)
     {
-        $this->valueOfIndicator = $valueOfIndicator;
+        $this->frequencyNotificationIndicator = $frequencyNotificationIndicator;
 
         return $this;
     }
 
     /**
-     * Get valueOfIndicator
+     * Get frequencyNotificationIndicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator 
+     */
+    public function getFrequencyNotificationIndicator()
+    {
+        return $this->frequencyNotificationIndicator;
+    }
+    
+    /**
+     * Add valuesIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
+     * @return Indicator
+     */
+    public function addValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
+    {
+        $this->valuesIndicator->add($valuesIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove valuesIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
+     */
+    public function removeValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
+    {
+        $this->valuesIndicator->removeElement($valuesIndicator);
+    }
+
+    /**
+     * Get valuesIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValuesIndicator()
+    {
+        return $this->valuesIndicator;
+    }
+
+    /**
+     * Get indicatorLevel
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\IndicatorLevel 
+     */
+    public function getIndicatorLevel()
+    {
+        return $this->indicatorLevel;
+    }
+    
+    /**
+     * Set valueFinal
+     *
+     * @param string $valueFinal
+     * @return Indicator
+     */
+    public function setValueFinal($valueFinal)
+    {
+        $this->valueFinal = $valueFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get valueFinal
      *
      * @return string 
      */
-    public function getValueOfIndicator()
+    public function getValueFinal()
     {
-        return $this->valueOfIndicator;
+        return $this->valueFinal;
     }
     
     /**

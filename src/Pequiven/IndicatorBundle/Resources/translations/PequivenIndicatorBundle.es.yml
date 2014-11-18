@@ -26,7 +26,6 @@ pequiven_indicator:
     cancel: Cancelar
     type_calculation:
         main: Tipo de calculo
-        simple: Fórmula simple
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
 form:
@@ -40,6 +39,7 @@ form:
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
+    frequencyNotificationIndicator: Frecuencia de notificación
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia

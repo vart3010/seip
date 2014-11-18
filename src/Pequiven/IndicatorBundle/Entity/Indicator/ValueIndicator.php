@@ -6,13 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Valor simple para calculo de indicador simple
+ * Valor del indicador
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
- * @ORM\Table(name="seip_indicator_value_simple")
+ * @ORM\Table(name="seip_indicator_value")
  * @ORM\Entity()
  */
-class SimpleValueIndicator
+class ValueIndicator
 {
     /**
      * @var integer
