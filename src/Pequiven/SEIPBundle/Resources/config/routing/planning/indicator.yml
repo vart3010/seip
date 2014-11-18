@@ -1,0 +1,28 @@
+pequiven_indicator_index:
+    path: /.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:indexAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_indicator_show:
+    path: /{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET]
+    
+pequiven_indicator_list:
+    path: /{level}/list.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]

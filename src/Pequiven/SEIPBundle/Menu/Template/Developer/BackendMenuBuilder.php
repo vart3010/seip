@@ -178,20 +178,22 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.main', $section)));
         
         $subchild->addChild('planning.indicators.strategic', array(
-//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
-                ;
+        
         $subchild->addChild('planning.indicators.tactic', array(
-//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
-                ;
+
         $subchild->addChild('planning.indicators.operative', array(
-//                                'route' => 'pequiven_indicator_menu_list_strategic',
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
-                ;
         
         $child->addChild($subchild);
         

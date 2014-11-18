@@ -50,6 +50,9 @@ pequiven_indicator_route:
     
 pequiven_arrangement_program_yml:
     resource: "@PequivenArrangementProgramBundle/Resources/config/routing/main.yml"
+    
+pequiven_planning:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/main.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

@@ -363,6 +363,6 @@ class Formula extends modelFormula
     }
     
     public function __toString() {
-        return $this->getDescription()?: '-';
+        return $this->getEquation() ?: '-';
     }
 }

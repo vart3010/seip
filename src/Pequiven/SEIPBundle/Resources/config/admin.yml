@@ -19,3 +19,13 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.indicator.frequency_notification:
+        class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Frecuencia de notificación" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

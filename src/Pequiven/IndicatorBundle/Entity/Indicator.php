@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\IndicatorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,8 +15,8 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @author matias
  */
-class Indicator extends modelIndicator {
-    
+class Indicator extends modelIndicator 
+{
     /**
      * @var integer
      *
@@ -112,14 +106,6 @@ class Indicator extends modelIndicator {
     private $tmp = false;
     
     /**
-     * IndicatorLevel
-     * @var \Pequiven\IndicatorBundle\Entity\IndicatorLevel
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\IndicatorLevel")
-     * @ORM\JoinColumn(name="fk_indicator_level", referencedColumnName="id")
-     */
-    private $indicatorLevel;
-    
-    /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
@@ -142,18 +128,44 @@ class Indicator extends modelIndicator {
     
     /**
      * Periodo.
+     * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
      */
     private $period;
     
+    /**
+     * Valores simples del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\SimpleValueIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\SimpleValueIndicator",mappedBy="indicator")
+     */
+    protected $simpleValuesIndicator;
     
+    /**
+     * Valor del indicador
+     * 
+     * @var decimal
+     * @ORM\Column(name="valueOfIndicator", type="decimal",precision = 3)
+     */
+    protected $valueOfIndicator;
+    
+    /**
+     * Frecuencia de notificacion del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator")
+     
+     */
+    protected $frequencyNotificationIndicator;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->simpleValuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -374,29 +386,6 @@ class Indicator extends modelIndicator {
     }
 
     /**
-     * Set indicatorLevel
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
-     * @return Indicator
-     */
-    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel = null)
-    {
-        $this->indicatorLevel = $indicatorLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorLevel
-     *
-     * @return \Pequiven\IndicatorBundle\Entity\IndicatorLevel 
-     */
-    public function getIndicatorLevel()
-    {
-        return $this->indicatorLevel;
-    }
-
-    /**
      * Set formula
      *
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
@@ -576,10 +565,33 @@ class Indicator extends modelIndicator {
     }
     
     /**
+     * Set valueOfIndicator
+     *
+     * @param string $valueOfIndicator
+     * @return SimpleValueIndicator
+     */
+    public function setValueOfIndicator($valueOfIndicator)
+    {
+        $this->valueOfIndicator = $valueOfIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get valueOfIndicator
+     *
+     * @return string 
+     */
+    public function getValueOfIndicator()
+    {
+        return $this->valueOfIndicator;
+    }
+    
+    /**
      * 
-     * @return type
+     * @return string
      */
     public function __toString() {
-        return $this->description;
+        return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
     }
 }

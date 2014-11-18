@@ -89,8 +89,16 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
      * @param ObjectEvent $event
      */
     public function onPostSerializeIndicator(ObjectEvent $event) {
-        $objetives = $event->getObject()->getObjetives();
-        $event->getVisitor()->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        $indicator = $event->getObject();
+        $objetives = $indicator->getObjetives();
+        $links = array();
+        $links['self'] = array(
+            'href' => $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId())),
+        );
+        
+        $visitor = $event->getVisitor();
+        $visitor->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        $visitor->addData('_links',$links);
     }
     
     public function onPostSerializeGoalDetails(ObjectEvent $event) {

@@ -203,6 +203,13 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        pequiven.indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\IndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
         #Indicador estratégico
         pequiven.indicatorstrategic:
             driver: doctrine/orm

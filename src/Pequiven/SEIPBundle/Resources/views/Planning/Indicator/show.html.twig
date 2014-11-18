@@ -1,0 +1,91 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% block body -%}
+    {% set level = indicator.indicatorLevel.level %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven.show'|trans({},'messages'))
+    ) }}
+        
+    <fieldset class="fieldset">
+        <legend class="legend">{{ indicator }}&nbsp;</legend>
+        
+         <div class="columns">
+             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {{ indicator }}
+                </p>
+             </div>
+             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.formula'|trans }}</label>
+                    {{ indicator.formula }}
+                </p>
+             </div>
+             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.tendency'|trans }}</label>
+                    {{ indicator.tendency }}
+                </p>
+             </div>
+             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.weight'|trans }}</label>
+                    <span class="tag">{{ indicator.weight?:('form.no_appy'|trans) }}%</span>
+                </p>
+             </div>
+             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.goal'|trans }}</label>
+                    {{ indicator.goal ?:('form.no_appy'|trans) }}
+                </p>
+             </div>
+             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
+                    {{ indicator.typeOfCalculationLabel|trans }}
+                </p>
+             </div>
+             <div class="new-row new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.objetives'|trans }}</label>
+                    {% for objetive in indicator.objetives %}
+                        {% set pathObjetive = null %}
+                        {% if objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO') %}
+                            {% set pathObjetive = 'objetiveStrategic_show' %}
+                        {% elseif objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO') %}
+                            {% set pathObjetive = 'objetiveTactic_show' %}
+                        {% elseif objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+                            {% set pathObjetive = 'objetiveOperative_show' %}
+                        {% endif %}
+                        <a href="{{ pathObjetive ? path(pathObjetive,{ id:objetive.id }) : '' }}">{{ objetive }}</a><br />
+                    {% endfor %}
+                </p>
+             </div>
+        </div>
+    </fieldset>
+<br /><br />
+
+<p class="button-height align-right">
+    {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+    
+    <a href="" class="button">
+        <span class="button-icon"><span class="icon-download"></span></span>
+        {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
+    </a>
+    
+</p>
+
+{% endblock %}
