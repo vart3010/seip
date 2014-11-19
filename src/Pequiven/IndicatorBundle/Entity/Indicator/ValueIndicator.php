@@ -39,6 +39,7 @@ class ValueIndicator
     
     /**
      * Usuario que ingreso el valor
+     * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
@@ -46,7 +47,8 @@ class ValueIndicator
     private $createdBy;
 
     /**
-     * Usuario que actualizo el valor original del valor
+     * Usuario que actualizo el valor original
+     * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      */
@@ -61,10 +63,17 @@ class ValueIndicator
     protected $valueOfIndicator;
     
     /**
+     * Parametros que se usaron en las variables de las formulas
+     * @var array
+     * @ORM\Column(name="formulaParameters",type="array",nullable=false)
+     */
+    protected $formulaParameters;
+
+    /**
      * Indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="simpleValuesIndicator")
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="valuesIndicator")
      * @ORM\JoinColumn(nullable=false)
      */
     private $indicator;
@@ -215,5 +224,28 @@ class ValueIndicator
     public function getValueOfIndicator()
     {
         return $this->valueOfIndicator;
+    }
+
+    /**
+     * Set formulaParameters
+     *
+     * @param array $formulaParameters
+     * @return ValueIndicator
+     */
+    public function setFormulaParameters($formulaParameters)
+    {
+        $this->formulaParameters = $formulaParameters;
+
+        return $this;
+    }
+
+    /**
+     * Get formulaParameters
+     *
+     * @return array 
+     */
+    public function getFormulaParameters()
+    {
+        return $this->formulaParameters;
     }
 }

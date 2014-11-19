@@ -28,6 +28,7 @@ pequiven_indicator:
         main: Tipo de calculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
+    results: Resultado(s)
 form:
     ref: Nro. de Referencia
     indicator: Indicador

@@ -87,6 +87,9 @@
         </div>
     </fieldset>
 <br /><br />
+{% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+<br /><br />
+{% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
 
 <p class="button-height align-right">
     {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}

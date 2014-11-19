@@ -158,7 +158,31 @@ class Indicator extends modelIndicator
      
      */
     protected $frequencyNotificationIndicator;
-
+    
+    /**
+     * Historiales o Eventos
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Historical
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
+     */
+    protected $histories;
+    
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Observation
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Observation",cascade={"persist","remove"})
+     */
+    protected $observations;
+    
+    /**
+     * Detalles del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",cascade={"persist","remove"})
+     */
+    protected $details;
+    
     /**
      * Constructor
      */
@@ -659,5 +683,94 @@ class Indicator extends modelIndicator
      */
     public function __toString() {
         return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
+    }
+
+    /**
+     * Add histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     * @return Indicator
+     */
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->add($histories);
+
+        return $this;
+    }
+
+    /**
+     * Remove histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     */
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->removeElement($histories);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHistories()
+    {
+        return $this->histories;
+    }
+
+    /**
+     * Add observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Observation $observations
+     * @return Indicator
+     */
+    public function addObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
+    {
+        $this->observations->add($observations);
+
+        return $this;
+    }
+
+    /**
+     * Remove observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Observation $observations
+     */
+    public function removeObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
+    {
+        $this->observations->removeElement($observations);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObservations()
+    {
+        return $this->observations;
+    }
+
+    /**
+     * Set details
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details
+     * @return Indicator
+     */
+    public function setDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details = null)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails 
+     */
+    public function getDetails()
+    {
+        return $this->details;
     }
 }
