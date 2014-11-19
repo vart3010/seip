@@ -41,7 +41,7 @@ UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 1, objOperati
 -- UNFER
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 1, objOperativeOriginal = 9, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 2;
 -- UNOP
-UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 3, objOperativeOriginal = 13, indOperativeOriginal = 13, arrangementProgramTactic = 0, arrangementProgramOperative = 11 WHERE fk_gerencia = 8;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 13, indOperativeOriginal = 13, arrangementProgramTactic = 0, arrangementProgramOperative = 11 WHERE fk_gerencia = 8;
 -- COMERCIO EXTERIOR / IPSL
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 24, indOperativeOriginal = 24, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 6;
 -- LOGÍSTICA
