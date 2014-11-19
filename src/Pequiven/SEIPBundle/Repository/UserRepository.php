@@ -164,8 +164,11 @@ class UserRepository extends EntityRepository
      */
     function createPaginatorUserAux(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->innerJoin('u.groups', 'g');
-        $queryBuilder->andWhere('g.typeRol =:typeRol');
+        $queryBuilder->leftJoin('u.groups', 'gr');
+        $queryBuilder->leftJoin('u.complejo', 'c');
+        $queryBuilder->leftJoin('u.gerencia', 'g');
+        $queryBuilder->leftJoin('u.gerenciaSecond', 'gs');
+        $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 1);
         
         if(isset($criteria['firstName'])){
