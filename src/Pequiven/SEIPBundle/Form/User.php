@@ -52,7 +52,8 @@ class User extends AbstractType {
                     'ROLE_WORKER_PLANNING' => 'Trabajador de planificacion',
                 ),
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'attr' => array('class' => 'select2 input-xlarge')
             ))
         ;
     }
