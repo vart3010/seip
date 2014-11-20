@@ -49,7 +49,7 @@ class RegistrationListener implements EventSubscriberInterface {
         if(is_array($results = $personal->getByNumPersonal($num_personal)) && count($results) > 0){
             foreach($results as $result){
                 
-                $user->addGroup(Rol::getRoleName(Rol::ROLE_WORKER_PQV));
+//                $user->addGroup(Rol::getRoleName(Rol::ROLE_WORKER_PQV));
                 //TODO: Hacer llamado a función (por crear) para determinar el rol del usuario registrado automáticamente
                 //var_dump($result->getNomPersonal());
             }
