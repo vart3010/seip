@@ -481,6 +481,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     }
     
     public function getFullNameUser(){
-        return $this->firstName . ' '.$this->lastName. ' ('.$this->numPersonal.' | '.$this->username.')';
+        return $this->firstname . ' '.$this->lastname. ' ('.$this->numPersonal.' | '.$this->username.')';
     }
 }
