@@ -35,8 +35,8 @@
                             </td>
                         </tr>
                         <tr ng-hide="group.$hideRows" ng-repeat="result in group.data" data="{$ result|json $}">
-                            <td data-title="'{{ 'form.objetiveTactic'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                            <td data-title="'{{ 'form.objetiveOperative'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description+' ('+result.gerenciaSecond.description+')' $}</a>
                             </td>
                         </tr>
                     </tbody>
