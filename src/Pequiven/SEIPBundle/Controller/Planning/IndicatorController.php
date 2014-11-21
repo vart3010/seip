@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Controller\Planning;
 
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -78,6 +79,11 @@ class IndicatorController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * @Security("is_granted('ROLE_WORKER_PLANNING')")
+     * @param Request $request
+     * @return type
+     */
     function addObservationAction(Request $request)
     {
         $resource = $this->findOr404($request);

@@ -2,12 +2,15 @@
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_value_indicator_get_form',{'idIndicator':indicator.id}) }}'">
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator.valuesIndicator.length $} {{ 'pequiven_indicator.results'|trans }}</h3>
-        {% set textAbbr = indicator.frequencyNotificationIndicator ? indicator.frequencyNotificationIndicator.textAbbr : '' %}
-        <div class="button-group absolute-right compact">
-            <a class="button icon-list-add " href="" ng-click="loadTemplateValueIndicator()" title="">{{ 'pequiven.add'|trans({},'messages') ~ ' ' ~ (textAbbr|lower) }}&nbsp;#{$ (indicator.valuesIndicator.length + 1) $}</a>
-        </div>
+        {% if is_granted('ROLE_WORKER_PLANNING') %}
+            {% set textAbbr = indicator.frequencyNotificationIndicator ? indicator.frequencyNotificationIndicator.textAbbr : '' %}
+            <div class="button-group absolute-right compact">
+                <a class="button icon-list-add " href="" ng-click="loadTemplateValueIndicator()" title="">{{ 'pequiven.add'|trans({},'messages') ~ ' ' ~ (textAbbr|lower) }}&nbsp;#{$ (indicator.valuesIndicator.length + 1) $}</a>
+            </div>
+        {% endif %}
     </div>
     <div class="with-padding">
+        {% set colspan = 5 %}
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
@@ -15,7 +18,10 @@
                     <th scope="col" width="15%" class="header">{{ 'seip.table.header.value'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="15%" class="hide-on-tablet header">{{ 'seip.table.header.created_at'|trans({},'PequivenArrangementProgramBundle') }}</th>
                     <th scope="col" width="30%" class="hide-on-mobile-portrait header">{{ 'seip.table.header.created_by'|trans({},'PequivenArrangementProgramBundle') }}</th>
-                    <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                    {% if is_granted('ROLE_WORKER_PLANNING') %}
+                        {% set colspan = 6 %}
+                        <th scope="col" width="15%" class="hide-on-mobile-portrait header">&nbsp;</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -28,17 +34,19 @@
                     <td>
                         {$ valueIndicator.createdBy.firstname + " "+ valueIndicator.createdBy.lastname $} <small class="tag">{$ " ("+valueIndicator.createdBy.username+")" $}</small>
                     </td>
-                    <td class="align-right vertical-center">
-                        <span class="select compact">
-                            <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
-                            <span class="select-arrow"></span>
-                            <span class="drop-down">
-                                <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                    {% if is_granted('ROLE_WORKER_PLANNING') %}
+                        <td class="align-right vertical-center">
+                            <span class="select compact">
+                                <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
+                                <span class="select-arrow"></span>
+                                <span class="drop-down">
+                                    <a href ng-click="loadTemplateValueIndicator(valueIndicator)" class="button icon-pencil">{{ "pequiven.actions.edit"|trans({},"messages") }}</a>
+                                </span>
                             </span>
-                        </span>
-                    </td>
+                        </td>
+                    {% endif %}
                 </tr>
-                {% set colspan = 6 %}
+                    
                 <tr ng-if="indicator.valuesIndicator.length == 0">
                     <td colspan="{{ colspan }}" class="empty_row">
                         {{ "seip.table.empty.results"|trans({},'PequivenArrangementProgramBundle') }}

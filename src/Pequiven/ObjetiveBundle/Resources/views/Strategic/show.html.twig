@@ -59,7 +59,7 @@
                 <label class="label">{{ 'pequiven_objetive.indicatorStrategics'|trans }}</label>
                 <ul>
                 {% for indicator in entity.indicators %}
-                    <li>{{ indicator.ref }} {{ indicator.description }}</li>
+                    <li><a href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">{{ indicator.ref }} {{ indicator.description }}</a></li>
                 {% endfor  %}
                 </ul>
             </div>

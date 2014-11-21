@@ -96,9 +96,11 @@
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
 <p class="button-height align-right">
-    {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
-    
-    {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
+    {% if is_granted('ROLE_WORKER_PLANNING') %}
+        {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+
+        {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
+    {% endif %}
 </p>
 
 {% endblock %}
