@@ -66,7 +66,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $valueGroupBy = '';
             $i = 1;
             foreach ($parents as $parent) {
-                    $valueGroupBy.= $parent->getRef() . $parent->getDescription();
+                    $valueGroupBy.= $parent->getRef() . $parent->getDescription().'<br>';
                 }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
