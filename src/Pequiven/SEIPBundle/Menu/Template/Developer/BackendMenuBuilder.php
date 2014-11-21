@@ -350,7 +350,7 @@ class BackendMenuBuilder extends MenuBuilder
      */
     
     function addArrangementProgramsMenu(ItemInterface $menu, $section) {
-        if($this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
+//        if($this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
             $child = $this->factory->createItem('arrangement_programs',
                     $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -396,7 +396,7 @@ class BackendMenuBuilder extends MenuBuilder
             $child->addChild($subchild);
             
             $menu->addChild($child);
-        }
+//        }
     }
     
     /**
