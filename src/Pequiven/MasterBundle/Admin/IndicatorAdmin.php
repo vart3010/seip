@@ -22,6 +22,7 @@ class IndicatorAdmin extends Admin
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
+            ->add('totalPlan')
             ->add('weight')
             ->add('goal')
             ->add('formula')

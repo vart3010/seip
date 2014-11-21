@@ -83,6 +83,14 @@ class Indicator extends modelIndicator
      * @ORM\Column(name="weight", type="float", nullable=true)
      */
     private $weight;
+    
+    /**
+     * Total planificado
+     * 
+     * @var float
+     * @ORM\Column(name="totalPlan", type="float", nullable=true)
+     */
+    private $totalPlan = 0;
 
     /**
      * @var float
@@ -774,5 +782,15 @@ class Indicator extends modelIndicator
     public function getDetails()
     {
         return $this->details;
+    }
+    
+    function getTotalPlan() {
+        return $this->totalPlan;
+    }
+
+    function setTotalPlan($totalPlan) {
+        $this->totalPlan = $totalPlan;
+        
+        return $this;
     }
 }
