@@ -4,6 +4,11 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
 {% set labelHeader = {
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
@@ -17,10 +22,9 @@
         { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
-        
+    <div ng-controller="IndicatorResultController">
     <fieldset class="fieldset">
-        <legend class="legend">{{ indicator }}&nbsp;</legend>
-        
+        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read'])) }}">{{ indicator }}&nbsp;</legend>
          <div class="columns">
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
@@ -48,8 +52,8 @@
              </div>
              <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">{{ 'form.goal'|trans }}</label>
-                    {{ indicator.goal ?:('form.no_appy'|trans) }}
+                    <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
+                    {$ indicator.valueFinal|myNumberFormat:3 $}
                 </p>
              </div>
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -86,19 +90,15 @@
              </div>
         </div>
     </fieldset>
-<br /><br />
-{% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
-<br /><br />
-{% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
-
+        <br /><br />
+        {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        <br /><br />
+        {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
+    </div>
 <p class="button-height align-right">
-    {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
+    {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
     
-    <a href="" class="button">
-        <span class="button-icon"><span class="icon-download"></span></span>
-        {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
-    </a>
-    
+    {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
 </p>
 
 {% endblock %}

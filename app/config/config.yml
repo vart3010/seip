@@ -210,6 +210,12 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Planning\IndicatorController
                 model: Pequiven\IndicatorBundle\Entity\Indicator
                 repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        pequiven.value_indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/ValueIndicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
         #Indicador estratégico
         pequiven.indicatorstrategic:
             driver: doctrine/orm

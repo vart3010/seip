@@ -1,4 +1,5 @@
 pequiven_indicator:
+    value: Valor
     #Registrar
     indicators: Indicadores
     add: Añadir
@@ -12,6 +13,8 @@ pequiven_indicator:
     indicator_strategic: Indicador Estratégico
     indicator_tactic: Indicador Táctico
     indicator_operative: Indicador Operativo
+    indicator:
+        add_observation: Agrege una observación al indicador
 
     popup:
         description: Descripción
@@ -29,6 +32,16 @@ pequiven_indicator:
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
     results: Resultado(s)
+    value_indicator:
+        enter_values_variables: Ingrese los valores de las variables
+        result: Resultado
+        errors:
+            you_must_assign_formula_indicator: Debe asignar la fórmula del indicador "%indicator%"
+    details:
+        previus_value: Valor previo
+        last_notification_by: Última persona que cargo resultados
+        last_notification_at: Fecha de última carga
+        last_formula_used: Última formula utilizada
 form:
     ref: Nro. de Referencia
     indicator: Indicador

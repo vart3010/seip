@@ -12,9 +12,17 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
  */
 class IndicatorController extends ResourceController
 {
-    public function indexAction(Request $request) {
-        parent::indexAction($request);
+    public function showAction(Request $request) {
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('show.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($this->findOr404($request))
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        return $this->handleView($view);
     }
+    
     function listAction(Request $request)
     {
         $level = $request->get('level');
@@ -54,7 +62,7 @@ class IndicatorController extends ResourceController
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
@@ -68,5 +76,44 @@ class IndicatorController extends ResourceController
             $view->setData($resources->toArray('', array(), $formatData));
         }
         return $this->handleView($view);
+    }
+    
+    function addObservationAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        
+        $comment = $request->get('observation');
+        if($comment == ''){
+            $this->setFlash('error', 'pequiven.error.empty_comment');
+            return $this->redirectHandler->redirectTo($resource);
+        }
+                
+            $observation = new \Pequiven\SEIPBundle\Entity\Observation();
+            $observation
+                ->setDescription($comment)
+                ->setCreatedBy($this->getUser())
+                ;
+            $resource->addObservation($observation);
+
+            $this->domainManager->dispatchEvent('pre_add_observation', new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($resource));
+            $this->domainManager->update($resource);
+            
+            $this->setFlash('success', 'pequiven.indicator.add_observation');
+                
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
+     * A
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $entity
+     * @param type $description
+     */
+    private function addObservation(\Pequiven\IndicatorBundle\Entity\Indicator $entity,$description) {
+        $observation = new \Pequiven\SEIPBundle\Entity\Observation();
+            $observation
+                ->setDescription($description)
+                ->setCreatedBy($this->getUser())
+                ;
+            $entity->addObservation($observation);
     }
 }

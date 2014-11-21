@@ -58,7 +58,7 @@ class ValueIndicator
      * Valor del indicador
      * 
      * @var decimal
-     * @ORM\Column(name="valueOfIndicator", type="decimal",precision = 3)
+     * @ORM\Column(name="valueOfIndicator", type="float",precision = 3)
      */
     protected $valueOfIndicator;
     
@@ -77,7 +77,15 @@ class ValueIndicator
      * @ORM\JoinColumn(nullable=false)
      */
     private $indicator;
-
+    
+    /**
+     * Formula
+     * @var \Pequiven\MasterBundle\Entity\Formula
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
+     * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id",nullable=false)
+     */
+    private $formula;
+    
     /**
      * Get id
      *
@@ -247,5 +255,28 @@ class ValueIndicator
     public function getFormulaParameters()
     {
         return $this->formulaParameters;
+    }
+    
+    /**
+     * Set formula
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @return Indicator
+     */
+    public function setFormula(\Pequiven\MasterBundle\Entity\Formula $formula = null)
+    {
+        $this->formula = $formula;
+
+        return $this;
+    }
+
+    /**
+     * Get formula
+     *
+     * @return \Pequiven\MasterBundle\Entity\Formula 
+     */
+    public function getFormula()
+    {
+        return $this->formula;
     }
 }

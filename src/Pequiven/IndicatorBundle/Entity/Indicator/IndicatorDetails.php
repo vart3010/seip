@@ -26,7 +26,7 @@ class IndicatorDetails
      * Ultimo valor del indicador
      * 
      * @var integer
-     * @ORM\Column(name="lastValue",type="integer")
+     * @ORM\Column(name="previusValue", type="float",precision = 3)
      */
     private $previusValue = 0;
     
@@ -53,7 +53,14 @@ class IndicatorDetails
      * @ORM\Column(name="lastNotificationParameters",type="array")
      */
     private $lastNotificationParameters;
-
+    
+    /**
+     * Formula
+     * @var \Pequiven\MasterBundle\Entity\Formula
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
+     */
+    private $lastFormulaUsed;
+    
     /**
      * Get id
      *
@@ -154,5 +161,17 @@ class IndicatorDetails
     public function getLastNotificationParameters()
     {
         return $this->lastNotificationParameters;
+    }
+    
+    function getLastFormulaUsed() 
+    {
+        return $this->lastFormulaUsed;
+    }
+
+    function setLastFormulaUsed(\Pequiven\MasterBundle\Entity\Formula $lastFormulaUsed) 
+    {
+        $this->lastFormulaUsed = $lastFormulaUsed;
+        
+        return $this;
     }
 }

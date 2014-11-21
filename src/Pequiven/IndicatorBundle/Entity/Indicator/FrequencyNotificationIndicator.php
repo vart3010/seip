@@ -44,6 +44,14 @@ class FrequencyNotificationIndicator
      * @ORM\Column(name="description", type="string", length=200,nullable=false)
      */
     private $description;
+    
+    /**
+     * Texto que se mostrara en la abreviacion
+     * 
+     * @var string
+     * @ORM\Column(name="textAbbr", type="string", length=20,nullable=false)
+     */
+    private $textAbbr;
 
     /**
      * Dias de frecuencia, contando de cero a partir del inicio del periodo y mes.
@@ -185,5 +193,38 @@ class FrequencyNotificationIndicator
     
     public function __toString() {
         return $this->getDescription()?:'-';
+    }
+
+    /**
+     * Set textAbbr
+     *
+     * @param string $textAbbr
+     * @return FrequencyNotificationIndicator
+     */
+    public function setTextAbbr($textAbbr)
+    {
+        $this->textAbbr = $textAbbr;
+
+        return $this;
+    }
+
+    /**
+     * Get textAbbr
+     *
+     * @return string 
+     */
+    public function getTextAbbr()
+    {
+        return $this->textAbbr;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 }

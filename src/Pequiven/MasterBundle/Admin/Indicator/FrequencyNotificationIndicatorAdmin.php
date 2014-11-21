@@ -17,6 +17,7 @@ class FrequencyNotificationIndicatorAdmin extends Admin
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')
+            ->add('textAbbr')
             ->add('days')
             ->add('enabled')
                 ;
@@ -33,6 +34,7 @@ class FrequencyNotificationIndicatorAdmin extends Admin
     protected function configureListFields(ListMapper $list) {
         $list
             ->addIdentifier('description')
+            ->add('textAbbr')
             ->add('days')
             ->add('enabled')
             ;

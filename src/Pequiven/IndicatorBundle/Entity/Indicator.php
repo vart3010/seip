@@ -138,7 +138,7 @@ class Indicator extends modelIndicator
      * Valores del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator")
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $valuesIndicator;
     
@@ -146,7 +146,7 @@ class Indicator extends modelIndicator
      * Valor (Evaluado a partir de todos los valores y formula)
      * 
      * @var decimal
-     * @ORM\Column(name="valueFinal", type="decimal",precision = 3)
+     * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
     protected $valueFinal;
     
@@ -619,6 +619,8 @@ class Indicator extends modelIndicator
      */
     public function addValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
     {
+        $valuesIndicator->setIndicator($this);
+        
         $this->valuesIndicator->add($valuesIndicator);
 
         return $this;
@@ -767,7 +769,7 @@ class Indicator extends modelIndicator
     /**
      * Get details
      *
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails 
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
      */
     public function getDetails()
     {
