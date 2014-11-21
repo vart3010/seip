@@ -1371,7 +1371,8 @@ angular.module('seipModule.controllers', [])
                                 "baseFontColor" : "#ffffff",
                                 "outCnvBaseFontColor" : "#ffffff",
                                 "visible" : "0",
-                                "theme": "fint"
+                                "theme": "fint",
+                                "formatNumberScale": "0",
                             },
                             "categories": [
                                 {

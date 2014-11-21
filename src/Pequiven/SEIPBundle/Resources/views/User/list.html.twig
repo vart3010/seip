@@ -30,16 +30,16 @@
                             <td data-title="'{{ 'pequiven_seip.numPersonal'|trans }}'" filter="{'numPersonal' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.numPersonal $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven_seip.complejo'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.complejo'|trans }}'" filter="{'complejo' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.complejo.description $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven_seip.gerenciaFirst'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.gerenciaFirst'|trans }}'" filter="{'gerencia' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.gerencia.description $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven_seip.gerenciaSecond'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.gerenciaSecond'|trans }}'" filter="{'gerenciaSecond' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.gerenciaSecond.description $}</a>
                             </td>
-                            <td data-title="'{{ 'pequiven_seip.rol'|trans }}'">
+                            <td data-title="'{{ 'pequiven_seip.rol'|trans }}'" filter="{'role' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.rol $}</a>
                             </td>
                     </tbody>

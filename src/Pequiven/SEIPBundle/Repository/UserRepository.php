@@ -120,9 +120,12 @@ class UserRepository extends EntityRepository
      */
     function createPaginatorUser(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->innerJoin('u.groups', 'g');
-        $queryBuilder->andWhere('g.level <=:maxLevel');
-        $queryBuilder->setParameter('maxLevel', 6000);
+        $queryBuilder->leftJoin('u.groups', 'gr');
+        $queryBuilder->leftJoin('u.complejo', 'c');
+        $queryBuilder->leftJoin('u.gerencia', 'g');
+        $queryBuilder->leftJoin('u.gerenciaSecond', 'gs');
+        $queryBuilder->andWhere('gr.typeRol =:typeRol');
+        $queryBuilder->setParameter('typeRol', 0);
         
         if(isset($criteria['firstName'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
@@ -132,6 +135,21 @@ class UserRepository extends EntityRepository
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
+        }
+        if(isset($criteria['numPersonal'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$criteria['numPersonal']."%'"));
+        }
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        if(isset($criteria['gerencia'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['gerencia']."%'"));
+        }
+        if(isset($criteria['gerenciaSecond'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
+        }
+        if(isset($criteria['role'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gr.description', "'%".$criteria['role']."%'"));
         }
         
         return $this->getPaginator($queryBuilder);
@@ -146,8 +164,11 @@ class UserRepository extends EntityRepository
      */
     function createPaginatorUserAux(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->innerJoin('u.groups', 'g');
-        $queryBuilder->andWhere('g.typeRol =:typeRol');
+        $queryBuilder->leftJoin('u.groups', 'gr');
+        $queryBuilder->leftJoin('u.complejo', 'c');
+        $queryBuilder->leftJoin('u.gerencia', 'g');
+        $queryBuilder->leftJoin('u.gerenciaSecond', 'gs');
+        $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 1);
         
         if(isset($criteria['firstName'])){
@@ -158,6 +179,21 @@ class UserRepository extends EntityRepository
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
+        }
+        if(isset($criteria['numPersonal'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$criteria['numPersonal']."%'"));
+        }
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        if(isset($criteria['gerencia'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['gerencia']."%'"));
+        }
+        if(isset($criteria['gerenciaSecond'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
+        }
+        if(isset($criteria['role'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gr.description', "'%".$criteria['role']."%'"));
         }
         
         return $this->getPaginator($queryBuilder);
