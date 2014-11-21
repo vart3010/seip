@@ -29,7 +29,7 @@
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
-                    {{ indicator }}
+                    {{ generateLink(indicator) }}
                 </p>
              </div>
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -72,22 +72,15 @@
                     {% endif %}
                 </p>
              </div>
-             <div class="new-row new-row-mobile twelve-columns-mobile twelve-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.objetives'|trans }}</label>
+             
+            <div class="inline-label">
+                <label class="label">{{ 'form.objetives'|trans }}</label>
+                <ul class="fa-ul">
                     {% for objetive in indicator.objetives %}
-                        {% set pathObjetive = null %}
-                        {% if objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO') %}
-                            {% set pathObjetive = 'objetiveStrategic_show' %}
-                        {% elseif objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO') %}
-                            {% set pathObjetive = 'objetiveTactic_show' %}
-                        {% elseif objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO') %}
-                            {% set pathObjetive = 'objetiveOperative_show' %}
-                        {% endif %}
-                        <a href="{{ pathObjetive ? path(pathObjetive,{ id:objetive.id }) : '' }}">{{ objetive }}</a><br />
+                        <li>{{ generateLink(objetive) }}</li>
                     {% endfor %}
-                </p>
-             </div>
+                </ul>
+            </div>
         </div>
     </fieldset>
         <br /><br />

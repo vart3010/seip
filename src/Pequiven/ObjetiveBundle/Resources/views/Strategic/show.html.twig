@@ -38,9 +38,11 @@
         {% if entity.childrens|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.objetiveTactics'|trans }}</label>
-                <ul>
+                <ul class="fa-ul">
                 {% for children in entity.childrens %}
-                    <li>{{ children.ref }} {{ children.description }}</li>
+                    <li>
+                        {{ generateLink(children) }}
+                    </li>
                 {% endfor  %}
                 </ul>
             </div>
@@ -57,9 +59,11 @@
         {% if entity.indicators|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.indicatorStrategics'|trans }}</label>
-                <ul>
+                <ul class="fa-ul">
                 {% for indicator in entity.indicators %}
-                    <li><a href="{{ path('pequiven_indicator_show',{id:indicator.id}) }}">{{ indicator.ref }} {{ indicator.description }}</a></li>
+                    <li>
+                        {{ generateLink(indicator) }}
+                    </li>
                 {% endfor  %}
                 </ul>
             </div>
