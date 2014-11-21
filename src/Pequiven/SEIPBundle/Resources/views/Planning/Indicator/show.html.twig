@@ -41,7 +41,11 @@
              <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.tendency'|trans }}</label>
-                    {{ indicator.tendency }}
+                    {% if indicator.tendency != null %}
+                        {{ indicator.tendency }}
+                    {% else %}
+                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                    {% endif %}
                 </p>
              </div>
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
