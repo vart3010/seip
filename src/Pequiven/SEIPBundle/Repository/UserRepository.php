@@ -106,7 +106,7 @@ class UserRepository extends EntityRepository
            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
             ;
         $qb
-            ->andWhere('g.level < :level')
+            ->andWhere('g.level <= :level')
             ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         return $qb;
     }

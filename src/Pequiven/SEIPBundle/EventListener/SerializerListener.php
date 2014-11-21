@@ -62,10 +62,12 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $event->getVisitor()->addData('_links',$data);
         } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
             $parents = $object->getParents();
+            $totalParents = count($parents);
             $valueGroupBy = '';
+            $i = 1;
             foreach ($parents as $parent) {
-                $valueGroupBy.= $parent->getRef() . $parent->getDescription();
-            }
+                    $valueGroupBy.= $parent->getRef() . $parent->getDescription().'<br>';
+                }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
             $data['self']['href'] = $this->generateUrl('objetiveTactic_show', array('id' => $object->getId()));
