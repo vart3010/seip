@@ -273,7 +273,7 @@ angular.module('seipModule.controllers', [])
                         $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
                             operationalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
                             angular.forEach(data, function(value) {
-                                operationalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + '</option>');
+                                operationalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + ' - ' + value.gerenciaSecond.description + '</option>');
                             });
                             if (data.length > 0) {
                                 operationalObjective.select2('val', e.val);
