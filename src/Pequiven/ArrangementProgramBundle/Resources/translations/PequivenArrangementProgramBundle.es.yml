@@ -44,6 +44,7 @@ pequiven:
         list_template: Lista de plantillas
         template: Plantilla
         list: Lista
+        observations: Observaciones al programa
         type_management:
             type_management: Tipo de gerencia
             modular: Modular
