@@ -8,6 +8,7 @@ pequiven_seip:
     sign_in: Ingresar
     remind_me: Recuerdame
     login: Iniciar sesión
+    group_roles: Roles
     lost_password: Recuperar contraseña
     username: Nombre de usuario
     password: Contraseña

@@ -32,7 +32,7 @@ class User extends AbstractType {
         
         $builder
             ->add('username',null,array(
-                'label' => 'pequiven_seip.userName',
+                'label' => 'pequiven_seip.username',
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
             ->add('firstname',null,array('label' => 'pequiven_seip.firstname','translation_domain' => 'PequivenSEIPBundle'))
@@ -44,8 +44,8 @@ class User extends AbstractType {
             ->add('direction',null,array('label' => 'pequiven_seip.direction','translation_domain' => 'PequivenSEIPBundle'))
             ->add('groups','entity',$parametersUser)
             ->add('roles', 'choice', array(
-                'label' => 'form.group_roles',
-                'translation_domain' => 'FOSUserBundle',
+                'label' => 'pequiven_seip.group_roles',
+                'translation_domain' => 'PequivenSEIPBundle',
                 'choices' => array(
                     'ROLE_WORKER_PQV' => 'Trabajador de pequiven',
                     'ROLE_WORKER_PLANNING' => 'Trabajador de planificacion',
