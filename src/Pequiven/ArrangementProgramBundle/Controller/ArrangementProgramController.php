@@ -885,41 +885,41 @@ class ArrangementProgramController extends SEIPController
             $weight = $goal->getWeight();
             $goalDetails = $goal->getGoalDetails();
             
-            $januaryPlanned = $goalDetails->getJanuaryPlanned();
-            $januaryReal = $goalDetails->getJanuaryReal();
+            $januaryPlanned = $goalDetails->getJanuaryPlanned() > 0 ? $goalDetails->getJanuaryPlanned(): '';
+            $januaryReal = $goalDetails->getJanuaryReal() > 0 ? $goalDetails->getJanuaryReal() : '';
             
-            $februaryPlanned = $goalDetails->getFebruaryPlanned();
-            $februaryReal = $goalDetails->getFebruaryReal();
+            $februaryPlanned = $goalDetails->getFebruaryPlanned() > 0 ? $goalDetails->getFebruaryPlanned() : '';
+            $februaryReal = $goalDetails->getFebruaryReal() > 0 ? $goalDetails->getFebruaryReal() : '';
             
-            $marchPlanned = $goalDetails->getMarchPlanned();
-            $marchReal = $goalDetails->getMarchReal();
+            $marchPlanned = $goalDetails->getMarchPlanned() > 0 ? $goalDetails->getMarchPlanned() : '';
+            $marchReal = $goalDetails->getMarchReal() > 0 ? $goalDetails->getMarchReal() : '';
             
-            $aprilPlanned = $goalDetails->getAprilPlanned();
-            $aprilReal = $goalDetails->getAprilReal();
+            $aprilPlanned = $goalDetails->getAprilPlanned() > 0 ? $goalDetails->getAprilPlanned() : '';
+            $aprilReal = $goalDetails->getAprilReal() > 0 ? $goalDetails->getAprilReal() : '';
             
-            $mayPlanned = $goalDetails->getMayPlanned();
-            $mayReal = $goalDetails->getMayReal();
+            $mayPlanned = $goalDetails->getMayPlanned() > 0 ? $goalDetails->getMayPlanned() : '';
+            $mayReal = $goalDetails->getMayReal() > 0 ? $goalDetails->getMayReal() : '';
             
-            $junePlanned = $goalDetails->getJunePlanned();
-            $juneReal = $goalDetails->getJuneReal();
+            $junePlanned = $goalDetails->getJunePlanned() > 0 ? $goalDetails->getJunePlanned() : '';
+            $juneReal = $goalDetails->getJuneReal() > 0 ? $goalDetails->getJuneReal() : '';
             
-            $julyPlanned = $goalDetails->getJulyPlanned();
-            $julyReal = $goalDetails->getJulyReal();
+            $julyPlanned = $goalDetails->getJulyPlanned() > 0 ? $goalDetails->getJulyPlanned() : '';
+            $julyReal = $goalDetails->getJulyReal() > 0 ? $goalDetails->getJulyReal() : '';
             
-            $augustPlanned = $goalDetails->getAugustPlanned();
-            $augustReal = $goalDetails->getAugustReal();
+            $augustPlanned = $goalDetails->getAugustPlanned() > 0 ? $goalDetails->getAugustPlanned() : '';
+            $augustReal = $goalDetails->getAugustReal() > 0 ? $goalDetails->getAugustReal() : '';
             
-            $septemberPlanned = $goalDetails->getSeptemberPlanned();
-            $septemberReal = $goalDetails->getSeptemberReal();
+            $septemberPlanned = $goalDetails->getSeptemberPlanned() > 0 ? $goalDetails->getSeptemberPlanned() : '';
+            $septemberReal = $goalDetails->getSeptemberReal() > 0 ? $goalDetails->getSeptemberReal() : '';
             
-            $octoberPlanned = $goalDetails->getOctoberPlanned();
-            $octoberReal = $goalDetails->getOctoberReal();
+            $octoberPlanned = $goalDetails->getOctoberPlanned() > 0 ? $goalDetails->getOctoberPlanned() : '';
+            $octoberReal = $goalDetails->getOctoberReal() > 0 ? $goalDetails->getOctoberReal() : '';
             
-            $novemberPlanned = $goalDetails->getNovemberPlanned();
-            $novemberReal = $goalDetails->getNovemberReal();
+            $novemberPlanned = $goalDetails->getNovemberPlanned() > 0 ? $goalDetails->getNovemberPlanned() : '';
+            $novemberReal = $goalDetails->getNovemberReal() > 0 ? $goalDetails->getNovemberReal() : '';
             
-            $decemberPlanned = $goalDetails->getDecemberPlanned();
-            $decemberReal = $goalDetails->getDecemberReal();
+            $decemberPlanned = $goalDetails->getDecemberPlanned() > 0 ? $goalDetails->getDecemberPlanned() : '';
+            $decemberReal = $goalDetails->getDecemberReal() > 0 ? $goalDetails->getDecemberReal() : '';
             
             $goalObservations = $goal->getObservations();
             
@@ -1019,6 +1019,7 @@ class ArrangementProgramController extends SEIPController
         //Observaciones del programa.
         $rowObservation = $rowSummary + 2;
         $observations = $resource->getObservations();
+        $reference = $resource->getRef();
         $observationString = '';
         foreach ($observations as $observation) {
             $observationString .= sprintf('%s,',$observation->getDescription());
@@ -1031,7 +1032,8 @@ class ArrangementProgramController extends SEIPController
             $observationString = 'Ninguna.';
         }
         $activeSheet
-                ->setCellValue('B'.$rowObservation,$observationString);
+                ->setCellValue('B'.$rowObservation,$observationString)
+                ->setCellValue('AE'.$rowObservation,$reference);
         
         //Agregar los detalles del programa de gestion
         $sendToReviewBy = ucfirst(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
