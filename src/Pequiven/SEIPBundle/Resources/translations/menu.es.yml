@@ -75,3 +75,10 @@ app:
                             main: Roles
                             list: Lista
                             add: Añadir
+                    planning:
+                        main: Planificación
+                        indicators:
+                            main: Indicadores
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo

@@ -283,4 +283,9 @@ class FormulaLevel extends modelFormulaLevel {
     {
         return $this->userUpdatedAt;
     }
+    
+    public function __toString()
+    {
+        return $this->getDescription()?: '-';
+    }
 }

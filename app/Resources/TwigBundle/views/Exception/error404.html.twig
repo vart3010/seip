@@ -1,0 +1,17 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layout404.html.twig" %}
+{% block body %}
+    <p class="wrapped relative" style="min-height: 130px; font-size: 30px;padding: 2em">
+        <span>
+            <span class="ribbon"><span class="ribbon-inner red-gradient glossy">404</span></span>
+            <br />
+            <br />
+            <br />
+            <span class="icon-info-round red icon-size2 "></span>
+            {{ 'app.http.error.404'|trans|raw }}
+        </span>
+        <br /><br /><br />
+        <div class="align-center" style="font-size:30px">
+            <a href="{{ path('pequiven_seip_default_index') }}"><i class="fa fa-home fa-4x"></i>{{ 'app.http.return_to_home'|trans|raw }}</a>
+        </div>
+    </p>
+{% endblock body %}

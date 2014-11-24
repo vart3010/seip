@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Historial
+ * Historial o Evento
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  * @ORM\Table()

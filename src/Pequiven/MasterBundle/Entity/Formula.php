@@ -21,7 +21,8 @@ use Pequiven\MasterBundle\Model\Formula as modelFormula;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\FormulaRepository")
  * @author matias
  */
-class Formula extends modelFormula {
+class Formula extends modelFormula 
+{
     
     /**
      * @var integer
@@ -70,11 +71,19 @@ class Formula extends modelFormula {
     private $description;
     
     /**
+     * Ecuacion
+     * 
      * @var string
-     *
-     * @ORM\Column(name="equation", type="string", length=300)
+     * @ORM\Column(name="equation", type="text")
      */
     private $equation;
+    
+    /**
+     * Ecuacion real con variables
+     * @var string
+     * @ORM\Column(name="equationReal", type="text")
+     */
+    private $equationReal;
     
     /**
      * FormulaLevel
@@ -90,6 +99,18 @@ class Formula extends modelFormula {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
+    
+    /**
+     * Variables de la formula
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Formula\Variable
+     * @ORM\ManyToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable", inversedBy="formulas")
+     */
+    protected $variables;
+    
+    public function __construct() {
+        $this->variables = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -283,5 +304,65 @@ class Formula extends modelFormula {
     public function getFormulaLevel()
     {
         return $this->formulaLevel;
+    }
+
+    /**
+     * Add variables
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variables
+     * @return Formula
+     */
+    public function addVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variables)
+    {
+        $this->variables[] = $variables;
+
+        return $this;
+    }
+
+    /**
+     * Remove variables
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variables
+     */
+    public function removeVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variables)
+    {
+        $this->variables->removeElement($variables);
+    }
+
+    /**
+     * Get variables
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVariables()
+    {
+        return $this->variables;
+    }
+
+    /**
+     * Set equationReal
+     *
+     * @param string $equationReal
+     * @return Formula
+     */
+    public function setEquationReal($equationReal)
+    {
+        $this->equationReal = $equationReal;
+
+        return $this;
+    }
+
+    /**
+     * Get equationReal
+     *
+     * @return string 
+     */
+    public function getEquationReal()
+    {
+        return $this->equationReal;
+    }
+    
+    public function __toString() {
+        return $this->getEquation() ?: '-';
     }
 }

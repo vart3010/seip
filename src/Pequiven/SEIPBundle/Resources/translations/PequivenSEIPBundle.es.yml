@@ -2,6 +2,7 @@
 pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
+    home: Página de inicio
 
     #Login
     sign_in: Ingresar
@@ -112,7 +113,7 @@ pequiven_seip:
         management_second_line: Gerencia de segunda línea
         complejo: Localidad
         responsibles_pg: Responsable(s) del programa de gestión
-        responsibles_goals: Responsable(s) del las metas
+        responsibles_goals: Responsable(s) de las metas
         type_template: Tipo de plantilla
     tooltips:
         click_to_show: Click para ver

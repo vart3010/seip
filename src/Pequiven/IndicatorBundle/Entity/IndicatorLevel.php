@@ -75,15 +75,7 @@ class IndicatorLevel extends modelIndicatorLevel {
      * @ORM\Column(name="level_name", type="string", length=50)
      */
     private $levelName;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="level", type="integer")
-     */
-    private $level;
     
-
     /**
      * @var boolean
      *
@@ -191,29 +183,6 @@ class IndicatorLevel extends modelIndicatorLevel {
     public function getLevelName()
     {
         return $this->levelName;
-    }
-
-    /**
-     * Set level
-     *
-     * @param integer $level
-     * @return IndicatorLevel
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * Get level
-     *
-     * @return integer 
-     */
-    public function getLevel()
-    {
-        return $this->level;
     }
 
     /**
