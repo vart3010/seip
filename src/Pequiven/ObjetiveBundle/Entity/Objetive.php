@@ -64,7 +64,7 @@ class Objetive extends modelObjetive {
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
 

@@ -33,8 +33,7 @@ class User extends AbstractType {
         $builder
             ->add('username',null,array(
                 'label' => 'pequiven_seip.userName',
-                'translation_domain' => 'PequivenSEIPBundle',
-                'disabled' => true
+                'translation_domain' => 'PequivenSEIPBundle'
             ))
             ->add('firstname',null,array('label' => 'pequiven_seip.firstname','translation_domain' => 'PequivenSEIPBundle'))
             ->add('lastname',null,array('label' => 'pequiven_seip.lastname','translation_domain' => 'PequivenSEIPBundle'))

@@ -59,7 +59,7 @@ class Indicator extends modelIndicator
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
     
@@ -156,7 +156,7 @@ class Indicator extends modelIndicator
      * @var decimal
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
-    protected $valueFinal;
+    protected $valueFinal = 0;
     
     /**
      * Frecuencia de notificacion del indicador
