@@ -27,7 +27,7 @@ class UserRepository extends EntityRepository
             ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
             ->setParameter('level', $level)
-            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_SUPERVISER)
+            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
             ;
