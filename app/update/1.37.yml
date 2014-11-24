@@ -1,0 +1,52 @@
+ALTER TABLE `seip_user` CHANGE `first_name` `firstname` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+ALTER TABLE `seip_user` CHANGE `last_name` `lastname` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+
+UPDATE `seip_indicator` SET `period_id`= 1;
+ALTER TABLE seip_indicator ADD typeOfCalculation INT NOT NULL;
+
+CREATE TABLE Observation (id INT AUTO_INCREMENT NOT NULL, description LONGTEXT NOT NULL, createdAt DATETIME NOT NULL, createdBy_id INT NOT NULL, INDEX IDX_43EA54373174800F (createdBy_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE Variable (id INT AUTO_INCREMENT NOT NULL, description VARCHAR(255) NOT NULL, name VARCHAR(100) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE formula_variable (formula_id INT NOT NULL, variable_id INT NOT NULL, INDEX IDX_E85AF96A50A6386 (formula_id), INDEX IDX_E85AF96F3037E8E (variable_id), PRIMARY KEY(formula_id, variable_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE indicator_historical (indicator_id INT NOT NULL, historical_id INT NOT NULL, INDEX IDX_8D72C1FC4402854A (indicator_id), INDEX IDX_8D72C1FCC75EAE06 (historical_id), PRIMARY KEY(indicator_id, historical_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE indicator_observation (indicator_id INT NOT NULL, observation_id INT NOT NULL, INDEX IDX_E85C29614402854A (indicator_id), INDEX IDX_E85C29611409DD88 (observation_id), PRIMARY KEY(indicator_id, observation_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE seip_indicator_value (id INT AUTO_INCREMENT NOT NULL, indicator_id INT NOT NULL, fk_formula INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, valueOfIndicator DOUBLE PRECISION NOT NULL, formulaParameters LONGTEXT NOT NULL COMMENT '(DC2Type:array)', createdBy_id INT NOT NULL, updatedBy_id INT DEFAULT NULL, INDEX IDX_1212EAD3174800F (createdBy_id), INDEX IDX_1212EAD65FF1AEC (updatedBy_id), INDEX IDX_1212EAD4402854A (indicator_id), INDEX IDX_1212EAD971E65AD (fk_formula), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE IndicatorDetails (id INT AUTO_INCREMENT NOT NULL, previusValue DOUBLE PRECISION NOT NULL, lastNotificationAt DATETIME DEFAULT NULL, lastNotificationParameters LONGTEXT NOT NULL COMMENT '(DC2Type:array)', lastNotificationBy_id INT DEFAULT NULL, lastFormulaUsed_id INT DEFAULT NULL, INDEX IDX_D088D9712F6EF883 (lastNotificationBy_id), INDEX IDX_D088D971E7968C7B (lastFormulaUsed_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE seip_c_indicator_frequency_notification (id INT AUTO_INCREMENT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, description VARCHAR(200) NOT NULL, textAbbr VARCHAR(20) NOT NULL, days INT NOT NULL, enabled TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE acl_classes (id INT UNSIGNED AUTO_INCREMENT NOT NULL, class_type VARCHAR(200) NOT NULL, UNIQUE INDEX UNIQ_69DD750638A36066 (class_type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE acl_security_identities (id INT UNSIGNED AUTO_INCREMENT NOT NULL, identifier VARCHAR(200) NOT NULL, username TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_8835EE78772E836AF85E0677 (identifier, username), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE acl_object_identities (id INT UNSIGNED AUTO_INCREMENT NOT NULL, parent_object_identity_id INT UNSIGNED DEFAULT NULL, class_id INT UNSIGNED NOT NULL, object_identifier VARCHAR(100) NOT NULL, entries_inheriting TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_9407E5494B12AD6EA000B10 (object_identifier, class_id), INDEX IDX_9407E54977FA751A (parent_object_identity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE acl_object_identity_ancestors (object_identity_id INT UNSIGNED NOT NULL, ancestor_id INT UNSIGNED NOT NULL, INDEX IDX_825DE2993D9AB4A6 (object_identity_id), INDEX IDX_825DE299C671CEA1 (ancestor_id), PRIMARY KEY(object_identity_id, ancestor_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE acl_entries (id INT UNSIGNED AUTO_INCREMENT NOT NULL, class_id INT UNSIGNED NOT NULL, object_identity_id INT UNSIGNED DEFAULT NULL, security_identity_id INT UNSIGNED NOT NULL, field_name VARCHAR(50) DEFAULT NULL, ace_order SMALLINT UNSIGNED NOT NULL, mask INT NOT NULL, granting TINYINT(1) NOT NULL, granting_strategy VARCHAR(30) NOT NULL, audit_success TINYINT(1) NOT NULL, audit_failure TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_46C8B806EA000B103D9AB4A64DEF17BCE4289BF4 (class_id, object_identity_id, field_name, ace_order), INDEX IDX_46C8B806EA000B103D9AB4A6DF9183C9 (class_id, object_identity_id, security_identity_id), INDEX IDX_46C8B806EA000B10 (class_id), INDEX IDX_46C8B8063D9AB4A6 (object_identity_id), INDEX IDX_46C8B806DF9183C9 (security_identity_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE Observation ADD CONSTRAINT FK_43EA54373174800F FOREIGN KEY (createdBy_id) REFERENCES seip_user (id);
+ALTER TABLE formula_variable ADD CONSTRAINT FK_E85AF96A50A6386 FOREIGN KEY (formula_id) REFERENCES seip_c_formula (id) ON DELETE CASCADE;
+ALTER TABLE formula_variable ADD CONSTRAINT FK_E85AF96F3037E8E FOREIGN KEY (variable_id) REFERENCES Variable (id) ON DELETE CASCADE;
+ALTER TABLE indicator_historical ADD CONSTRAINT FK_8D72C1FC4402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id) ON DELETE CASCADE;
+ALTER TABLE indicator_historical ADD CONSTRAINT FK_8D72C1FCC75EAE06 FOREIGN KEY (historical_id) REFERENCES Historical (id) ON DELETE CASCADE;
+ALTER TABLE indicator_observation ADD CONSTRAINT FK_E85C29614402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id) ON DELETE CASCADE;
+ALTER TABLE indicator_observation ADD CONSTRAINT FK_E85C29611409DD88 FOREIGN KEY (observation_id) REFERENCES Observation (id) ON DELETE CASCADE;
+ALTER TABLE seip_indicator_value ADD CONSTRAINT FK_1212EAD3174800F FOREIGN KEY (createdBy_id) REFERENCES seip_user (id);
+ALTER TABLE seip_indicator_value ADD CONSTRAINT FK_1212EAD65FF1AEC FOREIGN KEY (updatedBy_id) REFERENCES seip_user (id);
+ALTER TABLE seip_indicator_value ADD CONSTRAINT FK_1212EAD4402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id);
+ALTER TABLE seip_indicator_value ADD CONSTRAINT FK_1212EAD971E65AD FOREIGN KEY (fk_formula) REFERENCES seip_c_formula (id);
+ALTER TABLE IndicatorDetails ADD CONSTRAINT FK_D088D9712F6EF883 FOREIGN KEY (lastNotificationBy_id) REFERENCES seip_user (id);
+ALTER TABLE IndicatorDetails ADD CONSTRAINT FK_D088D971E7968C7B FOREIGN KEY (lastFormulaUsed_id) REFERENCES seip_c_formula (id);
+ALTER TABLE acl_object_identities ADD CONSTRAINT FK_9407E54977FA751A FOREIGN KEY (parent_object_identity_id) REFERENCES acl_object_identities (id);
+ALTER TABLE acl_object_identity_ancestors ADD CONSTRAINT FK_825DE2993D9AB4A6 FOREIGN KEY (object_identity_id) REFERENCES acl_object_identities (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE acl_object_identity_ancestors ADD CONSTRAINT FK_825DE299C671CEA1 FOREIGN KEY (ancestor_id) REFERENCES acl_object_identities (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B806EA000B10 FOREIGN KEY (class_id) REFERENCES acl_classes (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B8063D9AB4A6 FOREIGN KEY (object_identity_id) REFERENCES acl_object_identities (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE acl_entries ADD CONSTRAINT FK_46C8B806DF9183C9 FOREIGN KEY (security_identity_id) REFERENCES acl_security_identities (id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE seip_user ADD date_of_birth DATETIME DEFAULT NULL, ADD website VARCHAR(64) DEFAULT NULL, ADD biography VARCHAR(255) DEFAULT NULL, ADD gender VARCHAR(1) DEFAULT NULL, ADD locale VARCHAR(8) DEFAULT NULL, ADD timezone VARCHAR(64) DEFAULT NULL, ADD phone VARCHAR(64) DEFAULT NULL, ADD facebook_uid VARCHAR(255) DEFAULT NULL, ADD facebook_name VARCHAR(255) DEFAULT NULL, ADD facebook_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', ADD twitter_uid VARCHAR(255) DEFAULT NULL, ADD twitter_name VARCHAR(255) DEFAULT NULL, ADD twitter_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', ADD gplus_uid VARCHAR(255) DEFAULT NULL, ADD gplus_name VARCHAR(255) DEFAULT NULL, ADD gplus_data LONGTEXT DEFAULT NULL COMMENT '(DC2Type:json)', ADD token VARCHAR(255) DEFAULT NULL, ADD two_step_code VARCHAR(255) DEFAULT NULL, CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL, CHANGE firstname firstname VARCHAR(64) DEFAULT NULL, CHANGE lastname lastname VARCHAR(64) DEFAULT NULL;
+ALTER TABLE seip_c_formula ADD equationReal LONGTEXT NOT NULL, CHANGE equation equation LONGTEXT NOT NULL;
+ALTER TABLE seip_indicator ADD details_id INT DEFAULT NULL, ADD totalPlan DOUBLE PRECISION DEFAULT NULL, ADD valueFinal DOUBLE PRECISION NOT NULL, ADD frequencyNotificationIndicator_id INT DEFAULT NULL, CHANGE fk_indicator_level fk_indicator_level INT NOT NULL;
+ALTER TABLE seip_indicator ADD CONSTRAINT FK_6092D6A65045CFEB FOREIGN KEY (frequencyNotificationIndicator_id) REFERENCES seip_c_indicator_frequency_notification (id);
+ALTER TABLE seip_indicator ADD CONSTRAINT FK_6092D6A6BB1A0722 FOREIGN KEY (details_id) REFERENCES IndicatorDetails (id);
+CREATE INDEX IDX_6092D6A65045CFEB ON seip_indicator (frequencyNotificationIndicator_id);
+CREATE UNIQUE INDEX UNIQ_6092D6A6BB1A0722 ON seip_indicator (details_id);
+
+-- Data de fecuencia de notificacion
+INSERT INTO `seip_c_indicator_frequency_notification` (`id`, `created_at`, `updated_at`, `description`, `textAbbr`, `days`, `enabled`) VALUES
+(1, '2014-11-21 09:20:01', '2014-11-21 09:20:01', 'Semanal', 'Semana', 7, 1),
+(2, '2014-11-21 09:20:18', '2014-11-21 09:20:18', 'Quincenal', 'Quincena', 15, 1),
+(3, '2014-11-21 09:20:29', '2014-11-21 09:20:29', 'Mensual', 'Mes', 30, 1),
+(4, '2014-11-21 09:20:49', '2014-11-21 09:20:49', 'Anual', 'Año', 360, 1);
