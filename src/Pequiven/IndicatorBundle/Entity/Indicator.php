@@ -59,7 +59,7 @@ class Indicator extends modelIndicator
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
     
