@@ -29,6 +29,7 @@ class GenericDataController extends SEIPController
         }
         $view = $this->view();
         $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
         return $this->handleView($view);
     }
     
@@ -167,7 +168,7 @@ class GenericDataController extends SEIPController
         $results = $repository->findUsersByCriteria();
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','gerencia','sonata_api_read'));
         return $this->handleView($view);
     }
     

@@ -156,7 +156,9 @@
 
         
         <!-- Sidebar/drop-down menu -->
-        {% include 'PequivenSEIPBundle:Template/Developer/Layout:_sidebar-drop-down-menu.html.twig' %}
+        {% block sidebar %}
+            {% include 'PequivenSEIPBundle:Template/Developer/Layout:_sidebar-drop-down-menu.html.twig' %}
+        {% endblock sidebar %}
         <!-- End sidebar/drop-down menu -->
 
         <!-- JavaScript at the bottom for fast page loading -->

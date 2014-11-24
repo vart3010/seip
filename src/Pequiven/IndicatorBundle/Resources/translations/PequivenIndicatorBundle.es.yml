@@ -1,30 +1,47 @@
 pequiven_indicator:
-                #Registrar
-                indicators: Indicadores
-                add: Añadir
-                list: Lista
-                strategic: Estratégico
-                tactic: Táctico
-                operative: Operativo
-                titleFrameAddStrategic: Registro de Indicador Estratégico
-                titleFrameAddTactic: Registro de Indicador Táctico
-                titleFrameAddOperative: Registro de Indicador Operativo
-                indicator_strategic: Indicador Estratégico
-                indicator_tactic: Indicador Táctico
-                indicator_operative: Indicador Operativo
-                
-                popup:
-                    description: Descripción
-                    lineStrategic: Línea Estratégica
-                    formula: Fórmula
-                    created_at: Creado el
-                    updated_at: Actualizado el
+    value: Valor
+    #Registrar
+    indicators: Indicadores
+    add: Añadir
+    list: Lista
+    strategic: Estratégico
+    tactic: Táctico
+    operative: Operativo
+    titleFrameAddStrategic: Registro de Indicador Estratégico
+    titleFrameAddTactic: Registro de Indicador Táctico
+    titleFrameAddOperative: Registro de Indicador Operativo
+    indicator_strategic: Indicador Estratégico
+    indicator_tactic: Indicador Táctico
+    indicator_operative: Indicador Operativo
+    indicator:
+        add_observation: Agrege una observación al indicador
 
-                #Buttons
-                edit: Editar
-                save: Guardar
-                cancel: Cancelar
+    popup:
+        description: Descripción
+        lineStrategic: Línea Estratégica
+        formula: Fórmula
+        created_at: Creado el
+        updated_at: Actualizado el
 
+    #Buttons
+    edit: Editar
+    save: Guardar
+    cancel: Cancelar
+    type_calculation:
+        main: Tipo de calculo
+        formula_manually: Fórmula manual
+        formula_automatic: Fórmula automatica
+    results: Resultado(s)
+    value_indicator:
+        enter_values_variables: Ingrese los valores de las variables
+        result: Resultado
+        errors:
+            you_must_assign_formula_indicator: Debe asignar la fórmula del indicador "%indicator%"
+    details:
+        previus_value: Valor previo
+        last_notification_by: Última persona que cargo resultados
+        last_notification_at: Fecha de última carga
+        last_formula_used: Última formula utilizada
 form:
     ref: Nro. de Referencia
     indicator: Indicador
@@ -36,6 +53,7 @@ form:
     indicator_level: Nivel de Indicador
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
+    frequencyNotificationIndicator: Frecuencia de notificación
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
@@ -56,6 +74,9 @@ form:
     indicatorStrategic: Indicador Estratégico
     indicatorTactic: Indicador Táctico
     indicatorOperative: Indicador Operativo
+    no_appy: No aplica
+    period: Período
+    objetives: Objetivos
     
     arrangementRangeType: Tipo de Rango
     arrangementRangeTypeTop: Tipo de Rango Alto

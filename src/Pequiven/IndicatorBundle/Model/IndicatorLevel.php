@@ -1,24 +1,26 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\IndicatorBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Description of IndicatorLevel
+ * Modelo del nivel de indicador
  *
  * @author matias
  */
-class IndicatorLevel extends \Pequiven\SEIPBundle\Model\Common\CommonObject {
-    //put your code here
+abstract class IndicatorLevel extends \Pequiven\SEIPBundle\Model\Common\CommonObject {
     const LEVEL_DEFAULT = 0;
     const LEVEL_ESTRATEGICO = 1;
     const LEVEL_TACTICO = 2;
     const LEVEL_OPERATIVO = 3;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="level", type="integer")
+     */
+    protected $level;
     
     public $level_name = array();
     
@@ -30,10 +32,71 @@ class IndicatorLevel extends \Pequiven\SEIPBundle\Model\Common\CommonObject {
     }
     
     /**
+     * Set level
+     *
+     * @param integer $level
+     * @return IndicatorLevel
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return integer 
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+    
+    /**
      * Retorna todos los niveles
      * @return type
      */
     public function getLevelNameArray() {
         return $this->level_name;
+    }
+    
+    /**
+     * Retorna un array con las etiquetas de cada nivel
+     * @staticvar array $labelLevel
+     * @return string
+     */
+    static function getLabelLevels() 
+    {
+        static $labelLevels = array(
+            self::LEVEL_ESTRATEGICO => 'pequiven.indicator.level.stategic',
+            self::LEVEL_TACTICO => 'pequiven.indicator.level.tactic',
+            self::LEVEL_OPERATIVO => 'pequiven.indicator.level.objective',
+        );
+        return $labelLevels;
+    }
+    
+    /**
+     * Retorna la etiqueta que corresponde al nivel
+     * @param type $level
+     * @return type
+     * @throws \InvalidArgumentException
+     */
+    static function getLabelLevel($level)
+    {
+        $labelLevels = self::getLabelLevels();
+        if(!isset($labelLevels[$level])){
+            throw new \InvalidArgumentException(sprintf('Invalid argument, label for "%s" dont exist'));
+        }
+        return $labelLevels[$level];
+    }
+    
+    /**
+     * Retorna la etiqueta del nivel
+     * @return string
+     */
+    function getLabelForLevel() {
+        return $this->getLabelLevel($this->level);
     }
 }

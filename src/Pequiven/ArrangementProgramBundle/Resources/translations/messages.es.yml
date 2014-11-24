@@ -28,6 +28,7 @@ pequiven:
     modal:
         title:
             goal: Meta
+            value_indicator: Valor del indicador
         confirm:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?

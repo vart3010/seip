@@ -50,6 +50,9 @@ pequiven_indicator_route:
     
 pequiven_arrangement_program_yml:
     resource: "@PequivenArrangementProgramBundle/Resources/config/routing/main.yml"
+    
+pequiven_planning:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/main.yml"
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
@@ -83,3 +86,16 @@ _bazinga_jstranslation:
 tpg_extjs:
   resource: "@TpgExtjsBundle/Resources/config/routing.yml"
   prefix:   /extjs
+  
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin
+    
+sonata_user:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /admin

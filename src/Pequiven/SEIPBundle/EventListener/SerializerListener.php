@@ -62,10 +62,12 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             $event->getVisitor()->addData('_links',$data);
         } elseif ($object->getObjetiveLevel() && $object->getObjetiveLevel()->getLevel() === ObjetiveLevel::LEVEL_TACTICO) {
             $parents = $object->getParents();
+            $totalParents = count($parents);
             $valueGroupBy = '';
+            $i = 1;
             foreach ($parents as $parent) {
-                $valueGroupBy.= $parent->getRef() . $parent->getDescription();
-            }
+                    $valueGroupBy.= $parent->getRef() . $parent->getDescription().'<br>';
+                }
             $event->getVisitor()->addData('groupBy', $valueGroupBy);
             $event->getVisitor()->addData('totalParents', count($parents));
             $data['self']['href'] = $this->generateUrl('objetiveTactic_show', array('id' => $object->getId()));
@@ -89,8 +91,16 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
      * @param ObjectEvent $event
      */
     public function onPostSerializeIndicator(ObjectEvent $event) {
-        $objetives = $event->getObject()->getObjetives();
-        $event->getVisitor()->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        $indicator = $event->getObject();
+        $objetives = $indicator->getObjetives();
+        $links = array();
+        $links['self'] = array(
+            'href' => $this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId())),
+        );
+        
+        $visitor = $event->getVisitor();
+        $visitor->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        $visitor->addData('_links',$links);
     }
     
     public function onPostSerializeGoalDetails(ObjectEvent $event) {

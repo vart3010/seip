@@ -90,24 +90,14 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
             $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
         }
-//        if(isset($criteria['rif'])){
-//            $rif = $criteria['rif'];
-//            unset($criteria['rif']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
-//        }
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        //$queryBuilder->leftJoin('PequivenObjetiveBundle:Objetive', 'ob', \Doctrine\ORM\Query\Expr\Join::WITH, 'ob.ref = o.refParent');
-        //var_dump($queryBuilder->getQuery()->getSQL());
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
-        //var_dump('<br><br>');
-        //var_dump($queryBuilder->getQuery()->getSQL());
-//        die();
         return $this->getPaginator($queryBuilder);
     }
     
