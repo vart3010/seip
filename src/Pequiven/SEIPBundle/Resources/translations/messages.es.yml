@@ -50,8 +50,6 @@ pequiven:
     buttons:
         cancel: Cancelar
         submit: Enviar
-app:
-    loading: Cargando
 
 Updated: actualizado(a)
 Update: Actualización
