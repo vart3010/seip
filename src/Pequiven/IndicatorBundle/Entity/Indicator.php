@@ -156,7 +156,7 @@ class Indicator extends modelIndicator
      * @var decimal
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
-    protected $valueFinal;
+    protected $valueFinal = 0;
     
     /**
      * Frecuencia de notificacion del indicador
