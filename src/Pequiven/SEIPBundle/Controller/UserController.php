@@ -77,7 +77,7 @@ class UserController extends baseController {
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol','sonata_api_read'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {
@@ -126,7 +126,7 @@ class UserController extends baseController {
                 ->setTemplate($this->config->getTemplate('listAux.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia','gerenciaSecond','rol','sonata_api_read'));
         if ($request->get('_format') == 'html') {
             $view->setData($resources);
         } else {
