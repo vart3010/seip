@@ -36,7 +36,7 @@ class User extends AbstractType {
                 'translation_domain' => 'PequivenSEIPBundle',
                 'disabled' => true
             ))
-            ->add('firstName',null,array('label' => 'pequiven_seip.firstName','translation_domain' => 'PequivenSEIPBundle'))
+            ->add('firstname',null,array('label' => 'pequiven_seip.firstname','translation_domain' => 'PequivenSEIPBundle'))
             ->add('lastName',null,array('label' => 'pequiven_seip.lastName','translation_domain' => 'PequivenSEIPBundle'))
             ->add('numPersonal',null,array('label' => 'pequiven_seip.numPersonal','translation_domain' => 'PequivenSEIPBundle'))
             ->add('complejo','entity',array('class' => 'Pequiven\MasterBundle\Entity\Complejo','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.complejo','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))

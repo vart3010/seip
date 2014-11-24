@@ -34,7 +34,7 @@ pequiven_seip:
     complejo: Localidad
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
-    firstName: Nombre
+    firstname: Nombre
     lastName: Apellido
     numPersonal: Número de Personal
     direction: Dirección
