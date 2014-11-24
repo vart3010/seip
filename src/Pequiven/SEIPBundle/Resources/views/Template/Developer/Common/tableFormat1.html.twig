@@ -61,13 +61,13 @@
                         {{ 'tecnocreaciones_vzla_government.search'|trans }}&nbsp;<input ng-model="tableParams.search" type="text" name="table_search" id="table_search" value="" class="input mid-margin-left">
                     </div>
                         {{ 'tecnocreaciones_vzla_government.show'|trans }}&nbsp;
-                    <select name="range"  class="select red-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
-                        <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="{$count$}">
-                            <span ng-bind="count">{$count$} </span>
-                        </option>
-                    </select>
-                    <button ng-click="tableParams.reload()" class="button pull-left icon-refresh icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" >{{ 'tecnocreaciones_vzla_government.reload'|trans }}</button>
-                    <button ng-click="tableParams.sorting({})" class="button pull-left icon-cross-round icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.clear_sorting'|trans }}"></button>
+                        <select name="range"  class="select red-gradient glossy" ng-model="count" ng-change="params.count(count)" style="width: 80px">
+                            <option ng-repeat="count in params.settings().counts" ng-class="{'selected':params.count()==count}" value="{$count$}">
+                                <span ng-bind="count">{$count$} </span>
+                            </option>
+                        </select>
+                    <button ng-click="tableParams.reload()" class="button icon-refresh icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.reload'|trans }}" >{{ 'tecnocreaciones_vzla_government.reload'|trans }}</button>
+                    <button ng-click="tableParams.sorting({})" class="button icon-cross-round icon-size2 red-gradient glossy" title="{{ 'tecnocreaciones_vzla_government.clear_sorting'|trans }}"></button>
                 </div>
             </td>
         </tr>
