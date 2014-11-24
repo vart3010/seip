@@ -55,6 +55,7 @@ class User extends AbstractType {
                 'required' => false,
                 'attr' => array('class' => 'select2 input-xlarge')
             ))
+//            ->add('supervised')
         ;
     }
     

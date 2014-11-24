@@ -123,6 +123,24 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $goals;
     
     /**
+     * Supervisores
+     * @var User
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="supervised")
+     */
+    private $supervisors;
+    
+    /**
+     * Supervisados
+     * @var User
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="supervisors")
+     * @ORM\JoinTable(name="user_supervised",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="supervised_user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $supervised;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -131,6 +149,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
