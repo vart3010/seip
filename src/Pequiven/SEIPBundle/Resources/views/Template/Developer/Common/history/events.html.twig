@@ -14,7 +14,7 @@
                     <small>{{ history.comment }}</small>
                 </th>
                 <td>
-                    {{ history.user.firstname ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                    {{ history.user.firstname ~ " "~ history.user.lastname }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
                 </td>
                 <td>
                     {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
