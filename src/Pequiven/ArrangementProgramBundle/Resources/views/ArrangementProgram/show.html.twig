@@ -82,14 +82,14 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
-                    <a href="{{ path('objetiveTactic_show',{'id':entity.tacticalObjective.id}) }}">{{ entity.tacticalObjective }}</a>
+                    {{ generateLink(entity.tacticalObjective) }}
                 </p>        
             </div>
             {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
                 <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                         <p class="inline-label">
                             <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
-                            <a href="{{ path('objetiveOperative_show',{'id':entity.operationalObjective.id}) }}">{{ entity.operationalObjective }}</a>
+                            {{ generateLink(entity.operationalObjective) }}
                         </p>
                 </div>
             {% endif %}

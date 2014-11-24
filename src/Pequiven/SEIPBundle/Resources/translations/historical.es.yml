@@ -7,3 +7,10 @@ pequiven_seip:
         pre_rejected: El programa de gestión fue rechazado.
         pre_return_to_draft: El programa de gestión se regreso a borrador.
         pre_return_to_review: El programa de gestión se regreso a revisión.
+        
+pequiven:
+    value_indicator:
+        pre_add: Se agregó el resultado "%value%" al indicador.
+        pre_update: Se actualizo el resultado de "%previusValue%" a "%newValue%" del indicador.
+    indicator:
+        pre_add_observation: Se agrego una observación al indicador.

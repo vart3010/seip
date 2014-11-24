@@ -21,4 +21,4 @@ Pequiven\SEIPBundle\Entity\User:
             groups: [gerencia]
         gerenciaSecond:
             expose: true
-            groups: [gerencia_second]
+            groups: [gerenciaSecond]

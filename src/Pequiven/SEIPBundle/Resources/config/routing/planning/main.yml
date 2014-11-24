@@ -1,0 +1,3 @@
+pequiven_value_indicator:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/value_indicator.yml"
+    prefix:   /value-indicator

@@ -27,6 +27,9 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_REJECTED => 'onPreRejectedArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_DRAFT => 'onPreSendToDraftArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_REVIEW => 'onPreReturnToReviewArrangementProgram',
+            SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreAddValueIndicatorToIndicator',
+            SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreUpdateValueIndicatorToIndicator',
+            SeipEvents::INDICATOR_PRE_ADD_OBSERVATION => 'onPreAddObservationToIndicator',
         );
     }
     
@@ -111,6 +114,53 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
          $this->createHistorical(
                 $object,
                 ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_SEND_TO_REVIEW
+        );
+    }
+    
+    /**
+     * Se agrega una entrada al historico cuando se regresa el programa de gestion a revision
+     * @param ResourceEvent $event
+     */
+    function onPreAddObservationToIndicator(ResourceEvent $event) {
+        $object = $event->getSubject();
+        
+         $this->createHistorical(
+                $object,
+                SeipEvents::INDICATOR_PRE_ADD_OBSERVATION
+        );
+    }
+    
+    /**
+     * Se agrega una entrada al historico cuando se regresa el programa de gestion a revision
+     * @param ResourceEvent $event
+     */
+    function onPreAddValueIndicatorToIndicator(ResourceEvent $event) {
+        $object = $event->getSubject();
+        $indicator = $object->getIndicator();
+         $this->createHistorical(
+            $indicator,
+            SeipEvents::VALUE_INDICATOR_PRE_ADD,
+            array(
+                '%value%' => number_format($object->getValueOfIndicator(),3,',','.'),
+            )
+        );
+    }
+    
+    /**
+     * Se agrega una entrada al historico cuando se regresa el programa de gestion a revision
+     * @param ResourceEvent $event
+     */
+    function onPreUpdateValueIndicatorToIndicator(ResourceEvent $event) {
+        $object = $event->getSubject();
+        $indicator = $object->getIndicator();
+        $previusValue = $event->getArgument('previusValue');
+         $this->createHistorical(
+            $indicator,
+            SeipEvents::VALUE_INDICATOR_PRE_UPDATE,
+            array(
+                '%previusValue%' => number_format($previusValue,3,',','.'),
+                '%newValue%' => number_format($object->getValueOfIndicator(),3,',','.'),
+            )
         );
     }
     

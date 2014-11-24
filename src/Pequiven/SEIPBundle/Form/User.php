@@ -31,6 +31,11 @@ class User extends AbstractType {
         );
         
         $builder
+            ->add('username',null,array(
+                'label' => 'pequiven_seip.userName',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'disabled' => true
+            ))
             ->add('firstName',null,array('label' => 'pequiven_seip.firstName','translation_domain' => 'PequivenSEIPBundle'))
             ->add('lastName',null,array('label' => 'pequiven_seip.lastName','translation_domain' => 'PequivenSEIPBundle'))
             ->add('numPersonal',null,array('label' => 'pequiven_seip.numPersonal','translation_domain' => 'PequivenSEIPBundle'))
@@ -39,6 +44,17 @@ class User extends AbstractType {
             ->add('gerenciaSecond','entity',array('class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.gerenciaSecond','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
             ->add('direction',null,array('label' => 'pequiven_seip.direction','translation_domain' => 'PequivenSEIPBundle'))
             ->add('groups','entity',$parametersUser)
+            ->add('roles', 'choice', array(
+                'label' => 'form.group_roles',
+                'translation_domain' => 'FOSUserBundle',
+                'choices' => array(
+                    'ROLE_WORKER_PQV' => 'Trabajador de pequiven',
+                    'ROLE_WORKER_PLANNING' => 'Trabajador de planificacion',
+                ),
+                'multiple' => true,
+                'required' => false,
+                'attr' => array('class' => 'select2 input-xlarge')
+            ))
         ;
     }
     
@@ -50,7 +66,7 @@ class User extends AbstractType {
         $resolver->setDefaults(array(
             'data_class' => 'Pequiven\SEIPBundle\Entity\User'
         ));
-    }
+    } 
 
     /**
      * @return string
