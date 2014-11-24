@@ -55,7 +55,13 @@ class User extends AbstractType {
                 'required' => false,
                 'attr' => array('class' => 'select2 input-xlarge')
             ))
-//            ->add('supervised')
+            ->add('supervised',null,array(
+                'label' => 'pequiven_seip.supervised',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'multiple' => true,
+                'required' => false,
+                'attr' => array('class' => 'select2 input-xlarge')
+            ))
         ;
     }
     

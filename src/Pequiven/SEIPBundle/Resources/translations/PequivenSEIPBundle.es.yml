@@ -24,6 +24,7 @@ pequiven_seip:
     content: Contenido
     export_to_csv: Exportar a CVS
     your_personal_num: Su número de personal
+    supervised: Supervisados
 
     message_header_center: Sistema Estadístico de Información Petroquímica
     message_app_title: Sistema Estadístico de Información Petroquímica

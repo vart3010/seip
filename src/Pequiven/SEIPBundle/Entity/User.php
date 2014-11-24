@@ -13,7 +13,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
- * @ORM\Table(name="seip_user")
+    * @ORM\Table(name="seip_user")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
  *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=false)),
@@ -502,5 +502,71 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     public function getFullNameUser(){
         return $this->firstname . ' '.$this->lastname. ' ('.$this->numPersonal.' | '.$this->username.')';
+    }
+    
+    /**
+     * Add supervisors
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervisors
+     * @return User
+     */
+    public function addSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
+    {
+        $this->supervisors->add($supervisors);
+
+        return $this;
+    }
+
+    /**
+     * Remove supervisors
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervisors
+     */
+    public function removeSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
+    {
+        $this->supervisors->removeElement($supervisors);
+    }
+
+    /**
+     * Get supervisors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupervisors()
+    {
+        return $this->supervisors;
+    }
+
+    /**
+     * Add supervised
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervised
+     * @return User
+     */
+    public function addSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
+    {
+        $this->supervised->add($supervised);
+
+        return $this;
+    }
+
+    /**
+     * Remove supervised
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervised
+     */
+    public function removeSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
+    {
+        $this->supervised->removeElement($supervised);
+    }
+
+    /**
+     * Get supervised
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupervised()
+    {
+        return $this->supervised;
     }
 }
