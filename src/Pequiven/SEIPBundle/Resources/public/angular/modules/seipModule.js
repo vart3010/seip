@@ -204,10 +204,8 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
-                    applyDatePickerDatePG();
-                    $scope.openModalAuto();
+                    $scope.openModalAuto(applyDatePickerDatePG);
                 }
-                applyDatePickerDatePG();
             };
 
             //Setea la dta del formulario
@@ -1019,14 +1017,14 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
-            $scope.openModalAuto = function() {
+            $scope.openModalAuto = function(callback) {
                 notificationBarService.getLoadStatus().loading();
                 if ($scope.template.load == true) {
-                    openModal();
+                    openModal(callback);
                 }
             };
 
-            function openModal() {
+            function openModal(callback) {
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
                 }
@@ -1085,6 +1083,9 @@ angular.module('seipModule.controllers', [])
                     $scope.template.loadCallBack($scope.template.parameterCallBack);
                 }
                 $scope.template.parameterCallBack = null;
+                if(callback){
+                    callback();
+                }
                 notificationBarService.getLoadStatus().done();
             }
 
