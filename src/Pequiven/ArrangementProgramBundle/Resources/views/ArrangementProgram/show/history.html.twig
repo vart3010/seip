@@ -5,7 +5,7 @@
     <ul class="tabs">
         <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
         <li><a href="#tab-2">{{ 'pequiven.events'|trans({},'messages') }}</a></li>
-        <li><a href="#tab-3">{{ 'pequiven.observations'|trans({},'messages') }}</a></li>
+        <li><a href="#tab-3">{{ 'pequiven.arrangement_program.observations'|trans({},'PequivenArrangementProgramBundle') }}</a></li>
     </ul>
 
     <div class="tabs-content">
@@ -117,7 +117,7 @@
                                 <small>{{ history.comment }}</small>
                             </th>
                             <td>
-                                {{ history.user.firstName ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                                {{ history.user.firstname ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
                             </td>
                             <td>
                                 {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
@@ -144,7 +144,7 @@
                                 {{ observation.description }}
                             </th>
                             <td>
-                                {{ observation.createdBy.firstName ~ " "~ observation.createdBy.lastName }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                                {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastName }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
                             </td>
                             <td>
                                 {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}

@@ -127,8 +127,8 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 0);
         
-        if(isset($criteria['firstName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        if(isset($criteria['firstname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
         if(isset($criteria['lastName'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
@@ -171,8 +171,8 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 1);
         
-        if(isset($criteria['firstName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        if(isset($criteria['firstname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
         if(isset($criteria['lastName'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));

@@ -4,7 +4,7 @@ Pequiven\SEIPBundle\Entity\User:
         id:
             expose: true
             groups: [id]
-        firstName:
+        firstname:
             expose: true
             groups: [api_list]
         lastName:
