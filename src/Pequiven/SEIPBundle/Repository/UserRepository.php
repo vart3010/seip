@@ -130,8 +130,8 @@ class UserRepository extends EntityRepository
         if(isset($criteria['firstname'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
-        if(isset($criteria['lastName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        if(isset($criteria['lastname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$criteria['lastname']."%'"));
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
@@ -174,8 +174,8 @@ class UserRepository extends EntityRepository
         if(isset($criteria['firstname'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
-        if(isset($criteria['lastName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        if(isset($criteria['lastname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$criteria['lastname']."%'"));
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));

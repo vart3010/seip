@@ -35,7 +35,7 @@ pequiven_seip:
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
     firstname: Nombre
-    lastName: Apellido
+    lastname: Apellido
     numPersonal: Número de Personal
     direction: Dirección
     rol: Rol

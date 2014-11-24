@@ -52,7 +52,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 $form = $event->getForm();
                 $parameters = array(
                         'class' => 'Pequiven\ObjetiveBundle\Entity\Objetive',
-                        'property' => 'getDescriptionWithGerenciaSecond',
+                        'property' => 'descriptionWithGerenciaSecond',
                         'label' => 'pequiven.form.operational_objective',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
