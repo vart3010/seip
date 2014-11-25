@@ -47,7 +47,16 @@
     var urlResponsibles = '';
     
     var responsiblesFormatResult = function(object){
-                  var value = (object.firstname + " "+ object.lastname + " ("+object.numPersonal+")");
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
                   return value;
               };
               
