@@ -81,7 +81,9 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder
+                ->innerJoin('o.objetives', 'o_o')
+                ->andWhere('o.enabled = 1');
         $queryBuilder->andWhere('o.tmp = 0');
         if(isset($criteria['description'])){
             $description = $criteria['description'];
