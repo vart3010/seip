@@ -159,9 +159,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
     {
         $summary = $entity->getSummary();
         $valid = false;
-        if($summary['advancesPlanned'] == 100){
+        if(bccomp($summary['advancesPlanned'], 100) == 0){
             $valid = true;
         }
+        
         return $valid;
     }
     
