@@ -59,7 +59,10 @@ class User extends AbstractType {
                 'translation_domain' => 'PequivenSEIPBundle',
                 'multiple' => true,
                 'required' => false,
-                'attr' => array('class' => 'select2 input-xlarge')
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
+                    return $qb->findQueryUsersByCriteria();
+                },
             ))
         ;
     }
