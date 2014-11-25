@@ -28,7 +28,6 @@ sonata_block:
         sonata.user.block.account: # used to display menu option (login option)
             contexts: [user]
         sonata.core.block.menu: ~
-        sonata.block.service.text: ~ # used to if you plan to use Sonata user routes
         
 sonata_admin:
     title:      SEIP

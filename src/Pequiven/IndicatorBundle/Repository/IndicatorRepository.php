@@ -18,7 +18,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseE
  * @author matias
  */
 class IndicatorRepository extends baseEntityRepository {
-    //put your code here
     
     public function getByOptionRef($options = array()){
     
