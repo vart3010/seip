@@ -18,6 +18,7 @@ class GenericDataController extends SEIPController
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        $query = $request->get('query');
         $results = array();
         if(count($responsiblesId) > 0){
             $repository = $this->getRepositoryById('user');
@@ -25,8 +26,15 @@ class GenericDataController extends SEIPController
             if(!$users){
                 throw $this->createNotFoundException();
             }
-            $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users);
+            $criteria = array(
+                'username' => $query,
+                'firstname' => $query,
+                'lastname' => $query,
+                'numPersonal' => $query,
+            );
+            $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users,$criteria);
         }
+        
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));

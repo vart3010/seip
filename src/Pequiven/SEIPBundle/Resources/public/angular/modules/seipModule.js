@@ -75,7 +75,9 @@ function setValueSelect2(idSelect2, idEntity, data, callBack) {
 //    $("#"+idSelect2).select2();
     $("#" + idSelect2).select2('val', j);
     if (callBack) {
-        callBack(data[j]);
+        if(data && data[j] != undefined){
+            callBack(data[j]);
+        }
     }
 //    $("#"+idSelect2).trigger("select2-selecting");
 }
@@ -103,12 +105,13 @@ function setValueSelect2Multiple(idSelect2, entities, data, callBack) {
 
 angular.module('seipModule.controllers', [])
         .controller("ArrangementProgramController", function($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
+            var applyDatePickerDatePG = function(){};
             $scope.entity = null;
             $scope.complejo = null;
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
-        $scope.model.goalCount = null;
+            $scope.model.goalCount = null;
 
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
@@ -139,11 +142,9 @@ angular.module('seipModule.controllers', [])
                     } else {
                         setValueSelect2("goal_typeGoal", null, $scope.data.typeGoals, setTypeGoalCall);
                     }
-                    if (goal.responsibles != undefined) {
-                        setValueSelect2Multiple("goal_responsibles", goal.responsibles, $scope.data.responsibleGoals, function(selected) {
-                            $scope.model.goal.responsibles = selected;
-                        });
-                    }
+                    setUrlResponsibles($scope.model.goal.responsibles);
+                }else{
+                    angular.element('#div_goal_responsibles').select2('data',[]);
                 }
             };
             //Metas
@@ -174,8 +175,9 @@ angular.module('seipModule.controllers', [])
             $scope.validFormTypeGoal = function() {
                 var valid = $('#goalForms').validationEngine('validate');
                 if (valid) {
+                    $scope.model.goal.responsibles = $("#div_goal_responsibles").select2('data');
                     if ($scope.model.goal.responsibles == undefined) {
-                        $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person', 's2id_goal_responsibles');
+                        $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person', 's2id_div_goal_responsibles');
                         valid = false;
                     }
                 }
@@ -308,13 +310,15 @@ angular.module('seipModule.controllers', [])
                 if (reponsibleId == '') {
                     $scope.data.responsibleGoals = [];
                 } else {
-                    notificationBarService.getLoadStatus().loading();
-                    $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId})).success(function(data) {
-                        $scope.data.responsibleGoals = data;
-                        notificationBarService.getLoadStatus().done();
-                    });
+//                    notificationBarService.getLoadStatus().loading();
+//                    $scope.urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
+//                    $http.get($scope.urlResponsibles).success(function(data) {
+//                        $scope.data.responsibleGoals = data;
+//                        notificationBarService.getLoadStatus().done();
+//                    });
                 }
             };
+            
             $scope.getLocationByTactical = function(value){
                 if(value != ''){
                     notificationBarService.getLoadStatus().loading();
@@ -408,10 +412,10 @@ angular.module('seipModule.controllers', [])
                     confirmCallBack: $scope.addGoal,
                     cancelCallBack: $scope.cancelEditGoal,
                     loadCallBack: $scope.setDataFormGoal,
-                    initCallBack: initCallBack
+//                    initCallBack: initCallBack
                 }
             ];
-            $scope.templateOptions.setTemplate($scope.templates[0]);
+//            $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
                 if(programResponsible.val() != undefined && programResponsible.val() != ''){

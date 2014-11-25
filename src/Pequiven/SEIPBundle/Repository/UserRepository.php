@@ -49,7 +49,7 @@ class UserRepository extends EntityRepository
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findQueryToAssingTacticArrangementProgramGoal(array $users){
+    function findQueryToAssingTacticArrangementProgramGoal(array $users,array $criteria = array()){
         $qb = $this->getQueryBuilder();
         $level = 0;
         $usersId = array();
@@ -68,6 +68,8 @@ class UserRepository extends EntityRepository
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
 //            ->setParameter('gerencia', $user->getGerencia())
             ;
+        $this->applyCriteria($qb,$criteria);
+        $qb->setMaxResults(20);
         return $qb;
     }
     
@@ -109,6 +111,25 @@ class UserRepository extends EntityRepository
             ->andWhere('g.level <= :level')
             ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         return $qb;
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        
+        return parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     
     /**
