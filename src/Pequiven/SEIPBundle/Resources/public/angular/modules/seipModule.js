@@ -105,7 +105,6 @@ function setValueSelect2Multiple(idSelect2, entities, data, callBack) {
 
 angular.module('seipModule.controllers', [])
         .controller("ArrangementProgramController", function($scope, notificationBarService, $http, $filter, $timeout, $cookies) {
-            var applyDatePickerDatePG = function(){};
             $scope.entity = null;
             $scope.complejo = null;
             $scope.data.responsibleGoals = null;
@@ -206,7 +205,12 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
-                    $scope.openModalAuto(applyDatePickerDatePG);
+                    try { 
+                        $scope.openModalAuto(applyDatePickerDatePG);
+                    } catch( err ) { 
+                        $scope.openModalAuto();
+                    }
+                    
                 }
             };
 
