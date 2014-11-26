@@ -113,6 +113,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
         $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp = 0');
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -142,6 +143,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
         $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp = 0');
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -172,6 +174,10 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
         $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp :=false');
+        $queryBuilder->andWhere('ob.enabled :=enabled ');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
