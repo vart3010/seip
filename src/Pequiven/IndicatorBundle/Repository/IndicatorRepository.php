@@ -111,9 +111,12 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
         $queryBuilder->innerJoin('o.objetives', 'ob');
-        $queryBuilder->andWhere('o.tmp = 0');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -141,9 +144,12 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
         $queryBuilder->innerJoin('o.objetives', 'ob');
-        $queryBuilder->andWhere('o.tmp = 0');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -172,10 +178,10 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
         $queryBuilder->innerJoin('o.objetives', 'ob');
-        $queryBuilder->andWhere('o.tmp :=false');
-        $queryBuilder->andWhere('ob.enabled :=enabled ');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled ');
         $queryBuilder->setParameter('enabled', true);
         $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
