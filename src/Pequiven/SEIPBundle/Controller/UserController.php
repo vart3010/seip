@@ -150,6 +150,29 @@ class UserController extends baseController {
     }
     
     /**
+     * Busca un usuario
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchAction(Request $request)
+    {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteria($criteria);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    /*
      * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -166,7 +189,6 @@ class UserController extends baseController {
         } else{
             $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
         }
-        
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();

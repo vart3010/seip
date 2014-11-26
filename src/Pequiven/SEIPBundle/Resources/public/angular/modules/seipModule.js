@@ -708,13 +708,14 @@ angular.module('seipModule.controllers', [])
             });
             $scope.$watch("model.responsibles", function(newParams, oldParams) {
                 if ($scope.model.responsibles != null) {
-                    var responsibles = [], i = 0;
-                    angular.forEach($scope.model.responsibles, function(value) {
-                        responsibles.push(value.id);
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsibles").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
                         i++;
                     });
                     if (i > 0) {
-                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsibles);
+                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsiblesId);
                     } else {
                         $scope.tableParams.$params.filter['responsibles'] = null;
                     }
@@ -724,13 +725,14 @@ angular.module('seipModule.controllers', [])
             });
             $scope.$watch("model.responsiblesGoals", function(newParams, oldParams) {
                 if ($scope.model.responsiblesGoals != null) {
-                    var responsibles = [], i = 0;
-                    angular.forEach($scope.model.responsiblesGoals, function(value) {
-                        responsibles.push(value.id);
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsiblesGoals").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
                         i++;
                     });
                     if (i > 0) {
-                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsibles);
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsiblesId);
                     } else {
                         $scope.tableParams.$params.filter['responsiblesGoals'] = null;
                     }
@@ -1451,4 +1453,8 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);
 //        console.log($scope.tableParams.settings().pages);
-        });
+        })
+        .controller('UserController',function($scope){
+            console.log('UserController');
+        })
+        ;
