@@ -25,12 +25,12 @@
             charge();
             
             function charge(){
-                
+                chargeSelectGerenciaSecond("selected");
             }
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
-            chargeSelectGerenciaSecond(e);
+            chargeSelectGerenciaSecond('choice',e);
             //chargeList(e);
             //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
         })
@@ -39,18 +39,27 @@
             selectGerenciaSecond.select2("val",'');
         });
         
-        function chargeSelectGerenciaSecond(e){
+        function chargeSelectGerenciaSecond(type,e){
             var data = '';
-            data = {
-                gerencia: $.trim(e.val),
-            };
+            var gerenciaSecondValue = selectGerenciaSecond.val();
+            var gerenciaValue = selectGerenciaFirst.val();
+            if(type == 'choice'){
+                data = {
+                    gerencia: $.trim(e.val),
+                };
+            } else{
+                console.log('hola');
+                data = {
+                    gerencia: gerenciaValue,
+                };
+            }
             
             $.ajax({
                 type: 'post',
                 url: '{{ path("select_gerenciaSecond") }}',
                 data: data,
                 success: function(data) {
-                                    
+                    
                     $("#pequiven_seipbundle_user_gerenciaSecond optgroup").remove();
                     $("#pequiven_seipbundle_user_gerenciaSecond option[value]").remove();
 
@@ -63,15 +72,35 @@
 
                         for(var i=0, total = data.length; i<total; i++){
                             if(i == 0){
-                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                if(type == 'selected'  && data[i].id == gerenciaSecondValue){
+                                    text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
                             } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
                             } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected" >' + data[i].description + '</option> </optgroup>';
+                                } else{
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                }
                             } else if ((i+1) == cantidad){
-                                text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
+                                } else{
+                                    text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                                }
                             } else{
-                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
                             }
                         }
                         //selectGerenciaFirst.append("<option></option>");
@@ -79,7 +108,6 @@
                         selectGerenciaSecond.select2({
                         });
                         selectGerenciaSecond.select2("enable",true);
-{#                        chargeSelect2GerenciaSecond("full");#}
                     } else{
                         chargeSelect2GerenciaSecond("empty");
                     }
