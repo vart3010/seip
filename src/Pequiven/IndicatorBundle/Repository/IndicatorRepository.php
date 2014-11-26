@@ -83,7 +83,9 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
                 ->innerJoin('o.objetives', 'o_o')
-                ->andWhere('o.enabled = 1');
+                ->andWhere('o.enabled = 1')
+                ->andWhere('o_o.enabled = 1')
+                ;
         $queryBuilder->andWhere('o.tmp = 0');
         if(isset($criteria['description'])){
             $description = $criteria['description'];

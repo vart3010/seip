@@ -192,6 +192,22 @@ class Indicator extends modelIndicator
     protected $details;
     
     /**
+     * Indicador al que impacta este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens")
+     */
+    protected $parent;
+    
+    /**
+     * Indicadores que impactan a este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator 
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent")
+     */
+    protected $childrens;
+
+    /**
      * Constructor
      */
     public function __construct()
