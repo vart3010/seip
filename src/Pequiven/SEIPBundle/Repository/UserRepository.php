@@ -127,6 +127,39 @@ class UserRepository extends EntityRepository
             ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         return $qb;
     }
+    /**
+     * Buscador de usuarios
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function searchUserByCriteria(array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('u.groups','g')
+            ->andWhere('g.typeRol = :typeRol')
+            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ;
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $orX->add($qb->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $orX->add($qb->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        $qb->andWhere($orX);
+        
+        $qb->setMaxResults(30);
+        return $qb->getQuery()->getResult();
+    }
     
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
