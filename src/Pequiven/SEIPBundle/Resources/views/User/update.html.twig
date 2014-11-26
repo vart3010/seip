@@ -65,7 +65,7 @@
                     if(typeof data[0].empty === 'undefined'){
                         var cantidad = data.length;
                         var text = '';
-                        text = text + '<option value="0"></option>';
+                        text = text + '<option value>Ninguna</option>';
                         
                         text = text + '<optgroup label="' + data[0].optGroup + '">';
 
@@ -117,6 +117,7 @@
         //Función que carga el select2 de Gerencia de 2da Línea
         function chargeSelect2GerenciaSecond(type){
             selectGerenciaSecond.select2({
+                allowClear: true,
                 placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
                 formatNoMatches: function(term) {
                     if(type == 'full'){
