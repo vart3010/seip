@@ -149,19 +149,6 @@
             $('.select2').select2({
                 allowClear: true
             });
-            var responsiblesFormatResult = function(object){
-                  var value = '';
-                  if(object.firstname){
-                      value += object.firstname;
-                  }
-                  if(object.lastname){
-                      value +=  ' '+ object.lastname;
-                  }
-                  if(object.numPersonal){
-                      value +=  " ("+object.numPersonal+")";
-                  }
-                  return value;
-              };
             var urlResponsibles = '{{ path('pequiven_user_search') }}';
             var parametersSelectResponsibles = {
                     minimumInputLength: 1,
@@ -187,7 +174,7 @@
                     formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
                     formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
                     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-                };
+             };
                     
             $('#responsibles').select2(parametersSelectResponsibles);
             $('#responsiblesGoals').select2(parametersSelectResponsibles);

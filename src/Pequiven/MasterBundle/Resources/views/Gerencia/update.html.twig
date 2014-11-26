@@ -3,10 +3,66 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
-    <form action="{{ path('pequiven_gerenciafirst_update',{id:gerenciafirst.id} ) }}" method="POST" >
-        <input type="hidden" name="_method" value="PUT">
-        {{ form_widget(form) }}
+    <form ng-controller="UserController" action="{{ path('pequiven_gerenciafirst_update',{id:gerenciafirst.id} ) }}" method="POST">
     
+        <input type="hidden" name="_method" value="PUT">
+        <div class="field-block button-height">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.abbreviation) }}
+            {{ form_widget(form.abbreviation) }}
+            {{ form_errors(form.abbreviation) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.modular) }}
+            {{ form_widget(form.modular) }}
+            {{ form_errors(form.modular) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.vinculante) }}
+            {{ form_widget(form.vinculante) }}
+            {{ form_errors(form.vinculante) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.enabled) }}
+            {{ form_widget(form.enabled) }}
+            {{ form_errors(form.enabled) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.complejo) }}
+            {{ form_widget(form.complejo) }}
+            {{ form_errors(form.complejo) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.direction) }}
+            {{ form_widget(form.direction) }}
+            {{ form_errors(form.direction) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
+            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}
+            {{ form_errors(form.configuration.arrangementProgramUserToRevisers) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.configuration.arrangementProgramUsersToApproveTactical) }}
+            {{ form_widget(form.configuration.arrangementProgramUsersToApproveTactical) }}
+            {{ form_errors(form.configuration.arrangementProgramUsersToApproveTactical) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.configuration.arrangementProgramUsersToApproveOperative) }}
+            {{ form_widget(form.configuration.arrangementProgramUsersToApproveOperative) }}
+            {{ form_errors(form.configuration.arrangementProgramUsersToApproveOperative) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.configuration.arrangementProgramUsersToNotify) }}
+            {{ form_widget(form.configuration.arrangementProgramUsersToNotify) }}
+            {{ form_errors(form.configuration.arrangementProgramUsersToNotify) }}
+        </div>
+        {{ form_widget(form) }}
+        
         {{ actions.update() }}
     </form>
 {% endblock %}

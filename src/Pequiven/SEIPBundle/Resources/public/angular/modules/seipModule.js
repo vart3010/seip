@@ -1423,4 +1423,8 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);
 //        console.log($scope.tableParams.settings().pages);
-        });
+        })
+        .controller('UserController',function($scope){
+            console.log('UserController');
+        })
+        ;

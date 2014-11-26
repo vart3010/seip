@@ -56,3 +56,5 @@ pequiven_user_search:
         id: "\d+"
         _format: json
     methods: GET
+    options:
+        expose: true

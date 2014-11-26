@@ -47,45 +47,43 @@
     var urlResponsibles = '';
     
     var setUrlResponsibles = function(data){
-                  if(data == undefined){
-                      data = [];
-                  }
-                  $("#div_goal_responsibles").select2({
-{#                    placeholder: "Search for a repository",#}
-                    minimumInputLength: 1,
-                    multiple: true,
-                    ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-                        url: urlResponsibles,
-                        dataType: 'json',
-                        quietMillis: 250,
-                        data: function (term, page) {
-                            return {
-                                query: term, // search term
-                            };
-                        },
-                        results: function (data, page) { // parse the results into the format expected by Select2.
-                            // since we are using custom formatting functions we do not need to alter the remote JSON data
-                            return { results: data };
-                        },
-                        cache: true
+              if(data == undefined){
+                  data = [];
+              }
+              $("#div_goal_responsibles").select2({
+                minimumInputLength: 1,
+                multiple: true,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: urlResponsibles,
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (term, page) {
+                        return {
+                            query: term, // search term
+                        };
                     },
-                    initSelection: function(element, callback){
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return { results: data };
                     },
-                    formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
-                    formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
-    //                dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-                    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-                });
-                
-                if(data != undefined){
-                    var preselected = [];
-                     $.each(data,function(index,value){
-                         preselected.push(value.id);
-                     });
-                    $('#div_goal_responsibles').select2('data',data);
-                    $('#div_goal_responsibles').select2('val',preselected);
-                  }
-          }
+                    cache: true
+                },
+                initSelection: function(element, callback){
+                },
+                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
+                escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+            });
+
+            if(data != undefined){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                $('#div_goal_responsibles').select2('data', data);
+                $('#div_goal_responsibles').select2('val', preselected);
+        }
+    };
     
     jQuery(document).ready(function(){
         jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
