@@ -1187,10 +1187,40 @@ angular.module('seipModule.controllers', [])
 
         })
         .controller('TableIndicatorTacticController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-
+            $scope.gerenciaFirst = null;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerencia'] = null;
+                }
+            });
         })
         .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-
+            $scope.gerenciaSecond = null;
+            $scope.gerenciaFirst = null;
+            var gerencia = 0;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    if(gerencia != $scope.gerenciaFirst){
+                        gerencia = $scope.gerenciaFirst;
+                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                    }
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
+                }
+            });
+            $scope.$watch("gerenciaSecond", function() {
+                if ($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                }
+            });
         })
         .controller('TableMonitorTypeGroupController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
             //Porcentaje Cargado
