@@ -46,3 +46,9 @@ pequiven_user_update:
     requirements:
         id: "\d+"
     methods: [GET|POST|PUT]
+    
+#Select que devuelve las Gerencias de 2da Línea
+select_gerenciaSecond:
+    path: /select_gerenciaSecond
+    defaults:
+        _controller: pequiven_seip.controller.user:selectGerenciaSecondListAction
