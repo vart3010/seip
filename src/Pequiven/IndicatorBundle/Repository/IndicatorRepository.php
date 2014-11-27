@@ -72,6 +72,23 @@ class IndicatorRepository extends baseEntityRepository {
         return $q->getResult();
     }
     
+    function getQueryChildrenLevel($level) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->innerJoin('o.objetives', 'o_o')
+                ->innerJoin('o.indicatorLevel', 'o_il')
+                ->andWhere('o.enabled = 1')
+                ->andWhere('o_o.enabled = 1')
+                ->andWhere('o.tmp = 0')
+                ->andWhere("o_il.level > :level")
+                ->setParameter('level', $level)
+                ;
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+        
+        return $queryBuilder;
+    }
+    
     /**
      * Crea un paginador para los indicadores de acuerdo al nivel del mismo
      * 

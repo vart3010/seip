@@ -1036,7 +1036,7 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AE'.$rowObservation,$reference);
         
         //Agregar los detalles del programa de gestion
-        $sendToReviewBy = ucfirst(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $sendToReviewBy = ucfirst(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
         $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
         
         $approvedBy = ucfirst(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
