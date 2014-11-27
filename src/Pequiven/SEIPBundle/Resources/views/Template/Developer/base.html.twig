@@ -192,10 +192,10 @@
         {# Bloque para escribir javascript #}    
         {% block javascript '' %}
         <script>
-            window.notify.defaults.textOneSimilar = '{{ 'tecnocreaciones_vzla_government.notify.one_similar_notification'|trans }}';
-            window.notify.defaults.textSeveralSimilars = '{{ 'tecnocreaciones_vzla_government.notify.n_similar_notifications'|trans }}';
-            window.notify.defaults.textOneMore = '{{ 'tecnocreaciones_vzla_government.notify.one_more_notification'|trans }}';
-            window.notify.defaults.textSeveralMore = '{{ 'tecnocreaciones_vzla_government.notify.n_more_notifications'|trans }}';
+            window.notify.defaults.textOneSimilar = '{{ 'tecnocreaciones_vzla_government.notify.one_similar_notification'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textSeveralSimilars = '{{ 'tecnocreaciones_vzla_government.notify.n_similar_notifications'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textOneMore = '{{ 'tecnocreaciones_vzla_government.notify.one_more_notification'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
+            window.notify.defaults.textSeveralMore = '{{ 'tecnocreaciones_vzla_government.notify.n_more_notifications'|trans({},'TecnocreacionesVzlaGovernmentBundle') }}';
             // Call template init (optional, but faster if called manually)
             $.template.init();
             // If the browser support the Notification API, ask user for permission (with a little delay)

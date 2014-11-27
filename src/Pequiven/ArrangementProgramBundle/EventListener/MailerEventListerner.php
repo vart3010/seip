@@ -148,14 +148,14 @@ class MailerEventListerner extends BaseEventListerner
         
         //Buscar los responsables del programa
         foreach ($entity->getResponsibles() as $responsible) {
-            $users[$responsible->getEmail()] = $users;
+            $users[$responsible->getEmail()] = $responsible;
         }
         
         $timeline = $entity->getTimeline();
         //Buscar los responsables de las metas
         foreach ($timeline->getGoals() as $goal) {
             foreach ($goal->getResponsibles() as $responsible) {
-                $users[$responsible->getEmail()] = $users;
+                $users[$responsible->getEmail()] = $responsible;
             }
         }
         
