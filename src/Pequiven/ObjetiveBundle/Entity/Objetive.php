@@ -132,15 +132,6 @@ class Objetive extends modelObjetive {
     private $enabled = true;
 
     /**
-     * Nivel de objetivo
-     * 
-     * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel")
-     * @ORM\JoinColumn(name="fk_objetive_level", referencedColumnName="id")
-     */
-    private $objetiveLevel;
-
-    /**
      * LineStrategic
      * 
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
@@ -405,27 +396,6 @@ class Objetive extends modelObjetive {
      */
     public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
-    }
-
-    /**
-     * Set objetiveLevel
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel
-     * @return Objetive
-     */
-    public function setObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel = null) {
-        $this->objetiveLevel = $objetiveLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get objetiveLevel
-     *
-     * @return \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel 
-     */
-    public function getObjetiveLevel() {
-        return $this->objetiveLevel;
     }
 
     /**

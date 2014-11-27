@@ -27,8 +27,8 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  *
  * @author matias
  */
-class ObjetiveOperativeController extends baseController {
-
+class ObjetiveOperativeController extends baseController 
+{
     /**
      * Función que retorna la vista con la lista de los objetivos operativos
      * @Template("PequivenObjetiveBundle:Operative:list.html.twig")
