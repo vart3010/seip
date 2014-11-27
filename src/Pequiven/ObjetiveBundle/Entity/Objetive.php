@@ -1005,4 +1005,37 @@ class Objetive extends modelObjetive {
     {
         return $this->getDescriptionSelect() .' - ' . $this->getGerenciaSecond();
     }
+
+    /**
+     * Add results
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $results
+     * @return Objetive
+     */
+    public function addResult(\Pequiven\SEIPBundle\Entity\Result\Result $results)
+    {
+        $this->results->add($results);
+
+        return $this;
+    }
+
+    /**
+     * Remove results
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $results
+     */
+    public function removeResult(\Pequiven\SEIPBundle\Entity\Result\Result $results)
+    {
+        $this->results->removeElement($results);
+    }
+
+    /**
+     * Get results
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
 }
