@@ -69,19 +69,22 @@ class Result extends ModelResult
     /**
      * Resultados asociados
      * 
-     * @ORM\OneToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parent", cascade={"persist"})
+     * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="parent", cascade={"persist"})
      */
     private $childrens;
     
     /**
      * Resultado que impacta
      * 
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="childrens")
+     * @var \Pequiven\SEIPBundle\Entity\Result\Result
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", inversedBy="childrens")
      */
     private $parent;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="results")
      */
     private $objetives;
     
