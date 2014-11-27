@@ -162,6 +162,8 @@ class IndicatorRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
+        $user = $this->getUser();
+        $securityContext = $this->getSecurityContext();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled =:enabled');
         $queryBuilder->innerJoin('o.objetives', 'ob');
@@ -179,11 +181,25 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+        }
+        
+        //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
+        if(isset($criteria['gerencia'])){
+            if((int)$criteria['gerencia'] > 0){
+                $queryBuilder->andWhere("ob.gerencia = " . (int)$criteria['gerencia']);
+            } else{
+                unset($criteria['gerencia']);
+            }
+        }
+        
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -196,6 +212,8 @@ class IndicatorRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled =:enabled');
         $queryBuilder->innerJoin('o.objetives', 'ob');
@@ -213,11 +231,53 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){//En el caso que seleccione todas las Gerencias de 2da Línea
+                    $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());;
+                }
+            } else{
+                $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+            }
+        } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $queryBuilder->andWhere('ob.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
+        } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){//En caso que seleccione todas las Gerencias de 2da Línea
+                    $queryBuilder->leftJoin('ob.gerenciaSecond', 'gs');
+                    $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                    $queryBuilder->andWhere('gs.modular =:modular');
+                    $queryBuilder->setParameter('modular', true);
+                }
+            } else{
+                $queryBuilder->leftJoin('ob.gerenciaSecond', 'gs');
+                $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                $queryBuilder->andWhere('gs.modular =:modular');
+                $queryBuilder->setParameter('modular', true);
+            }
+        }
+        
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('ob.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("ob.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
