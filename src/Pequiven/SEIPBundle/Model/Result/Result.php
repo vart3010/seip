@@ -31,4 +31,35 @@ abstract class Result
      * Tipo de calculo (Promedio ponderado)
      */
     const TYPE_CALCULATION_WEIGHTED_AVERAGE = 2;
+    
+    /**
+     * Retorna los tipos de resultados
+     * 
+     * @staticvar array $results
+     * @return string
+     */
+    static function getTypeResults()
+    {
+        static $results = array(
+            self::TYPE_RESULT_INDICATOR => 'pequiven_seip.results.type_result.indicator',
+            self::TYPE_RESULT_ARRANGEMENT_PROGRAM => 'pequiven_seip.results.type_result.arrangement_program',
+            self::TYPE_RESULT_OBJECTIVE => 'pequiven_seip.results.type_result.objective',
+        );
+        return $results;
+    }
+    
+    /**
+     * Retorna los tipos de calculos
+     * 
+     * @staticvar array $typeCalculation
+     * @return string
+     */
+    static function getTypeCalculations()
+    {
+        static $typeCalculation = array(
+            self::TYPE_CALCULATION_SIMPLE_AVERAGE => 'pequiven_seip.results.type_calculation.simple_average',
+            self::TYPE_CALCULATION_WEIGHTED_AVERAGE => 'pequiven_seip.results.type_calculation.weighted_average',
+        );
+        return $typeCalculation;
+    }
 }

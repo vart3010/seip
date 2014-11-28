@@ -45,6 +45,15 @@ pequiven_seip:
     results:
         results: Resultados
         no_results: No hay resultados asociados al objetivo.
+        type_result: 
+            type_result: Tipo de resultado
+            indicator: Indicador
+            arrangement_program: Programa de gestión
+            objective: Objetivo
+        type_calculation:
+            type_calculation: Tipo de calculo
+            simple_average: Promedio simple
+            weighted_average: Promedio ponderado
 
     login:
         validators:

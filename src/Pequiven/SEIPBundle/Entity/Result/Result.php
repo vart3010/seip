@@ -26,14 +26,11 @@ class Result extends ModelResult
     private $id;
     
     /**
-     * Usuario que creo el resultado
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\User
-     * 
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
      */
-    private $createdBy;
+    private $description;
     
     /**
      * Date created
@@ -51,6 +48,14 @@ class Result extends ModelResult
      */
     private $updatedAt;
     
+    /**
+     * Peso
+     * 
+     * @var float 
+     * @ORM\Column(name="weight",type="float")
+     */
+    private $weight = 0;
+
     /**
      * Tipo de resultado
      * 
@@ -85,7 +90,10 @@ class Result extends ModelResult
     
     /**
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="results")
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
+     * @ORM\JoinTable(name="seip_results_objetives",
+     *      joinColumns={@ORM\JoinColumn(name="result_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="objetive_id", referencedColumnName="id")})
      */
     private $objetives;
     
@@ -93,7 +101,7 @@ class Result extends ModelResult
      * Detalle de resultado
      * 
      * @var \Pequiven\SEIPBundle\Entity\Result\ResultDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\ResultDetails",inversedBy="result")
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\ResultDetails",inversedBy="result",cascade={"persist","remove"})
      */
     private $resultDetails;
 
@@ -298,29 +306,6 @@ class Result extends ModelResult
     }
 
     /**
-     * Set createdBy
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $createdBy
-     * @return Result
-     */
-    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-    
-    /**
      * @ORM\PrePersist()
      */
     public function prePersist()
@@ -351,5 +336,55 @@ class Result extends ModelResult
     public function getResultDetails()
     {
         return $this->resultDetails;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Result
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    
+    public function __toString() {
+        return $this->getDescription() ? $this->getDescription() . ' - ' . $this->getTypeResult() : '-';
+    }
+
+    /**
+     * Set weight
+     *
+     * @param float $weight
+     * @return Result
+     */
+    public function setWeight($weight)
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight()
+    {
+        return $this->weight;
     }
 }

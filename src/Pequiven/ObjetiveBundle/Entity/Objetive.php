@@ -237,10 +237,7 @@ class Objetive extends modelObjetive {
     private $status = 0;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", inversedBy="objetives")
-     * @ORM\JoinTable(name="seip_objetives_results",
-     *      joinColumns={@ORM\JoinColumn(name="objetive_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="result_id", referencedColumnName="id")})
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetives")
      */
     private $results;
     
