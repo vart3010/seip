@@ -7,7 +7,7 @@
     <br/><br/>
     
     {% if (indicator.formula.variables|length) == 0 %}
-        {{ 'pequiven_indicator.value_indicator.errors.you_must_assign_formula_indicator'|trans({'%indicator%':indicator}) }}
+        {{ 'pequiven_indicator.value_indicator.errors.you_must_assign_the_variables_to_the_formula'|trans({'%formula%':indicator.formula}) }}
     {% else %}
         <form method="POST" id="form_value_indicator">
             <fieldset class="fieldset fields-list">
