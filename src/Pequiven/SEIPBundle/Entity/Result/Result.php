@@ -12,6 +12,7 @@ use Pequiven\SEIPBundle\Model\Result\Result as ModelResult;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table(name="seip_result")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Result\ResultRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Result extends ModelResult
 {
@@ -88,6 +89,14 @@ class Result extends ModelResult
      */
     private $objetives;
     
+    /**
+     * Detalle de resultado
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Result\ResultDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\ResultDetails",inversedBy="result")
+     */
+    private $resultDetails;
+
     /**
      * Constructor
      */
@@ -309,5 +318,38 @@ class Result extends ModelResult
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        if($this->resultDetails == null){
+            $this->resultDetails = new ResultDetails();
+        }
+    }
+
+    /**
+     * Set resultDetails
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Result\ResultDetails $resultDetails
+     * @return Result
+     */
+    public function setResultDetails(\Pequiven\SEIPBundle\Entity\Result\ResultDetails $resultDetails = null)
+    {
+        $this->resultDetails = $resultDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get resultDetails
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Result\ResultDetails 
+     */
+    public function getResultDetails()
+    {
+        return $this->resultDetails;
     }
 }

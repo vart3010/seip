@@ -42,6 +42,9 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    results:
+        results: Resultados
+        no_results: No hay resultados asociados al objetivo.
 
     login:
         validators:
@@ -80,7 +83,7 @@ pequiven_seip:
     #Roles
     role:
         super_administrator: Super Administrador
-        administrator: Administrador
+        administrator: Administporrador
         directive: Ejecutivo
         directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%
