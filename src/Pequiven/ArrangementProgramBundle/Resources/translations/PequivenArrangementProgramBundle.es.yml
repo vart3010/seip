@@ -3,6 +3,7 @@ pequiven:
     arrangement_program:
         my_arrangement_program: Mis programas de gestión
         not_arrangement_program_assigned: No tiene programas de gestión asignados.
+        for_reviewing_or_approving: Por revisar o aprobar
         assigned: Asignados
         total_planned: Total planificado
         write_observation: Escriba una observación
@@ -47,10 +48,16 @@ pequiven:
         observations: Observaciones al programa
         type_management:
             type_management: Tipo de gerencia
-            modular: Modular
+            modular: Medular
             binding: Vinculante
         details:
             rejected_by: Rechazado por
+            notification_in_progress:
+                by_user: Notificación en progreso por
+                date: Fecha de inicio del proceso notificación
+            last_notification_in_progress:
+                by_user: Ultima notificación por
+                date: Ultima fecha de notificación
             rejected_date: Fecha de rechazo
         status:
             status: Estatus
@@ -71,6 +78,8 @@ pequiven:
             refresh: Refrescar
             add_template_tactic: Añadir plantilla (tactico)
             add_template_operative: Añadir plantilla (operativo)
+            start_notification_process: Iniciar proceso de notificación
+            end_notification_process: Finalizar proceso de notificación
         type:
             tactic: Tactico
             tactics: Tacticos
@@ -83,6 +92,8 @@ pequiven:
             rejected: ¿Desea rechazar el programa de gestión?
             return_to_draft: ¿Desea regresar el programa de gestión al estatus "borrador"?
             return_to_review: ¿Desea regresar el programa de gestión al estatus "revisión"?
+            want_to_start_the_notification_process: ¿Desea iniciar el proceso de notificación? Recuerde que al culminar, debe cerrar el proceso para guardar sus cambios.
+            want_to_finish_the_notification_process: ¿Desea cerrar el proceso de notificación? Al cerrar el proceso se guardaran sus cambios.
         flash:
             send_comment: Su observación se ha guardado.
             no_send_comment: Su observación no se pudo guardar.

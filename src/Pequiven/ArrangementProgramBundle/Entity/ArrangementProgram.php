@@ -43,7 +43,7 @@ class ArrangementProgram extends Model
      * Objetivo táctico
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive")
+     * @ORM\ManyToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="tacticalArrangementPrograms")
      * @ORM\JoinColumn(name="tactical_objective_id")
      */
     private $tacticalObjective;
@@ -52,7 +52,7 @@ class ArrangementProgram extends Model
      * Objetivo operativo.
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive")
+     * @ORM\ManyToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="operationalArrangementPrograms")
      * @ORM\JoinColumn(name="operational_objective_id")
      */
     private $operationalObjective;
@@ -137,7 +137,22 @@ class ArrangementProgram extends Model
      * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram\Observation",mappedBy="arrangementProgram",cascade={"persist","remove"})
      */
     protected $observations;
-
+    
+     /**
+     * Avance total del programa
+     * @var integer
+     * @ORM\Column(name="totalAdvance",type="float")
+     */
+    protected $totalAdvance = 0;
+    
+    /**
+     * Avance del programa hasta la fecha
+     * 
+     * @var integer
+     * @ORM\Column(name="progressToDate",type="float")
+     */
+    protected $progressToDate = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -496,5 +511,58 @@ class ArrangementProgram extends Model
     
     public function __toString() {
         return $this->getRef();
+    }
+    /**
+     * Set totalAdvance
+     *
+     * @param float $totalAdvance
+     * @return ArrangementProgram
+     */
+    public function setTotalAdvance($totalAdvance)
+    {
+        $this->totalAdvance = $totalAdvance;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAdvance
+     *
+     * @return float 
+     */
+    public function getTotalAdvance()
+    {
+        return $this->totalAdvance;
+    }
+
+    /**
+     * Set progressToDate
+     *
+     * @param float $progressToDate
+     * @return ArrangementProgram
+     */
+    public function setProgressToDate($progressToDate)
+    {
+        $this->progressToDate = $progressToDate;
+
+        return $this;
+    }
+
+    /**
+     * Get progressToDate
+     *
+     * @return float 
+     */
+    public function getProgressToDate()
+    {
+        return $this->progressToDate;
+    }
+    /**
+     * Devuelve el valor que sera tomado en cuenta para los resuldatos
+     * @return type
+     */
+    function getTotalForResult()
+    {
+        return $this->progressToDate;
     }
 }

@@ -215,7 +215,14 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function assignedAction(Request $request) {
+    function forReviewingApprovingAction(Request $request){
+        $method = 'createPaginatorByAssigned';
+        $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
+        $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    private function getSummaryResponse(Request $request,$method,$route,$template) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
@@ -228,7 +235,7 @@ class ArrangementProgramController extends SEIPController
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByAssignedResponsibles',
+                $method,
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -250,7 +257,7 @@ class ArrangementProgramController extends SEIPController
 
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('assignedIndex.html'))
+            ->setTemplate($this->config->getTemplate($template))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
@@ -278,6 +285,7 @@ class ArrangementProgramController extends SEIPController
             }
             //PequivenArrangementProgramBundle
             $view->setData(array(
+                'route' => $route,
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
                 'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
@@ -292,6 +300,19 @@ class ArrangementProgramController extends SEIPController
             $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
         }
         return $this->handleView($view);
+    }
+
+    /**
+     * Retorna la vista de los asignados.
+     * @param Request $request
+     * @return type
+     */
+    public function assignedAction(Request $request) 
+    {    
+        $method = 'createPaginatorByAssignedResponsibles';
+        $route = 'pequiven_seip_arrangementprogram_assigned';
+        $template = 'assignedIndex.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
     }
     
     /**
@@ -407,6 +428,7 @@ class ArrangementProgramController extends SEIPController
         $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
+        $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
         
         return array(
             'entity'      => $entity,
@@ -416,6 +438,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToReview' => $isAllowToReview,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
+            'isAllowToNotity' => $isAllowToNotity,
         );
     }
 
@@ -779,6 +802,90 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Inicia el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function startNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() != null)
+        {
+            $this->flashHelper->setFlash('error', 'already_start_the_notification_process',array('%user%' => (string)$user));
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setNotificationInProgressByUser($user)
+                ->setNotificationInProgressDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_start_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'start_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_start_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    /**
+     * Finaliza el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function finishNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() !== $user)
+        {
+            if($details->getNotificationInProgressByUser() == null){
+                $this->flashHelper->setFlash('error', 'notification_process_dont_start',array());
+            }else{
+                $this->flashHelper->setFlash('error', 'notification_process_user_finish',array('%user%' => (string)$details->getNotificationInProgressByUser()));
+            }
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setlastNotificationInProgressByUser($details->getNotificationInProgressByUser())
+                ->setLastNotificationInProgressDate($details->getNotificationInProgressDate())
+                ->setNotificationInProgressByUser(null)
+                ->setNotificationInProgressDate(null)
+                ;
+        $summary = $resource->getSummary(array(
+            'limitMonthToNow' => true
+        ));
+        $resource->setProgressToDate($summary['advances']);
+        
+        $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'finish_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_finish_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+
     /**
      * Exportar el reporte tecnico
      * @param Request $request

@@ -11,6 +11,11 @@ pequiven_seip:
         return_to_review: El programa de gestión se regreso al estatus de revisión.
         error_observation: La acción que esta realizando requiere que ingrese una observación.
         planned_not_complete: Todas las metas del programa de gestión deben tener un planificado de 100%.
+        start_the_notification_process: El proceso de notificación fue iniciado por "%user%"
+        finish_the_notification_process: El proceso de notificación fue finalizado por "%user%"
+        already_start_the_notification_process: No se puede iniciar el proceso de notificación hasta que el usuario "%user%" termine el proceso.
+        notification_process_user_finish: El proceso de notificación lo debe finalizar el usuario "%user%" que lo inicio.
+        notification_process_dont_start: El proceso de notificación no se ha iniciado por ningun notificador.
     arrangementprogram_template:
         create: Plantilla de programa de gestión creado.
         update: Plantilla de programa de gestión actualizado.

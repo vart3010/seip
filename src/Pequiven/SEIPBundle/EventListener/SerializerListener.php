@@ -123,7 +123,11 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         if($arrangementProgram != null){
             if($this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === true
             ){
-                $isLoadRealEnabled = true;
+                $details = $arrangementProgram->getDetails();
+                $user = $this->getUser();
+                if($details->getNotificationInProgressByUser() !== null && $details->getNotificationInProgressByUser() === $user){
+                    $isLoadRealEnabled = true;
+                }
             }
             if(
                 $arrangementProgram->getStatus() == ArrangementProgram::STATUS_DRAFT ||
@@ -560,5 +564,31 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     private function getArrangementProgramManager()
     {
         return $this->container->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
     }
 }

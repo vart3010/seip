@@ -80,7 +80,7 @@ class BackendMenuBuilder extends MenuBuilder
         if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){
             $this->addPlanningMenu($menu, $section);
         }
-        if($this->securityContext->isGranted('ROLE_SUPER_ADMIN')){
+        if($this->securityContext->isGranted('ROLE_ADMIN')){
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
                 'labelAttributes' => array('icon' => 'icon-card'),
@@ -427,7 +427,7 @@ class BackendMenuBuilder extends MenuBuilder
             $child = $this->factory->createItem('arrangement_programs',
                     $this->getSubLevelOptions(array(
                         'uri' => null,
-                        'labelAttributes' => array('icon' => 'icon-book',),
+                        'labelAttributes' => array('icon' => 'fa fa-tasks',),
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.main', $section)));
 
@@ -442,6 +442,12 @@ class BackendMenuBuilder extends MenuBuilder
                     'route' => 'pequiven_seip_arrangementprogram_assigned',
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.assigned', $section)));
+            
+            $child
+                ->addChild('arrangement_programs.for_reviewing_or_approving', array(
+                    'route' => 'pequiven_seip_arrangementprogram_for_reviewing_or_approving',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
             
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(

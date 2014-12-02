@@ -17,6 +17,20 @@
         <legend class="legend">{{ 'pequiven_objetive.objetive_operative'|trans }} {{ entity.ref }}</legend>
 
         <!-- Objetivo Tácticos al cual o a los cuales esta Asociado el Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
+            
+            {% set advances = entity.resultOfObjetive|number_format(2) %}
+            {% set advancesClass = 'red-gradient' %}
+            {% if advances >= 50 %}
+                {% set advancesClass = 'orange-gradient' %}
+
+            {% elseif advances == 100 %}
+                {% set advancesClass = 'green-gradient' %}
+            {% endif %}
+            <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+        </p>
+        <br/>
         <div class="inline-label">
             <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
             <ul class="fa-ul">
@@ -63,12 +77,41 @@
             </div>
             <br>
         {% endif %}
-        
+                
         <!-- ¿Evaluación por Programas de Gestión? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
             {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
+        <div class="inline-label">
+            <label class="label">{{ 'pequiven.arrangement_program.arrangement_programs' |trans({},'PequivenArrangementProgramBundle') }}</label>
+            <ul class="fa-ul">
+            {% for arrangementProgram in entity.arrangementPrograms %}
+                <li>
+                    {% set avancedUsed = arrangementProgram.getTotalForResult %}
+                    {#<span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                    <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                    <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>#}
+                    {{ avancedUsed }}% - {{ generateLink(arrangementProgram) }}
+                </li>
+            {% endfor  %}
+            </ul>
+        </div>
+        <br/>
+        <div class="inline-label">
+            <label class="label">{{ 'pequiven_seip.results.results'|trans({},'PequivenSEIPBundle') }}</label>
+            <ul class="fa-ul">
+            {% for result in entity.results %}
+                <li>
+                    {{ result.resultDetails.globalResult ? result.resultDetails.globalResult : '0.0' }}% - {{ result }} (Peso {{ result.weight }}%)
+                </li>
+            {% else %}
+                <li>
+                    <b>{{ 'pequiven_seip.results.no_results'|trans({},'PequivenSEIPBundle') }}</b>
+                </li>
+            {% endfor  %}
+            </ul>
+        </div>
         
     </fieldset>
 
@@ -85,6 +128,8 @@
     <script type="text/javascript">
         jQuery(document).ready(function(){
              {#$('.tables-extras').tablesorter();#}
+                     // Progress
+            $('.progress').progress();
         });
     </script>
 {% endblock javascript %}
