@@ -243,6 +243,14 @@ class Objetive extends modelObjetive {
     private $results;
     
     /**
+     * Resultado del objetivo
+     * 
+     * @var float
+     * @ORM\Column(name="resultOfObjetive",type="float")
+     */
+    private $resultOfObjetive = 0;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -1005,5 +1013,17 @@ class Objetive extends modelObjetive {
     public function getResults()
     {
         return $this->results;
+    }
+    
+    function getResultOfObjetive() 
+    {
+        return $this->resultOfObjetive;
+    }
+
+    function setResultOfObjetive($resultOfObjetive) 
+    {
+        $this->resultOfObjetive = $resultOfObjetive;
+        
+        return $this;
     }
 }

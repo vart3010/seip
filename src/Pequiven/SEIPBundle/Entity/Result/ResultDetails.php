@@ -138,6 +138,14 @@ class ResultDetails
      * @ORM\Column(name="globalResult", type="float",nullable=true)
      */
     private $globalResult = 0;
+    
+    /**
+     * Resultado global con peso
+     * @var float
+     *
+     * @ORM\Column(name="globalResultWithWeight", type="float",nullable=true)
+     */
+    private $globalResultWithWeight = 0;
 
     /**
      * Estatus
@@ -500,6 +508,10 @@ class ResultDetails
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         $propertyAccessor->setValue($this, $monthResult, $globalResult);
         
+        $weight = $this->getResult()->getWeight();
+        
+        $this->globalResultWithWeight = ($globalResult * $weight) / 100;
+        
         $this->globalResult = $globalResult;
 
         return $this;
@@ -515,6 +527,18 @@ class ResultDetails
         return $this->globalResult;
     }
     
+    function getGlobalResultWithWeight() 
+    {
+        return $this->globalResultWithWeight;
+    }
+
+    function setGlobalResultWithWeight($globalResultWithWeight) 
+    {
+        $this->globalResultWithWeight = $globalResultWithWeight;
+        
+        return $this;
+    }
+        
     static function getMonthResult($month) {
         $months = self::getMonthsResult();
         if(!isset($months[$month])){

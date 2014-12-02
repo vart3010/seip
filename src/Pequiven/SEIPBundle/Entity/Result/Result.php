@@ -89,6 +89,8 @@ class Result extends ModelResult
     private $parent;
     
     /**
+     * Objetivos que impacta
+     * 
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
      * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
      * @ORM\JoinTable(name="seip_results_objetives",

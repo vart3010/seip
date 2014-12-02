@@ -57,7 +57,20 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
                 $myResult->setTotal($total);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($myResult->getResultDetails());
+                $objetives = $myResult->getObjetives();
+                foreach ($objetives as $objetive) {
+                    $results = $objetive->getResults();
+                    $total = 0;
+                    foreach ($results as $result) {
+                        $resultDetails = $result->getResultDetails();
+                        $total += $resultDetails->getGlobalResultWithWeight();
+                    }
+                    $objetive->setResultOfObjetive($total);
+                    $em->persist($objetive);
+                }
+                
                 $em->flush();
+                
             }
         }
     }
