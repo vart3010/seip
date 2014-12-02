@@ -241,7 +241,7 @@ class BackendMenuBuilder extends MenuBuilder
                         )
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.main',$section)));
                 
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                     $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
                             'route' => 'pequiven_objetive_menu_list_strategic',
                         ))
