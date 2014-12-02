@@ -48,7 +48,7 @@ pequiven:
         observations: Observaciones al programa
         type_management:
             type_management: Tipo de gerencia
-            modular: Modular
+            modular: Medular
             binding: Vinculante
         details:
             rejected_by: Rechazado por
