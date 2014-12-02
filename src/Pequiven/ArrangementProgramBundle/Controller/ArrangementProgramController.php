@@ -302,7 +302,11 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
 
-
+    /**
+     * Retorna la vista de los asignados.
+     * @param Request $request
+     * @return type
+     */
     public function assignedAction(Request $request) 
     {    
         $method = 'createPaginatorByAssignedResponsibles';
@@ -424,6 +428,7 @@ class ArrangementProgramController extends SEIPController
         $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
+        $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
         
         return array(
             'entity'      => $entity,
@@ -433,6 +438,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToReview' => $isAllowToReview,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
+            'isAllowToNotity' => $isAllowToNotity,
         );
     }
 
@@ -796,6 +802,79 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * Inicia el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function startNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() != null)
+        {
+            $this->flashHelper->setFlash('error', 'already_start_the_notification_process',array('%user%' => (string)$user));
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setNotificationInProgressByUser($user)
+                ->setNotificationInProgressDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_start_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'start_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_start_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    /**
+     * Inicia el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function endNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() != null)
+        {
+            $this->flashHelper->setFlash('error', 'already_start_the_notification_process',array('%user%' => (string)$user));
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setNotificationInProgressByUser($user)
+                ->setNotificationInProgressDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_start_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'start_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_start_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+
     /**
      * Exportar el reporte tecnico
      * @param Request $request

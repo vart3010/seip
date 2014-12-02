@@ -98,6 +98,26 @@
                     {{ entity.details.rejectedDate ? entity.details.rejectedDate|date(appConfiguration.generalDateFormat) : ''|trans }}
                 </p>
             {% endif %}
+            {% if entity.details.notificationInProgressByUser != null %}
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.notification_in_progress.by_user'|trans }}</label>
+                    <span class="green-gradient">{{ entity.details.notificationInProgressByUser }}</span>
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.notification_in_progress.date'|trans }}</label>
+                    {{ entity.details.notificationInProgressDate ? entity.details.notificationInProgressDate|date(appConfiguration.generalDateFormat) : ''|trans }}
+                </p>
+            {% endif %}
+            {% if entity.details.lastNotificationInProgressByUser != null %}
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.last_notification_in_progress.by_user'|trans }}</label>
+                    <span class="green-gradient">{{ entity.details.lastNotificationInProgressByUser }}</span>
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.arrangement_program.details.last_notification_in_progress.date'|trans }}</label>
+                    {{ entity.details.lastNotificationInProgressDate ? entity.details.lastNotificationInProgressDate|date(appConfiguration.generalDateFormat) : ''|trans }}
+                </p>
+            {% endif %}
         </div>
 
         <div id="tab-2" class="with-padding">

@@ -184,4 +184,25 @@ final class ArrangementProgramEvents
      * @var string
      */
     const ARRANGEMENT_PROGRAM_POST_RETURN_TO_REVIEW = 'pequiven_seip.arrangementprogram.post_return_to_review';
+    /**
+     * El pequiven_seip.arrangementprogram.pre_start_the_notification_process evento es lanzado cuando un usuario inicia el proceso de notificacion en un programa de gestion
+     * en el sistema.
+     *
+     * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const ARRANGEMENT_PROGRAM_PRE_START_THE_NOTIFICATION_PROCESS = 'pequiven_seip.arrangementprogram.pre_start_the_notification_process';
+    
+    /**
+     * El pequiven_seip.arrangementprogram.post_start_the_notification_process evento es lanzado despues que un usuario inicia el proceso de notificacion en un programa de gestion
+     * en el sistema.
+     *
+     * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const ARRANGEMENT_PROGRAM_POST_START_THE_NOTIFICATION_PROCESS = 'pequiven_seip.arrangementprogram.post_start_the_notification_process';
 }

@@ -7,6 +7,7 @@ pequiven_seip:
         pre_rejected: El programa de gestión fue rechazado.
         pre_return_to_draft: El programa de gestión se regreso a borrador.
         pre_return_to_review: El programa de gestión se regreso a revisión.
+        pre_start_the_notification_process: El proceso de notificación fue iniciado por "%user%"
         
 pequiven:
     value_indicator:
