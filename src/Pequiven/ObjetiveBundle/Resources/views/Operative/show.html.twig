@@ -89,7 +89,7 @@
             <ul class="fa-ul">
             {% for result in entity.results %}
                 <li>
-                    {{ result.resultDetails.globalResult ? result.resultDetails.globalResult : '0' }}% - {{ result }}
+                    {{ result.resultDetails.globalResult ? result.resultDetails.globalResult : '0.0' }}% - {{ result }} (Peso {{ result.weight }}%)
                 </li>
             {% else %}
                 <li>
