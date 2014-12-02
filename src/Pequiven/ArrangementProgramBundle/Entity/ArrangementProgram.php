@@ -138,12 +138,12 @@ class ArrangementProgram extends Model
      */
     protected $observations;
     
-    /**
+     /**
      * Avance total del programa
      * @var integer
      * @ORM\Column(name="totalAdvance",type="float")
      */
-    private $totalAdvance = 0;
+    protected $totalAdvance = 0;
     
     /**
      * Avance del programa hasta la fecha
@@ -151,8 +151,8 @@ class ArrangementProgram extends Model
      * @var integer
      * @ORM\Column(name="progressToDate",type="float")
      */
-    private $progressToDate = 0;
-
+    protected $progressToDate = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -557,5 +557,12 @@ class ArrangementProgram extends Model
     {
         return $this->progressToDate;
     }
-
+    /**
+     * Devuelve el valor que sera tomado en cuenta para los resuldatos
+     * @return type
+     */
+    function getTotalForResult()
+    {
+        return $this->progressToDate;
+    }
 }

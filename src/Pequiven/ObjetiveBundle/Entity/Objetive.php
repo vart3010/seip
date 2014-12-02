@@ -237,6 +237,7 @@ class Objetive extends modelObjetive {
     private $status = 0;
     
     /**
+     * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetives")
      */
     private $results;

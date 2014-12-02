@@ -28,6 +28,7 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_DRAFT => 'onPreSendToDraftArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_RETURN_TO_REVIEW => 'onPreReturnToReviewArrangementProgram',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_START_THE_NOTIFICATION_PROCESS => 'onPreStartTheNotificationProcess',
+            ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_FINISH_THE_NOTIFICATION_PROCESS => 'onPreFinishTheNotificationProcess',
             SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreAddValueIndicatorToIndicator',
             SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreUpdateValueIndicatorToIndicator',
             SeipEvents::INDICATOR_PRE_ADD_OBSERVATION => 'onPreAddObservationToIndicator',
@@ -128,6 +129,22 @@ class HistoricalListerner implements EventSubscriberInterface, ContainerAwareInt
          $this->createHistorical(
                 $object,
                 ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_START_THE_NOTIFICATION_PROCESS,
+                array(
+                    '%user%' => (string)$user
+                )
+        );
+    }
+    
+    /**
+     * Se agrega una entrada al historico cuando se inicia el proceso de notificacion en el programa de gestion
+     * @param ResourceEvent $event
+     */
+    function onPreFinishTheNotificationProcess(ResourceEvent $event) {
+        $object = $event->getSubject();
+        $user = $this->getUser();
+         $this->createHistorical(
+                $object,
+                ArrangementProgramEvents::ARRANGEMENT_PROGRAM_PRE_FINISH_THE_NOTIFICATION_PROCESS,
                 array(
                     '%user%' => (string)$user
                 )

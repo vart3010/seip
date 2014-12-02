@@ -2,6 +2,8 @@
 
 namespace Pequiven\SEIPBundle\Model\Result;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Modelo del resultado
  *
@@ -33,6 +35,14 @@ abstract class Result
     const TYPE_CALCULATION_WEIGHTED_AVERAGE = 2;
     
     /**
+     * Detalle de resultado
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Result\ResultDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\ResultDetails",inversedBy="result",cascade={"persist","remove"})
+     */
+    protected $resultDetails;
+    
+    /**
      * Retorna los tipos de resultados
      * 
      * @staticvar array $results
@@ -61,5 +71,10 @@ abstract class Result
             self::TYPE_CALCULATION_WEIGHTED_AVERAGE => 'pequiven_seip.results.type_calculation.weighted_average',
         );
         return $typeCalculation;
+    }
+    function setTotal($total)
+    {
+        $this->resultDetails->setGlobalResult($total);
+        
     }
 }

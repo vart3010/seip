@@ -839,13 +839,13 @@ class ArrangementProgramController extends SEIPController
         return $this->redirectHandler->redirectTo($resource);
     }
     /**
-     * Inicia el proceso de notificacion
+     * Finaliza el proceso de notificacion
      * 
      * @param Request $request
      * @return type
      * @throws type
      */
-    public function endNotificationProcessAction(Request $request)
+    public function finishNotificationProcessAction(Request $request)
     {
         $resource = $this->findOr404($request);
         $arrangementProgramManager = $this->getArrangementProgramManager();
@@ -855,22 +855,33 @@ class ArrangementProgramController extends SEIPController
         }
         $user = $this->getUser();
         $details = $resource->getDetails();
-        if($details->getNotificationInProgressByUser() != null)
+        if($details->getNotificationInProgressByUser() !== $user)
         {
-            $this->flashHelper->setFlash('error', 'already_start_the_notification_process',array('%user%' => (string)$user));
+            if($details->getNotificationInProgressByUser() == null){
+                $this->flashHelper->setFlash('error', 'notification_process_dont_start',array());
+            }else{
+                $this->flashHelper->setFlash('error', 'notification_process_user_finish',array('%user%' => (string)$details->getNotificationInProgressByUser()));
+            }
             throw $this->createAccessDeniedHttpException();
         }
         
         $details
-                ->setNotificationInProgressByUser($user)
-                ->setNotificationInProgressDate(new DateTime());
+                ->setlastNotificationInProgressByUser($details->getNotificationInProgressByUser())
+                ->setLastNotificationInProgressDate($details->getNotificationInProgressDate())
+                ->setNotificationInProgressByUser(null)
+                ->setNotificationInProgressDate(null)
+                ;
+        $summary = $resource->getSummary(array(
+            'limitMonthToNow' => true
+        ));
+        $resource->setProgressToDate($summary['advances']);
         
-        $this->domainManager->dispatchEvent('pre_start_the_notification_process', new ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
         
         $this->domainManager->update($resource);
-        $this->flashHelper->setFlash('success', 'start_the_notification_process',array('%user%' => (string)$user));
+        $this->flashHelper->setFlash('success', 'finish_the_notification_process',array('%user%' => (string)$user));
         
-        $this->domainManager->dispatchEvent('post_start_the_notification_process', new ResourceEvent($resource));
+        $this->domainManager->dispatchEvent('post_finish_the_notification_process', new ResourceEvent($resource));
         
         return $this->redirectHandler->redirectTo($resource);
     }

@@ -13,6 +13,19 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ResultDetails 
 {
+    const JANUARY_RESULT = 'januaryResult';
+    const FEBRUARY_RESULT = 'februaryResult';
+    const MARCH_RESULT = 'marchResult';
+    const APRIL_RESULT = 'aprilResult';
+    const MAY_RESULT = 'mayResult';
+    const JUNE_RESULT = 'juneResult';
+    const JULY_RESULT = 'julyResult';
+    const AUGUST_RESULT = 'augustResult';
+    const SEPTEMBER_RESULT = 'septemberResult';
+    const OCTOBER_RESULT = 'octoberResult';
+    const NOVEMBER_RESULT = 'novemberResult';
+    const DECEMBER_RESULT = 'decemberResult';
+    
     /**
      * @var integer
      *
@@ -117,6 +130,14 @@ class ResultDetails
      * @ORM\Column(name="decemberResult", type="float",nullable=true)
      */
     private $decemberResult;
+    
+    /**
+     * Resultado global
+     * @var float
+     *
+     * @ORM\Column(name="globalResult", type="float",nullable=true)
+     */
+    private $globalResult = 0;
 
     /**
      * Estatus
@@ -464,5 +485,64 @@ class ResultDetails
     public function getResult()
     {
         return $this->result;
+    }
+
+    /**
+     * Set globalResult
+     *
+     * @param float $globalResult
+     * @return ResultDetails
+     */
+    public function setGlobalResult($globalResult)
+    {
+        $now = new \DateTime();
+        $monthResult = self::getMonthResult($now->format('m'));
+        $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
+        $propertyAccessor->setValue($this, $monthResult, $globalResult);
+        
+        $this->globalResult = $globalResult;
+
+        return $this;
+    }
+
+    /**
+     * Get globalResult
+     *
+     * @return float 
+     */
+    public function getGlobalResult()
+    {
+        return $this->globalResult;
+    }
+    
+    static function getMonthResult($month) {
+        $months = self::getMonthsResult();
+        if(!isset($months[$month])){
+            throw new \Exception(sprintf('month result "%s" not defined',$month));
+        }
+        return $months[$month];
+    }
+
+    /**
+     * Devuelve un array asociativo de el string real con el mes que corresponde
+     * @staticvar array $months
+     * @return int
+     */
+    static function getMonthsResult(){
+        static $months = array(
+            1 => self::JANUARY_RESULT ,
+            2 => self::FEBRUARY_RESULT,
+            3 => self::MARCH_RESULT,
+            4 => self::APRIL_RESULT,
+            5 => self::MAY_RESULT,
+            6 => self::JUNE_RESULT,
+            7 => self::JULY_RESULT,
+            8 => self::AUGUST_RESULT,
+            9 => self::SEPTEMBER_RESULT,
+            10 => self::OCTOBER_RESULT,
+            11 => self::NOVEMBER_RESULT,
+            12 => self::DECEMBER_RESULT,
+        );
+        return $months;
     }
 }

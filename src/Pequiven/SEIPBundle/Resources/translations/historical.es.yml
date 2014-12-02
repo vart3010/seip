@@ -8,6 +8,7 @@ pequiven_seip:
         pre_return_to_draft: El programa de gestión se regreso a borrador.
         pre_return_to_review: El programa de gestión se regreso a revisión.
         pre_start_the_notification_process: El proceso de notificación fue iniciado por "%user%"
+        pre_finish_the_notification_process: El proceso de notificación fue finalizado por "%user%"
         
 pequiven:
     value_indicator:

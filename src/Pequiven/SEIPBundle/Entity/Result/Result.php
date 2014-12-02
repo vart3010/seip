@@ -98,14 +98,6 @@ class Result extends ModelResult
     private $objetives;
     
     /**
-     * Detalle de resultado
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\Result\ResultDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Result\ResultDetails",inversedBy="result",cascade={"persist","remove"})
-     */
-    private $resultDetails;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -361,10 +353,6 @@ class Result extends ModelResult
         return $this->description;
     }
     
-    public function __toString() {
-        return $this->getDescription() ? $this->getDescription() . ' - ' . $this->getTypeResult() : '-';
-    }
-
     /**
      * Set weight
      *
@@ -386,5 +374,9 @@ class Result extends ModelResult
     public function getWeight()
     {
         return $this->weight;
+    }
+    
+    public function __toString() {
+        return $this->getDescription() ? $this->getDescription() : '-';
     }
 }

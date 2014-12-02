@@ -74,12 +74,11 @@
             <ul class="fa-ul">
             {% for arrangementProgram in entity.arrangementPrograms %}
                 <li>
-                    {% set avancedUsed = arrangementProgram.totalAdvance %}
+                    {% set avancedUsed = arrangementProgram.getTotalForResult %}
                     {#<span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
                     <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
                     <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>#}
-                    <span class="demo-progress thin" data-progress-options='{"value":{{ avancedUsed }},"size":120,"barClasses":["green-gradient","glossy"],"innerMarks":25,"stripes":true,"darkStripes":false}'>{{ avancedUsed }}%</span>
-                    {{ generateLink(arrangementProgram) }}
+                    {{ avancedUsed }}% - {{ generateLink(arrangementProgram) }}
                 </li>
             {% endfor  %}
             </ul>
@@ -90,7 +89,7 @@
             <ul class="fa-ul">
             {% for result in entity.results %}
                 <li>
-                    {{ result }}
+                    {{ result.resultDetails.globalResult ? result.resultDetails.globalResult : '0' }}% - {{ result }}
                 </li>
             {% else %}
                 <li>

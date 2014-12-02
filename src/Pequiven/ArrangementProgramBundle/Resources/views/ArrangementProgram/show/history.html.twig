@@ -111,7 +111,7 @@
             {% if entity.details.lastNotificationInProgressByUser != null %}
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.arrangement_program.details.last_notification_in_progress.by_user'|trans }}</label>
-                    <span class="green-gradient">{{ entity.details.lastNotificationInProgressByUser }}</span>
+                    {{ entity.details.lastNotificationInProgressByUser }}
                 </p>
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.arrangement_program.details.last_notification_in_progress.date'|trans }}</label>
