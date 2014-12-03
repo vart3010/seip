@@ -875,6 +875,8 @@ class ArrangementProgramController extends SEIPController
             'limitMonthToNow' => true
         ));
         $resource->setProgressToDate($summary['advances']);
+        $summary = $resource->getSummary();
+        $resource->setTotalAdvance($summary['advances']);
         
         $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
         
