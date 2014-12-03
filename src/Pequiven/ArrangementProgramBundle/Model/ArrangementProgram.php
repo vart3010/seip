@@ -248,6 +248,9 @@ abstract class ArrangementProgram
     
     /**
      * Retorna el porcentaje de avance del programa de gestion
+     * 
+     * @param array $options limitMonthToNow: limita los resultados al mes actual
+     * @return type
      */
     function getSummary(array $options = array())
     {
