@@ -54,6 +54,7 @@ class IndicatorOperativeController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_OPERATIVO;
+        $criteria['gerencia'] = $request->get('gerencia');
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(

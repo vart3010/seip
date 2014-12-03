@@ -1,0 +1,31 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% if indicator.formula == null %}
+    {{ 'pequiven_indicator.value_indicator.errors.you_must_assign_formula_indicator'|trans({'%indicator%':indicator}) }}
+{% else %}
+    <br/><br/>
+    {{ 'pequiven_indicator.popup.formula'|trans({'%indicator%':indicator}) }}: <b>{{ indicator.formula }}</b>
+    <br/><br/>
+    <form method="POST" id="form_value_indicator">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_indicator.value_indicator.enter_values_variables'|trans }}</legend>
+            {% for child in form.children %}
+                <div class="field-block button-height" >
+                    {{ form_label(child) }}
+                    {{ form_widget(child) }}
+                    {{ form_errors(child) }}
+                </div>
+            {% endfor %}
+            {% if valueIndicator != null %}
+                <input type="hidden" name="id" value="{{ valueIndicator.id }}" />
+            {% endif %}
+        </fieldset>
+    </form>
+    <br/>
+    <p class="wrapped align-center button-height">
+        <b>{{ 'pequiven_indicator.value_indicator.result'|trans }}:</b>&nbsp;&nbsp;{$ evaluationResult |myNumberFormat:3 $}
+    </p>
+    <p class="align-center">
+        <button type="button" ng-click="evaluateFormula()" class="button blue-gradient glossy">Evaluar formula</button>
+    </p>
+    <br/><br/>
+{% endif %}

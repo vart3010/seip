@@ -1,0 +1,31 @@
+<table class="simple-table responsive-table tables-extras" >
+    <thead>
+        <tr>
+            <th scope="col" width="60%">{{ 'pequiven.table.header.event'|trans({},'messages') }}</th>
+            <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven.table.header.user'|trans({},'messages') }}</th>
+            <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven.table.header.date'|trans({},'messages') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for history in entity.histories %}
+            <tr>
+                <th scope="row">
+                    {{ history.event }}<br>
+                    <small>{{ history.comment }}</small>
+                </th>
+                <td>
+                    {{ history.user.firstname ~ " "~ history.user.lastname }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                </td>
+                <td>
+                    {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="empty_row">
+                    {{ "seip.table.empty.events"|trans({},'PequivenArrangementProgramBundle') }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -111,7 +111,9 @@ class MailerEventListerner extends BaseEventListerner
         $configuration =  $this->getConfiguration($entity);
         $users = array();
         if($configuration){
-            $users = $configuration->getArrangementProgramUserToRevisers();
+            foreach ($configuration->getArrangementProgramUserToRevisers() as $value) {
+                $users[] = $value;
+            }
         }
         return $users;
     }
@@ -148,14 +150,14 @@ class MailerEventListerner extends BaseEventListerner
         
         //Buscar los responsables del programa
         foreach ($entity->getResponsibles() as $responsible) {
-            $users[$responsible->getEmail()] = $users;
+            $users[$responsible->getEmail()] = $responsible;
         }
         
         $timeline = $entity->getTimeline();
         //Buscar los responsables de las metas
         foreach ($timeline->getGoals() as $goal) {
             foreach ($goal->getResponsibles() as $responsible) {
-                $users[$responsible->getEmail()] = $users;
+                $users[$responsible->getEmail()] = $responsible;
             }
         }
         
@@ -169,7 +171,7 @@ class MailerEventListerner extends BaseEventListerner
      */
     private function getEmailsToReviser(ArrangementProgram $entity) 
     {
-        $emails = $this->getUserToReviser($this->getUserToAprrove($entity));
+        $emails = $this->getEmailsInString($this->getUserToReviser($entity));
         return $emails;
     }
     
@@ -180,7 +182,7 @@ class MailerEventListerner extends BaseEventListerner
      */
     private function getEmailsToApprove(ArrangementProgram $entity) 
     {
-        $emails = $this->getEmailsInString($this->getEmailsAllResponsibles($entity));
+        $emails = $this->getEmailsAllResponsibles($entity);
         return $emails;
     }
     

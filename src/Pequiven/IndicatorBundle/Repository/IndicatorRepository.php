@@ -18,7 +18,6 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseE
  * @author matias
  */
 class IndicatorRepository extends baseEntityRepository {
-    //put your code here
     
     public function getByOptionRef($options = array()){
     
@@ -73,6 +72,23 @@ class IndicatorRepository extends baseEntityRepository {
         return $q->getResult();
     }
     
+    function getQueryChildrenLevel($level) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->innerJoin('o.objetives', 'o_o')
+                ->innerJoin('o.indicatorLevel', 'o_il')
+                ->andWhere('o.enabled = 1')
+                ->andWhere('o_o.enabled = 1')
+                ->andWhere('o.tmp = 0')
+                ->andWhere("o_il.level > :level")
+                ->setParameter('level', $level)
+                ;
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+        
+        return $queryBuilder;
+    }
+    
     /**
      * Crea un paginador para los indicadores de acuerdo al nivel del mismo
      * 
@@ -82,7 +98,11 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder
+                ->innerJoin('o.objetives', 'o_o')
+                ->andWhere('o.enabled = 1')
+                ->andWhere('o_o.enabled = 1')
+                ;
         $queryBuilder->andWhere('o.tmp = 0');
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -90,24 +110,14 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
             $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
         }
-//        if(isset($criteria['rif'])){
-//            $rif = $criteria['rif'];
-//            unset($criteria['rif']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
-//        }
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        //$queryBuilder->leftJoin('PequivenObjetiveBundle:Objetive', 'ob', \Doctrine\ORM\Query\Expr\Join::WITH, 'ob.ref = o.refParent');
-        //var_dump($queryBuilder->getQuery()->getSQL());
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
-        //var_dump('<br><br>');
-        //var_dump($queryBuilder->getQuery()->getSQL());
-//        die();
         return $this->getPaginator($queryBuilder);
     }
     
@@ -120,7 +130,12 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
+        $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -147,8 +162,15 @@ class IndicatorRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
+        $user = $this->getUser();
+        $securityContext = $this->getSecurityContext();
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
+        $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -159,11 +181,25 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+        }
+        
+        //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
+        if(isset($criteria['gerencia'])){
+            if((int)$criteria['gerencia'] > 0){
+                $queryBuilder->andWhere("ob.gerencia = " . (int)$criteria['gerencia']);
+            } else{
+                unset($criteria['gerencia']);
+            }
+        }
+        
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -176,8 +212,15 @@ class IndicatorRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
+        $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
+        $queryBuilder->andWhere('o.enabled =:enabled');
+        $queryBuilder->innerJoin('o.objetives', 'ob');
+        $queryBuilder->andWhere('o.tmp =:false');
+        $queryBuilder->andWhere('ob.enabled =:enabled ');
+        $queryBuilder->setParameter('enabled', true);
+        $queryBuilder->setParameter('false', false);
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -188,11 +231,53 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
+        
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){//En el caso que seleccione todas las Gerencias de 2da Línea
+                    $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());;
+                }
+            } else{
+                $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+            }
+        } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+            $queryBuilder->andWhere('ob.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
+        } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+            if(isset($criteria['gerenciaSecond'])){
+                if((int)$criteria['gerenciaSecond'] == 0){//En caso que seleccione todas las Gerencias de 2da Línea
+                    $queryBuilder->leftJoin('ob.gerenciaSecond', 'gs');
+                    $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                    $queryBuilder->andWhere('gs.modular =:modular');
+                    $queryBuilder->setParameter('modular', true);
+                }
+            } else{
+                $queryBuilder->leftJoin('ob.gerenciaSecond', 'gs');
+                $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
+                $queryBuilder->andWhere('gs.modular =:modular');
+                $queryBuilder->setParameter('modular', true);
+            }
+        }
+        
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('ob.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("ob.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }

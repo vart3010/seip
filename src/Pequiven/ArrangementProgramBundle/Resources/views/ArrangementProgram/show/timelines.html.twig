@@ -26,7 +26,7 @@
         {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
             {% set colspan = 7 %}
         {% endif %}
-        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
+        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}{% endif %}">
             <tr ng-if="goals.length == 0">
                 <td colspan="{{ colspan }}" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}
@@ -53,7 +53,7 @@
                 <td>{$ goal.weight $}%</td>
                 <td>
                     <span ng-repeat="responsible in goal.responsibles">
-                        {$ responsible.firstName + " "+ responsible.lastName $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
+                        {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
                     </span>
                 </td>
             </tr>

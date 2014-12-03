@@ -2,11 +2,13 @@
 pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
+    home: Página de inicio
 
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
     login: Iniciar sesión
+    group_roles: Roles
     lost_password: Recuperar contraseña
     username: Nombre de usuario
     password: Contraseña
@@ -23,6 +25,7 @@ pequiven_seip:
     content: Contenido
     export_to_csv: Exportar a CVS
     your_personal_num: Su número de personal
+    supervised: Supervisados
 
     message_header_center: Sistema Estadístico de Información Petroquímica
     message_app_title: Sistema Estadístico de Información Petroquímica
@@ -33,8 +36,8 @@ pequiven_seip:
     complejo: Localidad
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
-    firstName: Nombre
-    lastName: Apellido
+    firstname: Nombre
+    lastname: Apellido
     numPersonal: Número de Personal
     direction: Dirección
     rol: Rol
@@ -112,7 +115,7 @@ pequiven_seip:
         management_second_line: Gerencia de segunda línea
         complejo: Localidad
         responsibles_pg: Responsable(s) del programa de gestión
-        responsibles_goals: Responsable(s) del las metas
+        responsibles_goals: Responsable(s) de las metas
         type_template: Tipo de plantilla
     tooltips:
         click_to_show: Click para ver

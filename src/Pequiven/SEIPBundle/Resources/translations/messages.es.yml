@@ -13,10 +13,12 @@ pequiven:
     history: Historial
     details: Detalles
     observations: Observaciones
+    add_observation: Añadir observación
     events: Eventos
     ref: Referencia
     select: Seleccione
     actions: Acciones
+    no_assigned: No asignado.
     form:
         not_applicable: No aplica
     list: Lista
@@ -48,8 +50,6 @@ pequiven:
     buttons:
         cancel: Cancelar
         submit: Enviar
-app:
-    loading: Cargando
 
 Updated: actualizado(a)
 Update: Actualización
@@ -72,3 +72,10 @@ chart:
         seriesNamePlan: Plan
         seriesNameReal: Real
         seriesNameCarga: % Carga
+app:
+    http:
+        return_to_home: Ir a la página de inicio
+        error:
+            generic: Lo sentimos, ha ocurrido un error.
+            403: Usted no tiene permisos para acceder a esta sección.
+            404: La página que esta tratando de acceder no existe.

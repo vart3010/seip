@@ -91,6 +91,7 @@
     <!-- jquery-ui -->
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/font-awesome/css/font-awesome.min.css') }}">
 {% endblock stylesheets_base %}
 
 {% block javascripts_base %}
@@ -130,5 +131,18 @@
                 yearSuffix: ''};
             $.datepicker.setDefaults($.datepicker.regional['es']);
         });
+        var responsiblesFormatResult = function(object){
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
+                  return value;
+              };
     </script>
 {% endblock javascripts %}

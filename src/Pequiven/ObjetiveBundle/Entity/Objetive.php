@@ -64,7 +64,7 @@ class Objetive extends modelObjetive {
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
 
@@ -640,10 +640,6 @@ class Objetive extends modelObjetive {
         return $this->descriptionSelect;
     }
     
-    public function __toString() {
-        return $this->getDescriptionSelect();
-    }
-
     /**
      * Set gerenciaSecond
      *
@@ -991,5 +987,14 @@ class Objetive extends modelObjetive {
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    public function __toString() {
+        return $this->getDescriptionSelect();
+    }
+    
+    public function getDescriptionWithGerenciaSecond()
+    {
+        return $this->getDescriptionSelect() .' - ' . $this->getGerenciaSecond();
     }
 }

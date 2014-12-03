@@ -10,7 +10,6 @@ lunetics_locale:
     switcher:
         show_current_locale: true
 
-
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
@@ -23,9 +22,11 @@ fos_user:
             type: pequiven_seip_user_profile
     group:
         group_class: Pequiven\MasterBundle\Entity\Rol
+        group_manager: sonata.user.orm.group_manager
         form:
             type: seip_user_group
-    
+    service:
+        user_manager: sonata.user.orm.user_manager
 
 fos_rest:
     service:

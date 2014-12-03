@@ -27,7 +27,7 @@
         {% if appConfiguration.isSupportIntegratedManagementSystem == true %}
             {% set colspan = 8 %}
         {% endif %}
-        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles'])) }}{% endif %}">
+        <tbody ng-init="{% if entity.timeline %}goals={{ entity.timeline.goals|serialize('json',serialization_context().setGroups(['id','api_list','responsibles','sonata_api_read'])) }}{% endif %}">
             <tr ng-if="goals.length == 0">
                 <td colspan="{{ colspan }}" class="empty_row">
                     {{ "seip.table.empty.goals"|trans }}
@@ -75,12 +75,12 @@
                 </td>
                 <td>
                     <span ng-repeat="responsible in goal.responsibles">
-                        {$ responsible.firstName + " "+ responsible.lastName $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
+                        {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
                     </span>
                     <span ng-bind-html='printFormErrors(form.children.timeline.children.goals.children[$index].children.responsibles)'></span>
                 </td>
                 <td class="align-right vertical-center">
-                    <span class="select compact" tabindex="0">
+                    <span class="select compact">
                         <a href class="select-value form-edit">{{ 'pequiven.actions'|trans({},'messages') }}</a>
                         <span class="select-arrow"></span>
                         <span class="drop-down">

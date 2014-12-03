@@ -4,7 +4,7 @@ namespace Pequiven\SEIPBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
+use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Entity\Rol;
 
@@ -13,7 +13,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
- * @ORM\Table(name="seip_user")
+    * @ORM\Table(name="seip_user")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
  *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=false)),
@@ -29,36 +29,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @var type 
      */
     protected $id;
-    
-    /**
-     * Date created
-     * 
-     * @var type 
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at",type="datetime",nullable=true)
-     */
-    private $createdAt;
-    
-    /**
-     * Date update
-     * 
-     * @var type 
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at",type="datetime",nullable=true)
-     */
-    private $updatedAt;
-    
-    /**
-     * @ORM\Column(name="first_name",type="string",length=100,nullable=true)
-     * @var type 
-     */
-    private $firstName;
-    
-    /**
-     * @ORM\Column(name="last_name",type="string",length=100,nullable=true)
-     * @var type 
-     */
-    private $lastName;
     
     /**
      *@ORM\Column(name="num_personal",type="integer",nullable=true)
@@ -153,6 +123,24 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     private $goals;
     
     /**
+     * Supervisores
+     * @var User
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",mappedBy="supervised")
+     */
+    private $supervisors;
+    
+    /**
+     * Supervisados
+     * @var User
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\User",inversedBy="supervisors")
+     * @ORM\JoinTable(name="user_supervised",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="supervised_user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $supervised;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -161,6 +149,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->goals = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -174,19 +164,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return User
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * Get createdAt
      *
      * @return \DateTime 
@@ -194,19 +171,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return User
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     /**
@@ -265,52 +229,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         $this->groups->removeElement($groups);
     }
 
-    /**
-     * Set firstName
-     *
-     * @param string $firstName
-     * @return User
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    /**
-     * Get firstName
-     *
-     * @return string 
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     * @return User
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * Get lastName
-     *
-     * @return string 
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-    
     /**
      * Set numPersonal
      *
@@ -583,6 +501,72 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     }
     
     public function getFullNameUser(){
-        return $this->firstName . ' '.$this->lastName. ' ('.$this->numPersonal.' | '.$this->username.')';
+        return $this->firstname . ' '.$this->lastname. ' ('.$this->numPersonal.' | '.$this->username.')';
+    }
+    
+    /**
+     * Add supervisors
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervisors
+     * @return User
+     */
+    public function addSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
+    {
+        $this->supervisors->add($supervisors);
+
+        return $this;
+    }
+
+    /**
+     * Remove supervisors
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervisors
+     */
+    public function removeSupervisor(\Pequiven\SEIPBundle\Entity\User $supervisors)
+    {
+        $this->supervisors->removeElement($supervisors);
+    }
+
+    /**
+     * Get supervisors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupervisors()
+    {
+        return $this->supervisors;
+    }
+
+    /**
+     * Add supervised
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervised
+     * @return User
+     */
+    public function addSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
+    {
+        $this->supervised->add($supervised);
+
+        return $this;
+    }
+
+    /**
+     * Remove supervised
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User $supervised
+     */
+    public function removeSupervised(\Pequiven\SEIPBundle\Entity\User $supervised)
+    {
+        $this->supervised->removeElement($supervised);
+    }
+
+    /**
+     * Get supervised
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupervised()
+    {
+        return $this->supervised;
     }
 }

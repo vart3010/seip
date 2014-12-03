@@ -22,6 +22,7 @@ class CoreExtension extends \Twig_Extension
             new \Twig_SimpleFunction('form_top', null, array('node_class' => 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode', 'is_safe' => array('html'))),
             new \Twig_SimpleFunction('print_error', array($this,'printError'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('contentHeader', array($this,'contentHeader'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('generateLink', array($this,'generateLink'), array('is_safe' => array('html'))),
         );
     }
     
@@ -66,6 +67,18 @@ class CoreExtension extends \Twig_Extension
             <span>$error</span>
         </div>";
         return $base;
+    }
+    
+    /**
+     * Genera un link para mostrar el objeto
+     * 
+     * @param type $entity
+     * @param type $type
+     * @return type
+     */
+    function generateLink($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT)
+    {
+        return $this->container->get('seip.service.link_generator')->generate($entity,$type);
     }
     
     /**

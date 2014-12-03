@@ -76,6 +76,17 @@ class BackendMenuBuilder extends MenuBuilder
 //            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.reports', $section)));
         
     //$menu->setCurrent($this->request->getRequestUri());
+        
+        if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){
+            $this->addPlanningMenu($menu, $section);
+        }
+        if($this->securityContext->isGranted('ROLE_ADMIN')){
+            $menu->addChild('admin', array(
+                'route' => 'sonata_admin_dashboard',
+                'labelAttributes' => array('icon' => 'icon-card'),
+                //'linkAttributes' => array('target' => '_blank'),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main',$section)));
+        }
         return $menu;
     }
     
@@ -143,6 +154,53 @@ class BackendMenuBuilder extends MenuBuilder
     }
     
     /**
+     * Agregando menu de planificacion
+     * 
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    function addPlanningMenu(ItemInterface $menu, $section) 
+    {
+        $child = $this->factory->createItem('planning',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'icon-calendar',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
+                
+        $subchild = $this->factory->createItem('planning.indicators',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.main', $section)));
+        
+        $subchild->addChild('planning.indicators.strategic', array(
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.strategic', $section)));
+        
+        $subchild->addChild('planning.indicators.tactic', array(
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.tactic', $section)));
+
+        $subchild->addChild('planning.indicators.operative', array(
+                                'route' => 'pequiven_indicator_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
+        
+        $child->addChild($subchild);
+        
+        $menu->addChild($child);
+    }
+    
+    /**
      * Construye el menu de Gestión Estratégica
      * 
      * @param \Knp\Menu\ItemInterface $menu
@@ -183,7 +241,7 @@ class BackendMenuBuilder extends MenuBuilder
                         )
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.main',$section)));
                 
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                     $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
                             'route' => 'pequiven_objetive_menu_list_strategic',
                         ))
@@ -278,6 +336,7 @@ class BackendMenuBuilder extends MenuBuilder
                             )
                                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.main',$section)));
 
+                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
                     $thirdchild->addChild('arrangement_strategic.indicators.list.strategic', array(
                                 'route' => 'pequiven_indicator_menu_list_strategic',
                             ))
@@ -290,6 +349,21 @@ class BackendMenuBuilder extends MenuBuilder
                                 'route' => 'pequiven_indicator_menu_list_operative',
                             ))
                                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                        $thirdchild->addChild('arrangement_strategic.indicators.list.tactic', array(
+                                'route' => 'pequiven_indicator_menu_list_tactic',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
+                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
+                                'route' => 'pequiven_indicator_menu_list_operative',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
+                                'route' => 'pequiven_indicator_menu_list_operative',
+                            ))
+                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                    }
 
                 $subchild->addChild($thirdchild);
                 
@@ -350,7 +424,6 @@ class BackendMenuBuilder extends MenuBuilder
      */
     
     function addArrangementProgramsMenu(ItemInterface $menu, $section) {
-//        if($this->securityContext->isGranted(array('ROLE_WORKER_PQV'))){
             $child = $this->factory->createItem('arrangement_programs',
                     $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -369,6 +442,12 @@ class BackendMenuBuilder extends MenuBuilder
                     'route' => 'pequiven_seip_arrangementprogram_assigned',
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.assigned', $section)));
+            
+            $child
+                ->addChild('arrangement_programs.for_reviewing_or_approving', array(
+                    'route' => 'pequiven_seip_arrangementprogram_for_reviewing_or_approving',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
             
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(
@@ -396,7 +475,6 @@ class BackendMenuBuilder extends MenuBuilder
             $child->addChild($subchild);
             
             $menu->addChild($child);
-//        }
     }
     
     /**

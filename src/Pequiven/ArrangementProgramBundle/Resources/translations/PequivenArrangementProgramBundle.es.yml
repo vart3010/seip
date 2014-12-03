@@ -3,6 +3,7 @@ pequiven:
     arrangement_program:
         my_arrangement_program: Mis programas de gestión
         not_arrangement_program_assigned: No tiene programas de gestión asignados.
+        for_reviewing_or_approving: Por revisar o aprobar
         assigned: Asignados
         total_planned: Total planificado
         write_observation: Escriba una observación
@@ -44,6 +45,7 @@ pequiven:
         list_template: Lista de plantillas
         template: Plantilla
         list: Lista
+        observations: Observaciones al programa
         type_management:
             type_management: Tipo de gerencia
             modular: Modular
@@ -93,7 +95,7 @@ pequiven:
         operating_indicator: Indicador Operativo
         location: Localidad
         process: Proceso
-        responsibles: Responsable(s)
+        responsibles: Responsable(s) del programa
         period: Periodo
         name: Nombre
         type_goal: Tipo de Actividad
@@ -128,6 +130,13 @@ seip:
             weight: Peso
             observations: Observaciones
             actions: Acciones
+            created_at: Fecha
+            created_by: Creado por
+            updated_by: Actualizado por
+            value: Valor
+            parameters: Parametros
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.
+            events: No Hay Eventos Registrados.
+            results: No Hay Resultados Cargados.

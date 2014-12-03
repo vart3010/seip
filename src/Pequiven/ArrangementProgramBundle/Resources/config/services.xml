@@ -36,6 +36,12 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.arrangement_program.listener.mailer_listerner" class="Pequiven\ArrangementProgramBundle\EventListener\MailerEventListerner">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="seip.arrangement_program.listener.event_listerner" class="Pequiven\ArrangementProgramBundle\EventListener\EventListerner">
             <tag name="kernel.event_subscriber" />
             <call method="setContainer">

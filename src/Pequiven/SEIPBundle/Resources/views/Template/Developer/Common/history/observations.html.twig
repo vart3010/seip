@@ -1,0 +1,30 @@
+<table class="simple-table responsive-table tables-extras" >
+    <thead>
+        <tr>
+            <th scope="col" width="60%">{{ 'pequiven.table.header.observation'|trans({},'messages') }}</th>
+            <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven.table.header.user'|trans({},'messages') }}</th>
+            <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven.table.header.date'|trans({},'messages') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for observation in entity.observations %}
+            <tr>
+                <th scope="row">
+                    {{ observation.description }}
+                </th>
+                <td>
+                    {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastname }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                </td>
+                <td>
+                    {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="empty_row">
+                    {{ "seip.table.empty.observations"|trans({},'PequivenArrangementProgramBundle') }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

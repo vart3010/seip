@@ -51,6 +51,8 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 $qb = null;
                 $form = $event->getForm();
                 $parameters = array(
+                        'class' => 'Pequiven\ObjetiveBundle\Entity\Objetive',
+                        'property' => 'descriptionWithGerenciaSecond',
                         'label' => 'pequiven.form.operational_objective',
                         'label_attr' => array('class' => 'label'),
                         'attr' => array(
@@ -74,7 +76,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 }else{
                    $parameters['choices'] = array();
                 }
-                $form->add('operationalObjective',null,$parameters);
+                $form->add('operationalObjective','entity',$parameters);
             };
             
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($formModifier){
