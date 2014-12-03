@@ -37,6 +37,7 @@ pequiven_indicator:
         result: Resultado
         errors:
             you_must_assign_formula_indicator: Debe asignar la fórmula del indicador "%indicator%"
+            you_must_assign_the_variables_to_the_formula: Debe asignar las variables a la formula "%formula%"
     details:
         previus_value: Valor previo
         last_notification_by: Última persona que cargo resultados

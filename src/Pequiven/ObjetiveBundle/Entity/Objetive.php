@@ -132,15 +132,6 @@ class Objetive extends modelObjetive {
     private $enabled = true;
 
     /**
-     * Nivel de objetivo
-     * 
-     * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel
-     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel")
-     * @ORM\JoinColumn(name="fk_objetive_level", referencedColumnName="id")
-     */
-    private $objetiveLevel;
-
-    /**
      * LineStrategic
      * 
      * @var \Pequiven\MasterBundle\Entity\LineStrategic
@@ -245,6 +236,20 @@ class Objetive extends modelObjetive {
      */
     private $status = 0;
     
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetives")
+     */
+    private $results;
+    
+    /**
+     * Resultado del objetivo
+     * 
+     * @var float
+     * @ORM\Column(name="resultOfObjetive",type="float")
+     */
+    private $resultOfObjetive = 0;
+
     /**
      * Constructor
      */
@@ -397,27 +402,6 @@ class Objetive extends modelObjetive {
      */
     public function getUserUpdatedAt() {
         return $this->userUpdatedAt;
-    }
-
-    /**
-     * Set objetiveLevel
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel
-     * @return Objetive
-     */
-    public function setObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel = null) {
-        $this->objetiveLevel = $objetiveLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get objetiveLevel
-     *
-     * @return \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel 
-     */
-    public function getObjetiveLevel() {
-        return $this->objetiveLevel;
     }
 
     /**
@@ -996,5 +980,50 @@ class Objetive extends modelObjetive {
     public function getDescriptionWithGerenciaSecond()
     {
         return $this->getDescriptionSelect() .' - ' . $this->getGerenciaSecond();
+    }
+
+    /**
+     * Add results
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $results
+     * @return Objetive
+     */
+    public function addResult(\Pequiven\SEIPBundle\Entity\Result\Result $results)
+    {
+        $this->results->add($results);
+
+        return $this;
+    }
+
+    /**
+     * Remove results
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $results
+     */
+    public function removeResult(\Pequiven\SEIPBundle\Entity\Result\Result $results)
+    {
+        $this->results->removeElement($results);
+    }
+
+    /**
+     * Get results
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+    
+    function getResultOfObjetive() 
+    {
+        return $this->resultOfObjetive;
+    }
+
+    function setResultOfObjetive($resultOfObjetive) 
+    {
+        $this->resultOfObjetive = $resultOfObjetive;
+        
+        return $this;
     }
 }

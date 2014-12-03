@@ -210,6 +210,13 @@
         <span class="button-icon"><span class="icon-download"></span></span>
         {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
     </a>
+    {% if isAllowToNotity == true %}
+        {% if entity.details.notificationInProgressByUser == null %}
+            {{ buttons.generic_confirm(path('arrangementprogram_start_the_notification_process',{ id: entity.id }),('pequiven.arrangement_program.buttons.start_notification_process'|trans({},'PequivenArrangementProgramBundle')),{'icon':'icon-unlock','gradient':'green-gradient','content':('pequiven.arrangement_program.questions.want_to_start_the_notification_process'|trans)}) }}
+        {% else %}
+            {{ buttons.generic_confirm(path('arrangementprogram_finish_the_notification_process',{ id: entity.id }),('pequiven.arrangement_program.buttons.end_notification_process'|trans({},'PequivenArrangementProgramBundle')),{'icon':'icon-lock','gradient':'red-gradient','content':('pequiven.arrangement_program.questions.want_to_finish_the_notification_process'|trans)}) }}
+        {% endif %}
+    {% endif %}
     
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}

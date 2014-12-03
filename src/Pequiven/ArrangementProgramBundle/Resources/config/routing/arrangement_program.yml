@@ -131,3 +131,17 @@ arrangementprogram_export:
     requirements:
         id: "\d+"
     methods: [GET]
+    
+arrangementprogram_start_the_notification_process:
+    path: /{id}/start-the-notification-process
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:startNotificationProcessAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]
+    
+arrangementprogram_finish_the_notification_process:
+    path: /{id}/finish-the-notification-process
+    defaults: { _controller: pequiven_seip.controller.arrangementprogram:finishNotificationProcessAction }
+    requirements:
+        id: "\d+"
+    methods: [GET]

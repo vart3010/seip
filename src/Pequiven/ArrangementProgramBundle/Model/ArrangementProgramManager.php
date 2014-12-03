@@ -180,7 +180,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
         }
         $user = $this->getUser();
 
-        if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true) {
+        if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
             $valid = true;
         }
         return $valid;
