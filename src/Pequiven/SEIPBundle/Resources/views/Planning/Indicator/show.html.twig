@@ -28,7 +28,7 @@
         <p class="inline-label">
             <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
             
-            {% set advances = indicator.totalForResult|number_format(2) %}
+            {% set advances = indicator.progressToDate|number_format(2) %}
             {% set advancesClass = 'red-gradient' %}
             {% if advances >= 50 %}
                 {% set advancesClass = 'orange-gradient' %}

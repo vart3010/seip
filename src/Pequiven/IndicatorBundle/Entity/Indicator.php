@@ -885,6 +885,15 @@ class Indicator extends modelIndicator
      */
     function getTotalForResult()
     {
+        $progressToDate = $this->progressToDate;
+        if($this->weight > 0){
+            $progressToDate = ($progressToDate * $this->weight) / 100;
+        }
+        return $progressToDate;
+    }
+    
+    function getProgressToDate() 
+    {
         return $this->progressToDate;
     }
 }

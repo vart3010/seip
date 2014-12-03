@@ -45,6 +45,7 @@ pequiven_seip:
     results:
         results: Resultados
         result: Resultado
+        weight: Peso
         no_results: No hay resultados asociados al objetivo.
         type_result: 
             type_result: Tipo de resultado
