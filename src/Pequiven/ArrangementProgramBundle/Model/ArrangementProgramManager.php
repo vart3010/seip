@@ -141,7 +141,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
         //Security check
         $permission = true;
         $user = $this->getUser();
-        if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false){
+        if($entity->getCreatedBy() !== $user && $this->isAllowToApprove($entity) === false && $this->isAllowToReview($entity) === false
+                && $this->isAllowToNotity($entity) === false){
             $permission = false;
         }
         if($entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
@@ -159,9 +160,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
     {
         $summary = $entity->getSummary();
         $valid = false;
-        if($summary['advancesPlanned'] == 100){
+        if(bccomp($summary['advancesPlanned'], 100) == 0){
             $valid = true;
         }
+        
         return $valid;
     }
     

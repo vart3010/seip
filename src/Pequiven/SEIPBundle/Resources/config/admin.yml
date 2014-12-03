@@ -1,4 +1,8 @@
 services:
+    seip.model.manager:
+        class: Pequiven\SEIPBundle\Model\Admin\ModelManager
+        arguments: [@doctrine]
+        
     sonata.admin.formula:
         class: Pequiven\MasterBundle\Admin\FormulaAdmin
         tags:
@@ -39,3 +43,4 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setModelManager, [@seip.model.manager]]

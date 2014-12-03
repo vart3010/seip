@@ -11,6 +11,7 @@ namespace Pequiven\SEIPBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Description of UserController
  *
@@ -146,5 +147,62 @@ class UserController extends baseController {
 //        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
 //        $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
+    }
+    
+    /**
+     * Busca un usuario
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function searchAction(Request $request)
+    {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+        $results = $this->get('pequiven_seip.repository.user')->searchUserByCriteria($criteria);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    /*
+     * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaSecondListAction(Request $request) {
+        $response = new JsonResponse();
+        $gerenciaSecondChildren = array();
+        $em = $this->getDoctrine()->getManager();
+
+        $gerencia = $request->request->get('gerencia');
+
+        if((int)$gerencia == 0){
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+        } else{
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
+        }
+
+        foreach ($results as $result) {
+            $complejo = $result->getGerencia()->getComplejo();
+            $gerencia = $result->getGerencia();
+            $gerenciaSecondChildren[] = array(
+                'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
+                'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
+                'id' => $result->getId(),
+                'description' => $result->getDescription()
+            );
+        }
+
+        $response->setData($gerenciaSecondChildren);
+
+        return $response;
     }
 }

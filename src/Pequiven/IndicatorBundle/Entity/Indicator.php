@@ -156,7 +156,7 @@ class Indicator extends modelIndicator
      * @var decimal
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
-    protected $valueFinal;
+    protected $valueFinal = 0;
     
     /**
      * Frecuencia de notificacion del indicador
@@ -192,12 +192,29 @@ class Indicator extends modelIndicator
     protected $details;
     
     /**
+     * Indicador al que impacta este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
+     */
+    protected $parent;
+    
+    /**
+     * Indicadores que impactan a este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator 
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
+     */
+    protected $childrens;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -792,5 +809,62 @@ class Indicator extends modelIndicator
         $this->totalPlan = $totalPlan;
         
         return $this;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\IndicatorBundle\Entity\Indicator $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add childrens
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
+     * @return Indicator
+     */
+    public function addChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
+    {
+        $childrens->setParent($this);
+        $this->childrens->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * Remove childrens
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
+     */
+    public function removeChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
+    {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens()
+    {
+        return $this->childrens;
     }
 }

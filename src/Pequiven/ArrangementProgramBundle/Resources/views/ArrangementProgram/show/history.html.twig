@@ -58,7 +58,7 @@
             </p>
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.created_by'|trans({},'messages') }}</label>
-                {{ entity.createdBy }}
+                <span title="{{ entity.createdBy.username }}" class="with-tooltip">{{ entity.createdBy }}</span>
             </p>
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.created_at'|trans({},'messages') }}</label>

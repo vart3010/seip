@@ -32,7 +32,7 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveTacticList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX') %}
+                        {% if ((app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') or (is_granted('ROLE_WORKER_PLANNING'))) %}
                             <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                         {% endif %}
                         <tbody ng-repeat="group in $groups">

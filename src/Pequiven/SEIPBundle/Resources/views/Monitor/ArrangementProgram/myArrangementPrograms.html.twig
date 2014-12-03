@@ -22,13 +22,13 @@
                 {% set avancedUsed = advancesPlanned %}
             {% endif %}
         <li>
-            <a href="{{ path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id} ) }}" class="list-link icon-read with-tooltip" title="{{ 'pequiven_seip.tooltips.click_to_show'|trans({},'PequivenSEIPBundle') }} ({{ avancedUsed }}/100%)">
+            <span class="list-link with-tooltip" title="{{ 'pequiven_seip.tooltips.click_to_show'|trans({},'PequivenSEIPBundle') }} ({{ avancedUsed }}/100%)">
                 <span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
                 <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
                 <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
 
-                <strong>{{ arrangementProgram.ref }}</strong> {{ arrangementProgram.labelStatus|trans }}
-            </a>
+                {{ generateLink(arrangementProgram) }}&nbsp;{{ arrangementProgram.labelStatus|trans }}
+            </span>
         </li>
         {% else %}
             <li>

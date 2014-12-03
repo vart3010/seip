@@ -34,6 +34,15 @@ pequiven_seip_arrangementprogram_assigned:
         _format: html|json|xml
     methods: [GET]
     
+pequiven_seip_arrangementprogram_for_reviewing_or_approving:
+    path: /for-reviewing-or-approving.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forReviewingApprovingAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
 pequiven_arrangementprogram_create:
     path: /{type}/create
     defaults: { _controller: pequiven_seip.controller.arrangementprogram:createAction }

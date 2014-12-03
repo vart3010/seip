@@ -63,7 +63,7 @@ class IndicatorController extends ResourceController
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,

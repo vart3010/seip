@@ -215,7 +215,14 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function assignedAction(Request $request) {
+    function forReviewingApprovingAction(Request $request){
+        $method = 'createPaginatorByAssigned';
+        $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
+        $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    private function getSummaryResponse(Request $request,$method,$route,$template) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
@@ -228,7 +235,7 @@ class ArrangementProgramController extends SEIPController
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByAssignedResponsibles',
+                $method,
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -250,7 +257,7 @@ class ArrangementProgramController extends SEIPController
 
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('assignedIndex.html'))
+            ->setTemplate($this->config->getTemplate($template))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
@@ -278,6 +285,7 @@ class ArrangementProgramController extends SEIPController
             }
             //PequivenArrangementProgramBundle
             $view->setData(array(
+                'route' => $route,
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
                 'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
@@ -292,6 +300,15 @@ class ArrangementProgramController extends SEIPController
             $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
         }
         return $this->handleView($view);
+    }
+
+
+    public function assignedAction(Request $request) 
+    {    
+        $method = 'createPaginatorByAssignedResponsibles';
+        $route = 'pequiven_seip_arrangementprogram_assigned';
+        $template = 'assignedIndex.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
     }
     
     /**
@@ -1036,7 +1053,7 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AE'.$rowObservation,$reference);
         
         //Agregar los detalles del programa de gestion
-        $sendToReviewBy = ucfirst(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $sendToReviewBy = ucfirst(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
         $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
         
         $approvedBy = ucfirst(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
