@@ -32,21 +32,20 @@ class User extends AbstractType {
         
         $builder
             ->add('username',null,array(
-                'label' => 'pequiven_seip.userName',
-                'translation_domain' => 'PequivenSEIPBundle',
-                'disabled' => true
+                'label' => 'pequiven_seip.username',
+                'translation_domain' => 'PequivenSEIPBundle'
             ))
             ->add('firstname',null,array('label' => 'pequiven_seip.firstname','translation_domain' => 'PequivenSEIPBundle'))
-            ->add('lastName',null,array('label' => 'pequiven_seip.lastName','translation_domain' => 'PequivenSEIPBundle'))
+            ->add('lastname',null,array('label' => 'pequiven_seip.lastname','translation_domain' => 'PequivenSEIPBundle'))
             ->add('numPersonal',null,array('label' => 'pequiven_seip.numPersonal','translation_domain' => 'PequivenSEIPBundle'))
             ->add('complejo','entity',array('class' => 'Pequiven\MasterBundle\Entity\Complejo','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.complejo','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
             ->add('gerencia','entity',array('class' => 'Pequiven\MasterBundle\Entity\Gerencia','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.gerenciaFirst','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
-            ->add('gerenciaSecond','entity',array('class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna','label' => 'pequiven_seip.gerenciaSecond','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
+            ->add('gerenciaSecond','entity',array('class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond','property' => 'description','required' => false,'empty_data' => null,'empty_value' => 'Ninguna', 'required' => false ,'label' => 'pequiven_seip.gerenciaSecond','translation_domain' => 'PequivenSEIPBundle','attr' => array('class' => 'select2 input-xlarge')))
             ->add('direction',null,array('label' => 'pequiven_seip.direction','translation_domain' => 'PequivenSEIPBundle'))
             ->add('groups','entity',$parametersUser)
             ->add('roles', 'choice', array(
-                'label' => 'form.group_roles',
-                'translation_domain' => 'FOSUserBundle',
+                'label' => 'pequiven_seip.group_roles',
+                'translation_domain' => 'PequivenSEIPBundle',
                 'choices' => array(
                     'ROLE_WORKER_PQV' => 'Trabajador de pequiven',
                     'ROLE_WORKER_PLANNING' => 'Trabajador de planificacion',
@@ -54,6 +53,16 @@ class User extends AbstractType {
                 'multiple' => true,
                 'required' => false,
                 'attr' => array('class' => 'select2 input-xlarge')
+            ))
+            ->add('supervised',null,array(
+                'label' => 'pequiven_seip.supervised',
+                'translation_domain' => 'PequivenSEIPBundle',
+                'multiple' => true,
+                'required' => false,
+                'attr' => array('class' => 'select2 input-xlarge'),
+                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
+                    return $qb->findQueryUsersByCriteria();
+                },
             ))
         ;
     }

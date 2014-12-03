@@ -75,7 +75,9 @@ function setValueSelect2(idSelect2, idEntity, data, callBack) {
 //    $("#"+idSelect2).select2();
     $("#" + idSelect2).select2('val', j);
     if (callBack) {
-        callBack(data[j]);
+        if(data && data[j] != undefined){
+            callBack(data[j]);
+        }
     }
 //    $("#"+idSelect2).trigger("select2-selecting");
 }
@@ -108,7 +110,7 @@ angular.module('seipModule.controllers', [])
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
-        $scope.model.goalCount = null;
+            $scope.model.goalCount = null;
 
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
@@ -139,11 +141,9 @@ angular.module('seipModule.controllers', [])
                     } else {
                         setValueSelect2("goal_typeGoal", null, $scope.data.typeGoals, setTypeGoalCall);
                     }
-                    if (goal.responsibles != undefined) {
-                        setValueSelect2Multiple("goal_responsibles", goal.responsibles, $scope.data.responsibleGoals, function(selected) {
-                            $scope.model.goal.responsibles = selected;
-                        });
-                    }
+                    setUrlResponsibles($scope.model.goal.responsibles);
+                }else{
+                    angular.element('#div_goal_responsibles').select2('data',[]);
                 }
             };
             //Metas
@@ -174,8 +174,9 @@ angular.module('seipModule.controllers', [])
             $scope.validFormTypeGoal = function() {
                 var valid = $('#goalForms').validationEngine('validate');
                 if (valid) {
+                    $scope.model.goal.responsibles = $("#div_goal_responsibles").select2('data');
                     if ($scope.model.goal.responsibles == undefined) {
-                        $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person', 's2id_goal_responsibles');
+                        $scope.sendMessageError('pequiven.validators.arrangement_program.select_responsible_person', 's2id_div_goal_responsibles');
                         valid = false;
                     }
                 }
@@ -204,10 +205,13 @@ angular.module('seipModule.controllers', [])
                     $scope.templateOptions.enableModeEdit();
                     $scope.openModalAuto();
                 } else {
-                    applyDatePickerDatePG();
-                    $scope.openModalAuto();
+                    try { 
+                        $scope.openModalAuto(applyDatePickerDatePG);
+                    } catch( err ) { 
+                        $scope.openModalAuto();
+                    }
+                    
                 }
-                applyDatePickerDatePG();
             };
 
             //Setea la dta del formulario
@@ -310,13 +314,15 @@ angular.module('seipModule.controllers', [])
                 if (reponsibleId == '') {
                     $scope.data.responsibleGoals = [];
                 } else {
-                    notificationBarService.getLoadStatus().loading();
-                    $http.get(Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId})).success(function(data) {
-                        $scope.data.responsibleGoals = data;
-                        notificationBarService.getLoadStatus().done();
-                    });
+//                    notificationBarService.getLoadStatus().loading();
+//                    $scope.urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
+//                    $http.get($scope.urlResponsibles).success(function(data) {
+//                        $scope.data.responsibleGoals = data;
+//                        notificationBarService.getLoadStatus().done();
+//                    });
                 }
             };
+            
             $scope.getLocationByTactical = function(value){
                 if(value != ''){
                     notificationBarService.getLoadStatus().loading();
@@ -410,10 +416,10 @@ angular.module('seipModule.controllers', [])
                     confirmCallBack: $scope.addGoal,
                     cancelCallBack: $scope.cancelEditGoal,
                     loadCallBack: $scope.setDataFormGoal,
-                    initCallBack: initCallBack
+//                    initCallBack: initCallBack
                 }
             ];
-            $scope.templateOptions.setTemplate($scope.templates[0]);
+//            $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
                 if(programResponsible.val() != undefined && programResponsible.val() != ''){
@@ -702,13 +708,14 @@ angular.module('seipModule.controllers', [])
             });
             $scope.$watch("model.responsibles", function(newParams, oldParams) {
                 if ($scope.model.responsibles != null) {
-                    var responsibles = [], i = 0;
-                    angular.forEach($scope.model.responsibles, function(value) {
-                        responsibles.push(value.id);
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsibles").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
                         i++;
                     });
                     if (i > 0) {
-                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsibles);
+                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsiblesId);
                     } else {
                         $scope.tableParams.$params.filter['responsibles'] = null;
                     }
@@ -718,13 +725,14 @@ angular.module('seipModule.controllers', [])
             });
             $scope.$watch("model.responsiblesGoals", function(newParams, oldParams) {
                 if ($scope.model.responsiblesGoals != null) {
-                    var responsibles = [], i = 0;
-                    angular.forEach($scope.model.responsiblesGoals, function(value) {
-                        responsibles.push(value.id);
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsiblesGoals").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
                         i++;
                     });
                     if (i > 0) {
-                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsibles);
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsiblesId);
                     } else {
                         $scope.tableParams.$params.filter['responsiblesGoals'] = null;
                     }
@@ -1019,14 +1027,14 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
-            $scope.openModalAuto = function() {
+            $scope.openModalAuto = function(callback) {
                 notificationBarService.getLoadStatus().loading();
                 if ($scope.template.load == true) {
-                    openModal();
+                    openModal(callback);
                 }
             };
 
-            function openModal() {
+            function openModal(callback) {
                 if ($scope.template.name) {
                     modalOpen.dialog("option", "title", sfTranslator.trans($scope.template.name));
                 }
@@ -1085,6 +1093,9 @@ angular.module('seipModule.controllers', [])
                     $scope.template.loadCallBack($scope.template.parameterCallBack);
                 }
                 $scope.template.parameterCallBack = null;
+                if(callback){
+                    callback();
+                }
                 notificationBarService.getLoadStatus().done();
             }
 
@@ -1178,10 +1189,40 @@ angular.module('seipModule.controllers', [])
 
         })
         .controller('TableIndicatorTacticController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-
+            $scope.gerenciaFirst = null;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerencia'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerencia'] = null;
+                }
+            });
         })
         .controller('TableIndicatorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-
+            $scope.gerenciaSecond = null;
+            $scope.gerenciaFirst = null;
+            var gerencia = 0;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    if(gerencia != $scope.gerenciaFirst){
+                        gerencia = $scope.gerenciaFirst;
+                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                    }
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
+                }
+            });
+            $scope.$watch("gerenciaSecond", function() {
+                if ($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                }
+            });
         })
         .controller('TableMonitorTypeGroupController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
             //Porcentaje Cargado
@@ -1412,4 +1453,8 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams.$params.groupBy);
 //        console.log($scope.tableParams);
 //        console.log($scope.tableParams.settings().pages);
-        });
+        })
+        .controller('UserController',function($scope){
+            console.log('UserController');
+        })
+        ;

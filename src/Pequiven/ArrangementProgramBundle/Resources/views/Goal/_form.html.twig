@@ -24,7 +24,10 @@
     {% if goal.responsibles is defined %}
         <div class="field-block button-height">
             {{ form_label(goal.responsibles) }}
-            {{ form_widget(goal.responsibles) }}
+            <div id="div_goal_responsibles" style='width: 270px'></div>
+            <span style="display: none">
+                {{ form_widget(goal.responsibles) }}
+            </span>
             {{ form_errors(goal.responsibles) }}
         </div>
     {% endif %}
@@ -41,6 +44,47 @@
 </form>
 <script type="text/javascript">
     var applyDatePickerDatePG = null;
+    var urlResponsibles = '';
+    
+    var setUrlResponsibles = function(data){
+              if(data == undefined){
+                  data = [];
+              }
+              $("#div_goal_responsibles").select2({
+                minimumInputLength: 1,
+                multiple: true,
+                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                    url: urlResponsibles,
+                    dataType: 'json',
+                    quietMillis: 250,
+                    data: function (term, page) {
+                        return {
+                            query: term, // search term
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                        return { results: data };
+                    },
+                    cache: true
+                },
+                initSelection: function(element, callback){
+                },
+                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
+                escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+            });
+
+            if(data != undefined){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                $('#div_goal_responsibles').select2('data', data);
+                $('#div_goal_responsibles').select2('val', preselected);
+        }
+    };
+    
     jQuery(document).ready(function(){
         jQuery('#goalForms').validationEngine('attach', {promptPosition : "centerRight", scroll: false,autoHidePrompt:true,autoHideDelay:1500,showOneMessage:true});
         jQuery('#goalForms select').select2();
@@ -70,6 +114,18 @@
               jQuery( "#goal_startDate" ).datepicker( "option", "maxDate", defaultEndDate );
               jQuery( "#goal_endDate" ).datepicker( "option", "minDate", defaultStartDate );
               
+              var changeArrangementprogramResponsibles = function(){
+                  var reponsibleId = arrangementprogramResponsibles.val();
+                    urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
+                    setUrlResponsibles();
+              };
+              
+              var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
+              arrangementprogramResponsibles.on('change',function(){
+                changeArrangementprogramResponsibles();
+              });
+              
+              changeArrangementprogramResponsibles();
         };
         applyDatePickerDatePG();
     });

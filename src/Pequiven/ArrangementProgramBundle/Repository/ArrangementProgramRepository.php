@@ -97,13 +97,16 @@ class ArrangementProgramRepository extends EntityRepository
      * @return type
      */
     public function createPaginatorByAssigned(array $criteria = null, array $orderBy = null) {
-        $user = $this->getUser();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $user = $criteria->remove('ap.user');
+        
+        $user = $user->getId();
+        $period = $criteria->remove('ap.period');
+        
         
         $queryBuilder = $this->getCollectionQueryBuilder();
         
-        
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+        $this->applyCriteria($queryBuilder, $criteria->toArray());
         
         $queryBuilder
             ->innerJoin('to_g.configuration','to_g_c');
@@ -113,8 +116,14 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap');
         
         $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apr.id = :user','to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
-           
+        $queryBuilder
+            ->andWhere('ap.period = :period')
+            ->setParameter('period', $period)
+            ;
+        
         $queryBuilder->setParameter('user', $user);
+        $this->applySorting($queryBuilder, $orderBy);
+        
         return $this->getPaginator($queryBuilder);
     }
     

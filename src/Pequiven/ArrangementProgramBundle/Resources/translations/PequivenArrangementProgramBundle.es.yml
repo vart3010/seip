@@ -3,6 +3,7 @@ pequiven:
     arrangement_program:
         my_arrangement_program: Mis programas de gestión
         not_arrangement_program_assigned: No tiene programas de gestión asignados.
+        for_reviewing_or_approving: Por revisar o aprobar
         assigned: Asignados
         total_planned: Total planificado
         write_observation: Escriba una observación
@@ -47,7 +48,7 @@ pequiven:
         observations: Observaciones al programa
         type_management:
             type_management: Tipo de gerencia
-            modular: Modular
+            modular: Medular
             binding: Vinculante
         details:
             rejected_by: Rechazado por

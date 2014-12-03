@@ -8,6 +8,7 @@ pequiven_seip:
     sign_in: Ingresar
     remind_me: Recuerdame
     login: Iniciar sesión
+    group_roles: Roles
     lost_password: Recuperar contraseña
     username: Nombre de usuario
     password: Contraseña
@@ -24,6 +25,7 @@ pequiven_seip:
     content: Contenido
     export_to_csv: Exportar a CVS
     your_personal_num: Su número de personal
+    supervised: Supervisados
 
     message_header_center: Sistema Estadístico de Información Petroquímica
     message_app_title: Sistema Estadístico de Información Petroquímica
@@ -35,7 +37,7 @@ pequiven_seip:
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
     firstname: Nombre
-    lastName: Apellido
+    lastname: Apellido
     numPersonal: Número de Personal
     direction: Dirección
     rol: Rol

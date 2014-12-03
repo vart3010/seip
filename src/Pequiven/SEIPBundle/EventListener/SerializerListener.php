@@ -99,7 +99,9 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         );
         
         $visitor = $event->getVisitor();
-        $visitor->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        if($objetives[0] != null){
+            $visitor->addData('groupBy', $objetives[0]->getRef() . $objetives[0]->getDescription());
+        }
         $visitor->addData('_links',$links);
     }
     

@@ -13,7 +13,7 @@
                     {{ observation.description }}
                 </th>
                 <td>
-                    {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastName }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                    {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastname }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
                 </td>
                 <td>
                     {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}

@@ -10,3 +10,125 @@
         {{ actions.update() }}
     </form>
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        
+        var selectGerenciaSecond =  $("#pequiven_seipbundle_user_gerenciaSecond"),//Select de Gerencia de 2da Línea
+            selectGerenciaFirst =  $("#pequiven_seipbundle_user_gerencia")//Select de Gerencia de 1ra Línea
+        ;
+        
+        $(document).ready(function()
+        {
+            
+            charge();
+            
+            function charge(){
+                chargeSelectGerenciaSecond("selected");
+            }
+        });
+        
+        selectGerenciaFirst.on("select2-selecting", function(e) {
+            chargeSelectGerenciaSecond('choice',e);
+            //chargeList(e);
+            //displayObjetiveStrategicFromLineStrategic();//Actualizamos los Objetivos Estratégicos
+        })
+        
+        selectGerenciaFirst.change(function(){
+            selectGerenciaSecond.select2("val",'');
+        });
+        
+        function chargeSelectGerenciaSecond(type,e){
+            var data = '';
+            var gerenciaSecondValue = selectGerenciaSecond.val();
+            var gerenciaValue = selectGerenciaFirst.val();
+            if(type == 'choice'){
+                data = {
+                    gerencia: $.trim(e.val),
+                };
+            } else{
+                data = {
+                    gerencia: gerenciaValue,
+                };
+            }
+            
+            $.ajax({
+                type: 'post',
+                url: '{{ path("select_gerenciaSecond") }}',
+                data: data,
+                success: function(data) {
+                    
+                    $("#pequiven_seipbundle_user_gerenciaSecond optgroup").remove();
+                    $("#pequiven_seipbundle_user_gerenciaSecond option[value]").remove();
+
+                    if(typeof data[0].empty === 'undefined'){
+                        var cantidad = data.length;
+                        var text = '';
+                        text = text + '<option value>Ninguna</option>';
+                        
+                        text = text + '<optgroup label="' + data[0].optGroup + '">';
+
+                        for(var i=0, total = data.length; i<total; i++){
+                            if(i == 0){
+                                if(type == 'selected'  && data[i].id == gerenciaSecondValue){
+                                    text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
+                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
+                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" selected="selected" >' + data[i].description + '</option> </optgroup>';
+                                } else{
+                                    text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
+                                }
+                            } else if ((i+1) == cantidad){
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text +'<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option> </optgroup>';
+                                } else{
+                                    text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
+                                }
+                            } else{
+                                if(type == 'selected' && data[i].id == gerenciaSecondValue){
+                                    text = text + '<option value="' + data[i].id + '" selected="selected">' + data[i].description + '</option>';
+                                } else{
+                                    text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
+                                }
+                            }
+                        }
+                        //selectGerenciaFirst.append("<option></option>");
+                        selectGerenciaSecond.append(text);
+                        selectGerenciaSecond.select2({
+                        });
+                        selectGerenciaSecond.select2("enable",true);
+                    } else{
+                        chargeSelect2GerenciaSecond("empty");
+                    }
+                }
+            });
+        }
+        
+        //Función que carga el select2 de Gerencia de 2da Línea
+        function chargeSelect2GerenciaSecond(type){
+            selectGerenciaSecond.select2({
+                allowClear: true,
+                placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
+                formatNoMatches: function(term) {
+                    if(type == 'full'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    } else if (type == 'empty'){
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
+                    } else {
+                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

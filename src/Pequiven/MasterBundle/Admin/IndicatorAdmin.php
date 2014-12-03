@@ -15,6 +15,21 @@ use Sonata\AdminBundle\Form\FormMapper;
 class IndicatorAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $form) {
+        $object = $this->getSubject();
+        $childrensParameters = array(
+            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
+            'multiple' => true,
+            'required' => false,
+        );
+        if($object != null && $object->getId() !== null){
+            $indicatorLevel = $object->getIndicatorLevel();
+            $level = $indicatorLevel->getLevel();
+            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
+                return $repository->getQueryChildrenLevel($level);
+            };
+           
+        }
+        
         $form
             ->add('ref')
             ->add('description')
@@ -29,6 +44,7 @@ class IndicatorAdmin extends Admin
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('childrens','entity',$childrensParameters)
             ->add('enabled')
             ;
     }

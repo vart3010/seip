@@ -493,4 +493,8 @@ class ArrangementProgram extends Model
     {
         return $this->responsibles;
     }
+    
+    public function __toString() {
+        return $this->getRef();
+    }
 }

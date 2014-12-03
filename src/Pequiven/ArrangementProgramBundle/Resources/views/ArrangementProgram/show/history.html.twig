@@ -58,7 +58,7 @@
             </p>
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.created_by'|trans({},'messages') }}</label>
-                {{ entity.createdBy }}
+                <span title="{{ entity.createdBy.username }}" class="with-tooltip">{{ entity.createdBy }}</span>
             </p>
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.created_at'|trans({},'messages') }}</label>
@@ -117,7 +117,7 @@
                                 <small>{{ history.comment }}</small>
                             </th>
                             <td>
-                                {{ history.user.firstname ~ " "~ history.user.lastName }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
+                                {{ history.user.firstname ~ " "~ history.user.lastname }} <small class="tag">{{ " (" ~ history.user.username ~ ")" }}</small>
                             </td>
                             <td>
                                 {{ history.createdAt|date(appConfiguration.generalDateFormat) }}
@@ -144,7 +144,7 @@
                                 {{ observation.description }}
                             </th>
                             <td>
-                                {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastName }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
+                                {{ observation.createdBy.firstname ~ " "~ observation.createdBy.lastname }} <small class="tag">{{ " (" ~ observation.createdBy.username ~ ")" }}</small>
                             </td>
                             <td>
                                 {{ observation.createdAt|date(appConfiguration.generalDateFormat) }}
