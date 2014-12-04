@@ -281,4 +281,28 @@ class IndicatorRepository extends baseEntityRepository {
         
         return $this->getPaginator($queryBuilder);
     }
+    
+    /**
+     * Indicadores de acuerdo a un objetivo
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return type
+     */
+    public function getByObjetiveTactic(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive){
+        $qb = $this->getQueryBuilder();
+        
+        $qb->select('o.ref AS IndTacRef,o.description AS IndTac,o.goal AS IndTacGoal,o.weight AS IndTacPeso');
+        $qb->addSelect('f.equation AS IndTacFormula');
+        $qb->leftJoin('o.objetives', 'obj');
+        $qb->leftJoin('o.formula', 'f');
+        
+        $qb->andWhere('o.enabled = :enabled');
+        $qb->andWhere('obj.id = :idObjetive');
+        
+        $qb->setParameter('enabled', true);
+        $qb->setParameter('idObjetive', $objetive->getId());
+        
+        $qb->orderBy('o.ref');
+        
+        return $qb->getQuery()->getResult();
+    }
 }

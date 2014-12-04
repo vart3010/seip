@@ -42,6 +42,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgramTemplate', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeUser', 'class' => 'Pequiven\SEIPBundle\Entity\User', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerencia', 'class' => 'Pequiven\MasterBundle\Entity\Gerencia', 'format' => 'json'),
         );
     }
 
@@ -536,6 +537,11 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $links['self']['href'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
         $event->getVisitor()->addData('_links',$links);
         $event->getVisitor()->addData('rol',$roles[0]->getDescription());
+    }
+    
+    public function onPostSerializeGerencia(ObjectEvent $event) {
+        $object = $event->getObject();
+        $event->getVisitor()->addData('linkToExportMatriz', $this->generateUrl('gerencia_matriz_export', array('id' => $object->getId())));
     }
     
     public function setContainer(ContainerInterface $container = null) {
