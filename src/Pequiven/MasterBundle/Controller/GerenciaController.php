@@ -272,25 +272,34 @@ class GerenciaController extends baseController {
                         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
                         $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
                         $totalIndicatorsTactic = count($indicatorsTactic);
-                        $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
+                        if($totalIndicatorsTactic > 0){
+                            $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
 
-                        $contIndTactic = 1;
-                        foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
-                            if($contIndTactic === $totalIndicatorsTactic){
-                                $rowFinTac = $row;
-                            } else{
-                                $rowFinTac = $rowIniTac + ($div-1);
+                            $contIndTactic = 1;
+                            foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
+                                if($contIndTactic === $totalIndicatorsTactic){
+                                    $rowFinTac = $row;
+                                } else{
+                                    $rowFinTac = $rowIniTac + ($div-1);
+                                }
+                                $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
+                                $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
+                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+                                $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
+                                $contIndTactic++;
+                                $rowIniTac = $rowIniTac + ($div);
                             }
-                            $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
-                            $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
-                            $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
-                            $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
-                            $contIndTactic++;
-                            $rowIniTac = $rowIniTac + ($div);
+                        } else{
+                            if($contRepObjTac > 0){
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',($row-$contRepObjTac),($row)));
+                            }
                         }
                     }
                 } else{
@@ -299,27 +308,36 @@ class GerenciaController extends baseController {
                     $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
                     $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
                     $totalIndicatorsTactic = count($indicatorsTactic);
-                    $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
-
-                    $contIndTactic = 1;
-                    foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
-                        if($contIndTactic === $totalIndicatorsTactic){
-                            $rowFinTac = ($row-1);
-                        } else{
-                            $rowFinTac = $rowIniTac + ($div-1);
-                        }
-                        $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
-                            $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
-                            $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
-                            $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
-                            $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
-                            $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
-                        $contIndTactic++;
-                        $rowIniTac = $rowIniTac + ($div);
-                    }
+                    if($totalIndicatorsTactic > 0){
                     
+                        $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
+
+                        $contIndTactic = 1;
+                        foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
+                            if($contIndTactic === $totalIndicatorsTactic){
+                                $rowFinTac = ($row-1);
+                            } else{
+                                $rowFinTac = $rowIniTac + ($div-1);
+                            }
+                            $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
+                                $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
+                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+                                $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
+                            $contIndTactic++;
+                            $rowIniTac = $rowIniTac + ($div);
+                        }
+                    } else{
+                        if($contRepObjTac > 0){
+                            $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('L%s:L%s',($row-$contRepObjTac -1),($row-1)));
+                        }
+                    }
                     if($contRepObjTac > 0){
                         $activeSheet->mergeCells(sprintf('G%s:G%s',($row-$contRepObjTac -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('H%s:H%s',($row-$contRepObjTac -1),($row-1)));

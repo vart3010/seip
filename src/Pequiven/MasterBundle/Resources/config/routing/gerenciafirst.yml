@@ -20,7 +20,7 @@ pequiven_gerenciafirst_update:
         id: "\d+"
     methods: [GET|POST|PUT]
     
-gerencia_matriz_export:
+pequiven_gerenciafirst_export:
     path: /{id}/export
     defaults: { _controller: pequiven.controller.gerenciafirst:exportAction }
     requirements:
