@@ -241,6 +241,7 @@ sylius_resource:
         #Maestro gerencia 1ra línea
         pequiven.gerenciafirst:
             driver: doctrine/orm
+            templates: PequivenMasterBundle:Gerencia
             classes:
                 model: Pequiven\MasterBundle\Entity\Gerencia
                 controller: Pequiven\MasterBundle\Controller\GerenciaController
