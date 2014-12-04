@@ -188,7 +188,6 @@ class GerenciaController extends baseController {
             )
           ),
           'font' => array(
-              'bold' => false
           ),
           'alignment' => array(
               'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
@@ -241,17 +240,22 @@ class GerenciaController extends baseController {
         foreach($sectionOperative as $result){
             $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
             $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);
-//            $activeSheet->setCellValue('I'.$row, $result['IndTacRef'].' '.$result['IndTac']);
-//            $activeSheet->setCellValue('J'.$row, $result['IndTacFormula']);
-//            $activeSheet->setCellValue('K'.$row, $result['IndTacGoal']);
-//            $activeSheet->setCellValue('L'.$row, $result['IndTacPeso']);
-            $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe'].'('.$result['ObjOpeGerencia'].')');
-            $activeSheet->setCellValue('O'.$row, $result['ObjOpeGoal']);
-            $activeSheet->setCellValue('P'.$row, $result['ObjOpePeso']);
-            $activeSheet->setCellValue('Q'.$row, $result['IndOpeRef'].' '.$result['IndOpe']);
-            $activeSheet->setCellValue('R'.$row, $result['IndOpeFormula']);
-            $activeSheet->setCellValue('S'.$row, $result['IndOpeGoal']);
-            $activeSheet->setCellValue('T'.$row, $result['IndOpePeso']);
+
+            $styleArray = array(
+                'font' => array(
+                    'bold' => true
+                )
+            );
+            
+            $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe']);
+            $activeSheet->setCellValue('O'.$row, $result['ObjOpeGerencia']);
+            $activeSheet->getStyle('O'.$row)->applyFromArray($styleArray);
+            $activeSheet->setCellValue('P'.$row, $result['ObjOpeGoal']);
+            $activeSheet->setCellValue('Q'.$row, $result['ObjOpePeso']);
+            $activeSheet->setCellValue('R'.$row, $result['IndOpeRef'].' '.$result['IndOpe']);
+            $activeSheet->setCellValue('S'.$row, $result['IndOpeFormula']);
+            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
+            $activeSheet->setCellValue('U'.$row, $result['IndOpePeso']);
             
             if($contResult > 1){
                 
@@ -334,14 +338,16 @@ class GerenciaController extends baseController {
                         $activeSheet->mergeCells(sprintf('N%s:N%s',($row-$contRepObjOpe),($row)));
                         $activeSheet->mergeCells(sprintf('O%s:O%s',($row-$contRepObjOpe),($row)));
                         $activeSheet->mergeCells(sprintf('P%s:P%s',($row-$contRepObjOpe),($row)));
-                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('V%s:V%s',($row-$contRepObjOpe),($row)));
                     }
                 } else{
                     if($contRepObjOpe > 0){
                         $activeSheet->mergeCells(sprintf('N%s:N%s',($row-$contRepObjOpe -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('O%s:O%s',($row-$contRepObjOpe -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('P%s:P%s',($row-$contRepObjOpe -1),($row-1)));
-                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('V%s:V%s',($row-$contRepObjOpe -1),($row-1)));
                         $contRepObjOpe = 0;
                     }
                 }
@@ -351,17 +357,17 @@ class GerenciaController extends baseController {
                 if($beforeIndOpeRef === $result['IndOpeRef']){
                     $contRepIndOpe++;
                     if($contResult === $totalOperative){
-                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepIndOpe),($row)));
                         $activeSheet->mergeCells(sprintf('R%s:R%s',($row-$contRepIndOpe),($row)));
                         $activeSheet->mergeCells(sprintf('S%s:S%s',($row-$contRepIndOpe),($row)));
                         $activeSheet->mergeCells(sprintf('T%s:T%s',($row-$contRepIndOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepIndOpe),($row)));
                     }
                 } else{
                     if($contRepIndOpe > 0){
-                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepIndOpe -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('R%s:R%s',($row-$contRepIndOpe -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('S%s:S%s',($row-$contRepIndOpe -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('T%s:T%s',($row-$contRepIndOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepIndOpe -1),($row-1)));
                         $contRepIndOpe = 0;
                     }
                 }
@@ -369,7 +375,7 @@ class GerenciaController extends baseController {
             }
             
             $activeSheet->getRowDimension($row)->setRowHeight($rowHeight);
-            $activeSheet->getStyle(sprintf('G%s:T%s',$row,$row))->applyFromArray($styleArrayBordersContent);
+            $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->applyFromArray($styleArrayBordersContent);
             $row++;
             $contResult++;
         }
