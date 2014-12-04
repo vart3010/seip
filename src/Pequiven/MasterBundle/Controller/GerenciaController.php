@@ -192,7 +192,7 @@ class GerenciaController extends baseController {
           ),
           'alignment' => array(
               'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
-              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_JUSTIFY,
+              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
               'wrap' => true
           )
         );
