@@ -1,6 +1,7 @@
 pequiven:
     select: Seleccione
     arrangement_program:
+        not_arrangement_program_in_level: No hay programas de gestión asociados.
         my_arrangement_program: Mis programas de gestión
         not_arrangement_program_assigned: No tiene programas de gestión asignados.
         for_reviewing_or_approving: Por revisar o aprobar

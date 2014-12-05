@@ -11,5 +11,21 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class ResultRepository extends EntityRepository
 {
+    /**
+     * Retorna los resultados que sean de tipo resultado
+     * @return type
+     */
+    function getQueryOfValidParents()
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('r.typeResult = :typeResult')
+            ->setParameter('typeResult', \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT)
+            ;
+        return $qb;
+    }
     
+    protected function getAlias() {
+        return 'r';
+    }
 }

@@ -52,6 +52,7 @@ pequiven_seip:
             indicator: Indicador
             arrangement_program: Programa de gestión
             objective: Objetivo
+            result: Otros resultados
         type_calculation:
             type_calculation: Tipo de calculo
             simple_average: Promedio simple
