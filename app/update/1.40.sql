@@ -12,3 +12,5 @@ ALTER TABLE ArrangementProgramDetails ADD CONSTRAINT FK_165E90D734F0D945 FOREIGN
 CREATE INDEX IDX_165E90D78BF9F47E ON ArrangementProgramDetails (notificationInProgressByUser_id);
 CREATE INDEX IDX_165E90D734F0D945 ON ArrangementProgramDetails (lastNotificationInProgressByUser_id);
 ALTER TABLE ArrangementProgram ADD totalAdvance DOUBLE PRECISION NOT NULL, ADD progressToDate DOUBLE PRECISION NOT NULL;
+
+ALTER TABLE seip_indicator ADD progressToDate DOUBLE PRECISION NOT NULL;

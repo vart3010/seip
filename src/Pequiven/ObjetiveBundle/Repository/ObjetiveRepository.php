@@ -438,4 +438,51 @@ class ObjetiveRepository extends EntityRepository {
             ->setParameter('enabled', true);
         return $qb;
     }
+    
+    
+    /**
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
+     * @return type
+     */
+    public function getSectionOperativeByGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
+        $qb = $this->getQueryBuilder();
+        
+        $qb->select('o.ref AS ObjOpeRef,o.description AS ObjOpe,o.goal AS ObjOpeGoal,o.weight AS ObjOpePeso');
+        $qb->addSelect('i.ref AS IndOpeRef, i.description AS IndOpe, i.goal AS IndOpeGoal,i.weight AS IndOpePeso');
+        $qb->addSelect('f.equation AS IndOpeFormula');
+        $qb->addSelect('gs.description AS ObjOpeGerencia');
+        $qb->addSelect('o1.ref AS ObjTacRef, o1.description AS ObjTac, o1.goal AS ObjTacGoal');
+        
+        $qb->leftJoin('o.indicators', 'i');
+        $qb->leftJoin('i.formula', 'f');
+        $qb->innerJoin('o.gerenciaSecond', 'gs');
+        $qb->leftJoin('o.parents', 'o1');
+        $qb->leftJoin('o1.indicators', 'i1');
+        $qb->leftJoin('i1.formula', 'f1');
+        
+        $qb->andWhere('o.objetiveLevel = :objetiveLevel');
+        $qb->andWhere('o.enabled = :enabled');
+        $qb->andWhere('o.gerencia = :gerencia');
+        $qb->andWhere('o1.enabled = :enabled');
+        
+        $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_OPERATIVO);
+        $qb->setParameter('enabled', true);
+        $qb->setParameter('gerencia', $gerencia->getId());
+        
+        $qb->orderBy('o.ref');
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    
+    public function getSectionStrategic(Objetive $objetive){
+        
+    }
+    
+    
+    public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
+        
+        return $gerencia->getDescription();
+    }
 }

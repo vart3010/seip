@@ -71,7 +71,7 @@
                 <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
                 <ul class="fa-ul">
                 {% for indicator in entity.indicators %}
-                    <li>{{ generateLink(indicator) }}</li>
+                    <li>{{ indicator.totalForResult ? indicator.totalForResult : '0.0' }}% - {{ generateLink(indicator) }}</li>
                 {% endfor  %}
                 </ul>
             </div>

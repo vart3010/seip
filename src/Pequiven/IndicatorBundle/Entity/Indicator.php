@@ -206,6 +206,14 @@ class Indicator extends modelIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
      */
     protected $childrens;
+    
+    /**
+     * Avance del indicador
+     * 
+     * @var integer
+     * @ORM\Column(name="progressToDate",type="float")
+     */
+    protected $progressToDate = 0;
 
     /**
      * Constructor
@@ -689,6 +697,9 @@ class Indicator extends modelIndicator
      */
     public function setValueFinal($valueFinal)
     {
+        if($valueFinal > 0 && $this->totalPlan > 0){
+            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+        }
         $this->valueFinal = $valueFinal;
 
         return $this;
@@ -866,5 +877,14 @@ class Indicator extends modelIndicator
     public function getChildrens()
     {
         return $this->childrens;
+    }
+    
+    /**
+     * Devuelve el valor que sera tomado en cuenta para los resuldatos
+     * @return type
+     */
+    function getTotalForResult()
+    {
+        return $this->progressToDate;
     }
 }

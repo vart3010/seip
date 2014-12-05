@@ -6,7 +6,7 @@
 
 {% block contet_html %}
     El usuario <b>{{ user.getFullNameUser }}</b> acaba aprobar el programa de gestión 
-    <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true)) }}">{{ arrangementProgram.ref }}</a> donde usted se encuetra involucrado.
+    <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true)) }}">{{ arrangementProgram.ref }}</a> donde usted se encuentra involucrado.
     
     Los responsables del programa de gestión son:
     <br/>
@@ -29,7 +29,7 @@
                     {{ goal.name }}
                 </td>
                 <td>
-                    {% for responsible in  arrangementProgram.responsibles %}
+                    {% for responsible in  goal.responsibles %}
                         {{ responsible }}
                     {% endfor %}
                 </td>
