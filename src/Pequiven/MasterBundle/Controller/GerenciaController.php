@@ -253,10 +253,13 @@ class GerenciaController extends baseController {
             $activeSheet->getStyle('O'.$row)->applyFromArray($styleArray);
             $activeSheet->setCellValue('P'.$row, $result['ObjOpeGoal']);
             $activeSheet->setCellValue('Q'.$row, $result['ObjOpePeso']);
-            $activeSheet->setCellValue('R'.$row, $result['IndOpeRef'].' '.$result['IndOpe']);
-            $activeSheet->setCellValue('S'.$row, $result['IndOpeFormula']);
+            $textIndOpe = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpeRef'].' '.$result['IndOpe'];
+            $textIndOpeFormula = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpeFormula'];
+            $textIndOpePeso = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpePeso'];
+            $activeSheet->setCellValue('R'.$row, $textIndOpe);
+            $activeSheet->setCellValue('S'.$row, $textIndOpeFormula);
 //            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
-            $activeSheet->setCellValue('U'.$row, $result['IndOpePeso']);
+            $activeSheet->setCellValue('U'.$row, $textIndOpePeso);
             
             if($contResult > 1){
                 
@@ -303,6 +306,7 @@ class GerenciaController extends baseController {
                         $activeSheet->setCellValue('A'.($row-$contRepObjTac), $textLineStrategic);
                         $activeSheet->setCellValue('B'.($row-$contRepObjTac), $textObjStra);
 
+                        //Sección Indicadores Tácticos
                         $totalIndicatorsTactic = count($indicatorsTactic);
                         if($totalIndicatorsTactic > 0){
                             $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
@@ -327,6 +331,10 @@ class GerenciaController extends baseController {
                             }
                         } else{
                             if($contRepObjTac > 0){
+                                $activeSheet->setCellValue('I'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('J'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('K'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('L'.($row-$contRepObjTac), 'No Aplica');
                                 $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac),($row)));
                                 $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac),($row)));
                                 $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac),($row)));
@@ -348,7 +356,7 @@ class GerenciaController extends baseController {
                     //Consultamos si el objetivo táctico tiene más de un estratégico padre
                     foreach($objetivesStrategics as $objetiveStrategic){
                         if($totalStrategics > 1){
-                            $textObjStra.= $result['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
+                            $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
                             if($contObjStra == 1){
                                 $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
                             } else{
@@ -367,6 +375,7 @@ class GerenciaController extends baseController {
                     $activeSheet->setCellValue('A'.($row-$contRepObjTac-1), $textLineStrategic);
                     $activeSheet->setCellValue('B'.($row-$contRepObjTac-1), $textObjStra);
                     
+                    //Sección Indicadores Tácticos
                     $totalIndicatorsTactic = count($indicatorsTactic);
                     if($totalIndicatorsTactic > 0){
                     
@@ -392,6 +401,10 @@ class GerenciaController extends baseController {
                         }
                     } else{
                         if($contRepObjTac > 0){
+                            $activeSheet->setCellValue('I'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('J'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('K'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('L'.($row-$contRepObjTac-1), 'No Aplica');
                             $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac -1),($row-1)));
                             $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac -1),($row-1)));
                             $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac -1),($row-1)));
