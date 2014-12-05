@@ -23,6 +23,10 @@ abstract class Result
      * Resultados tipo objetivo (Se calcula a partir del valor del objetivo)
      */
     const TYPE_RESULT_OBJECTIVE = 3;
+    /**
+     * Resultados tipo resultado (Se calcula a partir del los resultados asociados)
+     */
+    const TYPE_RESULT_OF_RESULT = 4;
     
     /**
      * Tipo de calculo (Promedio simple)
@@ -54,6 +58,7 @@ abstract class Result
             self::TYPE_RESULT_INDICATOR => 'pequiven_seip.results.type_result.indicator',
             self::TYPE_RESULT_ARRANGEMENT_PROGRAM => 'pequiven_seip.results.type_result.arrangement_program',
             self::TYPE_RESULT_OBJECTIVE => 'pequiven_seip.results.type_result.objective',
+            self::TYPE_RESULT_OF_RESULT => 'pequiven_seip.results.type_result.result',
         );
         return $results;
     }

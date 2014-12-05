@@ -144,8 +144,14 @@ abstract class Objetive
         $objetiveLevel = $this->getObjetiveLevel();
         $arrangementPrograms = array();
         if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
-            $arrangementPrograms = $this->getTacticalArrangementPrograms();
-        }elseif($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+            $arrangementProgramsResult = $this->getTacticalArrangementPrograms();
+            foreach ($arrangementPrograms as $arrangementProgram) {
+                if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    $arrangementPrograms[] = $arrangementProgram;
+                }
+            }
+            
+        } elseif ($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
             $arrangementPrograms = $this->getOperationalArrangementPrograms();
         }
         return $arrangementPrograms;

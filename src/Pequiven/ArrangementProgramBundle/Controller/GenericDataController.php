@@ -21,6 +21,7 @@ class GenericDataController extends SEIPController
         $query = $request->get('query');
         $results = array();
         if(count($responsiblesId) > 0){
+            $gerencia = $request->get('gerencia',null);
             $repository = $this->getRepositoryById('user');
             $users = $repository->findUsers($responsiblesId);
             if(!$users){
@@ -32,6 +33,9 @@ class GenericDataController extends SEIPController
                 'lastname' => $query,
                 'numPersonal' => $query,
             );
+            if($gerencia != null){
+                $criteria['gerencia'] = $gerencia;
+            }
             $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users,$criteria);
         }
         

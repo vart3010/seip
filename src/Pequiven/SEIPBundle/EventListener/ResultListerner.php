@@ -20,6 +20,8 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
     public static function getSubscribedEvents() {
         return array(
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_FINISH_THE_NOTIFICATION_PROCESS => 'onPostFinishTheNotificationProcess',
+            SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreValueIndicatorPreUpdate',
+            SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreValueIndicatorPreUpdate',
         );
     }
     
@@ -35,15 +37,9 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
         
         $objetive = $object->getObjetiveByType();
         if($objetive){
+            $resultService = $this->getResultService();
+            $myResult = $resultService->getResultByType($objetive->getResults(),\Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM);
             
-            $results = $objetive->getResults();
-            $myResult = null;
-            foreach ($results as $result) {
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
-                    $myResult = $result;
-                    break;
-                }
-            }
             if($myResult){
                 $arrangementPrograms = $objetive->getArrangementPrograms();
                 $countArrangementPrograms = count($arrangementPrograms);
@@ -55,22 +51,42 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
                     $total = $total / $countArrangementPrograms;
                 }
                 $myResult->setTotal($total);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($myResult->getResultDetails());
-                $objetives = $myResult->getObjetives();
-                foreach ($objetives as $objetive) {
-                    $results = $objetive->getResults();
-                    $total = 0;
-                    foreach ($results as $result) {
-                        $resultDetails = $result->getResultDetails();
-                        $total += $resultDetails->getGlobalResultWithWeight();
+                
+                $resultService->updateResultOfObjetives($myResult);
+            }
+        }
+    }
+    
+    /**
+     * Se agrega calcula el resultado que impacta el programa de gestion
+     * @param ResourceEvent $event
+     */
+    function onPreValueIndicatorPreUpdate(ResourceEvent $event) {
+        /**
+         * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+         */
+        $object = $event->getSubject();
+        $indicator = $object->getIndicator();
+        $parent = $indicator->getParent();//Indicador que impacta este indicador
+        
+        $resultService = $this->getResultService();
+        if($parent){
+            
+        }else{
+            
+            $objetives = $indicator->getObjetives();
+            foreach ($objetives as $objetive) {
+                
+                $myResult = $resultService->getResultByType($objetive->getResults(),\Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_INDICATOR);
+                if($myResult){
+                    $indicators = $objetive->getIndicators();
+                    $totalForResult = 0;
+                    foreach ($indicators as $indicator) {
+                        $totalForResult += $indicator->getTotalForResult();
                     }
-                    $objetive->setResultOfObjetive($total);
-                    $em->persist($objetive);
+                    $myResult->setTotal($totalForResult);
+                    $resultService->updateResultOfObjetives($myResult);
                 }
-                
-                $em->flush();
-                
             }
         }
     }
@@ -119,5 +135,14 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
     
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }

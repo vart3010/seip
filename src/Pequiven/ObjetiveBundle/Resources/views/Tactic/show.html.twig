@@ -90,7 +90,8 @@
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
             {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
-        
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
     </fieldset>
 
 <br /><br />

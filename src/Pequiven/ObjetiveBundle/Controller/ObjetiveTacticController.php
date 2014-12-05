@@ -53,7 +53,7 @@ class ObjetiveTacticController extends baseController {
             ->setData($this->findOr404($request))
         ;
 
-        $groups = array_merge(array('api_list','gerencia'), $request->get('_groups',array()));
+        $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
         $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
     }

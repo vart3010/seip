@@ -81,6 +81,16 @@ class GoalType extends AbstractType
                     'empty_value' => 'Seleccione',
                     'required' => true,
                 ));
+            $builder->add('includeResponsibleManagement','checkbox',array(
+                'label'  => 'pequiven.arrangement_program.include_responsible_management',
+                'attr' => array(
+                    'ng-model' => 'model.goal.includeResponsibleManagement',
+                    'ng-change' => 'changeIncludeResponsibleManagement()'
+                ),
+                'required' => false,
+                'by_reference' => false,
+                'mapped' => false
+            ));
         }
         
         $builder
