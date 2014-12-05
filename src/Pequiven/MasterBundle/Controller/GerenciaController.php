@@ -178,9 +178,8 @@ class GerenciaController extends baseController {
         
         $sectionOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionOperativeByGerencia($gerencia);
         $resource = $this->findOr404($request);
-//        $details = $resource->getDetails();
-//        $summary = $resource->getSummary();
         
+        //Formato para tdo el dcumento
         $styleArrayBordersContent = array(
           'borders' => array(
             'allborders' => array(
@@ -194,6 +193,13 @@ class GerenciaController extends baseController {
               'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
               'wrap' => true
           )
+        );
+        
+        //Formato en negrita
+        $styleArray = array(
+            'font' => array(
+                'bold' => true
+            )
         );
         
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_objetivos.xls');
@@ -217,35 +223,30 @@ class GerenciaController extends baseController {
         
         $activeSheet->setCellValue('A3', $gerencia->getDescription());
         
-        $row = 8;
-        $contResult = 1;
-        $totalOperative = count($sectionOperative);
-        $rowHeight = 70;
+        $row = 8;//Fila Inicial del skeleton
+        $contResult = 1;//Contador de resultados totales
+        $totalOperative = count($sectionOperative);//Total de registros
+        $rowHeight = 70;//Alto de la fila
         
         //Objetivo Táctico
         $beforeObjTacRef = $sectionOperative[0]['ObjTacRef'];
-        $contRepObjTac = 0;
-        $contObjTac = 1;
-        $rowIniTac = 8;
-        $rowFinTac = 8;
+        $contRepObjTac = 0;//Contador que cuenta los objetivos tácticos repetidos
+        $contObjTac = 1;//Contador que cuenta el número de objetivos tácticos
+        $rowIniTac = 8;//Fila inicial para hacer mergecell en el nivel táctico
+        $rowFinTac = 8;//Fila final para hacer mergecell en el nivel táctico
         
         //Objetivo Operativo
         $beforeObjOpeRef = $sectionOperative[0]['ObjOpeRef'];
-        $contRepObjOpe = 0;
+        $contRepObjOpe = 0;//Contador que cuenta los objetivos operativos repetidos
         
         //Indicador Operativo
         $beforeIndOpeRef = $sectionOperative[0]['IndOpeRef'];
-        $contRepIndOpe = 0;
+        $contRepIndOpe = 0;//Contador que cuenta los indicadores operativos repetidos
         
+        //Recorremos los resultados obtenidos
         foreach($sectionOperative as $result){
             $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
             $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);
-
-            $styleArray = array(
-                'font' => array(
-                    'bold' => true
-                )
-            );
             
             $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe']);
             $activeSheet->setCellValue('O'.$row, $result['ObjOpeGerencia']);
@@ -254,13 +255,13 @@ class GerenciaController extends baseController {
             $activeSheet->setCellValue('Q'.$row, $result['ObjOpePeso']);
             $activeSheet->setCellValue('R'.$row, $result['IndOpeRef'].' '.$result['IndOpe']);
             $activeSheet->setCellValue('S'.$row, $result['IndOpeFormula']);
-            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
+//            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
             $activeSheet->setCellValue('U'.$row, $result['IndOpePeso']);
             
             if($contResult > 1){
                 
                 //Objetivos Tácticos
-                if($beforeObjTacRef === $result['ObjTacRef']){
+                if($beforeObjTacRef === $result['ObjTacRef']){//Si cambia el objetivo táctico
                     $contRepObjTac++;
                     if($contResult === $totalOperative){
 
@@ -284,7 +285,7 @@ class GerenciaController extends baseController {
                                 }
                                 $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
                                 $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
-                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+//                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
                                 $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
                                 $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
                                 $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
@@ -303,7 +304,6 @@ class GerenciaController extends baseController {
                         }
                     }
                 } else{
-
                     //Obtenemos el Objetivo Táctico anterior y seteamos los indicadores en la matriz
                     $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
                     $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
@@ -321,7 +321,7 @@ class GerenciaController extends baseController {
                             }
                             $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
                                 $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
-                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+//                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
                                 $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
                                 $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
                                 $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));

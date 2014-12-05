@@ -453,12 +453,11 @@ class ObjetiveRepository extends EntityRepository {
         $qb->addSelect('f.equation AS IndOpeFormula');
         $qb->addSelect('gs.description AS ObjOpeGerencia');
         $qb->addSelect('o1.ref AS ObjTacRef, o1.description AS ObjTac, o1.goal AS ObjTacGoal');
-//        $qb->addSelect('i1.ref AS IndTacRef, i1.description AS IndTac, i1.goal AS IndTacGoal,i1.weight AS IndTacPeso');
-//        $qb->addSelect('f1.equation AS IndTacFormula');
+        
         $qb->leftJoin('o.indicators', 'i');
         $qb->leftJoin('i.formula', 'f');
         $qb->innerJoin('o.gerenciaSecond', 'gs');
-        $qb->innerJoin('o.parents', 'o1');
+        $qb->leftJoin('o.parents', 'o1');
         $qb->leftJoin('o1.indicators', 'i1');
         $qb->leftJoin('i1.formula', 'f1');
         
@@ -475,6 +474,12 @@ class ObjetiveRepository extends EntityRepository {
         
         return $qb->getQuery()->getResult();
     }
+    
+    
+    public function getSectionStrategic(Objetive $objetive){
+        
+    }
+    
     
     public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
         
