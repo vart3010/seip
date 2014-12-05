@@ -47,6 +47,8 @@ pequiven:
         template: Plantilla
         list: Lista
         observations: Observaciones al programa
+        include_responsible_management: Incluir los responsables de la
+        responsible_management: Responsables de la gerencia
         type_management:
             type_management: Tipo de gerencia
             modular: Medular
