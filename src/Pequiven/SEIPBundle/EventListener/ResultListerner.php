@@ -56,7 +56,6 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
                 $resultService->updateResultOfObjetives($myResult);
             }
         }
-        return new \Symfony\Component\HttpFoundation\Response('OK');
     }
     
     /**

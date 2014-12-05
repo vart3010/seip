@@ -33,5 +33,6 @@ class UpdateController extends Controller
             $this->get('event_dispatcher')->dispatch(SeipEvents::RESULT_ARRANGEMENT_PROGRAM_UPDATE,new ResourceEvent($arrangementprogram));
         }
         $em->flush();
+        return new \Symfony\Component\HttpFoundation\Response('OK');
     }
 }
