@@ -1,0 +1,4 @@
+pequiven_planning_update:
+    path: /update-result-arrangement-program
+    defaults:
+        _controller: PequivenSEIPBundle:Planning/Update:updateResultArrangementProgram

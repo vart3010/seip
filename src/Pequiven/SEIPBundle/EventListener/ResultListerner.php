@@ -20,6 +20,7 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
     public static function getSubscribedEvents() {
         return array(
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_FINISH_THE_NOTIFICATION_PROCESS => 'onPostFinishTheNotificationProcess',
+            SeipEvents::RESULT_ARRANGEMENT_PROGRAM_UPDATE => 'onPostFinishTheNotificationProcess',
             SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreValueIndicatorPreUpdate',
             SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreValueIndicatorPreUpdate',
         );
@@ -55,6 +56,7 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
                 $resultService->updateResultOfObjetives($myResult);
             }
         }
+        return new \Symfony\Component\HttpFoundation\Response('OK');
     }
     
     /**
