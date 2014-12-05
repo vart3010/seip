@@ -265,6 +265,8 @@ class GerenciaController extends baseController {
                     $contRepObjTac++;
                     if($contResult === $totalOperative){
 
+                        $activeSheet->mergeCells(sprintf('A%s:A%s',($row-$contRepObjTac),($row)));
+                        $activeSheet->mergeCells(sprintf('B%s:B%s',($row-$contRepObjTac),($row)));
                         $activeSheet->mergeCells(sprintf('G%s:G%s',($row-$contRepObjTac),($row)));
                         $activeSheet->mergeCells(sprintf('H%s:H%s',($row-$contRepObjTac),($row)));
                         $activeSheet->mergeCells(sprintf('M%s:M%s',($row-$contRepObjTac),($row)));
@@ -272,6 +274,35 @@ class GerenciaController extends baseController {
                         //Obtenemos el Objetivo Táctico anterior y seteamos los indicadores en la matriz
                         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
                         $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
+                        $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionStrategic($objetiveTactic);
+                        
+                        $totalStrategics = count($objetivesStrategics);
+                        $beforeLineStraRef = $objetivesStrategics[0]['LineStraRef'];
+                        $contObjStra = 1;
+                        $textObjStra = '';
+                        $textLineStrategic = '';
+                        //Consultamos si el objetivo táctico tiene más de un estratégico padre
+                        foreach($objetivesStrategics as $objetiveStrategic){
+                            if($totalStrategics > 1){
+                                $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
+                                if($contObjStra == 1){
+                                    $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                } else{
+                                    if($beforeLineStraRef === $objetiveStrategic['LineStraRef']){
+                                    } else{
+                                        $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                    }
+                                    $beforeLineStraRef = $objetiveStrategic['LineStraRef'];
+                                }
+                            } else{
+                                $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra'];
+                                $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra'];
+                            }
+                        }
+
+                        $activeSheet->setCellValue('A'.($row-$contRepObjTac), $textLineStrategic);
+                        $activeSheet->setCellValue('B'.($row-$contRepObjTac), $textObjStra);
+
                         $totalIndicatorsTactic = count($indicatorsTactic);
                         if($totalIndicatorsTactic > 0){
                             $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
@@ -307,6 +338,35 @@ class GerenciaController extends baseController {
                     //Obtenemos el Objetivo Táctico anterior y seteamos los indicadores en la matriz
                     $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
                     $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
+                    $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionStrategic($objetiveTactic);
+                    
+                    $totalStrategics = count($objetivesStrategics);
+                    $beforeLineStraRef = $objetivesStrategics[0]['LineStraRef'];
+                    $contObjStra = 1;
+                    $textObjStra = '';
+                    $textLineStrategic = '';
+                    //Consultamos si el objetivo táctico tiene más de un estratégico padre
+                    foreach($objetivesStrategics as $objetiveStrategic){
+                        if($totalStrategics > 1){
+                            $textObjStra.= $result['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
+                            if($contObjStra == 1){
+                                $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                            } else{
+                                if($beforeLineStraRef === $objetiveStrategic['LineStraRef']){
+                                } else{
+                                    $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                }
+                                $beforeLineStraRef = $objetiveStrategic['LineStraRef'];
+                            }
+                        } else{
+                            $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra'];
+                            $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra'];
+                        }
+                    }
+                    
+                    $activeSheet->setCellValue('A'.($row-$contRepObjTac-1), $textLineStrategic);
+                    $activeSheet->setCellValue('B'.($row-$contRepObjTac-1), $textObjStra);
+                    
                     $totalIndicatorsTactic = count($indicatorsTactic);
                     if($totalIndicatorsTactic > 0){
                     
@@ -339,6 +399,8 @@ class GerenciaController extends baseController {
                         }
                     }
                     if($contRepObjTac > 0){
+                        $activeSheet->mergeCells(sprintf('A%s:A%s',($row-$contRepObjTac -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('B%s:B%s',($row-$contRepObjTac -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('G%s:G%s',($row-$contRepObjTac -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('H%s:H%s',($row-$contRepObjTac -1),($row-1)));
                         $activeSheet->mergeCells(sprintf('M%s:M%s',($row-$contRepObjTac -1),($row-1)));
