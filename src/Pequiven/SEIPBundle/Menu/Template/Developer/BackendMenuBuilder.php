@@ -197,6 +197,17 @@ class BackendMenuBuilder extends MenuBuilder
         
         $child->addChild($subchild);
         
+        $subchild = $this->factory->createItem('planning.matriz',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.matriz', $section)));
+        
+        $child->addChild($subchild);
+        
         $menu->addChild($child);
     }
     
