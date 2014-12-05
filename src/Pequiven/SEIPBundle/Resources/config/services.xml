@@ -24,6 +24,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.service.result" class="Pequiven\SEIPBundle\Service\ResultService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <!-- Formulario de registro de usuario  -->
         <service id="pequiven_seip.registration.form.type" class="Pequiven\SEIPBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_seip_user_registration" />

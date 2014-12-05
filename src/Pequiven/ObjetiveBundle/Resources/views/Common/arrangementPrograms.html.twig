@@ -1,0 +1,16 @@
+<div class="inline-label">
+    <label class="label">{{ 'pequiven.arrangement_program.arrangement_programs' |trans({},'PequivenArrangementProgramBundle') }}</label>
+    <ul class="fa-ul">
+        {% for arrangementProgram in entity.arrangementPrograms %}
+            <li>
+                {% set avancedUsed = arrangementProgram.getTotalForResult %}
+                {#<span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+                <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>#}
+                {{ avancedUsed|number_format(2) }}% - {{ generateLink(arrangementProgram) }}
+            </li>
+        {% else %}
+            <b>{{ 'pequiven.arrangement_program.not_arrangement_program_in_level' |trans({},'PequivenArrangementProgramBundle') }}</b>
+        {% endfor  %}
+    </ul>
+</div>

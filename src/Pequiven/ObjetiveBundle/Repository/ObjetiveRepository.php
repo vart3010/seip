@@ -475,9 +475,30 @@ class ObjetiveRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
     
-    
+    /**
+     * 
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return type
+     */
     public function getSectionStrategic(Objetive $objetive){
+        $qb = $this->getQueryBuilder();
         
+        $qb->select('o.ref AS ObjStraRef, o.description AS ObjStra');
+        $qb->addSelect('l.ref AS LineStraRef, l.description AS LineStra');
+        
+        $qb->innerJoin('o.childrens', 'o1');
+        $qb->innerjoin('o.lineStrategics', 'l');
+        
+        $qb->andWhere('o.objetiveLevel = :objetiveLevel');
+        $qb->andWhere('o.enabled = :enabled');
+        $qb->andWhere('o1.enabled = :enabled');
+        $qb->andWhere('o1.id = :idChildren');
+        
+        $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO);
+        $qb->setParameter('enabled', true);
+        $qb->setParameter('idChildren', $objetive->getId());
+        
+        return $qb->getQuery()->getResult();
     }
     
     
