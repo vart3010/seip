@@ -27,6 +27,13 @@ class ResultAdmin extends Admin
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
             ->add('objetives')
+            ->add('parent','entity',array(
+                'class' => 'Pequiven\SEIPBundle\Entity\Result\Result',
+                'query_builder' => function(\Pequiven\SEIPBundle\Repository\Result\ResultRepository $repository){
+                    return $repository->getQueryOfValidParents();
+                },
+                'required' => false,
+            ))
             ;
     }
     
@@ -35,14 +42,31 @@ class ResultAdmin extends Admin
             ->add('description')
             ->add('typeResult')
             ->add('typeCalculation')
+            ->add('objetives')
             ;
     }
     
     protected function configureListFields(ListMapper $list) {
         $list
             ->addIdentifier('description')
-            ->addIdentifier('typeResult')
-            ->addIdentifier('typeCalculation')
+            ->add('typeResult')
+            ->add('typeCalculation')
+            ->add('objetives')
             ;
+    }
+    
+    public function prePersist($object) 
+    {
+        $parent = $object->getParent();
+        if($parent != null){
+            $object->getObjetives()->clear();
+        }
+    }
+    
+    public function preUpdate($object) {
+        $parent = $object->getParent();
+        if($parent != null){
+            $object->getObjetives()->clear();
+        }
     }
 }

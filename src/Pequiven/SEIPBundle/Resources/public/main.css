@@ -65,3 +65,10 @@ select.xxlarge {
 .show {
   display: block;
 }
+.page-input-sub {
+    color: #666;
+    font-size: 11px;
+    padding-top: 3px;
+    width: 350px;
+    padding-left: 20px;
+}

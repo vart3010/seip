@@ -71,7 +71,7 @@
                 <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
                 <ul class="fa-ul">
                 {% for indicator in entity.indicators %}
-                    <li>{{ indicator.totalForResult ? indicator.totalForResult : '0.0' }}% - {{ generateLink(indicator) }}</li>
+                    <li>{{ (indicator.progressToDate ? indicator.progressToDate : '0')|number_format(2) }}% - {{ generateLink(indicator) }}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%)</li>
                 {% endfor  %}
                 </ul>
             </div>
@@ -83,35 +83,8 @@
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
             {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
-        <div class="inline-label">
-            <label class="label">{{ 'pequiven.arrangement_program.arrangement_programs' |trans({},'PequivenArrangementProgramBundle') }}</label>
-            <ul class="fa-ul">
-            {% for arrangementProgram in entity.arrangementPrograms %}
-                <li>
-                    {% set avancedUsed = arrangementProgram.getTotalForResult %}
-                    {#<span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-                    <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-                    <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>#}
-                    {{ avancedUsed }}% - {{ generateLink(arrangementProgram) }}
-                </li>
-            {% endfor  %}
-            </ul>
-        </div>
-        <br/>
-        <div class="inline-label">
-            <label class="label">{{ 'pequiven_seip.results.results'|trans({},'PequivenSEIPBundle') }}</label>
-            <ul class="fa-ul">
-            {% for result in entity.results %}
-                <li>
-                    {{ result.resultDetails.globalResult ? result.resultDetails.globalResult : '0.0' }}% - {{ result }} (Peso {{ result.weight }}%)
-                </li>
-            {% else %}
-                <li>
-                    <b>{{ 'pequiven_seip.results.no_results'|trans({},'PequivenSEIPBundle') }}</b>
-                </li>
-            {% endfor  %}
-            </ul>
-        </div>
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
         
     </fieldset>
 

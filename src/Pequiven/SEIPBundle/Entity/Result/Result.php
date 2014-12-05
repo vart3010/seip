@@ -246,10 +246,10 @@ class Result extends ModelResult
     /**
      * Set parent
      *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $parent
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $parent
      * @return Result
      */
-    public function setParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parent = null)
+    public function setParent(\Pequiven\SEIPBundle\Entity\Result\Result $parent = null)
     {
         $this->parent = $parent;
 
