@@ -11,7 +11,7 @@
         <br />
     {% endif %}
 
-{% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_PLANNING'])) %}
+{% if is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING']) %}
     {{ contentHeader(("principal.title.objTactic"|trans)) }}
     <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ "principal.chart.captionObjTactic"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
