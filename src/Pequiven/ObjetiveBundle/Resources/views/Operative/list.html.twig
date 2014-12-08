@@ -18,7 +18,7 @@
         </h1>
     </hgroup>
         
-    <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
+    <input type="hidden" id="rolUser" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
     
     <div ng-controller="TableGroupingFormatController">
         <div ng-controller="TableObjetiveOperativeController">
@@ -32,10 +32,10 @@
                 ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('objetiveOperativeList',{_format:'json',filter:app.request.get('filter',{})}) }}" export-csv="csv" class="table table-responsive table-extra-info">
-                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+                        {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                             <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                         {% endif %}
-                        {% if (app.user.getRoles[0] == 'ROLE_DIRECTIVE' or app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO' or app.user.getRoles[0] == 'ROLE_GENERAL_COMPLEJO_AUX' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST' or app.user.getRoles[0] == 'ROLE_MANAGER_FIRST_AUX') %}
+                        {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'])) %}
                             <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
                         {% endif %}
                         <tbody ng-repeat="group in $groups">
@@ -76,7 +76,7 @@
             function charge(){
                 chargeSelectGerenciaFirst();
                 
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                if(inputHiddenRoleName.val() == 1 || inputHiddenRoleName.val() == 1){
                    selectGerenciaSecond.select2({
                        
                    });
@@ -161,7 +161,7 @@
         
         function chargeSelectGerenciaSecond(e){
             var data = '';
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleName.val() == 1 || inputHiddenRoleName.val() == 1){
                 data = {
                     gerencia: $.trim(e.val),
                 };

@@ -1054,11 +1054,13 @@ class ObjetiveOperativeController extends baseController
         $gerenciasObjectArray = array();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+            
             $gerencia = $request->request->get('gerencia');
             
             if((int)$gerencia == 0){
                 $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
             } else{
+                
                 $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
             }
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
