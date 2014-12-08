@@ -18,7 +18,7 @@
         </h1>
     </hgroup>
         
-    <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
+    <input type="hidden" id="rolUser" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'] }}">
     
     <div ng-controller="TableGroupingFormatController">
         <div ng-controller="TableIndicatorTacticController">

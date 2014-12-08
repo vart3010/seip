@@ -1,0 +1,28 @@
+pequiven_result_list:
+    path: /{level}/list.{_format}
+    defaults:
+        _controller: pequiven.controller.result:listResultAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+    
+pequiven_result_show:
+    path: /{level}/{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.result:showMonitorAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+        level: 1|2|3
+    methods: [GET]
+
+pequiven_result:
+    path: /{level}
+    defaults:
+        _controller: pequiven.controller.result:monitorAction
+    requirements:
+        level: 1|2|3
+    methods: [GET]

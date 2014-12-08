@@ -27,3 +27,15 @@ pequiven_indicator_add_observation:
         _format: html
         id: \d+
     methods: [POST]
+    
+#Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
+indicatorGerenciaFirstTactic:
+    path: /indicator/indicatorGerenciaFirstTactic
+    defaults:
+        _controller: pequiven.controller.indicator:selectGerenciaFirstAction
+        
+#Select que devuelve las Gerencias de 2da Línea para la visualización de objetivos a nivel Operativo
+indicatorGerenciaSecondOperative:
+    path: /indicator/indicatorGerenciaSecondOperative
+    defaults:
+        _controller: pequiven.controller.indicator:selectGerenciaSecondListAction

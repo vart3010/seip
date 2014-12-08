@@ -151,5 +151,15 @@
         <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>
+        <!-- Servicio de RESULT -->
+        <service id="pequiven.repository.result" class="Pequiven\SEIPBundle\Repository\Result\ResultRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Result" />
+        </service>
+<!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
+            <tag name="form.type" alias="pequiven_seipbundle_user" />
+        </service>-->
     </services>
 </container>
