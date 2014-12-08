@@ -349,7 +349,7 @@ class Result extends ModelResult implements ResultItemInterface
         $resultDetails = $this->getResultDetails();
         $result = 0;
         if($resultDetails){
-            $result = $resultDetails->getResultDetails()->getGlobalResult();
+            $result = $resultDetails->getGlobalResult();
         }
         return $result;
     }

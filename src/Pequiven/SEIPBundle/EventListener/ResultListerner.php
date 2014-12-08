@@ -63,33 +63,11 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
         if($parent){
             
         }else{
-            
             $objetives = $indicator->getObjetives();
             foreach ($objetives as $objetive) {
                 $myResult = $resultService->getResultByType($objetive->getResults(),\Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_INDICATOR);
                 if($myResult){
-                    $indicators = $objetive->getIndicators();
-                    $total = 0;
-                    $countResult = 0;
-                    if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                        foreach ($indicators as $indicator) {
-                            $countResult++;
-                            $total += $indicator->getResult();
-                        }
-                    }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                        foreach ($indicators as $indicator) {
-                            $countResult++;
-                            $total += $indicator->getResultWithWeight();
-                        }
-                    }
-                    if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                        $total += ($total / $countResult);
-                    }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                        //Nada que hacer
-                    }
-                    
-                    $myResult->setTotal($total);
-                    $resultService->updateResultOfObjetives($myResult);
+                    $resultService->calculateResult($myResult);
                 }
             }
         }
