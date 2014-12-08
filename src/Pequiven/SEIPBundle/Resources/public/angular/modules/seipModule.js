@@ -1493,6 +1493,92 @@ angular.module('seipModule.controllers', [])
                     revenueChart.render();
                 })
             };
+            
+            $scope.renderChartResult = function(id) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "stackedbar3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Revenue split by product category",
+                                "subCaption": "For current year",
+                                "xAxisname": "Quarter",
+                                "yAxisName": "Revenues (In USD)",
+                                "showSum": "1",
+                                "numberSuffix": "%",
+                                "bgAlpha" : "0,0",
+                                "baseFontColor" : "#ffffff",
+                                "outCnvBaseFontColor" : "#ffffff",
+                                "valueFontColor": "#000000",
+                                "visible" : "0",
+                                "theme": "fint",
+                                "formatNumberScale": "0",
+                                "axisMaxValue": "100",
+                                "axisMinValue": "0",
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        {
+                                           "label": "Q1"
+                                        },
+                                        {
+                                           "label": "Q2"
+                                        },
+                                        {
+                                           "label": "Q3"
+                                        },
+                                        {
+                                           "label": "Q4"
+                                        }
+                                     ]
+                                }
+                            ],
+                            "dataset":[
+                                {
+                                    "seriesname": "Indicadores",
+                                    "data": [
+                                       {
+                                          "value": "100"
+                                       },
+                                       {
+                                          "value": "30.8"
+                                       },
+                                       {
+                                          "value": "20.3"
+                                       },
+                                       {
+                                          "value": "50.6"
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "seriesname": "Programas de Gestión",
+                                    "data": [
+                                       {
+                                          "value": "0"
+                                       },
+                                       {
+                                          "value": "30.6"
+                                       },
+                                       {
+                                          "value": "40.3"
+                                       },
+                                       {
+                                          "value": "30.5"
+                                       }
+                                    ]
+                                 }
+                            ]
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
         })
         .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
