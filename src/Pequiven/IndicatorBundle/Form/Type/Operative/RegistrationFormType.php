@@ -50,9 +50,6 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
         $user = $securityContext->getToken()->getUser();
         
         if($this->typeForm == 'regular'){
-            //Rol del usuario que esta logueado
-            $array = $user->getRoles();
-            $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
             
             //Línea estratégica del objetivo a crear
             $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container,array('registerIndicator' => true)));

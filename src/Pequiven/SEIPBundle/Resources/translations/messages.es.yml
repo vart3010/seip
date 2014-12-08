@@ -72,6 +72,8 @@ chart:
         seriesNamePlan: Plan
         seriesNameReal: Real
         seriesNameCarga: % Carga
+    results:
+        
 app:
     http:
         return_to_home: Ir a la página de inicio

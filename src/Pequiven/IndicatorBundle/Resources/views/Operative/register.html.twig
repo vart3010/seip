@@ -27,10 +27,10 @@
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_indicator.indicators'|trans }}</legend>
             
-            <!-- Hidden con "RoleName" del usuario que esta logueado -->
-            <div>
-                {{ form_widget(form.role_name) }}
-            </div>
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
+            <input type="hidden" id="rolGerenciaGeneral" value="{{ is_granted(['ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX']) }}">
+            <input type="hidden" id="rolGerenciaFirst" value="{{ is_granted(['ROLE_MANAGER_FIRST','ROLE_ROLE_MANAGER_FIRST_AUX']) }}">
+            <input type="hidden" id="rolGerenciaSecond" value="{{ is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX']) }}">
             
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
@@ -307,7 +307,10 @@
             selectFormula = $("#pequiven_indicator_operative_registration_formula"),//Select de Fórmula
             inputRef = $("#pequiven_indicator_operative_registration_ref"),//Input de Ref
             inputWeight = $("#pequiven_indicator_operative_registration_weight"),//Input de Peso
-            inputHiddenRoleName = $("#pequiven_indicator_operative_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+            inputHiddenRoleDirective = $("#rolDirective"),//Input Hidden del Nombre del Rol Directivo
+            inputHiddenRoleGerenciaGeneral = $("#rolGerenciaGeneral"),//Input Hidden del Nombre del Rol Gerente de Complejo
+            inputHiddenRoleGerenciaFirst = $("#rolGerenciaFirst"),//Input Hidden del Nombre del Rol Gerente 1ra Línea
+            inputHiddenRoleGerenciaSecond = $("#rolGerenciaSecond"),//Input Hidden del Nombre del Rol Gerente 2da Línea
             selectTendency = $("#pequiven_indicator_operative_registration_tendency"),//Select de Tendencia del indicador
             selectArrangementRangeTypeTop = $("#pequiven_indicator_operative_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
             selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_operative_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
@@ -402,7 +405,7 @@
                 })
                 selectObjetiveOperative.select2("enable",false);
 
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                if(inputHiddenRoleDirective.val() == 1){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
 
@@ -416,7 +419,7 @@
                     selectGerencia.select2("enable",false);
                 }
 
-                if(inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX'){
+                if(inputHiddenRoleGerenciaSecond.val() != 1){
                     //Inicializamos el select2 de Gerencia de 2da Línea
                     selectGerenciaSecond.select2({
 
@@ -534,8 +537,8 @@
 
         //Al seleccionar alguna opción en el select de Objetivo Táctico
         selectObjetiveTactic.on("select2-selecting", function(e) {
-            if(inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX'){
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleGerenciaSecond.val() != 1){
+                if(inputHiddenRoleDirective.val() == 1){
                     displaySelectComplejo(e);
                 } else{
                     displayGerenciaSecond(e);
@@ -900,7 +903,7 @@
         //Función que actualiza el select de gerencia de 2da línea en caso de que el usuario logueado sea de Sede Corporativa
         function displayGerenciaSecond(e){
             var data = '';
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() ==='ROLE_DIRECTIVE_AUX'){//En caso de que el usuario tenga rol directivo
+            if(inputHiddenRoleDirective.val() == 1){//En caso de que el usuario tenga rol directivo
                 data = {
                     gerencia: $.trim(e.val),
                 };
@@ -949,7 +952,7 @@
 
         //Función que carga los objetivos operativos de acuerdo al objetivo táctico seleccionado y a la gerencia de 2da línea
         function displayObjetiveOperative(e){
-            if(inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX'){
+            if(inputHiddenRoleGerenciaSecond.val() != 1){
                 var data = {
                     gerenciaSecondId: $.trim(e.val),
                     objetiveTacticId: $.trim(selectObjetiveTactic.val()),
@@ -1064,7 +1067,7 @@
             selectObjetiveOperative.select2({
                 placeholder: '{{ 'form.messages.selectObjetiveOperativePlaceholderIndicator'|trans }}',
                 formatNoMatches: function(term) {
-                    if(inputHiddenRoleName.val !== 'ROLE_MANAGER_SECOND' && inputHiddenRoleName.val() !== 'ROLE_MANAGER_SECOND_AUX'){
+                    if(inputHiddenRoleGerenciaSecond.val() != 1){
                         if(type == 'full'){
                             return "{{ 'form.messages.selectObjetiveOperativeFormatNoMatcherIndicatorOperativeOther'|trans }}";
                         } else if (type == 'empty'){
