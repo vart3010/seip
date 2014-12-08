@@ -113,11 +113,26 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
         }
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('o_o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("o_o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         return $this->getPaginator($queryBuilder);
     }
     
