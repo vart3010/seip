@@ -52,6 +52,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $results = $objetive->getResults();
         $total = 0.0;
         $countResult = 0;
+        //Los resultados siempre son por promedio ponderado
         foreach ($results as $result) {
             $countResult++;
             if($result->getChildrens()->count() > 0){
@@ -71,13 +72,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
                     //Nada que hacer
                 }
-                $total += $totalChild;
+                
+                $total += ($totalChild * $result->getWeight()) / 100;
             } else {
-                if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                    $total += $result->getResult();
-                } elseif ($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                    $total += $result->getResultWithWeight();
-                }
+                $total += $result->getResultWithWeight();
             }
         }
         
@@ -97,11 +95,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }
-    }
-    
-    function updateResultObjertivesParents(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
-    {
-        
     }
     
     function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
