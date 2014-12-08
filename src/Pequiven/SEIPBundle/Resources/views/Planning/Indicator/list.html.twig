@@ -22,8 +22,12 @@
         <div ng-controller="TableIndicatorController">
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    {% if (level > 1) %}
                     <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
+                    {% endif %}
+                    {% if (level == 3) %}
                     <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
+                    {% endif %}
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
@@ -61,7 +65,9 @@
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
-            chargeSelectGerenciaSecond(e);
+            if(inputHiddenLevel == 3){
+                chargeSelectGerenciaSecond(e);
+            }
         })
         
         //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
