@@ -27,6 +27,11 @@
     <form id="registerObjetiveOperativeForm" action="{{ path('pequiven_objetive_menu_add_operative') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
+            <input type="hidden" id="rolGerenciaGeneral" value="{{ is_granted(['ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX']) }}">
+            <input type="hidden" id="rolGerenciaFirst" value="{{ is_granted(['ROLE_MANAGER_FIRST','ROLE_ROLE_MANAGER_FIRST_AUX']) }}">
+            <input type="hidden" id="rolGerenciaSecond" value="{{ is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX']) }}">
+            
             <!-- Hidden con "ComplejoName" de la persona que esta logueada -->
             <div>
                 {{ form_widget(form.complejo_name) }}
@@ -72,7 +77,7 @@
             
             <!-- Localidad -->
             <div id="complejo" class="field-block button-height">
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                     {{ form_label(form.complejo) }}
                     {{ form_widget(form.complejo) }}
                     {{ form_errors(form.complejo) }}
@@ -88,7 +93,7 @@
                 
             <!-- Gerencia 1ra línea -->
             <div id="gerencia" class="field-block button-height">
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                     {{ form_label(form.gerencia) }}
                     {{ form_widget(form.gerencia) }}
                     {{ form_errors(form.gerencia) }}
@@ -104,7 +109,7 @@
             
             <!-- Gerencia 2da Línea -->
             <div id="gerenciaSecond" class="field-block button-height">
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') or (role_name == 'ROLE_GENERAL_COMPLEJO') or (role_name == 'ROLE_GENERAL_COMPLEJO_AUX') or (role_name == 'ROLE_MANAGER_FIRST') or (role_name == 'ROLE_MANAGER_FIRST_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'])) %}
                     {{ form_label(form.gerenciaSecond) }}
                     {{ form_widget(form.gerenciaSecond) }}
                     {{ form_errors(form.gerenciaSecond) }}
@@ -378,6 +383,10 @@
             inputGoal = $("#pequiven_objetive_operative_registration_goal"),//Input de Meta
             inputWeight = $("#pequiven_objetive_operative_registration_weight"),//Input de Peso
             inputHiddenRoleName = $("#pequiven_objetive_operative_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+            inputHiddenRoleDirective = $("#rolDirective"),//Input Hidden del Nombre del Rol Directivo
+            inputHiddenRoleGerenciaGeneral = $("#rolGerenciaGeneral"),//Input Hidden del Nombre del Rol Gerente de Complejo
+            inputHiddenRoleGerenciaFirst = $("#rolGerenciaFirst"),//Input Hidden del Nombre del Rol Gerente 1ra Línea
+            inputHiddenRoleGerenciaSecond = $("#rolGerenciaSecond"),//Input Hidden del Nombre del Rol Gerente 2da Línea
             checkIndicator = $("#pequiven_objetive_operative_registration_evalIndicator"),//Check de Evaluar por Indicador
             checkGerencia = $("#pequiven_objetive_operative_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
             selectTendency = $("#pequiven_objetive_operative_registration_tendency"),//Select de Tendencia del indicador
@@ -478,7 +487,7 @@
                 chargeSelectIndicator();
 
                 //Si el usuario tiene rol directivo
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                if(inputHiddenRoleDirective.val() == 1){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
 
@@ -494,7 +503,7 @@
                     selectGerenciaSecond.select2("enable",false);
                     sectionCheckGerencia.hide();
                     //Si el usuario tiene rol Gerencia General Complejo
-                } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                } else if(inputHiddenRoleGerenciaGeneral.val() == 1 || inputHiddenRoleGerenciaGeneral.val() == 1){
 
                    selectGerenciaSecond.select2({
 
@@ -731,14 +740,14 @@
             //chargeSelectIndicator();
             //Reiniciamos el Input de Referencia del Objetivo
             inputRef.val("");
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 selectComplejo.select2("val",'');
                 selectComplejo.select2("enable",false);
                 selectGerencia.select2("val",'');
                 selectGerencia.select2("enable",false);
                 selectGerenciaSecond.select2("val",'');
                 selectGerenciaSecond.select2("enable",false);
-            } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+            } else if(inputHiddenRoleGerenciaGeneral.val() == 1 || inputHiddenRoleGerenciaFirst.val() == 1){
                 selectGerenciaSecond.select2("val",'');
                 selectGerenciaSecond.select2("enable",false);
             }
@@ -760,14 +769,14 @@
         //Al cambiar el select de Objetivo Estratégico
         selectObjetiveStrategic.change(function() {
             inputRef.val("");
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 selectComplejo.select2("val",'');
                 selectComplejo.select2("enable",false);
                 selectGerencia.select2("val",'');
                 selectGerencia.select2("enable",false);
                 selectGerenciaSecond.select2("val",'');
                 selectGerenciaSecond.select2("enable",false);
-            } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+            } else if(inputHiddenRoleGerenciaGeneral.val() == 1 || inputHiddenRoleGerenciaFirst.val() == 1){
                 selectGerenciaSecond.select2("val",'');
                 selectGerenciaSecond.select2("enable",false);
             }
@@ -780,10 +789,10 @@
         //Al seleccionar alguna opción en el select de Objetivo Táctico
         selectObjetiveTactic.on("select2-selecting", function(e) {
             displayObjetiveRef(e);
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 displaySelectComplejoFromObjetiveTactic(e);
                 //$("#pequiven_objetive_operative_registration_complejo").show();
-            } else if(inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO' || inputHiddenRoleName.val() === 'ROLE_GENERAL_COMPLEJO_AUX' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+            } else if(inputHiddenRoleGerenciaGeneral.val() == 1 || inputHiddenRoleGerenciaFirst.val() == 1){
                 displaySelectGerenciaSecondFromGerenciaFirst();
             }
             chargeSelectIndicator();
@@ -798,7 +807,7 @@
 
         //Al cambiar el select de Localidad
         selectComplejo.change(function() {
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 //displaySelectGerenciaFromComplejo();
                 displaySelectGerenciaFirstFromComplejo();
             }
@@ -806,7 +815,7 @@
 
         //Al cambiar el select de Gerencia de 1ra Línea
         selectGerencia.change(function() {
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 displaySelectGerenciaSecondFromGerenciaFirst();
             }
         })
@@ -876,7 +885,7 @@
                         //selectObjetiveTactic.append('<option></option>');
                         chargeSelect2ObjetiveTactic();
 
-                        if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                        if(inputHiddenRoleDirective.val() == 1){
                             //Reiniciamos el select de Complejo y desactivamos respectivamente
                             $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
                             selectComplejo.select2("val","");
@@ -922,7 +931,7 @@
                         }
                         selectObjetiveTactic.select2("val", "");
                         inputRef.val("");
-                        if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                        if(inputHiddenRoleDirective.val() == 1){
                             //Reiniciamos el select de Complejo y desactivamos respectivamente
                             $("#pequiven_objetive_operative_registration_complejo option[value]").remove();
                             selectComplejo.select2("val","");
@@ -969,10 +978,10 @@
                         complejos[i] = data[i].id;
                     }
 
-                    if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                    if(inputHiddenRoleDirective.val() == 1){
                         //displaySelectGerenciaFromComplejo(complejos);
                         displaySelectGerenciaFirstFromComplejo(complejos);
-                    } else if(inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST' || inputHiddenRoleName.val() === 'ROLE_MANAGER_FIRST_AUX'){
+                    } else if(inputHiddenRoleGerenciaFirst.val() == 1){
                         displaySelectGerenciaSecondFromGerenciaFirst();
                     }
                     //displaySelectObjetiveStrategicFromObjetiveTactic();
