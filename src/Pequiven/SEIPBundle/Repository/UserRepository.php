@@ -91,7 +91,7 @@ class UserRepository extends EntityRepository
         if($gerencia == null){
             $qb->setMaxResults(50);
         }else{
-            $qb->setMaxResults(250);
+            $qb->setMaxResults(400);
         }
         return $qb;
     }
