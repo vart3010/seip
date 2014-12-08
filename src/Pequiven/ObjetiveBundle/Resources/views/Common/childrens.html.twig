@@ -1,0 +1,7 @@
+<ul class="fa-ul">
+    {% for children in entity.childrens %}
+        {% if (children.enabled) %}
+            <li>{{ (children.result ? children.result : '0')|number_format(2) }}% - {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}</li>
+        {% endif %}
+    {% endfor  %}
+</ul>
