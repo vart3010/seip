@@ -2,9 +2,8 @@
     {% for children in entity.childrens %}
         {% if (children.enabled) %}
             <li>{% set avancedUsed = children.getResult %}
-                <span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-                <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-                <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>&nbsp;{{ (children.result ? children.result : '0')|number_format(2) }}% - {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}</li>
+                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}</li>
         {% endif %}
     {% endfor  %}
 </ul>
