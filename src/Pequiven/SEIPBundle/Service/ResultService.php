@@ -199,17 +199,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $countResult = 0;
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
             foreach ($itemsResult as $item) {
+                if(method_exists($item, 'getEnabled')){
+                    if($item->getEnabled() == false){
+                        continue;
+                    }
+                }
+                
                 $countResult++;
                 $total += $item->getResult();
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             foreach ($itemsResult as $item) {
+                if(method_exists($item, 'getEnabled')){
+                    if($item->getEnabled() == false){
+                        continue;
+                    }
+                }
+                
                 $countResult++;
                 $total += $item->getResultWithWeight();
             }
         }
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            $total += ($total / $countResult);
+            $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
         }
