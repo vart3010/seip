@@ -18,7 +18,7 @@
                     {{ result|number_format(2) }}% - {{ generateLink(objetive) }}
                 </li>
             {% else %}
-                <b>{{ 'pequiven.arrangement_program.not_arrangement_program_in_level' |trans({},'PequivenArrangementProgramBundle') }}</b>
+                <b>{{ 'result.not_objetives_in_level' |trans }}</b>
             {% endfor  %}
         </ul>
     </div>
