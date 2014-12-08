@@ -238,7 +238,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetives")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive")
      */
     private $results;
     

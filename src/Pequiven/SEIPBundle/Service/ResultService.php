@@ -27,6 +27,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $myResult = $result;
                     break;
                 }
+                if($result->getChildrens()->count() > 0){
+                    $childResult = $this->getResultByType($result->getChildrens(), $type);
+                    if($childResult != null){
+                        $myResult= $childResult;
+                        break;
+                    }
+                }
             }
         }
         return $myResult;
@@ -36,54 +43,91 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Actualiza los resultados de un objetivo
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $myResult
      */
-    public function updateResultOfObjetives(\Pequiven\SEIPBundle\Entity\Result\Result $myResult)
+    public function updateResultOfObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$myResult)
     {
         $em = $this->getDoctrine()->getManager();
         $em->persist($myResult->getResultDetails());
-        $objetives = $myResult->getObjetives();
-        foreach ($objetives as $objetive) {
-            $results = $objetive->getResults();
-            $total = 0;
-            $countResult = 0;
-            foreach ($results as $result) {
-                $countResult++;
-                if($result->getChildrens()->count() > 0){
-                    
-                }else{
-                    if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                        $total += $myResult->getResult();
-                    }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                        $total += $myResult->getResultWithWeight();
+        
+        $objetive = $this->resolveObjetiveOfResult($myResult);
+        $results = $objetive->getResults();
+        $total = 0.0;
+        $countResult = 0;
+        foreach ($results as $result) {
+            $countResult++;
+            if($result->getChildrens()->count() > 0){
+                //Calcular el valor del resultado, a partir de los hijos
+                $totalChild = 0.0;
+                $countResultChild = 0;
+                foreach ($result->getChildrens() as $children) {
+                    $countResultChild++;
+                    if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                        $totalChild += $children->getResult();
+                    } elseif ($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+                        $totalChild += $children->getResultWithWeight();
                     }
                 }
+                if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                    $totalChild += ($totalChild / $countResultChild);
+                }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+                    //Nada que hacer
+                }
+                $total += $totalChild;
+            } else {
+                if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                    $total += $result->getResult();
+                } elseif ($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+                    $total += $result->getResultWithWeight();
+                }
             }
-            if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                $total += ($total / $countResult);
-            }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                //Nada que hacer
-            }
-            
-            $objetive->setResultOfObjetive($total);
-            $em->persist($objetive);
+        }
+        
+        if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $total = ($total / $countResult);
+        }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            //Nada que hacer
         }
 
-        $em->flush();
+        $objetive->setResultOfObjetive($total);
+        $em->persist($objetive);
+        if($objetive->getParents()->count() > 0){
+            foreach ($objetive->getParents() as $parent) {
+                $myResult = $this->getResultByType($parent->getResults(),\Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
+                if($myResult){
+                    $this->calculateResult($myResult);
+                }
+            }
+        }
     }
     
     function updateResultObjertivesParents(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
     {
-        $parents = $objetive->getParents();
-        foreach ($parents as $parent) {
-            
-        }
+        
     }
     
     function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+        $em = $this->getDoctrine()->getManager();
+        
         if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
             $this->calculateResultTypeArrangementPrograms($result);
         }elseif($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_INDICATOR){
             $this->calculateResultTypeIndicator($result);
+        }elseif($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE){
+            $this->calculateResultTypeObjetive($result);
         }
+        
+        if($result->getParent() != null && $result->getParent()->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result->getParent();
+            foreach ($result->getChildrens() as $child) {
+                $this->calculateResult($child);
+            }
+            $this->calculateResultItems($parent, $parent->getChildrens());
+            
+            $em->persist($parent);
+        }
+        
+        $this->updateResultOfObjetive($result);
+        
+        $em->flush();
     }
     
     /**
@@ -92,32 +136,28 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
     function calculateResultTypeArrangementPrograms(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
-        $objetives = $result->getObjetives();
-        foreach ($objetives as $objetive) {
-            $arrangementPrograms = $objetive->getArrangementPrograms();
-            $countArrangementPrograms = count($arrangementPrograms);
-            $total = 0.0;
-            $countResult = 0;
-            if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                if($countArrangementPrograms > 0){
-                    foreach ($arrangementPrograms as $arrangementProgram){
-                        $countResult++;
-                        $total += $arrangementProgram->getResult();
-                    }
+        $objetive = $this->resolveObjetiveOfResult($result);
+        $arrangementPrograms = $objetive->getArrangementPrograms();
+        $countArrangementPrograms = count($arrangementPrograms);
+        $total = 0.0;
+        $countResult = 0;
+        if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            if($countArrangementPrograms > 0){
+                foreach ($arrangementPrograms as $arrangementProgram){
+                    $countResult++;
+                    $total += $arrangementProgram->getResult();
                 }
-            }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$myResult->getId()));
             }
-
-            if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                $total += ($total / $countResult);
-            }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-                //Nada que hacer
-            }
-            $result->setTotal($total);
-
-            $this->updateResultOfObjetives($result);
+        }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$myResult->getId()));
         }
+        
+        if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $total = ($total / $countResult);
+        }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            //Nada que hacer
+        }
+        $result->setTotal($total);
     }
     
     /**
@@ -125,10 +165,70 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    function calculateResultTypeIndicator(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
-        
+    function calculateResultTypeIndicator(\Pequiven\SEIPBundle\Entity\Result\Result &$result) 
+    {
+        $objetive = $this->resolveObjetiveOfResult($result);
+        $itemsResult = $objetive->getIndicators();
+        $this->calculateResultItems($result, $itemsResult);
     }
     
+    /**
+     * Calcula los resultados a partir de los resultados de cada objetivo
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
+     */
+    function calculateResultTypeObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+        $objetive = $this->resolveObjetiveOfResult($result);
+        $itemsResult = $objetive->getChildrens();
+        $this->calculateResultItems($result, $itemsResult);
+    }
+    
+    public function resolveObjetiveOfResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+        $objetive = null;
+        if($result->getParent() != null){
+            $objetive = $result->getParent()->getObjetive();
+        }else{
+            $objetive = $result->getObjetive();    
+        }
+        return $objetive;
+    }
+    
+    public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult)
+    {
+        $total = 0;
+        $countResult = 0;
+        if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            foreach ($itemsResult as $item) {
+                if(method_exists($item, 'getEnabled')){
+                    if($item->getEnabled() == false){
+                        continue;
+                    }
+                }
+                
+                $countResult++;
+                $total += $item->getResult();
+            }
+        }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            foreach ($itemsResult as $item) {
+                if(method_exists($item, 'getEnabled')){
+                    if($item->getEnabled() == false){
+                        continue;
+                    }
+                }
+                
+                $countResult++;
+                $total += $item->getResultWithWeight();
+            }
+        }
+        if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $total = ($total / $countResult);
+        }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            //Nada que hacer
+        }
+        
+        $result->setTotal($total);
+    }
+
     /**
      * Shortcut to return the Doctrine Registry service.
      *

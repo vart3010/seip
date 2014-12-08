@@ -15,7 +15,8 @@
         
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_objetive.objetive_strategic'|trans }} {{ entity.ref }}</legend>
-
+        
+        {% include 'PequivenObjetiveBundle:Common:percentajeBar.html.twig' %}
         <!-- Línea Estratégica que sigue el Objetivo Estratégico -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.lineStrategic'|trans }}</label>
@@ -38,15 +39,7 @@
         {% if entity.childrens|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.objetiveTactics'|trans }}</label>
-                <ul class="fa-ul">
-                {% for children in entity.childrens %}
-                    {% if (children.enabled) %}
-                        <li>
-                            {{ generateLink(children) }}
-                        </li>
-                    {% endif %}
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' %}
             </div>
             <br>
         {% endif %}
@@ -72,6 +65,7 @@
             <br>
         {% endif %}
         
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
     </fieldset>
 
 <br /><br />
