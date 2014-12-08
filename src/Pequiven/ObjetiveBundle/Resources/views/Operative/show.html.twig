@@ -56,11 +56,7 @@
         {% if entity.indicators|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
-                <ul class="fa-ul">
-                {% for indicator in entity.indicators %}
-                    <li>{{ (indicator.progressToDate ? indicator.progressToDate : '0')|number_format(2) }}% - {{ generateLink(indicator) }}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%)</li>
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
             </div>
             <br>
         {% endif %}

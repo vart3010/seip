@@ -4,12 +4,16 @@
     <ul class="fa-ul">
         {% for result in entity.results %}
             <li>
-                {{ (result.resultDetails.globalResult ? result.resultDetails.globalResult : '0')|number_format(2) }}% - {{ result }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ result.weight }}%)
+                {% set avancedUsed = result.getResult %}
+                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                {{ result }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ result.weight }}%)
                 {% if result.childrens.count > 0 %}
                     <ul>
                     {% for child in result.childrens %}
                         <li>
-                            {{ (child.resultDetails.globalResult ? child.resultDetails.globalResult : '0')|number_format(2) }}% - {{ child }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ child.weight }}%)
+                            {% set avancedUsed = child.getResult %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {{ child }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ child.weight }}%)
                         </li>
                     {% endfor%}
                     </ul>
