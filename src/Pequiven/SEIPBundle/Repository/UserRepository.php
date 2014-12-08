@@ -83,13 +83,15 @@ class UserRepository extends EntityRepository
             $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
         }
         if( ($gerencia = $criteria->remove('gerencia')) ){
-            $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia','u.gerencia = :gerencia'));
+            $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia'));
             $qb->setParameter('gerencia', $gerencia);
         }
         $qb->andWhere($orX);
         
         if($gerencia == null){
             $qb->setMaxResults(50);
+        }else{
+            $qb->setMaxResults(250);
         }
         return $qb;
     }
