@@ -15,7 +15,7 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
  */
-class Objetive extends modelObjetive {
+class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface {
 
     //Texto a mostrar en los select
     protected $descriptionSelect;
@@ -456,15 +456,6 @@ class Objetive extends modelObjetive {
         $this->weight = $weight;
 
         return $this;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return float 
-     */
-    public function getWeight() {
-        return $this->weight;
     }
 
     /**
@@ -1025,5 +1016,23 @@ class Objetive extends modelObjetive {
         $this->resultOfObjetive = $resultOfObjetive;
         
         return $this;
+    }
+    
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight() {
+        return $this->weight;
+    }
+    
+    public function getResult() {
+        return $this->getResultOfObjetive();
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }

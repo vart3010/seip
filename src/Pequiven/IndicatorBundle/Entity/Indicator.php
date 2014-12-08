@@ -15,7 +15,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @author matias
  */
-class Indicator extends modelIndicator 
+class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
 {
     /**
      * @var integer
@@ -338,16 +338,6 @@ class Indicator extends modelIndicator
         $this->weight = $weight;
 
         return $this;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return float 
-     */
-    public function getWeight()
-    {
-        return $this->weight;
     }
 
     /**
@@ -879,21 +869,31 @@ class Indicator extends modelIndicator
         return $this->childrens;
     }
     
+    function getProgressToDate() 
+    {
+        return $this->progressToDate;
+    }
+    
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+    
     /**
      * Devuelve el valor que sera tomado en cuenta para los resuldatos
      * @return type
      */
-    function getTotalForResult()
-    {
-        $progressToDate = $this->progressToDate;
-        if($this->weight > 0){
-            $progressToDate = ($progressToDate * $this->weight) / 100;
-        }
-        return $progressToDate;
-    }
-    
-    function getProgressToDate() 
-    {
+    public function getResult() {
         return $this->progressToDate;
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }
