@@ -67,10 +67,10 @@
             
             
             <!-- En caso de que el usuario tenga rol diferente a gerente de 2da línea -->
-            {% if (role_name != 'ROLE_MANAGER_SECOND' and role_name != 'ROLE_MANAGER_SECOND_AUX') %}
+            {% if (!=is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'])) %}
                 <fieldset class="fieldset">
                     <legend class="legend">{{ 'form.selectionOfObjetiveOperative'|trans }}</legend>
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                         <!-- Localidad -->
                         <div id="complejo" class="field-block button-height">
                             {{ form_label(form.complejo) }}
@@ -119,7 +119,7 @@
             </div>
 
             <!-- Descripción -->
-            <div class="field-block button-height">
+            <div id="description" class="field-block button-height">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
