@@ -216,6 +216,21 @@ class BackendMenuBuilder extends MenuBuilder
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.main', $section)));
         
+        $subchild->addChild('planning.results.strategic', array(
+                                'route' => '',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.strategic', $section)));
+        
+        $subchild->addChild('planning.results.tactic', array(
+                                'route' => '',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.tactic', $section)));
+
+        $subchild->addChild('planning.results.operative', array(
+                                'route' => '',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
+        
         $child->addChild($subchild);
         
         $menu->addChild($child);

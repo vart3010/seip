@@ -86,3 +86,6 @@ app:
                         matriz: Matriz de Objetivos
                         results:
                             main: Resultados
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
