@@ -1,0 +1,48 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block body %}
+        
+    {{ contentHeader(
+        (gerenciaSecond.getDescription())
+    ) }}
+        
+    <div class="inline-label">
+        <label class="label">{{ 'result.objetiveOperative' |trans }}</label>
+        <ul class="fa-ul">
+            {% for objetive in object %}
+                <li>
+                    {% set result = objetive.getResult %}
+                    <span class="meter {% if result > 0 and result <= 30 %}red-gradient{% endif %}{% if result > 30 and result < 70 %}orange-gradient{% endif%}{% if result > 70 %}green-gradient{% endif %}"></span>
+                    <span class="meter {% if result > 30 and result < 70 %}orange-gradient{% endif%}{% if result > 70 %}green-gradient{% endif %}"></span>
+                    <span class="meter {% if result > 70 %}green-gradient{% endif %}"></span>
+                    {{ result|number_format(2) }}% - {{ generateLink(objetive) }}
+                </li>
+            {% else %}
+                <b>{{ 'result.not_objetives_in_level' |trans }}</b>
+            {% endfor  %}
+        </ul>
+    </div>
+    {#<div ng-controller="DashboardController" ng-init="renderChartResult('chartContainerResult')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
+            <!-- This div will hold the chart generated in the footer -->
+        </div>
+    </div>#}
+{% endblock body %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock %}

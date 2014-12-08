@@ -15,7 +15,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @author matias
  */
-class Indicator extends modelIndicator 
+class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
 {
     /**
      * @var integer
@@ -206,6 +206,14 @@ class Indicator extends modelIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
      */
     protected $childrens;
+    
+    /**
+     * Avance del indicador
+     * 
+     * @var integer
+     * @ORM\Column(name="progressToDate",type="float")
+     */
+    protected $progressToDate = 0;
 
     /**
      * Constructor
@@ -330,16 +338,6 @@ class Indicator extends modelIndicator
         $this->weight = $weight;
 
         return $this;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return float 
-     */
-    public function getWeight()
-    {
-        return $this->weight;
     }
 
     /**
@@ -689,6 +687,9 @@ class Indicator extends modelIndicator
      */
     public function setValueFinal($valueFinal)
     {
+        if($valueFinal > 0 && $this->totalPlan > 0){
+            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+        }
         $this->valueFinal = $valueFinal;
 
         return $this;
@@ -866,5 +867,33 @@ class Indicator extends modelIndicator
     public function getChildrens()
     {
         return $this->childrens;
+    }
+    
+    function getProgressToDate() 
+    {
+        return $this->progressToDate;
+    }
+    
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+    
+    /**
+     * Devuelve el valor que sera tomado en cuenta para los resuldatos
+     * @return type
+     */
+    public function getResult() {
+        return $this->progressToDate;
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }

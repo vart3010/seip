@@ -53,6 +53,7 @@ class IndicatorAdmin extends Admin
         $filter
             ->add('ref')
             ->add('description')
+            ->add('formula')
             ->add('typeOfCalculation',null,array(),'choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'

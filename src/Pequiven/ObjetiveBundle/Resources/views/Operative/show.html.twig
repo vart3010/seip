@@ -16,6 +16,7 @@
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_objetive.objetive_operative'|trans }} {{ entity.ref }}</legend>
 
+        {% include 'PequivenObjetiveBundle:Common:percentajeBar.html.twig' %}
         <!-- Objetivo Tácticos al cual o a los cuales esta Asociado el Objetivo Operativo -->
         <div class="inline-label">
             <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveTactics'|trans : 'pequiven_objetive.objetive_tactic'|trans }}</label>
@@ -48,27 +49,26 @@
         <!-- ¿Evaluación por Indicadores Operativos? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByIndicatorOperative'|trans }}</label>
-            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+            {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         
         <!-- Indicadores Operativos Asociados al Objetivo Operativo -->
         {% if entity.indicators|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.indicatorOperatives'|trans }}</label>
-                <ul class="fa-ul">
-                {% for indicator in entity.indicators %}
-                    <li>{{ generateLink(indicator) }}</li>
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
             </div>
             <br>
         {% endif %}
-        
+                
         <!-- ¿Evaluación por Programas de Gestión? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
-            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+            {{ entity.arrangementPrograms|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+{#            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}#}
         </p>
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
         
     </fieldset>
 
@@ -80,11 +80,3 @@
 </p>#}
 
 {% endblock %}
-
-{% block javascript %}
-    <script type="text/javascript">
-        jQuery(document).ready(function(){
-             {#$('.tables-extras').tablesorter();#}
-        });
-    </script>
-{% endblock javascript %}

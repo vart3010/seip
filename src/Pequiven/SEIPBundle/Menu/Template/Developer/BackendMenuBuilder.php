@@ -197,6 +197,43 @@ class BackendMenuBuilder extends MenuBuilder
         
         $child->addChild($subchild);
         
+        $subchild = $this->factory->createItem('planning.matriz',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.matriz', $section)));
+        
+        $child->addChild($subchild);
+        
+        $subchild = $this->factory->createItem('planning.results',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.main', $section)));
+        
+        $subchild->addChild('planning.results.strategic', array(
+                                'route' => '',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.strategic', $section)));
+        
+        $subchild->addChild('planning.results.tactic', array(
+                                'route' => '',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.tactic', $section)));
+
+        $subchild->addChild('planning.results.operative', array(
+                                'route' => 'pequiven_result_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
+        
+        $child->addChild($subchild);
+        
         $menu->addChild($child);
     }
     
@@ -241,7 +278,7 @@ class BackendMenuBuilder extends MenuBuilder
                         )
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.main',$section)));
                 
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                     $thirdchild->addChild('arrangement_strategic.objetives.list.strategic', array(
                             'route' => 'pequiven_objetive_menu_list_strategic',
                         ))
@@ -273,7 +310,7 @@ class BackendMenuBuilder extends MenuBuilder
             $subchild->addChild($thirdchild);
             
                 //Menú Nivel 3: Registro de Objetivos
-                if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV','ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -427,7 +464,7 @@ class BackendMenuBuilder extends MenuBuilder
             $child = $this->factory->createItem('arrangement_programs',
                     $this->getSubLevelOptions(array(
                         'uri' => null,
-                        'labelAttributes' => array('icon' => 'icon-book',),
+                        'labelAttributes' => array('icon' => 'fa fa-tasks',),
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.main', $section)));
 

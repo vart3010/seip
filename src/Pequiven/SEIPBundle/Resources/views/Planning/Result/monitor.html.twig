@@ -1,0 +1,67 @@
+{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block body %}
+        
+    {{ contentHeader(
+        {("monitor.objetiveOperative"|trans)}
+    ) }}
+    
+    <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }},'{{ gerenciaGroup.description }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+        <p class="button-height">
+            <a href="{{ path('monitorObjetiveTacticByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.objTactic"|trans }}</a>
+            <a href="{{ path('monitorArrangementProgramByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
+        </p>
+        <div id="chartTactic" class="columns">
+            {% if (gerenciaGroup.groupName == "CORP")%}
+                <div class="twelve-columns twelve-columns-mobile" id="chartContainerOperative">
+                </div>
+            {% else %}
+                <div class="nine-columns twelve-columns-mobile" id="chartContainerOperative">
+                </div>
+                <div class="three-columns twelve-columns-mobile new-row-mobile">
+                    <ul class="stats">
+                        {% for data in dataLinkOperative %}
+                            <li>
+                                <a href="{{ data.urlGerencia }}">
+                                    {{ data.typeGroup }}<br>
+                                    <b style="font-size:25px">{{ data.porcCarga }}%</b>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif%}
+        </div>
+    </div>
+            
+    <hgroup id="main-title" class="thin breadcrumb">
+        <h1>
+            {{ "principal.box.indicatorOperative"|trans }}
+            <span class="icon-forward"></span>
+            <span class="thin">{{ gerenciaGroup.description }}</span>
+        </h1>
+    </hgroup>
+    <div class="with-padding">
+        <div class="columns">
+            {{ boxRender.renderBox('pequiven_seip_box_operative_summaryindicatorchargedbygroup')|raw }}
+        </div>
+    </div>
+{% endblock body %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
+{% endblock stylesheets %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+
+    </script>
+
+{% endblock %}

@@ -42,6 +42,21 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    results:
+        results: Resultados
+        result: Resultado
+        weight: Peso
+        no_results: No hay resultados asociados al objetivo.
+        type_result: 
+            type_result: Tipo de resultado
+            indicator: Indicador
+            arrangement_program: Programa de gestión
+            objective: Objetivo
+            result: Otros resultados
+        type_calculation:
+            type_calculation: Tipo de calculo
+            simple_average: Promedio simple
+            weighted_average: Promedio ponderado
 
     login:
         validators:
@@ -80,7 +95,7 @@ pequiven_seip:
     #Roles
     role:
         super_administrator: Super Administrador
-        administrator: Administrador
+        administrator: Administporrador
         directive: Ejecutivo
         directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%
@@ -174,3 +189,8 @@ principal:
         indicatorPlan: Plan
         indicatorReal: Real
         indicatorPorc: % Carga
+        
+result:
+    results: Resultados
+    objetiveOperative: Objetivos Operativos
+    not_objetives_in_level: No existen objetivos asociados en este nivel

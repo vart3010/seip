@@ -27,8 +27,8 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  *
  * @author matias
  */
-class ObjetiveOperativeController extends baseController {
-
+class ObjetiveOperativeController extends baseController 
+{
     /**
      * Función que retorna la vista con la lista de los objetivos operativos
      * @Template("PequivenObjetiveBundle:Operative:list.html.twig")
@@ -51,7 +51,7 @@ class ObjetiveOperativeController extends baseController {
             ->setTemplateVar('entity')
             ->setData($this->findOr404($request))
         ;
-        $groups = array_merge(array('api_list','gerencia'), $request->get('_groups',array()));
+        $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
         $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
     }
@@ -1054,11 +1054,13 @@ class ObjetiveOperativeController extends baseController {
         $gerenciasObjectArray = array();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+            
             $gerencia = $request->request->get('gerencia');
             
             if((int)$gerencia == 0){
                 $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
             } else{
+                
                 $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
             }
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {

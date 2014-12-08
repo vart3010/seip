@@ -42,6 +42,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeArrangementProgramTemplate', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeMonitor', 'class' => 'Pequiven\SEIPBundle\Entity\Monitor', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeUser', 'class' => 'Pequiven\SEIPBundle\Entity\User', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerencia', 'class' => 'Pequiven\MasterBundle\Entity\Gerencia', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
         );
     }
 
@@ -123,7 +125,11 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         if($arrangementProgram != null){
             if($this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === true
             ){
-                $isLoadRealEnabled = true;
+                $details = $arrangementProgram->getDetails();
+                $user = $this->getUser();
+                if($details->getNotificationInProgressByUser() !== null && $details->getNotificationInProgressByUser() === $user){
+                    $isLoadRealEnabled = true;
+                }
             }
             if(
                 $arrangementProgram->getStatus() == ArrangementProgram::STATUS_DRAFT ||
@@ -534,6 +540,16 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $event->getVisitor()->addData('rol',$roles[0]->getDescription());
     }
     
+    public function onPostSerializeGerencia(ObjectEvent $event) {
+        $object = $event->getObject();
+        $event->getVisitor()->addData('linkToExportMatriz', $this->generateUrl('pequiven_gerenciafirst_export', array('id' => $object->getId())));
+    }
+    
+    public function onPostSerializeGerenciaSecond(ObjectEvent $event) {
+        $object = $event->getObject();
+        $event->getVisitor()->addData('linkToResult', $this->generateUrl('pequiven_result_show', array('level' => 3,'id' => $object->getId())));
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
@@ -560,5 +576,31 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     private function getArrangementProgramManager()
     {
         return $this->container->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws \LogicException If SecurityBundle is not available
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
     }
 }

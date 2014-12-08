@@ -1,0 +1,14 @@
+<div class="inline-label">
+    <label class="label">{{ 'pequiven.arrangement_program.arrangement_programs' |trans({},'PequivenArrangementProgramBundle') }}</label>
+    <ul class="fa-ul">
+        {% for arrangementProgram in entity.arrangementPrograms %}
+            <li>
+                {% set avancedUsed = arrangementProgram.getResult %}
+                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                {{ generateLink(arrangementProgram) }}
+            </li>
+        {% else %}
+            <b>{{ 'pequiven.arrangement_program.not_arrangement_program_in_level' |trans({},'PequivenArrangementProgramBundle') }}</b>
+        {% endfor  %}
+    </ul>
+</div>

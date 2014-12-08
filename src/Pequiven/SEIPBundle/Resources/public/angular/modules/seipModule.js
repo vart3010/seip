@@ -115,6 +115,26 @@ angular.module('seipModule.controllers', [])
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
             };
+            
+            //Se ejecuta cuando le da click a incluir los responsables de las gerencia
+            var changeIncludeResponsibleManagement = changeIncludeResponsibleManagement = function(){
+                if($scope.model.goal.includeResponsibleManagement){
+                    var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
+                    var reponsibleId = arrangementprogramResponsibles.val();
+                    var urlResponsiblesByGerencia = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId,gerencia:$scope.gerenciaOfObjetive.id});
+                    
+                    $("#div_goal_responsibles").select2('data',[]);
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(urlResponsiblesByGerencia).success(function(data) {
+                        setUrlResponsibles(data);
+                        notificationBarService.getLoadStatus().done();
+                    });
+                }else{
+                    $("#div_goal_responsibles").select2('data',[]);
+                }
+            };
+            $scope.templateOptions.setVar('changeIncludeResponsibleManagement',changeIncludeResponsibleManagement);
+                        
             //Inicializar modelo de meta
             $scope.initModelGoal = function(goal) {
                 $scope.model.goal = {
@@ -124,8 +144,10 @@ angular.module('seipModule.controllers', [])
                     endDate: null,
                     responsibles: null,
                     weight: null,
-                    observations: null
+                    observations: null,
+                    includeResponsibleManagement: false
                 };
+                $scope.changeIncludeResponsibleManagement();
                 $("#goalForms select").each(function() {
                     $(this).select2("val", "");
                 });
@@ -224,7 +246,7 @@ angular.module('seipModule.controllers', [])
                     $scope.goals.remove(goal);
                 });
             };
-
+                        
             $scope.getTypeGoal = function(c) {
                 if (c) {
                     notificationBarService.getLoadStatus().loading();
@@ -328,6 +350,7 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
                         $scope.complejo = data.gerencia.complejo;
+                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.gerencia);
                         notificationBarService.getLoadStatus().done();
                     });
                 }
@@ -337,6 +360,7 @@ angular.module('seipModule.controllers', [])
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
                         $scope.complejo = data.complejo;
+                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.gerenciaSecond);
                         notificationBarService.getLoadStatus().done();
                     });
                 }
@@ -1185,6 +1209,31 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        .controller('TableIndicatorController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.gerenciaSecond = null;
+            $scope.gerenciaFirst = null;
+            var gerencia = 0;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    if(gerencia != $scope.gerenciaFirst){
+                        gerencia = $scope.gerenciaFirst;
+                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                    }
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
+                }
+            });
+            $scope.$watch("gerenciaSecond", function() {
+                if ($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                }
+            });
+        })
         .controller('TableIndicatorStrategicController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
         })
@@ -1437,6 +1486,92 @@ angular.module('seipModule.controllers', [])
                                     "renderas": "column",
                                     "data": dataPorc
                                 }
+                            ]
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            
+            $scope.renderChartResult = function(id) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "stackedbar3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Revenue split by product category",
+                                "subCaption": "For current year",
+                                "xAxisname": "Quarter",
+                                "yAxisName": "Revenues (In USD)",
+                                "showSum": "1",
+                                "numberSuffix": "%",
+                                "bgAlpha" : "0,0",
+                                "baseFontColor" : "#ffffff",
+                                "outCnvBaseFontColor" : "#ffffff",
+                                "valueFontColor": "#000000",
+                                "visible" : "0",
+                                "theme": "fint",
+                                "formatNumberScale": "0",
+                                "axisMaxValue": "100",
+                                "axisMinValue": "0",
+                            },
+                            "categories": [
+                                {
+                                    "category": [
+                                        {
+                                           "label": "Q1"
+                                        },
+                                        {
+                                           "label": "Q2"
+                                        },
+                                        {
+                                           "label": "Q3"
+                                        },
+                                        {
+                                           "label": "Q4"
+                                        }
+                                     ]
+                                }
+                            ],
+                            "dataset":[
+                                {
+                                    "seriesname": "Indicadores",
+                                    "data": [
+                                       {
+                                          "value": "100"
+                                       },
+                                       {
+                                          "value": "30.8"
+                                       },
+                                       {
+                                          "value": "20.3"
+                                       },
+                                       {
+                                          "value": "50.6"
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "seriesname": "Programas de Gestión",
+                                    "data": [
+                                       {
+                                          "value": "0"
+                                       },
+                                       {
+                                          "value": "30.6"
+                                       },
+                                       {
+                                          "value": "40.3"
+                                       },
+                                       {
+                                          "value": "30.5"
+                                       }
+                                    ]
+                                 }
                             ]
                         }
                     });

@@ -16,6 +16,7 @@
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_objetive.objetive_tactic'|trans }} {{ entity.ref }}</legend>
 
+        {% include 'PequivenObjetiveBundle:Common:percentajeBar.html.twig' %}
         <!-- Objetivo Estratégicos al cual o a los cuales esta Asociado el Objetivo Táctico -->
         <div class="inline-label">
             <label class="label">{{ entity.parents|length > 1 ? 'pequiven_objetive.objetiveStrategics'|trans : 'pequiven_objetive.objetive_strategic'|trans }}</label>
@@ -42,7 +43,7 @@
         <!-- ¿Evaluación por Objetivo Operativo? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByObjetiveOperative'|trans }}</label>
-            {{ entity.evalObjetive ? 'Sí' : 'No' }}
+            {{ entity.childrens|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         
         <!-- Gerencia 1ra Línea a la cual impacta el Objetivo Táctico -->
@@ -55,13 +56,7 @@
         {% if entity.childrens|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.objetiveOperatives'|trans }}</label>
-                <ul class="fa-ul">
-                {% for children in entity.childrens %}
-                    {% if (children.enabled) %}
-                        <li>{{ generateLink(children) }}</li>
-                    {% endif %}
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' %}
             </div>
             <br>
         {% endif %}
@@ -69,18 +64,14 @@
         <!-- ¿Evaluación por Indicadores Tácticos? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByIndicatorTactic'|trans }}</label>
-            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+            {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         
         <!-- Indicadores Tácticos Asociados al Objetivo Táctico -->
         {% if entity.indicators|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.indicatorTactics'|trans }}</label>
-                <ul class="fa-ul">
-                {% for indicator in entity.indicators %}
-                    <li>{{ generateLink(indicator) }}</li>
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
             </div>
             <br>
         {% endif %}
@@ -88,9 +79,10 @@
         <!-- ¿Evaluación por Programas de Gestión? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
-            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+            {{ entity.arrangementPrograms|length > 0 ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
-        
+        {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
+        {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
     </fieldset>
 
 <br /><br />

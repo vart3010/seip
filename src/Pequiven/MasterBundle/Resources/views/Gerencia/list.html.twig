@@ -17,29 +17,11 @@
             <a href="{{ path(route_index) }}">{{ 'pequiven_master.gerencia_first'|trans }}</a>
             <span class="icon-forward"></span>
             <span class="thin">{{ 'pequiven_master.list'|trans }}</span>
-            <!--
-            {% if allow_create %}
-                <p class="button-height align-right">
-                    <a href="{{ path('coramer_sigtec_backend_company_create') }}" class="button">
-                            <span class="button-icon anthracite-gradient"><span class="icon-star"></span></span>
-                            {{ 'sigtec.create'|trans }}
-                    </a>
-                </p>
-            {% endif %}
-            -->
         </h1>
     </hgroup>
             
     <div ng-controller="TableFormatController">
         <!--<div ng-controller="ObjetiveTacticController">-->
-                {% set filterYesNo = [
-                    { 'id':0,'name': ('sigtec.no'|trans)},
-                    { 'id':1,'name': ('sigtec.yes'|trans)},
-                ] %}
-                {% set filterActiveInactive = [
-                    { 'id':1,'name': ('sigtec.active'|trans)},
-                    { 'id':0,'name': ('sigtec.inactive'|trans)},
-                ] %}
                 <div loading-container="tableParams.settings().$loading">
                     <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaFirstList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                         <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
@@ -48,6 +30,12 @@
                             </td>
                             <td data-title="'{{ 'form.gerencia_first'|trans }}'" sortable="'description'" filter="{ 'description': 'text' }" >
                                 <a href="{$ result._links.self.href $}">{$result.description$}</a>
+                            </td>
+                            <td>
+                                <a href="{$ result.linkToExportMatriz $}" class="button">
+                                    <span class="button-icon"><span class="icon-download"></span></span>
+                                    {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
+                                </a>
                             </td>
                         </tr>
                     </table>
@@ -64,9 +52,7 @@
             {
                 var response = '';
                 response =  '<strong>{{ 'pequiven_master.popup.description'|trans }}:</strong> ' + data.description + '<br>' +
-                            '<strong>{{ 'pequiven_master.popup.complejo'|trans }}:</strong> ' + data.complejo.description + '<br>' +
-                            '<strong>{{ 'pequiven_master.popup.created_at' |trans }}:</strong> ' + data.created_at + '<br>' +
-                            '<strong>{{ 'pequiven_master.popup.updated_at' | trans }}:</strong> ' + data.updated_at + '<br>'
+                            '<strong>{{ 'pequiven_master.popup.complejo'|trans }}:</strong> ' + data.complejo.description + '<br>'
                             ;
                 if(data.vinculante == 1){
                     response = response + '<strong>{{ 'pequiven_master.popup.vinculatedToZIV' | trans }}</strong> ' + '<br>'
