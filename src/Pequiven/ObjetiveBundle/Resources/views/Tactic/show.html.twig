@@ -42,7 +42,7 @@
         <!-- ¿Evaluación por Objetivo Operativo? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByObjetiveOperative'|trans }}</label>
-            {{ entity.evalObjetive ? 'Sí' : 'No' }}
+            {{ entity.childrens|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         
         <!-- Gerencia 1ra Línea a la cual impacta el Objetivo Táctico -->
@@ -69,7 +69,7 @@
         <!-- ¿Evaluación por Indicadores Tácticos? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByIndicatorTactic'|trans }}</label>
-            {{ entity.evalIndicator ? 'Sí' : 'No' }}
+            {{ entity.indicators|length > 0 ? 'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         
         <!-- Indicadores Tácticos Asociados al Objetivo Táctico -->
@@ -88,7 +88,7 @@
         <!-- ¿Evaluación por Programas de Gestión? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByArrangementProgram'|trans }}</label>
-            {{ entity.evalArrangementProgram ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
+            {{ entity.arrangementPrograms|length > 0 ?  'pequiven_objetive.yes'|trans : 'pequiven_objetive.no'|trans }}
         </p>
         {% include 'PequivenObjetiveBundle:Common:arrangementPrograms.html.twig' %}
         {% include 'PequivenObjetiveBundle:Common:results.html.twig' %}
