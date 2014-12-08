@@ -1512,6 +1512,7 @@ angular.module('seipModule.controllers', [])
                                 "bgAlpha" : "0,0",
                                 "baseFontColor" : "#ffffff",
                                 "outCnvBaseFontColor" : "#ffffff",
+                                "valueFontColor": "#000000",
                                 "visible" : "0",
                                 "theme": "fint",
                                 "formatNumberScale": "0",
