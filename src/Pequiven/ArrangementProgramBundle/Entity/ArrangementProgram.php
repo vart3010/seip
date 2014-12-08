@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
-class ArrangementProgram extends Model
+class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
 {
     /**
      * @var integer
@@ -557,12 +557,21 @@ class ArrangementProgram extends Model
     {
         return $this->progressToDate;
     }
+    
     /**
      * Devuelve el valor que sera tomado en cuenta para los resuldatos
      * @return type
      */
-    function getTotalForResult()
-    {
+    public function getResult() {
         return $this->progressToDate;
+    }
+
+    public function getWeight() {
+        return null;
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }

@@ -14,7 +14,7 @@ use Pequiven\SEIPBundle\Model\Result\Result as ModelResult;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Result\ResultRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Result extends ModelResult
+class Result extends ModelResult implements ResultItemInterface
 {
     /**
      * @var integer
@@ -380,5 +380,19 @@ class Result extends ModelResult
     
     public function __toString() {
         return $this->getDescription() ? $this->getDescription() : '-';
+    }
+    
+    public function getResult() {
+        $resultDetails = $this->getResultDetails();
+        $result = 0;
+        if($resultDetails){
+            $result = $resultDetails->getResultDetails()->getGlobalResult();
+        }
+        return $result;
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }
