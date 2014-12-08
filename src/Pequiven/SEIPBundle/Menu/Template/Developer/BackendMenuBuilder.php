@@ -208,6 +208,16 @@ class BackendMenuBuilder extends MenuBuilder
         
         $child->addChild($subchild);
         
+        $subchild = $this->factory->createItem('planning.results',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.main', $section)));
+        
+        $child->addChild($subchild);
+        
         $menu->addChild($child);
     }
     
