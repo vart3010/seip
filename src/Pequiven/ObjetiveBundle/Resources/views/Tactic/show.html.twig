@@ -71,11 +71,7 @@
         {% if entity.indicators|length > 0 %}
             <div class="inline-label">
                 <label class="label">{{ 'pequiven_objetive.indicatorTactics'|trans }}</label>
-                <ul class="fa-ul">
-                {% for indicator in entity.indicators %}
-                    <li>{{ generateLink(indicator) }}</li>
-                {% endfor  %}
-                </ul>
+                {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
             </div>
             <br>
         {% endif %}

@@ -85,11 +85,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             //Nada que hacer
         }
 
-        $objetive->setResultOfObjetive($total);
+        $objetive->setResultOfObjetive($total);//Resultado del objetivo
         $em->persist($objetive);
-        if($objetive->getParents()->count() > 0){
+        
+        if($objetive->getParents()->count() > 0){//Actualizar los resultados del padre
             foreach ($objetive->getParents() as $parent) {
                 $myResult = $this->getResultByType($parent->getResults(),\Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
+                
                 if($myResult){
                     $this->calculateResult($myResult);
                 }
@@ -181,7 +183,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($result->getParent() != null){
             $objetive = $result->getParent()->getObjetive();
         }else{
-            $objetive = $result->getObjetive();    
+            $objetive = $result->getObjetive();
         }
         return $objetive;
     }
