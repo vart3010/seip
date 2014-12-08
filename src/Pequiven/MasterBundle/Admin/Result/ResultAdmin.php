@@ -26,7 +26,7 @@ class ResultAdmin extends Admin
                 'choices' => \Pequiven\SEIPBundle\Model\Result\Result::getTypeCalculations(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
-            ->add('objetives')
+            ->add('objetive')
             ->add('parent','entity',array(
                 'class' => 'Pequiven\SEIPBundle\Entity\Result\Result',
                 'query_builder' => function(\Pequiven\SEIPBundle\Repository\Result\ResultRepository $repository){
@@ -42,7 +42,7 @@ class ResultAdmin extends Admin
             ->add('description')
             ->add('typeResult')
             ->add('typeCalculation')
-            ->add('objetives')
+            ->add('objetive')
             ;
     }
     
@@ -51,7 +51,7 @@ class ResultAdmin extends Admin
             ->addIdentifier('description')
             ->add('typeResult')
             ->add('typeCalculation')
-            ->add('objetives')
+            ->add('objetive')
             ;
     }
     
@@ -59,14 +59,14 @@ class ResultAdmin extends Admin
     {
         $parent = $object->getParent();
         if($parent != null){
-            $object->getObjetives()->clear();
+            $object->setObjetive(null);
         }
     }
     
     public function preUpdate($object) {
         $parent = $object->getParent();
         if($parent != null){
-            $object->getObjetives()->clear();
+            $object->setObjetive(null);
         }
     }
 }

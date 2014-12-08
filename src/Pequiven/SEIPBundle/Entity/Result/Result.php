@@ -92,12 +92,9 @@ class Result extends ModelResult implements ResultItemInterface
      * Objetivos que impacta
      * 
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
-     * @ORM\JoinTable(name="seip_results_objetives",
-     *      joinColumns={@ORM\JoinColumn(name="result_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="objetive_id", referencedColumnName="id")})
+     * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
      */
-    private $objetives;
+    private $objetive;
     
     /**
      * Constructor
@@ -105,7 +102,6 @@ class Result extends ModelResult implements ResultItemInterface
     public function __construct()
     {
         $this->childrens = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -267,39 +263,6 @@ class Result extends ModelResult implements ResultItemInterface
     }
 
     /**
-     * Add objetives
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
-     * @return Result
-     */
-    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
-    {
-        $this->objetives->add($objetives);
-
-        return $this;
-    }
-
-    /**
-     * Remove objetives
-     *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
-     */
-    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
-    {
-        $this->objetives->removeElement($objetives);
-    }
-
-    /**
-     * Get objetives
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getObjetives()
-    {
-        return $this->objetives;
-    }
-
-    /**
      * @ORM\PrePersist()
      */
     public function prePersist()
@@ -394,5 +357,28 @@ class Result extends ModelResult implements ResultItemInterface
     public function getResultWithWeight() {
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
+    }
+
+    /**
+     * Set objetive
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return Result
+     */
+    public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
+    {
+        $this->objetive = $objetive;
+
+        return $this;
+    }
+
+    /**
+     * Get objetive
+     *
+     * @return \Pequiven\ObjetiveBundle\Entity\Objetive 
+     */
+    public function getObjetive()
+    {
+        return $this->objetive;
     }
 }
