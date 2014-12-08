@@ -506,4 +506,18 @@ class ObjetiveRepository extends EntityRepository {
         
         return $gerencia->getDescription();
     }
+    
+    public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond){
+        $qb = $this->getQueryBuilder();
+        
+        $qb->andWhere('o.objetiveLevel = :objetiveLevel');
+        $qb->andWhere('o.enabled = :enabled');
+        $qb->andWhere('o.gerenciaSecond = :idGerenciaSecond');
+        
+        $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_OPERATIVO);
+        $qb->setParameter('enabled', true);
+        $qb->setParameter('idGerenciaSecond', $gerenciaSecond->getId());
+        
+        return $qb->getQuery()->getResult();
+    }
 }

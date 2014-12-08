@@ -189,3 +189,7 @@ principal:
         indicatorPlan: Plan
         indicatorReal: Real
         indicatorPorc: % Carga
+        
+result:
+    results: Resultados
+    objetiveOperative: Objetivos Operativos

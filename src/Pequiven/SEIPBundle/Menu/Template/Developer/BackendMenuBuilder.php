@@ -227,7 +227,8 @@ class BackendMenuBuilder extends MenuBuilder
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.tactic', $section)));
 
         $subchild->addChild('planning.results.operative', array(
-                                'route' => '',
+                                'route' => 'pequiven_result_list',
+                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
         
