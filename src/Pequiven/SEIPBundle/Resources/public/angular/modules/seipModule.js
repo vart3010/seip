@@ -1494,7 +1494,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id) {
+            $scope.renderChartResult = function(id,caption,subCaption,categories) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1503,10 +1503,10 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": "Revenue split by product category",
-                                "subCaption": "For current year",
-                                "xAxisname": "Quarter",
-                                "yAxisName": "Revenues (In USD)",
+                                "caption": caption,
+                                "subCaption": subCaption,
+                                "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
+                                "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
                                 "numberSuffix": "%",
                                 "bgAlpha" : "0,0",
@@ -1521,25 +1521,12 @@ angular.module('seipModule.controllers', [])
                             },
                             "categories": [
                                 {
-                                    "category": [
-                                        {
-                                           "label": "Q1"
-                                        },
-                                        {
-                                           "label": "Q2"
-                                        },
-                                        {
-                                           "label": "Q3"
-                                        },
-                                        {
-                                           "label": "Q4"
-                                        }
-                                     ]
+                                    "category": categories
                                 }
                             ],
                             "dataset":[
                                 {
-                                    "seriesname": "Indicadores",
+                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan1"),
                                     "data": [
                                        {
                                           "value": "100"
@@ -1552,11 +1539,17 @@ angular.module('seipModule.controllers', [])
                                        },
                                        {
                                           "value": "50.6"
+                                       },
+                                       {
+                                          "value": "50.6"
+                                       },
+                                       {
+                                          "value": "50.6"
                                        }
                                     ]
                                  },
                                  {
-                                    "seriesname": "Programas de Gestión",
+                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan2"),
                                     "data": [
                                        {
                                           "value": "0"
@@ -1566,6 +1559,12 @@ angular.module('seipModule.controllers', [])
                                        },
                                        {
                                           "value": "40.3"
+                                       },
+                                       {
+                                          "value": "30.5"
+                                       },
+                                       {
+                                          "value": "30.5"
                                        },
                                        {
                                           "value": "30.5"

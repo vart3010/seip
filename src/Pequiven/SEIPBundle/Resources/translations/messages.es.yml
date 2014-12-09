@@ -72,7 +72,12 @@ chart:
         seriesNamePlan: Plan
         seriesNameReal: Real
         seriesNameCarga: % Carga
-    results:
+    result:
+        objetiveOperative:
+            xAxisName: Objetivos
+            yAxisName: Meta del objetivo
+            seriesNamePlan1: Indicadores
+            seriesNamePlan2: Programas de Gestión
         
 app:
     http:
