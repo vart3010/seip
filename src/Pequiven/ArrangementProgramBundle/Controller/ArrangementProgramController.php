@@ -19,6 +19,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ArrangementProgramController extends SEIPController
 {
+    /**
+     * Muestra los programas de gestion
+     * @param Request $request
+     * @return type
+     */
     public function indexAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
@@ -99,7 +104,7 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
-     * 
+     * Retorna los programas por gerencia
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
@@ -146,6 +151,11 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function listTemplateAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
@@ -220,6 +230,11 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
     function forReviewingApprovingAction(Request $request){
         $method = 'createPaginatorByAssigned';
         $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
@@ -227,6 +242,14 @@ class ArrangementProgramController extends SEIPController
         return $this->getSummaryResponse($request,$method,$route,$template);
     }
     
+    /**
+     * Agrupa codigo para no repetir
+     * @param Request $request
+     * @param type $method
+     * @param type $route
+     * @param type $template
+     * @return type
+     */
     private function getSummaryResponse(Request $request,$method,$route,$template) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
@@ -607,20 +630,24 @@ class ArrangementProgramController extends SEIPController
         if(!$arrangementProgramManager->isAllowToSendToReview($resource)){
             throw $this->createAccessDeniedHttpException();
         }
-        $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
-        
-        $user = $this->getUser();
-        $details = $resource->getDetails();
-        $details
-                ->setSendToReviewBy($user)
-                ->setSendToReviewDate(new DateTime());
-        
-        $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
-        
-        $this->domainManager->update($resource);
-        $this->flashHelper->setFlash('success', 'send_to_review');
-        
-        $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
+        if($arrangementProgramManager->isYouCanSendInRevision($resource)){
+            $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
+
+            $user = $this->getUser();
+            $details = $resource->getDetails();
+            $details
+                    ->setSendToReviewBy($user)
+                    ->setSendToReviewDate(new DateTime());
+
+            $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
+
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'send_to_review');
+
+            $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
+        }else{
+            $this->flashHelper->setFlash('error', 'planned_not_complete');
+        }
         
         return $this->redirectHandler->redirectTo($resource);
     }
