@@ -1494,7 +1494,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id,caption,subCaption,categories) {
+            $scope.renderChartResult = function(id,caption,subCaption,categories,resultIndicator,resultArrangementProgram) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1527,49 +1527,11 @@ angular.module('seipModule.controllers', [])
                             "dataset":[
                                 {
                                     "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan1"),
-                                    "data": [
-                                       {
-                                          "value": "100"
-                                       },
-                                       {
-                                          "value": "30.8"
-                                       },
-                                       {
-                                          "value": "20.3"
-                                       },
-                                       {
-                                          "value": "50.6"
-                                       },
-                                       {
-                                          "value": "50.6"
-                                       },
-                                       {
-                                          "value": "50.6"
-                                       }
-                                    ]
+                                    "data": resultIndicator
                                  },
                                  {
                                     "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan2"),
-                                    "data": [
-                                       {
-                                          "value": "0"
-                                       },
-                                       {
-                                          "value": "30.6"
-                                       },
-                                       {
-                                          "value": "40.3"
-                                       },
-                                       {
-                                          "value": "30.5"
-                                       },
-                                       {
-                                          "value": "30.5"
-                                       },
-                                       {
-                                          "value": "30.5"
-                                       }
-                                    ]
+                                    "data": resultArrangementProgram
                                  }
                             ]
                         }

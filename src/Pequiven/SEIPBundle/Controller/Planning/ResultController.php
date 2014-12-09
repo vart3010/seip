@@ -85,6 +85,8 @@ class ResultController extends ResourceController {
      */
     public function showMonitorOperativeAction(Request $request) {
         $categories = array();
+        $resultIndicator = array();                
+        $resultArrangementProgram = array();                
         
         $em = $this->getDoctrine();
         $id = $request->get('id');
@@ -96,13 +98,18 @@ class ResultController extends ResourceController {
         //Data del gráfico
         foreach($object as $objetive){
             $categories[] = array('label' => $objetive->getRef());
-            
-        }
+            foreach($objetive->getResults() as $result){
+                $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => $result->getResultWithWeight()) : 0;
+                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => $result->getResultWithWeight()) : 0;
+            }
+        }        
 
         return array(
             'object' => $object,
             'entity' => $entity,
-            'categories' => $categories
+            'categories' => $categories,
+            'resultIndicator' => $resultIndicator,
+            'resultArrangementProgram' => $resultArrangementProgram,
         );
     }
 }
