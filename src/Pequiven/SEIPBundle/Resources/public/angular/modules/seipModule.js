@@ -687,7 +687,9 @@ angular.module('seipModule.controllers', [])
                 }
                 if($scope.model.typeManagement != null){
                     parameters.filter['typeManagement'] = $scope.model.typeManagement.id;
-                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                    if($scope.model.complejo){
+                        parameters.filter['complejo'] = $scope.model.complejo.id;
+                    }
                 }
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management',parameters))
                     .success(function(data) {
@@ -794,10 +796,18 @@ angular.module('seipModule.controllers', [])
             });
             //Filtro de modular y vinculante
             $scope.$watch("model.typeManagement", function(newParams, oldParams) {
+                var selectComplejos = angular.element('#selectComplejos');
+                var firstLineManagement = angular.element('#firstLineManagement');
                 if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
                     $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
+                    if($scope.model.typeManagement.id == 0){//Si el filtro es modular
+                        selectComplejos.select2('enable',false);
+                        firstLineManagement.select2('enable',false);
+                    }
                 } else {
                     $scope.tableParams.$params.filter['typeManagement'] = null;
+//                    selectComplejos.select2('enable',true);
+                    firstLineManagement.select2('enable',true);
                 }
             });
         })

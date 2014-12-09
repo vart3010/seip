@@ -24,7 +24,7 @@ class UserManager implements ContainerAwareInterface
      */
     public function isAllowFilterComplejo(User $user) {
         $level = $user->getLevelRealByGroup();
-        if($level >= Rol::ROLE_GENERAL_COMPLEJO){
+        if($level > Rol::ROLE_GENERAL_COMPLEJO){
             return true;
         }
         return false;

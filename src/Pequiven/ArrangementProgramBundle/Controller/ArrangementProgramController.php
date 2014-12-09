@@ -23,8 +23,15 @@ class ArrangementProgramController extends SEIPController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
-
-        if ($this->config->isPaginated()) {
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        if($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if(isset($criteria['typeManagement']) && $criteria['typeManagement'] == \Pequiven\MasterBundle\Entity\GerenciaSecond::TYPE_MANAGEMENT_BINDING){
+                unset($criteria['firstLineManagement']);
+                unset($criteria['complejo']);
+            }
+        }
+        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 'createPaginatorByRol',
@@ -61,8 +68,6 @@ class ArrangementProgramController extends SEIPController
                 );
             }
             
-            $user = $this->getUser();
-            $level = $user->getLevelRealByGroup();
             $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
             $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
             $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
@@ -75,7 +80,7 @@ class ArrangementProgramController extends SEIPController
                     'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
                 );
             }
-            //PequivenArrangementProgramBundle
+            
             $view->setData(array(
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
