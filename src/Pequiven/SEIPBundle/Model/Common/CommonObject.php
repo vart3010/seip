@@ -15,6 +15,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @author matias
  */
 class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAwareInterface {
+
+    /**
+     * Nivel Complejo
+     */
+    const LEVEL_COMPLEJO = 1;
+    /**
+     * Nivel Gerencia 1ra Línea
+     */
+    const LEVEL_GERENCIA = 2;
+    /**
+     * Nivel Gerencia 2da Línea
+     */
+    const LEVEL_GERENCIA_SECOND = 3;
+    
     protected $em;
     protected $class;
     protected $repository;
