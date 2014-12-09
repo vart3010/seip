@@ -36,6 +36,33 @@ class ArrangementProgramRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
     
+    public function findAllWithData(array $criteria = array()) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('ap_r')
+            ->addSelect('ap_t')
+            ->addSelect('ap_t_g')
+            ->addSelect('ap_t_g_r')
+            ->addSelect('ap_r_g')
+            ->addSelect('ap_t_g_r_g')
+            ->innerJoin('ap.responsibles','ap_r')
+            ->innerJoin('ap_r.groups','ap_r_g')
+            ->innerJoin('ap.timeline','ap_t')
+            ->innerJoin('ap_t.goals','ap_t_g')
+            ->innerJoin('ap_t_g.responsibles','ap_t_g_r')
+            ->innerJoin('ap_t_g_r.groups','ap_t_g_r_g')
+        ;
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($period = $criteria->remove('period'))){
+            $qb
+                ->andWhere('ap.period = :period')
+                ->setParameter('period', $period)
+            ;
+        }
+        return $qb->getQuery()->getResult();
+    }
+    
     /**
      * Retorna los programas de gestion que tengan de responsable al usuario que cuenta como una
      */

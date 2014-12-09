@@ -17,7 +17,7 @@ class UpdateController extends Controller
     {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
-        $arrangementprograms = $this->get('pequiven_seip.repository.arrangementprogram')->findBy(array(
+        $arrangementprograms = $this->get('pequiven_seip.repository.arrangementprogram')->findAllWithData(array(
             'period' => $period,
         ));
         $em = $this->getDoctrine()->getManager();
