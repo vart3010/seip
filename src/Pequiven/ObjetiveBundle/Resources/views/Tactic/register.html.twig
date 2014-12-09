@@ -32,10 +32,7 @@
                 {{ form_widget(form.complejo_name) }}
             </div>
             
-            <!-- Hidden con "RoleName" del usuario que esta logueado -->
-            <div>
-                {{ form_widget(form.role_name) }}
-            </div>
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
             
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
@@ -61,7 +58,7 @@
             
             <!-- Localidad -->
             <div id="complejo" class="field-block button-height">
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                     {{ form_label(form.complejo) }}
                     {{ form_widget(form.complejo) }}
                     {{ form_errors(form.complejo) }}
@@ -76,7 +73,7 @@
             </div>
             <!-- Gerencia 1ra línea -->
             <div id="gerencia" class="field-block button-height">
-                {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+                {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                     {{ form_label(form.gerencia) }}
                     {{ form_widget(form.gerencia) }}
                     {{ form_errors(form.gerencia) }}
@@ -344,6 +341,7 @@
             inputGoal = $("#pequiven_objetive_tactic_registration_goal"),//Input de Meta
 {#            inputWeight = $("#pequiven_objetive_tactic_registration_weight"),//Input de Peso#}
             inputHiddenRoleName = $("#pequiven_objetive_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+            inputHiddenRoleDirective = $("#rolDirective"),//Input Hidden del Nombre del Rol Directivo
             checkIndicator = $("#pequiven_objetive_tactic_registration_evalIndicator"),//Check de Evaluar por Indicador
             checkGerencia = $("#pequiven_objetive_tactic_registration_check_gerencia"),//Check para seleccionar todas las gerencia asociadas a los complejos seleccionados
             selectTendency = $("#pequiven_objetive_tactic_registration_tendency"),//Select de Tendencia del indicador
@@ -437,7 +435,7 @@
                 chargeSelectIndicator();
 
                 //Si el usuario tiene rol directivo
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                if(inputHiddenRoleDirective.val() == 1){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
 
@@ -765,7 +763,7 @@
 
         //Función que muestra las gerencias de acuerdo a los complejos seleccionados
         function displayGerenciaFromComplejo(){
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX' ){
+            if(inputHiddenRoleDirective.val() == 1 ){
                 var data = {
                     complejos: $.trim(selectComplejo.val()),
                 };
