@@ -168,6 +168,22 @@ class ArrangementProgramManager implements ContainerAwareInterface
     }
     
     /**
+     * Verifica que se pueda enviar un programa de gestion a revision
+     * @param \Pequiven\ArrangementProgramBundle\Model\ArrangementProgram $entity
+     * @return boolean
+     */
+    public function isYouCanSendInRevision(ArrangementProgram $entity)
+    {
+        $summary = $entity->getSummary();
+        $valid = false;
+        if(bccomp($summary['advancesPlanned'], 100) == 0){
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+    
+    /**
      * Evalua si el usuario logeado tiene permisos para notificar avancess en el programa de gestion
      * @param ArrangementProgram $entity
      * @return boolean
