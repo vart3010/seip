@@ -805,8 +805,9 @@ angular.module('seipModule.controllers', [])
                         firstLineManagement.select2('enable',false);
                     }
                 } else {
+                    console.log('s');
                     $scope.tableParams.$params.filter['typeManagement'] = null;
-//                    selectComplejos.select2('enable',true);
+                    selectComplejos.select2('enable',true);
                     firstLineManagement.select2('enable',true);
                 }
             });
