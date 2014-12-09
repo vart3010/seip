@@ -99,10 +99,11 @@ class ResultController extends ResourceController {
         foreach($object as $objetive){
             $categories[] = array('label' => $objetive->getRef());
             foreach($objetive->getResults() as $result){
-                $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => $result->getResultWithWeight()) : 0;
-                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => $result->getResultWithWeight()) : 0;
+                $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
+                $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
+                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
             }
-        }        
+        }
 
         return array(
             'object' => $object,
