@@ -95,13 +95,16 @@ class ResultController extends ResourceController {
         $object = $em->getRepository('PequivenObjetiveBundle:Objetive')->getObjetivesByGerenciaSecond($gerenciaSecond);
         $entity = $gerenciaSecond;
         
+        $totalObjects = count($object);
+        $heightChart = ($totalObjects * 30) + 100;
+        
         //Data del gráfico
         foreach($object as $objetive){
             $categories[] = array('label' => $objetive->getRef());
             foreach($objetive->getResults() as $result){
                 $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
                 $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
-                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
+                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '') : bcadd(0,'0',2);
             }
         }
 
@@ -111,6 +114,7 @@ class ResultController extends ResourceController {
             'categories' => $categories,
             'resultIndicator' => $resultIndicator,
             'resultArrangementProgram' => $resultArrangementProgram,
+            'heightChart' => $heightChart,
         );
     }
 }
