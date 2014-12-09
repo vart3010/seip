@@ -14,6 +14,12 @@ use Pequiven\SEIPBundle\Entity\User;
  */
 class ArrangementProgramRepository extends EntityRepository
 {
+    /**
+     * Retorna un programa de gestion pre hidratado para evitar tantas consultas a la base de datos.
+     * 
+     * @param type $id
+     * @return type
+     */
     public function findWithData($id) 
     {
         $qb = $this->getQueryBuilder();
@@ -36,6 +42,11 @@ class ArrangementProgramRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
     
+    /**
+     * Retorna todos los programas de gestion pre hidratados para evitar tantas consultas
+     * @param array $criteria
+     * @return type
+     */
     public function findAllWithData(array $criteria = array()) 
     {
         $qb = $this->getQueryBuilder();
