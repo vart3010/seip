@@ -43,10 +43,6 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
 
         //Nombre de la localidad del usuario que esta logueado
         $builder->add('complejo_name','hidden',array('data' => $user->getComplejo()->getRef(),'mapped' => false));
-        
-        //Rol del usuario que esta logueado
-        $array = $user->getRoles();
-        $builder->add('role_name','hidden',array('data' => $array[0],'mapped' => false));
 
         //Línea estratégica del objetivo a crear
         $builder->addEventSubscriber(new AddLineStrategicFieldListener($this->container,array('typeTactic' => true)));
