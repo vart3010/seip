@@ -547,7 +547,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     
     public function onPostSerializeGerenciaSecond(ObjectEvent $event) {
         $object = $event->getObject();
-        $event->getVisitor()->addData('linkToResult', $this->generateUrl('pequiven_result_show', array('level' => 3,'id' => $object->getId())));
+        $event->getVisitor()->addData('linkToResult', $this->generateUrl('pequiven_result_show_operative', array('id' => $object->getId())));
     }
     
     public function setContainer(ContainerInterface $container = null) {
