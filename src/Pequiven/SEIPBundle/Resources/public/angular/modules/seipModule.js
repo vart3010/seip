@@ -797,6 +797,7 @@ angular.module('seipModule.controllers', [])
             //Filtro de modular y vinculante
             $scope.$watch("model.typeManagement", function(newParams, oldParams) {
                 var selectComplejos = angular.element('#selectComplejos');
+                console.log('s');
                 var firstLineManagement = angular.element('#firstLineManagement');
                 if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
                     $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
@@ -805,7 +806,7 @@ angular.module('seipModule.controllers', [])
                         firstLineManagement.select2('enable',false);
                     }
                 } else {
-                    console.log('s');
+                    
                     $scope.tableParams.$params.filter['typeManagement'] = null;
                     selectComplejos.select2('enable',true);
                     firstLineManagement.select2('enable',true);

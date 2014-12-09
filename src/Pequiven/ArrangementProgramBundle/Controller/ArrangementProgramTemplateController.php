@@ -112,7 +112,55 @@ class ArrangementProgramTemplateController extends SEIPController
      * @return type
      */
     public function updateAction(\Symfony\Component\HttpFoundation\Request $request) {
-        return parent::updateAction($request);
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+        if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
+
+            $originalGoalsArray = array();
+            $timeline = $resource->getTimeline();
+            // Create an ArrayCollection of the current Tag objects in the database
+            foreach ($timeline->getGoals() as $goal) {
+                $originalGoalsArray[$timeline->getId()][] = $goal;
+            }
+
+            $form->submit($request,false);
+
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                
+                $autoOpenOnSave = $request->get('autoOpenOnSave',false);
+                if($autoOpenOnSave == true){
+                    $this->setFlash('autoOpenOnSave', true);
+                }
+                $timeline = $resource->getTimeline();
+                if(isset($originalGoalsArray[$timeline->getId()])){
+                    $goals = $originalGoalsArray[$timeline->getId()];
+                    foreach ($goals as $originalGoal) {
+                        if(false === $timeline->getGoals()->contains($originalGoal)){
+                            $timeline->getGoals()->removeElement($originalGoal);
+                            $em->remove($originalGoal);
+                        }
+                    }
+                }
+                $em->flush();
+                $this->domainManager->update($resource);
+                return $this->redirectHandler->redirectTo($resource);
+            }
+        }
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView(),
+            ))
+        ;
+
+        return $this->handleView($view);
     }
     
     /**
