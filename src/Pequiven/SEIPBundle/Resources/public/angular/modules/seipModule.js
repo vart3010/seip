@@ -1561,7 +1561,58 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams);
 //        console.log($scope.tableParams.settings().pages);
         })
-        .controller('UserController',function($scope){
+        .controller('UserController',function($scope,$timeout){
             console.log('UserController');
+            $scope.model = {
+                arrangementProgramUserToRevisers: [],
+                arrangementProgramUsersToApproveTactical: [],
+                arrangementProgramUsersToApproveOperative: [],
+                arrangementProgramUsersToNotify: []
+            };
+            $scope.setPreselectedData = function(id,data,model){
+                    var preselected = [];
+                     $.each(data,function(index,value){
+                         preselected.push(value.id);
+                     });
+                    $('#'+id).select2('data', data);
+                    $('#'+id).select2('val', preselected);
+                    $scope.model[model] = data;
+            };
+            
+            var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');
+            arrangementProgramUsersToApproveTactical.change(function(){
+                var data = arrangementProgramUsersToApproveTactical.select2('data');
+                $scope.model.arrangementProgramUsersToApproveTactical = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUserToRevisers = angular.element('#gerencia_configuration_arrangementProgramUserToRevisers');
+            arrangementProgramUserToRevisers.change(function(){
+                var data = arrangementProgramUserToRevisers.select2('data');
+                $scope.model.arrangementProgramUserToRevisers = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUsersToApproveOperative = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveOperative');
+            arrangementProgramUsersToApproveOperative.change(function(){
+                var data = arrangementProgramUsersToApproveOperative.select2('data');
+                $scope.model.arrangementProgramUsersToApproveOperative = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUsersToNotify = angular.element('#gerencia_configuration_arrangementProgramUsersToNotify');
+            arrangementProgramUsersToNotify.change(function(){
+                var data = arrangementProgramUsersToNotify.select2('data');
+                $scope.model.arrangementProgramUsersToNotify = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
         })
         ;

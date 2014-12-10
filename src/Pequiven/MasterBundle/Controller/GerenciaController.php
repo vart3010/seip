@@ -166,6 +166,43 @@ class GerenciaController extends baseController {
         return $this->handleView($view);
     }
     
+    public function updateAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+        if($request->isMethod('GET')){
+            $configuration = $form->remove('configuration');
+//            $configuration = $form->get('configuration');
+//            $configuration->remove('arrangementProgramUserToRevisers');
+//            $configuration->remove('arrangementProgramUsersToApproveTactical');
+//            $configuration->remove('arrangementProgramUsersToApproveOperative');
+//            $configuration->remove('arrangementProgramUsersToNotify');
+//            var_dump('AA');
+//            DIE;
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
     /**
      * Exportar la matriz de objetivos
      * @param Request $request

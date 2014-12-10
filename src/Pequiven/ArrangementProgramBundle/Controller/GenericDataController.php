@@ -11,7 +11,6 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  */
 class GenericDataController extends SEIPController 
 {
-    
     /**
      * Obtiene los responsable que se pueden asignar a una meta
      */
