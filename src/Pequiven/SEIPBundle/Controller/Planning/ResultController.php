@@ -95,6 +95,7 @@ class ResultController extends ResourceController {
         $object = $em->getRepository('PequivenObjetiveBundle:Objetive')->getObjetivesByGerenciaSecond($gerenciaSecond);
         $entity = $gerenciaSecond;
         
+        //Configuramos el alto del gráfico
         $totalObjects = count($object);
         $heightChart = ($totalObjects * 30) + 100;
         
