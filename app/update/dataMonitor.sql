@@ -39,7 +39,7 @@ UPDATE seip_monitor SET objTacticOriginal = 0, indTacticOriginal = 0, objOperati
 -- OFICINA DE PRESIDENCIA
 UPDATE seip_monitor SET objTacticOriginal = 0, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 0 WHERE fk_gerencia = 32;
 -- PLANIFICACIÓN ESTRATÉGICA
-UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 1, objOperativeOriginal = 22, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 31 WHERE fk_gerencia = 14;
+UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 0, objOperativeOriginal = 22, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 31 WHERE fk_gerencia = 14;
 -- UNPI
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 1, objOperativeOriginal = 5, indOperativeOriginal = 5, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 3;
 -- UNFER
