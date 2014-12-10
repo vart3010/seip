@@ -2,24 +2,24 @@ ALTER TABLE seip_c_gerencia ADD gerenciaGroup_id INT DEFAULT NULL;
 ALTER TABLE seip_c_gerencia ADD CONSTRAINT FK_12A7F17C4DD84A60 FOREIGN KEY (gerenciaGroup_id) REFERENCES seip_gerencia_group (id);
 CREATE INDEX IDX_12A7F17C4DD84A60 ON seip_c_gerencia (gerenciaGroup_id);
 
---GRUPO COMERCIALIZADORAS
+-- GRUPO COMERCIALIZADORAS
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '1' WHERE `seip_c_gerencia`.`id` = 3;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '1' WHERE `seip_c_gerencia`.`id` = 2;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '1' WHERE `seip_c_gerencia`.`id` = 8;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '1' WHERE `seip_c_gerencia`.`id` = 6;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '1' WHERE `seip_c_gerencia`.`id` = 5;
 
---GRUPO COMPLEJOS
+-- GRUPO COMPLEJOS
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '3' WHERE `seip_c_gerencia`.`id` = 7;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '3' WHERE `seip_c_gerencia`.`id` = 1;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '3' WHERE `seip_c_gerencia`.`id` = 9;
 
---GRUPO PROYECTOS
+-- GRUPO PROYECTOS
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '4' WHERE `seip_c_gerencia`.`id` = 4;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '4' WHERE `seip_c_gerencia`.`id` = 10;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '4' WHERE `seip_c_gerencia`.`id` = 17;
 
---GRUPO SEDE CORPORATIVA
+-- GRUPO SEDE CORPORATIVA
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 26;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 23;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 31;
