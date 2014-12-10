@@ -57,8 +57,8 @@ UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperati
 -- PROYECTO NAVAY
 UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 0, objOperativeOriginal = 20, indOperativeOriginal = 20, arrangementProgramTactic = 0, arrangementProgramOperative = 20 WHERE fk_gerencia = 10;
 -- CPM
-UPDATE seip_monitor SET objTacticOriginal = 10, indTacticOriginal = 10, objOperativeOriginal = 67, objOperativeVinculante = 69, indOperativeOriginal = 70, indOperativeVinculante = 76, arrangementProgramTactic = 0, arrangementProgramOperative = 198 WHERE fk_gerencia = 1;
+UPDATE seip_monitor SET objTacticOriginal = 10, indTacticOriginal = 9, objOperativeOriginal = 67, objOperativeVinculante = 69, indOperativeOriginal = 70, indOperativeVinculante = 76, arrangementProgramTactic = 0, arrangementProgramOperative = 198 WHERE fk_gerencia = 1;
 -- CPAMC
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 51, objOperativeVinculante = 60, indOperativeOriginal = 59, indOperativeVinculante = 60, arrangementProgramTactic = 0, arrangementProgramOperative = 1032 WHERE fk_gerencia = 7;
 -- CPJAA
-UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 12, objOperativeOriginal = 16, objOperativeVinculante = 39, indOperativeOriginal = 26, indOperativeVinculante = 32, arrangementProgramTactic = 0, arrangementProgramOperative = 43 WHERE fk_gerencia = 9;
+UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 12, objOperativeOriginal = 16, objOperativeVinculante = 39, indOperativeOriginal = 26, indOperativeVinculante = 32, arrangementProgramTactic = 0, arrangementProgramOperative = 48 WHERE fk_gerencia = 9;
