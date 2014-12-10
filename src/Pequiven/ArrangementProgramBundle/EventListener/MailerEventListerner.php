@@ -52,6 +52,10 @@ class MailerEventListerner extends BaseEventListerner
         $templateName = 'revisedToAproved';
         $methodEmailList = 'getEmailsAllResponsibles';
         $this->sendEmail($event, $templateName, $methodEmailList);
+        
+        $templateName = 'notityToNotifiers';
+        $methodEmailList = 'getEmailsUserToNotify';
+        $this->sendEmail($event, $templateName, $methodEmailList);
     }
     
     /**
@@ -91,6 +95,7 @@ class MailerEventListerner extends BaseEventListerner
             'arrangementProgram' => $object
         );
         $toEmail = $this->$methodEmailList($object);
+        
         $this->mailerSendMessage($template, $context, null, $toEmail);
     }
 
@@ -109,9 +114,40 @@ class MailerEventListerner extends BaseEventListerner
      */
     private function getUserToReviser(ArrangementProgram $entity) {
         $configuration =  $this->getConfiguration($entity);
+        $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+
         $users = array();
         if($configuration){
             foreach ($configuration->getArrangementProgramUserToRevisers() as $value) {
+                if($notifyToGerenciaSecond !== null){
+                    if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                        continue;
+                    }
+                }
+                $users[] = $value;
+            }
+        }
+        return $users;
+    }
+    
+    /**
+     * Retorna los usuarios encargados de notificar
+     * 
+     * @param ArrangementProgram $entity
+     * @return type
+     */
+    private function getUserToNotify(ArrangementProgram $entity) {
+        $configuration =  $this->getConfiguration($entity);
+        $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+
+        $users = array();
+        if($configuration){
+            foreach ($configuration->getArrangementProgramUsersToNotify() as $value) {
+                if($notifyToGerenciaSecond !== null){
+                    if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                        continue;
+                    }
+                }
                 $users[] = $value;
             }
         }
@@ -132,7 +168,16 @@ class MailerEventListerner extends BaseEventListerner
             if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $users = $configuration->getArrangementProgramUsersToApproveTactical();
             }else if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                $users = $configuration->getArrangementProgramUsersToApproveOperative();
+                $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+                $allUsersToAprrove = $configuration->getArrangementProgramUsersToApproveOperative();
+                foreach ($allUsersToAprrove as $value) {
+                    if($notifyToGerenciaSecond !== null){
+                        if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                            continue;
+                        }
+                    }
+                    $users[] = $value;
+                }
             }
         }
         return $users;
@@ -176,18 +221,29 @@ class MailerEventListerner extends BaseEventListerner
     }
     
     /**
-     * Retorna los correos de las personas encargadas de revisar el programa de gestion
+     * Retorna los correos de las personas encargadas de aprobar el programa de gestion
      * @param ArrangementProgram $entity
      * @return type
      */
     private function getEmailsToApprove(ArrangementProgram $entity) 
     {
-        $emails = $this->getEmailsAllResponsibles($entity);
+        $emails = $this->getEmailsInString($this->getUserToAprrove($entity));
         return $emails;
     }
     
     /**
-     * Retorna los correos de las personas encargadas de revisar el programa de gestion
+     * Retorna los correos de las personas encargadas de notificar el programa de gestion
+     * @param ArrangementProgram $entity
+     * @return type
+     */
+    private function getEmailsUserToNotify(ArrangementProgram $entity) 
+    {
+        $emails = $this->getEmailsInString($this->getUserToNotify($entity));
+        return $emails;
+    }
+    
+    /**
+     * Retorna los correos de las personas responsabes del programa de gestion
      * @param ArrangementProgram $entity
      * @return type
      */
@@ -216,6 +272,7 @@ class MailerEventListerner extends BaseEventListerner
 
     /**
      * Retorna un array asociativo con los correos y usuarios
+     * 
      * @param array $users
      * @return type
      */
@@ -225,6 +282,29 @@ class MailerEventListerner extends BaseEventListerner
             $emails[$user->getEmail()] = (string)$user;
         }
         return $emails;
+    }
+    
+    /**
+     * Si el programa de gestion es operativo y la gerencia es un complejo, retorna la gerencia a la que se debe notificar
+     * @param ArrangementProgram $entity
+     * @return type
+     */
+    private function getNotifyToGerenciaSecond(ArrangementProgram $entity)
+    {
+        $notifyToGerenciaSecond = null;
+        if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            $objetiveOperative = $entity->getOperationalObjective();
+            $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+            if(
+                $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                )
+                {
+                $notifyToGerenciaSecond = $gerenciaSecond;
+            }
+        }
+        return $notifyToGerenciaSecond;
     }
 
     /**
