@@ -1511,6 +1511,7 @@ angular.module('seipModule.controllers', [])
                         "type": "stackedbar3d",
                         "renderAt": id,
                         "width": "100%",
+                        "height": "100%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
@@ -1527,8 +1528,9 @@ angular.module('seipModule.controllers', [])
                                 "visible" : "0",
                                 "theme": "fint",
                                 "formatNumberScale": "0",
-                                "axisMaxValue": "100",
-                                "axisMinValue": "0",
+                                "yAxisMaxValue": "100",
+                                "yAxisMinValue": "0",
+                                "stack100Percent": "0",
                             },
                             "categories": [
                                 {

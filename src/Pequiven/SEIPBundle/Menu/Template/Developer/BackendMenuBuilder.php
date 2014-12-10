@@ -310,7 +310,7 @@ class BackendMenuBuilder extends MenuBuilder
             $subchild->addChild($thirdchild);
             
                 //Menú Nivel 3: Registro de Objetivos
-                if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER')) && $this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',

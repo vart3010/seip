@@ -58,20 +58,25 @@ class GerenciaSecondRepository extends baseEntityRepository {
      */
     function createPaginatorGerenciaSecond(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
+        
+        $queryBuilder->leftJoin('o.gerencia', 'g');
+        $queryBuilder->leftJoin('o.complejo', 'c');
 
-        if(isset($criteria['description'])){
-            $description = $criteria['description'];
-            unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
+        //Filtro gerencia 2da Línea
+        if(isset($criteria['gerenciaSecond'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$criteria['gerenciaSecond']."%'"));
         }
-//        if(isset($criteria['rif'])){
-//            $rif = $criteria['rif'];
-//            unset($criteria['rif']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->like('o.rif', "'%".$rif."%'"));
-//        }
+        //Filtro gerencia 1ra Línea
+        if(isset($criteria['gerenciaFirst'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['gerenciaFirst']."%'"));
+        }
+        //Filtro localidad
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
 
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
