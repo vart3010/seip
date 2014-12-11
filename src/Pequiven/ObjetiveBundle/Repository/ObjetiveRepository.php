@@ -238,7 +238,9 @@ class ObjetiveRepository extends EntityRepository {
                     $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());;
                 }
             } else{
+                if($user->getGerencia()){
                     $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+                }
             }
         } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $queryBuilder->andWhere('o.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
