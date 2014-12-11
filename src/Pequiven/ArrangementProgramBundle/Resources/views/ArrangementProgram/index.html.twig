@@ -33,7 +33,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-change="getSecondLineManagement()" ng-options="value as value.description group by value.complejo.description for (key,value) in data.first_line_managements" {% if isAllowFilterFirstLineManagement == false %}disabled="disabled"{% endif %} {% if user.gerencia %}ng-init="model.firstLineManagement = {{ user.gerencia.id }}"{% endif %}>
+                                <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-change="getSecondLineManagement()" ng-options="value as value.description group by model.complejo.description for (key,value) in model.complejo.gerencias" {% if isAllowFilterFirstLineManagement == false %}disabled="disabled"{% endif %} {% if user.gerencia %}ng-init="model.firstLineManagement = {{ user.gerencia.id }}"{% endif %}>
                                     <option value=''></option>
                                 </select>
                             </div>

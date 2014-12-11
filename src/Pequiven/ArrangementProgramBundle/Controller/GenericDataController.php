@@ -188,7 +188,7 @@ class GenericDataController extends SEIPController
         $results = $repository->findComplejos();
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','gerencias'));
         return $this->handleView($view);
     }
     

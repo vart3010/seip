@@ -685,15 +685,15 @@ angular.module('seipModule.controllers', [])
             };
             $scope.getOperatives();
             
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
-                    .success(function(data) {
-                        $scope.data.first_line_managements = data;
-                        if($scope.model.firstLineManagement != null){
-                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
-                                $scope.model.firstLineManagement = selected;
-                            });
-                        }
-                    });
+//            $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+//                    .success(function(data) {
+//                        $scope.data.first_line_managements = data;
+//                        if($scope.model.firstLineManagement != null){
+//                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
+//                                $scope.model.firstLineManagement = selected;
+//                            });
+//                        }
+//                    });
             //Busca las gerencias de segunda linea
             $scope.getSecondLineManagement = function(gerencia){
                 var parameters = {

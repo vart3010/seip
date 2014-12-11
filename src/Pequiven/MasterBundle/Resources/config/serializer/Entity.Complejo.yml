@@ -22,3 +22,6 @@ Pequiven\MasterBundle\Entity\Complejo:
         ref:
             expose: true
             groups: [api_list]
+        gerencias:
+            expose: true
+            groups: [gerencias]
