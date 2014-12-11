@@ -5,7 +5,6 @@ pequiven_arrangementprogram_data_responsible_goals:
         _format: json
     requirements:
         _format: "json|xml"
-        responsibleProgram: "\d+"
     methods: [GET]
     options:
         expose: true
@@ -104,3 +103,14 @@ pequiven_arrangementprogram_data_template_email:
         _controller: pequiven_seip.controller.arrangementprogram_data:getTemplateEmailAction
         _format: html
     methods: [GET]
+    
+pequiven_arrangementprogram_data_responsible:
+    path: /arrangement-program-responsible.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getResponsibleArrangementProgramAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

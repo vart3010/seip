@@ -408,6 +408,7 @@ class ArrangementProgramController extends SEIPController
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
+//        $form->remove('responsibles');
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),

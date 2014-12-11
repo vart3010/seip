@@ -14,10 +14,10 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository
 {
     /**
-     * Retornar los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * Retornar el query con los usuario a los cuales le puedo asignar programas de gestion tacticos
      * @return type
      */
-    function findQueryToAssingTacticArrangementProgram(){
+    function findQueryToAssingTacticArrangementProgram($criteria = array()){
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
@@ -44,7 +44,39 @@ class UserRepository extends EntityRepository
                     ;
             }
         }
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $orX->add($qb->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $orX->add($qb->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        if( ($gerencia = $criteria->remove('gerencia')) ){
+            $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia'));
+            $qb->setParameter('gerencia', $gerencia);
+        }
+        $qb->andWhere($orX);
+        
+        $qb->setMaxResults(50);
+        
         return $qb;
+    }
+    
+    /**
+     * Retornar los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * @return type
+     */
+    function findToAssingTacticArrangementProgram($criteria = array())
+    {
+        return $this->findQueryToAssingTacticArrangementProgram($criteria)->getQuery()->getResult();
     }
     
     /**
@@ -102,7 +134,7 @@ class UserRepository extends EntityRepository
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findToAssingTacticArrangementProgramGoal(array $users,array $criteria = array()){
+    function findToAssingTacticArrangementProgramGoal(array $users = array(),array $criteria = array()){
         return $this->findQueryToAssingTacticArrangementProgramGoal($users,$criteria)->getQuery()->getResult();
     }
     
