@@ -17,6 +17,9 @@ class GenericDataController extends SEIPController
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        if(is_string($responsiblesId)){
+            $responsiblesId = explode(',', $responsiblesId);
+        }
         $query = $request->get('query');
         $results = array();
         if(count($responsiblesId) > 0){
@@ -37,6 +40,27 @@ class GenericDataController extends SEIPController
             }
             $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users,$criteria);
         }
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Obtiene los responsable que se pueden asignar a un programa de gestion
+     */
+    function getResponsibleArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+            
+        $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
         
         $view = $this->view();
         $view->setData($results);

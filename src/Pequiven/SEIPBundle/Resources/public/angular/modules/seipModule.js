@@ -111,25 +111,27 @@ angular.module('seipModule.controllers', [])
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
             $scope.model.goalCount = null;
+            $scope.model.arrangementprogramResponsibles = [];
 
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
             };
             
-            $scope.setPreselectedData = function(id,data){
+            $scope.setPreselectedData = function(id,data,model){
                 var preselected = [];
-                $.each(data,function(index,value){
-                    preselected.push(value.id);
-                });
-                console.log(data);
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
                 $('#'+id).select2('data', data);
                 $('#'+id).select2('val', preselected);
+                $scope.model[model] = data;
             };
+            
+            var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
             
             //Se ejecuta cuando le da click a incluir los responsables de las gerencia
             var changeIncludeResponsibleManagement = changeIncludeResponsibleManagement = function(){
                 if($scope.model.goal.includeResponsibleManagement){
-                    var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
                     var reponsibleId = arrangementprogramResponsibles.val();
                     var urlResponsiblesByGerencia = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId,gerencia:$scope.gerenciaOfObjetive.id});
                     
@@ -222,7 +224,7 @@ angular.module('seipModule.controllers', [])
         //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal,index){
             $scope.model.goalCount = index;
-                var responsibles = programResponsible.val();
+                var responsibles = arrangementprogramResponsibles.val();
                 if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
                     $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
                     return;
@@ -275,7 +277,6 @@ angular.module('seipModule.controllers', [])
             };
 
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
-            var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             $scope.setOperationalObjective = function(tacticalObjetive, selected) {
@@ -329,14 +330,21 @@ angular.module('seipModule.controllers', [])
             operationalObjective.on('change',function(){
                 $scope.getLocationByOperative(operationalObjective.val());
             });
-            programResponsible.on('change', function(object) {
+            arrangementprogramResponsibles.on('change', function(object) {
+                var data = arrangementprogramResponsibles.select2('data');
+                $scope.model.arrangementprogramResponsibles = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+                
                 var reponsibleId = object.val;
                 $scope.validButtomAddGoal();
                 $scope.getResponsiblesGoal(reponsibleId);
             });
+            
             $scope.validButtomAddGoal = function() {
-                
-                if (programResponsible.val() != null && programResponsible.val().length > 0) {
+    
+                if (arrangementprogramResponsibles.val() != null && arrangementprogramResponsibles.val().length > 0) {
                     loadTemplateMetaButton.removeClass('disabled');
                 } else {
                     loadTemplateMetaButton.addClass('disabled');
@@ -391,9 +399,8 @@ angular.module('seipModule.controllers', [])
             form.submit(function(e) {
                 var valid = true;
                 //Select de responsables
-                var arrangementprogramResponsible = angular.element('#arrangementprogram_responsibles');
-                if (arrangementprogramResponsible) {
-                    var v = arrangementprogramResponsible.val();
+                if (arrangementprogramResponsibles) {
+                    var v = arrangementprogramResponsibles.val();
                     if (v == '' || v == null) {
                         $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person", "s2id_arrangementprogram_responsibles");
                         valid = false;
@@ -456,8 +463,8 @@ angular.module('seipModule.controllers', [])
 //            $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
-                if(programResponsible.val() != undefined && programResponsible.val() != ''){
-                    $scope.getResponsiblesGoal(programResponsible.val());
+                if(arrangementprogramResponsibles.val() != undefined && arrangementprogramResponsibles.val() != ''){
+                    $scope.getResponsiblesGoal(arrangementprogramResponsibles.val());
                 }
                 if (operationalObjective.val() == '' || operationalObjective.val() == null) {
                     operationalObjective.select2('enable', false)
