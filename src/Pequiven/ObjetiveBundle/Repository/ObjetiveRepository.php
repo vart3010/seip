@@ -238,7 +238,9 @@ class ObjetiveRepository extends EntityRepository {
                     $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());;
                 }
             } else{
+                if($user->getGerencia()){
                     $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+                }
             }
         } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $queryBuilder->andWhere('o.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
@@ -340,17 +342,52 @@ class ObjetiveRepository extends EntityRepository {
                 ->innerJoin("o.objetiveLevel","ol")
                 ->innerJoin("o.gerencia","g")
                 ->andWhere("ol.level = :level")
-                ->andWhere('ol.enabled = :enabled')
+                ->andWhere('o.enabled = :enabled')
                 ->setParameter('enabled', true)
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
         $level = $user->getLevelRealByGroup();
+        
         if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
-            $qb
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("gerencia", $user->getGerencia())
-                ;
+            if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+                $qb
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $user->getGerencia())
+                    ;
+            }
         }
+        $localidad = $user->getComplejo();
+        $gerenciasTypeComplejo = $gerenciasTypeComplejoId = array();
+        foreach ($localidad->getGerencias() as $gerencia) {
+            $gerenciaGroup = $gerencia->getGerenciaGroup();
+            
+            if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
+                $gerenciasTypeComplejo [] = $gerencia;
+                $gerenciasTypeComplejoId[] = $gerencia->getId();
+            }
+        }
+        if(count($gerenciasTypeComplejo) > 0){
+            $localidad = $gerencia->getComplejo();
+            $qbMedular = $this->getQueryAllEnabled();
+            $qbMedular
+                ->innerJoin("o.objetiveLevel","ol")
+                ->innerJoin("o.gerencia","g")
+                ->innerJoin("o.childrens","o_c")
+                ->innerJoin("o_c.gerenciaSecond","o_c_gs")
+                ->andWhere("ol.level = :level")
+                ->andWhere("o_c_gs.modular = 1")
+                ->andWhere('o.enabled = :enabled')
+                ->andWhere($qbMedular->expr()->in('g.id', $gerenciasTypeComplejoId))
+                ->setParameter('enabled', true)
+                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
+            ;
+            $objetivesMedular = array();
+            foreach ($qbMedular->getQuery()->getResult() as $result) {
+                $objetivesMedular[] = $result->getId();
+            }
+            $qb->orWhere($qb->expr()->in('o.id', $objetivesMedular));
+        }
+        
         return $qb;
     }
     
@@ -422,7 +459,7 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
+        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
             $qb
                 ->andWhere("gs.id = :gerenciaSecond")
                 ->setParameter("gerenciaSecond", $user->getGerenciaSecond())

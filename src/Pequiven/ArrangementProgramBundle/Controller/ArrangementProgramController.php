@@ -484,12 +484,10 @@ class ArrangementProgramController extends SEIPController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
         //Security check
-        $user = $this->getUser();
-        if($entity->getCreatedBy() !== $user){
-            throw $this->createAccessDeniedHttpException();
-        }
-        if($entity->getStatus() !== ArrangementProgram::STATUS_DRAFT){
+        if(!$arrangementProgramManager->hasPermissionToUpdate($entity)){
             throw $this->createAccessDeniedHttpException();
         }
 
@@ -870,6 +868,17 @@ class ArrangementProgramController extends SEIPController
         
         return $this->redirectHandler->redirectTo($resource);
     }
+    
+    public function deleteAction(Request $request) {
+        $resource = $this->findOr404($request);
+        
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToDelete($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        return parent::deleteAction($request);
+    }
+    
     /**
      * Finaliza el proceso de notificacion
      * 

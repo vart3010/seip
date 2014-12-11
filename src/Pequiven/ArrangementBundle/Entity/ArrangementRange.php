@@ -73,7 +73,7 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Indicator
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
+     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="arrangementRange")
      * @ORM\JoinColumn(name="fk_indicator", referencedColumnName="id")
      */
     private $indicator;

@@ -214,6 +214,14 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="progressToDate",type="float")
      */
     protected $progressToDate = 0;
+    
+    /**
+     *
+     * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="indicator",cascade={"remove"})
+     */
+    protected $arrangementRange;
+
 
     /**
      * Constructor

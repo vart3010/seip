@@ -10,11 +10,11 @@ pequiven:
         write_observation: Escriba una observación
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
-        period: Periodo
+        period: Período
         process: Proceso
         management: Gerencia
         management_second_line: Gerencia de segunda línea
-        category_arrangement_program: Progama asociado a
+        category_arrangement_program: Programa asociado a
         tactical_objective: Objetivo táctico
         operational_objective: Objetivo operativo
         operating_indicator: Indicador operativo

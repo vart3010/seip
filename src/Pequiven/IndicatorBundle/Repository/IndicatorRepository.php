@@ -253,7 +253,9 @@ class IndicatorRepository extends baseEntityRepository {
                     $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());;
                 }
             } else{
-                $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+                if($user->getGerencia()){
+                    $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+                }
             }
         } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $queryBuilder->andWhere('ob.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
