@@ -66,8 +66,8 @@ class Gerencia extends modelGerencia
     
     /** 
      * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @var \Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo",inversedBy="gerencias")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
