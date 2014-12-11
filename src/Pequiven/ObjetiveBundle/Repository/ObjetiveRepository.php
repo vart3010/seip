@@ -345,7 +345,8 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
+        
+        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
@@ -422,7 +423,7 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
+        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
             $qb
                 ->andWhere("gs.id = :gerenciaSecond")
                 ->setParameter("gerenciaSecond", $user->getGerenciaSecond())

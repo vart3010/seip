@@ -37,10 +37,12 @@ class UserRepository extends EntityRepository
                 ->andWhere("u.gerencia != ''")
                 ;
         }else{
-            $qb
-                ->andWhere('u.gerencia = :gerencia')
-                ->setParameter('gerencia', $user->getGerencia())
-                ;
+            if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+                $qb
+                    ->andWhere('u.gerencia = :gerencia')
+                    ->setParameter('gerencia', $user->getGerencia())
+                    ;
+            }
         }
         return $qb;
     }

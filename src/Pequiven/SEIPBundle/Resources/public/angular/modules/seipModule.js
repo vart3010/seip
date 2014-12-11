@@ -116,6 +116,16 @@ angular.module('seipModule.controllers', [])
                 categoryArrangementProgram: null
             };
             
+            $scope.setPreselectedData = function(id,data){
+                var preselected = [];
+                $.each(data,function(index,value){
+                    preselected.push(value.id);
+                });
+                console.log(data);
+                $('#'+id).select2('data', data);
+                $('#'+id).select2('val', preselected);
+            };
+            
             //Se ejecuta cuando le da click a incluir los responsables de las gerencia
             var changeIncludeResponsibleManagement = changeIncludeResponsibleManagement = function(){
                 if($scope.model.goal.includeResponsibleManagement){
