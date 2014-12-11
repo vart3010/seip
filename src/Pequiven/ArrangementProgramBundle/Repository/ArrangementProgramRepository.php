@@ -204,22 +204,16 @@ class ArrangementProgramRepository extends EntityRepository
                     )
                     {
                     $gerenciaSecondToNotify = $gerenciaSecond;
-//                    var_dump($gerenciaSecond->getId());
                 }
                 if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
-    //                var_dump($gerenciaSecondToNotify->getId());
-    //                var_dump('a');
                     continue;
                 }
             }
             $filterResults[] = $result;
         }
-//        var_dump($filterResults);
-//        die;
         $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
         $pagerfanta->setContainer($this->container);
-        return $this->getPaginator($queryBuilder);
-//        return $pagerfanta;
+        return $pagerfanta;
     }
     
     /**
