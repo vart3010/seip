@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
 
@@ -160,13 +161,18 @@ class ArrangementProgramRepository extends EntityRepository
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $user = $criteria->remove('ap.user');
         
-        $user = $user->getId();
+        $user->getId();
         $period = $criteria->remove('ap.period');
         
         
         $queryBuilder = $this->getCollectionQueryBuilder();
-        
         $this->applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('to_g_c')
+                ;
         
         $queryBuilder
             ->innerJoin('to_g.configuration','to_g_c');
@@ -184,7 +190,36 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
         
+        $results = $queryBuilder->getQuery()->getResult();
+        $filterResults = array();
+        foreach ($results as $result) {
+            if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $gerenciaSecondToNotify = null;
+                $objetiveOperative = $result->getOperationalObjective();
+                $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+                if(
+                    $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                    && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                    && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                    )
+                    {
+                    $gerenciaSecondToNotify = $gerenciaSecond;
+//                    var_dump($gerenciaSecond->getId());
+                }
+                if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
+    //                var_dump($gerenciaSecondToNotify->getId());
+    //                var_dump('a');
+                    continue;
+                }
+            }
+            $filterResults[] = $result;
+        }
+//        var_dump($filterResults);
+//        die;
+        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
+        $pagerfanta->setContainer($this->container);
         return $this->getPaginator($queryBuilder);
+//        return $pagerfanta;
     }
     
     /**
