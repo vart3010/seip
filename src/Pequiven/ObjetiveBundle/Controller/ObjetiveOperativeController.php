@@ -194,7 +194,7 @@ class ObjetiveOperativeController extends baseController
             $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
 
-            //Si el usuario tiene rol Directivo
+            //Si el usuario tiene rol directivo
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
                 //En caso de que las gerencias de 2da línea a impactar por el objetivo sean seleccionadas en el select
                 if (!isset($data['check_gerencia'])) {

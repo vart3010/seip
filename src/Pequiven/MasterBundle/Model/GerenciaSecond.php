@@ -8,12 +8,13 @@
 
 namespace Pequiven\MasterBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
 /**
  * Description of GerenciaSecond
  *
  * @author matias
  */
-class GerenciaSecond {
+abstract class GerenciaSecond {
     
     //Morón-Gerencia General
     const REF_GERENCIA_PRODUCCION_CPM = 1; //MODULAR
@@ -401,5 +402,21 @@ class GerenciaSecond {
             self::TYPE_MANAGEMENT_BINDING => 'pequiven.arrangement_program.type_management.binding',
         );
         return $typeManagement;
+    }
+    
+    /**
+     * Retorna true si la gerencia le reporta a la corporativa y la de complejo
+     * 
+     * @return boolean
+     */
+    final public function isMedularAndBinding()
+    {
+        $valid = false;
+        
+        if($this->modular && $this->vinculante){
+            $valid = true;
+        }
+        
+        return $valid;
     }
 }
