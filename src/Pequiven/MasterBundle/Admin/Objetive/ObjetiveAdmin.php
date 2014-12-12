@@ -20,6 +20,9 @@ class ObjetiveAdmin extends Admin
             ->add('ref')
             ->add('weight')
             ->add('goal')
+            ->add('complejo')
+            ->add('gerencia')
+            ->add('gerenciaSecond')
             ->add('evalObjetive',null,array(
                 'required' => false,
             ))
