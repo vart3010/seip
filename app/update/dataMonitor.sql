@@ -5,7 +5,7 @@ UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 0, objOperati
 -- ASEG Y SOPORTE DE PROYECTOS
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 6, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 31;
 -- ASUNTOS PÚBLICOS
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 15, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 27;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 18, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 27;
 -- AUDITORÍA INTERNA
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 29, indOperativeOriginal = 19, arrangementProgramTactic = 0, arrangementProgramOperative = 8 WHERE fk_gerencia = 19;
 -- CONSULTORIA JURÍDICA
@@ -19,7 +19,7 @@ UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperati
 -- ESTIMACIÓN DE COSTOS
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 2, objOperativeOriginal = 15, indOperativeOriginal = 17, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 11;
 -- FINANZAS
-UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 57, indOperativeOriginal = 56, arrangementProgramTactic = 0, arrangementProgramOperative = 55 WHERE fk_gerencia = 22;
+UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 59, indOperativeOriginal = 56, arrangementProgramTactic = 0, arrangementProgramOperative = 55 WHERE fk_gerencia = 22;
 -- P.C.P.
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 4, objOperativeOriginal = 108, indOperativeOriginal = 135, arrangementProgramTactic = 0, arrangementProgramOperative = 24 WHERE fk_gerencia = 24;
 -- PROYECTOS INTERNACIONALES

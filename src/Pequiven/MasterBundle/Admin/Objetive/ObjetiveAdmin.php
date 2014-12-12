@@ -35,7 +35,9 @@ class ObjetiveAdmin extends Admin
             ->add('evalWeightedAverage',null,array(
                 'required' => false,
             ))
-            ->add('enabled')
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
         ;
     }
     
