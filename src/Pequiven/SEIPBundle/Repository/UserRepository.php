@@ -181,8 +181,12 @@ class UserRepository extends EntityRepository
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere('g.typeRol = :typeRol')
+            ->andWhere('u.enabled = :enabled')
+            ->andWhere('g.level <= :level')
+            ->setParameter('enabled', true)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-            ;
+            ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+        
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $orX = $qb->expr()->orX();
         if( ($firstname = $criteria->remove('firstname')) ){
