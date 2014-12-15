@@ -1589,13 +1589,15 @@ angular.module('seipModule.controllers', [])
                 arrangementProgramUsersToNotify: []
             };
             $scope.setPreselectedData = function(id,data,model){
-                    var preselected = [];
-                     $.each(data,function(index,value){
-                         preselected.push(value.id);
-                     });
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                jQuery(document).ready(function(){
                     $('#'+id).select2('data', data);
                     $('#'+id).select2('val', preselected);
-                    $scope.model[model] = data;
+                });
+                $scope.model[model] = data;
             };
             
             var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');

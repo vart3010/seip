@@ -3,8 +3,10 @@
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block body -%}
+    {{ form_errors(form) }}
     <form ng-controller="UserController" action="{{ path('pequiven_gerenciafirst_update',{id:gerenciafirst.id} ) }}" method="POST">
     
+        
         <input type="hidden" name="_method" value="PUT">
         <div class="field-block button-height">
             {{ form_label(form.description) }}
@@ -43,35 +45,43 @@
         </div>
         <div class="field-block button-height">
             <label>Revisores</label>
-            <div id="gerencia_configuration_arrangementProgramUserToRevisers" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUserToRevisers',{{ gerenciafirst.configuration.arrangementProgramUserToRevisers|serialize }},'arrangementProgramUserToRevisers')"></div>
-            <input ng-repeat="user in model.arrangementProgramUserToRevisers" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUserToRevisers][{$ $index $}]" value="{$ user.id $}" />
+            <div id="gerencia_configuration_arrangementProgramUserToRevisers" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUserToRevisers',{{ gerenciafirst.configuration.arrangementProgramUserToRevisers|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUserToRevisers')"></div>
+            <input ng-repeat="user in model.arrangementProgramUserToRevisers" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUserToRevisers][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
-            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}
-            {{ form_errors(form.configuration.arrangementProgramUserToRevisers) }}#}
+            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}#}
+            {% if form.configuration.arrangementProgramUserToRevisers is defined %}
+                {{ form_errors(form.configuration.arrangementProgramUserToRevisers) }}
+            {% endif %}
         </div>
         <div class="field-block button-height">
             <label>Aprueban tacticos</label>
-            <div id="gerencia_configuration_arrangementProgramUsersToApproveTactical" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveTactical',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveTactical|serialize }},'arrangementProgramUsersToApproveTactical')" ></div>
-            <input ng-repeat="user in model.arrangementProgramUsersToApproveTactical" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveTactical][{$ $index $}]" value="{$ user.id $}" />
+            <div id="gerencia_configuration_arrangementProgramUsersToApproveTactical" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveTactical',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveTactical|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToApproveTactical')" ></div>
+            <input ng-repeat="user in model.arrangementProgramUsersToApproveTactical" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveTactical][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToApproveTactical) }}
-            {{ form_widget(form.configuration.arrangementProgramUsersToApproveTactical) }}
-            {{ form_errors(form.configuration.arrangementProgramUsersToApproveTactical) }}#}
+            {{ form_widget(form.configuration.arrangementProgramUsersToApproveTactical) }}#}
+            {% if form.configuration.arrangementProgramUsersToApproveTactical is defined %}
+                {{ form_errors(form.configuration.arrangementProgramUsersToApproveTactical) }}
+            {% endif %}
         </div>
         <div class="field-block button-height">
             <label>Aprueban operativos</label>
-            <div id="gerencia_configuration_arrangementProgramUsersToApproveOperative"  style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveOperative',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveOperative|serialize }},'arrangementProgramUsersToApproveOperative')"></div>
-            <input ng-repeat="user in model.arrangementProgramUsersToApproveOperative" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveOperative][{$ $index $}]" value="{$ user.id $}" />
+            <div id="gerencia_configuration_arrangementProgramUsersToApproveOperative"  style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveOperative',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveOperative|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToApproveOperative')"></div>
+            <input ng-repeat="user in model.arrangementProgramUsersToApproveOperative" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveOperative][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToApproveOperative) }}
-            {{ form_widget(form.configuration.arrangementProgramUsersToApproveOperative) }}
-            {{ form_errors(form.configuration.arrangementProgramUsersToApproveOperative) }}#}
+            {{ form_widget(form.configuration.arrangementProgramUsersToApproveOperative) }}#}
+            {% if form.configuration.arrangementProgramUsersToApproveTactical is defined %}
+                {{ form_errors(form.configuration.arrangementProgramUsersToApproveTactical) }}
+            {% endif %}
         </div>
         <div class="field-block button-height">
             <label>Notifican programas</label>
-            <div id="gerencia_configuration_arrangementProgramUsersToNotify" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToNotify',{{ gerenciafirst.configuration.arrangementProgramUsersToNotify|serialize }},'arrangementProgramUsersToNotify')"></div>
-            <input ng-repeat="user in model.arrangementProgramUsersToNotify" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToNotify][{$ $index $}]" value="{$ user.id $}" />
+            <div id="gerencia_configuration_arrangementProgramUsersToNotify" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToNotify',{{ gerenciafirst.configuration.arrangementProgramUsersToNotify|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToNotify')"></div>
+            <input ng-repeat="user in model.arrangementProgramUsersToNotify" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToNotify][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToNotify) }}
-            {{ form_widget(form.configuration.arrangementProgramUsersToNotify) }}
-            {{ form_errors(form.configuration.arrangementProgramUsersToNotify) }}#}
+            {{ form_widget(form.configuration.arrangementProgramUsersToNotify) }}#}
+            {% if form.configuration.arrangementProgramUsersToNotify is defined %}
+                {{ form_errors(form.configuration.arrangementProgramUsersToNotify) }}
+            {% endif %}
         </div>
         {{ form_widget(form._token) }}
         
@@ -103,8 +113,8 @@
                 },
                 initSelection: function(element, callback){
                 },
-                formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
-                formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
+                formatResult: responsiblesFormatResultDetails, // omitted for brevity, see the source of this page
+                formatSelection: responsiblesFormatResultDetails,  // omitted for brevity, see the source of this page
                 escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
             };
             
