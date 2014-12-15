@@ -30,7 +30,7 @@ UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_geren
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 12;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 28;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 11;
-UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 22;
+UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = ' 5' WHERE `seip_c_gerencia`.`id` = 22;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 24;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 16;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 18;
@@ -53,6 +53,11 @@ UPDATE `seip`.`seip_user` SET `fk_gerencia_second` = '137' WHERE `seip_user`.`fk
 UPDATE `seip`.`seip_user` SET `fk_gerencia_second` = '138' WHERE `seip_user`.`fk_gerencia_second` = 152;
 
 -- ACTUALIZAMOS LAS GERENCIAS DE 2DA LÍNEA A MEDULAR Y VINCULANTE
-UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 136;
-UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 137;
-UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 138;
+UPDATE `seip`.`seip_c_gerencia_second` SET `modular` = '1',`vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 136;
+UPDATE `seip`.`seip_c_gerencia_second` SET `modular` = '1',`vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 137;
+UPDATE `seip`.`seip_c_gerencia_second` SET `modular` = '1',`vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 138;
+
+-- ACTUALIZAMOS LAS GERENCIAS DE LAS 3 GERENCIAS DE APROYO DE SHA
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '29' WHERE `seip_c_gerencia_second`.`id` = 136;
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '29' WHERE `seip_c_gerencia_second`.`id` = 137;
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '29' WHERE `seip_c_gerencia_second`.`id` = 138;

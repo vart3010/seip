@@ -35,7 +35,7 @@ UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperati
 -- S.I.G.
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 9, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 22 WHERE fk_gerencia = 30;
 -- TRANSPORTE AÉREO
-UPDATE seip_monitor SET objTacticOriginal = 0, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 2 WHERE fk_gerencia = 13;
+UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 2 WHERE fk_gerencia = 13;
 -- OFICINA DE PRESIDENCIA
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 3 WHERE fk_gerencia = 32;
 -- PLANIFICACIÓN ESTRATÉGICA
