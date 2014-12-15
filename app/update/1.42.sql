@@ -41,3 +41,18 @@ UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_geren
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 14;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 13;
 UPDATE `seip`.`seip_c_gerencia` SET `gerenciaGroup_id` = '5' WHERE `seip_c_gerencia`.`id` = 32;
+
+-- ACTUALIZAMOS LOS OBJETIVOS DE SHA (GERENCIAS REPETIDAS)
+UPDATE `seip`.`seip_objetive` SET `fk_gerencia_second` = '136' WHERE `seip_objetive`.`fk_gerencia_second` = 149;
+UPDATE `seip`.`seip_objetive` SET `fk_gerencia_second` = '137' WHERE `seip_objetive`.`fk_gerencia_second` = 150;
+UPDATE `seip`.`seip_objetive` SET `fk_gerencia_second` = '138' WHERE `seip_objetive`.`fk_gerencia_second` = 152;
+
+-- ACTUALIZAMOS LOS USUARIOS DE SHA (GERENCIAS REPETIDAS)
+UPDATE `seip`.`seip_user` SET `fk_gerencia_second` = '136' WHERE `seip_user`.`fk_gerencia_second` = 149;
+UPDATE `seip`.`seip_user` SET `fk_gerencia_second` = '137' WHERE `seip_user`.`fk_gerencia_second` = 150;
+UPDATE `seip`.`seip_user` SET `fk_gerencia_second` = '138' WHERE `seip_user`.`fk_gerencia_second` = 152;
+
+-- ACTUALIZAMOS LAS GERENCIAS DE 2DA LÍNEA A MEDULAR Y VINCULANTE
+UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 136;
+UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 137;
+UPDATE `seip`.`seip_c_gerencia_second` SET `medular` = '1' AND `vinculante` = '1' WHERE `seip_c_gerencia_second`.`id` = 138;

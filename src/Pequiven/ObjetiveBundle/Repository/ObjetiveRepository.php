@@ -245,19 +245,10 @@ class ObjetiveRepository extends EntityRepository {
         } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
             $queryBuilder->andWhere('o.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
         } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-            if(isset($criteria['gerenciaSecond'])){
-                if((int)$criteria['gerenciaSecond'] == 0){//En caso que seleccione todas las Gerencias de 2da Línea
-                    $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
-                    $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
-                    $queryBuilder->andWhere('gs.modular =:modular');
-                    $queryBuilder->setParameter('modular', true);
-                }
-            } else{
-                $queryBuilder->leftJoin('o.gerenciaSecond', 'gs');
-                $queryBuilder->andWhere('gs.complejo = '.$user->getComplejo()->getId());
-                $queryBuilder->andWhere('gs.modular =:modular');
-                $queryBuilder->setParameter('modular', true);
-            }
+            $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
+            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+            $queryBuilder->andWhere('gs.modular =:modular');
+            $queryBuilder->setParameter('modular', true);
         }
         
         if(isset($criteria['gerenciaFirst'])){

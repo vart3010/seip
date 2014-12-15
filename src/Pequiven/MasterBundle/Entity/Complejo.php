@@ -262,7 +262,9 @@ class Complejo extends modelComplejo
      */
     public function __construct()
     {
+        parent::__construct();
         $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
+        
     }
 
     /**

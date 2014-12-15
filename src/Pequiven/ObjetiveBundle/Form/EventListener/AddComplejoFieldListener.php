@@ -85,6 +85,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         $object = $event->getData();
         
         $objetiveStrategicId = null;
+        
         if($this->user->getComplejo()->getRef() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
             $objetiveStrategicId = array_key_exists('parent', $object) ? $object['parent'] : null;
         }

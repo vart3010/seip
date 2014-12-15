@@ -249,6 +249,13 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      * @ORM\Column(name="resultOfObjetive",type="float")
      */
     private $resultOfObjetive = 0;
+    
+    /**
+     *
+     * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="objetive",cascade={"remove"})
+     */
+    protected $arrangementRange;
 
     /**
      * Constructor
@@ -938,6 +945,29 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      */
     public function postLoad(){
         
+    }
+    
+    /**
+     * Set arrangementRange
+     *
+     * @param \Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange
+     * @return Indicator
+     */
+    public function setArrangementRange(\Pequiven\ArrangementBundle\Entity\ArrangementRange $arrangementRange = null)
+    {
+        $this->arrangementRange = $arrangementRange;
+
+        return $this;
+    }
+
+    /**
+     * Get arrangementRange
+     *
+     * @return \Pequiven\ArrangementBundle\Entity\ArrangementRange 
+     */
+    public function getArrangementRange()
+    {
+        return $this->arrangementRange;
     }
 
 
