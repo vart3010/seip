@@ -54,16 +54,16 @@ class User extends AbstractType {
                 'required' => false,
                 'attr' => array('class' => 'select2 input-xlarge')
             ))
-            ->add('supervised',null,array(
-                'label' => 'pequiven_seip.supervised',
-                'translation_domain' => 'PequivenSEIPBundle',
-                'multiple' => true,
-                'required' => false,
-                'attr' => array('class' => 'select2 input-xlarge'),
-                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
-                    return $qb->findQueryUsersByCriteria();
-                },
-            ))
+//            ->add('supervised',null,array(
+//                'label' => 'pequiven_seip.supervised',
+//                'translation_domain' => 'PequivenSEIPBundle',
+//                'multiple' => true,
+//                'required' => false,
+//                'attr' => array('class' => 'select2 input-xlarge'),
+//                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
+//                    return $qb->findQueryUsersByCriteria();
+//                },
+//            ))
         ;
     }
     
