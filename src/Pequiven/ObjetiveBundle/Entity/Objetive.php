@@ -253,7 +253,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="objetive",cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="objetive",cascade={"remove"})
      */
     protected $arrangementRange;
 

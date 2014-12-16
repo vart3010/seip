@@ -375,6 +375,7 @@ class ArrangementProgramController extends SEIPController
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }
+        
         $form->handleRequest($request);
         if($request->isMethod('POST') && $form->isValid()){
             $autoOpenOnSave = $request->get('autoOpenOnSave',false);
@@ -408,10 +409,10 @@ class ArrangementProgramController extends SEIPController
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
-//        $form->remove('responsibles');
+        $view = $form->createView();
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form'   => $view,
         );
     }
 
@@ -524,8 +525,7 @@ class ArrangementProgramController extends SEIPController
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }

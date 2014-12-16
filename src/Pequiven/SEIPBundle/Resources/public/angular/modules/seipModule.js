@@ -117,16 +117,6 @@ angular.module('seipModule.controllers', [])
                 categoryArrangementProgram: null
             };
             
-            $scope.setPreselectedData = function(id,data,model){
-                var preselected = [];
-                 $.each(data,function(index,value){
-                     preselected.push(value.id);
-                 });
-                $('#'+id).select2('data', data);
-                $('#'+id).select2('val', preselected);
-                $scope.model[model] = data;
-            };
-            
             var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
             
             //Se ejecuta cuando le da click a incluir los responsables de las gerencia
@@ -959,12 +949,7 @@ angular.module('seipModule.controllers', [])
                     }
                     i++;
                 });
-            //    console.log(idSelect2);
-            //    console.log(idEntity);
-            //    console.log(j);
-            //    $("#"+idSelect2).select2("destroy");
-            //    $("#"+idSelect2).val(j);
-            //    $("#"+idSelect2).select2();
+    
                 $("#" + idSelect2).select2('val', j);
                 if (callBack) {
                     callBack(data[j]);
@@ -974,6 +959,19 @@ angular.module('seipModule.controllers', [])
                 });
 //                    $("#"+idSelect2).trigger("select2-selecting");
             };
+            //Pre seleccionar elementos en un select2 simple
+            $scope.setPreselectedData = function(id,data,model){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                $(function(){
+                    angular.element('#'+id).select2('data', data);
+                    angular.element('#'+id).select2('val', preselected);
+                });
+                $scope.model[model] = data;
+            };
+            
             //Funcion para remover un elemento de un array
             Array.prototype.remove = function(value) {
                 var idx = this.indexOf(value);
@@ -1587,17 +1585,6 @@ angular.module('seipModule.controllers', [])
                 arrangementProgramUsersToApproveTactical: [],
                 arrangementProgramUsersToApproveOperative: [],
                 arrangementProgramUsersToNotify: []
-            };
-            $scope.setPreselectedData = function(id,data,model){
-                var preselected = [];
-                 $.each(data,function(index,value){
-                     preselected.push(value.id);
-                 });
-                jQuery(document).ready(function(){
-                    $('#'+id).select2('data', data);
-                    $('#'+id).select2('val', preselected);
-                });
-                $scope.model[model] = data;
             };
             
             var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');

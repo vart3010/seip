@@ -88,3 +88,6 @@ Pequiven\ObjetiveBundle\Entity\Objetive:
         status:
             expose: true
             groups: [api_list]
+        arrangementRange:
+            expose: true
+            groups: [arrangementRange]

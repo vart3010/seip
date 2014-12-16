@@ -5,19 +5,20 @@ namespace Pequiven\SEIPBundle\Entity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * User model
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
+ * 
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\UserRepository")
-    * @ORM\Table(name="seip_user")
+ * @ORM\Table(name="seip_user")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email", column=@ORM\Column(type="string", name="email", length=255, unique=false, nullable=false)),
  *      @ORM\AttributeOverride(name="emailCanonical", column=@ORM\Column(type="string", name="email_canonical", length=255, unique=false, nullable=false)),
  * })
+ * @ORM\HasLifecycleCallbacks
  */
 class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
 {
@@ -32,7 +33,6 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     
     /**
      *@ORM\Column(name="num_personal",type="integer",nullable=true)
-     * @var type 
      */
     private $numPersonal;
     
@@ -139,6 +139,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      *      )
      */
     private $supervised;
+    
+    /**
+     * Configuracion del usuario
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User\Configuration
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\User\Configuration",inversedBy="user",cascade={"persist","remove"})
+     */
+    private $configuration;
 
     /**
      * Constructor
@@ -568,5 +576,61 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getSupervised()
     {
         return $this->supervised;
+    }
+    
+    /**
+     * Add arrangementPrograms
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms
+     * @return User
+     */
+    public function addArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms)
+    {
+        $this->arrangementPrograms->add($arrangementPrograms);
+
+        return $this;
+    }
+
+    /**
+     * Remove arrangementPrograms
+     *
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms
+     */
+    public function removeArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementPrograms)
+    {
+        $this->arrangementPrograms->removeElement($arrangementPrograms);
+    }
+
+    /**
+     * Get arrangementPrograms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getArrangementPrograms()
+    {
+        return $this->arrangementPrograms;
+    }
+
+    /**
+     * Set configuration
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User\Configuration $configuration
+     * @return User
+     */
+    public function setConfiguration(\Pequiven\SEIPBundle\Entity\User\Configuration $configuration = null)
+    {
+        $this->configuration = $configuration;
+
+        return $this;
+    }
+
+    /**
+     * Get configuration
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User\Configuration 
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }
