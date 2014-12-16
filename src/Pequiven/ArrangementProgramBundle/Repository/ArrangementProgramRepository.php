@@ -3,6 +3,7 @@
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
 
@@ -14,6 +15,12 @@ use Pequiven\SEIPBundle\Entity\User;
  */
 class ArrangementProgramRepository extends EntityRepository
 {
+    /**
+     * Retorna un programa de gestion pre hidratado para evitar tantas consultas a la base de datos.
+     * 
+     * @param type $id
+     * @return type
+     */
     public function findWithData($id) 
     {
         $qb = $this->getQueryBuilder();
@@ -24,16 +31,48 @@ class ArrangementProgramRepository extends EntityRepository
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
             ->addSelect('ap_t_g_r_g')
-            ->innerJoin('ap.responsibles','ap_r')
-            ->innerJoin('ap_r.groups','ap_r_g')
-            ->innerJoin('ap.timeline','ap_t')
-            ->innerJoin('ap_t.goals','ap_t_g')
-            ->innerJoin('ap_t_g.responsibles','ap_t_g_r')
-            ->innerJoin('ap_t_g_r.groups','ap_t_g_r_g')
+            ->leftJoin('ap.responsibles','ap_r')
+            ->leftJoin('ap_r.groups','ap_r_g')
+            ->leftJoin('ap.timeline','ap_t')
+            ->leftJoin('ap_t.goals','ap_t_g')
+            ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
+            ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')
             ->andWhere('ap.id = :id')
             ->setParameter('id', $id)
         ;
         return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    /**
+     * Retorna todos los programas de gestion pre hidratados para evitar tantas consultas
+     * @param array $criteria
+     * @return type
+     */
+    public function findAllWithData(array $criteria = array()) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('ap_r')
+            ->addSelect('ap_t')
+            ->addSelect('ap_t_g')
+            ->addSelect('ap_t_g_r')
+            ->addSelect('ap_r_g')
+            ->addSelect('ap_t_g_r_g')
+            ->leftJoin('ap.responsibles','ap_r')
+            ->leftJoin('ap_r.groups','ap_r_g')
+            ->leftJoin('ap.timeline','ap_t')
+            ->leftJoin('ap_t.goals','ap_t_g')
+            ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
+            ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')
+        ;
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($period = $criteria->remove('period'))){
+            $qb
+                ->andWhere('ap.period = :period')
+                ->setParameter('period', $period)
+            ;
+        }
+        return $qb->getQuery()->getResult();
     }
     
     /**
@@ -122,13 +161,18 @@ class ArrangementProgramRepository extends EntityRepository
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $user = $criteria->remove('ap.user');
         
-        $user = $user->getId();
+        $user->getId();
         $period = $criteria->remove('ap.period');
         
         
         $queryBuilder = $this->getCollectionQueryBuilder();
-        
         $this->applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('to_g_c')
+                ;
         
         $queryBuilder
             ->innerJoin('to_g.configuration','to_g_c');
@@ -146,7 +190,30 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
         
-        return $this->getPaginator($queryBuilder);
+        $results = $queryBuilder->getQuery()->getResult();
+        $filterResults = array();
+        foreach ($results as $result) {
+            if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $gerenciaSecondToNotify = null;
+                $objetiveOperative = $result->getOperationalObjective();
+                $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+                if(
+                    $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                    && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                    && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                    )
+                    {
+                    $gerenciaSecondToNotify = $gerenciaSecond;
+                }
+                if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
+                    continue;
+                }
+            }
+            $filterResults[] = $result;
+        }
+        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
+        $pagerfanta->setContainer($this->container);
+        return $pagerfanta;
     }
     
     /**

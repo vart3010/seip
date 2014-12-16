@@ -19,9 +19,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  * @author matias
  */
 class ResultController extends ResourceController {
-    //put your code here
     
-        /**
+    /**
      * Función que devuelve el paginador con las gerencias de 2da Línea
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -79,24 +78,44 @@ class ResultController extends ResourceController {
     }
     
     /**
-     * Función que renderiza el Monitor de Objetivos Tácticos
-     * @Template("PequivenSEIPBundle:Planning:Result/showMonitor.html.twig")
+     * Función que renderiza el Monitor de Objetivos Operativos
+     * @Template("PequivenSEIPBundle:Planning:Result/Operative/showMonitor.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
-    public function showMonitorAction(Request $request) {
+    public function showMonitorOperativeAction(Request $request) {
+        $categories = array();
+        $resultIndicator = array();                
+        $resultArrangementProgram = array();                
+        
         $em = $this->getDoctrine();
-        $level = $request->get('level');
         $id = $request->get('id');
         
-        if($level == 3){
-            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $id));
-            $object = $em->getRepository('PequivenObjetiveBundle:Objetive')->getObjetivesByGerenciaSecond($gerenciaSecond);
+        $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $id));
+        $object = $em->getRepository('PequivenObjetiveBundle:Objetive')->getObjetivesByGerenciaSecond($gerenciaSecond);
+        $entity = $gerenciaSecond;
+        
+        //Configuramos el alto del gráfico
+        $totalObjects = count($object);
+        $heightChart = ($totalObjects * 30) + 100;
+        
+        //Data del gráfico
+        foreach($object as $objetive){
+            $categories[] = array('label' => $objetive->getRef());
+            foreach($objetive->getResults() as $result){
+                $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
+                $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
+                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '') : bcadd(0,'0',2);
+            }
         }
 
         return array(
             'object' => $object,
-            'gerenciaSecond' => $gerenciaSecond,
+            'entity' => $entity,
+            'categories' => $categories,
+            'resultIndicator' => $resultIndicator,
+            'resultArrangementProgram' => $resultArrangementProgram,
+            'heightChart' => $heightChart,
         );
     }
 }

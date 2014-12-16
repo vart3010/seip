@@ -84,7 +84,7 @@
                  });
                 $('#div_goal_responsibles').select2('data', data);
                 $('#div_goal_responsibles').select2('val', preselected);
-        }
+            }
     };
     
     jQuery(document).ready(function(){
@@ -118,8 +118,8 @@
               
               var changeArrangementprogramResponsibles = function(){
                   var reponsibleId = arrangementprogramResponsibles.val();
-                    urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
-                    setUrlResponsibles();
+                  urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
+                  setUrlResponsibles();
               };
               
               var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');

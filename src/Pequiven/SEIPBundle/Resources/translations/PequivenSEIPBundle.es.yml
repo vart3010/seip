@@ -191,6 +191,13 @@ principal:
         indicatorPorc: % Carga
         
 result:
+    list:
+        titleObjetiveOperative: Resultados Objetivos Operativos
+        columnLocation: Localidad
+        columnGerenciaFirst: Gerencia 1ra Línea
+        columnGerenciaSecond: Gerencia 2da Línea
     results: Resultados
     objetiveOperative: Objetivos Operativos
     not_objetives_in_level: No existen objetivos asociados en este nivel
+    captionObjetiveOperative: Resultados Objetivos Operativos
+    subCaptionObjetiveOperative: Período 2014

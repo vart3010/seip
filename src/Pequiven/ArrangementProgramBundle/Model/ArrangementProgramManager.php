@@ -129,6 +129,9 @@ class ArrangementProgramManager implements ContainerAwareInterface
         if($entity->getStatus() === ArrangementProgram::STATUS_APPROVED || $entity->getStatus() === ArrangementProgram::STATUS_REJECTED){
             $permission = false;
         }
+        if($this->getSecurityConext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT')){
+            $permission = true;
+        }
         return $permission;
     }
     
@@ -157,6 +160,22 @@ class ArrangementProgramManager implements ContainerAwareInterface
      * @return boolean
      */
     public function isYouCanApprove(ArrangementProgram $entity)
+    {
+        $summary = $entity->getSummary();
+        $valid = false;
+        if(bccomp($summary['advancesPlanned'], 100) == 0){
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+    
+    /**
+     * Verifica que se pueda enviar un programa de gestion a revision
+     * @param \Pequiven\ArrangementProgramBundle\Model\ArrangementProgram $entity
+     * @return boolean
+     */
+    public function isYouCanSendInRevision(ArrangementProgram $entity)
     {
         $summary = $entity->getSummary();
         $valid = false;
@@ -235,7 +254,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
          //Security check
         $user = $this->getUser();
         $valid = false;
-        if(($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT) || $this->getSecurityConext()->isGranted('ROLE_SUPER_ADMIN')){
+        if(($entity->getCreatedBy() === $user && $entity->getStatus() == ArrangementProgram::STATUS_DRAFT) || $this->getSecurityConext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_DELETE')){
             $valid = true;
         }
         return $valid;

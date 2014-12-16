@@ -16,20 +16,20 @@ class ConfigurationType extends AbstractType
     {
         $parametersUser = array(
             'class' => 'Pequiven\SEIPBundle\Entity\User',
-                'property' => 'fullNameUser',
-                'attr' => array(
-                    'class' => 'select2 input-xlarge'
-                ),
-                'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
-                    return $qb->findQueryUsersByCriteria();
-                },
-                'multiple' => true,
+            'property' => 'fullNameUser',
+            'attr' => array(
+                'class' => 'select2 input-xlarge'
+            ),
+            'query_builder' => function(\Pequiven\SEIPBundle\Repository\UserRepository $qb){
+                return $qb->findQueryUsersByCriteria();
+            },
+            'multiple' => true,
         );
         $builder
             ->add('arrangementProgramUserToRevisers','entity',$parametersUser)
-            ->add('arrangementProgramUsersToApproveTactical',null,$parametersUser)
-            ->add('arrangementProgramUsersToApproveOperative',null,$parametersUser)
-            ->add('arrangementProgramUsersToNotify',null,$parametersUser)
+            ->add('arrangementProgramUsersToApproveTactical','entity',$parametersUser)
+            ->add('arrangementProgramUsersToApproveOperative','entity',$parametersUser)
+            ->add('arrangementProgramUsersToNotify','entity',$parametersUser)
         ;
     }
     

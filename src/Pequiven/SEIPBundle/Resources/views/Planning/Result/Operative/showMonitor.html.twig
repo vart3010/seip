@@ -3,12 +3,13 @@
 {% block body %}
         
     {{ contentHeader(
-        (gerenciaSecond.getDescription())
+        (entity.getDescription())
     ) }}
         
     <div class="inline-label">
-        <label class="label">{{ 'result.objetiveOperative' |trans }}</label>
-        <ul class="fa-ul">
+        <span class="bold">{{ 'result.objetiveOperative' |trans }}</span>
+        <br><br>
+        {#<ul class="fa-ul">
             {% for objetive in object %}
                 <li>
                     {% set result = objetive.getResult %}
@@ -20,13 +21,15 @@
             {% else %}
                 <b>{{ 'result.not_objetives_in_level' |trans }}</b>
             {% endfor  %}
-        </ul>
+        </ul>#}
+        {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' with {'entity':{'childrens':object}} %}
     </div>
-    {#<div ng-controller="DashboardController" ng-init="renderChartResult('chartContainerResult')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <br>
+    <div ng-controller="DashboardController" ng-init="renderChartResult('chartContainerResult','{{ "result.captionObjetiveOperative"|trans }}','{{ "result.subCaptionObjetiveOperative"|trans }}',{{ categories|json_encode() }},{{ resultIndicator|json_encode() }},{{ resultArrangementProgram|json_encode() }})" class="dashboard" style="height: {{ heightChart }}px;background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
             <!-- This div will hold the chart generated in the footer -->
         </div>
-    </div>#}
+    </div>
 {% endblock body %}
 {% block stylesheets %}
     {{ parent() }}

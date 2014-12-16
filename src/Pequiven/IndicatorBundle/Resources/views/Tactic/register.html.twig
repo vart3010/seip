@@ -32,6 +32,8 @@
                 {{ form_widget(form.role_name) }}
             </div>
             
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
+            
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
                 {{ form_label(form.lineStrategics) }}
@@ -54,7 +56,7 @@
                 </span>
             </div>
             
-            {% if (role_name == 'ROLE_DIRECTIVE') or (role_name == 'ROLE_DIRECTIVE_AUX') %}
+            {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
                 <fieldset class="fieldset">
                     <legend class="legend">{{ 'form.selectionOfObjetiveTactic'|trans }}</legend>
                     <!-- Localidad -->
@@ -291,6 +293,7 @@
             inputRef = $("#pequiven_indicator_tactic_registration_ref"),//Input de Ref
             inputWeight = $("#pequiven_indicator_tactic_registration_weight"),//Input de Peso
             inputHiddenRoleName = $("#pequiven_indicator_tactic_registration_role_name"),//Input Hidden del Nombre del Rol del usuario logueado
+            inputHiddenRoleDirective = $("#rolDirective"),//Input Hidden del Nombre del Rol Directivo
             selectTendency = $("#pequiven_indicator_tactic_registration_tendency"),//Select de Tendencia del indicador
             selectArrangementRangeTypeTop = $("#pequiven_indicator_tactic_registration_arrangementRangeTypeTop"),//Select de Tipo de Rango Alto
             selectArrangementRangeTypeMiddleTop = $("#pequiven_indicator_tactic_registration_arrangementRangeTypeMiddleTop"),//Select de Tipo de Rango Medio Alto
@@ -379,7 +382,7 @@
                 })
                 selectObjetiveTactic.select2("enable",false);                    
 
-                if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                if(inputHiddenRoleDirective.val() == 1){
                     //Inicializamos el select2 de Complejo
                     selectComplejo.select2({
 
@@ -476,7 +479,7 @@
 
         //Al seleccionar alguna opción en el select de Objetivo Estratégico
         selectObjetiveStrategic.on("select2-selecting", function(e) {
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 selectComplejo.select2("enable",true);
             } else{
                 displayObjetiveTactic(e);
@@ -746,7 +749,7 @@
 
         //Función que carga los objetivos tácticos de acuerdo al objetivo estratégico seleccionado y si el usuario tiene rol directivo, también depende de la gerencia de 1ra línea seleccionada
         function displayObjetiveTactic(e){
-            if(inputHiddenRoleName.val() === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+            if(inputHiddenRoleDirective.val() == 1){
                 var data = {
                    objetiveStrategicId: $.trim(selectObjetiveStrategic.val()),
                    gerenciaFirstId: $.trim(e.val)
@@ -841,7 +844,7 @@
                 maximumSelectionSize: 1,
                 placeholder: '{{ 'form.messages.selectObjetiveTacticPlaceholderIndicator'|trans }}',
                 formatNoMatches: function(term) {
-                    if(inputHiddenRoleName.val === 'ROLE_DIRECTIVE' || inputHiddenRoleName.val() === 'ROLE_DIRECTIVE_AUX'){
+                    if(inputHiddenRoleDirective.val() == 1){
                         if(type == 'full'){
                             return "{{ 'form.messages.selectObjetiveTacticFormatNoMatcherIndicatorTacticDirective'|trans }}";
                         } else if (type == 'empty'){

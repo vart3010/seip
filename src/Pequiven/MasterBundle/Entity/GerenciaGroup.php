@@ -82,7 +82,7 @@ class GerenciaGroup extends modelGerenciaGroup {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
-
+    
     /**
      * Get id
      *

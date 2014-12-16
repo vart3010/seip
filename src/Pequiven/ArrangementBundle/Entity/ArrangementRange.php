@@ -65,7 +65,7 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Objetive
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive")
+     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="arrangementRange")
      * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
      */
     private $objetive;
@@ -73,7 +73,7 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Indicator
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator")
+     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="arrangementRange")
      * @ORM\JoinColumn(name="fk_indicator", referencedColumnName="id")
      */
     private $indicator;

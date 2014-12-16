@@ -111,15 +111,27 @@ angular.module('seipModule.controllers', [])
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
             $scope.model.goalCount = null;
+            $scope.model.arrangementprogramResponsibles = [];
 
             $scope.model.arrangementProgram = {
                 categoryArrangementProgram: null
             };
             
+            $scope.setPreselectedData = function(id,data,model){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                $('#'+id).select2('data', data);
+                $('#'+id).select2('val', preselected);
+                $scope.model[model] = data;
+            };
+            
+            var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
+            
             //Se ejecuta cuando le da click a incluir los responsables de las gerencia
             var changeIncludeResponsibleManagement = changeIncludeResponsibleManagement = function(){
                 if($scope.model.goal.includeResponsibleManagement){
-                    var arrangementprogramResponsibles = $('#arrangementprogram_responsibles');
                     var reponsibleId = arrangementprogramResponsibles.val();
                     var urlResponsiblesByGerencia = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId,gerencia:$scope.gerenciaOfObjetive.id});
                     
@@ -212,7 +224,7 @@ angular.module('seipModule.controllers', [])
         //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal,index){
             $scope.model.goalCount = index;
-                var responsibles = programResponsible.val();
+                var responsibles = arrangementprogramResponsibles.val();
                 if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
                     $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
                     return;
@@ -265,7 +277,6 @@ angular.module('seipModule.controllers', [])
             };
 
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
-            var programResponsible = angular.element('#arrangementprogram_responsibles');//Responsable del programa de gestion
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
             $scope.setOperationalObjective = function(tacticalObjetive, selected) {
@@ -319,14 +330,21 @@ angular.module('seipModule.controllers', [])
             operationalObjective.on('change',function(){
                 $scope.getLocationByOperative(operationalObjective.val());
             });
-            programResponsible.on('change', function(object) {
+            arrangementprogramResponsibles.on('change', function(object) {
+                var data = arrangementprogramResponsibles.select2('data');
+                $scope.model.arrangementprogramResponsibles = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+                
                 var reponsibleId = object.val;
                 $scope.validButtomAddGoal();
                 $scope.getResponsiblesGoal(reponsibleId);
             });
+            
             $scope.validButtomAddGoal = function() {
-                
-                if (programResponsible.val() != null && programResponsible.val().length > 0) {
+    
+                if (arrangementprogramResponsibles.val() != null && arrangementprogramResponsibles.val().length > 0) {
                     loadTemplateMetaButton.removeClass('disabled');
                 } else {
                     loadTemplateMetaButton.addClass('disabled');
@@ -381,9 +399,8 @@ angular.module('seipModule.controllers', [])
             form.submit(function(e) {
                 var valid = true;
                 //Select de responsables
-                var arrangementprogramResponsible = angular.element('#arrangementprogram_responsibles');
-                if (arrangementprogramResponsible) {
-                    var v = arrangementprogramResponsible.val();
+                if (arrangementprogramResponsibles) {
+                    var v = arrangementprogramResponsibles.val();
                     if (v == '' || v == null) {
                         $scope.sendMessageError("pequiven.validators.arrangement_program.select_responsible_person", "s2id_arrangementprogram_responsibles");
                         valid = false;
@@ -446,8 +463,8 @@ angular.module('seipModule.controllers', [])
 //            $scope.templateOptions.setTemplate($scope.templates[0]);
 
             $scope.init = function() {
-                if(programResponsible.val() != undefined && programResponsible.val() != ''){
-                    $scope.getResponsiblesGoal(programResponsible.val());
+                if(arrangementprogramResponsibles.val() != undefined && arrangementprogramResponsibles.val() != ''){
+                    $scope.getResponsiblesGoal(arrangementprogramResponsibles.val());
                 }
                 if (operationalObjective.val() == '' || operationalObjective.val() == null) {
                     operationalObjective.select2('enable', false)
@@ -668,15 +685,15 @@ angular.module('seipModule.controllers', [])
             };
             $scope.getOperatives();
             
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
-                    .success(function(data) {
-                        $scope.data.first_line_managements = data;
-                        if($scope.model.firstLineManagement != null){
-                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
-                                $scope.model.firstLineManagement = selected;
-                            });
-                        }
-                    });
+//            $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+//                    .success(function(data) {
+//                        $scope.data.first_line_managements = data;
+//                        if($scope.model.firstLineManagement != null){
+//                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
+//                                $scope.model.firstLineManagement = selected;
+//                            });
+//                        }
+//                    });
             //Busca las gerencias de segunda linea
             $scope.getSecondLineManagement = function(gerencia){
                 var parameters = {
@@ -687,7 +704,9 @@ angular.module('seipModule.controllers', [])
                 }
                 if($scope.model.typeManagement != null){
                     parameters.filter['typeManagement'] = $scope.model.typeManagement.id;
-                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                    if($scope.model.complejo){
+                        parameters.filter['complejo'] = $scope.model.complejo.id;
+                    }
                 }
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management',parameters))
                     .success(function(data) {
@@ -794,10 +813,19 @@ angular.module('seipModule.controllers', [])
             });
             //Filtro de modular y vinculante
             $scope.$watch("model.typeManagement", function(newParams, oldParams) {
+                var selectComplejos = angular.element('#selectComplejos');
+                var firstLineManagement = angular.element('#firstLineManagement');
                 if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
                     $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
+                    if($scope.model.typeManagement.id == 0){//Si el filtro es modular
+                        selectComplejos.select2('enable',false);
+                        firstLineManagement.select2('enable',false);
+                    }
                 } else {
+                    
                     $scope.tableParams.$params.filter['typeManagement'] = null;
+                    selectComplejos.select2('enable',true);
+                    firstLineManagement.select2('enable',true);
                 }
             });
         })
@@ -1494,19 +1522,20 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id) {
+            $scope.renderChartResult = function(id,caption,subCaption,categories,resultIndicator,resultArrangementProgram) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
                         "renderAt": id,
                         "width": "100%",
+                        "height": "100%",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": "Revenue split by product category",
-                                "subCaption": "For current year",
-                                "xAxisname": "Quarter",
-                                "yAxisName": "Revenues (In USD)",
+                                "caption": caption,
+                                "subCaption": subCaption,
+                                "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
+                                "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
                                 "numberSuffix": "%",
                                 "bgAlpha" : "0,0",
@@ -1516,61 +1545,23 @@ angular.module('seipModule.controllers', [])
                                 "visible" : "0",
                                 "theme": "fint",
                                 "formatNumberScale": "0",
-                                "axisMaxValue": "100",
-                                "axisMinValue": "0",
+                                "yAxisMaxValue": "100",
+                                "yAxisMinValue": "0",
+                                "stack100Percent": "0",
                             },
                             "categories": [
                                 {
-                                    "category": [
-                                        {
-                                           "label": "Q1"
-                                        },
-                                        {
-                                           "label": "Q2"
-                                        },
-                                        {
-                                           "label": "Q3"
-                                        },
-                                        {
-                                           "label": "Q4"
-                                        }
-                                     ]
+                                    "category": categories
                                 }
                             ],
                             "dataset":[
                                 {
-                                    "seriesname": "Indicadores",
-                                    "data": [
-                                       {
-                                          "value": "100"
-                                       },
-                                       {
-                                          "value": "30.8"
-                                       },
-                                       {
-                                          "value": "20.3"
-                                       },
-                                       {
-                                          "value": "50.6"
-                                       }
-                                    ]
+                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan1"),
+                                    "data": resultIndicator
                                  },
                                  {
-                                    "seriesname": "Programas de Gestión",
-                                    "data": [
-                                       {
-                                          "value": "0"
-                                       },
-                                       {
-                                          "value": "30.6"
-                                       },
-                                       {
-                                          "value": "40.3"
-                                       },
-                                       {
-                                          "value": "30.5"
-                                       }
-                                    ]
+                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan2"),
+                                    "data": resultArrangementProgram
                                  }
                             ]
                         }
@@ -1589,7 +1580,60 @@ angular.module('seipModule.controllers', [])
 //        console.log($scope.tableParams);
 //        console.log($scope.tableParams.settings().pages);
         })
-        .controller('UserController',function($scope){
+        .controller('UserController',function($scope,$timeout){
             console.log('UserController');
+            $scope.model = {
+                arrangementProgramUserToRevisers: [],
+                arrangementProgramUsersToApproveTactical: [],
+                arrangementProgramUsersToApproveOperative: [],
+                arrangementProgramUsersToNotify: []
+            };
+            $scope.setPreselectedData = function(id,data,model){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                jQuery(document).ready(function(){
+                    $('#'+id).select2('data', data);
+                    $('#'+id).select2('val', preselected);
+                });
+                $scope.model[model] = data;
+            };
+            
+            var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');
+            arrangementProgramUsersToApproveTactical.change(function(){
+                var data = arrangementProgramUsersToApproveTactical.select2('data');
+                $scope.model.arrangementProgramUsersToApproveTactical = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUserToRevisers = angular.element('#gerencia_configuration_arrangementProgramUserToRevisers');
+            arrangementProgramUserToRevisers.change(function(){
+                var data = arrangementProgramUserToRevisers.select2('data');
+                $scope.model.arrangementProgramUserToRevisers = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUsersToApproveOperative = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveOperative');
+            arrangementProgramUsersToApproveOperative.change(function(){
+                var data = arrangementProgramUsersToApproveOperative.select2('data');
+                $scope.model.arrangementProgramUsersToApproveOperative = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramUsersToNotify = angular.element('#gerencia_configuration_arrangementProgramUsersToNotify');
+            arrangementProgramUsersToNotify.change(function(){
+                var data = arrangementProgramUsersToNotify.select2('data');
+                $scope.model.arrangementProgramUsersToNotify = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
         })
         ;

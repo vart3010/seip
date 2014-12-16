@@ -15,27 +15,20 @@ namespace Pequiven\MasterBundle\Model;
  */
 class GerenciaGroup extends \Pequiven\SEIPBundle\Model\Common\CommonObject {
     
-    const TYPE_DEFAULT = 0;
-    const TYPE_COMERCIALIZADORAS = 1;
-    const TYPE_COMPLEJOS = 2;
-    const TYPE_PROYECTOS = 3;
-    const TYPE_SEDE_CORPORATIVA = 4;
-    
-    public $group_name = array();
-    
-    public function __construct() {
-        $this->group_name[self::TYPE_DEFAULT] = 'SEDE CORPORATIVA';
-        $this->group_name[self::TYPE_COMERCIALIZADORAS] = 'COMERCIALIZADORAS';
-        $this->group_name[self::TYPE_COMPLEJOS] = 'COMPLEJOS';
-        $this->group_name[self::TYPE_PROYECTOS] = 'PROYECTOS';
-        $this->group_name[self::TYPE_SEDE_CORPORATIVA] = 'SEDE CORPORATIVA';
-    }
-    
     /**
-     * Retorna todos los grupos de Gerencia de 1ra Línea
-     * @return type
+     * Comercializadoras
      */
-    public function getGroupNameArray() {
-        return $this->group_name;
-    }
+    const TYPE_COMERCIALIZADORAS = 'COME';
+    /**
+     * Complejos
+     */
+    const TYPE_COMPLEJOS = 'COMP';
+    /**
+     * Proyectos
+     */
+    const TYPE_PROYECTOS = 'PROY';
+    /**
+     * Corporativa
+     */
+    const TYPE_SEDE_CORPORATIVA = 'CORP';
 }

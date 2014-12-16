@@ -11,13 +11,15 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  */
 class GenericDataController extends SEIPController 
 {
-    
     /**
      * Obtiene los responsable que se pueden asignar a una meta
      */
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        if(is_string($responsiblesId)){
+            $responsiblesId = explode(',', $responsiblesId);
+        }
         $query = $request->get('query');
         $results = array();
         if(count($responsiblesId) > 0){
@@ -38,6 +40,27 @@ class GenericDataController extends SEIPController
             }
             $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgramGoal($users,$criteria);
         }
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list','sonata_api_read'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Obtiene los responsable que se pueden asignar a un programa de gestion
+     */
+    function getResponsibleArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $query = $request->get('query');
+        $criteria = array(
+            'username' => $query,
+            'firstname' => $query,
+            'lastname' => $query,
+            'numPersonal' => $query,
+        );
+            
+        $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
         
         $view = $this->view();
         $view->setData($results);
@@ -165,7 +188,7 @@ class GenericDataController extends SEIPController
         $results = $repository->findComplejos();
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','gerencias'));
         return $this->handleView($view);
     }
     
@@ -190,7 +213,7 @@ class GenericDataController extends SEIPController
             throw $this->createNotFoundException(sprintf('Programa de gestion %s, no encontrado',$request->get('id')));
         }
         $view = $this->view();
-        $templateName = 'PequivenArrangementProgramBundle:ArrangementProgram:email/draftToInRevision.html.twig';
+        $templateName = 'PequivenArrangementProgramBundle:ArrangementProgram:email/notityToNotifiers.html.twig';
         $context = array(
             'arrangementProgram' => $entity,
             'user' => $this->getUser(),
@@ -200,16 +223,16 @@ class GenericDataController extends SEIPController
         $view->setData($context);
         
         $toEmail = array(
-            'rarias@pequiven.com' => 'Richard Arias',
-            'gaudybeth.colmenarez@pequiven.com' => 'Gaudybeth Colmenarez',
+//            'rarias@pequiven.com' => 'Richard Arias',
+//            'gaudybeth.colmenarez@pequiven.com' => 'Gaudybeth Colmenarez',
             'inhack20@gmail.com' => 'Carlos Mendoza',
         );
 //        $toEmail = 'gautybeth.colmenarez@pequiven.com';
 //        $toEmail = 'rarias@pequiven.com';
         
         $fromEmail = 'seip@pequiven.com';
-        
-        $this->container->get('pequiven_seip.mailer.twig_swift')->sendMessage($templateName, $context, $fromEmail, $toEmail);
+        $this->container->get('event_dispatcher')->dispatch(\Pequiven\ArrangementProgramBundle\ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_APPROVED,new \Sylius\Bundle\ResourceBundle\Event\ResourceEvent($entity));
+//        $this->container->get('pequiven_seip.mailer.twig_swift')->sendMessage($templateName, $context, $fromEmail, $toEmail);
         return $this->handleView($view);
     }
     

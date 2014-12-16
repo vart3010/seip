@@ -154,15 +154,67 @@ class GerenciaController extends baseController {
         return $this->handleView($view);
     }
     
+    
     public function showAction(Request $request) {
+        $user = $this->getUser();
+        
+//        if($user->getGerenciaSecond()->getId() == 50 && $user->getComplejo()->getId() == 5){
+            $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($this->findOr404($request))
+            ;
+            $groups = array_merge(array('api_list'), $request->get('_groups',array()));
+            $view->getSerializationContext()->setGroups($groups);
+            return $this->handleView($view);
+//        } else{
+//            return 'false';
+//        }
+    }
+    
+    public function updateAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
+            $form->submit($request);
+//            var_dump($resource->getConfiguration()->getArrangementProgramUserToRevisers()->count());
+//            var_dump($form->isValid());
+//            var_dump($form->getErrorsAsString());
+//            die;
+            if($form->isValid()){
+                $this->domainManager->update($resource);
+
+                return $this->redirectHandler->redirectTo($resource);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+        if($request->isMethod('GET')){
+//            $configuration = $form->remove('configuration');
+//            $configuration = $form->get('configuration');
+//            $configuration->remove('arrangementProgramUserToRevisers');
+//            $configuration->remove('arrangementProgramUsersToApproveTactical');
+//            $configuration->remove('arrangementProgramUsersToApproveOperative');
+//            $configuration->remove('arrangementProgramUsersToNotify');
+//            var_dump('AA');
+//            DIE;
+        }
+
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('show.html'))
-            ->setTemplateVar($this->config->getResourceName())
-            ->setData($this->findOr404($request))
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
         ;
-        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
-        $view->getSerializationContext()->setGroups($groups);
+//        print_r($_POST);
+//        var_dump($form->getErrorsAsString());die;
         return $this->handleView($view);
     }
     

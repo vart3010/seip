@@ -22,7 +22,9 @@ class GerenciaType extends AbstractType
             ->add('enabled')
             ->add('complejo')
             ->add('direction')
-            ->add('configuration',new Gerencia\ConfigurationType())
+            ->add('configuration',new Gerencia\ConfigurationType(),array(
+                'cascade_validation' => true,
+            ))
         ;
     }
     
@@ -32,7 +34,8 @@ class GerenciaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\MasterBundle\Entity\Gerencia'
+            'data_class' => 'Pequiven\MasterBundle\Entity\Gerencia',
+            'cascade_validation' => true,
         ));
     }
 
