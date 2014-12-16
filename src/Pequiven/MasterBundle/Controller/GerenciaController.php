@@ -158,7 +158,7 @@ class GerenciaController extends baseController {
     public function showAction(Request $request) {
         $user = $this->getUser();
         
-        if($user->getGerenciaSecond()->getId() == 50 && $user->getComplejo()->getId() == 5){
+//        if($user->getGerenciaSecond()->getId() == 50 && $user->getComplejo()->getId() == 5){
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -168,9 +168,9 @@ class GerenciaController extends baseController {
             $groups = array_merge(array('api_list'), $request->get('_groups',array()));
             $view->getSerializationContext()->setGroups($groups);
             return $this->handleView($view);
-        } else{
-            return 'false';
-        }
+//        } else{
+//            return 'false';
+//        }
     }
     
     public function updateAction(Request $request)
