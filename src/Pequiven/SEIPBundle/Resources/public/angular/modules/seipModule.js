@@ -110,12 +110,14 @@ angular.module('seipModule.controllers', [])
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
-            $scope.model.goalCount = null;
-            $scope.model.arrangementprogramResponsibles = [];
-
-            $scope.model.arrangementProgram = {
-                categoryArrangementProgram: null
+            var model = {
+                goalCount: null,
+                arrangementprogramResponsibles: [],
+                arrangementProgram: {
+                    categoryArrangementProgram: null
+                }
             };
+            $scope.templateOptions.setModel(model);
             
             var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
             
@@ -970,6 +972,9 @@ angular.module('seipModule.controllers', [])
                     angular.element('#'+id).select2('val', preselected);
                 });
                 $scope.model[model] = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
             };
             
             //Funcion para remover un elemento de un array
@@ -1580,12 +1585,13 @@ angular.module('seipModule.controllers', [])
         })
         .controller('UserController',function($scope,$timeout){
             console.log('UserController');
-            $scope.model = {
+            var model = {
                 arrangementProgramUserToRevisers: [],
                 arrangementProgramUsersToApproveTactical: [],
                 arrangementProgramUsersToApproveOperative: [],
                 arrangementProgramUsersToNotify: []
             };
+            $scope.templateOptions.setModel(model);
             
             var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');
             arrangementProgramUsersToApproveTactical.change(function(){

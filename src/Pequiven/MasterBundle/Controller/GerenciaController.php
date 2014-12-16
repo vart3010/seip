@@ -179,11 +179,7 @@ class GerenciaController extends baseController {
         $form = $this->getForm($resource);
 
         if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
-            $form->submit($request);
-//            var_dump($resource->getConfiguration()->getArrangementProgramUserToRevisers()->count());
-//            var_dump($form->isValid());
-//            var_dump($form->getErrorsAsString());
-//            die;
+            $form->submit($request,false);
             if($form->isValid()){
                 $this->domainManager->update($resource);
 
@@ -194,16 +190,6 @@ class GerenciaController extends baseController {
         if ($this->config->isApiRequest()) {
             return $this->handleView($this->view($form));
         }
-        if($request->isMethod('GET')){
-//            $configuration = $form->remove('configuration');
-//            $configuration = $form->get('configuration');
-//            $configuration->remove('arrangementProgramUserToRevisers');
-//            $configuration->remove('arrangementProgramUsersToApproveTactical');
-//            $configuration->remove('arrangementProgramUsersToApproveOperative');
-//            $configuration->remove('arrangementProgramUsersToNotify');
-//            var_dump('AA');
-//            DIE;
-        }
 
         $view = $this
             ->view()
@@ -213,8 +199,6 @@ class GerenciaController extends baseController {
                 'form'                           => $form->createView()
             ))
         ;
-//        print_r($_POST);
-//        var_dump($form->getErrorsAsString());die;
         return $this->handleView($view);
     }
     
