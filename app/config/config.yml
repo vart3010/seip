@@ -40,8 +40,7 @@ assetic:
 #    debug:          "%kernel.debug%"
     debug:          false
     use_controller: false
-    #bundles:        ['TecnocreacionesVzlaGovernmentBundle']
-    #bundles:        ['PequivenSEIPBundle']
+#    bundles:        ['FOSJsRoutingBundle']
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -127,10 +126,6 @@ tecnocreaciones_vzla_government:
         developer:
             app_title: SEIP
             menu: Pequiven\SEIPBundle\Menu\Template\Developer\BackendMenuBuilder
-            angular_dependencies: 
-                        - 'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
-                        - 'bundles/pequivenseip/angular/modules/seipModule.js'
-                        - 'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-cookies/angular-cookies.min.js'
             angular_modules: ['seipModule']
     config:
         main_route: 'pequiven_seip_default_index'
