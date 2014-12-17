@@ -253,7 +253,7 @@ sylius_resource:
         #Maestro gerencia 2da línea
         pequiven.gerenciasecond:
             driver: doctrine/orm
-            templates: PequivenMasterBundle:GerenciaSecond:list.html.twig
+            templates: PequivenMasterBundle:GerenciaSecond
             classes:
                 model: Pequiven\MasterBundle\Entity\GerenciaSecond
                 controller: Pequiven\MasterBundle\Controller\GerenciaSecondController

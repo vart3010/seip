@@ -44,6 +44,11 @@
             {{ form_errors(form.direction) }}
         </div>
         <div class="field-block button-height">
+            {{ form_label(form.gerenciaSecondVinculants) }}
+            {{ form_widget(form.gerenciaSecondVinculants) }}
+            {{ form_errors(form.gerenciaSecondVinculants) }}
+        </div>
+        <div class="field-block button-height">
             <label>Revisores #<b>{$ model.arrangementProgramUserToRevisers.length $}</b></label>
             <div id="gerencia_configuration_arrangementProgramUserToRevisers" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUserToRevisers',{{ gerenciafirst.configuration.arrangementProgramUserToRevisers|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUserToRevisers')"></div>
             <input ng-repeat="user in model.arrangementProgramUserToRevisers" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUserToRevisers][]" value="{$ user.id $}" />
@@ -121,6 +126,7 @@
             $("#gerencia_configuration_arrangementProgramUsersToApproveTactical").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToApproveOperative").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToNotify").select2(parametersUsers);
+            $("#pequiven_masterbundle_gerencia_gerenciaSeconds").select2();
         });
     </script>
 {% endblock javascript %}

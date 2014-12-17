@@ -14,6 +14,15 @@ class GerenciaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $parametersUser = array(
+            'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond',
+            'property' => 'description',
+            'attr' => array(
+                'class' => 'select2 input-xlarge'
+            ),
+            'multiple' => true,
+        );
+        
         $builder
             ->add('description')
             ->add('abbreviation')
@@ -22,6 +31,7 @@ class GerenciaType extends AbstractType
             ->add('enabled')
             ->add('complejo')
             ->add('direction')
+            ->add('gerenciaSecondVinculants','entity',$parametersUser)
             ->add('configuration',new Gerencia\ConfigurationType(),array(
                 'cascade_validation' => true,
             ))
