@@ -191,6 +191,7 @@ principal:
         indicatorPorc: % Carga
         
 result:
+    recalculate: Recalcular resultados
     list:
         titleObjetiveOperative: Resultados Objetivos Operativos
         columnLocation: Localidad

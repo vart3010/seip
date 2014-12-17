@@ -531,7 +531,6 @@ class ObjetiveRepository extends EntityRepository {
     
     
     public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
-        
         return $gerencia->getDescription();
     }
     

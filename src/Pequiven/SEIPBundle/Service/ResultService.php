@@ -79,11 +79,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         
-        if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            $total = ($total / $countResult);
-        }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-            //Nada que hacer
-        }
+//        if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+//            $total = ($total / $countResult);
+//        }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+//            //Nada que hacer
+//        }
 
         $objetive->setResultOfObjetive($total);//Resultado del objetivo
         $em->persist($objetive);
@@ -139,12 +139,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
             if($countArrangementPrograms > 0){
                 foreach ($arrangementPrograms as $arrangementProgram){
+                    if($arrangementProgram->getStatus() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED){
+                        continue;
+                    }
                     $countResult++;
                     $total += $arrangementProgram->getResult();
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-            throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$myResult->getId()));
+            throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
@@ -164,7 +167,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     {
         $objetive = $this->resolveObjetiveOfResult($result);
         $itemsResult = $objetive->getIndicators();
-        $this->calculateResultItems($result, $itemsResult);
+        $this->calculateResultItems($result, $itemsResult,true);
     }
     
     /**
@@ -188,7 +191,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $objetive;
     }
     
-    public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult)
+    public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult,$debug = false)
     {
         $total = 0;
         $countResult = 0;
@@ -223,7 +226,25 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $result->setTotal($total);
     }
-
+    
+    /**
+     * Actualiza los resultados de los objetivos
+     * @param type $objects
+     */
+    function updateResultOfObjects($objects) 
+    {
+        if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
+        {
+            $objects = array($objects);
+        }
+        foreach ($objects as $object) {
+            foreach ($object->getResults() as $result) 
+            {
+                $this->calculateResult($result);
+            }
+        }
+    }
+    
     /**
      * Shortcut to return the Doctrine Registry service.
      *

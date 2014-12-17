@@ -65,6 +65,7 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setModelManager, [@seip.model.manager]]
+            - [ setContainer, [@service_container]]
             
     sonata.admin.user.configuration:
         class: Pequiven\MasterBundle\Admin\User\ConfigurationAdmin
