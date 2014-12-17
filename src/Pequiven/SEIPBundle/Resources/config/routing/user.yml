@@ -63,3 +63,15 @@ select_gerenciaSecond:
     path: /select_gerenciaSecond
     defaults:
         _controller: pequiven_seip.controller.user:selectGerenciaSecondListAction
+        
+pequiven_seip_user_add_configuration:
+    path: /{id}/add-configuration
+    defaults:
+        _controller: pequiven_seip.controller.user:addConfigurationAction
+        _format: html
+    requirements:
+        id: "\d+"
+        _format: html|json
+    methods: [GET]
+    options:
+        expose: true

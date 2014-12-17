@@ -205,4 +205,13 @@ class UserController extends baseController {
 
         return $response;
     }
+    
+    function addConfigurationAction(Request $request) {
+        $resource = $this->findOr404($request);
+        if($resource->getConfiguration() == null){
+            $resource->setConfiguration(new \Pequiven\SEIPBundle\Entity\User\Configuration());
+            $this->domainManager->update($resource);
+        }
+        return $this->redirectHandler->redirectTo($resource);
+    }
 }
