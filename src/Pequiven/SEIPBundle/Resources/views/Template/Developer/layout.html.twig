@@ -25,7 +25,8 @@
         var interpolateStartSymbol = "{$";
         var interpolateEndSymbol = "$}";
         
-        {% javascripts output='compiled/baseDependecies.js'  
+        {% javascripts 
+               output='compiled/baseDependecies.js'  
                filter='uglifyjs2' 
                'bundles/bazingajstranslation/js/translator.min.js'
                'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js'
@@ -40,21 +41,18 @@
            baseUrl,
           '{{ url('bazinga_jstranslation_js') }}',
         ];
+         {% if app.debug %}
+            baseDependecies = [
+              '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
+              '{{ url('bazinga_jstranslation_js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js') }}'
+            ];
+         {% endif %}
         var dependencies = [
-            {# En desarrollo se cargan individuales y en produccion se combinan en uno, hay un bug que da error combinandolos en desarrollo #}
-          {% if app.debug %}
-              '{{ asset('bundles/pequivenseip/jquery-number-master/jquery.number.min.js') }}',
-              '{{ asset('bundles/pequivenseip/angular/modules/seipModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/tableFormat1Module.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/sfTranslatorModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notifyModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/services.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/controllers.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/filters.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/directives.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/mainApp.js') }}',
-          {% else %}
                 {% javascripts output='compiled/angular_modules.js' 
                    filter='uglifyjs2' 
                     'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
@@ -72,7 +70,6 @@
                 %}
                   '{{ asset_url }}',
                 {% endjavascripts %}
-            {% endif %}
             ''
         ];
         
@@ -117,6 +114,8 @@
 {% endblock javascripts_base %}
 
 {% block javascripts_core %}
+    <!-- jQuery-ui -->
+    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.js?v=1') }}"></script>
     {% javascripts 
        '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
        'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js'
@@ -136,8 +135,6 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <!-- jQuery-ui -->
-    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.js?v=1') }}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {

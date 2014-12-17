@@ -37,8 +37,7 @@ twig:
 
 # Assetic Configuration
 assetic:
-#    debug:          "%kernel.debug%"
-    debug:          false
+    debug:          "%kernel.debug%"
     use_controller: false
 #    bundles:        ['FOSJsRoutingBundle']
     #java: /usr/bin/java
