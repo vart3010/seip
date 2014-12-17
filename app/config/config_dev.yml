@@ -36,9 +36,9 @@ assetic:
 #    delivery_address: me@example.com
 
 
-doctrine:
-    dbal:
-        dbname:   "%database_name%_dev"
+#doctrine:
+#    dbal:
+#        dbname:   "%database_name%_dev"
         
 services:
     debug.twig.extension:
