@@ -35,4 +35,9 @@ class UpdateController extends Controller
         $em->flush();
         return new \Symfony\Component\HttpFoundation\Response('OK');
     }
+    
+    function updateResultOfObjetive()
+    {
+        
+    }
 }
