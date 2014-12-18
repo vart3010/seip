@@ -23,3 +23,13 @@ ALTER TABLE seip_arrangement_range DROP fk_objetive;
 CREATE TABLE seip_gerencia_second_vinculant (gerencia_id INT NOT NULL, gerenciasecond_id INT NOT NULL, INDEX IDX_30E3A2EBB8A96BDB (gerencia_id), INDEX IDX_30E3A2EBD8DEA097 (gerenciasecond_id), PRIMARY KEY(gerencia_id, gerenciasecond_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE seip_gerencia_second_vinculant ADD CONSTRAINT FK_30E3A2EBB8A96BDB FOREIGN KEY (gerencia_id) REFERENCES seip_c_gerencia (id) ON DELETE CASCADE;
 ALTER TABLE seip_gerencia_second_vinculant ADD CONSTRAINT FK_30E3A2EBD8DEA097 FOREIGN KEY (gerenciasecond_id) REFERENCES seip_c_gerencia_second (id) ON DELETE CASCADE;
+
+-- ACTUALIZAMOS LAS GERENCIAS DE LAS 3 GERENCIAS DE APROYO DE SHA
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '1' WHERE `seip_c_gerencia_second`.`id` = 136;
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '7' WHERE `seip_c_gerencia_second`.`id` = 137;
+UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '9' WHERE `seip_c_gerencia_second`.`id` = 138;
+
+-- ACTUALIZAMOS LOS USUARIOS DE SHA (GERENCIAS REPETIDAS)
+UPDATE `seip`.`seip_user` SET `fk_complejo` = '1',`fk_gerencia` = '1' WHERE `seip_user`.`fk_gerencia_second` = 136;
+UPDATE `seip`.`seip_user` SET `fk_complejo` = '2',`fk_gerencia` = '7' WHERE `seip_user`.`fk_gerencia_second` = 137;
+UPDATE `seip`.`seip_user` SET `fk_complejo` = '3',`fk_gerencia` = '9' WHERE `seip_user`.`fk_gerencia_second` = 138;
