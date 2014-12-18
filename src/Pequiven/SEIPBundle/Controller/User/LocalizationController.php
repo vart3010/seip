@@ -67,4 +67,5 @@ class LocalizationController extends ResourceController
 
         return $this->handleView($view);
     }
+    
 }

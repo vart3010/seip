@@ -27,4 +27,4 @@ pequiven_localization_delete:
         _format: html
     requirements:
         id: "\d+"
-    methods: [POST]
+    methods: [POST|DELETE]

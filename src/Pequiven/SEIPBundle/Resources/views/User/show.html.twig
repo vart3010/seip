@@ -31,7 +31,8 @@ Usuario: <b>{{ user }}</b>
                 </thead>
                 <tbody>
                    {% for localization in user.configuration.localizations %}
-                        <tr>
+                       {% set idLocalization = 'localization-' ~ localization.id %}
+                        <tr id="{{ idLocalization }}">
                             <th scope="row">
                                 {{ loop.index }}
                             </th>
@@ -43,7 +44,7 @@ Usuario: <b>{{ user }}</b>
                                 <span class="button-group compact">
                                     <a href="{{ path('pequiven_localization_update',{id:localization.id}) }}" class="button icon-pencil">{{ 'pequiven_seip.actions.update'|trans }}</a>
                                     <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="{{ 'pequiven_seip.actions.delete'|trans }}"></a>
-                                    {{ buttons.delete_mini(path('pequiven_localization_delete',{id:localization.id})) }}
+                                    {{ buttons.delete_mini(path('pequiven_localization_delete',{id:localization.id}),null,idLocalization) }}
                                 </span>
                             </td>
                         </tr>
