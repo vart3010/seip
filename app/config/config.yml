@@ -313,3 +313,9 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\Planning\ResultController
                 model: Pequiven\SEIPBundle\Entity\Result
                 repository: Pequiven\SEIPBundle\Repository\Result\ResultRepository
+        pequiven.localization:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User/Localization
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\LocalizationController
+                model: Pequiven\SEIPBundle\Entity\User\Localization
