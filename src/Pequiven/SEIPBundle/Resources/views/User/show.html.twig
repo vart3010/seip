@@ -43,7 +43,6 @@ Usuario: <b>{{ user }}</b>
                             <td class="align-right vertical-center">
                                 <span class="button-group compact">
                                     <a href="{{ path('pequiven_localization_update',{id:localization.id}) }}" class="button icon-pencil">{{ 'pequiven_seip.actions.update'|trans }}</a>
-                                    <a href="javascript:void(0);" class="button icon-trash with-tooltip confirm" title="{{ 'pequiven_seip.actions.delete'|trans }}"></a>
                                     {{ buttons.delete_mini(path('pequiven_localization_delete',{id:localization.id}),null,idLocalization) }}
                                 </span>
                             </td>
