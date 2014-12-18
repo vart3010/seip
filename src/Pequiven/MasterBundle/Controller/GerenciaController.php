@@ -211,12 +211,13 @@ class GerenciaController extends baseController {
     {
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);//Obtenemos la gerencia
         
+        //Obtenemos la sección operativa de la matriz de objetivos
         $sectionOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionOperativeByGerencia($gerencia);
         $resource = $this->findOr404($request);
         
-        //Formato para tdo el dcumento
+        //Formato para todo el documento
         $styleArrayBordersContent = array(
           'borders' => array(
             'allborders' => array(
@@ -266,21 +267,21 @@ class GerenciaController extends baseController {
         $rowHeight = 70;//Alto de la fila
         
         //Objetivo Táctico
-        $beforeObjTacRef = $sectionOperative[0]['ObjTacRef'];
+        $beforeObjTacRef = $totalOperative > 0 ? $sectionOperative[0]['ObjTacRef'] : '';//Referencia de la fila pasada
         $contRepObjTac = 0;//Contador que cuenta los objetivos tácticos repetidos
         $contObjTac = 1;//Contador que cuenta el número de objetivos tácticos
         $rowIniTac = 8;//Fila inicial para hacer mergecell en el nivel táctico
         $rowFinTac = 8;//Fila final para hacer mergecell en el nivel táctico
         
         //Objetivo Operativo
-        $beforeObjOpeRef = $sectionOperative[0]['ObjOpeRef'];
+        $beforeObjOpeRef = $totalOperative > 0 ? $sectionOperative[0]['ObjOpeRef'] : '';
         $contRepObjOpe = 0;//Contador que cuenta los objetivos operativos repetidos
         
         //Indicador Operativo
-        $beforeIndOpeRef = $sectionOperative[0]['IndOpeRef'];
+        $beforeIndOpeRef = $totalOperative > 0 ? $sectionOperative[0]['IndOpeRef'] : '';
         $contRepIndOpe = 0;//Contador que cuenta los indicadores operativos repetidos
         
-        //Recorremos los resultados obtenidos
+        //Recorremos los resultados obtenidos del nivel operativo
         foreach($sectionOperative as $result){
             $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
             $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);

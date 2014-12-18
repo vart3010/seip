@@ -469,7 +469,7 @@ class ObjetiveRepository extends EntityRepository {
     
     
     /**
-     * 
+     * Función que devuelve el nivel operativo para la matriz de objetivos
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return type
      */
@@ -504,7 +504,7 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
-     * 
+     * Función que devuelve el nivel estratégico para la matriz de objetivos
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
      * @return type
      */
@@ -527,11 +527,6 @@ class ObjetiveRepository extends EntityRepository {
         $qb->setParameter('idChildren', $objetive->getId());
         
         return $qb->getQuery()->getResult();
-    }
-    
-    
-    public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
-        return $gerencia->getDescription();
     }
     
     public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond){
