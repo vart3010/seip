@@ -36,8 +36,50 @@ class UpdateController extends Controller
         return new \Symfony\Component\HttpFoundation\Response('OK');
     }
     
-    function updateResultOfObjetive()
+    function updateResultOfObjetiveAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $id = $request->get('id',null);
+        $referral = $request->get('referral',null);
+        $respository = $this->get('pequiven.repository.objetive');
+        $objetives = array();
+        if($id != null){
+            $objetives[] = $respository->find($id);
+        }else{
+//            $objetives[] = $respository->find($id);
+        }
+        $resultService = $this->getResultService();
+        $resultService->updateResultOfObjects($objetives);
         
+        if($id > 0){
+            return $this->redirect($referral);
+        }
+    }
+    
+    function updateResultOfIndicatorAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $id = $request->get('id',null);
+        $referral = $request->get('referral',null);
+        $respository = $this->get('pequiven.repository.indicator');
+        $objects = array();
+        if($id != null){
+            $objects[] = $respository->find($id);
+        }else{
+//            $objetives[] = $respository->find($id);
+        }
+        $resultService = $this->getResultService();
+        $resultService->updateResultOfObjects($objects);
+        if($id > 0){
+            return $this->redirect($referral);
+        }
+    }
+    
+
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }
