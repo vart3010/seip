@@ -978,7 +978,7 @@ class ObjetiveOperativeController extends baseController
             $gerencias = $request->request->get('gerencias');
             $gerenciasArray = explode(',', $gerencias);
             $complejosArray = explode(',', $complejos);
-                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
             $gerenciasObjectArray = $gerenciasArray;
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
             $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
@@ -1035,50 +1035,26 @@ class ObjetiveOperativeController extends baseController
         $gerenciasObjectArray = array();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-            
             $gerencia = $request->request->get('gerencia');
-            
             if((int)$gerencia == 0){
                 $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
             } else{
-                
-                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
+                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
             }
-        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
-        } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $user->getGerencia()->getId()));
+        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))) {
+            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $user->getGerencia()->getId()));
         }
 
-//        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-//            foreach ($results as $result) {
-//                $complejo = $result->getGerencia()->getComplejo();
-//                $gerencia = $result->getGerencia();
-//                foreach ($complejosArray as $valueComplejo) {
-//                    foreach ($gerenciasObjectArray as $valueGerencia) {
-//                        if ($complejo->getId() . '-' . $gerencia->getId() == $valueComplejo . '-' . $valueGerencia) {
-//                            $gerenciaSecondChildren[] = array(
-//                                'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
-//                                'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
-//                                'id' => $result->getId(),
-//                                'description' => $result->getDescription()
-//                            );
-//                        }
-//                    }
-//                }
-//            }
-//        } else {
-            foreach ($results as $result) {
-                $complejo = $result->getGerencia()->getComplejo();
-                $gerencia = $result->getGerencia();
-                $gerenciaSecondChildren[] = array(
-                    'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
-                    'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
-                    'id' => $result->getId(),
-                    'description' => $result->getDescription()
-                );
-            }
-        //}
+        foreach ($results as $result) {
+            $complejo = $result->getGerencia()->getComplejo();
+            $gerencia = $result->getGerencia();
+            $gerenciaSecondChildren[] = array(
+                'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
+                'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
+                'id' => $result->getId(),
+                'description' => $result->getDescription()
+            );
+        }
 
         $response->setData($gerenciaSecondChildren);
 
