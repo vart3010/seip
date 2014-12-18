@@ -157,6 +157,7 @@ class GerenciaController extends baseController {
     
     public function showAction(Request $request) {
         $user = $this->getUser();
+        $securityContext = $this->container->get('security.context');
         
         if($user->getGerenciaSecond()->getId() == 50){
             $view = $this
