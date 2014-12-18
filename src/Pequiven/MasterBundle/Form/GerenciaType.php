@@ -23,6 +23,7 @@ class GerenciaType extends AbstractType
                 'class' => 'select2 input-xlarge'
             ),
             'multiple' => true,
+            'required' => false,
         );
         
         
