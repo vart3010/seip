@@ -27,6 +27,11 @@ abstract class Formula
     const TYPE_CALCULATION_REAL_AUTOMATIC = 2;
     
     /**
+     * Tipo de calculo de la formula es acumulado de todos los resultados.
+     */
+    const TYPE_CALCULATION_ACCUMULATE = 3;
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
@@ -45,6 +50,7 @@ abstract class Formula
             self::TYPE_CALCULATION_SIMPLE_AVERAGE => 'pequiven_indicator.type_calculation.simple_average',
             self::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC => 'pequiven_indicator.type_calculation.real_and_plan_automatic',
             self::TYPE_CALCULATION_REAL_AUTOMATIC => 'pequiven_indicator.type_calculation.real_automatic',
+            self::TYPE_CALCULATION_ACCUMULATE => 'pequiven_indicator.type_calculation.accumulate',
         );
         return $typesOfCalculation;
     }

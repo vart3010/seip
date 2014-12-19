@@ -13,6 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class UpdateController extends Controller
 {
+    /**
+     * Actualiza los resultados de los programas de gestion (Falta optimizar)
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     function updateResultArrangementProgramAction()
     {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
@@ -36,6 +40,12 @@ class UpdateController extends Controller
         return new \Symfony\Component\HttpFoundation\Response('OK');
     }
     
+    /**
+     * Actualiza el resultado de los objetivos
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
     function updateResultOfObjetiveAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $id = $request->get('id',null);
@@ -55,6 +65,11 @@ class UpdateController extends Controller
         }
     }
     
+    /**
+     * Actualiza los resultados de los indicadores
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
     function updateResultOfIndicatorAction(\Symfony\Component\HttpFoundation\Request $request) 
     {
         $id = $request->get('id',null);
@@ -66,8 +81,12 @@ class UpdateController extends Controller
         }else{
 //            $objetives[] = $respository->find($id);
         }
+        $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+        foreach ($objects as $indicator) {
+            $indicatorService->calculateValueIndicator($indicator);
+        }
         $resultService = $this->getResultService();
-        $resultService->updateResultOfObjects($objects);
+//        $resultService->updateResultOfObjects($objects);
         if($id > 0){
             return $this->redirect($referral);
         }

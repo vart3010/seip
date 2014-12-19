@@ -2,6 +2,12 @@
 
 namespace Pequiven\IndicatorBundle\Service;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use ErrorException;
+use Exception;
+use LogicException;
+use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\MasterBundle\Entity\Formula;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,11 +23,11 @@ class IndicatorService implements ContainerAwareInterface
     
     /**
      * Toma un string de una formula y realiza el parse a php para calcularlo
-     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @param Formula $formula
      * @param array $data
      * @return int
      */
-    public function calculateFormulaValue(\Pequiven\MasterBundle\Entity\Formula $formula,array $data) 
+    public function calculateFormulaValue(Formula $formula,array $data) 
     {
         $variables = $formula->getVariables();
         foreach ($variables as $variable) {
@@ -36,9 +42,9 @@ class IndicatorService implements ContainerAwareInterface
         $result = 0;
         try {
             eval(sprintf('$result = %s;',$equationParse));
-        } catch( \ErrorException $exc){
+        } catch( ErrorException $exc){
 //            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
-        } catch (\Exception $exc) {
+        } catch (Exception $exc) {
 //            echo $exc->getTraceAsString();
 //            echo 'Excepción capturada 2: ',  $e->getMessage(), "\n";
             $result = 0;
@@ -50,10 +56,10 @@ class IndicatorService implements ContainerAwareInterface
     /**
      * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
      * 
-     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @param Formula $formula
      * @return type
      */
-    public function parseFormulaVars(\Pequiven\MasterBundle\Entity\Formula $formula)
+    public function parseFormulaVars(Formula $formula)
     {
         $equationReal = $formula->getEquationReal();
         $variables = $formula->getVariables();
@@ -69,9 +75,9 @@ class IndicatorService implements ContainerAwareInterface
     
     /**
      * Valida la configuracion de una formula
-     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @param Formula $formula
      */
-    function validateFormula(\Pequiven\MasterBundle\Entity\Formula &$formula) 
+    function validateFormula(Formula &$formula) 
     {
         $typeOfCalculation = $formula->getTypeOfCalculation();
         $variableToRealValue = $formula->getVariableToRealValue();
@@ -80,13 +86,13 @@ class IndicatorService implements ContainerAwareInterface
         
         $error = null;
         
-        //Si el calculo es por promedio simple
-        if($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+        //Si el calculo es por promedio simple o acumulativo
+        if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE || $typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
             $formula
                 ->setVariableToRealValue(null)
                 ->setVariableToPlanValue(null)
                 ;
-        }elseif($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
             if($variableToRealValue === null || $variableToPlanValue === null){
                $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation',array(
                     '%formula%' => (string) $formula,
@@ -94,7 +100,7 @@ class IndicatorService implements ContainerAwareInterface
                     'requireVars' => 'Real y Plan'
                 ),'flashes');
             }
-        }elseif($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
              $formula
                 ->setVariableToPlanValue(null)
                 ;
@@ -109,6 +115,112 @@ class IndicatorService implements ContainerAwareInterface
         return $error;
     }
     
+    /**
+     * Calcula el valor de un indicador
+     * @param Indicator $indicator
+     */
+    function calculateValueIndicator(Indicator $indicator)
+    {
+        $formula = $indicator->getFormula();
+        if($formula !== null && $this->validateFormula($formula) === null){
+            $typeOfCalculation = $formula->getTypeOfCalculation();
+            if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $this->calculateFormulaSimpleAverage($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $this->calculateFormulaRealPlanAutomatic($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+                $this->calculateFormulaRealAutomatic($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
+                $this->calculateFormulaAccumulate($indicator);
+            }
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($indicator);
+        $em->flush();
+    }
+    
+    /**
+     * Calcula la formula con promedio simple
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaSimpleAverage(Indicator &$indicator) {
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $quantity = 0;
+        $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $quantity++;
+            $value += $valueIndicator->getValueOfIndicator();
+        }
+        $value = ($value / $quantity);
+        $indicator->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula con plan y real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaRealPlanAutomatic(Indicator &$indicator) 
+    {
+        $formula = $indicator->getFormula();
+        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        
+        $totalPlan = $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $totalPlan += $formulaParameters[$variableToPlanValueName];
+            $totalReal += $formulaParameters[$variableToRealValueName];
+        }
+        
+        $value = $totalReal;
+        $indicator
+                ->setTotalPlan($totalPlan)
+                ->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula con real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaRealAutomatic(Indicator &$indicator) 
+    {
+        $formula = $indicator->getFormula();
+        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        
+        $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $totalReal += $formulaParameters[$variableToRealValueName];
+        }
+        
+        $value = $totalReal;
+        $indicator
+            ->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula acumulativo de cada valor de resultado
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaAccumulate(Indicator &$indicator) {
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $quantity = 0;
+        $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $quantity++;
+            $value += $valueIndicator->getValueOfIndicator();
+        }
+        $indicator->setValueFinal($value);
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
@@ -116,5 +228,21 @@ class IndicatorService implements ContainerAwareInterface
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return Registry
+     *
+     * @throws LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 }
