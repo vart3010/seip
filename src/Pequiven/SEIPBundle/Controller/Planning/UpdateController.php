@@ -60,6 +60,9 @@ class UpdateController extends Controller
         $resultService = $this->getResultService();
         $resultService->updateResultOfObjects($objetives);
         
+        $flashBag = $this->getRequest()->getSession()->getFlashBag();
+        $flashBag->add('success',  $this->trans('pequiven.result.success.update',array(),'flashes'));
+        
         if($id > 0){
             return $this->redirect($referral);
         }
@@ -81,16 +84,55 @@ class UpdateController extends Controller
         }else{
 //            $objetives[] = $respository->find($id);
         }
-        $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+        $resultService = $this->container->get('seip.service.result');
         foreach ($objects as $indicator) {
-            $indicatorService->calculateValueIndicator($indicator);
+            $resultService->refreshValueIndicator($indicator);
         }
+        
+        $flashBag = $this->getRequest()->getSession()->getFlashBag();
+        $flashBag->add('success',  $this->trans('pequiven.result.success.update',array(),'flashes'));
+        
         if($id > 0){
             return $this->redirect($referral);
         }
     }
     
-
+    /**
+     * Actualiza los resultados de los programas de gestion
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     */
+    function updateResultOfArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $id = $request->get('id',null);
+                
+        $referral = $request->get('referral',null);
+        $respository = $this->get('pequiven_seip.repository.arrangementprogram');
+        $objects = array();
+        if($id != null){
+            $objects[] = $respository->find($id);
+        }else{
+//            $objetives[] = $respository->find($id);
+        }
+        $resultService = $this->container->get('seip.service.result');
+        foreach ($objects as $object) {
+            $resultService->refreshValueArrangementProgram($object);
+        }
+        
+        $flashBag = $this->getRequest()->getSession()->getFlashBag();
+        $flashBag->add('success',  $this->trans('pequiven.result.success.update',array(),'flashes'));
+        
+        if($id > 0){
+            return $this->redirect($referral);
+        }
+    }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->get('translator')->trans($id, $parameters, $domain);
+    }
+    
     /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService

@@ -913,12 +913,8 @@ class ArrangementProgramController extends SEIPController
                 ->setNotificationInProgressByUser(null)
                 ->setNotificationInProgressDate(null)
                 ;
-        $summary = $resource->getSummary(array(
-            'limitMonthToNow' => true
-        ));
-        $resource->setProgressToDate($summary['advances']);
-        $summary = $resource->getSummary();
-        $resource->setTotalAdvance($summary['advances']);
+        $resultService = $this->container->get('seip.service.result');
+        $resultService->refreshValueArrangementProgram($resource);
         
         $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
         

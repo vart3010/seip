@@ -47,8 +47,8 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
             }else{
             }
-            $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
-            $indicatorService->calculateValueIndicator($indicator);
+            $resultService = $this->container->get('seip.service.result');
+            $resultService->refreshValueIndicator($indicator);
             
             $valueIndicator
                 ->setFormulaParameters($data)

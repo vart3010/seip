@@ -242,6 +242,14 @@
     {% if isAllowToDelete == true %}
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
     {% endif %}
+    {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
+            {
+                routeUpdateResult: 'pequiven_planning_update_result_arrangement_program',
+                entity: entity,
+                urlUpdateResulReferral: (path('pequiven_seip_arrangementprogram_show',{id:entity.id}))
+            }
+        )
+    %}
 </p>
 
 {% endblock %}

@@ -77,7 +77,7 @@ class IndicatorService implements ContainerAwareInterface
      * Valida la configuracion de una formula
      * @param Formula $formula
      */
-    function validateFormula(Formula &$formula) 
+    function validateFormula(Formula &$formula)
     {
         $typeOfCalculation = $formula->getTypeOfCalculation();
         $variableToRealValue = $formula->getVariableToRealValue();
@@ -113,131 +113,6 @@ class IndicatorService implements ContainerAwareInterface
             }
         }
         return $error;
-    }
-    
-    /**
-     * Calcula el valor de un indicador
-     * 
-     * @param Indicator $indicator
-     */
-    function calculateValueIndicator(Indicator $indicator)
-    {
-        $details = $indicator->getDetails();
-        if(!$details){
-            $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
-            $indicator->setDetails($details);
-        }
-        $previusValue = $indicator->getValueFinal();
-        $details
-                ->setPreviusValue($previusValue)
-                ;
-        $formula = $indicator->getFormula();
-        if($formula !== null && $this->validateFormula($formula) === null){
-            $typeOfCalculation = $formula->getTypeOfCalculation();
-            if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                $this->calculateFormulaSimpleAverage($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                $this->calculateFormulaRealPlanAutomatic($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
-                $this->calculateFormulaRealAutomatic($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
-                $this->calculateFormulaAccumulate($indicator);
-            }
-        }
-        $indicator->updateLastDateCalculateResult();
-        
-        $em = $this->getDoctrine()->getManager();
-        
-        
-        $em->persist($indicator);
-        $em->persist($details);
-        
-        $em->flush();
-        
-        $objetives = $indicator->getObjetives();
-        $this->getResultService()->updateResultOfObjects($objetives);
-    }
-    
-    /**
-     * Calcula la formula con promedio simple
-     * 
-     * @param Indicator $indicator
-     */
-    public function calculateFormulaSimpleAverage(Indicator &$indicator) {
-        $valuesIndicator = $indicator->getValuesIndicator();
-        $quantity = 0;
-        $value = 0.0;
-        foreach ($valuesIndicator as $valueIndicator) {
-            $quantity++;
-            $value += $valueIndicator->getValueOfIndicator();
-        }
-        $value = ($value / $quantity);
-        $indicator->setValueFinal($value);
-    }
-    
-    /**
-     * Calcula la formula con plan y real a partir de la formula
-     * 
-     * @param Indicator $indicator
-     */
-    public function calculateFormulaRealPlanAutomatic(Indicator &$indicator) 
-    {
-        $formula = $indicator->getFormula();
-        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-        
-        $valuesIndicator = $indicator->getValuesIndicator();
-        
-        $totalPlan = $totalReal = $value = 0.0;
-        foreach ($valuesIndicator as $valueIndicator) {
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            $totalPlan += $formulaParameters[$variableToPlanValueName];
-            $totalReal += $formulaParameters[$variableToRealValueName];
-        }
-        
-        $value = $totalReal;
-        $indicator
-                ->setTotalPlan($totalPlan)
-                ->setValueFinal($value);
-    }
-    
-    /**
-     * Calcula la formula con real a partir de la formula
-     * 
-     * @param Indicator $indicator
-     */
-    public function calculateFormulaRealAutomatic(Indicator &$indicator) 
-    {
-        $formula = $indicator->getFormula();
-        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-        
-        $valuesIndicator = $indicator->getValuesIndicator();
-        
-        $totalReal = $value = 0.0;
-        foreach ($valuesIndicator as $valueIndicator) {
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            $totalReal += $formulaParameters[$variableToRealValueName];
-        }
-        
-        $value = $totalReal;
-        $indicator
-            ->setValueFinal($value);
-    }
-    
-    /**
-     * Calcula la formula acumulativo de cada valor de resultado
-     * 
-     * @param Indicator $indicator
-     */
-    public function calculateFormulaAccumulate(Indicator &$indicator) {
-        $valuesIndicator = $indicator->getValuesIndicator();
-        $quantity = 0;
-        $value = 0.0;
-        foreach ($valuesIndicator as $valueIndicator) {
-            $quantity++;
-            $value += $valueIndicator->getValueOfIndicator();
-        }
-        $indicator->setValueFinal($value);
     }
     
     /**
