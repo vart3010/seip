@@ -8,31 +8,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Controlador de los indicadores (Planificacion)
+ * Controlador de los objetivos (Planificacion)
  *
- * @author Carlos Mendoza<inhack20@gmail.com>
+ * @author Matias
  */
-class IndicatorController extends ResourceController
+class ObjetiveController extends ResourceController
 {
     public function showAction(Request $request) {
-        $resource = $this->findOr404($request);
-        
-        $errorFormula = null;
-        if($resource->getFormula() !== null){
-            $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
-            $formula = $resource->getFormula();
-            $errorFormula = $indicatorService->validateFormula($formula);
-        }
-        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
-            ->setData(array(
-                $this->config->getResourceName() => $resource,
-                'errorFormula' => $errorFormula,
-            ))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($this->findOr404($request))
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','api_details','indicators','formula','gerenciaSecond'));
         return $this->handleView($view);
     }
     
@@ -43,7 +32,7 @@ class IndicatorController extends ResourceController
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
 
-        $criteria['indicatorLevel'] = $level;
+        $criteria['objetiveLevel'] = $level;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -68,14 +57,14 @@ class IndicatorController extends ResourceController
             '_format' => 'json',
             'level' => $level,
         );
-        $apiDataUrl = $this->generateUrl('pequiven_indicator_list',$routeParameters);
+        $apiDataUrl = $this->generateUrl('pequiven_objetive_list',$routeParameters);
         
         $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula','gerenciaSecond'));
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,

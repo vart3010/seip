@@ -1,32 +1,32 @@
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 
-{% trans_default_domain 'PequivenIndicatorBundle' %}
+{% trans_default_domain 'PequivenObjetiveBundle' %}
 
-{% block title %}- {{ 'pequiven_indicator.indicator_strategic'|trans }}{% endblock %}
+{% set labelHeader = {
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO')):'pequiven_objetive.objetive_strategic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO')):'pequiven_objetive.objetive_tactic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
+} %}
 
-{% set route_index = 'pequiven_indicator_menu_list_strategic' %}
+{% block title %}- {{ (labelHeader[level])|trans }}{% endblock %}
+
 {% block body %}
-    {% set labelHeader = {
-        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
-        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
-        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
-    } %}
     
     {{ contentHeader(
         ((labelHeader[level])|trans),
-        ('pequiven_indicator.list'|trans)
+        ('pequiven_objetive.list'|trans)
     ) }}
 
     <input type="hidden" id="level" value="{{ level }}">
     <div ng-controller="TableFormatController">
-        <div ng-controller="TableIndicatorController">
+        <div ng-controller="TableObjetiveController">
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
                     {% if (level > 1) %}
-                    <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
+                        <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                     {% endif %}
                     {% if (level == 3) %}
-                    <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
+                        <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
                     {% endif %}
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
@@ -65,6 +65,7 @@
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
+            console.log(inputHiddenLevel);
             if(inputHiddenLevel.val() == 3){
                 chargeSelectGerenciaSecond(e);
             }
@@ -76,7 +77,7 @@
             };
             $.ajax({
                 type: 'post',
-                url: '{{ path("indicatorGerenciaFirstTactic") }}',
+                url: '{{ path("objetiveGerenciaFirstTactic") }}',
                 data: data,
                 success: function(data) {
 
@@ -115,7 +116,7 @@
             };
             $.ajax({
                 type: 'post',
-                url: '{{ path("indicatorGerenciaSecondOperative") }}',
+                url: '{{ path("objetiveGerenciaSecondOperative") }}',
                 data: data,
                 success: function(data) {
                                     
@@ -188,8 +189,6 @@
         function getTableExtraInfo(data)
             {
                 var response = '';
-
-                response = response + 'Fórmula: ' + data.formula.equation;
                 
                 {#var totalIndicators = data.indicators.length;
                 if(totalIndicators > 0){

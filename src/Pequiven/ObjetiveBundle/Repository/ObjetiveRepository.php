@@ -125,6 +125,47 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
+     * Crea un paginador para los objetivos de acuerdo al nivel del mismo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
+        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
      * Crea un paginador para los objetivos estratégicos
      * 
      * @param array $criteria
