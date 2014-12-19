@@ -3,7 +3,7 @@
     <li>
         {% set avancedUsed = indicator.getResult %}
         {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-        {{ generateLink(indicator) }}
+        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %}
     </li>
 {% endfor  %}
 </ul>

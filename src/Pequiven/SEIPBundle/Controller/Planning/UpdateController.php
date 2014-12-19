@@ -85,8 +85,6 @@ class UpdateController extends Controller
         foreach ($objects as $indicator) {
             $indicatorService->calculateValueIndicator($indicator);
         }
-        $resultService = $this->getResultService();
-//        $resultService->updateResultOfObjects($objects);
         if($id > 0){
             return $this->redirect($referral);
         }
