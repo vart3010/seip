@@ -139,8 +139,8 @@
                       url: url,
                       data: { _method:'DELETE' }
                     }).done(function(data){
-                        if(tableIdRow > 0){
-                            $('#table-row-'+tableIdRow).remove();
+                        if(tableIdRow != ''){
+                            $('#'+tableIdRow).remove();
                         }
                         $.each(data.message,function(index,value){
                             notify(value,'', {

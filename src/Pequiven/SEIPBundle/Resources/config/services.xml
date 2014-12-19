@@ -161,5 +161,8 @@
 <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
+        <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
+        </service>
     </services>
 </container>
