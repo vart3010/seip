@@ -84,7 +84,7 @@ class UpdateController extends Controller
         }else{
 //            $objetives[] = $respository->find($id);
         }
-        $resultService = $this->container->get('seip.service.result');
+        $resultService = $this->getResultService();
         foreach ($objects as $indicator) {
             $resultService->refreshValueIndicator($indicator);
         }
@@ -115,7 +115,7 @@ class UpdateController extends Controller
         }else{
 //            $objetives[] = $respository->find($id);
         }
-        $resultService = $this->container->get('seip.service.result');
+        $resultService = $this->getResultService();
         foreach ($objects as $object) {
             $resultService->refreshValueArrangementProgram($object);
         }
