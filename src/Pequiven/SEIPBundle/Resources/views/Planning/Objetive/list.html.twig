@@ -8,7 +8,7 @@
     (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
 } %}
 
-{% block title %}- {{ labelHeader[level])|trans }}{% endblock %}
+{% block title %}- {{ (labelHeader[level])|trans }}{% endblock %}
 
 {% block body %}
     
@@ -23,10 +23,10 @@
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
                     {% if (level > 1) %}
-                    <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
+                        <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
                     {% endif %}
                     {% if (level == 3) %}
-                    <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
+                        <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
                     {% endif %}
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
@@ -47,7 +47,7 @@
         
         var selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
             selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
-            inputHiddenLevel = $("level"),//
+            inputHiddenLevel = $("#level"),//
             inputHiddenRoleName = $("rolUser")//
         ;
         
@@ -65,7 +65,8 @@
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
-            if(inputHiddenLevel == 3){
+            console.log(inputHiddenLevel);
+            if(inputHiddenLevel.val() == 3){
                 chargeSelectGerenciaSecond(e);
             }
         })

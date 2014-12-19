@@ -47,7 +47,7 @@
         
         var selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
             selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
-            inputHiddenLevel = $("level"),//
+            inputHiddenLevel = $("#level"),//
             inputHiddenRoleName = $("rolUser")//
         ;
         
@@ -65,7 +65,7 @@
         });
         
         selectGerenciaFirst.on("select2-selecting", function(e) {
-            if(inputHiddenLevel == 3){
+            if(inputHiddenLevel.val() == 3){
                 chargeSelectGerenciaSecond(e);
             }
         })
