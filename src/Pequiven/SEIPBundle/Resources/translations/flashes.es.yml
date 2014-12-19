@@ -3,3 +3,4 @@ pequiven:
         empty_comment: Debe añadir un comentario.
     indicator:
         add_observation: Se añadio una observación al indicador.
+        invalid_configuration_formula_type_calculation: Configuración incorrecta de la formula "%formula%", el tipo de calculo "typeOfCalculation" requiere la configuración de las variables origen "requireVars"

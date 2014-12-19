@@ -15,6 +15,12 @@ class IndicatorService implements ContainerAwareInterface
 {
     private $container;
     
+    /**
+     * Toma un string de una formula y realiza el parse a php para calcularlo
+     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @param array $data
+     * @return int
+     */
     public function calculateFormulaValue(\Pequiven\MasterBundle\Entity\Formula $formula,array $data) 
     {
         $variables = $formula->getVariables();
@@ -41,7 +47,14 @@ class IndicatorService implements ContainerAwareInterface
         return $result;
     }
     
-    public function parseFormulaVars(\Pequiven\MasterBundle\Entity\Formula $formula) {
+    /**
+     * Toma una ecuacion y la transforma a variales php validas en un string para evaluarlas.
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     * @return type
+     */
+    public function parseFormulaVars(\Pequiven\MasterBundle\Entity\Formula $formula)
+    {
         $equationReal = $formula->getEquationReal();
         $variables = $formula->getVariables();
         $formulaPaser = $equationReal;
@@ -54,7 +67,54 @@ class IndicatorService implements ContainerAwareInterface
         return $formulaPaser;
     }
     
+    /**
+     * Valida la configuracion de una formula
+     * @param \Pequiven\MasterBundle\Entity\Formula $formula
+     */
+    function validateFormula(\Pequiven\MasterBundle\Entity\Formula &$formula) 
+    {
+        $typeOfCalculation = $formula->getTypeOfCalculation();
+        $variableToRealValue = $formula->getVariableToRealValue();
+        $variableToPlanValue = $formula->getVariableToPlanValue();
+        $typeOfCalculationLabel = $this->trans($formula->getTypeOfCalculationLabel(),array(),'PequivenIndicatorBundle');
+        
+        $error = null;
+        
+        //Si el calculo es por promedio simple
+        if($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $formula
+                ->setVariableToRealValue(null)
+                ->setVariableToPlanValue(null)
+                ;
+        }elseif($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            if($variableToRealValue === null || $variableToPlanValue === null){
+               $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation',array(
+                    '%formula%' => (string) $formula,
+                    'typeOfCalculation' => $typeOfCalculationLabel,
+                    'requireVars' => 'Real y Plan'
+                ),'flashes');
+            }
+        }elseif($typeOfCalculation == \Pequiven\MasterBundle\Entity\Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+             $formula
+                ->setVariableToPlanValue(null)
+                ;
+            if($variableToRealValue === null){
+                $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation',array(
+                    '%formula%' => (string) $formula,
+                    'typeOfCalculation' => $typeOfCalculationLabel,
+                    'requireVars' => 'Real'
+                ),'flashes');
+            }
+        }
+        return $error;
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
 }

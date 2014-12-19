@@ -108,6 +108,20 @@ class Formula extends modelFormula
      */
     protected $variables;
     
+    /**
+     * Variable para calcular el valor Real.
+     * @var \Pequiven\MasterBundle\Entity\Formula\Variable
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    protected $variableToRealValue;
+    
+    /**
+     * Variable para calcular el valor Plan.
+     * @var \Pequiven\MasterBundle\Entity\Formula\Variable
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    protected $variableToPlanValue;
+
     public function __construct() {
         $this->variables = new ArrayCollection();
     }
@@ -360,6 +374,73 @@ class Formula extends modelFormula
     public function getEquationReal()
     {
         return $this->equationReal;
+    }
+    
+    /**
+     * Retorna el tipo de calculo de la formula
+     * @return integer
+     */
+    function getTypeOfCalculation() 
+    {
+        return $this->typeOfCalculation;
+    }
+    
+    /**
+     * Establece el tipo de calculo de la formula
+     * 
+     * @param integer $typeOfCalculation Formula::TYPE_CALCULATION_*
+     * @return Formula
+     */
+    function setTypeOfCalculation($typeOfCalculation) {
+        $this->typeOfCalculation = $typeOfCalculation;
+        
+        return $this;
+    }
+    
+    /**
+     * Set variableToRealValue
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variableToRealValue
+     * @return Formula
+     */
+    public function setVariableToRealValue(\Pequiven\MasterBundle\Entity\Formula\Variable $variableToRealValue = null)
+    {
+        $this->variableToRealValue = $variableToRealValue;
+
+        return $this;
+    }
+
+    /**
+     * Get variableToRealValue
+     *
+     * @return \Pequiven\MasterBundle\Entity\Formula\Variable 
+     */
+    public function getVariableToRealValue()
+    {
+        return $this->variableToRealValue;
+    }
+
+    /**
+     * Set variableToPlanValue
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variableToPlanValue
+     * @return Formula
+     */
+    public function setVariableToPlanValue(\Pequiven\MasterBundle\Entity\Formula\Variable $variableToPlanValue = null)
+    {
+        $this->variableToPlanValue = $variableToPlanValue;
+
+        return $this;
+    }
+
+    /**
+     * Get variableToPlanValue
+     *
+     * @return \Pequiven\MasterBundle\Entity\Formula\Variable 
+     */
+    public function getVariableToPlanValue()
+    {
+        return $this->variableToPlanValue;
     }
     
     public function __toString() {

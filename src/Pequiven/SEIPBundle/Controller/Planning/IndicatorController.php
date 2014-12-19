@@ -15,11 +15,22 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class IndicatorController extends ResourceController
 {
     public function showAction(Request $request) {
+        $resource = $this->findOr404($request);
+        
+        $errorFormula = null;
+        if($resource->getFormula() !== null){
+            $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+            $formula = $resource->getFormula();
+            $errorFormula = $indicatorService->validateFormula($formula);
+        }
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
-            ->setTemplateVar($this->config->getResourceName())
-            ->setData($this->findOr404($request))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'errorFormula' => $errorFormula,
+            ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
         return $this->handleView($view);
