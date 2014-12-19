@@ -61,4 +61,4 @@ UPDATE seip_monitor SET objTacticOriginal = 10, indTacticOriginal = 9, objOperat
 -- CPAMC
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 51, objOperativeVinculante = 60, indOperativeOriginal = 59, indOperativeVinculante = 60, arrangementProgramTactic = 0, arrangementProgramOperative = 1032 WHERE fk_gerencia = 7;
 -- CPJAA
-UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 13, objOperativeOriginal = 16, objOperativeVinculante = 39, indOperativeOriginal = 26, indOperativeVinculante = 32, arrangementProgramTactic = 0, arrangementProgramOperative = 47 WHERE fk_gerencia = 9;
+UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 13, objOperativeOriginal = 16, objOperativeVinculante = 39, indOperativeOriginal = 26, indOperativeVinculante = 32, arrangementProgramTactic = 0, arrangementProgramOperative = 48 WHERE fk_gerencia = 9;
