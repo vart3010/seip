@@ -168,6 +168,34 @@ class BackendMenuBuilder extends MenuBuilder
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
+        
+        $subchild = $this->factory->createItem('planning.objetives',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.main', $section)));
+        
+        $subchild->addChild('planning.objetives.strategic', array(
+                                'route' => 'pequiven_objetive_list',
+                                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
+        
+        $subchild->addChild('planning.objetives.tactic', array(
+                                'route' => 'pequiven_objetive_list',
+                                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
+
+        $subchild->addChild('planning.objetives.operative', array(
+                                'route' => 'pequiven_objetive_list',
+                                'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
+        
+        $child->addChild($subchild);
                 
         $subchild = $this->factory->createItem('planning.indicators',
                         $this->getSubLevelOptions(array(

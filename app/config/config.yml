@@ -180,8 +180,9 @@ sylius_resource:
                 repository: Pequiven\SEIPBundle\Repository\MonitorRepository
         pequiven.objetive:
             driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Objetive
+            templates: PequivenSEIPBundle:Planning/Objetive
             classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\ObjetiveController
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
         #Objetivo estratégico

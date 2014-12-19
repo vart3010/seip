@@ -78,6 +78,11 @@ app:
                             add: Añadir
                     planning:
                         main: Planificación
+                        objetives:
+                            main: Objetivos
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
                         indicators:
                             main: Indicadores
                             strategic: Estratégico
