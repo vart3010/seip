@@ -35,6 +35,12 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
 
     /**
      * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateResult;
+
+    /**
+     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -903,5 +909,10 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultWithWeight() {
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
+    }
+    
+    public function updateLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = new \DateTime();
     }
 }

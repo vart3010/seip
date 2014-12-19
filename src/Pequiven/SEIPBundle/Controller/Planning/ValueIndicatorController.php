@@ -45,10 +45,10 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             
             if(!$valueIndicator){
                 $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
-                $indicator->setValueFinal($previusValue + $value);
             }else{
-                $indicator->setValueFinal($value - $previusValue);
             }
+            $resultService = $this->container->get('seip.service.result');
+            $resultService->refreshValueIndicator($indicator);
             
             $valueIndicator
                 ->setFormulaParameters($data)

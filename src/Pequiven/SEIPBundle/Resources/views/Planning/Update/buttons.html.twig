@@ -1,0 +1,7 @@
+{% if is_granted('ROLE_WORKER_PLANNING') %}
+    {{ buttons.generic(
+        (path(routeUpdateResult, { 'id': entity.id,'referral':(urlUpdateResulReferral) })),
+        ('result.recalculate'|trans({},'PequivenSEIPBundle')),
+        'fa fa-pie-chart fa-1'
+    ) }}
+{% endif %}

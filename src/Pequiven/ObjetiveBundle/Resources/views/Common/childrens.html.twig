@@ -3,7 +3,8 @@
         {% if (children.enabled) %}
             <li>{% set avancedUsed = children.getResult %}
                 {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}</li>
+                {{ generateLink(children) }}{% if children.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ children.weight }}%){% endif %}
+            </li>
         {% endif %}
     {% endfor  %}
 </ul>

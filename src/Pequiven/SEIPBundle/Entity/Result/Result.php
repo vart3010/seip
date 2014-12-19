@@ -97,6 +97,12 @@ class Result extends ModelResult implements ResultItemInterface
     private $objetive;
     
     /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateResult;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -380,5 +386,10 @@ class Result extends ModelResult implements ResultItemInterface
     public function getObjetive()
     {
         return $this->objetive;
+    }
+    
+    public function updateLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = new \DateTime();
     }
 }
