@@ -390,16 +390,17 @@ class ObjetiveRepository extends EntityRepository {
         }
         $localidad = $user->getComplejo();
         $gerenciasTypeComplejo = $gerenciasTypeComplejoId = array();
-        foreach ($localidad->getGerencias() as $gerencia) {
-            $gerenciaGroup = $gerencia->getGerenciaGroup();
-            
-            if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
-                $gerenciasTypeComplejo [] = $gerencia;
-                $gerenciasTypeComplejoId[] = $gerencia->getId();
+        if($localidad){
+            foreach ($localidad->getGerencias() as $gerencia) {
+                $gerenciaGroup = $gerencia->getGerenciaGroup();
+
+                if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
+                    $gerenciasTypeComplejo [] = $gerencia;
+                    $gerenciasTypeComplejoId[] = $gerencia->getId();
+                }
             }
         }
         if(count($gerenciasTypeComplejo) > 0){
-            $localidad = $gerencia->getComplejo();
             $qbMedular = $this->getQueryAllEnabled();
             $qbMedular
                 ->innerJoin("o.objetiveLevel","ol")
