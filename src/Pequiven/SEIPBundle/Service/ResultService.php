@@ -86,6 +86,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //        }
 
         $objetive->setResultOfObjetive($total);//Resultado del objetivo
+        $objetive->updateLastDateCalculateResult();
+        
         $em->persist($objetive);
         
         if($objetive->getParents()->count() > 0){//Actualizar los resultados del padre
@@ -99,6 +101,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
     }
     
+    /**
+     * Calcula los resultados
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
+     */
     function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
         $em = $this->getDoctrine()->getManager();
         
@@ -120,7 +126,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $em->persist($parent);
         }
         
+        $result->updateLastDateCalculateResult();
         $this->updateResultOfObjetive($result);
+        
         
         $em->flush();
     }
@@ -191,6 +199,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $objetive;
     }
     
+    /**
+     * Calcula los resultados de los items
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
+     * @param type $itemsResult
+     * @param type $debug
+     */
     public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult,$debug = false)
     {
         $total = 0;

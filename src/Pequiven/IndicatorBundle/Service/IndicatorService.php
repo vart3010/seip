@@ -117,10 +117,20 @@ class IndicatorService implements ContainerAwareInterface
     
     /**
      * Calcula el valor de un indicador
+     * 
      * @param Indicator $indicator
      */
     function calculateValueIndicator(Indicator $indicator)
     {
+        $details = $indicator->getDetails();
+        if(!$details){
+            $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
+            $indicator->setDetails($details);
+        }
+        $previusValue = $indicator->getValueFinal();
+        $details
+                ->setPreviusValue($previusValue)
+                ;
         $formula = $indicator->getFormula();
         if($formula !== null && $this->validateFormula($formula) === null){
             $typeOfCalculation = $formula->getTypeOfCalculation();
@@ -134,9 +144,18 @@ class IndicatorService implements ContainerAwareInterface
                 $this->calculateFormulaAccumulate($indicator);
             }
         }
+        $indicator->updateLastDateCalculateResult();
+        
         $em = $this->getDoctrine()->getManager();
+        
+        
         $em->persist($indicator);
+        $em->persist($details);
+        
         $em->flush();
+        
+        $objetives = $indicator->getObjetives();
+        $this->getResultService()->updateResultOfObjects($objetives);
     }
     
     /**
@@ -219,6 +238,15 @@ class IndicatorService implements ContainerAwareInterface
             $value += $valueIndicator->getValueOfIndicator();
         }
         $indicator->setValueFinal($value);
+    }
+    
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
     
     public function setContainer(ContainerInterface $container = null) {
