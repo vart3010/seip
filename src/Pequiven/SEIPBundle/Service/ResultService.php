@@ -336,7 +336,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $objetives = $indicator->getObjetives();
         
-        $this->getResultService()->updateResultOfObjects($objetives);
+        $this->updateResultOfObjects($objetives);
     }
     
      /**
@@ -344,7 +344,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaSimpleAverage(Indicator &$indicator) {
+    public function calculateFormulaSimpleAverage(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
         $valuesIndicator = $indicator->getValuesIndicator();
         $quantity = 0;
         $value = 0.0;
