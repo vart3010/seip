@@ -1,0 +1,96 @@
+Pequiven\ArrangementBundle\Entity\ArrangementRange:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        userCreatedAt:
+            expose: true
+            groups: [api_details]
+        userUpdatedAt:
+            expose: true
+            groups: [api_details]
+        objetive:
+            expose: true
+            groups: [objetive]
+        indicator:
+            expose: true
+            groups: [indicator]
+        typeRangeTop:
+            expose: true
+            groups: [api_list]
+        typeRangeMiddleTop:
+            expose: true
+            groups: [api_list]
+        typeRangeMiddleBottom:
+            expose: true
+            groups: [api_list]
+        typeRangeBottom:
+            expose: true
+            groups: [api_list]
+        opRankTopBasic:
+            expose: true
+            groups: [api_list]
+        rankTopBasic:
+            expose: true
+            groups: [api_list]
+        opRankTopMixedTop:
+            expose: true
+            groups: [api_list]
+        rankTopMixedTop:
+            expose: true
+            groups: [api_list]
+        opRankTopMixedBottom:
+            expose: true
+            groups: [api_list]
+        rankTopMixedBottom:
+            expose: true
+            groups: [api_list]
+        oprankMiddleTopBasic:
+            expose: true
+            groups: [api_list]
+        rankMiddleTopBasic:
+            expose: true
+            groups: [api_list]
+        opRankMiddleTopMixedTop:
+            expose: true
+            groups: [api_list]
+        rankMiddleTopMixedTop:
+            expose: true
+            groups: [api_list]
+        opRankMiddleTopMixedBottom:
+            expose: true
+            groups: [api_list]
+        rankMiddleTopMixedBottom:
+            expose: true
+            groups: [api_list]
+        oprankMiddleBottomBasic:
+            expose: true
+            groups: [api_list]
+        rankMiddleBottomBasic:
+            expose: true
+            groups: [api_list]
+        opRankMiddleBottomMixedTop:
+            expose: true
+            groups: [api_list]
+        rankBottomMixedTop:
+            expose: true
+            groups: [api_list]
+        opRankBottomMixedBottom:
+            expose: true
+            groups: [api_list]
+        rankBottomMixedBottom:
+            expose: true
+            groups: [api_list]
+        enabled:
+            expose: true
+            groups: [api_list]
+        objetive:
+            expose: true
+            groups: [objetive]

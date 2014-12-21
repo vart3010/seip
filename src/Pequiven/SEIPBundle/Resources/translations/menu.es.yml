@@ -42,6 +42,7 @@ app:
                         main: Programas de Gestión
                         list: Lista
                         assigned: Asignados
+                        for_reviewing_or_approving: Por revisar o aprobar
                         temaplate: Desde plantilla
                         add:
                             main: Añadir
@@ -79,6 +80,12 @@ app:
                         main: Planificación
                         indicators:
                             main: Indicadores
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
+                        matriz: Matriz de Objetivos
+                        results:
+                            main: Resultados
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo

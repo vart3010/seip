@@ -1,0 +1,28 @@
+<br/>
+<div class="inline-label">
+    <label class="label">{{ 'pequiven_seip.results.results'|trans({},'PequivenSEIPBundle') }}</label>
+    <ul class="fa-ul">
+        {% for result in entity.results %}
+            <li>
+                {% set avancedUsed = result.getResult %}
+                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                {{ result }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ result.weight }}%)
+                {% if result.childrens.count > 0 %}
+                    <ul>
+                    {% for child in result.childrens %}
+                        <li>
+                            {% set avancedUsed = child.getResult %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {{ child }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ child.weight }}%)
+                        </li>
+                    {% endfor%}
+                    </ul>
+                {% endif %}
+            </li>
+        {% else %}
+            <li>
+                <b>{{ 'pequiven_seip.results.no_results'|trans({},'PequivenSEIPBundle') }}</b>
+            </li>
+        {% endfor  %}
+    </ul>
+</div>

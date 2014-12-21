@@ -19,12 +19,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ArrangementProgramController extends SEIPController
 {
+    /**
+     * Muestra los programas de gestion
+     * @param Request $request
+     * @return type
+     */
     public function indexAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
-
-        if ($this->config->isPaginated()) {
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if(isset($criteria['typeManagement']) && $criteria['typeManagement'] == \Pequiven\MasterBundle\Entity\GerenciaSecond::TYPE_MANAGEMENT_BINDING){
+                unset($criteria['firstLineManagement']);
+                unset($criteria['complejo']);
+            }
+        }
+        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 'createPaginatorByRol',
@@ -61,8 +73,6 @@ class ArrangementProgramController extends SEIPController
                 );
             }
             
-            $user = $this->getUser();
-            $level = $user->getLevelRealByGroup();
             $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
             $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
             $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
@@ -75,7 +85,7 @@ class ArrangementProgramController extends SEIPController
                     'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
                 );
             }
-            //PequivenArrangementProgramBundle
+            
             $view->setData(array(
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
@@ -94,7 +104,7 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
-     * 
+     * Retorna los programas por gerencia
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
@@ -141,6 +151,11 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function listTemplateAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
@@ -215,7 +230,27 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function assignedAction(Request $request) {
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function forReviewingApprovingAction(Request $request){
+        $method = 'createPaginatorByAssigned';
+        $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
+        $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
+     * Agrupa codigo para no repetir
+     * @param Request $request
+     * @param type $method
+     * @param type $route
+     * @param type $template
+     * @return type
+     */
+    private function getSummaryResponse(Request $request,$method,$route,$template) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
@@ -228,7 +263,7 @@ class ArrangementProgramController extends SEIPController
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
-                'createPaginatorByAssignedResponsibles',
+                $method,
                 array($criteria, $sorting)
             );
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -250,7 +285,7 @@ class ArrangementProgramController extends SEIPController
 
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('assignedIndex.html'))
+            ->setTemplate($this->config->getTemplate($template))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
@@ -278,6 +313,7 @@ class ArrangementProgramController extends SEIPController
             }
             //PequivenArrangementProgramBundle
             $view->setData(array(
+                'route' => $route,
                 'labelsStatus' => $labelsStatus,
                 'isAllowFilterComplejo' => $isAllowFilterComplejo,
                 'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
@@ -292,6 +328,19 @@ class ArrangementProgramController extends SEIPController
             $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array(),$formatData));
         }
         return $this->handleView($view);
+    }
+
+    /**
+     * Retorna la vista de los asignados.
+     * @param Request $request
+     * @return type
+     */
+    public function assignedAction(Request $request) 
+    {    
+        $method = 'createPaginatorByAssignedResponsibles';
+        $route = 'pequiven_seip_arrangementprogram_assigned';
+        $template = 'assignedIndex.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
     }
     
     /**
@@ -326,6 +375,7 @@ class ArrangementProgramController extends SEIPController
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }
+        
         $form->handleRequest($request);
         if($request->isMethod('POST') && $form->isValid()){
             $autoOpenOnSave = $request->get('autoOpenOnSave',false);
@@ -359,9 +409,10 @@ class ArrangementProgramController extends SEIPController
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
+        $view = $form->createView();
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form'   => $view,
         );
     }
 
@@ -392,7 +443,7 @@ class ArrangementProgramController extends SEIPController
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
@@ -407,6 +458,7 @@ class ArrangementProgramController extends SEIPController
         $isAllowToSendToReview = $arrangementProgramManager->isAllowToSendToReview($entity);
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
+        $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
         
         return array(
             'entity'      => $entity,
@@ -416,6 +468,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToReview' => $isAllowToReview,
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
+            'isAllowToNotity' => $isAllowToNotity,
         );
     }
 
@@ -433,12 +486,10 @@ class ArrangementProgramController extends SEIPController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
         //Security check
-        $user = $this->getUser();
-        if($entity->getCreatedBy() !== $user){
-            throw $this->createAccessDeniedHttpException();
-        }
-        if($entity->getStatus() !== ArrangementProgram::STATUS_DRAFT){
+        if(!$arrangementProgramManager->hasPermissionToUpdate($entity)){
             throw $this->createAccessDeniedHttpException();
         }
 
@@ -474,8 +525,7 @@ class ArrangementProgramController extends SEIPController
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
@@ -579,20 +629,24 @@ class ArrangementProgramController extends SEIPController
         if(!$arrangementProgramManager->isAllowToSendToReview($resource)){
             throw $this->createAccessDeniedHttpException();
         }
-        $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
-        
-        $user = $this->getUser();
-        $details = $resource->getDetails();
-        $details
-                ->setSendToReviewBy($user)
-                ->setSendToReviewDate(new DateTime());
-        
-        $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
-        
-        $this->domainManager->update($resource);
-        $this->flashHelper->setFlash('success', 'send_to_review');
-        
-        $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
+        if($arrangementProgramManager->isYouCanSendInRevision($resource)){
+            $resource->setStatus(ArrangementProgram::STATUS_IN_REVIEW);
+
+            $user = $this->getUser();
+            $details = $resource->getDetails();
+            $details
+                    ->setSendToReviewBy($user)
+                    ->setSendToReviewDate(new DateTime());
+
+            $this->domainManager->dispatchEvent('pre_send_to_review', new ResourceEvent($resource));
+
+            $this->domainManager->update($resource);
+            $this->flashHelper->setFlash('success', 'send_to_review');
+
+            $this->domainManager->dispatchEvent('post_send_to_review', new ResourceEvent($resource));
+        }else{
+            $this->flashHelper->setFlash('error', 'planned_not_complete');
+        }
         
         return $this->redirectHandler->redirectTo($resource);
     }
@@ -780,6 +834,103 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
+     * Inicia el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function startNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() != null)
+        {
+            $this->flashHelper->setFlash('error', 'already_start_the_notification_process',array('%user%' => (string)$user));
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setNotificationInProgressByUser($user)
+                ->setNotificationInProgressDate(new DateTime());
+        
+        $this->domainManager->dispatchEvent('pre_start_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'start_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_start_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    public function deleteAction(Request $request) {
+        $resource = $this->findOr404($request);
+        
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        if(!$arrangementProgramManager->isAllowToDelete($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        return parent::deleteAction($request);
+    }
+    
+    /**
+     * Finaliza el proceso de notificacion
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function finishNotificationProcessAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $arrangementProgramManager = $this->getArrangementProgramManager();
+        
+        if(!$arrangementProgramManager->isAllowToNotity($resource)){
+            throw $this->createAccessDeniedHttpException();
+        }
+        $user = $this->getUser();
+        $details = $resource->getDetails();
+        if($details->getNotificationInProgressByUser() !== $user)
+        {
+            if($details->getNotificationInProgressByUser() == null){
+                $this->flashHelper->setFlash('error', 'notification_process_dont_start',array());
+            }else{
+                $this->flashHelper->setFlash('error', 'notification_process_user_finish',array('%user%' => (string)$details->getNotificationInProgressByUser()));
+            }
+            throw $this->createAccessDeniedHttpException();
+        }
+        
+        $details
+                ->setlastNotificationInProgressByUser($details->getNotificationInProgressByUser())
+                ->setLastNotificationInProgressDate($details->getNotificationInProgressDate())
+                ->setNotificationInProgressByUser(null)
+                ->setNotificationInProgressDate(null)
+                ;
+        $summary = $resource->getSummary(array(
+            'limitMonthToNow' => true
+        ));
+        $resource->setProgressToDate($summary['advances']);
+        $summary = $resource->getSummary();
+        $resource->setTotalAdvance($summary['advances']);
+        
+        $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
+        
+        $this->domainManager->update($resource);
+        $this->flashHelper->setFlash('success', 'finish_the_notification_process',array('%user%' => (string)$user));
+        
+        $this->domainManager->dispatchEvent('post_finish_the_notification_process', new ResourceEvent($resource));
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+
+    /**
      * Exportar el reporte tecnico
      * @param Request $request
      */
@@ -885,41 +1036,41 @@ class ArrangementProgramController extends SEIPController
             $weight = $goal->getWeight();
             $goalDetails = $goal->getGoalDetails();
             
-            $januaryPlanned = $goalDetails->getJanuaryPlanned();
-            $januaryReal = $goalDetails->getJanuaryReal();
+            $januaryPlanned = $goalDetails->getJanuaryPlanned() > 0 ? $goalDetails->getJanuaryPlanned(): '';
+            $januaryReal = $goalDetails->getJanuaryReal() > 0 ? $goalDetails->getJanuaryReal() : '';
             
-            $februaryPlanned = $goalDetails->getFebruaryPlanned();
-            $februaryReal = $goalDetails->getFebruaryReal();
+            $februaryPlanned = $goalDetails->getFebruaryPlanned() > 0 ? $goalDetails->getFebruaryPlanned() : '';
+            $februaryReal = $goalDetails->getFebruaryReal() > 0 ? $goalDetails->getFebruaryReal() : '';
             
-            $marchPlanned = $goalDetails->getMarchPlanned();
-            $marchReal = $goalDetails->getMarchReal();
+            $marchPlanned = $goalDetails->getMarchPlanned() > 0 ? $goalDetails->getMarchPlanned() : '';
+            $marchReal = $goalDetails->getMarchReal() > 0 ? $goalDetails->getMarchReal() : '';
             
-            $aprilPlanned = $goalDetails->getAprilPlanned();
-            $aprilReal = $goalDetails->getAprilReal();
+            $aprilPlanned = $goalDetails->getAprilPlanned() > 0 ? $goalDetails->getAprilPlanned() : '';
+            $aprilReal = $goalDetails->getAprilReal() > 0 ? $goalDetails->getAprilReal() : '';
             
-            $mayPlanned = $goalDetails->getMayPlanned();
-            $mayReal = $goalDetails->getMayReal();
+            $mayPlanned = $goalDetails->getMayPlanned() > 0 ? $goalDetails->getMayPlanned() : '';
+            $mayReal = $goalDetails->getMayReal() > 0 ? $goalDetails->getMayReal() : '';
             
-            $junePlanned = $goalDetails->getJunePlanned();
-            $juneReal = $goalDetails->getJuneReal();
+            $junePlanned = $goalDetails->getJunePlanned() > 0 ? $goalDetails->getJunePlanned() : '';
+            $juneReal = $goalDetails->getJuneReal() > 0 ? $goalDetails->getJuneReal() : '';
             
-            $julyPlanned = $goalDetails->getJulyPlanned();
-            $julyReal = $goalDetails->getJulyReal();
+            $julyPlanned = $goalDetails->getJulyPlanned() > 0 ? $goalDetails->getJulyPlanned() : '';
+            $julyReal = $goalDetails->getJulyReal() > 0 ? $goalDetails->getJulyReal() : '';
             
-            $augustPlanned = $goalDetails->getAugustPlanned();
-            $augustReal = $goalDetails->getAugustReal();
+            $augustPlanned = $goalDetails->getAugustPlanned() > 0 ? $goalDetails->getAugustPlanned() : '';
+            $augustReal = $goalDetails->getAugustReal() > 0 ? $goalDetails->getAugustReal() : '';
             
-            $septemberPlanned = $goalDetails->getSeptemberPlanned();
-            $septemberReal = $goalDetails->getSeptemberReal();
+            $septemberPlanned = $goalDetails->getSeptemberPlanned() > 0 ? $goalDetails->getSeptemberPlanned() : '';
+            $septemberReal = $goalDetails->getSeptemberReal() > 0 ? $goalDetails->getSeptemberReal() : '';
             
-            $octoberPlanned = $goalDetails->getOctoberPlanned();
-            $octoberReal = $goalDetails->getOctoberReal();
+            $octoberPlanned = $goalDetails->getOctoberPlanned() > 0 ? $goalDetails->getOctoberPlanned() : '';
+            $octoberReal = $goalDetails->getOctoberReal() > 0 ? $goalDetails->getOctoberReal() : '';
             
-            $novemberPlanned = $goalDetails->getNovemberPlanned();
-            $novemberReal = $goalDetails->getNovemberReal();
+            $novemberPlanned = $goalDetails->getNovemberPlanned() > 0 ? $goalDetails->getNovemberPlanned() : '';
+            $novemberReal = $goalDetails->getNovemberReal() > 0 ? $goalDetails->getNovemberReal() : '';
             
-            $decemberPlanned = $goalDetails->getDecemberPlanned();
-            $decemberReal = $goalDetails->getDecemberReal();
+            $decemberPlanned = $goalDetails->getDecemberPlanned() > 0 ? $goalDetails->getDecemberPlanned() : '';
+            $decemberReal = $goalDetails->getDecemberReal() > 0 ? $goalDetails->getDecemberReal() : '';
             
             $goalObservations = $goal->getObservations();
             
@@ -1019,6 +1170,7 @@ class ArrangementProgramController extends SEIPController
         //Observaciones del programa.
         $rowObservation = $rowSummary + 2;
         $observations = $resource->getObservations();
+        $reference = $resource->getRef();
         $observationString = '';
         foreach ($observations as $observation) {
             $observationString .= sprintf('%s,',$observation->getDescription());
@@ -1031,10 +1183,11 @@ class ArrangementProgramController extends SEIPController
             $observationString = 'Ninguna.';
         }
         $activeSheet
-                ->setCellValue('B'.$rowObservation,$observationString);
+                ->setCellValue('B'.$rowObservation,$observationString)
+                ->setCellValue('AE'.$rowObservation,$reference);
         
         //Agregar los detalles del programa de gestion
-        $sendToReviewBy = ucfirst(strtolower($details->getSendToReviewBy() ? $details->getSendToReviewBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $sendToReviewBy = ucfirst(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
         $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
         
         $approvedBy = ucfirst(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));

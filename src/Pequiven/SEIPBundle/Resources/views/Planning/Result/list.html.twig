@@ -1,0 +1,42 @@
+{#% extends "::base.html.twig" %#}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block title %}- {{ 'pequiven_master.gerencia_second'|trans({},'PequivenMasterBundle') }}{% endblock %}
+
+{% block body %}
+    {{ contentHeader(
+        ("result.list.titleObjetiveOperative"|trans)
+    ) }}
+    
+    <div ng-controller="TableFormatController">
+        <!--<div ng-controller="ObjetiveTacticController">-->
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaSecondList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                    <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
+                        <td data-title="'{{ 'result.list.columnLocation'|trans }}'" filter="{ 'complejo': 'text' }" >
+                            <a href="{$ result._links.self.href $}">{$result.gerencia.complejo.description$}</a>
+                        </td>
+                        <td data-title="'{{ 'result.list.columnGerenciaFirst'|trans }}'" filter="{ 'gerenciaFirst': 'text' }" >
+                            <a href="{$ result._links.self.href $}">{$result.gerencia.description$}</a>
+                        </td>
+                        <td data-title="'{{ 'result.list.columnGerenciaSecond'|trans }}'" sortable="'description'" filter="{ 'gerenciaSecond': 'text' }">
+                            <a href="{$ result.linkGerenciaSecondToResult $}">{$result.description$}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        <!--</div>-->
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    
+    <script type="text/javascript">
+        function getTableExtraInfo(data)
+            {
+                
+            }
+    </script>
+    
+{% endblock %}

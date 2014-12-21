@@ -79,10 +79,10 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      * @return \Pequiven\SEIPBundle\Service\Configuration
      */
     protected function getSeipConfiguration() {
-        return $this->get('seip.configuration');
+        return $this->container->get('seip.configuration');
     }
     
-    public function setContainer(ContainerInterface $container = null) {
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
 }

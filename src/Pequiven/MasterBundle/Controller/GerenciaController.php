@@ -143,6 +143,7 @@ class GerenciaController extends baseController {
             ->setTemplate($this->config->getTemplate('list.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
         if($request->get('_format') == 'html'){
             $view->setData($resources);
         }else{
@@ -153,15 +154,383 @@ class GerenciaController extends baseController {
         return $this->handleView($view);
     }
     
+    
     public function showAction(Request $request) {
+        $user = $this->getUser();
+        
+        if($user->getGerenciaSecond()->getId() == 50){
+            $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('show.html'))
+                ->setTemplateVar($this->config->getResourceName())
+                ->setData($this->findOr404($request))
+            ;
+            $groups = array_merge(array('api_list'), $request->get('_groups',array()));
+            $view->getSerializationContext()->setGroups($groups);
+            return $this->handleView($view);
+        } else{
+            return 'false';
+        }
+    }
+    
+    public function updateAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
+            $form->submit($request,false);
+            if($form->isValid()){
+                $this->domainManager->update($resource);
+
+                return $this->redirectHandler->redirectTo($resource);
+            }
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('show.html'))
-            ->setTemplateVar($this->config->getResourceName())
-            ->setData($this->findOr404($request))
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
         ;
-        $groups = array_merge(array('api_list'), $request->get('_groups',array()));
-        $view->getSerializationContext()->setGroups($groups);
         return $this->handleView($view);
+    }
+    
+    /**
+     * Exportar la matriz de objetivos
+     * @param Request $request
+     */
+    public function exportAction(Request $request)
+    {
+        $em = $this->getDoctrine();
+        $idGerencia = $request->get('id');
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);
+        
+        $sectionOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionOperativeByGerencia($gerencia);
+        $resource = $this->findOr404($request);
+        
+        //Formato para tdo el dcumento
+        $styleArrayBordersContent = array(
+          'borders' => array(
+            'allborders' => array(
+              'style' => \PHPExcel_Style_Border::BORDER_THIN
+            )
+          ),
+          'font' => array(
+          ),
+          'alignment' => array(
+              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY,
+              'vertical'   => \PHPExcel_Style_Alignment::VERTICAL_TOP,
+              'wrap' => true
+          )
+        );
+        
+        //Formato en negrita
+        $styleArray = array(
+            'font' => array(
+                'bold' => true
+            )
+        );
+        
+        $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_objetivos.xls');
+        $now = new \DateTime();
+        $objPHPExcel = \PHPExcel_IOFactory::load($path);
+//        $objPHPExcel = new \PHPExcel();
+        $objPHPExcel
+                ->getProperties()
+                ->setCreator("SEIP")
+                ->setTitle('SEIP - Matriz de Objetivos')
+                ->setCreated()
+                ->setLastModifiedBy('SEIP')
+                ->setModified()
+                ;
+        $objPHPExcel
+                ->setActiveSheetIndex(0);
+        $activeSheet = $objPHPExcel->getActiveSheet();
+        $activeSheet->getDefaultRowDimension()->setRowHeight();
+        
+//        $activeSheet->setTitle($gerencia->getDescription());
+        
+        $activeSheet->setCellValue('A3', $gerencia->getDescription());
+        
+        $row = 8;//Fila Inicial del skeleton
+        $contResult = 1;//Contador de resultados totales
+        $totalOperative = count($sectionOperative);//Total de registros
+        $rowHeight = 70;//Alto de la fila
+        
+        //Objetivo Táctico
+        $beforeObjTacRef = $sectionOperative[0]['ObjTacRef'];
+        $contRepObjTac = 0;//Contador que cuenta los objetivos tácticos repetidos
+        $contObjTac = 1;//Contador que cuenta el número de objetivos tácticos
+        $rowIniTac = 8;//Fila inicial para hacer mergecell en el nivel táctico
+        $rowFinTac = 8;//Fila final para hacer mergecell en el nivel táctico
+        
+        //Objetivo Operativo
+        $beforeObjOpeRef = $sectionOperative[0]['ObjOpeRef'];
+        $contRepObjOpe = 0;//Contador que cuenta los objetivos operativos repetidos
+        
+        //Indicador Operativo
+        $beforeIndOpeRef = $sectionOperative[0]['IndOpeRef'];
+        $contRepIndOpe = 0;//Contador que cuenta los indicadores operativos repetidos
+        
+        //Recorremos los resultados obtenidos
+        foreach($sectionOperative as $result){
+            $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
+            $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);
+            
+            $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe']);
+            $activeSheet->setCellValue('O'.$row, $result['ObjOpeGerencia']);
+            $activeSheet->getStyle('O'.$row)->applyFromArray($styleArray);
+            $activeSheet->setCellValue('P'.$row, $result['ObjOpeGoal']);
+            $activeSheet->setCellValue('Q'.$row, $result['ObjOpePeso']);
+            $textIndOpe = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpeRef'].' '.$result['IndOpe'];
+            $textIndOpeFormula = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpeFormula'];
+            $textIndOpePeso = empty($result['IndOpeRef']) ? 'No Aplica' : $result['IndOpePeso'];
+            $activeSheet->setCellValue('R'.$row, $textIndOpe);
+            $activeSheet->setCellValue('S'.$row, $textIndOpeFormula);
+//            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
+            $activeSheet->setCellValue('U'.$row, $textIndOpePeso);
+            
+            if($contResult > 1){
+                
+                //Objetivos Tácticos
+                if($beforeObjTacRef === $result['ObjTacRef']){//Si cambia el objetivo táctico
+                    $contRepObjTac++;
+                    if($contResult === $totalOperative){
+
+                        $activeSheet->mergeCells(sprintf('A%s:A%s',($row-$contRepObjTac),($row)));
+                        $activeSheet->mergeCells(sprintf('B%s:B%s',($row-$contRepObjTac),($row)));
+                        $activeSheet->mergeCells(sprintf('G%s:G%s',($row-$contRepObjTac),($row)));
+                        $activeSheet->mergeCells(sprintf('H%s:H%s',($row-$contRepObjTac),($row)));
+                        $activeSheet->mergeCells(sprintf('M%s:M%s',($row-$contRepObjTac),($row)));
+
+                        //Obtenemos el Objetivo Táctico anterior y seteamos los indicadores en la matriz
+                        $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
+                        $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
+                        $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionStrategic($objetiveTactic);
+                        
+                        $totalStrategics = count($objetivesStrategics);
+                        $beforeLineStraRef = $objetivesStrategics[0]['LineStraRef'];
+                        $contObjStra = 1;
+                        $textObjStra = '';
+                        $textLineStrategic = '';
+                        //Consultamos si el objetivo táctico tiene más de un estratégico padre
+                        foreach($objetivesStrategics as $objetiveStrategic){
+                            if($totalStrategics > 1){
+                                $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
+                                if($contObjStra == 1){
+                                    $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                } else{
+                                    if($beforeLineStraRef === $objetiveStrategic['LineStraRef']){
+                                    } else{
+                                        $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                    }
+                                    $beforeLineStraRef = $objetiveStrategic['LineStraRef'];
+                                }
+                            } else{
+                                $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra'];
+                                $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra'];
+                            }
+                        }
+
+                        $activeSheet->setCellValue('A'.($row-$contRepObjTac), $textLineStrategic);
+                        $activeSheet->setCellValue('B'.($row-$contRepObjTac), $textObjStra);
+
+                        //Sección Indicadores Tácticos
+                        $totalIndicatorsTactic = count($indicatorsTactic);
+                        if($totalIndicatorsTactic > 0){
+                            $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
+
+                            $contIndTactic = 1;
+                            foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
+                                if($contIndTactic === $totalIndicatorsTactic){
+                                    $rowFinTac = $row;
+                                } else{
+                                    $rowFinTac = $rowIniTac + ($div-1);
+                                }
+                                $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
+                                $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
+//                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+                                $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
+                                $contIndTactic++;
+                                $rowIniTac = $rowIniTac + ($div);
+                            }
+                        } else{
+                            if($contRepObjTac > 0){
+                                $activeSheet->setCellValue('I'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('J'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('K'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->setCellValue('L'.($row-$contRepObjTac), 'No Aplica');
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac),($row)));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',($row-$contRepObjTac),($row)));
+                            }
+                        }
+                    }
+                } else{
+                    //Obtenemos el Objetivo Táctico anterior y seteamos los indicadores en la matriz
+                    $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $beforeObjTacRef));
+                    $indicatorsTactic = $em->getRepository('PequivenIndicatorBundle:Indicator')->getByObjetiveTactic($objetiveTactic);
+                    $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionStrategic($objetiveTactic);
+                    
+                    $totalStrategics = count($objetivesStrategics);
+                    $beforeLineStraRef = $objetivesStrategics[0]['LineStraRef'];
+                    $contObjStra = 1;
+                    $textObjStra = '';
+                    $textLineStrategic = '';
+                    //Consultamos si el objetivo táctico tiene más de un estratégico padre
+                    foreach($objetivesStrategics as $objetiveStrategic){
+                        if($totalStrategics > 1){
+                            $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra']."\n";
+                            if($contObjStra == 1){
+                                $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                            } else{
+                                if($beforeLineStraRef === $objetiveStrategic['LineStraRef']){
+                                } else{
+                                    $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra']."\n";
+                                }
+                                $beforeLineStraRef = $objetiveStrategic['LineStraRef'];
+                            }
+                        } else{
+                            $textObjStra.= $objetiveStrategic['ObjStraRef'].' '.$objetiveStrategic['ObjStra'];
+                            $textLineStrategic.= $objetiveStrategic['LineStraRef'].' '.$objetiveStrategic['LineStra'];
+                        }
+                    }
+                    
+                    $activeSheet->setCellValue('A'.($row-$contRepObjTac-1), $textLineStrategic);
+                    $activeSheet->setCellValue('B'.($row-$contRepObjTac-1), $textObjStra);
+                    
+                    //Sección Indicadores Tácticos
+                    $totalIndicatorsTactic = count($indicatorsTactic);
+                    if($totalIndicatorsTactic > 0){
+                    
+                        $div = ($contRepObjTac + 1) / $totalIndicatorsTactic;
+
+                        $contIndTactic = 1;
+                        foreach($indicatorsTactic as $indicatorTactic){//Recorremos los Indicadores Tácticos para el Objetivo en específico
+                            if($contIndTactic === $totalIndicatorsTactic){
+                                $rowFinTac = ($row-1);
+                            } else{
+                                $rowFinTac = $rowIniTac + ($div-1);
+                            }
+                            $activeSheet->setCellValue('I'.$rowIniTac, $indicatorTactic['IndTacRef'].' '.$indicatorTactic['IndTac']);
+                                $activeSheet->setCellValue('J'.$rowIniTac, $indicatorTactic['IndTacFormula']);
+//                                $activeSheet->setCellValue('K'.$rowIniTac, $indicatorTactic['IndTacGoal']);
+                                $activeSheet->setCellValue('L'.$rowIniTac, $indicatorTactic['IndTacPeso']);
+                                $activeSheet->mergeCells(sprintf('I%s:I%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('J%s:J%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('K%s:K%s',$rowIniTac,$rowFinTac));
+                                $activeSheet->mergeCells(sprintf('L%s:L%s',$rowIniTac,$rowFinTac));
+                            $contIndTactic++;
+                            $rowIniTac = $rowIniTac + ($div);
+                        }
+                    } else{
+                        if($contRepObjTac > 0){
+                            $activeSheet->setCellValue('I'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('J'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('K'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->setCellValue('L'.($row-$contRepObjTac-1), 'No Aplica');
+                            $activeSheet->mergeCells(sprintf('I%s:I%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('J%s:J%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('K%s:K%s',($row-$contRepObjTac -1),($row-1)));
+                            $activeSheet->mergeCells(sprintf('L%s:L%s',($row-$contRepObjTac -1),($row-1)));
+                        }
+                    }
+                    if($contRepObjTac > 0){
+                        $activeSheet->mergeCells(sprintf('A%s:A%s',($row-$contRepObjTac -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('B%s:B%s',($row-$contRepObjTac -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('G%s:G%s',($row-$contRepObjTac -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('H%s:H%s',($row-$contRepObjTac -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('M%s:M%s',($row-$contRepObjTac -1),($row-1)));
+                        $contRepObjTac = 0;
+                    }
+                    $contObjTac++;
+                }
+                
+                $beforeObjTacRef = $result['ObjTacRef'];
+                
+                //Objetivos Operativos
+                if($beforeObjOpeRef === $result['ObjOpeRef']){
+                    $contRepObjOpe++;
+                    if($contResult === $totalOperative){
+                        $activeSheet->mergeCells(sprintf('N%s:N%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('O%s:O%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('P%s:P%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepObjOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('V%s:V%s',($row-$contRepObjOpe),($row)));
+                    }
+                } else{
+                    if($contRepObjOpe > 0){
+                        $activeSheet->mergeCells(sprintf('N%s:N%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('O%s:O%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('P%s:P%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($row-$contRepObjOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('V%s:V%s',($row-$contRepObjOpe -1),($row-1)));
+                        $contRepObjOpe = 0;
+                    }
+                }
+                $beforeObjOpeRef = $result['ObjOpeRef'];
+                
+                //Indicadores Operativos
+                if($beforeIndOpeRef === $result['IndOpeRef']){
+                    $contRepIndOpe++;
+                    if($contResult === $totalOperative){
+                        $activeSheet->mergeCells(sprintf('R%s:R%s',($row-$contRepIndOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('S%s:S%s',($row-$contRepIndOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('T%s:T%s',($row-$contRepIndOpe),($row)));
+                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepIndOpe),($row)));
+                    }
+                } else{
+                    if($contRepIndOpe > 0){
+                        $activeSheet->mergeCells(sprintf('R%s:R%s',($row-$contRepIndOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('S%s:S%s',($row-$contRepIndOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('T%s:T%s',($row-$contRepIndOpe -1),($row-1)));
+                        $activeSheet->mergeCells(sprintf('U%s:U%s',($row-$contRepIndOpe -1),($row-1)));
+                        $contRepIndOpe = 0;
+                    }
+                }
+                $beforeIndOpeRef = $result['IndOpeRef'];
+            }
+            
+            $activeSheet->getRowDimension($row)->setRowHeight($rowHeight);
+            $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->applyFromArray($styleArrayBordersContent);
+            $row++;
+            $contResult++;
+        }
+//        die();
+        
+//        $activeSheet->getProtection()
+//                    ->setSheet(true)
+//                    ->setPassword('531P-P1A-2014')
+//                ;
+        
+        $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$fileName.'"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 }

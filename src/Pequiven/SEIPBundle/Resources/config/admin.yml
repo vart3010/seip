@@ -1,4 +1,8 @@
 services:
+    seip.model.manager:
+        class: Pequiven\SEIPBundle\Model\Admin\ModelManager
+        arguments: [@doctrine]
+        
     sonata.admin.formula:
         class: Pequiven\MasterBundle\Admin\FormulaAdmin
         tags:
@@ -19,6 +23,27 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.objetive:
+        class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Objetivo" }
+        arguments:
+            - ~
+            - Pequiven\ObjetiveBundle\Entity\Objetive
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.result:
+        class: Pequiven\MasterBundle\Admin\Result\ResultAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Resultado" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Result\Result
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.indicator.frequency_notification:
         class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
         tags:
@@ -39,3 +64,16 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setModelManager, [@seip.model.manager]]
+            - [ setContainer, [@service_container]]
+            
+    sonata.admin.user.configuration:
+        class: Pequiven\MasterBundle\Admin\User\ConfigurationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%", label_catalogue: "admin",label: "Configuracion del usuario" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\User\Configuration
+            - ~
+        calls:
+            - [ setTranslationDomain, [admin]]

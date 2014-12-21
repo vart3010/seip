@@ -14,10 +14,10 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository
 {
     /**
-     * Retornar los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * Retornar el query con los usuario a los cuales le puedo asignar programas de gestion tacticos
      * @return type
      */
-    function findQueryToAssingTacticArrangementProgram(){
+    function findQueryToAssingTacticArrangementProgram($criteria = array()){
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
@@ -27,7 +27,7 @@ class UserRepository extends EntityRepository
             ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
             ->setParameter('level', $level)
-            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_SUPERVISER)
+            ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
             ;
@@ -37,19 +37,53 @@ class UserRepository extends EntityRepository
                 ->andWhere("u.gerencia != ''")
                 ;
         }else{
-            $qb
-                ->andWhere('u.gerencia = :gerencia')
-                ->setParameter('gerencia', $user->getGerencia())
-                ;
+            if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+                $qb
+                    ->andWhere('u.gerencia = :gerencia')
+                    ->setParameter('gerencia', $user->getGerencia())
+                    ;
+            }
         }
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $orX->add($qb->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $orX->add($qb->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        if( ($gerencia = $criteria->remove('gerencia')) ){
+            $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia'));
+            $qb->setParameter('gerencia', $gerencia);
+        }
+        $qb->andWhere($orX);
+        
+        $qb->setMaxResults(50);
+        
         return $qb;
+    }
+    
+    /**
+     * Retornar los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * @return type
+     */
+    function findToAssingTacticArrangementProgram($criteria = array())
+    {
+        return $this->findQueryToAssingTacticArrangementProgram($criteria)->getQuery()->getResult();
     }
     
     /**
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findQueryToAssingTacticArrangementProgramGoal(array $users){
+    function findQueryToAssingTacticArrangementProgramGoal(array $users,array $criteria = array()){
         $qb = $this->getQueryBuilder();
         $level = 0;
         $usersId = array();
@@ -68,6 +102,31 @@ class UserRepository extends EntityRepository
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
 //            ->setParameter('gerencia', $user->getGerencia())
             ;
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $orX->add($qb->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $orX->add($qb->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        if( ($gerencia = $criteria->remove('gerencia')) ){
+            $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia'));
+            $qb->setParameter('gerencia', $gerencia);
+        }
+        $qb->andWhere($orX);
+        
+        if($gerencia == null){
+            $qb->setMaxResults(50);
+        }else{
+            $qb->setMaxResults(400);
+        }
         return $qb;
     }
     
@@ -75,8 +134,8 @@ class UserRepository extends EntityRepository
      * Retornar los usuario a los cuales le puedo asignar metas de un programa de gestion tactico
      * @return type
      */
-    function findToAssingTacticArrangementProgramGoal(array $users){
-        return $this->findQueryToAssingTacticArrangementProgramGoal($users)->getQuery()->getResult();
+    function findToAssingTacticArrangementProgramGoal(array $users = array(),array $criteria = array()){
+        return $this->findQueryToAssingTacticArrangementProgramGoal($users,$criteria)->getQuery()->getResult();
     }
     
     function findUsers(array $responsiblesId) {
@@ -110,6 +169,62 @@ class UserRepository extends EntityRepository
             ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         return $qb;
     }
+    /**
+     * Buscador de usuarios
+     * 
+     * @param array $criteria
+     * @return type
+     */
+    function searchUserByCriteria(array $criteria = array())
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->innerJoin('u.groups','g')
+            ->andWhere('g.typeRol = :typeRol')
+            ->andWhere('u.enabled = :enabled')
+            ->andWhere('g.level <= :level')
+            ->setParameter('enabled', true)
+            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $orX = $qb->expr()->orX();
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $orX->add($qb->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $orX->add($qb->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $orX->add($qb->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        $qb->andWhere($orX);
+        
+        $qb->setMaxResults(30);
+        return $qb->getQuery()->getResult();
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
+        if( ($firstname = $criteria->remove('firstname')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$firstname."%'"));
+        }
+        if( ($lastname = $criteria->remove('lastname')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$lastname."%'"));
+        }
+        if( ($username = $criteria->remove('username')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$username."%'"));
+        }
+        if( ($numPersonal = $criteria->remove('numPersonal')) ){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.numPersonal', "'%".$numPersonal."%'"));
+        }
+        
+        return parent::applyCriteria($queryBuilder, $criteria->toArray());
+    }
     
     /**
      * Crea un paginador para los usuarios
@@ -127,11 +242,11 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 0);
         
-        if(isset($criteria['firstName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        if(isset($criteria['firstname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
-        if(isset($criteria['lastName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        if(isset($criteria['lastname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$criteria['lastname']."%'"));
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));
@@ -171,11 +286,11 @@ class UserRepository extends EntityRepository
         $queryBuilder->andWhere('gr.typeRol =:typeRol');
         $queryBuilder->setParameter('typeRol', 1);
         
-        if(isset($criteria['firstName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstName', "'%".$criteria['firstName']."%'"));
+        if(isset($criteria['firstname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.firstname', "'%".$criteria['firstname']."%'"));
         }
-        if(isset($criteria['lastName'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastName', "'%".$criteria['lastName']."%'"));
+        if(isset($criteria['lastname'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('u.lastname', "'%".$criteria['lastname']."%'"));
         }
         if(isset($criteria['username'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('u.username', "'%".$criteria['username']."%'"));

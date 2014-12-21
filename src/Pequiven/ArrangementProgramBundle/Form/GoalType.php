@@ -71,16 +71,26 @@ class GoalType extends AbstractType
                     'label' => 'pequiven.form.goal.responsible',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
-                        'class' => "select2 input-xlarge",
+                        'class' => "input-xlarge",
                         'ng-model' => 'model.goal.responsibles',
-                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
+//                        'ng-options' => 'value as (value.firstname + " "+ value.lastname + " ("+value.numPersonal+")") for (key,value) in data.responsibleGoals',
                         'style' => 'width: 270px',
-                        'multiple' => 'multiple'
+//                        'multiple' => 'multiple'
                     ),
                     'multiple' => true,
                     'empty_value' => 'Seleccione',
                     'required' => true,
                 ));
+            $builder->add('includeResponsibleManagement','checkbox',array(
+                'label'  => 'pequiven.arrangement_program.include_responsible_management',
+                'attr' => array(
+                    'ng-model' => 'model.goal.includeResponsibleManagement',
+                    'ng-change' => 'changeIncludeResponsibleManagement()'
+                ),
+                'required' => false,
+                'by_reference' => false,
+                'mapped' => false
+            ));
         }
         
         $builder

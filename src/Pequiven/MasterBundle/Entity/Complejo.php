@@ -76,6 +76,12 @@ class Complejo extends modelComplejo
      */
     private $enabled;
 
+    /**
+     * Localidad
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Gerencia",mappedBy="complejo")
+     */
+    private $gerencias;
 
     /**
      * Get id
@@ -250,5 +256,47 @@ class Complejo extends modelComplejo
     
     public function __toString() {
         return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->gerencias = new \Doctrine\Common\Collections\ArrayCollection();
+        
+    }
+
+    /**
+     * Add gerencias
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
+     * @return Complejo
+     */
+    public function addGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias)
+    {
+        $this->gerencias[] = $gerencias;
+
+        return $this;
+    }
+
+    /**
+     * Remove gerencias
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencias
+     */
+    public function removeGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencias)
+    {
+        $this->gerencias->removeElement($gerencias);
+    }
+
+    /**
+     * Get gerencias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGerencias()
+    {
+        return $this->gerencias;
     }
 }

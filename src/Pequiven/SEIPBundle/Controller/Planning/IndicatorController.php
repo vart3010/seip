@@ -5,6 +5,7 @@ namespace Pequiven\SEIPBundle\Controller\Planning;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -63,7 +64,7 @@ class IndicatorController extends ResourceController
                 ->setTemplate($this->config->getTemplate('list.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
         if ($request->get('_format') == 'html') {
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
@@ -121,5 +122,73 @@ class IndicatorController extends ResourceController
                 ->setCreatedBy($this->getUser())
                 ;
             $entity->addObservation($observation);
+    }
+    
+    /**
+     * Gerencias de 1ra línea para la tabla de visualización del menú de planificación
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaFirstAction(Request $request) {
+        $response = new JsonResponse();
+
+        $dataGerencia = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        
+        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+
+        $totalResults = count($results);
+        if (is_array($results) && $totalResults > 0) {
+            foreach ($results as $result) {
+                foreach ($result as $gerencia) {
+                    $dataGerencia[] = array(
+                        'idComplejo' => $gerencia->getComplejo()->getId(),
+                        'optGroup' => $gerencia->getComplejo()->getDescription(),
+                        'id' => $gerencia->getId(),
+                        'description' => $gerencia->getDescription()
+                    );
+                }
+            }
+        } else {
+            $dataGerencia[] = array("empty" => true);
+        }
+
+        $response->setData($dataGerencia);
+
+        return $response;
+    }
+    
+    /**
+     * Función que devuelve la(s) gerencias de 2da línea asociada a las gerencias de 1ra línea cargadas de acuerdo al objetivo táctico seleccionado
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function selectGerenciaSecondListAction(Request $request) {
+        $response = new JsonResponse();
+        $gerenciaSecondChildren = array();
+        $em = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+            
+        $gerencia = $request->request->get('gerencia');
+
+        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
+
+        foreach ($results as $result) {
+            $complejo = $result->getGerencia()->getComplejo();
+            $gerencia = $result->getGerencia();
+            $gerenciaSecondChildren[] = array(
+                'idGroup' => $complejo->getId() . '-' . $gerencia->getId(),
+                'optGroup' => $complejo->getRef() . '-' . $gerencia->getDescription(),
+                'id' => $result->getId(),
+                'description' => $result->getDescription()
+            );
+        }
+
+        $response->setData($gerenciaSecondChildren);
+
+        return $response;
     }
 }

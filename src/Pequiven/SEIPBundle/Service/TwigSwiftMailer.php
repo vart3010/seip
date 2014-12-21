@@ -45,7 +45,7 @@ class TwigSwiftMailer {
         } else {
             $message->setBody($textBody);
         }
-
+        
         $this->mailer->send($message);
     }
 }

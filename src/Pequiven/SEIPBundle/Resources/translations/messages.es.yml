@@ -50,8 +50,6 @@ pequiven:
     buttons:
         cancel: Cancelar
         submit: Enviar
-app:
-    loading: Cargando
 
 Updated: actualizado(a)
 Update: Actualización
@@ -74,6 +72,13 @@ chart:
         seriesNamePlan: Plan
         seriesNameReal: Real
         seriesNameCarga: % Carga
+    result:
+        objetiveOperative:
+            xAxisName: Objetivos
+            yAxisName: Meta del objetivo
+            seriesNamePlan1: Indicadores
+            seriesNamePlan2: Programas de Gestión
+        
 app:
     http:
         return_to_home: Ir a la página de inicio

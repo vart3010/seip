@@ -24,6 +24,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.service.result" class="Pequiven\SEIPBundle\Service\ResultService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <!-- Formulario de registro de usuario  -->
         <service id="pequiven_seip.registration.form.type" class="Pequiven\SEIPBundle\Form\Type\RegistrationFormType">
             <tag name="form.type" alias="pequiven_seip_user_registration" />
@@ -52,6 +57,12 @@
             </call>
         </service>
         <service id="seip.listener.historical" class="Pequiven\SEIPBundle\EventListener\HistoricalListerner">
+            <tag name="kernel.event_subscriber" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.listener.result" class="Pequiven\SEIPBundle\EventListener\ResultListerner">
             <tag name="kernel.event_subscriber" />
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -140,5 +151,15 @@
         <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>
+        <!-- Servicio de RESULT -->
+        <service id="pequiven.repository.result" class="Pequiven\SEIPBundle\Repository\Result\ResultRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Result" />
+        </service>
+<!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
+            <tag name="form.type" alias="pequiven_seipbundle_user" />
+        </service>-->
     </services>
 </container>

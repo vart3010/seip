@@ -15,6 +15,7 @@ class LinkGeneratorService extends LinkGenerator
         return array(
             array('class' => 'Pequiven\IndicatorBundle\Entity\Indicator','icon' => 'fa fa-line-chart','route' => 'pequiven_indicator_show'),
             array('class' => 'Pequiven\ObjetiveBundle\Entity\Objetive','icon' => 'fa fa-cogs','method' => 'renderObjetive'),
+            array('class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram','icon' => 'fa fa-tasks','route' => 'pequiven_seip_arrangementprogram_show'),
         );
     }
     

@@ -66,8 +66,8 @@ class Gerencia extends modelGerencia
     
     /** 
      * Complejo
-     * @var=\Pequiven\MasterBundle\Entity\Complejo
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo")
+     * @var \Pequiven\MasterBundle\Entity\Complejo
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Complejo",inversedBy="gerencias")
      * @ORM\JoinColumn(name="fk_complejo", referencedColumnName="id")
      */
     private $complejo;
@@ -132,7 +132,15 @@ class Gerencia extends modelGerencia
      */
     private $tacticalObjectives;
     
-        /**
+    /**
+     * Grupo de la gerencia
+     * 
+     * @var \Pequiven\MasterBundle\Entity\GerenciaGroup
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\GerenciaGroup")
+     */
+    private $gerenciaGroup;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -467,5 +475,28 @@ class Gerencia extends modelGerencia
     public function getTacticalObjectives()
     {
         return $this->tacticalObjectives;
+    }
+
+    /**
+     * Set gerenciaGroup
+     *
+     * @param \Pequiven\MasterBundle\Entity\GerenciaGroup $gerenciaGroup
+     * @return Gerencia
+     */
+    public function setGerenciaGroup(\Pequiven\MasterBundle\Entity\GerenciaGroup $gerenciaGroup = null)
+    {
+        $this->gerenciaGroup = $gerenciaGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get gerenciaGroup
+     *
+     * @return \Pequiven\MasterBundle\Entity\GerenciaGroup 
+     */
+    public function getGerenciaGroup()
+    {
+        return $this->gerenciaGroup;
     }
 }

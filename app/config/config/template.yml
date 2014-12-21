@@ -10,7 +10,6 @@ lunetics_locale:
     switcher:
         show_current_locale: true
 
-
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main

@@ -4,8 +4,9 @@ security:
     acl:
         connection: default
     role_hierarchy:
+        ROLE_ARRANGEMENT_PROGRAM: [ROLE_ARRANGEMENT_PROGRAM_EDIT,ROLE_ARRANGEMENT_PROGRAM_DELETE,ROLE_ARRANGEMENT_PROGRAM_READ]
         ROLE_VIEW: [ROLE_WORKER_PQV,ROLE_WORKER_PLANNING]
-        ROLE_ADMIN: ROLE_DIRECTIVE,ROLE_DIRECTIVE_AUX,ROLE_MANAGER_FIRST,ROLE_MANAGER_FIRST_AUX,ROLE_MANAGER_SECOND,ROLE_MANAGER_SECOND_AUX,ROLE_SUPERVISER,ROLE_WORKER_PQV,ROLE_VIEW
+        ROLE_ADMIN: [ROLE_DIRECTIVE,ROLE_DIRECTIVE_AUX,ROLE_MANAGER_FIRST,ROLE_MANAGER_FIRST_AUX,ROLE_MANAGER_SECOND,ROLE_MANAGER_SECOND_AUX,ROLE_SUPERVISER,ROLE_WORKER_PQV,ROLE_VIEW,ROLE_SONATA_ADMIN,ROLE_ARRANGEMENT_PROGRAM]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN,ROLE_ALLOWED_TO_SWITCH]
 
     providers:
@@ -14,7 +15,7 @@ security:
 
     firewalls:
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            pattern:  ^/(_(profiler|wdt)|css|images|js|compiled|translations)/
             security: false
         login_firewall:
             pattern: ^/(login$|register|resetting)
@@ -25,6 +26,7 @@ security:
         main:
             pattern: ^/
             anonymous: false
+            switch_user: { role: ROLE_SUPER_ADMIN }
             form_login:
                 login_path: fos_user_security_login
                 check_path: fos_user_security_check
@@ -47,6 +49,8 @@ security:
                 path:           /admin/logout
             anonymous:          true
     access_control:
+        - { path: ^/compiled, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/translations, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

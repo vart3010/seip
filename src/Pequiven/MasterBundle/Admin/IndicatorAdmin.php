@@ -12,9 +12,26 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class IndicatorAdmin extends Admin
-{
+class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
+{   
+    private $container;
+    
     protected function configureFormFields(FormMapper $form) {
+        $object = $this->getSubject();
+        $childrensParameters = array(
+            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
+            'multiple' => true,
+            'required' => false,
+        );
+        if($object != null && $object->getId() !== null){
+            $indicatorLevel = $object->getIndicatorLevel();
+            $level = $indicatorLevel->getLevel();
+            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
+                return $repository->getQueryChildrenLevel($level);
+            };
+           
+        }
+        
         $form
             ->add('ref')
             ->add('description')
@@ -29,6 +46,7 @@ class IndicatorAdmin extends Admin
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('childrens','entity',$childrensParameters)
             ->add('enabled')
             ;
     }
@@ -37,6 +55,7 @@ class IndicatorAdmin extends Admin
         $filter
             ->add('ref')
             ->add('description')
+            ->add('formula')
             ->add('typeOfCalculation',null,array(),'choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
@@ -57,5 +76,24 @@ class IndicatorAdmin extends Admin
             ->add('valueFinal')
             ->add('enabled')
             ;
+    }
+    
+    public function postUpdate($object) 
+    {
+//        $objetives = $object->getObjetives();
+//        $this->getResultService()->updateResultOfObjects($objetives);
+    }
+    
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
+    }
+    
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
     }
 }

@@ -25,29 +25,39 @@
         var interpolateStartSymbol = "{$";
         var interpolateEndSymbol = "$}";
         
+        {% javascripts 
+               output='compiled/baseDependecies.js'  
+               filter='uglifyjs2' 
+               'bundles/bazingajstranslation/js/translator.min.js'
+               'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js'
+               'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js'
+               'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js'
+               'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js'
+               'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js'
+            %}
+             var baseUrl = '{{ asset_url }}';
+        {% endjavascripts %}
         var baseDependecies = [
-          '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
+           baseUrl,
           '{{ url('bazinga_jstranslation_js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js') }}'
         ];
+         {% if app.debug %}
+            baseDependecies = [
+              '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
+              '{{ url('bazinga_jstranslation_js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js') }}',
+              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js') }}'
+            ];
+         {% endif %}
         var dependencies = [
-            {# En desarrollo se cargan individuales y en produccion se combinan en uno, hay un bug que da error combinandolos en desarrollo #}
-          {% if app.debug %}
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/tableFormat1Module.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/sfTranslatorModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notifyModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/services.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/controllers.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/filters.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/directives.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/mainApp.js') }}',
-          {% else %}
-                {% javascripts output='js/compiled/angular_modules.js' 
+                {% javascripts output='compiled/angular_modules.js' 
+                   filter='uglifyjs2' 
+                    'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
+                    'bundles/pequivenseip/angular/modules/seipModule.js'
+                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-cookies/angular-cookies.min.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/tableFormat1Module.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/sfTranslatorModule.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js'
@@ -60,7 +70,6 @@
                 %}
                   '{{ asset_url }}',
                 {% endjavascripts %}
-            {% endif %}
             ''
         ];
         
@@ -89,7 +98,7 @@
 {% block stylesheets_base %}
     {{ parent() }}
     <!-- jquery-ui -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/main.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/font-awesome/css/font-awesome.min.css') }}">
 {% endblock stylesheets_base %}
@@ -104,11 +113,28 @@
     
 {% endblock javascripts_base %}
 
-{% block javascripts %}
-    {{ parent() }}
+{% block javascripts_core %}
     <!-- jQuery-ui -->
     <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.js?v=1') }}"></script>
-    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js?v=1') }}"></script>
+    {% javascripts 
+       '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.scroll.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tooltip.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.modal.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/tinycon.min.js'
+       'bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js'
+        
+        filter='uglifyjs2' 
+        output='compiled/javascript_base.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {
@@ -131,5 +157,34 @@
                 yearSuffix: ''};
             $.datepicker.setDefaults($.datepicker.regional['es']);
         });
+        var responsiblesFormatResult = function(object){
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
+                  return value;
+              };
+        var responsiblesFormatResultDetails = function(object){
+                  var value = '';
+                  if(object.firstname){
+                      value += object.firstname;
+                  }
+                  if(object.lastname){
+                      value +=  ' '+ object.lastname;
+                  }
+                  if(object.numPersonal){
+                      value +=  " ("+object.numPersonal+")";
+                  }
+                  
+                  value +=  " | "+object.username;
+                  
+                  return value;
+              };
     </script>
 {% endblock javascripts %}

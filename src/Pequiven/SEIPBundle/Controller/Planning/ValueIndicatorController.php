@@ -39,9 +39,9 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             
             
             $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
+                $this->getRepository(),
+                'findOneBy',
+                array(array('id' => $request->get('id',0))));
             
             if(!$valueIndicator){
                 $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();

@@ -1,10 +1,17 @@
-{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+{#{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}#}
+{% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block body %}
-{#    {{ contentHeader('principal.title.objTactic','fff',{'aaaa':'bbbb'},'ccc','dddd',{'hhhh':'ggggggg'}) }}#}
-{% if (app.user.getGerencia != null and app.user.getGerencia.getId == 14) or (app.user.getRoles[0] == 'ROLE_DIRECTIVE') or (app.user.getRoles[0] == 'ROLE_DIRECTIVE_AUX') %}
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+        <div class="alert alert-info text-align-right">
+            <a href="{{ path('pequiven_seip_default_index', {'_switch_user': '_exit'}) }}" class="button red-gradient glossy">Terminar de suplantacion del usuario</a>
+        </div>
+        <br />
+    {% endif %}
+
+{% if is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING']) %}
     {{ contentHeader(("principal.title.objTactic"|trans)) }}
     <div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ "principal.chart.captionObjTactic"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
@@ -122,17 +129,9 @@
     {{ parent() }}
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
     <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
-    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js') }}"></script>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
-    <script type="text/javascript">
-
-        function getTableExtraInfo(data)
-        {
-
-        }
-    </script>
 
 {% endblock %}

@@ -67,6 +67,10 @@ abstract class ArrangementProgram
      */
     protected $type;
     
+    /**
+     * Retorna la etiqueta del tipo de programa de gestion
+     * @return string
+     */
     function getTypeLabel() {
         $labels = array(
             self::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'pequiven.arrangement_program.type.tactic',
@@ -244,6 +248,9 @@ abstract class ArrangementProgram
     
     /**
      * Retorna el porcentaje de avance del programa de gestion
+     * 
+     * @param array $options limitMonthToNow: limita los resultados al mes actual
+     * @return type
      */
     function getSummary(array $options = array())
     {
@@ -371,5 +378,32 @@ abstract class ArrangementProgram
             $valid = false;
         }
         return $valid;
+    }
+    
+    /**
+     * Revuelve el objetivo dependiendo del tipo de programa de gestion
+     */
+    function getObjetiveByType() {
+        $objetive = null;
+        if($this->getType() == self::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            $objetive = $this->getTacticalObjective();
+        }elseif($this->getType() == self::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            $objetive = $this->getOperationalObjective();
+        }
+        return $objetive;
+    }
+    
+    /**
+     * Devuelve el objetivo tactico
+     */
+    public function getTacticalObjective(){
+        
+    }
+    
+    /**
+     * Devuelve el objetivo operativo
+     */
+    public function getOperationalObjective(){
+        
     }
 }

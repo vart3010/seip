@@ -10,7 +10,7 @@
         <!-- Login pages styles -->
         <link rel="stylesheet" media="screen" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/login3860.css?v=1') }}">
 
-        {% stylesheets  output='css/compiled/login.css'filter='cssrewrite'
+        {% stylesheets  output='compiled/login.css'filter='cssrewrite'
             '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/login.css'
             '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/gobierno-vzla.css'
         %}
@@ -350,7 +350,7 @@
                         $.ajax(url, {
                             type: "POST",
                             data: {
-                                'fos_user_registration_form[firstName]': name,
+                                'fos_user_registration_form[firstname]': name,
                                 'fos_user_registration_form[email]': mail,
                                 'fos_user_registration_form[numPersonal]': num_personal,
                                 'fos_user_registration_form[username]': login,

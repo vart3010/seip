@@ -6,6 +6,12 @@ monitorTypeGroupList:
         _sylius:
             method: createPaginatorTypeGroup
             
+#Monitor de Objetivos Tácticos Agrupados por Grupo de Gerencia de 1ra línea
+monitorObjetiveTactic:
+    path: /monitor/tactic
+    defaults:
+        _controller: pequiven.controller.seipmonitor:displayObjetiveTacticAction
+
 #Monitor de Objetivos Operativos Agrupados por Grupo de Gerencia de 1ra línea
 monitorObjetiveOperative:
     path: /monitor/operative

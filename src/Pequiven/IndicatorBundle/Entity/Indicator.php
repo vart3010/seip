@@ -15,7 +15,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @author matias
  */
-class Indicator extends modelIndicator 
+class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
 {
     /**
      * @var integer
@@ -59,7 +59,7 @@ class Indicator extends modelIndicator
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=300)
+     * @ORM\Column(name="description", type="text")
      */
     private $description;
     
@@ -156,7 +156,7 @@ class Indicator extends modelIndicator
      * @var decimal
      * @ORM\Column(name="valueFinal", type="float",precision = 3)
      */
-    protected $valueFinal;
+    protected $valueFinal = 0;
     
     /**
      * Frecuencia de notificacion del indicador
@@ -192,12 +192,45 @@ class Indicator extends modelIndicator
     protected $details;
     
     /**
+     * Indicador al que impacta este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
+     */
+    protected $parent;
+    
+    /**
+     * Indicadores que impactan a este indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator 
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
+     */
+    protected $childrens;
+    
+    /**
+     * Avance del indicador
+     * 
+     * @var integer
+     * @ORM\Column(name="progressToDate",type="float")
+     */
+    protected $progressToDate = 0;
+    
+    /**
+     *
+     * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="indicator",cascade={"remove"})
+     */
+    protected $arrangementRange;
+
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -313,16 +346,6 @@ class Indicator extends modelIndicator
         $this->weight = $weight;
 
         return $this;
-    }
-
-    /**
-     * Get weight
-     *
-     * @return float 
-     */
-    public function getWeight()
-    {
-        return $this->weight;
     }
 
     /**
@@ -672,6 +695,9 @@ class Indicator extends modelIndicator
      */
     public function setValueFinal($valueFinal)
     {
+        if($valueFinal > 0 && $this->totalPlan > 0){
+            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+        }
         $this->valueFinal = $valueFinal;
 
         return $this;
@@ -792,5 +818,90 @@ class Indicator extends modelIndicator
         $this->totalPlan = $totalPlan;
         
         return $this;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $parent
+     * @return Indicator
+     */
+    public function setParent(\Pequiven\IndicatorBundle\Entity\Indicator $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add childrens
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
+     * @return Indicator
+     */
+    public function addChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
+    {
+        $childrens->setParent($this);
+        $this->childrens->add($childrens);
+
+        return $this;
+    }
+
+    /**
+     * Remove childrens
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $childrens
+     */
+    public function removeChildren(\Pequiven\IndicatorBundle\Entity\Indicator $childrens)
+    {
+        $this->childrens->removeElement($childrens);
+    }
+
+    /**
+     * Get childrens
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildrens()
+    {
+        return $this->childrens;
+    }
+    
+    function getProgressToDate() 
+    {
+        return $this->progressToDate;
+    }
+    
+    /**
+     * Get weight
+     *
+     * @return float 
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+    
+    /**
+     * Devuelve el valor que sera tomado en cuenta para los resuldatos
+     * @return type
+     */
+    public function getResult() {
+        return $this->progressToDate;
+    }
+
+    public function getResultWithWeight() {
+        $result = ( $this->getResult() * $this->getWeight()) / 100;
+        return $result;
     }
 }
