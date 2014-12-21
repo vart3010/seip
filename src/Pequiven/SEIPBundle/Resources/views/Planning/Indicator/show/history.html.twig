@@ -1,0 +1,52 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+<div class="standard-tabs margin-bottom" id="add-tabs">
+
+    <ul class="tabs">
+        <li class="active"><a href="#tab-1">{{ 'pequiven.details'|trans({},'messages') }}</a></li>
+        <li><a href="#tab-2">{{ 'pequiven.events'|trans({},'messages') }}</a></li>
+        <li><a href="#tab-3">{{ 'pequiven.observations'|trans({},'messages') }}</a></li>
+    </ul>
+
+    <div class="tabs-content">
+
+        <div id="tab-1" class="with-padding">
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_by'|trans({},'messages') }}</label>
+                {{ entity.userCreatedAt }}
+            </p>
+            <p class="inline-label">
+                <label class="label">{{ 'pequiven.created_at'|trans({},'messages') }}</label>
+                {{ entity.createdAt|date(appConfiguration.generalDateFormat) }}
+            </p>
+            {% set details = entity.details %}
+            {% if details != null %}
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_indicator.details.previus_value'|trans({},'PequivenIndicatorBundle') }}</label>
+                    {{ details.previusValue|number_format(3,',','.') }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_indicator.details.last_notification_by'|trans({},'PequivenIndicatorBundle') }}</label>
+                    {{ details.lastNotificationBy }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_indicator.details.last_notification_at'|trans({},'PequivenIndicatorBundle') }}</label>
+                    {{ details.lastNotificationAt|date(appConfiguration.generalDateFormat) }}
+                </p>
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_indicator.details.last_formula_used'|trans({},'PequivenIndicatorBundle') }}</label>
+                    {{ details.lastFormulaUsed }}
+                </p>
+            {% endif  %}
+        </div>
+
+        <div id="tab-2" class="with-padding">
+            {% include 'PequivenSEIPBundle:Template:Developer/Common/history/events.html.twig' %}
+        </div>
+                
+        <div id="tab-3" class="with-padding">
+            {% include 'PequivenSEIPBundle:Template:Developer/Common/history/observations.html.twig' %}
+        </div>
+    </div>
+
+</div>

@@ -10,8 +10,11 @@ var seipModule = angular.module('seipModule', [
 
 seipModule
         .filter('myNumberFormat', function() {
-            return function(numberToFormat) {
-                var numberFormat = $.number(numberToFormat, 2, ',', '.');
+            return function(numberToFormat,limit) {
+                if(limit == undefined){
+                    var limit = 2;
+                }
+                var numberFormat = $.number(numberToFormat, limit, ',', '.');
                 return numberFormat;
             };
         });
@@ -33,6 +36,23 @@ function getMappingModel(data,idEntity){
     });
     return selected;
 }
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
 
 //Establece el valor de un select2
 function setValueSelect2(idSelect2, idEntity, data, callBack) {
@@ -749,6 +769,113 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        .controller('IndicatorResultController',function($scope,notificationBarService,$http,notifyService,$filter){
+            console.log('IndicatorResultController');
+    
+            $scope.urlValueIndicatorForm = null;
+            $scope.indicator = null;
+            var isInit = false;
+            
+            //Carga el formulario de los valores del indicador
+            $scope.loadTemplateValueIndicator = function(resource){
+                $scope.initForm(resource);
+                if(isInit == false){
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult',0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+                var evaluateFormula = function(save,successCallBack){
+                    var formValueIndicator = angular.element('#form_value_indicator');
+                    var formData = formValueIndicator.serialize();
+                    if(save == undefined){
+                        var save = false;
+                    }
+                    if(save == true){
+                        var url = Routing.generate('pequiven_value_indicator_add',{idIndicator : $scope.indicator.id});
+                    }else{
+                        var url = Routing.generate('pequiven_value_indicator_calculate',{idIndicator : $scope.indicator.id});
+                    }
+                    console.log(formData);
+                    notificationBarService.getLoadStatus().loading();
+                 return $http({
+                    method  : 'POST',
+                    url     : url,
+                    data    : formData,
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With':'XMLHttpRequest' }  // set the headers so angular passing info as form data (not request payload)
+                }).success(function(data){
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    $scope.templateOptions.setVar('evaluationResult',data.result);
+                    if(successCallBack){
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function(data,status, headers, config){
+                    $scope.templateOptions.setVar("form", {errors:{}});
+                    if(data.errors){
+                        if(data.errors.errors){
+                            $.each(data.errors.errors,function(index,value){
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    $scope.templateOptions.setVar('evaluationResult',0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
+            $scope.templateOptions.setVar('evaluateFormula',evaluateFormula);
+            $scope.templateOptions.setVar('evaluationResult',0);
+            
+            var confirmCallBack = function(){
+                evaluateFormula(true,function(data){
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            
+            $scope.initForm = function(resource){
+                var d = new Date();
+                var numero = d.getTime();
+                var parameters = {
+                    idIndicator: $scope.indicator.id,
+                    _dc: numero
+                };
+                if(resource){
+                    parameters.id = resource.id;
+                }
+                var url = Routing.generate('pequiven_value_indicator_get_form',parameters);
+                console.log(url);
+                $scope.templates = [
+                    {
+                        name: 'pequiven.modal.title.value_indicator',
+                        url: url,
+                        confirmCallBack: confirmCallBack,
+    //                    cancelCallBack: $scope.cancelEditGoal,
+    //                    loadCallBack: $scope.setDataFormGoal,
+//                        initCallBack: initCallBack
+                    }
+                ];
+                $scope.templateOptions.setTemplate($scope.templates[0]);
+            };
+            
+            var initCallBack = function() {
+                return false;
+            };
+            
+            
+            
+            
+        })
         .controller("MainContentController", function($scope, notificationBarService, sfTranslator, $timeout) {
 
             $scope.model = {};
@@ -830,6 +957,18 @@ angular.module('seipModule.controllers', [])
             };
             $scope.templateOptions.setTemplate = function(template) {
                 $scope.template = template;
+            };
+            $scope.templateOptions.setData = function(data){
+                $scope.data = data;
+            };
+            $scope.templateOptions.setModel = function(model){
+                $scope.model = model;
+            };
+            $scope.templateOptions.setVar = function(name,object){
+                $scope[name] = object;
+            };
+            $scope.templateOptions.getTemplate = function(){
+                return $scope.template;
             };
 
             var modalOpen, modalConfirm;
@@ -1232,7 +1371,8 @@ angular.module('seipModule.controllers', [])
                                 "baseFontColor" : "#ffffff",
                                 "outCnvBaseFontColor" : "#ffffff",
                                 "visible" : "0",
-                                "theme": "fint"
+                                "theme": "fint",
+                                "formatNumberScale": "0",
                             },
                             "categories": [
                                 {

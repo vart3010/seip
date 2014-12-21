@@ -1,20 +1,14 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\ObjetiveBundle\Model;
 
 /**
- * Description of ObjetiveLevel
+ * Nivel de objetivo
  *
  * @author matias
  */
 class ObjetiveLevel extends \Pequiven\SEIPBundle\Model\Common\CommonObject {
-    //put your code here
+    
     const LEVEL_DEFAULT = 0;
     const LEVEL_ESTRATEGICO = 1;
     const LEVEL_TACTICO = 2;

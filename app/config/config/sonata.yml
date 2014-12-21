@@ -1,0 +1,39 @@
+sonata_user:
+    security_acl: true
+    manager_type: orm # can be orm or mongodb
+    impersonating:
+        route:  pequiven_seip_menu_home
+        parameters: { path: / }
+    class:
+        user: Pequiven\SEIPBundle\Entity\User
+        group: Pequiven\MasterBundle\Entity\Rol
+    admin:
+        user:
+            class: Pequiven\MasterBundle\Admin\UserAdmin
+        group:
+            class: Pequiven\MasterBundle\Admin\GroupAdmin
+
+sonata_block:
+    default_contexts: [cms]
+        
+    blocks:
+        sonata.block.service.menu:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        sonata.admin.block.search_result:
+            contexts:   [admin]
+        sonata.user.block.menu:    # used to display the menu in profile pages
+            contexts: [user]
+        sonata.user.block.account: # used to display menu option (login option)
+            contexts: [user]
+        sonata.core.block.menu: ~
+        sonata.block.service.text: ~ # used to if you plan to use Sonata user routes
+        
+sonata_admin:
+    title:      SEIP
+    title_logo: bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png
+    options:
+        title_mode: single_image
+    templates:
+        layout: PequivenSEIPBundle:Sonata:standard_layout.html.twig

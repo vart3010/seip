@@ -18,7 +18,16 @@ class RegistrationFormType extends BaseType {
     //put your code here
     public function buildForm(FormBuilderInterface $builder, array $options) {
         parent::buildForm($builder, $options);
+        $parametersUser = array(
+            'class' => 'Pequiven\MasterBundle\Entity\Rol',
+                'property' => 'description',
+                'label' => 'pequiven_seip.rol',
+                'translation_domain' => 'PequivenSEIPBundle',
+            'multiple' => true
+        );
         $builder->add('numPersonal');
+        $builder->add('complejo');
+        $builder->add('gerencia');
     }
     
     public function getName() {

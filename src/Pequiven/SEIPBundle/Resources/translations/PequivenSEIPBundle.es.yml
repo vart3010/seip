@@ -2,6 +2,7 @@
 pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
+    home: Página de inicio
 
     #Login
     sign_in: Ingresar

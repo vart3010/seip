@@ -34,6 +34,9 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         goal:
             expose: true
             groups: [api_list]
+        valueFinal:
+            expose: true
+            groups: [api_list]
         indicatorLevel:
             expose: true
             groups: [api_details]
@@ -49,3 +52,6 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         period:
             expose: true
             groups: [period]
+        valuesIndicator:
+            expose: true
+            groups: [valuesIndicator]

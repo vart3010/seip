@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\IndicatorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,8 +15,8 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @author matias
  */
-class Indicator extends modelIndicator {
-    
+class Indicator extends modelIndicator 
+{
     /**
      * @var integer
      *
@@ -89,6 +83,14 @@ class Indicator extends modelIndicator {
      * @ORM\Column(name="weight", type="float", nullable=true)
      */
     private $weight;
+    
+    /**
+     * Total planificado
+     * 
+     * @var float
+     * @ORM\Column(name="totalPlan", type="float", nullable=true)
+     */
+    private $totalPlan = 0;
 
     /**
      * @var float
@@ -110,14 +112,6 @@ class Indicator extends modelIndicator {
      * @ORM\Column(name="tmp", type="boolean")
      */
     private $tmp = false;
-    
-    /**
-     * IndicatorLevel
-     * @var \Pequiven\IndicatorBundle\Entity\IndicatorLevel
-     * @ORM\ManyToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\IndicatorLevel")
-     * @ORM\JoinColumn(name="fk_indicator_level", referencedColumnName="id")
-     */
-    private $indicatorLevel;
     
     /**
      * Formula
@@ -142,11 +136,60 @@ class Indicator extends modelIndicator {
     
     /**
      * Periodo.
+     * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
      */
     private $period;
     
+    /**
+     * Valores del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $valuesIndicator;
+    
+    /**
+     * Valor (Evaluado a partir de todos los valores y formula)
+     * 
+     * @var decimal
+     * @ORM\Column(name="valueFinal", type="float",precision = 3)
+     */
+    protected $valueFinal;
+    
+    /**
+     * Frecuencia de notificacion del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator")
+     
+     */
+    protected $frequencyNotificationIndicator;
+    
+    /**
+     * Historiales o Eventos
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Historical
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Historical",cascade={"persist","remove"})
+     */
+    protected $histories;
+    
+    /**
+     * Observaciones
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Observation
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\Observation",cascade={"persist","remove"})
+     */
+    protected $observations;
+    
+    /**
+     * Detalles del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",cascade={"persist","remove"})
+     */
+    protected $details;
     
     /**
      * Constructor
@@ -154,6 +197,7 @@ class Indicator extends modelIndicator {
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -374,29 +418,6 @@ class Indicator extends modelIndicator {
     }
 
     /**
-     * Set indicatorLevel
-     *
-     * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
-     * @return Indicator
-     */
-    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel = null)
-    {
-        $this->indicatorLevel = $indicatorLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get indicatorLevel
-     *
-     * @return \Pequiven\IndicatorBundle\Entity\IndicatorLevel 
-     */
-    public function getIndicatorLevel()
-    {
-        return $this->indicatorLevel;
-    }
-
-    /**
      * Set formula
      *
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
@@ -575,11 +596,201 @@ class Indicator extends modelIndicator {
         return $this->period;
     }
     
+   /**
+     * Set frequencyNotificationIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator
+     * @return Indicator
+     */
+    public function setFrequencyNotificationIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator = null)
+    {
+        $this->frequencyNotificationIndicator = $frequencyNotificationIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get frequencyNotificationIndicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator 
+     */
+    public function getFrequencyNotificationIndicator()
+    {
+        return $this->frequencyNotificationIndicator;
+    }
+    
+    /**
+     * Add valuesIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
+     * @return Indicator
+     */
+    public function addValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
+    {
+        $valuesIndicator->setIndicator($this);
+        
+        $this->valuesIndicator->add($valuesIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove valuesIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator
+     */
+    public function removeValuesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valuesIndicator)
+    {
+        $this->valuesIndicator->removeElement($valuesIndicator);
+    }
+
+    /**
+     * Get valuesIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValuesIndicator()
+    {
+        return $this->valuesIndicator;
+    }
+
+    /**
+     * Get indicatorLevel
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\IndicatorLevel 
+     */
+    public function getIndicatorLevel()
+    {
+        return $this->indicatorLevel;
+    }
+    
+    /**
+     * Set valueFinal
+     *
+     * @param string $valueFinal
+     * @return Indicator
+     */
+    public function setValueFinal($valueFinal)
+    {
+        $this->valueFinal = $valueFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get valueFinal
+     *
+     * @return string 
+     */
+    public function getValueFinal()
+    {
+        return $this->valueFinal;
+    }
+    
     /**
      * 
-     * @return type
+     * @return string
      */
     public function __toString() {
-        return $this->description;
+        return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
+    }
+
+    /**
+     * Add histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     * @return Indicator
+     */
+    public function addHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->add($histories);
+
+        return $this;
+    }
+
+    /**
+     * Remove histories
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Historical $histories
+     */
+    public function removeHistory(\Pequiven\SEIPBundle\Entity\Historical $histories)
+    {
+        $this->histories->removeElement($histories);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHistories()
+    {
+        return $this->histories;
+    }
+
+    /**
+     * Add observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Observation $observations
+     * @return Indicator
+     */
+    public function addObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
+    {
+        $this->observations->add($observations);
+
+        return $this;
+    }
+
+    /**
+     * Remove observations
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Observation $observations
+     */
+    public function removeObservation(\Pequiven\SEIPBundle\Entity\Observation $observations)
+    {
+        $this->observations->removeElement($observations);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObservations()
+    {
+        return $this->observations;
+    }
+
+    /**
+     * Set details
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details
+     * @return Indicator
+     */
+    public function setDetails(\Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails $details = null)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+     */
+    public function getDetails()
+    {
+        return $this->details;
+    }
+    
+    function getTotalPlan() {
+        return $this->totalPlan;
+    }
+
+    function setTotalPlan($totalPlan) {
+        $this->totalPlan = $totalPlan;
+        
+        return $this;
     }
 }

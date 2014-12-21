@@ -2,6 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: config/template.yml }
+    - { resource: config/sonata.yml }
+    - { resource: @PequivenSEIPBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~
@@ -60,6 +62,8 @@ doctrine:
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: "%kernel.root_dir%/data/data.db3"
         # path:     "%database_path%"
+        types:
+            json: Sonata\Doctrine\Types\JsonType
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
@@ -68,7 +72,7 @@ doctrine:
                 auto_mapping: true
                 mappings:
 #                    ApplicationSonataUserBundle: ~
-#                    SonataUserBundle: ~
+                    SonataUserBundle: ~
                     FOSUserBundle: ~
 #                    gedmo_loggable:
 #                        type: annotation
@@ -102,15 +106,15 @@ swiftmailer:
             username:  %mailer_user%
             password:  %mailer_password%
             spool:
-                type: file
-                path: "%kernel.root_dir%/spool"
+                type: memory
         second_mailer:
             transport: %mailer_transport%
             host:      %mailer_host%
             username:  %mailer_user%
             password:  %mailer_password%
             spool:
-                type: memory
+                type: file
+                path: "%kernel.root_dir%/spool"
     
 #Plantilla Configuration    
 tecnocreaciones_vzla_government:
@@ -199,6 +203,19 @@ sylius_resource:
                 model: Pequiven\ObjetiveBundle\Entity\Objetive
                 controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
                 repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
+        pequiven.indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\IndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator
+                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
+        pequiven.value_indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/ValueIndicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
         #Indicador estratégico
         pequiven.indicatorstrategic:
             driver: doctrine/orm

@@ -253,4 +253,8 @@ class Tendency extends modelTendency {
     {
         return $this->userUpdatedAt;
     }
+    
+    public function __toString() {
+        return $this->getDescription() ? $this->getDescription() : '-';
+    }
 }

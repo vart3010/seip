@@ -1,0 +1,16 @@
+{% extends "SonataAdminBundle::standard_layout.html.twig" %}
+
+{% block side_bar_before_nav %} 
+    {{ parent() }}
+    <p class="text-center small" style="padding-top: 13px;font-size: 18px">
+        <a>{{ 'pequiven_seip.seip'|trans({},'PequivenSEIPBundle') }}</a>
+    </p>
+{% endblock %}
+
+{% block side_bar_after_nav %}
+    <p class="text-center small" style="border-top: 1px solid #444444; padding-top: 10px">
+        <a href="{{ path('pequiven_seip_menu_home') }}" rel="noreferrer">{{ 'pequiven_seip.home'|trans({},'PequivenSEIPBundle') }}</a>
+        <br/><br/>
+        
+    </p>
+{% endblock %}

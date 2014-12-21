@@ -1,0 +1,41 @@
+services:
+    sonata.admin.formula:
+        class: Pequiven\MasterBundle\Admin\FormulaAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Formula" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Formula
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.formula.variable:
+        class: Pequiven\MasterBundle\Admin\Formula\VariableAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Variable de Formula" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Formula\Variable
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.indicator.frequency_notification:
+        class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Frecuencia de notificación" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    sonata.admin.indicator.indicator:
+        class: Pequiven\MasterBundle\Admin\IndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

@@ -1,0 +1,5 @@
+pequiven:
+    error:
+        empty_comment: Debe añadir un comentario.
+    indicator:
+        add_observation: Se añadio una observación al indicador.
