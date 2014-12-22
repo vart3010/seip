@@ -15,7 +15,7 @@
                 {% elseif  status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') %}
                     {% set className = 'red-bg' %}
                 {% endif %}
-                <small class="tag {{ className }}">{{ arrangementProgram.getLabelStatus | trans({},'PequivenArrangementProgramBundle') }}</small>
+                - <small class="tag {{ className }}">{{ arrangementProgram.getLabelStatus | trans({},'PequivenArrangementProgramBundle') }}</small>
             </li>
         {% else %}
             <b>{{ 'pequiven.arrangement_program.not_arrangement_program_in_level' |trans({},'PequivenArrangementProgramBundle') }}</b>
