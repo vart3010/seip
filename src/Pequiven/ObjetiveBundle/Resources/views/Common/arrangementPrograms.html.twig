@@ -3,7 +3,7 @@
     <ul class="fa-ul">
         {% for arrangementProgram in entity.arrangementPrograms %}
             <li>
-                {{ loop.index }}&nbsp-&nbsp;
+                {{ loop.index|str_pad(2,'0') }}&nbsp-&nbsp;
                 {% set avancedUsed = arrangementProgram.getResult %}
                 {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
                 {{ generateLink(arrangementProgram) }}
