@@ -20,7 +20,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  * })
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
+class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface,  \Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface
 {
     
     /**
@@ -147,6 +147,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\User\Configuration",inversedBy="user",cascade={"persist","remove"})
      */
     private $configuration;
+    
+    /**
+     * Boxes o widgets del usuario
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Box\ModelBox
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Box\ModelBox",mappedBy="user")
+     */
+    private $boxes;
 
     /**
      * Constructor
@@ -159,6 +167,7 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -632,5 +641,40 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+    
+    
+
+    /**
+     * Add boxes
+     *
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
+     * @return User
+     */
+    public function addModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
+    {
+        $this->boxes[] = $boxes;
+
+        return $this;
+    }
+
+    /**
+     * Remove boxes
+     *
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
+     */
+    public function removeModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
+    {
+        $this->boxes->removeElement($boxes);
+    }
+
+    /**
+     * Get boxes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModelBoxes()
+    {
+        return $this->boxes;
     }
 }

@@ -33,5 +33,9 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     public function getTemplateName() {
         return 'PequivenSEIPBundle:Monitor:ArrangementProgram/myArrangementPrograms.html.twig';
     }
-
+    
+    
+    public function getDescription() {
+        return 'Muestra un resumen de los programas de gestión donde el usuario sea responsable de las metas o del programa.';
+    }
 }
