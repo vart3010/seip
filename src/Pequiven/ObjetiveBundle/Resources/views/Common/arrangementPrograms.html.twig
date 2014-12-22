@@ -6,6 +6,16 @@
                 {% set avancedUsed = arrangementProgram.getResult %}
                 {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
                 {{ generateLink(arrangementProgram) }}
+                {% set status = arrangementProgram.status %}
+                {% set className = '' %}
+                {% if status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') %}
+                    {% set className = 'orange-bg' %}
+                {% elseif  status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') %}
+                    {% set className = 'green-bg' %}
+                {% elseif  status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') %}
+                    {% set className = 'red-bg' %}
+                {% endif %}
+                <small class="tag {{ className }}">{{ arrangementProgram.getLabelStatus | trans({},'PequivenArrangementProgramBundle') }}</small>
             </li>
         {% else %}
             <b>{{ 'pequiven.arrangement_program.not_arrangement_program_in_level' |trans({},'PequivenArrangementProgramBundle') }}</b>

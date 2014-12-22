@@ -128,10 +128,10 @@
                 <label class="label">{{ 'pequiven.arrangement_program.advances'|trans }}</label>
                 {% set advances = summary['advances'] %}
                 {% set advancesClass = 'red-gradient' %}
-                {% if advances >= 50 %}
+                {% if advances >= 50 and advances < 100 %}
                     {% set advancesClass = 'orange-gradient' %}
 
-                {% elseif advances == 100 %}
+                {% elseif advances >= 100 %}
                     {% set advancesClass = 'green-gradient' %}
                 {% endif %}
                 <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
