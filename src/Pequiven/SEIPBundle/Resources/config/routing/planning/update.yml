@@ -1,4 +1,19 @@
 pequiven_planning_update:
-    path: /update-result-arrangement-program
+    path: /update-result-arrangement-program-all
     defaults:
         _controller: PequivenSEIPBundle:Planning/Update:updateResultArrangementProgram
+        
+pequiven_planning_update_result_objetive:
+    path: /update-result-objetive
+    defaults:
+        _controller: PequivenSEIPBundle:Planning/Update:updateResultOfObjetive
+        
+pequiven_planning_update_result_indicator:
+    path: /update-result-indicator
+    defaults:
+        _controller: PequivenSEIPBundle:Planning/Update:updateResultOfIndicator
+        
+pequiven_planning_update_result_arrangement_program:
+    path: /update-result-arrangement-program
+    defaults:
+        _controller: PequivenSEIPBundle:Planning/Update:updateResultOfArrangementProgram

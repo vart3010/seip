@@ -9,8 +9,9 @@
 namespace Pequiven\SEIPBundle\Model\Box\Tactic;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
+
 /**
- * Description of SummaryIndicatorCharged
+ * Resumen de los indicadores cargados a nivel tactico por tipo de gerencia.
  *
  * @author matias
  */
@@ -25,12 +26,14 @@ class SummaryBoxIndicatorChargedByGroup extends GenericBox {
     }
     
     public function getParameters() {
-        $em = $this->getDoctrine()->getManager();
-        
         $datas = $this->getDataIndicatorTacticGroup();
         return array(
             'indicatorTactic' => $datas['indicatorTactic']
             );
+    }
+    
+    public function getDescription() {
+        return 'Resumen de los indicadores cargados a nivel tactico por tipo de gerencia.';
     }
     
     /**

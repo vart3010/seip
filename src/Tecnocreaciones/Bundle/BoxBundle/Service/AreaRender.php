@@ -20,14 +20,38 @@ class AreaRender implements ContainerAwareInterface
      */
     private $boxRender;
     
+    /**
+     * Areas agregadas
+     * @var array 
+     */
     private $areas;
-            
+    
+    /**
+     * Areas definidas en el sistema
+     * 
+     * @var array 
+     */
+    private $areasDefinition;
+    
+    /**
+     * Adaptadores para agregar los boxes a imprimir
+     * @var \Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\AdapterInterface
+     */
+    private $adapters;
+    
+    /**
+     * Se usa como bandera  para inicializar una sola vez los adaptadores
+     * @var boolean
+     */
+    private $initAdapter = false;
+
     public function __construct() {
         $this->areas = array();
     }
     
     /**
      * Agrega un boxe a una area
+     * 
      * @param type $areaName
      * @param type $boxName
      * @param type $position
@@ -68,6 +92,9 @@ class AreaRender implements ContainerAwareInterface
      */
     function renderArea($areaName)
     {
+        if($this->initAdapter === false){
+            $this->initAdapters();
+        }
         $positions = $this->getArea($areaName);
         foreach ($positions as $boxName) {
             if($this->getBoxRender()->hasBox($boxName)){
@@ -80,7 +107,7 @@ class AreaRender implements ContainerAwareInterface
      * 
      * @return \Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender
      */
-    function getBoxRender() {
+    public function getBoxRender() {
         return $this->boxRender;
     }
 
@@ -88,10 +115,95 @@ class AreaRender implements ContainerAwareInterface
      * Establece el renderizador de box
      * @param \Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender $boxRender
      */
-    function setBoxRender(\Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender $boxRender) {
+    public function setBoxRender(\Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender $boxRender) {
         $this->boxRender = $boxRender;
     }
-
+    
+    /**
+     * Añade una definicion de area
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\AreaDefinitionInterface $areaDefinition
+     */
+    public function addAreaDefinition(\Tecnocreaciones\Bundle\BoxBundle\Model\AreaDefinitionInterface $areaDefinition)
+    {
+        if($this->areasDefinition === null){
+            $this->areasDefinition = array();
+        }
+        $this->areasDefinition[] = $areaDefinition;
+    }
+    
+    /**
+     * Retorna la lista de las areas definidas
+     * 
+     * @throws \LogicException
+     */
+    public function getListAreasDefinition()
+    {
+        $listAreas = array();
+        if($this->areasDefinition){
+            $defaultParameters = array(
+                'translation_domain' => 'messages',
+            );
+            foreach ($this->areasDefinition as $areaDefinition) {
+                $areas = $areaDefinition->getAreas();
+                foreach ($areas as $area) {
+                    if(!isset($area['name'])){
+                        throw new \LogicException(sprintf('The area definition require the "name" property'));
+                    }
+                    $name = $area['name'];
+                    if(isset($listAreas[$name])){
+                        throw new \LogicException(sprintf('The area definition name "%s" is already defined'));
+                    }
+                    $areaDefinitionData = array_merge($defaultParameters, $area);
+                    $listAreas[$name] = $this->trans($areaDefinitionData['name'],array(),$areaDefinitionData['translation_domain']);
+                }
+            } 
+        }
+        return $listAreas;
+    }
+    
+    /**
+     * Inicializa la data de los adaptadores
+     */
+    private function initAdapters()
+    {
+        if($this->adapters){
+            foreach ($this->adapters as $adapter)
+            {
+                $modelBoxes = $adapter->getModelBoxes();
+                if($modelBoxes){
+                    foreach ($modelBoxes as $modelBox) {
+                        $this->addArea($modelBox->getAreaName(), $modelBox->getBoxName(),$modelBox->getBoxOrder());
+                    }
+                }
+            }
+        }
+        $this->initAdapter = array();
+    }
+    
+    /**
+     * Agrega un adaptador para obtener los datos
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\AdapterInterface $adapter
+     */
+    function addAdapter(\Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\AdapterInterface $adapter)
+    {
+        if($this->adapters === null){
+            $this->adapters = array();
+        }
+        $this->adapters[] = $adapter;
+    }
+    
+    /**
+     * Traduce
+     * @param type $id
+     * @param array $parameters
+     * @param type $domain
+     * @return type
+     */
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->get('translator')->trans($id, $parameters, $domain);
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }

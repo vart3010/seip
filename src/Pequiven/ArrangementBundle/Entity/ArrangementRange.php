@@ -65,8 +65,8 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Objetive
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="arrangementRange")
-     * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="arrangementRange")
+     
      */
     private $objetive;
     

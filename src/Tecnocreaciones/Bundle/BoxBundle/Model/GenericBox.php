@@ -9,11 +9,11 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Base de caja
+ * Base de box
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-abstract class GenericBox implements ContainerAwareInterface,BoxInterface
+abstract class GenericBox implements BoxInterface
 {
     const GROUP_DEFAULT = 'default';
     protected $container;
@@ -128,5 +128,9 @@ abstract class GenericBox implements ContainerAwareInterface,BoxInterface
     public function get($id)
     {
         return $this->container->get($id);
+    }
+    
+    function getTranslationDomain() {
+        return 'messages';
     }
 }

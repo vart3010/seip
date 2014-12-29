@@ -30,5 +30,7 @@ class SummaryBox extends GenericBox
             'summaryOperative' => $summaryOperative,
         );
     }
-
+    public function getDescription() {
+        return 'Genera un resumen de los programas de gestion que el usuario tiene pendiente por aprobar.';
+    }
 }

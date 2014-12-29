@@ -1,16 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\SEIPBundle\Model\Box\Operative;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
+
 /**
- * Description of SummaryIndicatorCharged
+ * Resumen de los indicadores cargados a nivel operativo.
  *
  * @author matias
  */
@@ -63,5 +58,9 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $datas['indicatorOperative'] = $indicatorOperative;
         
         return $datas;
+    }
+    
+    public function getDescription() {
+        return 'Resumen de los indicadores cargados a nivel operativo.';
     }
 }

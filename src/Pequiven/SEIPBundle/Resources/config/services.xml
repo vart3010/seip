@@ -140,11 +140,17 @@
         <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Entity\Box\AreaDefinition">
+            <tag name="tecnocreaciones_box.area" />
+        </service>
+        <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
+            <argument type="service" id="security.context" />
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <call method="setContainer">
-                <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
@@ -161,5 +167,8 @@
 <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
+        <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
+        </service>
     </services>
 </container>

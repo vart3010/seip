@@ -35,17 +35,17 @@ UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperati
 -- S.I.G.
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 9, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 22 WHERE fk_gerencia = 30;
 -- TRANSPORTE AÉREO
-UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 2 WHERE fk_gerencia = 13;
+UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 1, arrangementProgramOperative = 0 WHERE fk_gerencia = 13;
 -- OFICINA DE PRESIDENCIA
-UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 3 WHERE fk_gerencia = 32;
+UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 0, indOperativeOriginal = 0, arrangementProgramTactic = 6, arrangementProgramOperative = 0 WHERE fk_gerencia = 32;
 -- PLANIFICACIÓN ESTRATÉGICA
 UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 0, objOperativeOriginal = 22, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 36 WHERE fk_gerencia = 14;
 -- UNPI
-UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 1, objOperativeOriginal = 5, indOperativeOriginal = 5, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 3;
+UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 1, objOperativeOriginal = 5, indOperativeOriginal = 5, arrangementProgramTactic = 0, arrangementProgramOperative = 10 WHERE fk_gerencia = 3;
 -- UNFER
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 1, objOperativeOriginal = 11, indOperativeOriginal = 11, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 2;
 -- UNOP
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 13, indOperativeOriginal = 13, arrangementProgramTactic = 0, arrangementProgramOperative = 11 WHERE fk_gerencia = 8;
+UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 2, objOperativeOriginal = 7, indOperativeOriginal = 6, arrangementProgramTactic = 1, arrangementProgramOperative = 8 WHERE fk_gerencia = 8;
 -- COMERCIO EXTERIOR / IPSL
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 24, indOperativeOriginal = 24, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 6;
 -- LOGÍSTICA
@@ -55,7 +55,7 @@ UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperati
 -- PROYECTO TERMINAL MARÍTIMO
 UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 9, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 17;
 -- PROYECTO NAVAY
-UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 0, objOperativeOriginal = 20, indOperativeOriginal = 20, arrangementProgramTactic = 0, arrangementProgramOperative = 30 WHERE fk_gerencia = 10;
+UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 0, objOperativeOriginal = 21, indOperativeOriginal = 20, arrangementProgramTactic = 0, arrangementProgramOperative = 30 WHERE fk_gerencia = 10;
 -- CPM
 UPDATE seip_monitor SET objTacticOriginal = 10, indTacticOriginal = 9, objOperativeOriginal = 67, objOperativeVinculante = 69, indOperativeOriginal = 70, indOperativeVinculante = 76, arrangementProgramTactic = 0, arrangementProgramOperative = 198 WHERE fk_gerencia = 1;
 -- CPAMC

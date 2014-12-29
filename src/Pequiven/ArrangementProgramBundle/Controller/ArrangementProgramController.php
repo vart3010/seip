@@ -375,6 +375,7 @@ class ArrangementProgramController extends SEIPController
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }
+        
         $form->handleRequest($request);
         if($request->isMethod('POST') && $form->isValid()){
             $autoOpenOnSave = $request->get('autoOpenOnSave',false);
@@ -408,10 +409,10 @@ class ArrangementProgramController extends SEIPController
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
         }
-//        $form->remove('responsibles');
+        $view = $form->createView();
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form'   => $view,
         );
     }
 
@@ -524,8 +525,7 @@ class ArrangementProgramController extends SEIPController
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
         
-        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->find($id);
-
+        $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
@@ -913,12 +913,8 @@ class ArrangementProgramController extends SEIPController
                 ->setNotificationInProgressByUser(null)
                 ->setNotificationInProgressDate(null)
                 ;
-        $summary = $resource->getSummary(array(
-            'limitMonthToNow' => true
-        ));
-        $resource->setProgressToDate($summary['advances']);
-        $summary = $resource->getSummary();
-        $resource->setTotalAdvance($summary['advances']);
+        $resultService = $this->container->get('seip.service.result');
+        $resultService->refreshValueArrangementProgram($resource);
         
         $this->domainManager->dispatchEvent('pre_finish_the_notification_process', new ResourceEvent($resource));
         

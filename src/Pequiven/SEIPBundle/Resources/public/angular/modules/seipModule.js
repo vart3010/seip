@@ -110,22 +110,14 @@ angular.module('seipModule.controllers', [])
             $scope.data.responsibleGoals = null;
             $scope.data.typeGoals = null;
             $scope.data.operationalObjectives = null;
-            $scope.model.goalCount = null;
-            $scope.model.arrangementprogramResponsibles = [];
-
-            $scope.model.arrangementProgram = {
-                categoryArrangementProgram: null
+            var model = {
+                goalCount: null,
+                arrangementprogramResponsibles: [],
+                arrangementProgram: {
+                    categoryArrangementProgram: null
+                }
             };
-            
-            $scope.setPreselectedData = function(id,data,model){
-                var preselected = [];
-                 $.each(data,function(index,value){
-                     preselected.push(value.id);
-                 });
-                $('#'+id).select2('data', data);
-                $('#'+id).select2('val', preselected);
-                $scope.model[model] = data;
-            };
+            $scope.templateOptions.setModel(model);
             
             var arrangementprogramResponsibles = angular.element('#arrangementprogram_responsibles');
             
@@ -219,6 +211,29 @@ angular.module('seipModule.controllers', [])
             $scope.cancelEditGoal = function() {
                 return $scope.validFormTypeGoal();
             };
+        $scope.getClassForMeter = function (percentaje,numMeter){
+            var className = '';
+            if(numMeter == 1){
+                if(percentaje > 0 && percentaje <= 30){
+                    className = 'red-gradient';
+                }else if(percentaje > 30 && percentaje < 70){
+                    className = 'orange-gradient';
+                }else if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }else if(numMeter == 2){
+                if(percentaje > 30 && percentaje < 70){
+                    className = 'orange-gradient';
+                }else if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }else if(numMeter == 3){
+                if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }
+            return 'meter '+className;
+        };
 
 
         //Funcion que carga el template de la meta
@@ -959,12 +974,7 @@ angular.module('seipModule.controllers', [])
                     }
                     i++;
                 });
-            //    console.log(idSelect2);
-            //    console.log(idEntity);
-            //    console.log(j);
-            //    $("#"+idSelect2).select2("destroy");
-            //    $("#"+idSelect2).val(j);
-            //    $("#"+idSelect2).select2();
+    
                 $("#" + idSelect2).select2('val', j);
                 if (callBack) {
                     callBack(data[j]);
@@ -974,6 +984,22 @@ angular.module('seipModule.controllers', [])
                 });
 //                    $("#"+idSelect2).trigger("select2-selecting");
             };
+            //Pre seleccionar elementos en un select2 simple
+            $scope.setPreselectedData = function(id,data,model){
+                var preselected = [];
+                 $.each(data,function(index,value){
+                     preselected.push(value.id);
+                 });
+                $(function(){
+                    angular.element('#'+id).select2('data', data);
+                    angular.element('#'+id).select2('val', preselected);
+                });
+                $scope.model[model] = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            };
+            
             //Funcion para remover un elemento de un array
             Array.prototype.remove = function(value) {
                 var idx = this.indexOf(value);
@@ -1190,6 +1216,31 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
+        })
+        .controller('TableObjetiveController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.gerenciaSecond = null;
+            $scope.gerenciaFirst = null;
+            var gerencia = 0;
+            $scope.$watch("gerenciaFirst", function() {
+                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
+                {
+                    if(gerencia != $scope.gerenciaFirst){
+                        gerencia = $scope.gerenciaFirst;
+                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                    }
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
+                }
+            });
+            $scope.$watch("gerenciaSecond", function() {
+                if ($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
+                {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
+                } else {
+                    $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                }
+            });
         })
         .controller("ObjetiveStrategicController", function($scope, notificationBarService, $http, $filter, $timeout) {
             var form = angular.element('#registerObjetiveStrategicForm');
@@ -1582,23 +1633,13 @@ angular.module('seipModule.controllers', [])
         })
         .controller('UserController',function($scope,$timeout){
             console.log('UserController');
-            $scope.model = {
+            var model = {
                 arrangementProgramUserToRevisers: [],
                 arrangementProgramUsersToApproveTactical: [],
                 arrangementProgramUsersToApproveOperative: [],
                 arrangementProgramUsersToNotify: []
             };
-            $scope.setPreselectedData = function(id,data,model){
-                var preselected = [];
-                 $.each(data,function(index,value){
-                     preselected.push(value.id);
-                 });
-                jQuery(document).ready(function(){
-                    $('#'+id).select2('data', data);
-                    $('#'+id).select2('val', preselected);
-                });
-                $scope.model[model] = data;
-            };
+            $scope.templateOptions.setModel(model);
             
             var arrangementProgramUsersToApproveTactical = angular.element('#gerencia_configuration_arrangementProgramUsersToApproveTactical');
             arrangementProgramUsersToApproveTactical.change(function(){

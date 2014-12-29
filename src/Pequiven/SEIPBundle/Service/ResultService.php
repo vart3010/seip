@@ -2,6 +2,8 @@
 
 namespace Pequiven\SEIPBundle\Service;
 
+use Pequiven\MasterBundle\Entity\Formula;
+
 /**
  * Servicio que se encarga de actualizar los resultados
  * 
@@ -43,7 +45,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Actualiza los resultados de un objetivo
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $myResult
      */
-    public function updateResultOfObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$myResult)
+    public function updateResultOfObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$myResult,$andFlush = true)
     {
         $em = $this->getDoctrine()->getManager();
         $em->persist($myResult->getResultDetails());
@@ -79,14 +81,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         
-        if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            $total = ($total / $countResult);
-        }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-            //Nada que hacer
-        }
+//        if($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+//            $total = ($total / $countResult);
+//        }elseif($myResult->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+//            //Nada que hacer
+//        }
 
         $objetive->setResultOfObjetive($total);//Resultado del objetivo
-        $em->persist($objetive);
+        $objetive->updateLastDateCalculateResult();
+        
+        if($andFlush){
+            $em->persist($objetive);
+        }
         
         if($objetive->getParents()->count() > 0){//Actualizar los resultados del padre
             foreach ($objetive->getParents() as $parent) {
@@ -99,7 +105,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
     }
     
-    function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+    /**
+     * Calcula los resultados
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
+     */
+    function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) {
         $em = $this->getDoctrine()->getManager();
         
         if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
@@ -120,9 +130,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $em->persist($parent);
         }
         
-        $this->updateResultOfObjetive($result);
+        $result->updateLastDateCalculateResult();
+        $this->updateResultOfObjetive($result,$andFlush);
         
-        $em->flush();
+        if($andFlush){
+            $em->flush();
+        }
     }
     
     /**
@@ -139,12 +152,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
             if($countArrangementPrograms > 0){
                 foreach ($arrangementPrograms as $arrangementProgram){
+                    if($arrangementProgram->getStatus() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED){
+                        continue;
+                    }
                     $countResult++;
                     $total += $arrangementProgram->getResult();
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
-            throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$myResult->getId()));
+            throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
@@ -164,7 +180,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     {
         $objetive = $this->resolveObjetiveOfResult($result);
         $itemsResult = $objetive->getIndicators();
-        $this->calculateResultItems($result, $itemsResult);
+        $this->calculateResultItems($result, $itemsResult,true);
     }
     
     /**
@@ -188,6 +204,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $objetive;
     }
     
+    /**
+     * Calcula los resultados de los items
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
+     * @param type $itemsResult
+     * @param type $debug
+     */
     public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult)
     {
         $total = 0;
@@ -223,7 +246,181 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $result->setTotal($total);
     }
-
+    
+    /**
+     * Actualiza los resultados de los objetivos
+     * @param type $objects
+     */
+    function updateResultOfObjects($objects,$andFlush = true) 
+    {
+        if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
+        {
+            $objects = array($objects);
+        }
+        foreach ($objects as $object) {
+            foreach ($object->getResults() as $result) 
+            {
+                $this->calculateResult($result,$andFlush);
+            }
+        }
+    }
+    
+    /**
+     * Refresca el valor del programa de gestion
+     * 
+     * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
+     */
+    function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
+    {
+        $summary = $arrangementProgram->getSummary(array(
+            'limitMonthToNow' => true
+        ));
+        $arrangementProgram->setProgressToDate($summary['advances']);
+        $summary = $arrangementProgram->getSummary();
+        $arrangementProgram->setTotalAdvance($summary['advances']);
+        $em = $this->getDoctrine()->getManager();
+        
+        $arrangementProgram->updateLastDateCalculateResult();
+        
+        $em->persist($arrangementProgram);
+        
+        $this->updateResultOfObjects($arrangementProgram->getObjetiveByType());
+        
+        if($andFlush){
+            $em->flush();
+        }
+    }
+    
+    /**
+     * Refresca el valor de un indicador
+     * 
+     * @param Indicator $indicator
+     */
+    function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
+    {
+        $details = $indicator->getDetails();
+        if(!$details){
+            $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
+            $indicator->setDetails($details);
+        }
+        $previusValue = $indicator->getValueFinal();
+        $details
+                ->setPreviusValue($previusValue)
+                ;
+        
+        $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+        
+        $formula = $indicator->getFormula();
+        if($formula !== null && $indicatorService->validateFormula($formula) === null){
+            $typeOfCalculation = $formula->getTypeOfCalculation();
+            if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $this->calculateFormulaSimpleAverage($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $this->calculateFormulaRealPlanAutomatic($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+                $this->calculateFormulaRealAutomatic($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
+                $this->calculateFormulaAccumulate($indicator);
+            }
+        }
+        $indicator->updateLastDateCalculateResult();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        
+        $em->persist($indicator);
+        $em->persist($details);
+        if($andFlush){
+            $em->flush();
+        }
+        
+        $objetives = $indicator->getObjetives();
+        
+        $this->updateResultOfObjects($objetives);
+    }
+    
+     /**
+     * Calcula la formula con promedio simple
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaSimpleAverage(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $quantity = 0;
+        $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $quantity++;
+            $value += $valueIndicator->getValueOfIndicator();
+        }
+        $value = ($value / $quantity);
+        $indicator->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula con plan y real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaRealPlanAutomatic(Indicator &$indicator) 
+    {
+        $formula = $indicator->getFormula();
+        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        
+        $totalPlan = $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $totalPlan += $formulaParameters[$variableToPlanValueName];
+            $totalReal += $formulaParameters[$variableToRealValueName];
+        }
+        
+        $value = $totalReal;
+        $indicator
+                ->setTotalPlan($totalPlan)
+                ->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula con real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaRealAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    {
+        $formula = $indicator->getFormula();
+        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        
+        $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $totalReal += $formulaParameters[$variableToRealValueName];
+        }
+        
+        $value = $totalReal;
+        $indicator
+            ->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula acumulativo de cada valor de resultado
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaAccumulate(Indicator &$indicator) {
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $quantity = 0;
+        $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $quantity++;
+            $value += $valueIndicator->getValueOfIndicator();
+        }
+        $indicator->setValueFinal($value);
+    }
+    
     /**
      * Shortcut to return the Doctrine Registry service.
      *

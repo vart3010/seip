@@ -107,8 +107,7 @@ class IndicatorRepository extends baseEntityRepository {
         if(isset($criteria['description'])){
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$description."%'"));
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.ref', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
         }
         if(isset($criteria['indicatorLevel'])){
             $queryBuilder->andWhere("o.indicatorLevel = " . $criteria['indicatorLevel']);
@@ -131,8 +130,7 @@ class IndicatorRepository extends baseEntityRepository {
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
+
         return $this->getPaginator($queryBuilder);
     }
     

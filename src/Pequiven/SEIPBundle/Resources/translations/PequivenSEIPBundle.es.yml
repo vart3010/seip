@@ -42,6 +42,22 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    user:
+        user: Usuario
+        localization:
+            localization: Localización
+    actions:
+        create: Crear
+        add: Añadir
+        edit: Editar
+        delete: Eliminar
+        update: Editar
+    headers:
+        location: Localidad
+        gerencia: Gerencia
+        gerenciaSecond:  Gerencia de 2da linea
+        rol: Rol
+        actions: Acciones
     results:
         results: Resultados
         result: Resultado
@@ -191,6 +207,7 @@ principal:
         indicatorPorc: % Carga
         
 result:
+    recalculate: Recalcular resultados
     list:
         titleObjetiveOperative: Resultados Objetivos Operativos
         columnLocation: Localidad

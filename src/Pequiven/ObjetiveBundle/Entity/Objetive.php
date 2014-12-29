@@ -15,8 +15,8 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
  */
-class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface {
-
+class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface 
+{
     //Texto a mostrar en los select
     protected $descriptionSelect;
     
@@ -253,10 +253,16 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="objetive",cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="objetive",cascade={"remove"})
      */
     protected $arrangementRange;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateResult;
+    
     /**
      * Constructor
      */
@@ -1065,4 +1071,10 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
     }
+    
+    public function updateLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = new \DateTime();
+    }
+    
 }

@@ -153,6 +153,12 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $progressToDate = 0;
     
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateResult;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -573,5 +579,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultWithWeight() {
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
+    }
+    
+    public function updateLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = new \DateTime();
     }
 }

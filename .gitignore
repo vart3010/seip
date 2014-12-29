@@ -19,5 +19,7 @@ composer.lock
 /web/media/cache/
 /web/css/
 /web/js/
+/web/compiled/*.js
+/web/compiled/*.css
 *.~lock*
 /app/spool/

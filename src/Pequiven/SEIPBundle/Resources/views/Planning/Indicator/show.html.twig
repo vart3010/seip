@@ -22,7 +22,12 @@
         { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
+    
     <div ng-controller="IndicatorResultController">
+        
+    {% if errorFormula != null %}
+        {{ print_error(errorFormula) }}
+    {% endif  %}
     <fieldset class="fieldset">
         <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read'])) }}">{{ indicator }}&nbsp;</legend>
         <p class="inline-label">
@@ -122,6 +127,14 @@
 
         {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
     {% endif %}
+    {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
+            {
+                routeUpdateResult: 'pequiven_planning_update_result_indicator',
+                entity: indicator,
+                urlUpdateResulReferral: (path('pequiven_indicator_show',{id:indicator.id}))
+            }
+        )
+    %}
 </p>
 
 {% endblock %}

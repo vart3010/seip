@@ -125,6 +125,47 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
+     * Crea un paginador para los objetivos de acuerdo al nivel del mismo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
+        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        return $this->getPaginator($queryBuilder);
+    }
+    
+    /**
      * Crea un paginador para los objetivos estratégicos
      * 
      * @param array $criteria
@@ -349,16 +390,17 @@ class ObjetiveRepository extends EntityRepository {
         }
         $localidad = $user->getComplejo();
         $gerenciasTypeComplejo = $gerenciasTypeComplejoId = array();
-        foreach ($localidad->getGerencias() as $gerencia) {
-            $gerenciaGroup = $gerencia->getGerenciaGroup();
-            
-            if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
-                $gerenciasTypeComplejo [] = $gerencia;
-                $gerenciasTypeComplejoId[] = $gerencia->getId();
+        if($localidad){
+            foreach ($localidad->getGerencias() as $gerencia) {
+                $gerenciaGroup = $gerencia->getGerenciaGroup();
+
+                if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
+                    $gerenciasTypeComplejo [] = $gerencia;
+                    $gerenciasTypeComplejoId[] = $gerencia->getId();
+                }
             }
         }
         if(count($gerenciasTypeComplejo) > 0){
-            $localidad = $gerencia->getComplejo();
             $qbMedular = $this->getQueryAllEnabled();
             $qbMedular
                 ->innerJoin("o.objetiveLevel","ol")
@@ -469,7 +511,7 @@ class ObjetiveRepository extends EntityRepository {
     
     
     /**
-     * 
+     * Función que devuelve el nivel operativo para la matriz de objetivos
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return type
      */
@@ -504,7 +546,7 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
-     * 
+     * Función que devuelve el nivel estratégico para la matriz de objetivos
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
      * @return type
      */
@@ -527,12 +569,6 @@ class ObjetiveRepository extends EntityRepository {
         $qb->setParameter('idChildren', $objetive->getId());
         
         return $qb->getQuery()->getResult();
-    }
-    
-    
-    public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
-        
-        return $gerencia->getDescription();
     }
     
     public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond){

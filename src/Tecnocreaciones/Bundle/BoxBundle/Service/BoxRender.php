@@ -9,7 +9,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\BoxInterface;
 
 /**
  * Servicio para renderizar los box
- *
+ * 
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
 class BoxRender implements ContainerAwareInterface
