@@ -44,6 +44,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeUser', 'class' => 'Pequiven\SEIPBundle\Entity\User', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerencia', 'class' => 'Pequiven\MasterBundle\Entity\Gerencia', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
         );
     }
 
@@ -548,6 +549,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     public function onPostSerializeGerenciaSecond(ObjectEvent $event) {
         $object = $event->getObject();
         $event->getVisitor()->addData('linkGerenciaSecondToResult', $this->generateUrl('pequiven_result_show_operative', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId())));
+    }
+    
+    public function onPostSerializeGoal(ObjectEvent $event)
+    {
+        $goal = $event->getObject();
+        
+        $event->getVisitor()->addData('_data',array(
+            'advance' => $goal->getGoalDetails()->getAdvance()
+        ));
     }
     
     public function setContainer(ContainerInterface $container = null) {

@@ -211,6 +211,29 @@ angular.module('seipModule.controllers', [])
             $scope.cancelEditGoal = function() {
                 return $scope.validFormTypeGoal();
             };
+        $scope.getClassForMeter = function (percentaje,numMeter){
+            var className = '';
+            if(numMeter == 1){
+                if(percentaje > 0 && percentaje <= 30){
+                    className = 'red-gradient';
+                }else if(percentaje > 30 && percentaje < 70){
+                    className = 'orange-gradient';
+                }else if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }else if(numMeter == 2){
+                if(percentaje > 30 && percentaje < 70){
+                    className = 'orange-gradient';
+                }else if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }else if(numMeter == 3){
+                if(percentaje >= 70){
+                    className = 'green-gradient';
+                }
+            }
+            return 'meter '+className;
+        };
 
 
         //Funcion que carga el template de la meta
