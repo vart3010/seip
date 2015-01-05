@@ -108,6 +108,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
                     ->innerJoin('gs.gerencia', 'g')
                     ->leftJoin('gs.gerenciaVinculants', 'gv')
                     ->andWhere('g.id = :gerencia')
+                    ->orWhere('gv.id = :gerencia')
                     ->setParameter('gerencia', $gerencia)
                 ;
         }
