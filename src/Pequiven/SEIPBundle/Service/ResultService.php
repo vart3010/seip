@@ -3,6 +3,7 @@
 namespace Pequiven\SEIPBundle\Service;
 
 use Pequiven\MasterBundle\Entity\Formula;
+use Pequiven\IndicatorBundle\Entity\Indicator;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -361,7 +362,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaRealPlanAutomatic(Indicator &$indicator) 
+    public function calculateFormulaRealPlanAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
         $formula = $indicator->getFormula();
         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
@@ -410,7 +411,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaAccumulate(Indicator &$indicator) {
+    public function calculateFormulaAccumulate(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
         $valuesIndicator = $indicator->getValuesIndicator();
         $quantity = 0;
         $value = 0.0;
