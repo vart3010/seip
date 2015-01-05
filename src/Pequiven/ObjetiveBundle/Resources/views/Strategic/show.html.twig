@@ -64,10 +64,10 @@
 
 <br /><br />
 
-{#<p class="button-height align-right">
-    {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
-    {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
-</p>#}
+<p class="button-height align-right">
+    {% set urlUpdateResulReferral = (path('objetiveStrategic_show',{id:entity.id})) %}
+    {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}
+</p>
 
 {% endblock %}
 
