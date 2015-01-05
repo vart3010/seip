@@ -106,6 +106,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
         }else if(($gerencia = $criteria->remove('gerencia')) != null){
             $queryBuilder
                     ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('gs.gerenciaVinculants', 'gv')
                     ->andWhere('g.id = :gerencia')
                     ->setParameter('gerencia', $gerencia)
                 ;
