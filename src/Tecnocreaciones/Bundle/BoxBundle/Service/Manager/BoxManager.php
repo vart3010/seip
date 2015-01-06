@@ -34,6 +34,28 @@ abstract class BoxManager implements \Tecnocreaciones\Bundle\BoxBundle\Model\Box
         return new $this->classBox;
     }
     
+    function buildModelBox($boxName, $areasName) {
+        $areasName = $this->buildAreasName($areasName);
+        $modelBox = $this->createNew();
+        $modelBox
+                ->setAreaName($areasName)
+                ->setBoxName($boxName)
+                ;
+        
+        return $modelBox;
+    }
+    
+    public function buildAreasName(array $areasName) {
+        foreach ($areasName as $key => $areaName) {
+            $areasName[$areaName] = array(
+                'position' => 0,
+                'template' => ''
+            );
+            unset($areasName[$key]);
+        }
+        return $areasName;
+    }
+    
     /**
      * Shortcut to return the Doctrine Registry service.
      *

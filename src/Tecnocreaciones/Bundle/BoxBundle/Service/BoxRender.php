@@ -88,6 +88,7 @@ class BoxRender implements ContainerAwareInterface
             if(isset($this->boxs[$group][$box->getName()])){
                 throw new Exception(sprintf('Box "%s" already exists!',$box->getName()));
             }
+            $box->setContainer($this->container);
             $this->boxs[$group][$box->getName()] = $box;
         }
         $this->quantityBox++;

@@ -36,13 +36,6 @@ abstract class ModelBox implements ModelBoxInterface
     protected $areaName;
     
     /**
-     * Orden del box
-     * @var integer
-     * @ORM\Column(name="orderBox",type="integer")
-     */
-    protected $orderBox = 0;
-    
-     /**
      * Set name
      *
      * @param string $name
@@ -65,29 +58,6 @@ abstract class ModelBox implements ModelBoxInterface
         return $this->boxName;
     }
 
-    /**
-     * Set orderBox
-     *
-     * @param integer $orderBox
-     * @return Box
-     */
-    public function setBoxOrder($orderBox)
-    {
-        $this->orderBox = $orderBox;
-
-        return $this;
-    }
-
-    /**
-     * Get orderBox
-     *
-     * @return integer 
-     */
-    public function getBoxOrder()
-    {
-        return $this->orderBox;
-    }
-    
     /**
      * Set areaName
      *

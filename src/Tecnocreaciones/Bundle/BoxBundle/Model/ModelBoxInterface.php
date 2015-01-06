@@ -21,10 +21,6 @@ interface ModelBoxInterface
     
     public function getBoxName();
     
-    public function setBoxOrder($orderBox);
-    
-    public function getBoxOrder();
-    
     public function setAreaName($areaName);
     
     public function getAreaName();

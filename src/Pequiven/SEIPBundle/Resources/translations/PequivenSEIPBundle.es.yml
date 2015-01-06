@@ -99,13 +99,7 @@ pequiven_seip:
         update_password: Actualizar contraseña
         update: Actualizar
         num_personal: Número de personal
-    box:
-        arrangementprogram_summary: Programas de gestión pendientes.
-        my_arrangementprogram_summary: Mis programas de gestión.
-        tactic_summaryindicatorcharged: Indicadores tacticos.
-        tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
-        operative_summaryindicatorcharged: Indicadores operativos.
-        operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
+        
     hello: Hola
 
     #Buttons
@@ -228,3 +222,10 @@ result:
     not_objetives_in_level: No existen objetivos asociados en este nivel
     captionObjetiveOperative: Resultados Objetivos Operativos
     subCaptionObjetiveOperative: Período 2014
+    
+pequiven_seip_box_arrangementprogram_summary: Programas de gestión pendientes.
+pequiven_seip_box_my_arrangementprogram_summary: Mis programas de gestión.
+pequiven_seip_box_tactic_summaryindicatorcharged: Indicadores tacticos.
+pequiven_seip_box_tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
+pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
+pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.

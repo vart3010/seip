@@ -10,7 +10,7 @@ namespace Pequiven\SEIPBundle\Model\Box\ArrangementProgram;
 class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
 {
     public function getName() {
-        return 'pequiven_seip.box.my_arrangementprogram_summary';
+        return 'pequiven_seip_box_my_arrangementprogram_summary';
     }
 
     public function getParameters() 

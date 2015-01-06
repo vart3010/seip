@@ -1,36 +1,43 @@
 {% extends "::base.html.twig" %}
 
+{% form_theme formBoxes _self %}
+
+{% block form_label -%}
+    {% if label is not sameas(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|raw }}</label>
+    {%- endif %}
+{%- endblock form_label %}         
+
 {% block body %}
     <h2>Lista de boxes disponibles</h2>
     <form action="{{ path('tecnocreaciones_box_add') }}" method="POST">
-        <table>
+        <table style="width: 100%">
             <tr>
                 <th>Nro.</th>
-                <th>Nombre</th>
                 <th>Descripcion</th>
                 <th>Areas</th>
+                <th>&nbsp;</th>
             </tr>
-            {% set areas = listAreasDefinition %}
-            {% for box in boxes %}
-                {% if box.hasPermission %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ box.name|trans({},box.getTranslationDomain) }}</td>
-                        <td>{{ box.description }}</td>
-                        <td>
-                            <select id="area" name="box[{{ box.name }}][]" multiple="multiple">
-                                <option value="">&nbsp;</option>
-                                {% for area_name,value in areas %}
-                                    {% if area_name not in box.getAreasNotPermitted %}
-                                        <option value="{{ area_name }}">
-                                            {{ value }}
-                                        </option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </td>
-                    </tr>
-                {% endif %}
+            {% for form in formBoxes %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ form_label(form) }}</td>
+                    <td>
+                        {{ form_widget(form) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form) }}
+                    </td>
+                </tr>
             {% endfor %}
         </table>
         <br/>
@@ -38,46 +45,50 @@
     </form>
     <br/>
     <h2>Mis boxes</h2>
-    <form action="{{ path('tecnocreaciones_box_add') }}" method="POST">
-        <table>
+    <table style="width: 100%">
+        <tr>
+            <th>Nro.</th>
+            <th>Descripcion</th>
+            <th>Areas</th>
+        </tr>
+        {% for box in boxes %}
             <tr>
-                <th>Nro.</th>
-                <th>Nombre</th>
-                <th>Descripcion</th>
-                <th>Areas</th>
-            </tr>
-            {% set areas = listAreasDefinition %}
-            {% for modelBox in modelBoxes %}
-                {% if boxRender.hasBox(modelBox.boxName) %}
-                    
-                    {% set box = boxRender.getBox(modelBox.boxName) %}
-                    {% if box.hasPermission %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ box.name|trans({},box.getTranslationDomain) }}</td>
-                            <td>{{ box.description }}</td>
-                            <td>
-                                <select id="area" name="box[{{ box.name }}][]" multiple="multiple">
-                                    <option value="">&nbsp;</option>
-                                    {% for area_name,value in areas %}
-                                        {% if area_name not in box.getAreasNotPermitted %}
-                                            <option value="{{ area_name }}">
-                                                {{ value }}
-                                            </option>
-                                        {% endif %}
-                                    {% endfor %}
-                                </select>
-                            </td>
-                        </tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ box.name|trans({},box.getTranslationDomain) }} <b>({{ box.description }})</b></td>
+                <td>
+                    {% if box.extraData is defined %}
+                        {% for area_name,value in box.extraData %}
+                            {{ area_name|trans({},box.getTranslationDomain) }}{% if loop.last %}.{% else %},{% endif %}
+                        {% endfor %}
                     {% endif %}
-                    
-                {% endif %}
-            {% endfor %}
-        </table>
-        
-        {{ form(formMyBoxes) }}
-        
-        <br/>
-        <button type class="fa fa-plus-square button">Guardar Cambios</button>
-    </form>
+                </td>
+            </tr>
+        {% else%}
+            <tr>
+                <td colspan="3" style="text-align: center">No hay boxes agregados.</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock body %}
+
+{% block stylesheets %}
+    <style></style>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+{% endblock javascripts %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascript %}

@@ -25,70 +25,138 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
      */
     function indexAction()
     {
-        $areaRender = $this->get('tecnocreaciones_box.area.render');
         $boxRender = $this->get('tecnocreaciones_box.render');
+        $areaRender = $this->get('tecnocreaciones_box.area.render');
         
-        $listAreasDefinition = $areaRender->getListAreasDefinition();
-        $areas = $areaRender->getAreas();
-        $modelBoxes = $areaRender->getModelBoxes();
         $boxsByName = $boxRender->getBoxsByName();
-
+        $modelBoxes = $areaRender->getModelBoxes();
+        
 //        var_dump($listAreasDefinition);
 //        var_dump($boxsByName);
 //        var_dump($areas);
 //        var_dump($modelBoxes);
 //        die;
-        $formBuilderMyBoxes = $this->createFormBuilder();
-        foreach ($modelBoxes as $modelBox) {
-            if($boxRender->hasBox($modelBox->getBoxName()) === false){
-                continue;
-            }
-            $box = $boxRender->getBox($modelBox->getBoxName());
-            if($box->hasPermission() === false){
-                continue;
-            }
-            $nameBox = $box->getName();
-            $name = sprintf('my_box[%s][]',$nameBox);
-            $choices = array();
-            
-            foreach ($listAreasDefinition as $areaName => $labelArea) {
-                if(in_array($areaName, $box->getAreasNotPermitted()) === true){
+       $boxesUser = array();
+        foreach ($boxsByName as $box) {
+            $data = array();
+            foreach ($modelBoxes as $modelBox) {
+                if ($box->getName() !== $modelBox->getBoxName()){
                     continue;
                 }
-                $choices[$areaName] = $labelArea;
+                foreach ($modelBox->getAreaName() as $key => $value) {
+                    $data[] = $key;
+                }
+                $box->extraData = $modelBox->getAreaName();
+                $boxesUser[] = $box;
+                break;
             }
-            $formBuilderMyBoxes->add($name,'choice',array(
-                'label' => sprintf('%s (%s)',  $this->trans($nameBox,array(),$box->getTranslationDomain()),$this->trans($box->getDescription(),array(),$box->getTranslationDomain())),
-                'choices' => $choices,
-                
-            ));
         }
-        $formMyBoxes = $formBuilderMyBoxes->getForm();
+        
+        $formBoxes = $this->getFormBuilderBoxes()->getForm();
+        
         return array(
-            'listAreasDefinition' => $listAreasDefinition,
-            'boxes' => $boxsByName,
-            'modelBoxes' => $modelBoxes,
-            'boxRender' => $boxRender,
-            'formMyBoxes' => $formMyBoxes->createView(),
+            'boxes' => $boxesUser,
+            'formBoxes' => $formBoxes->createView(),
         );
     }
     
     /**
      * 
+     * @param type $data
+     * @return \Symfony\Component\Form\FormBuilderInterface
+     */
+    private function getFormBuilderBoxes($data = array()) 
+    {
+        $areaRender = $this->get('tecnocreaciones_box.area.render');
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $modelBoxes = $areaRender->getModelBoxes();
+        $boxsByName = $boxRender->getBoxsByName();
+        
+         $formBuilderBoxes = $this->createFormBuilder($data,array(
+            'csrf_protection' => false,
+        ));
+        foreach ($boxsByName as $box) {
+            $data = array();
+            foreach ($modelBoxes as $modelBox) {
+                if ($box->getName() !== $modelBox->getBoxName()){
+                    continue;
+                }
+                foreach ($modelBox->getAreaName() as $key => $value) {
+                    $data[] = $key;
+                }
+                $box->extraData = $modelBox->getAreaName();
+                break;
+            }
+            $this->buildFormBoxes($formBuilderBoxes, $box,$data);
+        }
+        return $formBuilderBoxes;
+    }
+
+
+    private function buildFormBoxes(\Symfony\Component\Form\FormBuilderInterface &$formBuilder,  \Tecnocreaciones\Bundle\BoxBundle\Model\BoxInterface $box,array $data = array())
+    {
+        if($box->hasPermission() === false){
+            return ;
+        }
+        $areaRender = $this->get('tecnocreaciones_box.area.render');
+        $nameBox = $box->getName();
+        $name = sprintf('%s',$nameBox);
+        
+        $choices = array();
+        
+        $listAreasDefinition = $areaRender->getListAreasDefinition();
+        foreach ($listAreasDefinition as $areaName => $labelArea) {
+            if(in_array($areaName, $box->getAreasNotPermitted()) === true){
+                continue;
+            }
+            $choices[$areaName] = $labelArea;
+        }
+            
+        $formBuilder->add($name,'choice',array(
+            'label' => sprintf('%s <b>(%s)</b>',  $this->trans($nameBox,array(),$box->getTranslationDomain()),$this->trans($box->getDescription(),array(),$box->getTranslationDomain())),
+            'attr' => array(
+                'class' => 'select2 input-large'
+            ),
+            'choices' => $choices,
+            'multiple' => true,
+            'data' => $data,
+            'required' => false,
+        ));
+    }
+
+
+    /**
+     * 
      */
     function addAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        $data = $request->get('box');
-        $boxManager = $this->getBoxManager();
-        foreach ($data as $boxName => $areaName) {
-            if($areaName == ''){
-                continue;
-            }
-            $box = $boxManager->find($boxName, $areaName);
-            if($box === null){
-                $boxManager->save($boxName, $areaName);
+//        var_dump($data);
+        $formBoxes = $this->getFormBuilderBoxes()->getForm();
+        if($formBoxes->submit($request)->isValid()){
+            $data = $formBoxes->getData();
+            $boxManager = $this->getBoxManager();
+            foreach ($data as $boxName => $areasName) {
+                if($areasName == ''){
+                    continue;
+                }
+                $box = $boxManager->find($boxName);
+//                var_dump($areasName);
+    //            var_dump($box);
+                $quantityAreasName = count($areasName);
+                if($box === null){
+                    $box = $boxManager->buildModelBox($boxName, $areasName);
+                }
+                
+                if($quantityAreasName > 0){
+                    $box->setAreaName($boxManager->buildAreasName($areasName));
+                    $boxManager->save($box);
+                }else if ($quantityAreasName <= 0){
+                    $boxManager->remove($box);
+                }
             }
         }
+        
         return $this->redirect($this->generateUrl('tecnocreaciones_box_index'));
     }
     

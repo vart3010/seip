@@ -2,6 +2,8 @@
 
 namespace Pequiven\SEIPBundle\Model\Box\ArrangementProgram;
 
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\MasterBundle\Entity\Rol;
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
@@ -12,7 +14,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class SummaryBox extends GenericBox 
 {
     public function getName() {
-        return 'pequiven_seip.box.arrangementprogram_summary';
+        return 'pequiven_seip_box_arrangementprogram_summary';
     }
     
     public function getTemplateName() {
@@ -22,8 +24,8 @@ class SummaryBox extends GenericBox
     public function getParameters() {
         $repository = $this->get('pequiven_seip.repository.arrangementprogram');
         
-        $summaryTactical = $repository->findGroupByType(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC);
-        $summaryOperative = $repository->findGroupByType(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE);
+        $summaryTactical = $repository->findGroupByType(ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC);
+        $summaryOperative = $repository->findGroupByType(ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE);
         
         return array(
             'summaryTactical' => $summaryTactical,
@@ -31,12 +33,16 @@ class SummaryBox extends GenericBox
         );
     }
     
-//    public function getAreasNotPermitted() 
-//    {
-//        return array(
-//            'pequiven_seip.area.events'
-//        );
-//    }
+    public function hasPermission() {
+        return $this->isGranted(array(Rol::getRoleName(Rol::ROLE_MANAGER_SECOND)));
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            'pequiven_seip.area.events'
+        );
+    }
     
     public function getTranslationDomain() {
         return 'PequivenSEIPBundle';

@@ -180,7 +180,8 @@ class AreaRender implements ContainerAwareInterface
                 $modelBoxes = $adapter->getModelBoxes();
                 if($modelBoxes){
                     foreach ($modelBoxes as $modelBox) {
-                        foreach ($modelBox->getAreaName() as $areaName => $order) {
+                        foreach ($modelBox->getAreaName() as $areaName => $data) {
+                            $order = $data['position'];
                             $this->addArea($areaName, $modelBox->getBoxName(),$order);
                             $this->modelBoxes[$modelBox->getBoxName()] = $modelBox;
                         }

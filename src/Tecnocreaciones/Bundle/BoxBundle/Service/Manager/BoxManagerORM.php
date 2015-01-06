@@ -18,7 +18,7 @@ namespace Tecnocreaciones\Bundle\BoxBundle\Service\Manager;
  */
 class BoxManagerORM extends BoxManager {
     
-    function find($boxName, $areaName)
+    function find($boxName)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -26,7 +26,6 @@ class BoxManagerORM extends BoxManager {
         $box = $repository->findOneBy(array(
             'user' => $user,
             'boxName' => $boxName,
-            'areaName' => $areaName
         ));
         return $box;
     }
@@ -38,25 +37,23 @@ class BoxManagerORM extends BoxManager {
         $em->flush();
     }
 
-    public function save($boxName, $areasName) 
+    public function save(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $modelBox) 
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        
-        foreach ($areasName as $key => $areaName) {
-            $areasName[$areaName] = 0;
-            unset($areasName[$key]);
-        }
-        $modelBox = $this->createNew();
-        $modelBox
-                ->setAreaName($areasName)
-                ->setBoxName($boxName)
-                ;
-        $modelBox->setUser($user);
         
         $em->persist($modelBox);
         $em->flush();
         
         return $modelBox;
     }
+    
+    public function buildModelBox($boxName, $areasName) {
+        $user = $this->getUser();
+        
+        $modelBox = parent::buildModelBox($boxName, $areasName);
+        $modelBox->setUser($user);
+        
+        return $modelBox;
+    }
+    
 }

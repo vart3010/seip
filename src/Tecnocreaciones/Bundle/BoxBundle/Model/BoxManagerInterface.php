@@ -17,11 +17,13 @@ namespace Tecnocreaciones\Bundle\BoxBundle\Model;
  */
 interface BoxManagerInterface extends \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
-    function save($boxName,$areaName);
+    function save(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $modelBox);
     
     function remove(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $box);
     
     function createNew();
     
-    function find($boxName, $areaName);
+    function find($boxName);
+    
+    function buildModelBox($boxName,$areaName);
 }

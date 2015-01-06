@@ -11,7 +11,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class SummaryBoxIndicatorChargedByGroup extends GenericBox {
     
     public function getName() {
-        return 'pequiven_seip.box.operative_summaryindicatorchargedbygroup';
+        return 'pequiven_seip_box_operative_summaryindicatorchargedbygroup';
     }
     
     public function getTemplateName() {
@@ -65,6 +65,10 @@ class SummaryBoxIndicatorChargedByGroup extends GenericBox {
     
     public function getTranslationDomain() {
         return 'PequivenSEIPBundle';
+    }
+    
+    public function hasPermission() {
+        return $this->isGranted(array('ROLE_WORKER_PLANNING'));
     }
     
     public function getAreasNotPermitted() 
