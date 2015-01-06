@@ -87,6 +87,7 @@ pequiven_seip:
     details: Detalles
     profile:
         profile: Perfil
+        config: Configuración
         details: Detalles
         username: Nombre de usuario
         first_name: Nombre
@@ -98,7 +99,13 @@ pequiven_seip:
         update_password: Actualizar contraseña
         update: Actualizar
         num_personal: Número de personal
-
+    box:
+        arrangementprogram_summary: Programas de gestión pendientes.
+        my_arrangementprogram_summary: Mis programas de gestión.
+        tactic_summaryindicatorcharged: Indicadores tacticos.
+        tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
+        operative_summaryindicatorcharged: Indicadores operativos.
+        operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
     hello: Hola
 
     #Buttons
@@ -150,6 +157,9 @@ pequiven_seip:
         type_template: Tipo de plantilla
     tooltips:
         click_to_show: Click para ver
+    area:
+        main: Area principal
+        events: Area de eventos
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

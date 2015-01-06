@@ -12,7 +12,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class SummaryBox extends GenericBox 
 {
     public function getName() {
-        return 'pequiven_seip_box_arrangementprogram_summary';
+        return 'pequiven_seip.box.arrangementprogram_summary';
     }
     
     public function getTemplateName() {
@@ -30,6 +30,18 @@ class SummaryBox extends GenericBox
             'summaryOperative' => $summaryOperative,
         );
     }
+    
+//    public function getAreasNotPermitted() 
+//    {
+//        return array(
+//            'pequiven_seip.area.events'
+//        );
+//    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
+    }
+    
     public function getDescription() {
         return 'Genera un resumen de los programas de gestion que el usuario tiene pendiente por aprobar.';
     }

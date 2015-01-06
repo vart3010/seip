@@ -16,7 +16,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class GenericBox implements BoxInterface
 {
     const GROUP_DEFAULT = 'default';
+    
     protected $container;
+    
     public function hasPermission() {
         return true;
     }
@@ -130,7 +132,12 @@ abstract class GenericBox implements BoxInterface
         return $this->container->get($id);
     }
     
-    function getTranslationDomain() {
+    function getAreasNotPermitted() {
+        return array();
+    }
+            
+    function getTranslationDomain()
+    {
         return 'messages';
     }
 }

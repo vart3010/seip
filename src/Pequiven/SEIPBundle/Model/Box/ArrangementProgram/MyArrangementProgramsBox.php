@@ -10,7 +10,7 @@ namespace Pequiven\SEIPBundle\Model\Box\ArrangementProgram;
 class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox
 {
     public function getName() {
-        return 'pequiven_seip_box_my_arrangementprogram_summary';
+        return 'pequiven_seip.box.my_arrangementprogram_summary';
     }
 
     public function getParameters() 
@@ -34,6 +34,16 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         return 'PequivenSEIPBundle:Monitor:ArrangementProgram/myArrangementPrograms.html.twig';
     }
     
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            'pequiven_seip.area.events'
+        );
+    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
+    }
     
     public function getDescription() {
         return 'Muestra un resumen de los programas de gestión donde el usuario sea responsable de las metas o del programa.';

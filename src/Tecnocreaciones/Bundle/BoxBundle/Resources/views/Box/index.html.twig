@@ -1,0 +1,83 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+    <h2>Lista de boxes disponibles</h2>
+    <form action="{{ path('tecnocreaciones_box_add') }}" method="POST">
+        <table>
+            <tr>
+                <th>Nro.</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Areas</th>
+            </tr>
+            {% set areas = listAreasDefinition %}
+            {% for box in boxes %}
+                {% if box.hasPermission %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ box.name|trans({},box.getTranslationDomain) }}</td>
+                        <td>{{ box.description }}</td>
+                        <td>
+                            <select id="area" name="box[{{ box.name }}][]" multiple="multiple">
+                                <option value="">&nbsp;</option>
+                                {% for area_name,value in areas %}
+                                    {% if area_name not in box.getAreasNotPermitted %}
+                                        <option value="{{ area_name }}">
+                                            {{ value }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <br/>
+        <button type class="fa fa-plus-square button">Guardar Cambios</button>
+    </form>
+    <br/>
+    <h2>Mis boxes</h2>
+    <form action="{{ path('tecnocreaciones_box_add') }}" method="POST">
+        <table>
+            <tr>
+                <th>Nro.</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Areas</th>
+            </tr>
+            {% set areas = listAreasDefinition %}
+            {% for modelBox in modelBoxes %}
+                {% if boxRender.hasBox(modelBox.boxName) %}
+                    
+                    {% set box = boxRender.getBox(modelBox.boxName) %}
+                    {% if box.hasPermission %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ box.name|trans({},box.getTranslationDomain) }}</td>
+                            <td>{{ box.description }}</td>
+                            <td>
+                                <select id="area" name="box[{{ box.name }}][]" multiple="multiple">
+                                    <option value="">&nbsp;</option>
+                                    {% for area_name,value in areas %}
+                                        {% if area_name not in box.getAreasNotPermitted %}
+                                            <option value="{{ area_name }}">
+                                                {{ value }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    
+                {% endif %}
+            {% endfor %}
+        </table>
+        
+        {{ form(formMyBoxes) }}
+        
+        <br/>
+        <button type class="fa fa-plus-square button">Guardar Cambios</button>
+    </form>
+{% endblock body %}

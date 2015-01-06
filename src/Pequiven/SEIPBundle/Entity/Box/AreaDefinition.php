@@ -11,17 +11,20 @@
 
 namespace Pequiven\SEIPBundle\Entity\Box;
 
+use Tecnocreaciones\Bundle\BoxBundle\Model\AreaDefinitionInterface;
+
 /**
  * Definicion de las areas del sistema
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class AreaDefinition implements \Tecnocreaciones\Bundle\BoxBundle\Model\AreaDefinitionInterface
+class AreaDefinition implements AreaDefinitionInterface
 {
     public function getAreas() 
     {
         return array(
-            array('name' => 'seip.area.main', 'translation_domain' => 'messages'),
+            array('name' => 'pequiven_seip.area.main', 'translation_domain' => 'PequivenSEIPBundle'),
+            array('name' => 'pequiven_seip.area.events', 'translation_domain' => 'PequivenSEIPBundle'),
         );
     }
 }

@@ -1,6 +1,8 @@
 parameters:
     tecnocreaciones_box.render.class: Tecnocreaciones\Bundle\BoxBundle\Service\BoxRender
     tecnocreaciones_box.area_render.class: Tecnocreaciones\Bundle\BoxBundle\Service\AreaRender
+    tecnocreaciones_box.box_manager.class: Tecnocreaciones\Bundle\BoxBundle\Service\Manager\BoxManagerORM
+    tecnocreaciones_box.model_box.class: Pequiven\SEIPBundle\Entity\Box\ModelBox
 
 services:
     tecnocreaciones_box.render:
@@ -17,5 +19,10 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+        calls:
+            - [setContainer,[@service_container]]
+    tecnocreaciones_box.box_manager:
+        class: %tecnocreaciones_box.box_manager.class%
+        arguments: ["%tecnocreaciones_box.model_box.class%"]
         calls:
             - [setContainer,[@service_container]]

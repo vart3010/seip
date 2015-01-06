@@ -12,7 +12,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class SummaryBoxIndicatorCharged extends GenericBox {
     
     public function getName() {
-        return 'pequiven_seip_box_tactic_summaryindicatorcharged';
+        return 'pequiven_seip.box.tactic_summaryindicatorcharged';
     }
     
     public function getTemplateName() {
@@ -60,5 +60,16 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $datas['indicatorTactic'] = $indicatorTactic;
         
         return $datas;
+    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            'pequiven_seip.area.events'
+        );
     }
 }

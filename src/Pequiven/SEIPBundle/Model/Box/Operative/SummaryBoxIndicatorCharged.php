@@ -12,7 +12,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 class SummaryBoxIndicatorCharged extends GenericBox {
     
     public function getName() {
-        return 'pequiven_seip_box_operative_summaryindicatorcharged';
+        return 'pequiven_seip.box.operative_summaryindicatorcharged';
     }
     
     public function getTemplateName() {
@@ -20,8 +20,6 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     }
     
     public function getParameters() {
-        $em = $this->getDoctrine()->getManager();
-        
         $datas = $this->getDataIndicatorOperativeGroup();
         return array(
             'indicatorOperative' => $datas['indicatorOperative']
@@ -58,6 +56,17 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $datas['indicatorOperative'] = $indicatorOperative;
         
         return $datas;
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            'pequiven_seip.area.events'
+        );
+    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
     }
     
     public function getDescription() {

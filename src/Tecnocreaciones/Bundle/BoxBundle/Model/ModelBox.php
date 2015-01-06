@@ -29,9 +29,9 @@ abstract class ModelBox implements ModelBoxInterface
     protected $boxName;
     
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="area", type="string",length=200)
+     * @ORM\Column(name="areas", type="json_array")
      */
     protected $areaName;
     
@@ -40,7 +40,7 @@ abstract class ModelBox implements ModelBoxInterface
      * @var integer
      * @ORM\Column(name="orderBox",type="integer")
      */
-    protected $orderBox;
+    protected $orderBox = 0;
     
      /**
      * Set name

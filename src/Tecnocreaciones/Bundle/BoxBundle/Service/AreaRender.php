@@ -40,6 +40,13 @@ class AreaRender implements ContainerAwareInterface
     private $adapters;
     
     /**
+     * Todos los boxes obtenidos a partir de los adaptadores
+     * 
+     * @var array
+     */
+    private $modelBoxes;
+
+    /**
      * Se usa como bandera  para inicializar una sola vez los adaptadores
      * @var boolean
      */
@@ -167,17 +174,21 @@ class AreaRender implements ContainerAwareInterface
     private function initAdapters()
     {
         if($this->adapters){
+            $this->modelBoxes = array();
             foreach ($this->adapters as $adapter)
             {
                 $modelBoxes = $adapter->getModelBoxes();
                 if($modelBoxes){
                     foreach ($modelBoxes as $modelBox) {
-                        $this->addArea($modelBox->getAreaName(), $modelBox->getBoxName(),$modelBox->getBoxOrder());
+                        foreach ($modelBox->getAreaName() as $areaName => $order) {
+                            $this->addArea($areaName, $modelBox->getBoxName(),$order);
+                            $this->modelBoxes[$modelBox->getBoxName()] = $modelBox;
+                        }
                     }
                 }
             }
         }
-        $this->initAdapter = array();
+        $this->initAdapter = true;
     }
     
     /**
@@ -193,7 +204,28 @@ class AreaRender implements ContainerAwareInterface
     }
     
     /**
-     * Traduce
+     * Retorna los boxes en las areas agregadas
+     * 
+     * @return type
+     */
+    function getAreas()
+    {
+        if($this->initAdapter === false){
+            $this->initAdapters();
+        }
+        return $this->areas;
+    }
+    
+    function getModelBoxes() 
+    {
+        if($this->initAdapter === false){
+            $this->initAdapters();
+        }
+        return $this->modelBoxes;
+    }
+
+    /**
+     * Traduce un texto
      * @param type $id
      * @param array $parameters
      * @param type $domain
@@ -201,7 +233,7 @@ class AreaRender implements ContainerAwareInterface
      */
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
-        return $this->get('translator')->trans($id, $parameters, $domain);
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
     
     public function setContainer(ContainerInterface $container = null) {
