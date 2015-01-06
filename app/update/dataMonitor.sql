@@ -25,7 +25,7 @@ UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 4, objOperati
 -- PROYECTOS INTERNACIONALES
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 3, indOperativeOriginal = 3, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 16;
 -- RECURSOS HUMANOS
-UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 80, indOperativeOriginal = 42, arrangementProgramTactic = 0, arrangementProgramOperative = 119 WHERE fk_gerencia = 18;
+UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 80, indOperativeOriginal = 42, arrangementProgramTactic = 0, arrangementProgramOperative = 103 WHERE fk_gerencia = 18;
 -- SALUD
 UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 3, objOperativeOriginal = 27, indOperativeOriginal = 26, arrangementProgramTactic = 0, arrangementProgramOperative = 27 WHERE fk_gerencia = 25;
 -- SEGUIM. Y CONTROL DE PROYECTOS

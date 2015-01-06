@@ -25,7 +25,7 @@
         {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' with {'entity':{'childrens':object}} %}
     </div>
     <br>
-    <div ng-controller="DashboardController" ng-init="renderChartResult('chartContainerResult','{{ "result.captionObjetiveOperative"|trans }}','{{ "result.subCaptionObjetiveOperative"|trans }}',{{ categories|json_encode() }},{{ resultIndicator|json_encode() }},{{ resultArrangementProgram|json_encode() }})" class="dashboard" style="height: {{ heightChart }}px;background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <div ng-controller="DashboardController" class="dashboard" ng-init="renderChartResult('chartContainerResult','{{ "result.captionObjetiveOperative"|trans }}','{{ "result.subCaptionObjetiveOperative"|trans }}',{{ categories|json_encode() }},{{ resultIndicator|json_encode() }},{{ resultArrangementProgram|json_encode() }})" style="height: {{ heightChart }}px;">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
             <!-- This div will hold the chart generated in the footer -->
         </div>
@@ -44,7 +44,6 @@
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-
     </script>
 
 {% endblock %}

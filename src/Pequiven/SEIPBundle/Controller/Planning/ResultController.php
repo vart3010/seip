@@ -97,17 +97,34 @@ class ResultController extends ResourceController {
         
         //Configuramos el alto del gráfico
         $totalObjects = count($object);
-        $heightChart = ($totalObjects * 30) + 100;
+        $heightChart = ($totalObjects * 30) + 150;
         
         //Data del gráfico
         foreach($object as $objetive){
-            $categories[] = array('label' => $objetive->getRef());
+            $refObjetive = $objetive->getRef();
+            $flagResultIndicator = false;
+            $flagResultArrangementProgram = false;
+            $categories[] = array('label' => $refObjetive);
             foreach($objetive->getResults() as $result){
                 $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
-                $resultIndicator[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive) : bcadd(0,'0',2);
-                $resultArrangementProgram[] = $result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM ? array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '') : bcadd(0,'0',2);
+                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
+                    $resultIndicator[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive);
+                    $flagResultIndicator = true;
+                }
+                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
+                    $resultArrangementProgram[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '');
+                    $flagResultArrangementProgram = true;
+                }
+            }
+            
+            if(!$flagResultArrangementProgram){
+                $resultArrangementProgram[] = array('value' => bcadd(0,'0',2));
+            }
+            if(!$flagResultIndicator){
+                $resultIndicator[] = array('value' => bcadd(0,'0',2));
             }
         }
+        
 
         return array(
             'object' => $object,
