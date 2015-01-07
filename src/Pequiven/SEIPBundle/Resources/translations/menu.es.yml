@@ -77,7 +77,7 @@ app:
                             list: Lista
                             add: Cargar
                     planning:
-                        main: Planificación
+                        main: Estadística e información
                         objetives:
                             main: Objetivos
                             strategic: Estratégico
