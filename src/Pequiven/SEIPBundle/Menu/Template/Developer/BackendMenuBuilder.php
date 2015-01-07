@@ -536,7 +536,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.indicators', $section)));
                         
                     $itemNotifyArrangementPrograms = $this->factory->createItem('results.notify.arrangement_programs', array(
-                            'route' => self::ROUTE_DEFAULT,
+                            'route' => 'pequiven_seip_result_notify_arrangementprogram',
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.arrangement_programs', $section)));
                     
                     $thirdchild->addChild($itemNotifyIndicators);

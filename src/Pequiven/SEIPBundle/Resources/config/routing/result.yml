@@ -1,0 +1,8 @@
+pequiven_seip_result_notify_arrangementprogram:
+    path: /notify/arrangementprogram.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:indexAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

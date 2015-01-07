@@ -10,6 +10,10 @@ pequiven_objetive:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/objetive.yml"
     prefix:   /objetive
 
-pequiven_result:
+pequiven_planning_result:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/result.yml"
+    prefix:   /planning/result
+    
+pequiven_result:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/result.yml"
     prefix:   /result
