@@ -17,24 +17,24 @@ app:
                         objetives:
                             main: Objetivos
                             add:
-                                main: Añadir
+                                main: Cargar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Mostrar Carga
+                                main: Visualizar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                         indicators:
                             main: Indicadores
                             add:
-                                main: Añadir
+                                main: Cargar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Mostrar Carga
+                                main: Visualizar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
@@ -45,7 +45,7 @@ app:
                         for_reviewing_or_approving: Por revisar o aprobar
                         temaplate: Desde plantilla
                         add:
-                            main: Añadir
+                            main: Cargar
                             tactic: Táctico
                             operative: Operativo
                             other: Otro
@@ -55,27 +55,27 @@ app:
                         complejo:
                             main: Complejos
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         gerencia_first:
                             main: Gerencia 1ra Línea
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         gerencia_second:
                             main: Gerencia 2da Línea
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         cargo:
                             main: Cargos
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         personal:
                             main: Personal PQV
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         rol:
                             main: Roles
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                     planning:
                         main: Planificación
                         objetives:
@@ -94,3 +94,25 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                    objetives:
+                        main: Objetivos
+                        visualize:
+                            main: Visualizar
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
+                        matrices_objectives:
+                            Matrices de objetivos
+                    results:
+                        main: Resultados
+                        visualize:
+                            main: Visualizar
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
+                        notify:
+                            main: Notificar
+                            indicators: Indicadores
+                            arrangement_programs: Programas de Gestión
+                        period:
+                            main: Periodo

@@ -3,14 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Pequiven\SEIPBundle\Model\Period as Base;
 /**
  * Periodo
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  */
-class Period
+class Period extends Base
 {
     /**
      * @var integer

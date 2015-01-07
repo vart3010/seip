@@ -12,9 +12,22 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class PeriodRepository extends EntityRepository
 {
+    /**
+     * Devuelve el periodo activo en el sistema
+     * @return type
+     */
     function findOneActive()
     {
         return $this->findOneBy(array('status' => true));
+    }
+    
+    /**
+     * Devuelve todos los periodos disponibles para consultas de resultados
+     * @return type
+     */
+    function findAllForConsultation()
+    {
+        return $this->findAll();
     }
     
     protected function getAlias() {
