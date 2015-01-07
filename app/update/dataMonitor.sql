@@ -7,7 +7,7 @@ UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperati
 -- ASUNTOS PÚBLICOS
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 18, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 27;
 -- AUDITORÍA INTERNA
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 29, indOperativeOriginal = 19, arrangementProgramTactic = 0, arrangementProgramOperative = 8 WHERE fk_gerencia = 19;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 29, indOperativeOriginal = 19, arrangementProgramTactic = 0, arrangementProgramOperative = 29 WHERE fk_gerencia = 19;
 -- CONSULTORIA JURÍDICA
 UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 3, objOperativeOriginal = 47, indOperativeOriginal = 54, arrangementProgramTactic = 0, arrangementProgramOperative = 31 WHERE fk_gerencia = 20;
 -- CONTRATACIONES
@@ -27,9 +27,9 @@ UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperati
 -- RECURSOS HUMANOS
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 7, objOperativeOriginal = 80, indOperativeOriginal = 42, arrangementProgramTactic = 0, arrangementProgramOperative = 103 WHERE fk_gerencia = 18;
 -- SALUD
-UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 3, objOperativeOriginal = 27, indOperativeOriginal = 26, arrangementProgramTactic = 0, arrangementProgramOperative = 27 WHERE fk_gerencia = 25;
+UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 3, objOperativeOriginal = 27, indOperativeOriginal = 26, arrangementProgramTactic = 0, arrangementProgramOperative = 25 WHERE fk_gerencia = 25;
 -- SEGUIM. Y CONTROL DE PROYECTOS
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 14, indOperativeOriginal = 14, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 15;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 14, indOperativeOriginal = 14, arrangementProgramTactic = 0, arrangementProgramOperative = 14 WHERE fk_gerencia = 15;
 -- S.H.A.
 UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 37, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 52 WHERE fk_gerencia = 29;
 -- S.I.G.
