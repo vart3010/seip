@@ -9,14 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Tecnocreaciones\Bundle\BoxBundle\Model\Adapter;
+namespace Pequiven\SEIPBundle\Model\Box;
 
 /**
- * Definicion de adaptardor de los boxes o widget
- * 
+ * De definen las areas disponibles en el sistema
+ *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface AdapterInterface extends \Symfony\Component\DependencyInjection\ContainerAwareInterface
+final class AreasBox 
 {
-    function getModelBoxes();
+    const DASHBOARD = 'pequiven_seip.area.dashboard';
+    
+    const PRINCIPAL = 'pequiven_seip.area.main';
+    
+    const EVENTS = 'pequiven_seip.area.events';
 }

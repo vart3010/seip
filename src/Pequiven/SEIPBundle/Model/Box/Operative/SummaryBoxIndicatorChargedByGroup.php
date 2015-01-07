@@ -62,4 +62,19 @@ class SummaryBoxIndicatorChargedByGroup extends GenericBox {
         
         return $datas;
     }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
+    }
+    
+    public function hasPermission() {
+        return $this->isGranted(array('ROLE_WORKER_PLANNING'));
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
+        );
+    }
 }

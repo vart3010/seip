@@ -29,7 +29,8 @@ class BoxCompilerPass implements CompilerPassInterface {
         //Busca los adaptadores de datos definidos
         $tags = $container->findTaggedServiceIds('tecnocreaciones_box.area.adapter');
         foreach ($tags as $id => $attributes) {
-            $renderAreaRenderDefinition->addMethodCall('addAdapter',array($container->getDefinition($id)));
+            $adapterDefinition = $container->getDefinition($id);
+            $renderAreaRenderDefinition->addMethodCall('addAdapter',array($adapterDefinition));
         }
     }
 }

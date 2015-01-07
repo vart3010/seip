@@ -3,7 +3,6 @@
 namespace Tecnocreaciones\Bundle\BoxBundle\Model;
 
 use LogicException;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +15,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class GenericBox implements BoxInterface
 {
     const GROUP_DEFAULT = 'default';
+    
     protected $container;
+    
     public function hasPermission() {
         return true;
     }
@@ -31,6 +32,19 @@ abstract class GenericBox implements BoxInterface
     
     public function getGroups() {
         return array(self::GROUP_DEFAULT);
+    }
+    
+    function getAreasNotPermitted() {
+        return array();
+    }
+    
+    function getAreasPermitted() {
+        return array();
+    }
+            
+    function getTranslationDomain()
+    {
+        return 'messages';
     }
     
     public function setContainer(ContainerInterface $container = null) {
@@ -117,6 +131,12 @@ abstract class GenericBox implements BoxInterface
     {
         return $this->container->has($id);
     }
+    
+    final protected function isGranted($parameters)
+    {
+        return $this->container->get('security.context')->isGranted($parameters);
+    }
+
 
     /**
      * Gets a service by id.
@@ -128,9 +148,5 @@ abstract class GenericBox implements BoxInterface
     public function get($id)
     {
         return $this->container->get($id);
-    }
-    
-    function getTranslationDomain() {
-        return 'messages';
     }
 }

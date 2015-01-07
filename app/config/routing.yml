@@ -99,3 +99,7 @@ _sonata_admin:
 sonata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
     prefix: /admin
+    
+TecnocreacionesBoxBundle:
+    resource: "@TecnocreacionesBoxBundle/Resources/config/routing.yml"
+    prefix:   /boxes

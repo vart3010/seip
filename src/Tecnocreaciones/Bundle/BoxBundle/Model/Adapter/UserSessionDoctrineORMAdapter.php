@@ -20,42 +20,12 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class UserSessionDoctrineORMAdapter extends BaseAdapter
+class UserSessionDoctrineORMAdapter extends BoxBaseAdapter
 {
-    private $securityContext;
             
-    function __construct(SecurityContextInterface $securityContext) {
-        $this->securityContext = $securityContext;
-    }
-
-    
     function getModelBoxes()
     {
         $user = $this->getUser();
         return $user->getModelBoxes();
     }
-    
-    /**
-     * Get a user from the Security Context
-     *
-     * @return \Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface
-     *
-     * @throws LogicException If SecurityBundle is not available
-     *
-     * @see TokenInterface::getUser()
-     */
-    public function getUser()
-    {
-        if (null === $token = $this->securityContext->getToken()) {
-            return;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            return;
-        }
-
-        return $user;
-    }
-    
-    
 }
