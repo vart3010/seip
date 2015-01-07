@@ -34,20 +34,23 @@ class SequenceGenerator
         $qb
             ->from('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram', 'ap')
             ;
+        
         $gerencia = 'ERROR';
         if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
             $type = 'TAC';
-            $gerencia = $arrangementProgram->getTacticalObjective()->getGerencia()->getAbbreviation();;
+            $gerencia = $arrangementProgram->getTacticalObjective()->getGerencia()->getAbbreviation();
         }
         if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
             $type = 'OPT';
             $gerencia = $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getAbbreviation();
         }
         $gerencia = strtoupper($gerencia);
-        $mask = 'PG-{yyyy}-{gerencia}-{type}-{000}';
+        $year = $arrangementProgram->getPeriod()->getDateStart()->format('Y');
+        $mask = 'PG-{year}-{gerencia}-{type}-{000}';
         return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
             'gerencia' => $gerencia,
-            'type' => $type
+            'type' => $type,
+            'year' => $year
         ));
     }
     

@@ -33,7 +33,7 @@ class Period extends Base
      * Fecha de inicio
      * @var \DateTime
      *
-     * @ORM\Column(name="dateStart", type="date")
+     * @ORM\Column(name="dateStart", type="date", nullable=false)
      */
     private $dateStart;
 
@@ -41,7 +41,7 @@ class Period extends Base
      * Fecha fin
      * @var \DateTime
      *
-     * @ORM\Column(name="dateEnd", type="date")
+     * @ORM\Column(name="dateEnd", type="date", nullable=false)
      */
     private $dateEnd;
 

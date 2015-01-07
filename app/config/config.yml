@@ -169,6 +169,7 @@ tecnocreaciones_tools:
             additional_masks:
                 - gerencia
                 - type
+                - year
                 
 sylius_resource:
     resources:
