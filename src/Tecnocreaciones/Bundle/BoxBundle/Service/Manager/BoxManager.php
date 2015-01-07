@@ -38,7 +38,7 @@ abstract class BoxManager implements \Tecnocreaciones\Bundle\BoxBundle\Model\Box
         $areasName = $this->buildAreasName($areasName);
         $modelBox = $this->createNew();
         $modelBox
-                ->setAreaName($areasName)
+                ->setAreas($areasName)
                 ->setBoxName($boxName)
                 ;
         
@@ -46,8 +46,8 @@ abstract class BoxManager implements \Tecnocreaciones\Bundle\BoxBundle\Model\Box
     }
     
     public function buildAreasName(array $areasName) {
-        foreach ($areasName as $key => $areaName) {
-            $areasName[$areaName] = array(
+        foreach ($areasName as $key => $areas) {
+            $areasName[$areas] = array(
                 'position' => 0,
                 'template' => ''
             );

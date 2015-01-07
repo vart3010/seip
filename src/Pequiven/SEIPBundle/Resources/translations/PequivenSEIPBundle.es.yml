@@ -154,6 +154,7 @@ pequiven_seip:
     area:
         main: Area principal
         events: Area de eventos
+        dashboard: Bienvenida
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -229,3 +230,5 @@ pequiven_seip_box_tactic_summaryindicatorcharged: Indicadores tacticos.
 pequiven_seip_box_tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
 pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
 pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
+pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
+pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.

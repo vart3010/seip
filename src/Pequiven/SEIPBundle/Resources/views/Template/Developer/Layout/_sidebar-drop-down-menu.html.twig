@@ -50,7 +50,9 @@
             <!--<li><a href title="Messages"><span class="icon-inbox"></span><span class="count">2</span></a></li>
             <li><a href title="Calendar"><span class="icon-calendar"></span></a></li> -->
             <li><a href="{{ path('fos_user_profile_show') }}" title="{{ 'pequiven_seip.profile.profile'|trans }}"><span class="icon-user"></span></a></li>
-            <li><a href="{{ path('tecnocreaciones_box_index') }}" title="{{ 'pequiven_seip.profile.config'|trans }}"><span class="fa fa-wrench"></span></a></li>
+            {% if is_granted('ROLE_WORKER_PLANNING') %}
+                <li><a href="{{ path('tecnocreaciones_box_index') }}" title="{{ 'pequiven_seip.profile.config'|trans }}"><span class="fa fa-wrench"></span></a></li>
+            {% endif %}
             <li><a href="{{ path('fos_user_security_logout') }}" title="{{ 'pequiven_seip.logout'|trans }}" style="margin:8px"><img src="{{ asset('bundles/pequivenseip/logotipos-pqv/icon_application_exit.png') }}" width="32" height="32" /></a></li>
         </ul>
 

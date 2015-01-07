@@ -25,5 +25,5 @@ interface BoxManagerInterface extends \Symfony\Component\DependencyInjection\Con
     
     function find($boxName);
     
-    function buildModelBox($boxName,$areaName);
+    function buildModelBox($boxName,$areas);
 }

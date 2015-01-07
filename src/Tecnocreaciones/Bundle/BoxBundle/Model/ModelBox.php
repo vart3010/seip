@@ -33,8 +33,15 @@ abstract class ModelBox implements ModelBoxInterface
      *
      * @ORM\Column(name="areas", type="json_array")
      */
-    protected $areaName;
+    protected $areas;
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="locked", type="boolean")
+     */
+    protected $locked = false;
+
     /**
      * Set name
      *
@@ -59,25 +66,33 @@ abstract class ModelBox implements ModelBoxInterface
     }
 
     /**
-     * Set areaName
+     * Set areas
      *
-     * @param string $areaName
+     * @param string $areas
      * @return Box
      */
-    public function setAreaName($areaName)
+    public function setAreas($areas)
     {
-        $this->areaName = $areaName;
+        $this->areas = $areas;
 
         return $this;
     }
 
     /**
-     * Get areaName
+     * Get areas
      *
      * @return string 
      */
-    public function getAreaName()
+    public function getAreas()
     {
-        return $this->areaName;
+        return $this->areas;
+    }
+    
+    function isLocked() {
+        return $this->locked;
+    }
+
+    function setLocked($locked) {
+        $this->locked = $locked;
     }
 }

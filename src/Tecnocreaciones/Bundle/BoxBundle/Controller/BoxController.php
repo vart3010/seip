@@ -28,26 +28,34 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
         $boxRender = $this->get('tecnocreaciones_box.render');
         $areaRender = $this->get('tecnocreaciones_box.area.render');
         
-        $boxsByName = $boxRender->getBoxsByName();
-        $modelBoxes = $areaRender->getModelBoxes();
+        $boxsByName = $boxRender->getBoxsByName();//Boxes disponibles
+        $modelBoxes = $areaRender->getModelBoxes();//Boxes activos
         
 //        var_dump($listAreasDefinition);
 //        var_dump($boxsByName);
 //        var_dump($areas);
 //        var_dump($modelBoxes);
 //        die;
-       $boxesUser = array();
+       $boxesActives = array();
         foreach ($boxsByName as $box) {
-            $data = array();
+            if($box->hasPermission() === false){
+                continue;
+            }
             foreach ($modelBoxes as $modelBox) {
                 if ($box->getName() !== $modelBox->getBoxName()){
                     continue;
                 }
-                foreach ($modelBox->getAreaName() as $key => $value) {
-                    $data[] = $key;
-                }
-                $box->extraData = $modelBox->getAreaName();
-                $boxesUser[] = $box;
+//                var_dump(get_class($box));
+//                var_dump(get_class($modelBox));
+//                die;
+                
+                $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxActive();
+                $boxActive->setAreasName($modelBox->getAreas());
+                $boxActive->setBoxName($modelBox->getBoxName());
+                $boxActive->setDescription($box->getDescription());
+                $boxActive->setTranslationDomain($box->getTranslationDomain());
+                
+                $boxesActives[] = $boxActive;
                 break;
             }
         }
@@ -55,7 +63,7 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
         $formBoxes = $this->getFormBuilderBoxes()->getForm();
         
         return array(
-            'boxes' => $boxesUser,
+            'boxesActives' => $boxesActives,
             'formBoxes' => $formBoxes->createView(),
         );
     }
@@ -82,10 +90,10 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
                 if ($box->getName() !== $modelBox->getBoxName()){
                     continue;
                 }
-                foreach ($modelBox->getAreaName() as $key => $value) {
+                foreach ($modelBox->getAreas() as $key => $value) {
                     $data[] = $key;
                 }
-                $box->extraData = $modelBox->getAreaName();
+                $box->extraData = $modelBox->getAreas();
                 break;
             }
             $this->buildFormBoxes($formBuilderBoxes, $box,$data);
@@ -106,11 +114,17 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
         $choices = array();
         
         $listAreasDefinition = $areaRender->getListAreasDefinition();
-        foreach ($listAreasDefinition as $areaName => $labelArea) {
-            if(in_array($areaName, $box->getAreasNotPermitted()) === true){
+        $areasPermittedQuantity = count($box->getAreasPermitted());
+        $areasNotPermittedQuantity = count($box->getAreasNotPermitted());
+        
+        foreach ($listAreasDefinition as $areas => $labelArea) {
+            if($areasNotPermittedQuantity > 0 && in_array($areas, $box->getAreasNotPermitted()) === true){
                 continue;
             }
-            $choices[$areaName] = $labelArea;
+            if($areasPermittedQuantity > 0 && !in_array($areas, $box->getAreasPermitted()) === true){
+                continue;
+            }
+            $choices[$areas] = $labelArea;
         }
             
         $formBuilder->add($name,'choice',array(
@@ -149,7 +163,7 @@ class BoxController extends \Symfony\Bundle\FrameworkBundle\Controller\Controlle
                 }
                 
                 if($quantityAreasName > 0){
-                    $box->setAreaName($boxManager->buildAreasName($areasName));
+                    $box->setAreas($boxManager->buildAreasName($areasName));
                     $boxManager->save($box);
                 }else if ($quantityAreasName <= 0){
                     $boxManager->remove($box);

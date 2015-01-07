@@ -51,16 +51,14 @@
             <th>Descripcion</th>
             <th>Areas</th>
         </tr>
-        {% for box in boxes %}
+        {% for box in boxesActives %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td>{{ box.name|trans({},box.getTranslationDomain) }} <b>({{ box.description }})</b></td>
+                <td>{{ box.boxName|trans({},box.getTranslationDomain) }} <b>({{ box.description }})</b></td>
                 <td>
-                    {% if box.extraData is defined %}
-                        {% for area_name,value in box.extraData %}
-                            {{ area_name|trans({},box.getTranslationDomain) }}{% if loop.last %}.{% else %},{% endif %}
-                        {% endfor %}
-                    {% endif %}
+                    {% for area_name,value in box.areasName %}
+                        {{ area_name|trans({},box.translationDomain) }}{% if loop.last %}.{% else %},{% endif %}
+                    {% endfor %}
                 </td>
             </tr>
         {% else%}

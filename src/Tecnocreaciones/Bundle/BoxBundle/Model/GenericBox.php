@@ -34,6 +34,19 @@ abstract class GenericBox implements BoxInterface
         return array(self::GROUP_DEFAULT);
     }
     
+    function getAreasNotPermitted() {
+        return array();
+    }
+    
+    function getAreasPermitted() {
+        return array();
+    }
+            
+    function getTranslationDomain()
+    {
+        return 'messages';
+    }
+    
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
@@ -135,14 +148,5 @@ abstract class GenericBox implements BoxInterface
     public function get($id)
     {
         return $this->container->get($id);
-    }
-    
-    function getAreasNotPermitted() {
-        return array();
-    }
-            
-    function getTranslationDomain()
-    {
-        return 'messages';
     }
 }

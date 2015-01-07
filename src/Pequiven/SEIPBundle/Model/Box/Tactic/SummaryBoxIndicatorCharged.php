@@ -73,7 +73,7 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     public function getAreasNotPermitted() 
     {
         return array(
-            'pequiven_seip.area.events'
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
         );
     }
 }

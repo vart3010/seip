@@ -9,7 +9,8 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
  *
  * @author matias
  */
-class SummaryBoxIndicatorCharged extends GenericBox {
+class SummaryBoxIndicatorCharged extends GenericBox
+{
     
     public function getName() {
         return 'pequiven_seip_box_operative_summaryindicatorcharged';
@@ -61,7 +62,7 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     public function getAreasNotPermitted() 
     {
         return array(
-            'pequiven_seip.area.events'
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
         );
     }
     

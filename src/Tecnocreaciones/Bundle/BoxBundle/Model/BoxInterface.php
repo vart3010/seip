@@ -29,4 +29,6 @@ interface BoxInterface extends ContainerAwareInterface
     function getGroups();
     
     function getAreasNotPermitted();
+    
+    function getAreasPermitted();
 }

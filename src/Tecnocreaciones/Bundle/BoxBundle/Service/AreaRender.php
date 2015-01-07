@@ -57,23 +57,28 @@ class AreaRender implements ContainerAwareInterface
     }
     
     /**
-     * Agrega un boxe a una area
+     * Agrega un box a una area
      * 
-     * @param type $areaName
+     * @param type $area
      * @param type $boxName
      * @param type $position
      * @return \Tecnocreaciones\Bundle\BoxBundle\Service\AreaRender
      */
-    function addArea($areaName,$boxName,$position = 0) {
+    function addArea($area,$boxName,$position = 0) {
         if($this->boxRender->hasBox($boxName)){
-            if(!isset($this->areas[$areaName])){
-                $this->areas[$areaName] = array();
+            
+            if(!isset($this->areas[$area])){
+                $this->areas[$area] = array();
             }
-            if(!isset($this->areas[$areaName][$position])){
-                $this->areas[$areaName][$position] = array();
-            }
-            if(!array_search($boxName, $this->areas[$areaName][$position])){
-                $this->areas[$areaName][$position][] = $boxName;
+//            if(!isset($this->areas[$area][$position])){
+//                $this->areas[$area][$position] = array();
+//            }
+            if(!array_search($boxName, $this->areas[$area])){
+                if(empty($this->areas[$area][$position])){
+                    $this->areas[$area][$position] = $boxName;
+                }else{
+                    $this->areas[$area][] = $boxName;
+                }
             }
         }
         return $this;
@@ -81,33 +86,36 @@ class AreaRender implements ContainerAwareInterface
     
     /**
      * Retorna el area a renderizar
-     * @param type $areaName Nombre del area
+     * @param type $areas Nombre del area
      * @return array
      */
-    function getArea($areaName)
+    function getArea($area)
     {
         $areas = array();
-        if(isset($this->areas[$areaName])){
-            $areas = $this->areas[$areaName];
+        if(isset($this->areas[$area])){
+            ksort($this->areas[$area]);
+            $areas = $this->areas[$area];
         }
         return $areas;
     }
     
     /**
      * Renderiza un area
-     * @param type $areaName
+     * @param type $area
      */
-    function renderArea($areaName)
+    function renderArea($area)
     {
         if($this->initAdapter === false){
             $this->initAdapters();
         }
-        $positions = $this->getArea($areaName);
+        $result = '';
+        $positions = $this->getArea($area);
         foreach ($positions as $boxName) {
             if($this->getBoxRender()->hasBox($boxName)){
-                $this->getBoxRender()->getBox($boxName);
+                $result .= $this->getBoxRender()->renderBox($boxName);
             }
         }
+        return $result;
     }
     
     /**
@@ -180,9 +188,9 @@ class AreaRender implements ContainerAwareInterface
                 $modelBoxes = $adapter->getModelBoxes();
                 if($modelBoxes){
                     foreach ($modelBoxes as $modelBox) {
-                        foreach ($modelBox->getAreaName() as $areaName => $data) {
+                        foreach ($modelBox->getAreas() as $areas => $data) {
                             $order = $data['position'];
-                            $this->addArea($areaName, $modelBox->getBoxName(),$order);
+                            $this->addArea($areas, $modelBox->getBoxName(),$order);
                             $this->modelBoxes[$modelBox->getBoxName()] = $modelBox;
                         }
                     }
@@ -201,6 +209,7 @@ class AreaRender implements ContainerAwareInterface
         if($this->adapters === null){
             $this->adapters = array();
         }
+        $adapter->setContainer($this->container);
         $this->adapters[] = $adapter;
     }
     

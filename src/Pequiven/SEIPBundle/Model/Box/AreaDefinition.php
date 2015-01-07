@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Entity\Box;
+namespace Pequiven\SEIPBundle\Model\Box;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\AreaDefinitionInterface;
 
@@ -23,8 +23,9 @@ class AreaDefinition implements AreaDefinitionInterface
     public function getAreas() 
     {
         return array(
-            array('name' => 'pequiven_seip.area.main', 'translation_domain' => 'PequivenSEIPBundle'),
-            array('name' => 'pequiven_seip.area.events', 'translation_domain' => 'PequivenSEIPBundle'),
+            array('name' => \Pequiven\SEIPBundle\Model\Box\AreasBox::DASHBOARD, 'translation_domain' => 'PequivenSEIPBundle'),
+            array('name' => \Pequiven\SEIPBundle\Model\Box\AreasBox::PRINCIPAL, 'translation_domain' => 'PequivenSEIPBundle'),
+            array('name' => \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS, 'translation_domain' => 'PequivenSEIPBundle'),
         );
     }
 }

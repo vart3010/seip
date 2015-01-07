@@ -37,7 +37,7 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     public function getAreasNotPermitted() 
     {
         return array(
-            'pequiven_seip.area.events'
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
         );
     }
     
