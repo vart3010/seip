@@ -12,14 +12,15 @@
 namespace Pequiven\SEIPBundle\Model;
 
 /**
- * Modelo del periodo
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-abstract class Period implements PeriodInterface
+interface PeriodInterface
 {
-    function getYear()
-    {
-        return $this->getDateStart()->format('Y');
-    }
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime 
+     */
+    public function getDateStart();
 }

@@ -45,7 +45,7 @@ class SequenceGenerator
             $gerencia = $arrangementProgram->getOperationalObjective()->getGerenciaSecond()->getAbbreviation();
         }
         $gerencia = strtoupper($gerencia);
-        $year = $arrangementProgram->getPeriod()->getDateStart()->format('Y');
+        $year = $arrangementProgram->getPeriod()->getYear();
         $mask = 'PG-{year}-{gerencia}-{type}-{000}';
         return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
             'gerencia' => $gerencia,

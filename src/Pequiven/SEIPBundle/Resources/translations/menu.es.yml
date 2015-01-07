@@ -116,3 +116,5 @@ app:
                             arrangement_programs: Programas de Gestión
                         period:
                             main: Periodo
+                            objetives: Objetivos
+                            indicators: Indicadores

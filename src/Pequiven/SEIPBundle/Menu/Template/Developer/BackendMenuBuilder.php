@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author Anais Ortega <adcom23@tecnocreaciones.com.ve>
  */
-class BackendMenuBuilder extends MenuBuilder
+class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
     /**
      * Base de segundo nivel de sidebar
@@ -544,15 +544,38 @@ class BackendMenuBuilder extends MenuBuilder
                         
                     $menuResults->addChild($thirdchild);
                 }
-                $itemPeriod = $this->factory->createItem('results.period')
+                $itemPeriod = $this->factory->createItem('results.period',$this->getSubLevelOptions())
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.main', $section)));
                 
                 //Periodos
                 $periods = $this->container->get('pequiven.repository.period')->findAllForConsultation();
                 foreach ($periods as $period) {
-                    $itemPeriodConsultation = $this->factory->createItem('results.notify.period.'.$period->getId(), array(
-                        'route' => self::ROUTE_DEFAULT,
-                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.arrangement_programs', $section)));
+                    $year = $period->getYear();
+                    $itemName = 'results.notify.period.'.$period->getId();
+                    $itemPeriodConsultation = $this->factory->createItem($itemName,$this->getSubLevelOptions(
+                         array(
+                            'route' => self::ROUTE_DEFAULT,
+                            'routeParameters' => array('year' => $year),
+                        )
+                    ))->setLabel($year);
+                    
+                    $itemPeriodConsultationObjetives = $this->factory->createItem($itemName.$year.'objetives',$this->getSubLevelOptions(
+                         array(
+                            'route' => self::ROUTE_DEFAULT,
+                            'routeParameters' => array('year' => $year),
+                        )
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.objetives', $section)));
+                    $itemPeriodConsultation->addChild($itemPeriodConsultationObjetives);
+                    
+                    $itemPeriodConsultationIndicators = $this->factory->createItem($itemName.$year.'indicators',$this->getSubLevelOptions(
+                         array(
+                            'route' => self::ROUTE_DEFAULT,
+                            'routeParameters' => array('year' => $year),
+                        )
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.indicators', $section)));
+                    $itemPeriodConsultation->addChild($itemPeriodConsultationIndicators);
+                    
+                    $itemPeriod->addChild($itemPeriodConsultation);
                 }
                 $menuResults->addChild($itemPeriod);
                 
@@ -926,4 +949,5 @@ class BackendMenuBuilder extends MenuBuilder
 //		
 //        return null;
 //    }
+    
 }
