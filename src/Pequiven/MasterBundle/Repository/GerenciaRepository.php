@@ -67,12 +67,22 @@ class GerenciaRepository extends baseEntityRepository
      */
     function createPaginatorGerenciaFirst(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        $queryBuilder->leftJoin('g.complejo', 'c');
 
         if(isset($criteria['description'])){
-            $description = $criteria['description'];
-            unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['description']."%'"));
         }
+        //Filtro localidad
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        
+        if(!$this->getSecurityContext()->isGranted(array('ROLE_WORKER_PLANNING','ROLE_DIRECTIVE'))){
+            $queryBuilder->andWhere('g.id = '.$user->getGerencia()->getId());
+        }
+        
+        
 //        if(isset($criteria['rif'])){
 //            $rif = $criteria['rif'];
 //            unset($criteria['rif']);
@@ -80,8 +90,8 @@ class GerenciaRepository extends baseEntityRepository
 //        }
 //var_dump($queryBuilder->getQuery()->getSQL());
 //die();
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
