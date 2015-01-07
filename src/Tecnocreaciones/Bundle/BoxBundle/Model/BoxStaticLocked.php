@@ -12,20 +12,20 @@
 namespace Tecnocreaciones\Bundle\BoxBundle\Model;
 
 /**
+ * Box fijo o manual
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface ModelBoxInterface 
+class BoxStaticLocked extends ModelBox
 {
-    public function setBoxName($name);
+    protected $locked = true;
     
-    public function getBoxName();
+    public function __construct() {
+        $this->areas = array();
+    }
     
-    public function setAreas($areas);
-    
-    public function getAreas();
-    
-    public function isLocked();
-    
-    public function setLocked($locked);
+    function setArea($name,$data = array())
+    {
+        $this->areas[$name] = $data;
+    }
 }

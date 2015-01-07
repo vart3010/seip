@@ -15,17 +15,21 @@ namespace Tecnocreaciones\Bundle\BoxBundle\Model;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface ModelBoxInterface 
-{
-    public function setBoxName($name);
+interface BoxActiveInterface {
     
-    public function getBoxName();
+    function getDescription();
     
-    public function setAreas($areas);
+    function setDescription($description);
     
-    public function getAreas();
+    function getBoxName();
     
-    public function isLocked();
+    function setBoxName($boxName);
     
-    public function setLocked($locked);
+    function setAreasName($areasName);
+    
+    function getAreasName();
+    
+    function getTranslationDomain();
+    
+    function setTranslationDomain($translationDomain);
 }

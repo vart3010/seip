@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Pequiven\MasterBundle\Entity\Rol;
+use Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface;
+use Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface;
 
 /**
  * User model
@@ -20,7 +22,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  * })
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface,  \Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface
+class User extends BaseUser implements UserInterface,UserBoxInterface
 {
     
     /**

@@ -9,7 +9,8 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
  *
  * @author matias
  */
-class SummaryBoxIndicatorCharged extends GenericBox {
+class SummaryBoxIndicatorCharged extends GenericBox
+{
     
     public function getName() {
         return 'pequiven_seip_box_operative_summaryindicatorcharged';
@@ -20,8 +21,6 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     }
     
     public function getParameters() {
-        $em = $this->getDoctrine()->getManager();
-        
         $datas = $this->getDataIndicatorOperativeGroup();
         return array(
             'indicatorOperative' => $datas['indicatorOperative']
@@ -58,6 +57,21 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $datas['indicatorOperative'] = $indicatorOperative;
         
         return $datas;
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
+        );
+    }
+    
+    public function hasPermission() {
+        return $this->isGranted(array('ROLE_WORKER_PLANNING'));
+    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
     }
     
     public function getDescription() {
