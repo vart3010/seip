@@ -121,8 +121,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $this->calculateResultTypeObjetive($result);
         }
         
-        if($result->getParent() != null && $result->getParent()->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
-            $parent = $result->getParent();
+        if($result->getParent() == null && $result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result;
+            foreach ($result->getChildrens() as $child) {
+                $this->calculateResult($child);
+            }
+            $this->calculateResultItems($parent, $parent->getChildrens());
+            
+            $em->persist($parent);
+            
+            
+        }
+        if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            if($result->getParent() == null){
+                $parent = $result;
+            }else{
+                $parent = $result->getParent();
+            }
             foreach ($result->getChildrens() as $child) {
                 $this->calculateResult($child);
             }
