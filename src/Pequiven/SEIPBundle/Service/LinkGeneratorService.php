@@ -83,7 +83,7 @@ class LinkGeneratorService extends LinkGenerator
         
         $levelRequest = $parameters['level'];
         $routeParameters = array();
-        $routeResult = 'pequiven_result_show_by_gerencia';
+        $routeResult = 'pequiven_seip_result_visualize_gerencia';
         $route = null;
         if($levelRequest == CommonObject::LEVEL_GERENCIA){
             if($level == ObjetiveLevel::LEVEL_OPERATIVO){

@@ -33,3 +33,8 @@ UPDATE `seip`.`seip_c_gerencia_second` SET `fk_gerencia` = '9' WHERE `seip_c_ger
 UPDATE `seip`.`seip_user` SET `fk_complejo` = '1',`fk_gerencia` = '1' WHERE `seip_user`.`fk_gerencia_second` = 136;
 UPDATE `seip`.`seip_user` SET `fk_complejo` = '2',`fk_gerencia` = '7' WHERE `seip_user`.`fk_gerencia_second` = 137;
 UPDATE `seip`.`seip_user` SET `fk_complejo` = '3',`fk_gerencia` = '9' WHERE `seip_user`.`fk_gerencia_second` = 138;
+
+
+-- Soft deleteable para objetivo
+ALTER TABLE seip_objetive ADD deletedAt DATETIME DEFAULT NULL;
+UPDATE `seip_objetive` SET `deletedAt`=NOW() WHERE enabled=0;
