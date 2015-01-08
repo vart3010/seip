@@ -285,6 +285,19 @@ class GerenciaController extends baseController {
         foreach($sectionOperative as $result){
             $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
             $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);
+            //Seteamos los programas de gestión a nivel táctico
+            $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $result['ObjTacRef']));
+            $arrangementProgramsTactic = $objetiveTactic->getArrangementPrograms();
+            $totalArrangementProgramsTactic = count($arrangementProgramsTactic);
+            $textArrangementProgramsTactic = '';
+            if($totalArrangementProgramsTactic > 0){
+                foreach($arrangementProgramsTactic as $arrangementProgram){
+                    $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                }
+            } else{
+                $textArrangementProgramsTactic = 'No Aplica';
+            }
+            $activeSheet->setCellValue('M'.$row, $textArrangementProgramsTactic);
             
             $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe']);
             $activeSheet->setCellValue('O'.$row, $result['ObjOpeGerencia']);
@@ -298,6 +311,19 @@ class GerenciaController extends baseController {
             $activeSheet->setCellValue('S'.$row, $textIndOpeFormula);
 //            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
             $activeSheet->setCellValue('U'.$row, $textIndOpePeso);
+            //Seteamos los programas de gestión a nivel operativo
+            $objetiveOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $result['ObjOpeRef']));
+            $arrangementProgramsOperative = $objetiveOperative->getArrangementPrograms();
+            $totalArrangementProgramsOperative = count($arrangementProgramsOperative);
+            $textArrangementProgramsOperative = '';
+            if($totalArrangementProgramsOperative > 0){
+                foreach($arrangementProgramsOperative as $arrangementProgram){
+                    $textArrangementProgramsOperative.= $arrangementProgram->getRef() . "\n";
+                }
+            } else{
+                $textArrangementProgramsOperative = 'No Aplica';
+            }
+            $activeSheet->setCellValue('V'.$row, $textArrangementProgramsOperative);
             
             if($contResult > 1){
                 
