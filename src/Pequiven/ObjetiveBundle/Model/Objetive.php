@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author matias
  */
-abstract class Objetive 
+abstract class Objetive implements ObjetiveInterface
 {
     /**
      * Nivel de objetivo
@@ -155,5 +155,16 @@ abstract class Objetive
             $arrangementPrograms = $this->getOperationalArrangementPrograms();
         }
         return $arrangementPrograms;
+    }
+    
+    public function getGerenciaByLevel() {
+        $objetiveLevel = $this->getObjetiveLevel();
+        $gerencia = null;
+        if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+            $gerencia = $this->getGerencia();
+        }elseif($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+            $gerencia = $this->getGerenciaSecond()->getGerencia();
+        }
+        return $gerencia;
     }
 }

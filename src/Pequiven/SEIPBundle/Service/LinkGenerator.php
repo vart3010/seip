@@ -24,7 +24,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
     /**
      * Tipo de link por defecto o categoria (Se usa para crear links diferentes del mismo objeto)
      */
-    const TYPE_LINK_DEFAULT = 0;
+    const TYPE_LINK_DEFAULT = 'default';
     
     /**
      * Configuraciones de las entitades
@@ -61,16 +61,14 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
                 throw new LogicException(sprintf('The class for item "%s" not defined',$key));
             }
             $class = $config['class'];
-            if(!isset($config[$class])){
-                $configsObjects[$class] = array();
+            if(!isset($configsObjects[$class])){
+                $configsObjects[$class] = array(
+                    'type' => array(),
+                );
             }
             $type = $config['type'];
-            if(!isset($configsObjects[$class]['type'])){
-                $configsObjects[$class]['type'] = array();
-            }else{
-                if(in_array($type, $configsObjects[$class]['type'])){
-                    throw new LogicException(sprintf('The type "%s" for the class "%s" in item "%s" is already defined (Change type o remove definition)',$type,$class,$key));
-                }
+            if(isset($configsObjects[$class]['type'][$type])){
+                throw new LogicException(sprintf('The type "%s" for the class "%s" in item "%s" is already defined (Change type o remove definition)',$type,$class,$key));
             }
             if($defaultConfig['method'] == $config['method'] && !isset($configObject['route'])){
                 throw new LogicException(sprintf('The route for the class "%s" in item "%s" is required (optional with custom method)',$class,$key));
@@ -90,7 +88,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
      * @param type $type
      * @return type
      */
-    protected function renderDefault($entity,$entityConfig,$type = self::TYPE_LINK_DEFAULT)
+    protected function renderDefault($entity,$entityConfig,$type = self::TYPE_LINK_DEFAULT,array $parameters = array())
     {
         $route = $entityConfig['route'];
         $routeParameters = $entityConfig['routeParameters'];
@@ -101,12 +99,42 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
         }else{
             $label = (string)$entity;
         }
+        $truncate = 0;
+        $addTitle = false;
+        if(isset($parameters['truncate'])){
+            $truncate = (int) $parameters['truncate'];
+            if(strlen($label) > $truncate){
+                $label = substr($label, 0, $truncate).'...';
+                $addTitle = true;
+            }
+        }
         
         $icon = sprintf('<i class="%s"></i>',$entityConfig['icon']);
-        $href = $this->generateUrl($route,array_merge($routeParameters,array('id' => $entity->getId())));
-        $link = sprintf('<a href="%s">%s&nbsp;&nbsp;%s</a>',$href,$icon,$label);
+        $href = $this->buildUrl($entity, $entityConfig);
+        if(isset($parameters['_onlyUrl']) && $parameters['_onlyUrl'] === true){
+            return $href;
+        }
+        if($href != ''){
+            $extraParameters = '';
+            if($addTitle === true){
+                $extraParameters .= 'title = "'.$label.'"';
+            }
+            $link = sprintf('<a href="%s" %s>%s&nbsp;&nbsp;%s</a>',$href,$extraParameters,$icon,$label);
+        }else{
+            $link = sprintf('%s&nbsp;&nbsp;%s',$icon,$label);
+        }
         
         return $link;
+    }
+    
+    private function buildUrl($entity,$entityConfig) {
+        $route = $entityConfig['route'];
+        $routeParameters = $entityConfig['routeParameters'];
+        $href = '';
+        if($route != null){
+            $href = $this->generateUrl($route,array_merge(array('id' => $entity->getId()),$routeParameters));
+        }
+        return $href;
     }
     
     /**
@@ -136,10 +164,10 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
      * @param type $type
      * @return type
      */
-    private function generateFromConfig($entity,array $entityConfig,$type)
+    private function generateFromConfig($entity,array $entityConfig,$type,$parameters = array())
     {
         $method = $entityConfig['type'][$type]['method'];
-        return call_user_func_array(array($this,$method), array($entity,$entityConfig['type'][$type],$type,$entityConfig));
+        return call_user_func_array(array($this,$method), array($entity,$entityConfig['type'][$type],$type,$parameters));
     }
 
     /**
@@ -149,14 +177,31 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
      * @param type $type
      * @return type
      */
-    public function generate($entity,$type = self::TYPE_LINK_DEFAULT)
+    public function generate($entity,$type = self::TYPE_LINK_DEFAULT,$parameters = array())
     {
         $entityClass = get_class($entity);
-        
+        if($type === null){
+            $type = self::TYPE_LINK_DEFAULT;
+        }
         $entityConfig = $this->getEntityConf($entityClass);
         $link = '';
         if($entityConfig){
-            $link = $this->generateFromConfig($entity,$entityConfig,$type);
+            $link = $this->generateFromConfig($entity,$entityConfig,$type,$parameters);
+        }
+        return $link;
+    }
+    
+    public function generateOnlyUrl($entity,$type = self::TYPE_LINK_DEFAULT,$parameters = array())
+    {
+        $entityClass = get_class($entity);
+        if($type === null){
+            $type = self::TYPE_LINK_DEFAULT;
+        }
+        $entityConfig = $this->getEntityConf($entityClass);
+        $link = '';
+        $parameters['_onlyUrl'] = true;
+        if($entityConfig){
+            $link = $this->generateFromConfig($entity,$entityConfig,$type,$parameters);
         }
         return $link;
     }

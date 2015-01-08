@@ -6,14 +6,14 @@
             <li>
                 {% set avancedUsed = result.getResult %}
                 {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                {{ result }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ result.weight }}%)
+                <span title="{{ result.id }}">{{ result }}</span> ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ result.weight }}%)
                 {% if result.childrens.count > 0 %}
                     <ul>
                     {% for child in result.childrens %}
                         <li>
                             {% set avancedUsed = child.getResult %}
                             {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                            {{ child }} ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ child.weight }}%)
+                            <span title="{{ child.id }}">{{ child }}</span> ({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ child.weight }}%)
                         </li>
                     {% endfor%}
                     </ul>

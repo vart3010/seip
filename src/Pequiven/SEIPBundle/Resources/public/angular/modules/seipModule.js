@@ -1573,7 +1573,8 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id,caption,subCaption,categories,resultIndicator,resultArrangementProgram) {
+            $scope.renderChartResult = function(id,data) {
+                console.log(data);
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1583,8 +1584,8 @@ angular.module('seipModule.controllers', [])
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": {
-                                "caption": caption,
-                                "subCaption": subCaption,
+                                "caption": data.dataSource.chart.caption,
+                                "subCaption": data.dataSource.chart.subCaption,
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
                                 "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
@@ -1602,19 +1603,10 @@ angular.module('seipModule.controllers', [])
                             },
                             "categories": [
                                 {
-                                    "category": categories
+                                    "category": data.dataSource.categories.category
                                 }
                             ],
-                            "dataset":[
-                                {
-                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan1"),
-                                    "data": resultIndicator
-                                 },
-                                 {
-                                    "seriesname": Translator.trans("chart.result.objetiveOperative.seriesNamePlan2"),
-                                    "data": resultArrangementProgram
-                                 }
-                            ]
+                            "dataset": data.dataSource.dataset
                         }
                     });
                     revenueChart.setTransparent(true);

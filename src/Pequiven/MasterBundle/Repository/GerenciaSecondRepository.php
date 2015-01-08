@@ -132,6 +132,22 @@ class GerenciaSecondRepository extends baseEntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    public function findWithObjetives($id) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('gs_ob')
+            ->addSelect('gs_ob_c')
+            ->addSelect('gs_ob_p')
+            ->leftJoin('gs.operationalObjectives', 'gs_ob')
+            ->leftJoin('gs_ob.childrens', 'gs_ob_c')
+            ->leftJoin('gs_ob.parents', 'gs_ob_p')
+            ->andWhere('gs.id = :gerencia')
+            ->setParameter('gerencia', $id)
+                ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
     protected function getAlias() {
         return 'gs';
     }
