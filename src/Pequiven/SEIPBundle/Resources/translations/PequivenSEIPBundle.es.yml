@@ -214,7 +214,7 @@ principal:
 result:
     recalculate: Recalcular resultados
     list:
-        titleObjetiveOperative: Resultados Objetivos Operativos
+        titleObjetiveOperative: Resultados Objetivos
         columnLocation: Localidad
         columnGerenciaFirst: Gerencia 1ra Línea
         columnGerenciaSecond: Gerencia 2da Línea

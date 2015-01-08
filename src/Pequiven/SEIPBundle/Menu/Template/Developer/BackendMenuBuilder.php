@@ -490,34 +490,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.main', $section)));
             $menuResults->addChild($visualize);
                 
-                $itemStrategicVisualize = $this->factory->createItem('results.visualize.strategic', array(
-                    'route' => 'pequiven_objetive_menu_list_strategic',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.strategic', $section)));
-                        
-                $itemTacticVisualize = $this->factory->createItem('results.visualize.tactic', array(
-                    'route' => 'pequiven_objetive_menu_list_tactic',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.tactic', $section)));
-
-                $itemOperativeVisualize = $this->factory->createItem('results.visualize.operative', array(
-                    'route' => 'pequiven_objetive_menu_list_operative',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.operative', $section)));
-            
-                //Menú Nivel 3: Item de visulizar
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
-                    $visualize->addChild($itemStrategicVisualize);
-                    
-                    $visualize->addChild($itemTacticVisualize);
-                    
-                    $visualize->addChild($itemOperativeVisualize);
-                    
-                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-                    $visualize->addChild($itemTacticVisualize);
-                    
-                    $visualize->addChild($itemOperativeVisualize);
-                    
-                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    $visualize->addChild($itemOperativeVisualize);
-                }
+                $itemOperativeVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
+                    'route' => 'pequiven_seip_result_visualize_by_gerencia',
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_gerencia', $section)));
+                
+                $visualize->addChild($itemOperativeVisualize);
                 
                 if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER')) && $this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                     $thirdchild = $this->factory->createItem('results.notify',
@@ -598,7 +575,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     
                     $itemPeriod->addChild($itemPeriodConsultation);
                 }
-                $menuResults->addChild($itemPeriod);
+                //$menuResults->addChild($itemPeriod);
                 
                
         $menu->addChild($menuResults);

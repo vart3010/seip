@@ -21,3 +21,13 @@ pequiven_seip_result_notify_indicator_operative:
     path: /notify/indicator/operative
     defaults: 
         _controller: pequiven.controller.indicatoroperative:listAction
+
+pequiven_seip_result_visualize_by_gerencia:
+    path: /visualize/by-gerencia.{_format}
+    defaults:
+        _controller: pequiven.controller.result:listResultAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]

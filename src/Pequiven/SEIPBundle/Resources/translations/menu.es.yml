@@ -110,6 +110,7 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            by_gerencia: Por gerencia
                         notify:
                             main: Notificar
                             indicators: Indicadores
