@@ -145,7 +145,7 @@ abstract class Objetive implements ObjetiveInterface
         $arrangementPrograms = array();
         if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
             $arrangementProgramsResult = $this->getTacticalArrangementPrograms();
-            foreach ($arrangementPrograms as $arrangementProgram) {
+            foreach ($arrangementProgramsResult as $arrangementProgram) {
                 if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                     $arrangementPrograms[] = $arrangementProgram;
                 }
