@@ -38,3 +38,11 @@ UPDATE `seip`.`seip_user` SET `fk_complejo` = '3',`fk_gerencia` = '9' WHERE `sei
 -- Soft deleteable para objetivo
 ALTER TABLE seip_objetive ADD deletedAt DATETIME DEFAULT NULL;
 UPDATE `seip_objetive` SET `deletedAt`=NOW() WHERE enabled=0;
+
+-- Soft deleteable para rangos de objetivos
+ALTER TABLE seip_arrangement_range ADD deletedAt DATETIME DEFAULT NULL;
+UPDATE `seip_arrangement_range` SET `deletedAt`=NOW() WHERE enabled=0;
+
+-- Soft deleteable para indicadores
+ALTER TABLE seip_indicator ADD deletedAt DATETIME DEFAULT NULL;
+UPDATE `seip_indicator` SET `deletedAt`=NOW() WHERE enabled=0;

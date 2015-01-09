@@ -19,6 +19,7 @@ use Pequiven\ArrangementBundle\Model\ArrangementRange as modelArrangementRange;
  *
  * @ORM\Table(name="seip_arrangement_range")
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementBundle\Repository\ArrangementRangeRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
 class ArrangementRange extends modelArrangementRange {
@@ -305,7 +306,11 @@ class ArrangementRange extends modelArrangementRange {
      */
     private $enabled = true;    
 
-
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Get id
      *
@@ -1119,5 +1124,15 @@ class ArrangementRange extends modelArrangementRange {
     public function getEnabled()
     {
         return $this->enabled;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
 }

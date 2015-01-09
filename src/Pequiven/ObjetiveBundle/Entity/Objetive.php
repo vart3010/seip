@@ -190,7 +190,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     private $tendency;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist","remove"})
      * @ORM\JoinTable(name="seip_objetives_indicators")
      */
     private $indicators;
