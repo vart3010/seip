@@ -153,7 +153,9 @@ class ResultController extends ResourceController {
         $id = $request->get('id');
         
         $tree = $objetives = array();
+        $caption = '';
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
+            $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
             $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
             $objetives = $gerencia->getTacticalObjectives();
             foreach ($objetives as $objetive) {
@@ -169,6 +171,7 @@ class ResultController extends ResourceController {
             }
             $entity = $gerencia;
         }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
+            $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
             $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
@@ -184,7 +187,6 @@ class ResultController extends ResourceController {
             }
             $entity = $gerenciaSecond;
         }
-        $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
         $subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
         $data = array(
             'dataSource' => array(

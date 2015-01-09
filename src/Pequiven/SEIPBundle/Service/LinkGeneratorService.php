@@ -65,20 +65,13 @@ class LinkGeneratorService extends LinkGenerator
      */
     function renderObjetiveResult(Objetive $entity,$entityConfig,$type = self::TYPE_LINK_DEFAULT,array $parameters = array()) 
     {
-        $levelRoute = array(
-            ObjetiveLevel::LEVEL_ESTRATEGICO => 'objetiveStrategic_show',
-            ObjetiveLevel::LEVEL_TACTICO => 'objetiveTactic_show',
-            ObjetiveLevel::LEVEL_OPERATIVO => 'objetiveOperative_show',
-        );
         $levelIcon = array(
             ObjetiveLevel::LEVEL_ESTRATEGICO => 'fa fa-cubes',
             ObjetiveLevel::LEVEL_TACTICO => 'fa fa-cube',
             ObjetiveLevel::LEVEL_OPERATIVO => 'fa fa-cog',
         );
         $level = $entity->getObjetiveLevel()->getLevel();
-        $route = $levelRoute[$level];
         $icon = $levelIcon[$level];
-        $entityConfig['route'] = $route;
         $entityConfig['icon'] = $icon;
         
         $levelRequest = $parameters['level'];
