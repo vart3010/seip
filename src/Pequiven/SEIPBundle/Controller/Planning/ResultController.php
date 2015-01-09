@@ -146,7 +146,7 @@ class ResultController extends ResourceController {
     public function showMonitorAction(Request $request) {
         $categories = array();
         $resultIndicator = $resultArrangementProgram = $resultObjetives = array();
-        
+        $showResultObjetives = false;
         $level = $request->get('level');
         
         $em = $this->getDoctrine();
@@ -155,6 +155,7 @@ class ResultController extends ResourceController {
         $tree = $objetives = array();
         $caption = '';
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
+            $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
             $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
             $objetives = $gerencia->getTacticalObjectives();
@@ -231,10 +232,9 @@ class ResultController extends ResourceController {
                 if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OF_RESULT){
                     foreach ($result->getChildrens() as $child) {
                         if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                            $totalIndicator += $result->getResultWithWeight();
+                            $totalIndicator += $child->getResultWithWeight();
                             $flagResultIndicator = $flagResultIndicatorInternal = true;
-                        }
-                        if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
+                        }elseif($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
                             $totalObjetives+= $child->getResultWithWeight();
                             $flagResultObjetives = $flagResultObjetivesInternal = true;
                         }
@@ -261,24 +261,25 @@ class ResultController extends ResourceController {
                 $resultObjetives[] = array('value' => bcadd(0,'0',2));
             }
         }
-        if(count($resultArrangementProgram) > 0){
-            $data['dataSource']['dataset'][] = array(
-                    'seriesname' => $this->trans('chart.result.objetiveOperative.seriesNamePlan1'),
-                    'data' => $resultArrangementProgram,
-                );
-        }
         if(count($resultIndicator) > 0){
             $data['dataSource']['dataset'][] = array(
+                    'seriesname' => $this->trans('chart.result.objetiveOperative.seriesNamePlan1'),
+                    'data' => $resultIndicator,
+                );
+        }
+        if(count($resultArrangementProgram) > 0){
+            $data['dataSource']['dataset'][] = array(
                 'seriesname' => $this->trans('chart.result.objetiveOperative.seriesNamePlan2'),
-                'data' => $resultIndicator,
+                'data' => $resultArrangementProgram,
             );
         }
-        if(count($resultObjetives) > 0){
+        if($showResultObjetives && count($resultObjetives) > 0){
             $data['dataSource']['dataset'][] = array(
                 'seriesname' => $this->trans('chart.result.objetiveOperative.seriesNamePlan3'),
                 'data' => $resultObjetives,
             );
         }
+        
         $data['dataSource']['categories']['category'] = $categories;
         
         return array(
