@@ -99,6 +99,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
         }else{
             $label = (string)$entity;
         }
+        $originalLabel = $label;
         $truncate = 0;
         $addTitle = false;
         if(isset($parameters['truncate'])){
@@ -117,7 +118,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
         if($href != ''){
             $extraParameters = '';
             if($addTitle === true){
-                $extraParameters .= 'title = "'.$label.'"';
+                $extraParameters .= 'title = "'.$originalLabel.'"';
             }
             $link = sprintf('<a href="%s" %s>%s&nbsp;&nbsp;%s</a>',$href,$extraParameters,$icon,$label);
         }else{
