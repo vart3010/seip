@@ -81,6 +81,7 @@ class ObjetiveRepository extends EntityRepository {
      */
     public function getByParent($objetiveParentsArray,$options = array()){
         $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
         
         $query = $this->createQueryBuilder('o');
         $query
@@ -100,7 +101,9 @@ class ObjetiveRepository extends EntityRepository {
         } else{
             if(!isset($options['searchByRef'])){
                 if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+                    if(!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){
+                        $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
+                    }
                 }
             }
         }

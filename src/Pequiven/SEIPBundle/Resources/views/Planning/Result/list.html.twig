@@ -9,23 +9,21 @@
     ) }}
     
     <div ng-controller="TableFormatController">
-        <!--<div ng-controller="ObjetiveTacticController">-->
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaSecondList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
                         <td data-title="'{{ 'result.list.columnLocation'|trans }}'" filter="{ 'complejo': 'text' }" >
-                            <a href="{$ result._links.self.href $}">{$result.gerencia.complejo.description$}</a>
+                            {$result.gerencia.complejo.description$}
                         </td>
                         <td data-title="'{{ 'result.list.columnGerenciaFirst'|trans }}'" filter="{ 'gerenciaFirst': 'text' }" >
-                            <a href="{$ result._links.self.href $}">{$result.gerencia.description$}</a>
+                            <a href="{$ result.gerencia._links.show_result $}">{$result.gerencia.description$}</a>
                         </td>
                         <td data-title="'{{ 'result.list.columnGerenciaSecond'|trans }}'" sortable="'description'" filter="{ 'gerenciaSecond': 'text' }">
-                            <a href="{$ result.linkGerenciaSecondToResult $}">{$result.description$}</a>
+                            <a href="{$ result._links.show_result $}">{$result.description$}</a>
                         </td>
                     </tr>
                 </table>
             </div>
-        <!--</div>-->
     </div>
 {% endblock %}
 

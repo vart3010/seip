@@ -77,7 +77,7 @@ app:
                             list: Lista
                             add: Cargar
                     planning:
-                        main: Planificación
+                        main: Estadística e información
                         objetives:
                             main: Objetivos
                             strategic: Estratégico
@@ -110,6 +110,7 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            by_gerencia: Por gerencia
                         notify:
                             main: Notificar
                             indicators: Indicadores

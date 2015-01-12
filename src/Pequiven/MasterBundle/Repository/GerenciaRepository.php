@@ -109,6 +109,25 @@ class GerenciaRepository extends baseEntityRepository
         }
         return $queryBuilder->getQuery()->getResult();
     }
+ 
+    public function findWithObjetives($id) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('g_ot')
+            ->addSelect('g_ot_c')
+            ->addSelect('g_ot_p')
+            ->leftJoin('g.tacticalObjectives', 'g_ot')
+            ->leftJoin('g_ot.childrens', 'g_ot_c')
+            ->leftJoin('g_ot.parents', 'g_ot_p')
+            ->leftJoin('g_ot.objetiveLevel', 'g_ot_ol')
+            ->andWhere('g.id = :gerencia')
+            ->andWhere('g_ot_ol.level = :level')
+            ->setParameter('gerencia', $id)
+            ->setParameter('level',  \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
     
     protected function getAlias() {
         return 'g';

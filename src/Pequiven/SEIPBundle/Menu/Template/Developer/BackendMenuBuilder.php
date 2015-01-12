@@ -321,7 +321,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                 }
                 
-                if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER')) && $this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -384,46 +384,40 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $this->getSubLevelOptions(array(
                     'uri' => null,
                     'labelAttributes' => array('icon' => 'fa fa-line-chart',),
-                ))
-                )
-                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.main', $section)));
+                )))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.main', $section)));
                
                 //Menú Nivel 3: Lista de Indicadores
                     $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.list',
-                                $this->getSubLevelOptions(array(
-                                    'uri' => 'list',
-                                    'labelAttributes' => array('icon' => 'icon-book'),
-                                ))
-                            )
-                                ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.main',$section)));
-
+                        $this->getSubLevelOptions(array(
+                            'uri' => 'list',
+                        )))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.main',$section)));
+                    
+                    $itemIndicatorsStrategic = $this->factory->createItem('arrangement_strategic.indicators.list.strategic', array(
+                        'route' => 'pequiven_indicator_menu_list_strategic',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
+                    
+                    $itemIndicatorsTactic = $this->factory->createItem('arrangement_strategic.indicators.list.tactic', array(
+                        'route' => 'pequiven_indicator_menu_list_tactic',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
+                    
+                    $itemIndicatorsOperative = $this->factory->createItem('arrangement_strategic.indicators.list.operative', array(
+                        'route' => 'pequiven_indicator_menu_list_operative',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                    
                     if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                    $thirdchild->addChild('arrangement_strategic.indicators.list.strategic', array(
-                                'route' => 'pequiven_indicator_menu_list_strategic',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
-                        $thirdchild->addChild('arrangement_strategic.indicators.list.tactic', array(
-                                'route' => 'pequiven_indicator_menu_list_tactic',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
-                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
-                                'route' => 'pequiven_indicator_menu_list_operative',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                        $thirdchild->addChild($itemIndicatorsStrategic);
+                        
+                        $thirdchild->addChild($itemIndicatorsTactic);
+                        
+                        $thirdchild->addChild($itemIndicatorsOperative);
+                        
                     } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-                        $thirdchild->addChild('arrangement_strategic.indicators.list.tactic', array(
-                                'route' => 'pequiven_indicator_menu_list_tactic',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
-                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
-                                'route' => 'pequiven_indicator_menu_list_operative',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                        $thirdchild->addChild($itemIndicatorsTactic);
+                        
+                        $thirdchild->addChild($itemIndicatorsOperative);
+                        
                     } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                        $thirdchild->addChild('arrangement_strategic.indicators.list.operative', array(
-                                'route' => 'pequiven_indicator_menu_list_operative',
-                            ))
-                                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                        $thirdchild->addChild($itemIndicatorsOperative);
                     }
                     $menuIndicators->addChild($thirdchild);
                     
@@ -496,34 +490,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.main', $section)));
             $menuResults->addChild($visualize);
                 
-                $itemStrategicVisualize = $this->factory->createItem('results.visualize.strategic', array(
-                    'route' => 'pequiven_objetive_menu_list_strategic',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.strategic', $section)));
-                        
-                $itemTacticVisualize = $this->factory->createItem('results.visualize.tactic', array(
-                    'route' => 'pequiven_objetive_menu_list_tactic',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.tactic', $section)));
-
-                $itemOperativeVisualize = $this->factory->createItem('results.visualize.operative', array(
-                    'route' => 'pequiven_objetive_menu_list_operative',
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.operative', $section)));
-            
-                //Menú Nivel 3: Item de visulizar
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
-                    $visualize->addChild($itemStrategicVisualize);
-                    
-                    $visualize->addChild($itemTacticVisualize);
-                    
-                    $visualize->addChild($itemOperativeVisualize);
-                    
-                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
-                    $visualize->addChild($itemTacticVisualize);
-                    
-                    $visualize->addChild($itemOperativeVisualize);
-                    
-                } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    $visualize->addChild($itemOperativeVisualize);
-                }
+                $itemOperativeVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
+                    'route' => 'pequiven_seip_result_visualize_by_gerencia',
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_gerencia', $section)));
+                
+                $visualize->addChild($itemOperativeVisualize);
                 
                 if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER')) && $this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                     $thirdchild = $this->factory->createItem('results.notify',
@@ -531,12 +502,39 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                                 'uri' => 'add',
                             )))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.main',$section)));
                     
-                    $itemNotifyIndicators = $this->factory->createItem('results.notify.indicators', array(
-                            'route' => self::ROUTE_DEFAULT,
-                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.indicators', $section)));
+                    //Menu y sub menu de notificar indicadores
+                    $itemNotifyIndicators = $this->factory->createItem('results.notify.indicators', $this->getSubLevelOptions())->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.indicators', $section)));
+                    
+                    $itemIndicatorsStrategic = $this->factory->createItem('results.notify.indicators.strategic', array(
+                        'route' => 'pequiven_seip_result_notify_indicator_strategic',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.strategic', $section)));
+                    
+                    $itemIndicatorsTactic = $this->factory->createItem('results.notify.indicators.tactic', array(
+                        'route' => 'pequiven_seip_result_notify_indicator_tactic',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.tactic', $section)));
+                    
+                    $itemIndicatorsOperative = $this->factory->createItem('results.notify.indicators.operative', array(
+                        'route' => 'pequiven_seip_result_notify_indicator_operative',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.indicators.list.operative', $section)));
+                    
+                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+                        $itemNotifyIndicators->addChild($itemIndicatorsStrategic);
                         
+                        $itemNotifyIndicators->addChild($itemIndicatorsTactic);
+                        
+                        $itemNotifyIndicators->addChild($itemIndicatorsOperative);
+                        
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                        $itemNotifyIndicators->addChild($itemIndicatorsTactic);
+                        
+                        $itemNotifyIndicators->addChild($itemIndicatorsOperative);
+                        
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
+                        $itemNotifyIndicators->addChild($itemIndicatorsOperative);
+                    }
+                    
                     $itemNotifyArrangementPrograms = $this->factory->createItem('results.notify.arrangement_programs', array(
-                            'route' => self::ROUTE_DEFAULT,
+                            'route' => 'pequiven_seip_result_notify_arrangementprogram',
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.notify.arrangement_programs', $section)));
                     
                     $thirdchild->addChild($itemNotifyIndicators);
@@ -577,7 +575,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     
                     $itemPeriod->addChild($itemPeriodConsultation);
                 }
-                $menuResults->addChild($itemPeriod);
+                //$menuResults->addChild($itemPeriod);
                 
                
         $menu->addChild($menuResults);

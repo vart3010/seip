@@ -543,12 +543,19 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     
     public function onPostSerializeGerencia(ObjectEvent $event) {
         $object = $event->getObject();
+        $links = array(
+            'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $object->getId()))
+        );
         $event->getVisitor()->addData('linkToExportMatriz', $this->generateUrl('pequiven_gerenciafirst_export', array('id' => $object->getId())));
+        $event->getVisitor()->addData('_links',$links);
     }
     
     public function onPostSerializeGerenciaSecond(ObjectEvent $event) {
         $object = $event->getObject();
-        $event->getVisitor()->addData('linkGerenciaSecondToResult', $this->generateUrl('pequiven_result_show_operative', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId())));
+        $links = array(
+            'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId()))
+        );
+        $event->getVisitor()->addData('_links',$links);
     }
     
     public function onPostSerializeGoal(ObjectEvent $event)
