@@ -279,6 +279,9 @@ class MailerEventListerner extends BaseEventListerner
     private function getEmailsInString(array $users) {
         $emails = array();
         foreach ($users as $user) {
+            if(strpos($user->getEmail(), '@') === false){
+                continue;
+            }
             $emails[$user->getEmail()] = (string)$user;
         }
         return $emails;

@@ -308,7 +308,7 @@ abstract class ArrangementProgram
                             continue;
                         }
                         if($limitMonthToNow === true){
-                            $plannedString = lcfirst(str_replace('get', '', $methodName));
+                            $plannedString = GoalDetails::getRealNameProperty($methodName);
                             $plannedMonth = GoalDetails::getMonthOfPlanned($plannedString);
                             if($plannedMonth > $month){
                                 continue;

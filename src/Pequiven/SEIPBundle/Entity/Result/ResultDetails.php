@@ -541,6 +541,9 @@ class ResultDetails
         
     static function getMonthResult($month) {
         $months = self::getMonthsResult();
+        if(is_string($month) === true){
+            $month = (int)$month;
+        }
         if(!isset($months[$month])){
             throw new \Exception(sprintf('month result "%s" not defined',$month));
         }

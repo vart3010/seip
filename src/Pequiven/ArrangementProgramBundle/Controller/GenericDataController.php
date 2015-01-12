@@ -59,7 +59,7 @@ class GenericDataController extends SEIPController
             'lastname' => $query,
             'numPersonal' => $query,
         );
-            
+        
         $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
         
         $view = $this->view();

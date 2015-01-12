@@ -1,0 +1,21 @@
+pequiven_objetive_list:
+    path: /{level}/list.{_format}
+    defaults:
+        _controller: pequiven.controller.objetive:listAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+    
+#Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
+objetiveGerenciaFirstTactic:
+    path: /objetive/objetiveGerenciaFirstTactic
+    defaults:
+        _controller: pequiven.controller.objetive:selectGerenciaFirstAction
+        
+#Select que devuelve las Gerencias de 2da Línea para la visualización de objetivos a nivel Operativo
+objetiveGerenciaSecondOperative:
+    path: /objetive/objetiveGerenciaSecondOperative
+    defaults:
+        _controller: pequiven.controller.objetive:selectGerenciaSecondListAction

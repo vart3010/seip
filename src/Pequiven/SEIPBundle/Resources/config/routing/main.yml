@@ -6,6 +6,14 @@ pequiven_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/indicator.yml"
     prefix:   /indicator
 
-pequiven_result:
+pequiven_objetive:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/objetive.yml"
+    prefix:   /objetive
+
+pequiven_planning_result:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/result.yml"
+    prefix:   /planning/result
+    
+pequiven_result:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/result.yml"
     prefix:   /result

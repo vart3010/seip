@@ -42,6 +42,22 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    user:
+        user: Usuario
+        localization:
+            localization: Localización
+    actions:
+        create: Crear
+        add: Añadir
+        edit: Editar
+        delete: Eliminar
+        update: Editar
+    headers:
+        location: Localidad
+        gerencia: Gerencia
+        gerenciaSecond:  Gerencia de 2da linea
+        rol: Rol
+        actions: Acciones
     results:
         results: Resultados
         result: Resultado
@@ -71,6 +87,7 @@ pequiven_seip:
     details: Detalles
     profile:
         profile: Perfil
+        config: Configuración
         details: Detalles
         username: Nombre de usuario
         first_name: Nombre
@@ -82,7 +99,7 @@ pequiven_seip:
         update_password: Actualizar contraseña
         update: Actualizar
         num_personal: Número de personal
-
+        
     hello: Hola
 
     #Buttons
@@ -134,6 +151,10 @@ pequiven_seip:
         type_template: Tipo de plantilla
     tooltips:
         click_to_show: Click para ver
+    area:
+        main: Area principal
+        events: Area de eventos
+        dashboard: Bienvenida
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -191,8 +212,9 @@ principal:
         indicatorPorc: % Carga
         
 result:
+    recalculate: Recalcular resultados
     list:
-        titleObjetiveOperative: Resultados Objetivos Operativos
+        titleObjetiveOperative: Resultados Objetivos
         columnLocation: Localidad
         columnGerenciaFirst: Gerencia 1ra Línea
         columnGerenciaSecond: Gerencia 2da Línea
@@ -200,4 +222,14 @@ result:
     objetiveOperative: Objetivos Operativos
     not_objetives_in_level: No existen objetivos asociados en este nivel
     captionObjetiveOperative: Resultados Objetivos Operativos
+    captionObjetiveTactical: Resultados Objetivos Tacticos
     subCaptionObjetiveOperative: Período 2014
+    
+pequiven_seip_box_arrangementprogram_summary: Programas de gestión pendientes.
+pequiven_seip_box_my_arrangementprogram_summary: Mis programas de gestión.
+pequiven_seip_box_tactic_summaryindicatorcharged: Indicadores tacticos.
+pequiven_seip_box_tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
+pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
+pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
+pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
+pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.

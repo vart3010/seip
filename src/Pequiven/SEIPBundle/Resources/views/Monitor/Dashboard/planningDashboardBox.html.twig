@@ -1,0 +1,29 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{{ contentHeader(("principal.title.objTactic"|trans)) }}
+<div ng-controller="DashboardController" ng-init="renderChartTactic('chartContainerTactic',{{ categories|json_encode() }},{{ dataPlanTactic|json_encode() }},{{ dataRealTactic|json_encode() }},{{ dataPorcTactic|json_encode() }},'{{ "principal.chart.captionObjTactic"|trans }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    <p class="button-height">
+        <a href="{{ path('monitorObjetiveOperative') }}" class="button red-gradient">{{ "principal.button.objOperative"|trans }}</a>
+        <a href="{{ path('monitorArrangementProgram') }}" class="button red-gradient">{{ "principal.button.arrangementProgram"|trans }}</a>
+    </p>
+    <div id="chartTactic" class="columns">
+        <div class="nine-columns twelve-columns-mobile" id="chartContainerTactic">
+            <!-- This div will hold the chart generated in the footer -->
+        </div>
+        <div class="three-columns twelve-columns-mobile new-row-mobile">
+            <ul class="stats">
+                {% for data in dataLinkTactic %}
+                    <li>
+                        <a href="{{ data.linkTypeGroup }}">
+                            {{ data.typeGroup }}<br>
+                            <b style="font-size:25px">{{ data.porcCarga }}%</b>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+<hgroup id="main-title" class="thin">
+    <h1>{{ "principal.box.indicatorTactic"|trans }}</h1>
+</hgroup>

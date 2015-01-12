@@ -188,4 +188,25 @@ class GoalDetails {
         $nameProperty = lcfirst(str_replace('get', '', $methodName));
         return $nameProperty;
     }
+    
+    function getAdvance()
+    {
+        $nameMatchReal = '^get\w+Real$';
+        $reflection = new \ReflectionClass($this);
+        $advancesReal = 0;
+        $quantity = 0;
+        foreach ($reflection->getMethods() as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
+                continue;
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $real = $this->$methodName();
+                $advancesReal +=  $real;
+                $quantity++;
+            }
+        }
+        return ($advancesReal);
+    }
 }

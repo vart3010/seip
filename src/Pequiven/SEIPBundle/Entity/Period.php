@@ -3,14 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Pequiven\SEIPBundle\Model\Period as Base;
 /**
  * Periodo
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  */
-class Period
+class Period extends Base
 {
     /**
      * @var integer
@@ -33,7 +33,7 @@ class Period
      * Fecha de inicio
      * @var \DateTime
      *
-     * @ORM\Column(name="dateStart", type="date")
+     * @ORM\Column(name="dateStart", type="date", nullable=false)
      */
     private $dateStart;
 
@@ -41,7 +41,7 @@ class Period
      * Fecha fin
      * @var \DateTime
      *
-     * @ORM\Column(name="dateEnd", type="date")
+     * @ORM\Column(name="dateEnd", type="date", nullable=false)
      */
     private $dateEnd;
 

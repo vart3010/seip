@@ -15,9 +15,22 @@ class BoxCompilerPass implements CompilerPassInterface {
     public function process(ContainerBuilder $container) 
     {
         $renderBoxDefinition = $container->getDefinition('tecnocreaciones_box.render');
+        $renderAreaRenderDefinition = $container->getDefinition('tecnocreaciones_box.area.render');
+        //Busca los boxes definidos
         $tags = $container->findTaggedServiceIds('tecnocreaciones_box.box');
         foreach ($tags as $id => $attributes) {
             $renderBoxDefinition->addMethodCall('addBox',array($container->getDefinition($id)));
+        }
+        //Busca las areas definidas
+        $tags = $container->findTaggedServiceIds('tecnocreaciones_box.area');
+        foreach ($tags as $id => $attributes) {
+            $renderAreaRenderDefinition->addMethodCall('addAreaDefinition',array($container->getDefinition($id)));
+        }
+        //Busca los adaptadores de datos definidos
+        $tags = $container->findTaggedServiceIds('tecnocreaciones_box.area.adapter');
+        foreach ($tags as $id => $attributes) {
+            $adapterDefinition = $container->getDefinition($id);
+            $renderAreaRenderDefinition->addMethodCall('addAdapter',array($adapterDefinition));
         }
     }
 }

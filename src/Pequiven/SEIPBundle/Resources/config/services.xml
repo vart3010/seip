@@ -140,11 +140,30 @@
         <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box de dashboard de planificacion -->
+        <service id="operative.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box de dashboard generico -->
+        <service id="operative.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Model\Box\AreaDefinition">
+            <tag name="tecnocreaciones_box.area" />
+        </service>
+        <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
+        <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
+        <service id="pequiven_seip.area.adapter.box_default" class="Pequiven\SEIPBundle\Model\Box\BoxDefaultAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <call method="setContainer">
-                <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
@@ -161,5 +180,8 @@
 <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
+        <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
+        </service>
     </services>
 </container>

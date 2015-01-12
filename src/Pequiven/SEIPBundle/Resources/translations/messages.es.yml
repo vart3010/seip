@@ -78,6 +78,7 @@ chart:
             yAxisName: Meta del objetivo
             seriesNamePlan1: Indicadores
             seriesNamePlan2: Programas de Gestión
+            seriesNamePlan3: Objetivos
         
 app:
     http:

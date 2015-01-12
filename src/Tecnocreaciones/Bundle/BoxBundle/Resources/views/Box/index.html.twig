@@ -1,0 +1,92 @@
+{% extends "::base.html.twig" %}
+
+{% form_theme formBoxes _self %}
+
+{% block form_label -%}
+    {% if label is not sameas(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|raw }}</label>
+    {%- endif %}
+{%- endblock form_label %}         
+
+{% block body %}
+    <h2>Lista de boxes disponibles</h2>
+    <form action="{{ path('tecnocreaciones_box_add') }}" method="POST">
+        <table style="width: 100%">
+            <tr>
+                <th>Nro.</th>
+                <th>Descripcion</th>
+                <th>Areas</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% for form in formBoxes %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ form_label(form) }}</td>
+                    <td>
+                        {{ form_widget(form) }}
+                    </td>
+                    <td>
+                        {{ form_errors(form) }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br/>
+        <button type class="fa fa-plus-square button">Guardar Cambios</button>
+    </form>
+    <br/>
+    <h2>Mis boxes</h2>
+    <table style="width: 100%">
+        <tr>
+            <th>Nro.</th>
+            <th>Descripcion</th>
+            <th>Areas</th>
+        </tr>
+        {% for box in boxesActives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ box.boxName|trans({},box.getTranslationDomain) }} <b>({{ box.description }})</b></td>
+                <td>
+                    {% for area_name,value in box.areasName %}
+                        {{ area_name|trans({},box.translationDomain) }}{% if loop.last %}.{% else %},{% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% else%}
+            <tr>
+                <td colspan="3" style="text-align: center">No hay boxes agregados.</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock body %}
+
+{% block stylesheets %}
+    <style></style>
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.css') }}">
+{% endblock stylesheets %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Select2 -->
+    <script src="{{ asset('bundles/pequivenseip/select2-3.5.0/select2.min.js') }}"></script>
+{% endblock javascripts %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock javascript %}
