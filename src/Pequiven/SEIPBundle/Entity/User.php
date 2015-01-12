@@ -528,6 +528,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
                     $realGroup = $group;
                 }
             }
+            $this->levelByGroup = $level;
             $this->realGroup = $realGroup;
         }
         return $this->realGroup;

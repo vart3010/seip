@@ -43,7 +43,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" {% if isAllowFilterManagementSecondLine == false %}disabled="disabled" ng-init="model.secondLineManagement = {{ user.gerenciaSecond.id }}"{% endif %}>
+                                <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" {% if isAllowFilterManagementSecondLine == false %}disabled="disabled" {% endif %} {% if user.gerenciaSecond %}ng-init="model.secondLineManagement = {{ user.gerenciaSecond.id }}"{% endif%} >
                                     <option value=''></option>
                                 </select>
                             </div>

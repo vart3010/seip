@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Controller\Api;
 
+use Pequiven\MasterBundle\Entity\Rol;
+
 /**
  * Description of ResultAPIController
  *
@@ -27,19 +29,19 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         if(!$user){
             throw $this->createNotFoundException(sprintf('El numero de personal "%s" no existe',$numPersonal));
         }
+        $level = $user->getLevelRealByGroup();
         
         //Repositorios
         $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
         $arrangementProgramRepository = $this->container->get('pequiven_seip.repository.arrangementprogram');
         
-        $criteria = $arrangementPrograms = array();
-        $objetives = array();
-        $goals = array();
+        $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = array();
         
         //Programas de gestion donde es responsable
         $arrangementProgramsGoals = $arrangementProgramRepository->findByUserAndPeriodNotGoals($user,$period,$criteria);
         foreach ($arrangementProgramsGoals as $arrangementProgramsGoal) {
             $arrangementPrograms[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
+            $arrangementProgramsForObjetives[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
         }
         
         //Metas de otros programa de gestion donde no es reponsable
@@ -47,9 +49,33 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         foreach ($goalsNotResponsible as $goal) {
             $goals[$goal->getId()] = $goal;
             $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
-            $arrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
+            $arrangementProgramsForObjetives[$arrangementProgram->getId()] = $arrangementProgram;
         }
-        $this->getObjetiveFromPrograms($arrangementPrograms, $objetives);
+        $this->getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
+        
+        $canBeEvaluated = true;
+        $errors = array();
+        $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
+        foreach ($arrangementProgramsForObjetives as $arrangementProgram) {
+            $details = $arrangementProgram->getDetails();
+            $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
+                                array(
+                                    'id' => $arrangementProgram->getId()
+                                ),$referenceType
+                            );
+            $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$arrangementProgram);
+            //Se evalua que la notificacion no este en progeso
+            if($details->getNotificationInProgressByUser() !== null){
+                $errors[] = sprintf('El usuario "%s" debe finalizar el proceso de notificación en el programa de gestión "%s".',$details->getNotificationInProgressByUser(),$link);
+                $canBeEvaluated = false;
+                continue;
+            }
+            //Se evalua que no tenga avance cargado
+            if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+                $errors[] = sprintf('El programa de gestión "%s" no tiene avances cargados.',$link);
+                $canBeEvaluated = false;
+            }
+        }
         
         foreach ($arrangementPrograms as $key => $arrangementProgram) {
             $arrangementPrograms[$key] = array(
@@ -75,18 +101,34 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             );
         }
         
+        //Se evalua que tenga por lo menos un item
+        if(count($goals) == 0 && count($arrangementPrograms) == 0 && count($objetives) == 0){
+            $canBeEvaluated = false;
+            $errors[] = sprintf('El usuario "%s" no tiene items asociados para su evaluación.',$user);
+        }
+        
+        if(!$canBeEvaluated){
+            $goals = $arrangementPrograms = $objetives = array();
+        }
         $data = array(
-            'user' => $user,
-            'evaluation' => array(
-                'management' => array(
-                    'goals' => $goals,
-                    'arrangementPrograms' => $arrangementPrograms,
-                ),
-                'results' => array(
-                    'objetives' => $objetives,
+            'data' => array(
+                'user' => $user,
+                'evaluation' => array(
+                    'management' => array(
+                        'goals' => $goals,
+                        'arrangementPrograms' => $arrangementPrograms,
+                    ),
+                    'results' => array(
+                        'objetives' => $objetives,
+                    ),
                 ),
             ),
+            'errors' => $errors,
+            'success' => true,
         );
+        if(!$canBeEvaluated){
+            $data['success'] = false;
+        }
         $view = $this->view($data);
         $view->getSerializationContext()->setGroups(array('api_list','api_result','sonata_api_read'));
         
