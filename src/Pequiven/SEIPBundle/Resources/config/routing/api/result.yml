@@ -1,0 +1,8 @@
+seip_api_result_useritems:
+    path: /result/user-items.{_format}
+    defaults: 
+        _controller: PequivenSEIPBundle:Api/ResultApi:getUserItems
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]

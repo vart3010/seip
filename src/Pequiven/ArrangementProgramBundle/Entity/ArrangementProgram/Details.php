@@ -103,7 +103,7 @@ class Details
     private $notificationInProgressDate;
     
     /**
-     * Ultima persona que notifico
+     * Ultima persona que notifico el programa de gestion
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
