@@ -335,6 +335,18 @@ class UserRepository extends EntityRepository
         return $this->getPaginator($queryBuilder);
     }
     
+    function findUserByNumPersonal($numPersonal)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('u.numPersonal = :numPersonal')
+            ->innerJoin('u.groups','g')
+            ->andWhere('g.typeRol = :typeRol')
+            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ->setParameter('numPersonal', $numPersonal)
+            ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
     protected function getAlias() {
         return 'u';
     }

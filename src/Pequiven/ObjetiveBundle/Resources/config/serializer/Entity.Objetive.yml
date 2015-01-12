@@ -91,3 +91,6 @@ Pequiven\ObjetiveBundle\Entity\Objetive:
         arrangementRange:
             expose: true
             groups: [arrangementRange]
+        resultOfObjetive:
+            expose: true
+            groups: [api_result]

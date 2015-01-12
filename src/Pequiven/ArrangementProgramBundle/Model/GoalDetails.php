@@ -189,6 +189,10 @@ class GoalDetails {
         return $nameProperty;
     }
     
+    /**
+     * Retorna el avance de la meta
+     * @return type
+     */
     function getAdvance()
     {
         $nameMatchReal = '^get\w+Real$';

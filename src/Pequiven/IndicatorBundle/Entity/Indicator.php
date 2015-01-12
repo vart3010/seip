@@ -13,6 +13,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  *
  * @ORM\Table(name="seip_indicator")
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
 class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
@@ -228,7 +229,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $arrangementRange;
 
-
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Constructor
      */
@@ -914,5 +919,15 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function updateLastDateCalculateResult() 
     {
         $this->lastDateCalculateResult = new \DateTime();
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
 }
