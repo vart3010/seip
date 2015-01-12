@@ -497,14 +497,40 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
         if(!isset($this->levelByGroup)){
             $level = 0;
             $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
             foreach ($groups as $group) {
-                if($group->getLevel() > $level){
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
                     $level = $group->getLevel();
                 }
             }
             $this->levelByGroup = $level;
         }
         return $this->levelByGroup;
+    }
+    
+    public function getRealGroup() {
+        if(!isset($this->realGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
+            $realGroup = null;
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
+                    $level = $group->getLevel();
+                    $realGroup = $group;
+                }
+            }
+            $this->realGroup = $realGroup;
+        }
+        return $this->realGroup;
     }
     
     /**

@@ -76,7 +76,7 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
-     * Retorna los programas de gestion que tengan de responsable al usuario que cuenta como una
+     * Retorna los programas de gestion que tengan de responsable el usuario
      */
     function findByUserAndPeriodNotGoals(User $user,Period $period,array $criteria = array())
     {
