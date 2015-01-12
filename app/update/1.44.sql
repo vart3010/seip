@@ -5,3 +5,5 @@ ALTER TABLE RefreshToken ADD CONSTRAINT FK_7142379E19EB6921 FOREIGN KEY (client_
 ALTER TABLE RefreshToken ADD CONSTRAINT FK_7142379EA76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
 ALTER TABLE AccessToken ADD CONSTRAINT FK_B39617F519EB6921 FOREIGN KEY (client_id) REFERENCES Client (id);
 ALTER TABLE AccessToken ADD CONSTRAINT FK_B39617F5A76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
+
+-- Added a new client with public id 1_22nbip4ffc74skwkw8wswcc4kcs88k0gwco4k8o8kk8g0w4ksw, secret 3gcqb6870fc4ssc8skockgk8gsgcookgo4gcw08so8wo8s00s8

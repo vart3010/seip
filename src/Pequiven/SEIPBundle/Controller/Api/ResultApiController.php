@@ -14,7 +14,7 @@ namespace Pequiven\SEIPBundle\Controller\Api;
 use Pequiven\MasterBundle\Entity\Rol;
 
 /**
- * Description of ResultAPIController
+ * API de Resultados
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
