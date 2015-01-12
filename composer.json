@@ -31,6 +31,7 @@
         "friendsofsymfony/rest-bundle":"@stable",
         "friendsofsymfony/user-bundle": "v1.3.3",
         "friendsofsymfony/jsrouting-bundle": "1.5.3",
+        "friendsofsymfony/oauth-server-bundle": "1.4.2",
         
         "jms/translation-bundle": "~1.1@dev",
         "jms/serializer-bundle": "@stable",
