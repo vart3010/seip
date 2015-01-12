@@ -321,7 +321,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                 }
                 
-                if(!$this->securityContext->isGranted(array('ROLE_SUPERVISER','ROLE_WORKER_PQV')) || $this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
+                if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
