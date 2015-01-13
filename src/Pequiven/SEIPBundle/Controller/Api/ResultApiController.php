@@ -35,7 +35,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
         $arrangementProgramRepository = $this->container->get('pequiven_seip.repository.arrangementprogram');
         
-        $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = array();
+        $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         
         //Programas de gestion donde es responsable
         $arrangementProgramsGoals = $arrangementProgramRepository->findByUserAndPeriodNotGoals($user,$period,$criteria);
@@ -86,11 +86,18 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         }
         
         foreach ($objetives as $key => $objetive) {
-            $objetives[$key] = array(
+            $data = array(
                 'id' => sprintf('OB-%s',$objetive->getId()),
                 'description' => $objetive->getDescription(),
                 'result' => $this->formatResult($objetive->getResult()),
             );
+            if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
+                $objetivesOO[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                $objetivesOT[$objetive->getId()] = $data;
+            }else if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+                $objetivesOE[$objetive->getId()] = $data;
+            }
         }
         
         foreach ($goals as $key => $goal) {
@@ -108,8 +115,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         }
         
         if(!$canBeEvaluated){
-            $goals = $arrangementPrograms = $objetives = array();
+            $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         }
+        
         $data = array(
             'data' => array(
                 'user' => $user,
@@ -119,7 +127,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                         'arrangementPrograms' => $arrangementPrograms,
                     ),
                     'results' => array(
-                        'objetives' => $objetives,
+                        'objetives' => array(
+                            'OO' => $objetivesOO,
+                            'OT' => $objetivesOT,
+                            'OE' => $objetivesOE,
+                        ),
                     ),
                 ),
             ),

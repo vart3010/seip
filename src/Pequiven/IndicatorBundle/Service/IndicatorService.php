@@ -70,6 +70,18 @@ class IndicatorService implements ContainerAwareInterface
                 $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
             }
         }
+        
+        $exp = '\$';
+        for($i=1;$i < 10; $i++) {
+            $exp .= '\$';
+            $matches = array();
+            if(preg_match('/'.$exp.'/i', $formulaPaser,$matches)){
+                $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
+                foreach ($matches as $value) {
+                    $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
+                }
+            }
+        }
         return $formulaPaser;
     }
     
