@@ -144,6 +144,10 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
         }
         
+        if(isset($criteria['status'])){
+            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
+        }
+        
 //        $this->applyCriteria($queryBuilder, $criteria);
 //        $this->applySorting($queryBuilder, $orderBy);
 
