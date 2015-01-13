@@ -258,6 +258,13 @@ class ArrangementProgramRepository extends EntityRepository
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
         $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('oo')
+                ->addSelect('gs')
+                ;
+                
+        $queryBuilder
                     ->leftJoin('ap.tacticalObjective', 'to')
                     ->leftJoin('to.gerencia', 'to_g')
                     ->leftJoin('ap.operationalObjective', 'oo')
