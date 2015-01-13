@@ -29,7 +29,6 @@ fos_user:
         user_manager: sonata.user.orm.user_manager
 
 fos_rest:
-    disable_csrf_role: ROLE_API
     service:
         serializer: tpg_extjs.serializer
     allowed_methods_listener: true
