@@ -78,7 +78,8 @@ class IndicatorService implements ContainerAwareInterface
             '  ',
             '   ',
         );
-        
+        $numbers = array('0','1','2','3','4','5','6','7','8','9');
+//        $equationReal = '6 + ( num_hoja_entrada_servicios_entregadas / num_valuaciones_solicitadas ) * 100 + casa - 1';
         $stringSplit = str_split($equationReal);
         $newEquation = $varEquation = '';
         foreach ($stringSplit as $key => $char) {
@@ -89,24 +90,24 @@ class IndicatorService implements ContainerAwareInterface
             $nextKey = $key + 1;
             $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
             $varEquation .= $char;
-            
             if(in_array($nextChar, $especialCaracter,true)){
-                $newEquation .= '$'.$varEquation;
+                if(in_array($varEquation[0], $numbers)){
+                }else{
+                    $newEquation .= '$';
+                }
+                $newEquation .= $varEquation;
                 $varEquation = '';
             }
         }
+        if(strlen($varEquation) > 0){//Se adjunta lo que queda de la formula que no contiene variable
+            if(in_array($varEquation[0], $numbers)){
+            }else{
+                $newEquation .= '$';
+            }
+            $newEquation .= $varEquation;
+        }
         $formulaPaser = $newEquation;
-//        $exp = '\$';
-//        for($i=1;$i < 10; $i++) {
-//            $exp .= '\$';
-//            $matches = array();
-//            if(preg_match('/'.$exp.'/i', $formulaPaser,$matches)){
-//                $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
-//                foreach ($matches as $value) {
-//                    $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
-//                }
-//            }
-//        }
+        
         return $formulaPaser;
     }
     
