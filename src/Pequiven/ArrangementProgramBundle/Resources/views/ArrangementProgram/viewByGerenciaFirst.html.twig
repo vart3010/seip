@@ -21,6 +21,7 @@
     <div ng-controller="TableFormatController">
         <div ng-controller="ReportArrangementProgramController">
             <details class="details margin-bottom" open="">
+                <input type="hidden" id="planning" value="VIEW_PLANNING">
                 <summary role="button" aria-expanded="true">
                     {{ 'pequiven.filters'|trans({},'messages') }}
 
@@ -31,7 +32,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" {% if isAllowFilterComplejo == false %}disabled="disabled"{% endif %}{% if user.complejo != null %}ng-init="model.complejo = {{ user.complejo.id }}"{% endif %} >
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-options="value as value.description for (key,value) in data.complejos" disabled="disabled" {% if user.complejo != null %}ng-init="model.complejo = {{ gerencia.complejo.id }}"{% endif %} >
                                     <option value=''></option>
                                 </select>
                             </div>
@@ -40,7 +41,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-change="getSecondLineManagement()" ng-options="value as value.description group by model.complejo.description for (key,value) in model.complejo.gerencias" {% if isAllowFilterFirstLineManagement == false %}disabled="disabled"{% endif %} {% if user.gerencia %}ng-init="model.firstLineManagement = {{ user.gerencia.id }}"{% endif %}>
+                                <select class="select2 input-xlarge" id="firstLineManagement" ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in model.complejo.gerencias" disabled="disabled" ng-init="model.firstLineManagement = {{ gerencia.id }}">
                                     <option value=''></option>
                                 </select>
                             </div>
@@ -50,7 +51,7 @@
                             <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" {% if isAllowFilterManagementSecondLine == false %}disabled="disabled" {% endif %} {% if user.gerenciaSecond %}ng-init="model.secondLineManagement = {{ user.gerenciaSecond.id }}"{% endif%} >
+                                <select class="select2 input-xlarge" id="secondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
                                     <option value=''></option>
                                 </select>
                             </div>
@@ -161,9 +162,39 @@
             
             function charge(){
                $('.select2').select2({
-                   allowClear: true
-               });
+                allowClear: true
+                });
             }
+            
+            var urlResponsibles = '{{ path('pequiven_user_search') }}';
+            var parametersSelectResponsibles = {
+                    minimumInputLength: 1,
+                    multiple: true,
+                    allowClear: true,
+                    ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                        url: urlResponsibles,
+                        dataType: 'json',
+                        quietMillis: 250,
+                        data: function (term, page) {
+                            return {
+                                query: term, // search term
+                            };
+                        },
+                        results: function (data, page) { // parse the results into the format expected by Select2.
+                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                            return { results: data };
+                        },
+                        cache: true
+                    },
+                    initSelection: function(element, callback){
+                    },
+                    formatResult: responsiblesFormatResult, // omitted for brevity, see the source of this page
+                    formatSelection: responsiblesFormatResult,  // omitted for brevity, see the source of this page
+                    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+             };
+
+            $('#responsibles').select2(parametersSelectResponsibles);
+            $('#responsiblesGoals').select2(parametersSelectResponsibles);
         });
         
         function getTableExtraInfo(data)

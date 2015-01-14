@@ -88,8 +88,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
     public function isAllowToSendToDraft(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
-        if( ($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
+        if( (($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)) || ($user->isAllowSuperAdmin()) 
             ){
             $valid = true;
         }

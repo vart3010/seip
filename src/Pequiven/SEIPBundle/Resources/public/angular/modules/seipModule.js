@@ -659,6 +659,9 @@ angular.module('seipModule.controllers', [])
             };
         })
         .controller('ReportArrangementProgramController', function($scope, $http) {
+            var planning = angular.element('#planning');
+            var isPlanning = (planning.val() != undefined ) ? true : false;
+
             $scope.data = {
                 tacticals: null,
                 operatives: null,
@@ -699,16 +702,18 @@ angular.module('seipModule.controllers', [])
                 });
             };
             $scope.getOperatives();
-            
-//            $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
-//                    .success(function(data) {
-//                        $scope.data.first_line_managements = data;
-//                        if($scope.model.firstLineManagement != null){
-//                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
-//                                $scope.model.firstLineManagement = selected;
-//                            });
-//                        }
-//                    });
+            if(isPlanning){
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+                        .success(function(data) {
+                            $scope.data.first_line_managements = data;
+                            if($scope.model.firstLineManagement != null){
+                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
+                                    console.log(selected);
+                                    $scope.model.firstLineManagement = selected;
+                                });
+                            }
+                        });
+            }
             //Busca las gerencias de segunda linea
             $scope.getSecondLineManagement = function(gerencia){
                 var parameters = {
@@ -733,7 +738,9 @@ angular.module('seipModule.controllers', [])
                         }
                     });
             };
-            $scope.getSecondLineManagement();
+            if(!isPlanning){
+                $scope.getSecondLineManagement();
+            }
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
