@@ -489,6 +489,23 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
     {
         return $this->goals;
     }
+    
+    /**
+     * 
+     */
+    public function isAllowSuperAdmin(){
+        $isSuperAdmin = false;
+        $level = Rol::ROLE_SUPER_ADMIN;
+        $groups = $this->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() == $level)
+            {
+                $isSuperAdmin = true;
+            }
+        }
+        return $isSuperAdmin;
+    }
+    
     /**
      * Devuelve el nivel del rol asignado
      * @return integer
