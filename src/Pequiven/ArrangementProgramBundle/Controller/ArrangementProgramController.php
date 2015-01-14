@@ -355,7 +355,12 @@ class ArrangementProgramController extends SEIPController
         $user = $this->getUser();
         $periodService = $this->getPeriodService();
         
+        if(!$periodService->isAllowLoadArrangementProgram()){
+            throw $this->createAccessDeniedHttpException('La carga de programas de gestion no se encuentra habilitada para este periodo.');
+        }
+        
         $period = $periodService->getPeriodActive();
+        
         $date = new \DateTime();
         
         $entity

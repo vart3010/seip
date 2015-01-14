@@ -19,7 +19,23 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class PeriodService extends ContainerAware 
 {
+    function isAllowLoadArrangementProgram()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        var_dump($period->getDateEndLoadArrangementProgram() <= $now);
+        die;
+        if($period->getDateStartLoadArrangementProgram() >= $now && $period->getDateEndLoadArrangementProgram() <= $now){
+            $result = true;
+        }
+        return $result;
+    }
     
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
     function getPeriodActive()
     {
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
