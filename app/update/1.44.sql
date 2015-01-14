@@ -14,3 +14,8 @@ ALTER TABLE RefreshToken ADD CONSTRAINT FK_7142379EA76ED395 FOREIGN KEY (user_id
 
 -- Agregar fuente de equacion real y plan
 ALTER TABLE seip_c_formula ADD sourceEquationReal LONGTEXT DEFAULT NULL, ADD sourceEquationPlan LONGTEXT DEFAULT NULL;
+-- Agregar campo descripcion a el periodo
+ALTER TABLE Period ADD description VARCHAR(255) NOT NULL;
+UPDATE `Period` SET `description`=`name` WHERE `id`=1;
+UPDATE `Period` SET `name`=2014 WHERE `id`=1;
+CREATE UNIQUE INDEX name_idx ON Period (name);

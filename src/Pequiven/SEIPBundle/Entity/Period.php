@@ -7,7 +7,7 @@ use Pequiven\SEIPBundle\Model\Period as Base;
 /**
  * Periodo
  *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="name_idx", columns={"name"})})
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  */
 class Period extends Base
@@ -28,6 +28,14 @@ class Period extends Base
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * Description del periodo
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
 
     /**
      * Fecha de inicio
@@ -156,6 +164,21 @@ class Period extends Base
         return $this->status;
     }
     
+    function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * 
+     * @param type $description
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    function setDescription($description) {
+        $this->description = $description;
+        
+        return $this;
+    }
+
     public function __toString() {
         return $this->name;
     }
