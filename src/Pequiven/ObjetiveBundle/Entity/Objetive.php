@@ -199,6 +199,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
