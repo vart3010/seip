@@ -37,7 +37,7 @@ class IndicatorService implements ContainerAwareInterface
                 $$name = $data[$name];
             }
         }
-        
+        $sourceEquationReal = $sourceEquationPlan = 0.0;
         if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
             $sourceEquationPlan = $this->parseFormulaVars($formula,$formula->getSourceEquationPlan());
             $sourceEquationReal = $this->parseFormulaVars($formula,$formula->getSourceEquationReal());
@@ -67,33 +67,46 @@ class IndicatorService implements ContainerAwareInterface
      */
     public function parseFormulaVars(Formula $formula,$equationReal)
     {
-        $variables = $formula->getVariables();
-        $variablesExtra = array('equation_real','equation_plan');
+        $especialCaracter = array(
+            '(',
+            ')',
+            '+',
+            '-',
+            '*',
+            '/',
+            ' ',
+            '  ',
+            '   ',
+        );
         
-        $formulaPaser = $equationReal;
-        foreach ($variables as $variable) {
-            $name = $variable->getName();
-            if(preg_match('/'.$name.'/i', $formulaPaser)){
-                $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
+        $stringSplit = str_split($equationReal);
+        $newEquation = $varEquation = '';
+        foreach ($stringSplit as $key => $char) {
+            if(in_array($char, $especialCaracter,true)){
+                $newEquation .= $char;
+                continue;
+            }
+            $nextKey = $key + 1;
+            $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
+            $varEquation .= $char;
+            
+            if(in_array($nextChar, $especialCaracter,true)){
+                $newEquation .= '$'.$varEquation;
+                $varEquation = '';
             }
         }
-        foreach ($variablesExtra as $name) {
-            if(preg_match('/'.$name.'/i', $formulaPaser)){
-                $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
-            }
-        }
-        
-        $exp = '\$';
-        for($i=1;$i < 10; $i++) {
-            $exp .= '\$';
-            $matches = array();
-            if(preg_match('/'.$exp.'/i', $formulaPaser,$matches)){
-                $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
-                foreach ($matches as $value) {
-                    $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
-                }
-            }
-        }
+        $formulaPaser = $newEquation;
+//        $exp = '\$';
+//        for($i=1;$i < 10; $i++) {
+//            $exp .= '\$';
+//            $matches = array();
+//            if(preg_match('/'.$exp.'/i', $formulaPaser,$matches)){
+//                $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
+//                foreach ($matches as $value) {
+//                    $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
+//                }
+//            }
+//        }
         return $formulaPaser;
     }
     
