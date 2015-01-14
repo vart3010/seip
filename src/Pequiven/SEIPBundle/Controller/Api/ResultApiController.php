@@ -11,8 +11,6 @@
 
 namespace Pequiven\SEIPBundle\Controller\Api;
 
-use Pequiven\MasterBundle\Entity\Rol;
-
 /**
  * API de Resultados
  *
@@ -50,8 +48,6 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         $canBeEvaluated = true;
         
         if(count($errors) == 0){
-            $level = $user->getLevelRealByGroup();
-
             //Repositorios
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
             $arrangementProgramRepository = $this->container->get('pequiven_seip.repository.arrangementprogram');
@@ -101,6 +97,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 
                 $planDateStart = $summary['dateStartPlanned'];
                 $planDateEnd = $summary['dateEndPlanned'];
+                
+                $realDateStart = $summary['dateStartReal'];
+                $realDateEnd = $summary['dateEndReal'];
                         
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
@@ -108,11 +107,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'result' => $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
                         'plan' => $planDateStart,
-                        'real' => ''
+                        'real' => $realDateStart
                     ),
                     'dateEnd' => array(
                         'plan' => $planDateEnd,
-                        'real' => ''
+                        'real' => $realDateEnd
                     ),
                 );
             }

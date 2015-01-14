@@ -277,6 +277,8 @@ abstract class ArrangementProgram
         $advancesGoalDetailsReal = array();
         $advancesGoalDetailsPlanned = array();
         $dateStartPlanned = $dateStartReal = $dateEndPlanned = $dateEndReal = null;
+        $realMonthDateStart = 13;
+        $realMonthDateEnd = -1;
         
         if($timeline){
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
@@ -315,6 +317,14 @@ abstract class ArrangementProgram
                         }
                         $advancesGoalDetailsReal[$nameProperty] += $advanceReal;
                         $advancesReal +=  $advanceReal;
+                        
+                        $month = GoalDetails::getMonthOfReal($nameProperty);
+                        if($real > 0 && $realMonthDateStart > $month ){
+                            $realMonthDateStart = $month;
+                        }
+                        if($real > 0 && $realMonthDateEnd < $month){
+                           $realMonthDateEnd =  $month;
+                        }
                     }
                     if(preg_match('/'.$nameMatchPlanned.'/i', $methodName)){
                         $class = $method->getDeclaringClass();
@@ -342,6 +352,15 @@ abstract class ArrangementProgram
                 
             }
         }
+        $dateStartReal = clone($dateStartPlanned);
+        $dateEndReal = clone($dateEndPlanned);
+        if($realMonthDateStart != 13){
+            $dateStartReal->setDate($dateStartReal->format('Y'), $realMonthDateStart, 1);
+        }
+        if($realMonthDateEnd != -1){
+            $dateEndReal->setDate($dateEndReal->format('Y'), $realMonthDateEnd, \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($dateEndReal->format('Y'), $realMonthDateEnd));
+        }
+        
         $summary['advances'] = $advancesReal;
         $summary['weight'] = $totalWeight;
         $summary['advancesPlanned'] = $advancesPlanned;
@@ -349,6 +368,8 @@ abstract class ArrangementProgram
         $summary['detailsAdvancesReal'] = $advancesGoalDetailsReal;
         $summary['dateStartPlanned'] = $dateStartPlanned;
         $summary['dateEndPlanned'] = $dateEndPlanned;
+        $summary['dateStartReal'] = $dateStartReal;
+        $summary['dateEndReal'] = $dateEndReal;
         return $summary;
     }
     
