@@ -95,18 +95,45 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }
 
             foreach ($arrangementPrograms as $key => $arrangementProgram) {
+                $period = $arrangementProgram->getPeriod();
+                
+                $summary = $arrangementProgram->getSummary();
+                
+                $planDateStart = $summary['dateStartPlanned'];
+                $planDateEnd = $summary['dateEndPlanned'];
+                        
                 $arrangementPrograms[$key] = array(
                     'id' => sprintf('PG-%s',$arrangementProgram->getId()),
                     'description' => $arrangementProgram->getRef(),
                     'result' => $this->formatResult($arrangementProgram->getResult()),
+                    'dateStart' => array(
+                        'plan' => $planDateStart,
+                        'real' => ''
+                    ),
+                    'dateEnd' => array(
+                        'plan' => $planDateEnd,
+                        'real' => ''
+                    ),
                 );
             }
 
             foreach ($objetives as $key => $objetive) {
+                $period = $objetive->getPeriod();
+                $planDateStart = $period->getDateStart();
+                $planDateEnd = $period->getDateEnd();
+                
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
                     'description' => $objetive->getDescription(),
                     'result' => $this->formatResult($objetive->getResult()),
+                    'dateStart' => array(
+                        'plan' => $planDateStart,
+                        'real' => $planDateStart
+                    ),
+                    'dateEnd' => array(
+                        'plan' => $planDateEnd,
+                        'real' => $planDateEnd
+                    ),
                 );
                 if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
                     $objetivesOO[$objetive->getId()] = $data;
@@ -118,10 +145,30 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }
 
             foreach ($goals as $key => $goal) {
+//                var_dump($goal->getTimeLine()->getArrangementProgram()->getId());
+                $goalDetails = $goal->getGoalDetails();
+                $summary = $goalDetails->getSummary();
+                
+                $planDateStart = $goal->getStartDate();
+                $realDateStart = clone($planDateStart);
+                $realDateStart->setDate($realDateStart->format('Y'), $summary['realMonthDateStart'], 1);
+                
+                $planDateEnd = $goal->getEndDate();
+                $realDateEnd = clone($planDateEnd);
+                $realDateEnd->setDate($realDateEnd->format('Y'), $summary['realMonthDateEnd'], \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($realDateEnd->format('Y'), $summary['realMonthDateEnd']));
+                
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
                     'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
+                    'dateStart' => array(
+                        'plan' => $planDateStart,
+                        'real' => $realDateStart
+                    ),
+                    'dateEnd' => array(
+                        'plan' => $planDateEnd,
+                        'real' => $realDateEnd
+                    ),
                 );
             }
 

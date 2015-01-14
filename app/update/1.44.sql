@@ -26,3 +26,6 @@ UPDATE `Period` SET `dateStartNotificationArrangementProgram` = '2014-01-01' WHE
 UPDATE `Period` SET `dateStartLoadArrangementProgram` = '2014-01-01' WHERE `Period`.`id` = 1;
 UPDATE `Period` SET `dateEndNotificationArrangementProgram` = '2014-01-30' WHERE `Period`.`id` = 1;
 UPDATE `Period` SET `dateEndLoadArrangementProgram` = '2015-01-30' WHERE `Period`.`id` = 1;
+
+UPDATE `seip_objetive` SET period_id=1 WHERE period_id is null;
+ALTER TABLE seip_objetive CHANGE period_id period_id INT NOT NULL;

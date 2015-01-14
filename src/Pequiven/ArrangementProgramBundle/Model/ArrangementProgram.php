@@ -258,6 +258,10 @@ abstract class ArrangementProgram
             'weight' => 0,
             'advances' => 0,
             'advancesPlanned' => 0,
+            'dateStartPlanned' => null,
+            'dateStartReal' => null,
+            'dateEndPlanned' => null,
+            'dateEndReal' => null,
         );
         $limitMonthToNow = false;
         $month = null;
@@ -272,11 +276,21 @@ abstract class ArrangementProgram
         $timeline = $this->getTimeline();
         $advancesGoalDetailsReal = array();
         $advancesGoalDetailsPlanned = array();
+        $dateStartPlanned = $dateStartReal = $dateEndPlanned = $dateEndReal = null;
         
         if($timeline){
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
+                //Buscar la fecha de inicio planificada
+                if($dateStartPlanned === null || $dateStartPlanned > $goal->getStartDate()){
+                    $dateStartPlanned = $goal->getStartDate();
+                }
+                //Buscar la fecha de fin planificada
+                if($dateEndPlanned === null || $dateEndPlanned < $goal->getEndDate()){
+                    $dateEndPlanned = $goal->getEndDate();
+                }
                 $goalDetails = $goal->getGoalDetails();
+                
                 $weight = 0;
                 if($goalDetails !== null && $goalDetails->getGoal() !== null){
                     $weight = $goalDetails->getGoal()->getWeight();
@@ -333,6 +347,8 @@ abstract class ArrangementProgram
         $summary['advancesPlanned'] = $advancesPlanned;
         $summary['detailsAdvancesPlanned'] = $advancesGoalDetailsPlanned;
         $summary['detailsAdvancesReal'] = $advancesGoalDetailsReal;
+        $summary['dateStartPlanned'] = $dateStartPlanned;
+        $summary['dateEndPlanned'] = $dateEndPlanned;
         return $summary;
     }
     
