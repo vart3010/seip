@@ -30,6 +30,12 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ))
             ->add('variableToRealValue')
             ->add('variableToPlanValue')
+            ->add('sourceEquationReal',null,array(
+                'label' => 'Source Equation Real (equation_real)'
+            ))
+            ->add('sourceEquationPlan',null,array(
+                'label' => 'Source Equation Plan (equation_plan)'
+            ))
         ;
     }
     

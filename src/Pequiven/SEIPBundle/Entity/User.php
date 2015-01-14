@@ -170,6 +170,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
         $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

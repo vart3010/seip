@@ -60,11 +60,15 @@ class CoreExtension extends \Twig_Extension
             $parameters[] = $item;
         }
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $periodDescription = '';
+        if($period){
+            $periodDescription = $period->getDescription();
+        }
         
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
-                'period' => $period
+                'period' => $periodDescription
             )
         );
     }

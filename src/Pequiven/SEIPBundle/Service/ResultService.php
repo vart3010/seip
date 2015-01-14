@@ -324,7 +324,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setPreviusValue($previusValue)
                 ;
         
-        $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+        $indicatorService = $this->getIndicatorService();
         
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
@@ -337,6 +337,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaRealAutomatic($indicator);
             }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
                 $this->calculateFormulaAccumulate($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
             }
         }
         $indicator->updateLastDateCalculateResult();
@@ -390,6 +392,47 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $totalPlan += $formulaParameters[$variableToPlanValueName];
             $totalReal += $formulaParameters[$variableToRealValueName];
+        }
+        
+        $value = $totalReal;
+        $indicator
+                ->setTotalPlan($totalPlan)
+                ->setValueFinal($value);
+    }
+    
+    /**
+     * Calcula la formula con plan y real automatico a partir de equaciones de las formulas
+     * 
+     * @param Indicator $indicator
+     */
+    public function calculateFormulaRealPlanAutomaticFromEQ(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    {
+        $indicatorService = $this->getIndicatorService();
+        
+        $formula = $indicator->getFormula();
+        
+        $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
+        $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
+        
+        $equation_real = $equation_plan = 0.0;
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $totalPlan = $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            
+            foreach ($formulaParameters as $name => $value) {
+                $$name = 0;
+                if(isset($formulaParameters[$name])){
+                    $$name = $value;
+                }
+            }
+            
+            eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+            eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+            
+            $totalPlan += $equation_plan;
+            $totalReal += $equation_real;
         }
         
         $value = $totalReal;
@@ -477,6 +520,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
 
         return $user;
+    }
+
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    public function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
