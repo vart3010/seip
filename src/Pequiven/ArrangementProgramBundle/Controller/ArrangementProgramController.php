@@ -358,7 +358,6 @@ class ArrangementProgramController extends SEIPController
         $period = $periodService->getPeriodActive();
         $date = new \DateTime();
         
-        die;
         $entity
                 ->setType($type)
                 ->setPeriod($period)
@@ -1285,6 +1284,6 @@ class ArrangementProgramController extends SEIPController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period')->getPeriodActive();
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }
