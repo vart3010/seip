@@ -254,7 +254,7 @@ class ArrangementProgramController extends SEIPController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $period = $this->getPeriodService()->getPeriodActive();
         $criteria['ap.period'] = $period;
         $criteria['ap.user'] = $this->getUser();
         
@@ -353,7 +353,12 @@ class ArrangementProgramController extends SEIPController
         $type = $request->get("type");
         $entity = new ArrangementProgram();
         $user = $this->getUser();
-        $period = $this->getRepositoryById('period')->findOneActive();
+        $periodService = $this->getPeriodService();
+        
+        $period = $periodService->getPeriodActive();
+        $date = new \DateTime();
+        
+        die;
         $entity
                 ->setType($type)
                 ->setPeriod($period)
@@ -1273,5 +1278,13 @@ class ArrangementProgramController extends SEIPController
     
     protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
         return parent::trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period')->getPeriodActive();
     }
 }

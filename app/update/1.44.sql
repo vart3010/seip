@@ -19,3 +19,10 @@ ALTER TABLE Period ADD description VARCHAR(255) NOT NULL;
 UPDATE `Period` SET `description`=`name` WHERE `id`=1;
 UPDATE `Period` SET `name`=2014 WHERE `id`=1;
 CREATE UNIQUE INDEX name_idx ON Period (name);
+
+-- Agregar campos de fechas para inicio y fin de carga y notificacion de programas de gestion.
+ALTER TABLE Period ADD dateStartNotificationArrangementProgram DATE DEFAULT NULL, ADD dateEndNotificationArrangementProgram DATE DEFAULT NULL, ADD dateStartLoadArrangementProgram DATE DEFAULT NULL, ADD dateEndLoadArrangementProgram DATE DEFAULT NULL;
+UPDATE `Period` SET `dateStartNotificationArrangementProgram` = '2014-01-01' WHERE `Period`.`id` = 1;
+UPDATE `Period` SET `dateStartLoadArrangementProgram` = '2014-01-01' WHERE `Period`.`id` = 1;
+UPDATE `Period` SET `dateEndNotificationArrangementProgram` = '2014-01-30' WHERE `Period`.`id` = 1;
+UPDATE `Period` SET `dateEndLoadArrangementProgram` = '2015-01-30' WHERE `Period`.`id` = 1;

@@ -44,7 +44,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             $errors[] = sprintf('El numero de personal "%s" no existe',$numPersonal);
         }
         
-        if(!$period){
+        if($periodName != '' && !$period){
             $errors[] = sprintf('El período "%s" no existe.',$periodName);
         }
         $canBeEvaluated = true;
