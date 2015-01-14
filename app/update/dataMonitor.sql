@@ -19,7 +19,7 @@ UPDATE seip_monitor SET objTacticOriginal = 6, indTacticOriginal = 6, objOperati
 -- ESTIMACIÓN DE COSTOS
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 2, objOperativeOriginal = 15, indOperativeOriginal = 17, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 11;
 -- FINANZAS
-UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 59, indOperativeOriginal = 56, arrangementProgramTactic = 0, arrangementProgramOperative = 58 WHERE fk_gerencia = 22;
+UPDATE seip_monitor SET objTacticOriginal = 4, indTacticOriginal = 0, objOperativeOriginal = 69, indOperativeOriginal = 56, arrangementProgramTactic = 0, arrangementProgramOperative = 58 WHERE fk_gerencia = 22;
 -- P.C.P.
 UPDATE seip_monitor SET objTacticOriginal = 7, indTacticOriginal = 4, objOperativeOriginal = 108, indOperativeOriginal = 135, arrangementProgramTactic = 0, arrangementProgramOperative = 25 WHERE fk_gerencia = 24;
 -- PROYECTOS INTERNACIONALES
