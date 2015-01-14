@@ -122,6 +122,22 @@ class Formula extends modelFormula
      */
     protected $variableToPlanValue;
 
+    /**
+     * Ecuacion para calcular el valor real (Se puede usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="sourceEquationReal", type="text",nullable=true)
+     */
+    private $sourceEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor planificado (Se puede usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="sourceEquationPlan", type="text",nullable=true)
+     */
+    private $sourceEquationPlan;
+    
     public function __construct() {
         $this->variables = new ArrayCollection();
     }
@@ -443,6 +459,27 @@ class Formula extends modelFormula
         return $this->variableToPlanValue;
     }
     
+    
+    function getSourceEquationReal() {
+        return $this->sourceEquationReal;
+    }
+
+    function getSourceEquationPlan() {
+        return $this->sourceEquationPlan;
+    }
+
+    function setSourceEquationReal($sourceEquationReal) {
+        $this->sourceEquationReal = $sourceEquationReal;
+        
+        return $this;
+    }
+
+    function setSourceEquationPlan($sourceEquationPlan) {
+        $this->sourceEquationPlan = $sourceEquationPlan;
+        
+        return $this;
+    }
+
     public function __toString() {
         return $this->getEquation() ?: '-';
     }

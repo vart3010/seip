@@ -11,3 +11,6 @@ ALTER TABLE RefreshToken ADD CONSTRAINT FK_7142379EA76ED395 FOREIGN KEY (user_id
 
 
 -- app/console fos:oauth-server:client:create --grant-type="password"
+
+-- Agregar fuente de equacion real y plan
+ALTER TABLE seip_c_formula ADD sourceEquationReal LONGTEXT DEFAULT NULL, ADD sourceEquationPlan LONGTEXT DEFAULT NULL;
