@@ -451,6 +451,7 @@ class ArrangementProgramController extends SEIPController
     {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
 
@@ -468,6 +469,7 @@ class ArrangementProgramController extends SEIPController
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
         $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
+        $isAllowSuperAdmin = $user->isAllowSuperAdmin();
         
         return array(
             'entity'      => $entity,
@@ -478,6 +480,7 @@ class ArrangementProgramController extends SEIPController
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
             'isAllowToNotity' => $isAllowToNotity,
+            'isAllowSuperAdmin' => $isAllowSuperAdmin,
         );
     }
 
