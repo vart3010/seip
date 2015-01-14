@@ -221,7 +221,7 @@
     {% if isAllowToSendToReview == true %}
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
-    {% if isAllowSuperAdmin == true AND (entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or  entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW'))%}
+    {% if isAllowSuperAdmin == true and (entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or  entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW')) %}
         {{ buttons.generic_modal(path('arrangementprogram_return_to_draft', { 'id': entity.id }),('pequiven.arrangement_program.buttons.return_to_draft'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.return_to_draft'|trans) ~ filedObservation}) }}
     {% endif %}
      {% if isAllowToReview == true %}
