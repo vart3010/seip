@@ -20,6 +20,7 @@
                 <li>
                         {% set p = t['parent'] %}
                         {% set avancedUsed = p.getResult %}
+                        {% set avancedUsedText = avancedUsed %}
                         {% set href = generateLinkUrlOnly(p,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
                         {% if href != '' %}
                             <a href="{{ href }}">
@@ -28,11 +29,15 @@
                         {% if href != '' %}
                             </a>
                         {% endif %}
+                        {% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
+                        ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - 
+                        
                         {{ generateLink(p,null,{truncate:limitTruncate}) }}
                     <ul class="fa-ul">
                     {% for chlid in t['child'] %}
                         <li>
                             {% set avancedUsed = chlid.getResult %}
+                            {% set avancedUsedText = avancedUsed %}
                             {% set href = generateLinkUrlOnly(chlid,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
                             {% if href != '' %}
                                 <a href="{{ href }}">
@@ -48,6 +53,7 @@
                                     {% if ch.getGerenciaByLevel  == entity %}
                                         <li>
                                             {% set avancedUsed = ch.getResult %}
+                                            {% set avancedUsedText = avancedUsed %}
                                             {% set href = generateLinkUrlOnly(ch,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
                                             {% if href != '' %}
                                                 <a href="{{ href }}">
