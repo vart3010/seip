@@ -19,6 +19,26 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class PeriodService extends ContainerAware 
 {
+    /**
+     * Retorna si se encuetra habilitada la notificacion del programa de gestion para el periodo activo.
+     * @return boolean
+     */
+    function isAllowNotifyArrangementProgram()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        
+        if($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()){
+            $result = true;
+        }
+        return false;
+    }
+    
+    /**
+     * Retorna si se encuetra habilitada la carga de programa de gestion para el periodo activo.
+     * @return boolean
+     */
     function isAllowLoadArrangementProgram()
     {
         $result = false;
