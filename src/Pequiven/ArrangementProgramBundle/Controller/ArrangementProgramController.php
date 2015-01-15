@@ -391,12 +391,12 @@ class ArrangementProgramController extends SEIPController
         $periodService = $this->getPeriodService();
         
         if(!$periodService->isAllowLoadArrangementProgram()){
-            throw $this->createAccessDeniedHttpException('La carga de programas de gestion no se encuentra habilitada para este periodo.');
+            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram',array(),'flashes');
+            $this->setFlash('error', $message);
+            throw $this->createAccessDeniedHttpException($message);
         }
         
         $period = $periodService->getPeriodActive();
-        
-        $date = new \DateTime();
         
         $entity
                 ->setType($type)
