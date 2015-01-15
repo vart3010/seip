@@ -189,6 +189,49 @@ class GoalDetails {
         return $nameProperty;
     }
     
+    function getSummary()
+    {
+        $summary = array(
+            'advancesReal' => 0.0,
+            'realMonthDateStart' => null,
+            'realMonthDateEnd' => null,
+        );
+        $realMonthDateStart = $realMonthDateEnd = null;
+        
+        $nameMatchReal = '^get\w+Real$';
+        $reflection = new \ReflectionClass($this);
+        $advancesReal = 0.0;
+        $quantity = 0;
+        foreach ($reflection->getMethods() as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
+                continue;
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $real = $this->$methodName();
+                $advancesReal +=  $real;
+                $quantity++;
+            }
+        }
+        $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
+        foreach (self::getMonthsReal() as $monthReal => $month) {
+            $valueReal = $propertyAccessor->getValue($this, $monthReal);
+            if($realMonthDateStart === null && $valueReal > 0){
+                $realMonthDateStart = $month;
+            }
+            if($valueReal != 0){
+               $realMonthDateEnd =  $month;
+            }
+        }
+        
+        $summary['advancesReal'] = $advancesReal;
+        $summary['realMonthDateStart'] = $realMonthDateStart;
+        $summary['realMonthDateEnd'] = $realMonthDateEnd;
+        
+        return $summary;
+    }
+    
     /**
      * Retorna el avance de la meta
      * @return type

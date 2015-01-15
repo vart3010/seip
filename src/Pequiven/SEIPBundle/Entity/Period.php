@@ -61,6 +61,37 @@ class Period extends Base
      */
     private $status = true;
 
+    /**
+     * Fecha inicio de notificación de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartNotificationArrangementProgram;
+
+    /**
+     * Fecha fin de notificación de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndNotificationArrangementProgram;
+
+    /**
+     * Fecha inicio de carga de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartLoadArrangementProgram;
+
+    /**
+     * Fecha fin de carga de programas de gestión.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndLoadArrangementProgram;
 
     /**
      * Get id
@@ -181,5 +212,97 @@ class Period extends Base
 
     public function __toString() {
         return $this->description;
+    }
+
+    /**
+     * Set dateStartNotificationArrangementProgram
+     *
+     * @param \DateTime $dateStartNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateStartNotificationArrangementProgram($dateStartNotificationArrangementProgram)
+    {
+        $this->dateStartNotificationArrangementProgram = $dateStartNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartNotificationArrangementProgram()
+    {
+        return $this->dateStartNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateEndNotificationArrangementProgram
+     *
+     * @param \DateTime $dateEndNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateEndNotificationArrangementProgram($dateEndNotificationArrangementProgram)
+    {
+        $this->dateEndNotificationArrangementProgram = $dateEndNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndNotificationArrangementProgram()
+    {
+        return $this->dateEndNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateStartLoadArrangementProgram
+     *
+     * @param \DateTime $dateStartLoadArrangementProgram
+     * @return Period
+     */
+    public function setDateStartLoadArrangementProgram($dateStartLoadArrangementProgram)
+    {
+        $this->dateStartLoadArrangementProgram = $dateStartLoadArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadArrangementProgram()
+    {
+        return $this->dateStartLoadArrangementProgram;
+    }
+
+    /**
+     * Set dateEndLoadArrangementProgram
+     *
+     * @param \DateTime $dateEndLoadArrangementProgram
+     * @return Period
+     */
+    public function setDateEndLoadArrangementProgram($dateEndLoadArrangementProgram)
+    {
+        $this->dateEndLoadArrangementProgram = $dateEndLoadArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadArrangementProgram()
+    {
+        return $this->dateEndLoadArrangementProgram;
     }
 }

@@ -37,7 +37,7 @@ class IndicatorService implements ContainerAwareInterface
                 $$name = $data[$name];
             }
         }
-        
+        $sourceEquationReal = $sourceEquationPlan = 0.0;
         if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
             $sourceEquationPlan = $this->parseFormulaVars($formula,$formula->getSourceEquationPlan());
             $sourceEquationReal = $this->parseFormulaVars($formula,$formula->getSourceEquationReal());
@@ -67,33 +67,47 @@ class IndicatorService implements ContainerAwareInterface
      */
     public function parseFormulaVars(Formula $formula,$equationReal)
     {
-        $variables = $formula->getVariables();
-        $variablesExtra = array('equation_real','equation_plan');
-        
-        $formulaPaser = $equationReal;
-        foreach ($variables as $variable) {
-            $name = $variable->getName();
-            if(preg_match('/'.$name.'/i', $formulaPaser)){
-                $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
+        $especialCaracter = array(
+            '(',
+            ')',
+            '+',
+            '-',
+            '*',
+            '/',
+            ' ',
+            '  ',
+            '   ',
+        );
+        $numbers = array('0','1','2','3','4','5','6','7','8','9');
+//        $equationReal = '6 + ( num_hoja_entrada_servicios_entregadas / num_valuaciones_solicitadas ) * 100 + casa - 1';
+        $stringSplit = str_split($equationReal);
+        $newEquation = $varEquation = '';
+        foreach ($stringSplit as $key => $char) {
+            if(in_array($char, $especialCaracter,true)){
+                $newEquation .= $char;
+                continue;
             }
-        }
-        foreach ($variablesExtra as $name) {
-            if(preg_match('/'.$name.'/i', $formulaPaser)){
-                $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
-            }
-        }
-        
-        $exp = '\$';
-        for($i=1;$i < 10; $i++) {
-            $exp .= '\$';
-            $matches = array();
-            if(preg_match('/'.$exp.'/i', $formulaPaser,$matches)){
-                $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
-                foreach ($matches as $value) {
-                    $formulaPaser = preg_replace('/'.$exp.'/i', '$', $formulaPaser);
+            $nextKey = $key + 1;
+            $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
+            $varEquation .= $char;
+            if(in_array($nextChar, $especialCaracter,true)){
+                if(in_array($varEquation[0], $numbers)){
+                }else{
+                    $newEquation .= '$';
                 }
+                $newEquation .= $varEquation;
+                $varEquation = '';
             }
         }
+        if(strlen($varEquation) > 0){//Se adjunta lo que queda de la formula que no contiene variable
+            if(in_array($varEquation[0], $numbers)){
+            }else{
+                $newEquation .= '$';
+            }
+            $newEquation .= $varEquation;
+        }
+        $formulaPaser = $newEquation;
+        
         return $formulaPaser;
     }
     

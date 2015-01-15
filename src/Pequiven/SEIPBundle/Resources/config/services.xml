@@ -183,5 +183,10 @@
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
         </service>
+        <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>
