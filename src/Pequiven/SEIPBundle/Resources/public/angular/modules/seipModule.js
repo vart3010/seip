@@ -704,6 +704,10 @@ angular.module('seipModule.controllers', [])
             $scope.getOperatives();
             //Primera Línea
             if(isPlanning){
+                var parameters = {
+                    filter: {}
+                };
+                parameters.filter['complejo'] = $scope.model.complejo.id;
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
                         .success(function(data) {
                             $scope.data.first_line_managements = data;
