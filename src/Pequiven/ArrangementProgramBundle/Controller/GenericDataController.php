@@ -147,10 +147,10 @@ class GenericDataController extends SEIPController
     function getFirstLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $user = $this->getUser();
-        $criteria = array();
-        if($this->getUserManager()->isAllowFilterComplejo($user) === false){
-            $criteria['complejo'] =  $user->getComplejo();
-        }
+        $criteria = $request->get('filter',$this->config->getCriteria());
+//        if($this->getUserManager()->isAllowFilterComplejo($user) === false){
+//            $criteria['complejo'] =  $user->getComplejo();
+//        }
         $repository = $this->get('pequiven.repository.gerenciafirst');
         $results = $repository->findGerencia($criteria);
         $view = $this->view();
