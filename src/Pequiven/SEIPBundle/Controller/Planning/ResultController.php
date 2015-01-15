@@ -282,29 +282,28 @@ class ResultController extends ResourceController {
         
         $data['dataSource']['categories']['category'] = $categories;
         
+        $resultService = $this->getResultService();
+        
         return array(
             'object' => $objetives,
             'entity' => $entity,
             'heightChart' => $heightChart,
             'data' => $data,
             'tree' => $tree,
+            'resultService' => $resultService,
         );
-    }
-    
-    /**
-     * Genera un link para mostrar el objeto
-     * 
-     * @param type $entity
-     * @param type $type
-     * @return \Pequiven\SEIPBundle\Service\LinkGeneratorInterface
-     */
-    private function generateLink($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT)
-    {
-        return $this->container->get('seip.service.link_generator')->generate($entity,$type);
     }
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * Servicio de resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    private function getResultService(){
+        return $this->container->get('seip.service.result');
     }
 }
