@@ -32,7 +32,7 @@ class PeriodService extends ContainerAware
         if($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()){
             $result = true;
         }
-        return false;
+        return $result;
     }
     
     /**
