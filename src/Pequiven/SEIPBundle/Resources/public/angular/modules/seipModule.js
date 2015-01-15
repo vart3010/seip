@@ -24,8 +24,6 @@ function confirm() {
 }
 
 function getMappingModel(data,idEntity){
-//    console.log("getMappingModel");
-    //console.log(idEntity);
     var selected = null;
     angular.forEach(data,function(val,i){
         if(val != undefined){
@@ -67,12 +65,6 @@ function setValueSelect2(idSelect2, idEntity, data, callBack) {
         }
         i++;
     });
-//    console.log(idSelect2);
-//    console.log(idEntity);
-//    console.log(j);
-//    $("#"+idSelect2).select2("destroy");
-//    $("#"+idSelect2).val(j);
-//    $("#"+idSelect2).select2();
     $("#" + idSelect2).select2('val', j);
     if (callBack) {
         if(data && data[j] != undefined){
@@ -845,7 +837,6 @@ angular.module('seipModule.controllers', [])
             });
         })
         .controller('IndicatorResultController',function($scope,notificationBarService,$http,notifyService,$filter){
-            console.log('IndicatorResultController');
     
             $scope.urlValueIndicatorForm = null;
             $scope.indicator = null;
@@ -878,7 +869,6 @@ angular.module('seipModule.controllers', [])
                     }else{
                         var url = Routing.generate('pequiven_value_indicator_calculate',{idIndicator : $scope.indicator.id});
                     }
-                    console.log(formData);
                     notificationBarService.getLoadStatus().loading();
                  return $http({
                     method  : 'POST',
@@ -929,7 +919,6 @@ angular.module('seipModule.controllers', [])
                     parameters.id = resource.id;
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form',parameters);
-                console.log(url);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
@@ -1145,7 +1134,6 @@ angular.module('seipModule.controllers', [])
                     // setter
                     modalOpen.dialog("option", "buttons", [
                         {text: "Añadir", click: function() {
-                                //console.log($scope.template.confirmCallBack);
                                 if ($scope.template.confirmCallBack) {
                                     if ($scope.template.confirmCallBack()) {
                                         modalOpen.dialog("close");
@@ -1247,10 +1235,7 @@ angular.module('seipModule.controllers', [])
 
         })
         .controller('TableObjetiveStrategicController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
-//        console.log($scope.tableParams.$params.groupBy);
-//        console.log($scope.tableParams);
-//        console.log($scope.tableParams.settings().pages);
+
         })
         .controller('TableObjetiveTacticController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
             $scope.gerenciaFirst = null;
@@ -1574,7 +1559,6 @@ angular.module('seipModule.controllers', [])
             };
             
             $scope.renderChartResult = function(id,data) {
-                console.log(data);
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1618,13 +1602,9 @@ angular.module('seipModule.controllers', [])
 
         })
         .controller('TableUserController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
-//        $scope.tableParams.$params.groupBy = 'line_strategics[0].description';
-//        console.log($scope.tableParams.$params.groupBy);
-//        console.log($scope.tableParams);
-//        console.log($scope.tableParams.settings().pages);
+
         })
         .controller('UserController',function($scope,$timeout){
-            console.log('UserController');
             var model = {
                 arrangementProgramUserToRevisers: [],
                 arrangementProgramUsersToApproveTactical: [],
