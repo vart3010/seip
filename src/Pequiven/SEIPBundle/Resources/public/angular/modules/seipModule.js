@@ -708,7 +708,6 @@ angular.module('seipModule.controllers', [])
                             $scope.data.first_line_managements = data;
                             if($scope.model.firstLineManagement != null){
                                 $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
-                                    console.log(selected);
                                     $scope.model.firstLineManagement = selected;
                                 });
                             }
@@ -738,9 +737,9 @@ angular.module('seipModule.controllers', [])
                         }
                     });
             };
-            if(!isPlanning){
+            
                 $scope.getSecondLineManagement();
-            }
+            
             $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
