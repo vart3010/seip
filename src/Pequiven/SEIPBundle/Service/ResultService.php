@@ -121,18 +121,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $this->calculateResultTypeObjetive($result);
         }
         
-        if($result->getParent() == null && $result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
-            $parent = $result;
+        if($result->getParent() !== null && $result->getTypeResult() !== \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result->getParent();
             foreach ($result->getChildrens() as $child) {
                 $this->calculateResult($child);
             }
             $this->calculateResultItems($parent, $parent->getChildrens());
             
             $em->persist($parent);
-            
-            
-        }
-        if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+        }else if($result->getParent() == null && $result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result;
+            foreach ($result->getChildrens() as $child) {
+                $this->calculateResult($child);
+            }
+            $this->calculateResultItems($parent, $parent->getChildrens());
+            $em->persist($parent);
+        }else if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
             if($result->getParent() == null){
                 $parent = $result;
             }else{
@@ -342,6 +346,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         $indicator->updateLastDateCalculateResult();
+        $tendenty = $indicator->getTendency();
+        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
+            
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
+            $result = $indicator->getTotalPlan() - $indicator->getResult();
+            $indicator->setProgressToDate($result);
+        }
         
         $em = $this->getDoctrine()->getManager();
         
@@ -370,7 +381,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $quantity++;
             $value += $valueIndicator->getValueOfIndicator();
         }
+        if($quantity == 0){//Fix error de division por cero.
+            $quantity = 1;
+        }
         $value = ($value / $quantity);
+
         $indicator->setValueFinal($value);
     }
     
@@ -482,7 +497,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     
     public function getResultChildresObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive,$childrens) {
         $myProgress = $myContribution = $myContributionWithWeight = $myDuty = $myDutyWithWeight = 0.0;
-//        var_dump((string)$objetive);
         $result = $this->getResultByType($objetive->getResults(),  \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
         $countMyChildrens = count($childrens);
         $countAllChildrens = count($objetive->getChildrens());
