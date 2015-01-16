@@ -85,7 +85,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+        $criteria->remove('view_planning');
         //Filtro de gerencia de segunda linea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){
             $complejo = $criteria->remove('complejo');

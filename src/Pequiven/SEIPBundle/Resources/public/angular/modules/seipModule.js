@@ -675,18 +675,42 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 typeManagement: null
             };
-
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
-                    .success(function(data) {
-                        $scope.data.tacticals = data;
-                    });
-            //objetiveTactical
+            
+            //Objetivo Táctico
+            if(!isPlanning){
+                var parameters = {
+                    filter: {}
+                };
+                parameters.filter['view_planning'] = false;
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
+                        .success(function(data) {
+                            $scope.data.tacticals = data;
+                        });
+            } else{
+                var parameters = {
+                    filter: {}
+                };
+                var gerencia = angular.element('#idGerencia');
+                parameters.filter['gerencia'] = gerencia.val();
+                parameters.filter['view_planning'] = true;
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives',parameters))
+                        .success(function(data) {
+                            $scope.data.tacticals = data;
+                        });
+            }
+            // Objetivo Operativo
             $scope.getOperatives = function(objetiveTactical){
                 var parameters = {
                     filter: {}
                 };
+                parameters.filter['view_planning'] = false;
                 if(objetiveTactical != undefined){
                     parameters.filter['objetiveTactical'] = objetiveTactical;
+                }
+                if(objetiveTactical == undefined && isPlanning){
+                    var gerencia = angular.element('#idGerencia');
+                    parameters.filter['gerencia'] = gerencia.val();
+                    parameters.filter['view_planning'] = true;
                 }
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives',parameters))
                 .success(function(data) {
@@ -694,13 +718,15 @@ angular.module('seipModule.controllers', [])
                 });
             };
             $scope.getOperatives();
-            //Primera Línea
+            
+            //Gerencia Primera Línea
             if(isPlanning){
+                var complejo = angular.element('#idComplejo');
                 var parameters = {
                     filter: {}
                 };
-                parameters.filter['complejo'] = $scope.model.complejo.id;
-                $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management'))
+                parameters.filter['complejo'] = complejo.val();
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management',parameters))
                         .success(function(data) {
                             $scope.data.first_line_managements = data;
                             if($scope.model.firstLineManagement != null){
@@ -715,6 +741,7 @@ angular.module('seipModule.controllers', [])
                 var parameters = {
                     filter: {}
                 };
+                parameters.filter['view_planning'] = false;
                 if($scope.model.firstLineManagement != null){
                     parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
                 }
@@ -724,6 +751,12 @@ angular.module('seipModule.controllers', [])
                         parameters.filter['complejo'] = $scope.model.complejo.id;
                     }
                 }
+                if(isPlanning){
+                    parameters.filter['view_planning'] = true;
+                    var gerencia = angular.element("#idGerencia");
+                    parameters.filter['gerencia'] = gerencia.val();
+                }
+                
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management',parameters))
                     .success(function(data) {
                         $scope.data.second_line_managements = data;
@@ -734,20 +767,35 @@ angular.module('seipModule.controllers', [])
                         }
                     });
             };
-            if(!isPlanning){
-                $scope.getSecondLineManagement();
-            }
             
-            $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
+            $scope.getSecondLineManagement();
+            
+            if(!isPlanning){
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
                         $scope.data.complejos = data;
-                
                         if($scope.model.complejo != null){
                             $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
                                 $scope.model.complejo = selected;
                             });
                         }
                     });
+            } else{
+                var parameters = {
+                    filter: {}
+                };
+                var complejo = angular.element('#idComplejo');
+                parameters.filter['id'] = complejo.val();
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos',parameters))
+                    .success(function(data) {
+                        $scope.data.complejos = data;
+                        if($scope.model.complejo != null){
+                            $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
+                                $scope.model.complejo = selected;
+                            });
+                        }
+                    });
+            }
             $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
                     .success(function(data) {
                         $scope.data.responsibles = data;

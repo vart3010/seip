@@ -16,7 +16,8 @@
         ('pequiven.arrangement_program.list'|trans)
     ) }}
         
-    <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
+    <input type="hidden" id="idComplejo" value="{{ gerencia.complejo.id }}">
+    <input type="hidden" id="idGerencia" value="{{ gerencia.id }}">
 
     <div ng-controller="TableFormatController">
         <div ng-controller="ReportArrangementProgramController">

@@ -111,9 +111,10 @@ class GenericDataController extends SEIPController
      */
     function getTacticalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
         $repository = $this->get('pequiven.repository.objetiveoperative');
-        $results = $repository->findTacticalObjetives($user);
+        $results = $repository->findTacticalObjetives($user,$criteria);
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list'));
@@ -166,8 +167,10 @@ class GenericDataController extends SEIPController
     function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
-        if($this->getUserManager()->isAllowFilterFirstLineManagement($user) === false){
-            $criteria['gerencia'] =  $user->getGerencia();
+        if(!$criteria['view_planning']){
+            if($this->getUserManager()->isAllowFilterFirstLineManagement($user) === false){
+                $criteria['gerencia'] =  $user->getGerencia();
+            }
         }
         $repository = $this->get('pequiven.repository.gerenciasecond');
         $results = $repository->findGerenciaSecond($criteria);
@@ -184,6 +187,7 @@ class GenericDataController extends SEIPController
     function getComplejosAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $user = $this->getUser();
+        $criteria = $request->get('filter',$this->config->getCriteria());
         $repository = $this->get('pequiven_seip.repository.complejo');
         $results = $repository->findComplejos();
         $view = $this->view();

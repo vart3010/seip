@@ -117,8 +117,9 @@ class ArrangementProgramController extends SEIPController
         
         $idGerencia = $request->get("idGerencia");
         $typeGroup = $request->get("typeGroup");
+        $criteria['firstLineManagement'] = $idGerencia;
         
-        $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia,'_format' => 'json','filter' => array('gerencia' => $idGerencia)));
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia,'_format' => 'json'));
         $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
         $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
 

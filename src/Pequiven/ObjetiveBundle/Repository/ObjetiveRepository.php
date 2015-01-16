@@ -427,7 +427,7 @@ class ObjetiveRepository extends EntityRepository {
         return $qb;
     }
     
-    function findTacticalObjetives($user)
+    function findTacticalObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -437,15 +437,29 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * Busca los objetivos tácticos del usuario logueado
+     * @return type
+     */
     function findOperativeObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
