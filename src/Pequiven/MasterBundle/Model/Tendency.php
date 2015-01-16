@@ -1,19 +1,13 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\MasterBundle\Model;
 
 /**
- * Description of Tendency
+ * Modelo de Tendencia
  *
  * @author matias
  */
-class Tendency {
+abstract class Tendency {
     //put your code here
     const TENDENCY_MAX = 'MAX';
     const TENDENCY_MIN = 'MIN';
