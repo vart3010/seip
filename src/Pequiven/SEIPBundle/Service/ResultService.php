@@ -381,7 +381,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $quantity++;
             $value += $valueIndicator->getValueOfIndicator();
         }
-        if($quantity == 0){
+        if($quantity == 0){//Fix error de division por cero.
             $quantity = 1;
         }
         $value = ($value / $quantity);
