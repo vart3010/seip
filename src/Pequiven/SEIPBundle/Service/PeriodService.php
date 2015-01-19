@@ -29,7 +29,10 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
-        if($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()){
+        if(
+            ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()) ||
+            ($now >= $period->getDateStartClearanceNotificationArrangementProgram() && $now <= $period->getDateEndClearanceNotificationArrangementProgram() && $this->isGranted('ROLE_ARRANGEMENT_PROGRAM_CLEARANCE'))
+          ){
             $result = true;
         }
         return $result;
@@ -59,5 +62,13 @@ class PeriodService extends ContainerAware
     {
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         return $period;
+    }
+    
+    private function isGranted($roles) {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context')->isGranted($roles);
     }
 }
