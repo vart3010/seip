@@ -202,7 +202,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
 
         if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
             $periodService = $this->getPeriodService();
-            if($periodService->isAllowNotifyArrangementProgram() === true || ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)){
+            if($periodService->isAllowNotifyArrangementProgram() === true || ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0) ){
                 $valid = true;
             }
         }
@@ -220,10 +220,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $permission = true;
         $user = $this->getUser();
         if ($entity->isNotificable() === false || 
-            ($this->isAllowToNotity($entity) === false && 
-                $this->isAllowToApprove($entity) === false && 
-                $this->isAllowToReview($entity) === false && 
-                $entity->getCreatedBy() !== $user) === true ) {
+            ($this->isAllowToNotity($entity) === false)
+                ) {
             $permission = false;
         }
         return $permission;

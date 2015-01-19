@@ -94,9 +94,11 @@ class RestArrangementProgramController extends FOSRestController
             throw $this->createNotFoundException('Unable to find GoalDetails entity.');
         }
         $arrangementProgram = $entity->getGoal()->getTimeline()->getArrangementProgram();
-
-        if (!$this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram)
-                && !$this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram)
+        
+        $hasPermissionToNotify = $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram);
+        $hasPermissionToPlanned = $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram);
+        if (!$hasPermissionToNotify
+                && !$hasPermissionToPlanned
                 ) {
             throw new AccessDeniedException();
         }
@@ -110,12 +112,12 @@ class RestArrangementProgramController extends FOSRestController
         foreach ($dataRequest as $property => $value) {
             $permission = true;
             if(GoalDetails::isPlannedProperty($property) === true
-                && $this->getArrangementProgramManager()->hasPermissionToPlanned($arrangementProgram) === false
+                && $hasPermissionToPlanned === false
             ){
                 $permission = false;
             }
-            if($arrangementProgram->isNotificable() == true && GoalDetails::isRealProperty($property) === true && 
-                    $this->getArrangementProgramManager()->hasPermissionToNotify($arrangementProgram) === false)
+            if(GoalDetails::isRealProperty($property) === true && 
+                    $hasPermissionToNotify === false)
             {
                 $permission = false;
             }
