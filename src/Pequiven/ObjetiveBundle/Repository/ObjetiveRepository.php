@@ -478,11 +478,20 @@ class ObjetiveRepository extends EntityRepository {
                 ;
         }
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
