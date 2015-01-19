@@ -682,7 +682,7 @@ angular.module('seipModule.controllers', [])
                     filter: {}
                 };
                 parameters.filter['view_planning'] = false;
-                $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives'))
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives',parameters))
                         .success(function(data) {
                             $scope.data.tacticals = data;
                         });
