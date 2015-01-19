@@ -163,6 +163,7 @@ pequiven_seip:
         user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.
         user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
         the_management_program_does_not_progress_loaded: El programa de gestión "%arrangementProgram%" no tiene avances cargados.
+        the_indicator_has_not_loaded_values: El indicador "%indicator%" no tiene valores cargados.
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

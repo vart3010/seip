@@ -610,4 +610,23 @@ class ObjetiveRepository extends EntityRepository {
         
         return $qb->getQuery()->getResult();
     }
+    
+    /**
+     * Retorna los objetivos estrategicos del periodo.
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return type
+     */
+    public function findAllStrategicByPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('o.objetiveLevel = :objetiveLevel')
+            ->andWhere('o.period = :period')
+            ;
+        $qb
+            ->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO)
+            ->setParameter('period', $period)
+            ;
+        return $qb->getQuery()->getResult();
+    }
 }

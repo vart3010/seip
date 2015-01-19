@@ -102,12 +102,12 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'description' => $arrangementProgram->getRef(),
                     'result' => $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $realDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($realDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $realDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($realDateEnd)
                     ),
                 );
             }
@@ -127,7 +127,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     }
                 }
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
-                
+                $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+                foreach ($objetivesStrategic as $objetive) {
+                    $objetives[$objetive->getId()] = $objetive;
+                }
             }
             
             //Recorrer todos los objetivos
@@ -148,12 +151,12 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'description' => $objetive->getDescription(),
                     'result' => $this->formatResult($objetive->getResult()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $planDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($planDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $planDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($planDateEnd)
                     ),
                 );
                 if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
@@ -183,12 +186,12 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'description' => $goal->getName(),
                     'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $realDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($realDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $realDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($realDateEnd)
                     ),
                 );
             }
@@ -218,13 +221,31 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $canBeEvaluated = false;
                 }
             }
-            //Evaluar que los indicadores tengan avances
             foreach ($allIndicators as $indicator) {
-
+                if($indicator->hasNotification() === false){
+                    $url = $this->generateUrl('pequiven_indicator_show',
+                        array(
+                            'id' => $indicator->getId()
+                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+                        '%indicator%' => $link,
+                    ));
+                    $canBeEvaluated = false;
+                }
             }
+            
+//            var_dump($this->errors);
+//            die;
+//            var_dump(count($objetives));
+//            die;
             $resultService = $this->getResultService();
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
+//            var_dump($isValidAdvance);
             if(!$isValidAdvance){
+//                var_dump($resultService->getErrors());
+//                die;
                 $canBeEvaluated = $isValidAdvance;
                 $this->addErrorTrans($resultService->getErrors());
             }
@@ -290,10 +311,31 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         }
     }
     
+    /**
+     * Formatea los decimales antes de enviar los resultados.
+     * @param type $result
+     * @return type
+     */
     private function formatResult($result){
-        return number_format($result,3);
+        return number_format($result,2);
     }
     
+    /**
+     * Formatea la fecha antes de enviarla en la api.
+     * 
+     * @param type $date
+     * @return type
+     */
+    private function formatDateTime($date) {
+        $r = '';
+        if(is_a($date, 'DateTime')){
+            $r = $date->format('d-m-Y');
+        }else{
+            $r = $date;
+        }
+        return $r;
+    }
+
     /**
      * Servicio de resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService

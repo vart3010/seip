@@ -548,13 +548,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param array $objetives
      * @return boolean
      */
-    public function validateAdvanceOfObjetives($objetives) {
-//        echo '1';
-        $limitErrors = 5;
-        $valid = true;
+    public function validateAdvanceOfObjetives($objetives,$valid = true) {
+        
+        $limitErrors = 10;
+//        var_dump('Pasados - '.count($objetives));
         foreach ($objetives as $objetive) {
             $childrens = $objetive->getChildrens();
+//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
             $arrangementPrograms = $objetive->getArrangementPrograms();
+            //Se evalua que los programas de gestion tengan notificacion.
             foreach ($arrangementPrograms as $arrangementProgram) {
                 $details = $arrangementProgram->getDetails();
                 $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
@@ -580,11 +582,30 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $valid = false;
                 }
             }
-            if($valid == true && count($childrens) > 0){
-                return $this->validateAdvanceOfObjetives($childrens);
+            
+            $indicators = $objetive->getIndicators();
+            foreach ($indicators as $indicator) {
+                if($indicator->hasNotification() === false){
+                    $url = $this->generateUrl('pequiven_indicator_show',
+                        array(
+                            'id' => $indicator->getId()
+                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+                        '%indicator%' => $link,
+                    ));
+                    $valid = false;
+                }
+            }
+            
+            if(count($childrens) > 0){
+                $valid =  $this->validateAdvanceOfObjetives($childrens,$valid);
+            }
+            if(!$valid && count($this->errors) > $limitErrors){
+                return false;
             }
         }
-        
         return $valid;
     }
     
