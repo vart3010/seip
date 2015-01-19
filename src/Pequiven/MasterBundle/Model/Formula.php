@@ -32,6 +32,11 @@ abstract class Formula
     const TYPE_CALCULATION_ACCUMULATE = 3;
     
     /**
+     * Tipo de calculo de la formula es por plan y real a partir de ecuacion.
+     */
+    const TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ = 4;
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
@@ -51,6 +56,7 @@ abstract class Formula
             self::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC => 'pequiven_indicator.type_calculation.real_and_plan_automatic',
             self::TYPE_CALCULATION_REAL_AUTOMATIC => 'pequiven_indicator.type_calculation.real_automatic',
             self::TYPE_CALCULATION_ACCUMULATE => 'pequiven_indicator.type_calculation.accumulate',
+            self::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ => 'pequiven_indicator.type_calculation.real_and_plan_from_eq',
         );
         return $typesOfCalculation;
     }

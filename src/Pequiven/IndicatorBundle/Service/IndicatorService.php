@@ -37,10 +37,16 @@ class IndicatorService implements ContainerAwareInterface
                 $$name = $data[$name];
             }
         }
-        $equationParse = $this->parseFormulaVars($formula);
-//        var_dump($equationParse);
-        $result = 0;
+        $sourceEquationReal = $sourceEquationPlan = 0.0;
+        if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+            $sourceEquationPlan = $this->parseFormulaVars($formula,$formula->getSourceEquationPlan());
+            $sourceEquationReal = $this->parseFormulaVars($formula,$formula->getSourceEquationReal());
+        }
+        $equationParse = $this->parseFormulaVars($formula,$formula->getEquationReal());
+        $result = $equation_real = $equation_plan = 0.0;
         try {
+            eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+            eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
             eval(sprintf('$result = %s;',$equationParse));
         } catch( ErrorException $exc){
 //            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
@@ -59,17 +65,49 @@ class IndicatorService implements ContainerAwareInterface
      * @param Formula $formula
      * @return type
      */
-    public function parseFormulaVars(Formula $formula)
+    public function parseFormulaVars(Formula $formula,$equationReal)
     {
-        $equationReal = $formula->getEquationReal();
-        $variables = $formula->getVariables();
-        $formulaPaser = $equationReal;
-        foreach ($variables as $variable) {
-            $name = $variable->getName();
-            if(preg_match('/'.$name.'/i', $formulaPaser)){
-                $formulaPaser = preg_replace('/'.$name.'/i', '$'.$name, $formulaPaser);
+        $especialCaracter = array(
+            '(',
+            ')',
+            '+',
+            '-',
+            '*',
+            '/',
+            ' ',
+            '  ',
+            '   ',
+        );
+        $numbers = array('0','1','2','3','4','5','6','7','8','9');
+//        $equationReal = '6 + ( num_hoja_entrada_servicios_entregadas / num_valuaciones_solicitadas ) * 100 + casa - 1';
+        $stringSplit = str_split($equationReal);
+        $newEquation = $varEquation = '';
+        foreach ($stringSplit as $key => $char) {
+            if(in_array($char, $especialCaracter,true)){
+                $newEquation .= $char;
+                continue;
+            }
+            $nextKey = $key + 1;
+            $nextChar = isset($stringSplit[$nextKey]) ? $stringSplit[$nextKey] : null;
+            $varEquation .= $char;
+            if(in_array($nextChar, $especialCaracter,true)){
+                if(in_array($varEquation[0], $numbers)){
+                }else{
+                    $newEquation .= '$';
+                }
+                $newEquation .= $varEquation;
+                $varEquation = '';
             }
         }
+        if(strlen($varEquation) > 0){//Se adjunta lo que queda de la formula que no contiene variable
+            if(in_array($varEquation[0], $numbers)){
+            }else{
+                $newEquation .= '$';
+            }
+            $newEquation .= $varEquation;
+        }
+        $formulaPaser = $newEquation;
+        
         return $formulaPaser;
     }
     
@@ -82,6 +120,8 @@ class IndicatorService implements ContainerAwareInterface
         $typeOfCalculation = $formula->getTypeOfCalculation();
         $variableToRealValue = $formula->getVariableToRealValue();
         $variableToPlanValue = $formula->getVariableToPlanValue();
+        $sourceEquationPlan = $formula->getSourceEquationPlan();
+        $sourceEquationReal = $formula->getSourceEquationReal();
         $typeOfCalculationLabel = $this->trans($formula->getTypeOfCalculationLabel(),array(),'PequivenIndicatorBundle');
         
         $error = null;
@@ -109,6 +149,18 @@ class IndicatorService implements ContainerAwareInterface
                     '%formula%' => (string) $formula,
                     'typeOfCalculation' => $typeOfCalculationLabel,
                     'requireVars' => 'Real'
+                ),'flashes');
+            }
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+             $formula
+                ->setVariableToPlanValue(null)
+                ->setVariableToRealValue(null)
+                ;
+            if($sourceEquationPlan === null || $sourceEquationReal === null){
+                $error = $this->trans('pequiven.indicator.invalid_configuration_formula_type_calculation',array(
+                    '%formula%' => (string) $formula,
+                    'typeOfCalculation' => $typeOfCalculationLabel,
+                    'requireVars' => 'Origen de ecuación real y Origen de ecuación del plan'
                 ),'flashes');
             }
         }

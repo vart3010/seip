@@ -171,6 +171,15 @@ tecnocreaciones_tools:
                 - type
                 - year
                 
+fos_oauth_server:
+    db_driver: orm       # Driver availables: orm, mongodb, or propel
+    client_class:        Pequiven\SEIPBundle\Entity\Api\Client
+    access_token_class:  Pequiven\SEIPBundle\Entity\Api\AccessToken
+    refresh_token_class: Pequiven\SEIPBundle\Entity\Api\RefreshToken
+    auth_code_class:     Pequiven\SEIPBundle\Entity\Api\AuthCode
+    service:
+        user_provider: fos_user.user_provider.username
+
 sylius_resource:
     resources:
         pequiven.seipmonitor:

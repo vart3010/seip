@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * Controlador rest de los programas de gestion
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
- * @Route("/api/arrangement-program")
+ * @Route("/arrangement-program")
  */
 class RestArrangementProgramController extends FOSRestController 
 {

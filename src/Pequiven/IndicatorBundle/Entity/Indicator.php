@@ -930,4 +930,8 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         
         return $this;
     }
+    
+    function setProgressToDate($progressToDate) {
+        $this->progressToDate = $progressToDate;
+    }
 }

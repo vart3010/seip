@@ -16,6 +16,7 @@ pequiven_seip:
         already_start_the_notification_process: No se puede iniciar el proceso de notificación hasta que el usuario "%user%" termine el proceso.
         notification_process_user_finish: El proceso de notificación lo debe finalizar el usuario "%user%" que lo inicio.
         notification_process_dont_start: El proceso de notificación no se ha iniciado por ningun notificador.
+        not_allow_load_arrangementprogram: La carga de programas de gestión no se encuentra habilitada para este período.
     arrangementprogram_template:
         create: Plantilla de programa de gestión creado.
         update: Plantilla de programa de gestión actualizado.

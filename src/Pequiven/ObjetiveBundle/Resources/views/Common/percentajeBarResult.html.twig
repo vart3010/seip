@@ -1,4 +1,13 @@
-<span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed >= 70 %}green-gradient{% endif %}"></span>
-<span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-<span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
-{{ ((avancedUsed ? avancedUsed : '0')|number_format(2)) | str_pad(5,'0') }}% - 
+<span title="{{ ((avancedUsed ? avancedUsed : '0')|number_format(2)) | str_pad(5,'0') }}%">
+    <span class="meter {% if avancedUsed > 0 and avancedUsed <= 30 %}red-gradient{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed >= 70 %}green-gradient{% endif %}"></span>
+    <span class="meter {% if avancedUsed > 30 and avancedUsed < 70 %}orange-gradient{% endif%}{% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+    <span class="meter {% if avancedUsed > 70 %}green-gradient{% endif %}"></span>
+</span>
+{% if avancedUsedText is not defined %}
+    {% set avancedUsedText = avancedUsed %}
+{% endif %}
+{{ ((avancedUsedText ? avancedUsedText : '0')|number_format(2)) | str_pad(5,'0') }}% - 
+
+{# Limpiar variables #}
+{% set avancedUsedText = null %}
+{% set avancedUsed = null %}
