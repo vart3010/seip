@@ -137,17 +137,23 @@ class ArrangementProgramRepository extends EntityRepository
      */
     public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
         $this->getUser();
-        
-        $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
-        if(isset($criteria['gerencia'])){
-            $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
-        }
-        
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
-
-        return $this->getPaginator($queryBuilder);
+        return parent::createPaginator($criteria, $orderBy);
+//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+//        
+//        $queryBuilder = $this->getCollectionQueryBuilder();
+//        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
+//        if(($gerencia = $criteria->remove('gerencia')) != null){
+//            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
+//        }
+//        
+//        if(isset($criteria['status'])){
+//            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
+//        }
+//        
+////        $this->applyCriteria($queryBuilder, $criteria);
+////        $this->applySorting($queryBuilder, $orderBy);
+//
+//        return $this->getPaginator($queryBuilder);
     }
     
     /**

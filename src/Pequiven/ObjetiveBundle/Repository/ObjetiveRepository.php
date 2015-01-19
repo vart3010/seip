@@ -81,6 +81,7 @@ class ObjetiveRepository extends EntityRepository {
      */
     public function getByParent($objetiveParentsArray,$options = array()){
         $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
         
         $query = $this->createQueryBuilder('o');
         $query
@@ -100,7 +101,9 @@ class ObjetiveRepository extends EntityRepository {
         } else{
             if(!isset($options['searchByRef'])){
                 if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+                    if(!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){
+                        $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
+                    }
                 }
             }
         }
@@ -424,7 +427,7 @@ class ObjetiveRepository extends EntityRepository {
         return $qb;
     }
     
-    function findTacticalObjetives($user)
+    function findTacticalObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -434,15 +437,29 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * Busca los objetivos tácticos del usuario logueado
+     * @return type
+     */
     function findOperativeObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
@@ -461,11 +478,20 @@ class ObjetiveRepository extends EntityRepository {
                 ;
         }
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }

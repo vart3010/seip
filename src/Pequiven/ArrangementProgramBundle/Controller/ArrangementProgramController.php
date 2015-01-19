@@ -112,8 +112,18 @@ class ArrangementProgramController extends SEIPController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        
+        $idGerencia = $request->get("idGerencia");
+        $typeGroup = $request->get("typeGroup");
+        $criteria['firstLineManagement'] = $idGerencia;
+        
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia,'_format' => 'json'));
+        $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
+        $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
 
-        if ($this->config->isPaginated()) {
+        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 'createPaginatorByGerencia',
@@ -142,7 +152,33 @@ class ArrangementProgramController extends SEIPController
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
-            $view->setData($resources);
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user,
+                'url' => $url,
+                'urlReturn' => $urlReturn,
+                'gerencia' => $gerencia
+            ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
