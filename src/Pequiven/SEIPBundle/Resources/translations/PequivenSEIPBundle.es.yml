@@ -155,6 +155,14 @@ pequiven_seip:
         main: Area principal
         events: Area de eventos
         dashboard: Bienvenida
+    errors:
+        you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
+        you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
+        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe
+        the_period_does_not_exist.: El período "%period%" no existe.
+        user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.
+        user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
+        the_management_program_does_not_progress_loaded: El programa de gestión "%arrangementProgram%" no tiene avances cargados.
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
