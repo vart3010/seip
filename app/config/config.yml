@@ -171,6 +171,13 @@ tecnocreaciones_tools:
                 - type
                 - year
                 
+simple_things_entity_audit:
+        global_ignore_columns:
+            - createdAt
+            - updatedAt
+            - created_at
+            - updated_at
+            
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel
     client_class:        Pequiven\SEIPBundle\Entity\Api\Client

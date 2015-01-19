@@ -14,6 +14,13 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class VariableAdmin extends Admin
 {
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('name')
+            ->add('description')
+            ;
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('name')

@@ -67,7 +67,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
             $arrangementProgramRepository = $this->container->get('pequiven_seip.repository.arrangementprogram');
             $allArrangementPrograms = $arrangementProgramsObjects = $allIndicators = array();
-            
+
             //Programas de gestion donde es responsable
             $arrangementProgramsGoals = $arrangementProgramRepository->findByUserAndPeriodNotGoals($user,$period,$criteria);
             foreach ($arrangementProgramsGoals as $arrangementProgramsGoal) {
@@ -111,7 +111,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     ),
                 );
             }
-            
+
             if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
                 $gerenciaFirst = $user->getGerencia();
                 if($gerenciaFirst){
@@ -220,7 +220,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }
             //Evaluar que los indicadores tengan avances
             foreach ($allIndicators as $indicator) {
-                
+
             }
             $resultService = $this->getResultService();
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
@@ -300,7 +300,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
      */
     private function getResultService(){
         return $this->container->get('seip.service.result');
-    }
+}
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {

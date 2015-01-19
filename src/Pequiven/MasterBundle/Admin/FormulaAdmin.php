@@ -16,6 +16,30 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
 {
     private $container;
     
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('description')
+            ->add('equation')
+            ->add('equationReal')
+            ->add('formulaLevel')
+            ->add('enabled')
+            ->add('variables')
+            ->add('typeOfCalculation','choice',array(
+                'choices' => \Pequiven\MasterBundle\Entity\Formula::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('variableToRealValue')
+            ->add('variableToPlanValue')
+            ->add('sourceEquationReal',null,array(
+                'label' => 'Source Equation Real (equation_real)'
+            ))
+            ->add('sourceEquationPlan',null,array(
+                'label' => 'Source Equation Plan (equation_plan)'
+            ))
+            ;
+        
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')
