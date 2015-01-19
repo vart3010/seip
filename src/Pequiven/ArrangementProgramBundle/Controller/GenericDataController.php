@@ -167,7 +167,7 @@ class GenericDataController extends SEIPController
     function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
-        if(!$criteria['view_planning']){
+        if(isset($criteria['view_planning']) && !$criteria['view_planning']){
             if($this->getUserManager()->isAllowFilterFirstLineManagement($user) === false){
                 $criteria['gerencia'] =  $user->getGerencia();
             }
