@@ -535,10 +535,15 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     public function onPostSerializeUser(ObjectEvent $event) {
         $links = array();
         $object = $event->getObject();
-        $roles = $object->getGroups();
+        $group = $object->getRealGroup();
         $links['self']['href'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
         $event->getVisitor()->addData('_links',$links);
-        $event->getVisitor()->addData('rol',$roles[0]->getDescription());
+        $rol = 'SIN ASIGNAR';
+        if($group){
+            $rol = $group->getDescription();
+        }
+            
+        $event->getVisitor()->addData('rol',$rol);
     }
     
     public function onPostSerializeGerencia(ObjectEvent $event) {

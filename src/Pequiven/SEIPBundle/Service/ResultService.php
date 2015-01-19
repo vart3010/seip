@@ -8,7 +8,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 /**
  * Servicio que se encarga de actualizar los resultados
  * 
- * @service seip.service.result
+ * service seip.service.result
  * @author inhack20
  */
 class ResultService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
@@ -17,8 +17,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
  
     /**
      * Devuelve un resultado por el tipo
-     * @param array $results
-     * @param type $type
+     * @param array $results Pequiven\SEIPBundle\Model\Result
+     * @param int $type Pequiven\SEIPBundle\Model\Result::TYPE_RESULT_*
      * @return array
      */
     public function getResultByType($results,$type)
@@ -46,7 +46,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Actualiza los resultados de un objetivo
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $myResult
      */
-    public function updateResultOfObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$myResult,$andFlush = true)
+    private function updateResultOfObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$myResult,$andFlush = true)
     {
         $em = $this->getDoctrine()->getManager();
         $em->persist($myResult->getResultDetails());
@@ -110,7 +110,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Calcula los resultados
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) {
+    public function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) {
         $em = $this->getDoctrine()->getManager();
         
         if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
@@ -121,18 +121,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $this->calculateResultTypeObjetive($result);
         }
         
-        if($result->getParent() == null && $result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
-            $parent = $result;
+        if($result->getParent() !== null && $result->getTypeResult() !== \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result->getParent();
             foreach ($result->getChildrens() as $child) {
                 $this->calculateResult($child);
             }
             $this->calculateResultItems($parent, $parent->getChildrens());
             
             $em->persist($parent);
-            
-            
-        }
-        if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+        }else if($result->getParent() == null && $result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
+            $parent = $result;
+            foreach ($result->getChildrens() as $child) {
+                $this->calculateResult($child);
+            }
+            $this->calculateResultItems($parent, $parent->getChildrens());
+            $em->persist($parent);
+        }else if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OF_RESULT){
             if($result->getParent() == null){
                 $parent = $result;
             }else{
@@ -159,7 +163,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    function calculateResultTypeArrangementPrograms(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+    private function calculateResultTypeArrangementPrograms(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
         $objetive = $this->resolveObjetiveOfResult($result);
         $arrangementPrograms = $objetive->getArrangementPrograms();
         $countArrangementPrograms = count($arrangementPrograms);
@@ -192,7 +196,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    function calculateResultTypeIndicator(\Pequiven\SEIPBundle\Entity\Result\Result &$result) 
+    private function calculateResultTypeIndicator(\Pequiven\SEIPBundle\Entity\Result\Result &$result) 
     {
         $objetive = $this->resolveObjetiveOfResult($result);
         $itemsResult = $objetive->getIndicators();
@@ -204,13 +208,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    function calculateResultTypeObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+    private function calculateResultTypeObjetive(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
         $objetive = $this->resolveObjetiveOfResult($result);
         $itemsResult = $objetive->getChildrens();
         $this->calculateResultItems($result, $itemsResult);
     }
     
-    public function resolveObjetiveOfResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
+    private function resolveObjetiveOfResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result) {
         $objetive = null;
         if($result->getParent() != null){
             $objetive = $result->getParent()->getObjetive();
@@ -227,7 +231,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $itemsResult
      * @param type $debug
      */
-    public function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult)
+    private function calculateResultItems(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$itemsResult)
     {
         $total = 0;
         $countResult = 0;
@@ -267,7 +271,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Actualiza los resultados de los objetivos
      * @param type $objects
      */
-    function updateResultOfObjects($objects,$andFlush = true) 
+    public function updateResultOfObjects($objects,$andFlush = true) 
     {
         if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
         {
@@ -286,7 +290,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram
      */
-    function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
+    public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
     {
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true
@@ -312,7 +316,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
+    public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
         $details = $indicator->getDetails();
         if(!$details){
@@ -324,7 +328,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setPreviusValue($previusValue)
                 ;
         
-        $indicatorService = $this->container->get('pequiven_indicator.service.inidicator');
+        $indicatorService = $this->getIndicatorService();
         
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
@@ -337,9 +341,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaRealAutomatic($indicator);
             }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
                 $this->calculateFormulaAccumulate($indicator);
+            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
             }
         }
         $indicator->updateLastDateCalculateResult();
+        $tendenty = $indicator->getTendency();
+        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
+            
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
+            $result = $indicator->getTotalPlan() - $indicator->getResult();
+            $indicator->setProgressToDate($result);
+        }
         
         $em = $this->getDoctrine()->getManager();
         
@@ -360,7 +373,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaSimpleAverage(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
+     private function calculateFormulaSimpleAverage(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
         $valuesIndicator = $indicator->getValuesIndicator();
         $quantity = 0;
         $value = 0.0;
@@ -368,7 +381,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $quantity++;
             $value += $valueIndicator->getValueOfIndicator();
         }
+        if($quantity == 0){//Fix error de division por cero.
+            $quantity = 1;
+        }
         $value = ($value / $quantity);
+
         $indicator->setValueFinal($value);
     }
     
@@ -377,7 +394,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaRealPlanAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    private function calculateFormulaRealPlanAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
         $formula = $indicator->getFormula();
         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
@@ -399,11 +416,52 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     }
     
     /**
+     * Calcula la formula con plan y real automatico a partir de equaciones de las formulas
+     * 
+     * @param Indicator $indicator
+     */
+    private function calculateFormulaRealPlanAutomaticFromEQ(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    {
+        $indicatorService = $this->getIndicatorService();
+        
+        $formula = $indicator->getFormula();
+        
+        $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
+        $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
+        
+        $equation_real = $equation_plan = 0.0;
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        $totalPlan = $totalReal = $value = 0.0;
+        foreach ($valuesIndicator as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            
+            foreach ($formulaParameters as $name => $value) {
+                $$name = 0;
+                if(isset($formulaParameters[$name])){
+                    $$name = $value;
+                }
+            }
+            
+            eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+            eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+            
+            $totalPlan += $equation_plan;
+            $totalReal += $equation_real;
+        }
+        
+        $value = $totalReal;
+        $indicator
+                ->setTotalPlan($totalPlan)
+                ->setValueFinal($value);
+    }
+    
+    /**
      * Calcula la formula con real a partir de la formula
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaRealAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    private function calculateFormulaRealAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
         $formula = $indicator->getFormula();
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
@@ -426,7 +484,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    public function calculateFormulaAccumulate(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
+    private function calculateFormulaAccumulate(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) {
         $valuesIndicator = $indicator->getValuesIndicator();
         $quantity = 0;
         $value = 0.0;
@@ -437,6 +495,42 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator->setValueFinal($value);
     }
     
+    public function getResultChildresObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive,$childrens) {
+        $myProgress = $myContribution = $myContributionWithWeight = $myDuty = $myDutyWithWeight = 0.0;
+        $result = $this->getResultByType($objetive->getResults(),  \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
+        $countMyChildrens = count($childrens);
+        $countAllChildrens = count($objetive->getChildrens());
+        if($result){
+            $this->calculateResultItems($result, $childrens);
+            $myProgress = $result->getResult();
+            $weight = $result->getWeight();
+            if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                $myContribution = (($myProgress * $countMyChildrens) / $countAllChildrens);
+                $myContributionWithWeight = ((($myProgress * $countMyChildrens) / $countAllChildrens) * $weight) / 100;
+                $myDuty = (100 / $countAllChildrens) * $countMyChildrens;
+                $myDutyWithWeight = ($myDuty * $weight / 100);
+            }else{
+                $totalWeight = 0.0;
+                foreach ($childrens as $child) {
+                    $totalWeight +=$child->getWeight();
+                }
+                $myContribution = $myProgress;
+                $myContributionWithWeight = ($myProgress * $weight) / 100;
+                $myDuty = $totalWeight;
+                $myDutyWithWeight = ($totalWeight * $weight ) / 100;
+                
+            }
+        }
+        
+        return array(
+            'myProgress' => $myProgress,
+            'myContribution' => $myContribution,
+            'myContributionWithWeight' => $myContributionWithWeight,
+            'myDuty' => $myDuty,//Mi deber
+            'myDutyWithWeight' => $myDutyWithWeight,//Mi deber con peso
+        );
+    }
+    
     /**
      * Shortcut to return the Doctrine Registry service.
      *
@@ -444,7 +538,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      *
      * @throws \LogicException If DoctrineBundle is not available
      */
-    public function getDoctrine()
+    protected function getDoctrine()
     {
         if (!$this->container->has('doctrine')) {
             throw new \LogicException('The DoctrineBundle is not registered in your application.');
@@ -462,7 +556,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      *
      * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
      */
-    public function getUser()
+    protected function getUser()
     {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
@@ -477,6 +571,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
 
         return $user;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

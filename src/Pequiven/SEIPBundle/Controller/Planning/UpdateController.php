@@ -62,7 +62,6 @@ class UpdateController extends Controller
         
         $flashBag = $this->getRequest()->getSession()->getFlashBag();
         $flashBag->add('success',  $this->trans('pequiven.result.success.update',array(),'flashes'));
-        
         if($id > 0){
             return $this->redirect($referral);
         }

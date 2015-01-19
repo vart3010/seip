@@ -112,8 +112,18 @@ class ArrangementProgramController extends SEIPController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        
+        $idGerencia = $request->get("idGerencia");
+        $typeGroup = $request->get("typeGroup");
+        $criteria['firstLineManagement'] = $idGerencia;
+        
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia,'_format' => 'json'));
+        $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
+        $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
 
-        if ($this->config->isPaginated()) {
+        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 'createPaginatorByGerencia',
@@ -142,7 +152,33 @@ class ArrangementProgramController extends SEIPController
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         if($request->get('_format') == 'html'){
-            $view->setData($resources);
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user,
+                'url' => $url,
+                'urlReturn' => $urlReturn,
+                'gerencia' => $gerencia
+            ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
@@ -254,7 +290,7 @@ class ArrangementProgramController extends SEIPController
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $period = $this->getPeriodService()->getPeriodActive();
         $criteria['ap.period'] = $period;
         $criteria['ap.user'] = $this->getUser();
         
@@ -353,7 +389,16 @@ class ArrangementProgramController extends SEIPController
         $type = $request->get("type");
         $entity = new ArrangementProgram();
         $user = $this->getUser();
-        $period = $this->getRepositoryById('period')->findOneActive();
+        $periodService = $this->getPeriodService();
+        
+        if(!$periodService->isAllowLoadArrangementProgram()){
+            $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram',array(),'flashes');
+            $this->setFlash('error', $message);
+            throw $this->createAccessDeniedHttpException($message);
+        }
+        
+        $period = $periodService->getPeriodActive();
+        
         $entity
                 ->setType($type)
                 ->setPeriod($period)
@@ -442,6 +487,7 @@ class ArrangementProgramController extends SEIPController
     {
         $id = $request->get("id");
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
         $entity = $em->getRepository('PequivenArrangementProgramBundle:ArrangementProgram')->findWithData($id);
 
@@ -459,6 +505,7 @@ class ArrangementProgramController extends SEIPController
         $hasPermissionToUpdate = $arrangementProgramManager->hasPermissionToUpdate($entity);
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
         $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
+        $isAllowSuperAdmin = $user->isAllowSuperAdmin();
         
         return array(
             'entity'      => $entity,
@@ -469,6 +516,7 @@ class ArrangementProgramController extends SEIPController
             'hasPermissionToUpdate' => $hasPermissionToUpdate,
             'isAllowToDelete' => $isAllowToDelete,
             'isAllowToNotity' => $isAllowToNotity,
+            'isAllowSuperAdmin' => $isAllowSuperAdmin,
         );
     }
 
@@ -1273,5 +1321,13 @@ class ArrangementProgramController extends SEIPController
     
     protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
         return parent::trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

@@ -7,15 +7,6 @@ pequiven_seip_arrangementprogram_index:
         _format: html|json|xml
     methods: [GET]
     
-pequiven_seip_arrangementprogram_by_gerencia:
-    path: /list/gerencia
-    defaults:
-        _controller: pequiven_seip.controller.arrangementprogram:arrangementProgramByGerenciaAction
-        _format: json
-    requirements:
-        _format: html|json|xml
-    methods: [GET]
-    
 pequiven_seip_arrangementprogram_list_template:
     path: /list-template.{_format}
     defaults:

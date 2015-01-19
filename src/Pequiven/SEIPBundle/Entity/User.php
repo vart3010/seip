@@ -170,6 +170,7 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
         $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -488,6 +489,23 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
     {
         return $this->goals;
     }
+    
+    /**
+     * 
+     */
+    public function isAllowSuperAdmin(){
+        $isSuperAdmin = false;
+        $level = Rol::ROLE_SUPER_ADMIN;
+        $groups = $this->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() == $level)
+            {
+                $isSuperAdmin = true;
+            }
+        }
+        return $isSuperAdmin;
+    }
+    
     /**
      * Devuelve el nivel del rol asignado
      * @return integer
@@ -497,14 +515,41 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
         if(!isset($this->levelByGroup)){
             $level = 0;
             $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
             foreach ($groups as $group) {
-                if($group->getLevel() > $level){
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
                     $level = $group->getLevel();
                 }
             }
             $this->levelByGroup = $level;
         }
         return $this->levelByGroup;
+    }
+    
+    public function getRealGroup() {
+        if(!isset($this->realGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
+            $realGroup = null;
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
+                    $level = $group->getLevel();
+                    $realGroup = $group;
+                }
+            }
+            $this->levelByGroup = $level;
+            $this->realGroup = $realGroup;
+        }
+        return $this->realGroup;
     }
     
     /**

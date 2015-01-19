@@ -4,9 +4,10 @@ security:
     acl:
         connection: default
     role_hierarchy:
+        ROLE_API: ROLE_USER
         ROLE_ARRANGEMENT_PROGRAM: [ROLE_ARRANGEMENT_PROGRAM_EDIT,ROLE_ARRANGEMENT_PROGRAM_DELETE,ROLE_ARRANGEMENT_PROGRAM_READ]
         ROLE_VIEW: [ROLE_WORKER_PQV,ROLE_WORKER_PLANNING]
-        ROLE_ADMIN: [ROLE_DIRECTIVE,ROLE_DIRECTIVE_AUX,ROLE_MANAGER_FIRST,ROLE_MANAGER_FIRST_AUX,ROLE_MANAGER_SECOND,ROLE_MANAGER_SECOND_AUX,ROLE_SUPERVISER,ROLE_WORKER_PQV,ROLE_VIEW,ROLE_SONATA_ADMIN,ROLE_ARRANGEMENT_PROGRAM]
+        ROLE_ADMIN: [ROLE_DIRECTIVE,ROLE_DIRECTIVE_AUX,ROLE_MANAGER_FIRST,ROLE_MANAGER_FIRST_AUX,ROLE_MANAGER_SECOND,ROLE_MANAGER_SECOND_AUX,ROLE_SUPERVISER,ROLE_WORKER_PQV,ROLE_VIEW,ROLE_SONATA_ADMIN,ROLE_ARRANGEMENT_PROGRAM,ROLE_API]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN,ROLE_ALLOWED_TO_SWITCH]
 
     providers:
@@ -23,6 +24,21 @@ security:
         cache:
             pattern: ^/media/cache
             security: false
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            # Add your favorite authentication process here
+            form_login:
+                provider: fos_userbundle
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+        api:
+            pattern:    ^/api
+            fos_oauth:  true
+            stateless:  true
+            anonymous:  false # can be omitted as its default value
         main:
             pattern: ^/
             anonymous: false
@@ -48,6 +64,7 @@ security:
             logout:
                 path:           /admin/logout
             anonymous:          true
+
     access_control:
         - { path: ^/compiled, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/translations, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -63,4 +80,5 @@ security:
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         
         - { path: ^/planning/, role: ROLE_WORKER_PLANNING }
+        - { path: ^/api, roles: [ ROLE_API ] }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }

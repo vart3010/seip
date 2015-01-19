@@ -483,7 +483,7 @@ class MonitorController extends baseController {
         
         foreach($results as $result){
             $res = $result['PlanArrPro'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$result['RealArrPro'] / (float)$result['PlanArrPro']) * 100,'0',2);
-            $urlGerencia = $this->generateUrl('listArrangementProgramByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $result['idGerencia']));
+            $urlGerencia = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('typeGroup' => $typeGroup,'idGerencia' => $result['idGerencia']));
             $dataPorc[] = array('value' => $res, 'link' => $urlGerencia);
             $dataPlan[] = array('value' => $result['PlanArrPro'], 'link' => $urlGerencia);
             $dataReal[] = array('value' => $result['RealArrPro'], 'link' => $urlGerencia);
