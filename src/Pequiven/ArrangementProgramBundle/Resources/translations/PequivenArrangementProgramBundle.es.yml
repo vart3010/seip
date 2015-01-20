@@ -70,6 +70,9 @@ pequiven:
             rejected: Rechazado
             approved: Aprobado
             finished: Finalizado
+            charged: Cargados
+            notified: Notificados
+            not_notified: No Notificados
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión

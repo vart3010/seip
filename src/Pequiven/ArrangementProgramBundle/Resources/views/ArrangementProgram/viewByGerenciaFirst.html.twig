@@ -21,6 +21,11 @@
 
     <div ng-controller="TableFormatController">
         <div ng-controller="ReportArrangementProgramController">
+            <div class="with-padding">
+                <div class="columns">
+                    {{ boxRender.renderBox('pequiven_seip_box_arrangementprogram_summary_total')|raw }}
+                </div>
+            </div>
             <details class="details margin-bottom" open="">
                 <input type="hidden" id="planning" value="VIEW_PLANNING">
                 <summary role="button" aria-expanded="true">

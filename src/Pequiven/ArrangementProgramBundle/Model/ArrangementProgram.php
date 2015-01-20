@@ -16,6 +16,26 @@ abstract class ArrangementProgram
     const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
     
     /**
+     * Resumen Tipo "Cargados"
+     */
+    const SUMMARY_TYPE_CHARGED = 'CHARGED';
+    
+    /**
+     * Resumen Por Status
+     */
+    const SUMMARY_TYPE_BY_STATUS = 'BY_STATUS';
+    
+    /**
+     * Resumen Por Notificados
+     */
+    const SUMMARY_TYPE_NOTIFIED = 'NOTIFIED';
+    
+    /**
+     * Resumen Por No Notificados
+     */
+    const SUMMARY_TYPE_NOT_NOTIFIED = 'NOT_NOTIFIED';
+    
+    /**
      * Estatus borrador
      */
     const STATUS_DRAFT = 0;

@@ -1,0 +1,37 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+    <div class="block large-margin-bottom">
+        <div class="block-title">
+            <h3>Resumen Programas de Gestión</h3>
+        </div>
+        <ul class="events">
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.charged'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.charged|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.draft'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.draft|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.in_review'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.in_review|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.revised'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.revised|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.approved'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.approved|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.rejected'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.rejected|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.finished'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.finished|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.notified'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.notified|length }}</p>
+            </li>
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.not_notified'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.not_notified|length }}</p>
+            </li>
+        </ul>
+    </div>
+</div>

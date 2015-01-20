@@ -119,6 +119,61 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
+     * Programas de Gestión Cargados y por status (en borrador, en revisión, revisados, aprobados, rechazados y finalizados)
+     * @param array $criteria
+     * @return type
+     */
+    public function getSummaryCharged(array $criteria = null){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $gerencia = $criteria['gerencia'];
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->leftJoin('ap.tacticalObjective','to')
+            ->andWhere('to.gerencia = '.$gerencia)
+                ;
+        if(isset($criteria['type']) && $criteria['type'] == ArrangementProgram::SUMMARY_TYPE_CHARGED){
+            $qb
+                ->andWhere('ap.status <= :status')
+                ->setParameter('status', ArrangementProgram::STATUS_APPROVED);
+            $criteria->remove('type');
+        } else{
+            $status = $criteria->remove('status');
+            $qb
+                ->andWhere('ap.status = :status')
+                ->setParameter('status', $status);
+        }
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param array $criteria
+     */
+    public function getNotified(array $criteria = null){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $gerencia = $criteria['gerencia'];
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->leftJoin('ap.tacticalObjective','to')
+            ->andWhere('to.gerencia = '.$gerencia)
+            ->andWhere('ap.status = :status')
+            ->innerJoin('ap.details', 'd')
+            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
+                ;
+        if(isset($criteria['type'])){
+            if($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
+                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'));
+            } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
+                $qb->andWhere($qb->expr()->orX('d.notificationInProgressByUser IS NOT NULL','ap.totalAdvance = 0'))
+;
+            }
+        } 
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
      * 
      * @param array $criteria
      * @param array $orderBy

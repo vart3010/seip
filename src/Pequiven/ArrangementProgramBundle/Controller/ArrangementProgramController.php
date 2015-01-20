@@ -114,6 +114,7 @@ class ArrangementProgramController extends SEIPController
         $repository = $this->getRepository();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
+        $boxRender = $this->get('tecnocreaciones_box.render');
         
         $idGerencia = $request->get("idGerencia");
         $typeGroup = $request->get("typeGroup");
@@ -177,6 +178,7 @@ class ArrangementProgramController extends SEIPController
                 'user' => $user,
                 'url' => $url,
                 'urlReturn' => $urlReturn,
+                'boxRender' => $boxRender,
                 'gerencia' => $gerencia
             ));
         }else{
