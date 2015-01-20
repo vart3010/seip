@@ -100,7 +100,8 @@ class IndicatorOperativeController extends baseController {
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
     public function createAction(Request $request) {
-
+        $periodService = $this->get('pequiven_arrangement_program.service.period');
+        $period = $periodService->getPeriodActive();
         $form = $this->createForm($this->get('pequiven_indicator.operative.registration.form.type'));
 
         $lastId = '';
@@ -109,6 +110,7 @@ class IndicatorOperativeController extends baseController {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         $role = $user->getRoles();
+        $refParent = '';
 
         $em->getConnection()->beginTransaction();
 
@@ -124,6 +126,8 @@ class IndicatorOperativeController extends baseController {
 
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative']));
             $object->setRefParent($objetive->getRef());
+            $refIndicator = $data['ref'];
+            $object->setPeriod($period);
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
@@ -151,7 +155,7 @@ class IndicatorOperativeController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
+            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('ref' => $refIndicator));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
