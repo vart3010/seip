@@ -53,7 +53,9 @@
         "sonata-project/block-bundle": "~2.2@dev",
         "sonata-project/user-bundle": "~2.2@dev",
         
-        "tecnick.com/tcpdf": "6.0.097"
+        "tecnick.com/tcpdf": "6.0.097",
+        
+        "simplethings/entity-audit-bundle": "0.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

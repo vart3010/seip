@@ -13,8 +13,14 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
  */
 class ResultService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
+    protected $errors;
+    
     protected $container;
- 
+    
+    public function __construct() {
+        $this->errors = array();
+    }
+    
     /**
      * Devuelve un resultado por el tipo
      * @param array $results Pequiven\SEIPBundle\Model\Result
@@ -495,6 +501,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator->setValueFinal($value);
     }
     
+    /**
+     * Obtiene el resumen del resultado de mis hijos
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @param type $childrens
+     * @return type
+     */
     public function getResultChildresObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive,$childrens) {
         $myProgress = $myContribution = $myContributionWithWeight = $myDuty = $myDutyWithWeight = 0.0;
         $result = $this->getResultByType($objetive->getResults(),  \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
@@ -531,6 +543,85 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         );
     }
     
+    /**
+     * Valida que los objetivos tengan avances
+     * @param array $objetives
+     * @return boolean
+     */
+    public function validateAdvanceOfObjetives($objetives,$valid = true) {
+        
+        $limitErrors = 10;
+//        var_dump('Pasados - '.count($objetives));
+        foreach ($objetives as $objetive) {
+            $childrens = $objetive->getChildrens();
+//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
+            $arrangementPrograms = $objetive->getArrangementPrograms();
+            //Se evalua que los programas de gestion tengan notificacion.
+            foreach ($arrangementPrograms as $arrangementProgram) {
+                $details = $arrangementProgram->getDetails();
+                $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
+                    array(
+                        'id' => $arrangementProgram->getId()
+                    ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$arrangementProgram);
+                //Se evalua que la notificacion no este en progeso
+                if($details->getNotificationInProgressByUser() !== null){
+                    $this->addErrorTrans('pequiven_seip.errors.user_must_complete_notification_process_management_program',array(
+                        '%user%' => $details->getNotificationInProgressByUser(),
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $valid = false;
+                    continue;
+                }
+                //Se evalua que no tenga avance cargado
+                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $valid = false;
+                }
+            }
+            
+            $indicators = $objetive->getIndicators();
+            foreach ($indicators as $indicator) {
+                if($indicator->hasNotification() === false){
+                    $url = $this->generateUrl('pequiven_indicator_show',
+                        array(
+                            'id' => $indicator->getId()
+                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+                        '%indicator%' => $link,
+                    ));
+                    $valid = false;
+                }
+            }
+            
+            if(count($childrens) > 0){
+                $valid =  $this->validateAdvanceOfObjetives($childrens,$valid);
+            }
+            if(!$valid && count($this->errors) > $limitErrors){
+                return false;
+            }
+        }
+        return $valid;
+    }
+    
+    private function addErrorTrans($error,array $parameters = array()) {
+        if(is_array($error)){
+            $this->errors = array_merge($this->errors,$error);
+        }else{
+            $message = $this->trans($error,$parameters,'PequivenSEIPBundle');
+            $this->errors[md5($message)] = $message;
+        }
+    }
+    
+    function getErrors() {
+        return $this->errors;
+    }
+
     /**
      * Shortcut to return the Doctrine Registry service.
      *
@@ -584,5 +675,26 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
 }

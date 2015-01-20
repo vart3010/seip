@@ -48,6 +48,8 @@ class AppKernel extends Kernel
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new Sonata\UserBundle\SonataUserBundle(),
             
+            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),//Bundle para auditar entidades
+            
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),
