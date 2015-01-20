@@ -846,6 +846,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
             
+            $visualize
+                ->addChild('arrangement_programs.for_notifying', array(
+                    'route' => 'pequiven_seip_arrangementprogram_for_notifying',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_notifying', $section)));
+            
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(
                         'uri' => null,

@@ -238,12 +238,11 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder
             ->innerJoin('to_g.configuration','to_g_c');
         
-        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToNotify', 'to_g_c_apn');
         $queryBuilder->leftJoin('to_g_c.arrangementProgramUserToRevisers', 'to_g_c_apr');
         $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveTactical', 'to_g_c_apt');
         $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap');
         
-        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apn.id = :user','to_g_c_apr.id = :user','to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apr.id = :user','to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
         $queryBuilder
             ->andWhere('ap.period = :period')
             ->setParameter('period', $period)
@@ -252,7 +251,71 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
         
-        $results = $queryBuilder->getQuery()->getResult();
+        $results = $queryBuilder->getQuery()->getResult();        
+        $filterResults = array();
+        foreach ($results as $result) {
+            if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $gerenciaSecondToNotify = null;
+                $objetiveOperative = $result->getOperationalObjective();
+                $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+                if(
+                    $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                    && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                    && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                    )
+                    {
+                    $gerenciaSecondToNotify = $gerenciaSecond;
+                }
+                if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
+                    continue;
+                }
+            }
+            $filterResults[] = $result;
+        }
+        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
+        $pagerfanta->setContainer($this->container);
+        return $pagerfanta;
+    }
+    
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para notificar
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByNotified(array $criteria = null, array $orderBy = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $user = $criteria->remove('ap.user');
+        
+        $user->getId();
+        $period = $criteria->remove('ap.period');
+        
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $this->applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('to_g_c')
+                ;
+        
+        $queryBuilder
+            ->innerJoin('to_g.configuration','to_g_c');
+        
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToNotify', 'to_g_c_apn');
+        
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apn.id = :user'));
+        $queryBuilder
+            ->andWhere('ap.period = :period')
+            ->setParameter('period', $period)
+            ;
+        
+        $queryBuilder->setParameter('user', $user);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
         foreach ($results as $result) {
             if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){

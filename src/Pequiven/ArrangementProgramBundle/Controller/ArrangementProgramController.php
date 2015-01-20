@@ -281,6 +281,18 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function forNotifyingAction(Request $request){
+        $method = 'createPaginatorByNotified';
+        $route = 'pequiven_seip_arrangementprogram_for_notifying';
+        $template = 'forNotifying.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
      * Agrupa codigo para no repetir
      * @param Request $request
      * @param type $method

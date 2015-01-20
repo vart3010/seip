@@ -33,6 +33,15 @@ pequiven_seip_arrangementprogram_for_reviewing_or_approving:
     requirements:
         _format: html|json|xml
     methods: [GET]
+
+pequiven_seip_arrangementprogram_for_notifying:
+    path: /for-notifying.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forNotifyingAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
     
 pequiven_arrangementprogram_create:
     path: /{type}/create
