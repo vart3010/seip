@@ -64,6 +64,9 @@ class SummaryTotalBox extends GenericBox
         //Por Notificar
         $criteria['type'] = ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED;
         $summary['not_notified'] = $repository->getNotified($criteria);
+        //Notificados pero con Proceso sin cerrar
+        $criteria['type'] = ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS;
+        $summary['notified_but_still_in_progress'] = $repository->getNotified($criteria);
         
         return $summary;
     }

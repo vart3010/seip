@@ -36,6 +36,11 @@ abstract class ArrangementProgram
     const SUMMARY_TYPE_NOT_NOTIFIED = 'NOT_NOTIFIED';
     
     /**
+     * Resumen Por Notificados pero con Notificación en Progreso
+     */
+    const SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS = 'NOTIFIED_BUT_STILL_IN_PROGRESS';
+    
+    /**
      * Estatus borrador
      */
     const STATUS_DRAFT = 0;

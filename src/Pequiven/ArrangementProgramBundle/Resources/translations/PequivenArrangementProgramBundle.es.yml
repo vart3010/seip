@@ -74,6 +74,7 @@ pequiven:
             charged: Cargados
             notified: Notificados
             not_notified: No Notificados
+            notified_but_still_in_progress: Notificados pero con proceso sin cerrar
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión
