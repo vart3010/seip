@@ -57,6 +57,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
+        $period = 2015;
+        $menu->addChild('planning_next_period',array(
+            'route' => 'pequiven_pre_planning_index',//Route
+            'labelAttributes' => array('icon' => 'fa fa-calendar'),
+            'routeParameters' => array('period' => $period),
+        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning_next_period', $section),array('%period%' => $period)));
+        
         //$this->addExampleMenu($menu, $section);
 
 //        $menu->addChild('support', array(
@@ -169,7 +176,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child = $this->factory->createItem('planning',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
-                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',),
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));

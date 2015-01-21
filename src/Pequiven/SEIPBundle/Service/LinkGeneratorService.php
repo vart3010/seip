@@ -9,11 +9,22 @@ use Pequiven\SEIPBundle\Model\Common\CommonObject;
 /**
  * Generador de links de objetos
  * 
- * @service seip.service.link_generator
+ * @service (seip.service.link_generator)
+ * 
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
 class LinkGeneratorService extends LinkGenerator
 {
+    function getIconsDefinition() {
+        return array(
+            'fa fa-line-chart' => array('unicode' => 'xf201'),
+            'fa fa-tasks' => array('unicode' => 'xf0ae'),
+            'fa fa-cubes' => array('unicode' => 'xf1b3'),
+            'fa fa-cube' => array('unicode' => 'xf1b2'),
+            'fa fa-cog' => array('unicode' => 'xf013'),
+        );
+    }
+    
     /**
      * Tipo de link por defecto o categoria (Se usa para crear links diferentes del mismo objeto)
      */

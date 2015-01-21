@@ -1,0 +1,128 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block stylesheet %}
+    <style>
+        .x-grid-tree-node-expanded .x-tree-icon-parent {
+            background-image: none;
+        }
+        
+    </style>
+{% endblock stylesheet  %}
+    
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            enabled: true
+        });Ext.Loader.setPath('Ext.ux', '../ux');
+
+        Ext.require([
+            'Ext.data.*',
+            'Ext.grid.*',
+            'Ext.tree.*',
+            'Ext.tip.*',
+            'Ext.ux.CheckColumn'
+        ]);
+
+        //we want to setup a model and store instead of using dataUrl
+        Ext.define('Task', {
+            extend: 'Ext.data.TreeModel',
+            fields: [
+                {name: 'task',     type: 'string'},
+                {name: 'user',     type: 'string'},
+                {name: 'duration', type: 'string'},
+                {name: 'done',     type: 'boolean'}
+            ]
+        });
+
+        Ext.onReady(function() {
+            Ext.tip.QuickTipManager.init();
+
+            var store = Ext.create('Ext.data.TreeStore', {
+                model: 'Pequiven.SEIPBundle.Entity.PrePlanning.PrePlanning',
+                proxy: {
+                    type: 'ajax',
+                    //the store will get the content from the .json file
+                    url: 'get-pre-planning.json'
+                    {#api: {
+                        create: 'createPersons',
+                        read: 'get-pre-planning.json',
+                        update: 'updatePersons',
+                        destroy: 'destroyPersons'
+                    }#}
+                },
+                folderSort: true,
+                root: {
+                    name: 'People',
+                    expanded: true
+                }
+            });
+            
+            //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
+            var tree = Ext.create('Ext.tree.Panel', {
+                title: 'Planificación 2015',
+{#                width: 700,#}
+                height: 500,
+                renderTo: Ext.getBody(),
+                collapsible: false,
+                useArrows: true,
+                rootVisible: false,
+                store: store,
+                multiSelect: true,
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: [{
+                        iconCls: 'icon-add',
+                        text: 'Iniciar planificación',
+                        scope: this,
+{#                        handler: this.onAddClick#}
+                    }, {
+                        iconCls: 'icon-delete',
+                        glyph :'xf002@FontAwesome',
+                        text: 'Delete',
+                        disabled: true,
+                        itemId: 'delete',
+                        scope: this,
+{#                        handler: this.onDeleteClick#}
+                    },{
+                        itemId: 'refreshBtn',
+                            text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                            iconCls: 'icon-refresh',
+                            xtype: 'button',
+                            handler: function(){
+                                store.load();
+                            }
+                       }
+                    ]
+                }],
+                columns: [{
+                    xtype: 'treecolumn', //this is so we know which column will show the tree
+                    text: 'Nombre',
+                    width: 700,
+                    sortable: true,
+                    dataIndex: 'name',
+                    locked: true
+                },{
+                    text: 'Edit',
+                    width: 40,
+                    menuDisabled: true,
+                    xtype: 'actioncolumn',
+                    tooltip: 'Edit task',
+                    align: 'center',
+                    icon: '../simple-tasks/resources/images/edit_task.png',
+                    handler: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+                        Ext.Msg.alert('Editing' + (record.get('done') ? ' completed task' : '') , record.get('task'));
+                    },
+                    // Only leaf level tasks may be edited
+                    isDisabled: function(view, rowIdx, colIdx, item, record) {
+                        return !record.data.leaf;
+                    }
+                }]
+            });
+            
+            store.load();
+        });
+    </script>
+{% endblock javascript %}

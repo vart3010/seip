@@ -55,7 +55,7 @@ class PeriodService extends ContainerAware
     }
     
     /**
-     * 
+     * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
     function getPeriodActive()
