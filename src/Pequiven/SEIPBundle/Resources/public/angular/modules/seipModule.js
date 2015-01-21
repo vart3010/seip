@@ -733,6 +733,8 @@ angular.module('seipModule.controllers', [])
                                 $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
                                     $scope.model.firstLineManagement = selected;
                                 });
+                                var selectFirstLineManagement = angular.element('#firstLineManagement');
+                                selectFirstLineManagement.select2("enable",false);
                             }
                         });
             }
@@ -770,6 +772,7 @@ angular.module('seipModule.controllers', [])
             
             $scope.getSecondLineManagement();
             
+            //Carga de Filtro Localidad
             if(!isPlanning){
                 $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
                     .success(function(data) {
@@ -793,6 +796,8 @@ angular.module('seipModule.controllers', [])
                             $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
                                 $scope.model.complejo = selected;
                             });
+                            var selectComplejos = angular.element('#selectComplejos');
+                            selectComplejos.select2("enable",false);
                         }
                     });
             }
