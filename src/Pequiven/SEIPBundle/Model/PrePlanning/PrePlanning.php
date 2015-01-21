@@ -31,23 +31,19 @@ abstract class PrePlanning  implements PrePlanningInterface
     const TYPE_OBJECT_ROOT_NODE = 0;
     
     /**
-     * Tipo objetivo
-     */
-    const TYPE_OBJECT_OBJETIVE = 1;
-    /**
-     * Tipo programa de gestion
-     */
-    const TYPE_OBJECT_ARRANGEMENT_PROGRAM = 2;
-    /**
-     * Tipo indicador
-     */
-    const TYPE_OBJECT_INDICATOR = 3;
-    
-    /**
      * Estatus borrador
      */
     const STATUS_DRAFT = 0;
     
+    /**
+     * Estatus aprobado
+     */
+    const STATUS_APPROVED = 1;
+    
+    /**
+     * Parametros de la pre planificacion
+     * @var type 
+     */
     protected $parameters;
     
     public function setOriginObject($object)
@@ -56,6 +52,9 @@ abstract class PrePlanning  implements PrePlanningInterface
         $class = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($object));
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
             $typeObject = self::TYPE_OBJECT_OBJETIVE;
+            if($object->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                $this->setRequiresApproval(true);
+            }
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
             $typeObject = self::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
         }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){

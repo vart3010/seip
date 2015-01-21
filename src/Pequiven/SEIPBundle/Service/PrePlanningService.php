@@ -55,8 +55,6 @@ class PrePlanningService extends ContainerAware
             $prePlannig->setParameters($configEntity);
             
             $childrens = $objetiveArray['childrens'];
-//            var_dump($objetive->getRef());
-//            var_dump(count($childrens));
             $this->extractDataFromObjective($prePlannig, $objetive);
             
             foreach ($childrens as $children) {
@@ -103,8 +101,27 @@ class PrePlanningService extends ContainerAware
         $icon = $root->getParameter('icon');
         $url = $root->getParameter('url');
         $name = $root->getName();
+        $limitName = 130;
+        $nameSumary = $name;
+        if(strlen($nameSumary) > $limitName){
+            $nameSumary = substr($nameSumary, 0, $limitName).'...';
+        }
+        
         if($url != ''){
-            $name = sprintf('<a href="%s" target="_blank">%s</a>',$url,$name);
+            $name = sprintf('<a href="%s" target="_blank" title="%s">%s</a>',$url,$name,$nameSumary);
+        }
+        if($root->isRequiresApproval()){
+            $em = $this->getDoctrine()->getManager();
+            $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningApprovalItem');
+            $prePlanningApprovalItem = $repository->findOneBy(array(
+                'typeObject' => $root->getTypeObject(),
+                'idObject' => $root->getIdObject(),
+            ));
+            if($prePlanningApprovalItem){
+                $name .= ' <span class="green">(Aprobado)</span>';
+            }else{
+                $name .= ' <span class="red">(Requiere Aprobación)</span>';
+            }
         }
         $child = array(
             'id' => $root->getId(),'name' => $name,'leaf' => true, 'iconCls' => $icon
@@ -171,7 +188,7 @@ class PrePlanningService extends ContainerAware
      *
      * @throws LogicException If DoctrineBundle is not available
      */
-    public function getDoctrine()
+    protected function getDoctrine()
     {
         if (!$this->container->has('doctrine')) {
             throw new LogicException('The DoctrineBundle is not registered in your application.');

@@ -150,3 +150,10 @@ a {
     vertical-align: baseline;
     background: transparent;
 }
+
+.red {
+    color: #e90202;
+}
+.green {
+    color: #28d600;
+}

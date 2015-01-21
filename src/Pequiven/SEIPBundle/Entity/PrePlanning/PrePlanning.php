@@ -125,11 +125,20 @@ class PrePlanning extends Model
     private $period;
     
     /**
+     * Parametros de la preplanificacion
      * 
      * @ORM\Column(name="parameters",type="json_array")
      * @var array
      */
     protected $parameters;
+    
+    /**
+     * ¿Requiere aprobacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiresApproval",type="boolean")
+     */
+    protected $requiresApproval = false;
 
     /**
      * Constructor
@@ -436,5 +445,38 @@ class PrePlanning extends Model
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Set requiresApproval
+     *
+     * @param boolean $requiresApproval
+     * @return PrePlanning
+     */
+    public function setRequiresApproval($requiresApproval)
+    {
+        $this->requiresApproval = $requiresApproval;
+
+        return $this;
+    }
+
+    /**
+     * Get requiresApproval
+     *
+     * @return boolean 
+     */
+    public function getRequiresApproval()
+    {
+        return $this->requiresApproval;
+    }
+    
+    /**
+     * Is requiresApproval
+     *
+     * @return boolean 
+     */
+    public function isRequiresApproval()
+    {
+        return $this->getRequiresApproval();
     }
 }

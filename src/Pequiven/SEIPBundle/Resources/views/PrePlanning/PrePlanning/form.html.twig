@@ -26,17 +26,6 @@
             'Ext.ux.CheckColumn'
         ]);
 
-        //we want to setup a model and store instead of using dataUrl
-        Ext.define('Task', {
-            extend: 'Ext.data.TreeModel',
-            fields: [
-                {name: 'task',     type: 'string'},
-                {name: 'user',     type: 'string'},
-                {name: 'duration', type: 'string'},
-                {name: 'done',     type: 'boolean'}
-            ]
-        });
-
         Ext.onReady(function() {
             Ext.tip.QuickTipManager.init();
 
@@ -54,10 +43,37 @@
                     }#}
                 },
                 folderSort: true,
-                root: {
-                    name: 'People',
-                    expanded: true
-                }
+            });
+            var btnDelete = Ext.create("Ext.Button", {
+                handler: function () {
+                    if (tree.getSelectionModel().hasSelection()) {
+                        var selectedNodes = tree.getSelectionModel().getSelection();
+                        var i = 0;
+                        for(i=0; i < selectedNodes.length; i++){
+                            console.log(selectedNodes[i].id);
+                            console.log(selectedNodes);
+                            if(selectedNodes[i].childNodes.length){
+                                Ext.Msg.alert("", "No selected item.");
+                            }
+                        }
+                        Ext.Msg.confirm('Eliminar', '¿Desea eliminar '+i+' items?<br/>Recuere que al eliminar un objetivo, se eliminaran los items asociados.', function(btn){
+                            console.log(btn);
+                           if(btn === 'yes'){
+                               //some code
+                           }
+                           else{
+                              //some code
+                           }
+                         });
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados.");
+                    }
+                },
+                iconCls: 'icon-delete',
+                glyph :'xf002@FontAwesome',
+                text: 'Delete',
+                disabled: true,
+                itemId: 'btnDelete',
             });
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
@@ -71,6 +87,20 @@
                 rootVisible: false,
                 store: store,
                 multiSelect: true,
+                listeners: {
+                    itemclick:{
+                        fn: function(view, record, item, index, e){
+{#                            console.log(record.get('id'));#}
+                            if (tree.getSelectionModel().hasSelection()) {
+                                btnDelete.setDisabled(false);
+                                var selectedNode = tree.getSelectionModel().getSelection();
+{#                                console.log(selectedNode);#}
+                            } else {
+                                btnDelete.setDisabled(true);
+                            }
+                        }
+                    }
+                },
                 dockedItems: [{
                     xtype: 'toolbar',
                     items: [{
@@ -78,15 +108,7 @@
                         text: 'Iniciar planificación',
                         scope: this,
 {#                        handler: this.onAddClick#}
-                    }, {
-                        iconCls: 'icon-delete',
-                        glyph :'xf002@FontAwesome',
-                        text: 'Delete',
-                        disabled: true,
-                        itemId: 'delete',
-                        scope: this,
-{#                        handler: this.onDeleteClick#}
-                    },{
+                    }, btnDelete,{
                         itemId: 'refreshBtn',
                             text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
                             iconCls: 'icon-refresh',
@@ -100,25 +122,9 @@
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree
                     text: 'Nombre',
-                    width: 700,
-                    sortable: true,
+                    sortable: false,
                     dataIndex: 'name',
-                    locked: true
-                },{
-                    text: 'Edit',
-                    width: 40,
-                    menuDisabled: true,
-                    xtype: 'actioncolumn',
-                    tooltip: 'Edit task',
-                    align: 'center',
-                    icon: '../simple-tasks/resources/images/edit_task.png',
-                    handler: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-                        Ext.Msg.alert('Editing' + (record.get('done') ? ' completed task' : '') , record.get('task'));
-                    },
-                    // Only leaf level tasks may be edited
-                    isDisabled: function(view, rowIdx, colIdx, item, record) {
-                        return !record.data.leaf;
-                    }
+                    flex: 1
                 }]
             });
             

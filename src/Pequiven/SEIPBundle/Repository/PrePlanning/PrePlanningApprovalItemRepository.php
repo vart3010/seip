@@ -9,17 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\PrePlanning;
+namespace Pequiven\SEIPBundle\Repository\PrePlanning;
+
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
+ * Aprobaciones de los item de pre planificacion
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface extends TypePrePlanningInterface
+class PrePlanningApprovalItemRepository extends EntityRepository
 {
-    public function setName($name);
     
-    public function getParameters();
-    
-    public function setRequiresApproval($requiresApproval);
 }
