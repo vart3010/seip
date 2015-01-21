@@ -149,6 +149,9 @@ pequiven_seip:
         responsibles_pg: Responsable(s) del programa de gestión
         responsibles_goals: Responsable(s) de las metas
         type_template: Tipo de plantilla
+        notified: Notificados
+        not_notified: Sin Notificación
+        notified_but_still_in_progress: Notificados pero con proceso sin cerrar
     tooltips:
         click_to_show: Click para ver
     area:

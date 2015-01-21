@@ -801,10 +801,31 @@ angular.module('seipModule.controllers', [])
                         $scope.data.responsibles = data;
                     });
 
+            //Programas de Gestión Notificados, No Notificados y con Proceso de Notificación sin cerrar
+            $scope.viewNotified = function(type) {
+                $scope.tableParams.$params.filter['view_planning'] = true;
+                $scope.tableParams.$params.filter['type'] = type;
+                $scope.tableParams.$params.filter['status'] = null;
+                var selectStatus = angular.element('#selectStatus');
+                selectStatus.select2("val",'');
+            };
+            $scope.resetViewNotified = function() {
+                $scope.tableParams.$params.filter['view_planning'] = null;
+                $scope.tableParams.$params.filter['type'] = null;
+            };
+            $scope.viewByStatus = function(status){
+                $scope.tableParams.$params.filter['status'] = status;
+                var selectStatus = angular.element('#selectStatus');
+                selectStatus.select2("val",status);
+                $scope.resetViewNotified();
+            }
+
+            
             $scope.$watch("model.complejo", function(newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
 
                     $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
                 }
@@ -812,6 +833,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.arrangementProgramStatus", function(newParams, oldParams) {
                 if ($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined) {
                     $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['status'] = null;
                 }
@@ -826,6 +848,7 @@ angular.module('seipModule.controllers', [])
                     });
                     if (i > 0) {
                         $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
                     } else {
                         $scope.tableParams.$params.filter['responsibles'] = null;
                     }
@@ -843,6 +866,7 @@ angular.module('seipModule.controllers', [])
                     });
                     if (i > 0) {
                         $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
                     } else {
                         $scope.tableParams.$params.filter['responsiblesGoals'] = null;
                     }
@@ -853,6 +877,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.tacticalObjective", function(newParams, oldParams) {
                 if ($scope.model.tacticalObjective != null && $scope.model.tacticalObjective.id != undefined) {
                     $scope.tableParams.$params.filter['tacticalObjective'] = $scope.model.tacticalObjective.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['tacticalObjective'] = null;
                 }
@@ -860,6 +885,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.operationalObjective", function(newParams, oldParams) {
                 if ($scope.model.operationalObjective != null && $scope.model.operationalObjective.id != undefined) {
                     $scope.tableParams.$params.filter['operationalObjective'] = $scope.model.operationalObjective.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['operationalObjective'] = null;
                 }
@@ -867,6 +893,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.firstLineManagement", function(newParams, oldParams) {
                 if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
                     $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['firstLineManagement'] = null;
                 }
@@ -874,6 +901,7 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.secondLineManagement", function(newParams, oldParams) {
                 if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
                     $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                    $scope.resetViewNotified();
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
                 }
@@ -884,6 +912,7 @@ angular.module('seipModule.controllers', [])
                 var firstLineManagement = angular.element('#firstLineManagement');
                 if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
                     $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
+                    $scope.resetViewNotified();
                     if($scope.model.typeManagement.id == 0){//Si el filtro es modular
                         selectComplejos.select2('enable',false);
                         firstLineManagement.select2('enable',false);

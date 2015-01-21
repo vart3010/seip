@@ -147,7 +147,7 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
-     * 
+     * Retorna los Programas de Gestión por Notificados, No Notificados o con Proceso de Notificación sin cerrar
      * @param array $criteria
      */
     public function getNotified(array $criteria = null){
@@ -480,6 +480,32 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder
                     ->setParameter('typeManagement', true)
                 ;
+        }
+        
+        //VISTA PLANIFICACIÓN POR GERENCIA
+        if(isset($criteria['view_planning'])){
+            if($criteria['view_planning'] == true){
+                $criteria->remove('view_planning');
+                $type = $criteria['type'];
+                $criteria->remove('type');
+                if($type == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere($queryBuilder->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'))
+                        ;
+                } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere($queryBuilder->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'))
+                        ;
+                } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere('d.notificationInProgressByUser IS NOT NULL')
+                            ->andWhere('ap.totalAdvance > 0')
+                            ;
+                }
+            }
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
