@@ -20,6 +20,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class PrePlanningRepository extends EntityRepository
 {
+    /**
+     * Devuelve el root de una pre planificacion
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @param \Pequiven\SEIPBundle\Entity\User $user
+     * @return type
+     */
     public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user) {
         $qb = $this->getQueryBuilder();
         $qb
@@ -40,6 +46,12 @@ class PrePlanningRepository extends EntityRepository
             ->setParameter('typeObject', \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::TYPE_OBJECT_ROOT_NODE)
             ;
         return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    public function findIn(array $ids) {
+        $qb = $this->getQueryBuilder();
+        $qb->andWhere($qb->expr()->in('p.id', $ids));
+        return $qb->getQuery()->getResult();
     }
     
     protected function getAlias() {

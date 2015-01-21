@@ -34,13 +34,12 @@
                 proxy: {
                     type: 'ajax',
                     //the store will get the content from the .json file
-                    url: 'get-pre-planning.json'
-                    {#api: {
-                        create: 'createPersons',
+                    api: {
+                        {#create: 'createPersons',#}
                         read: 'get-pre-planning.json',
-                        update: 'updatePersons',
-                        destroy: 'destroyPersons'
-                    }#}
+                        {#update: 'updatePersons',#}
+                        destroy: 'delete-pre-planning'
+                    }
                 },
                 folderSort: true,
             });
@@ -49,19 +48,14 @@
                     if (tree.getSelectionModel().hasSelection()) {
                         var selectedNodes = tree.getSelectionModel().getSelection();
                         var i = 0;
-                        for(i=0; i < selectedNodes.length; i++){
-                            console.log(selectedNodes[i].id);
-                            console.log(selectedNodes);
-                            if(selectedNodes[i].childNodes.length){
-                                Ext.Msg.alert("", "No selected item.");
-                            }
-                        }
-                        Ext.Msg.confirm('Eliminar', '¿Desea eliminar '+i+' items?<br/>Recuere que al eliminar un objetivo, se eliminaran los items asociados.', function(btn){
-                            console.log(btn);
+                        Ext.Msg.confirm('Eliminar', '¿Desea eliminar '+(selectedNodes.length)+' items?<br/>Recuere que al eliminar un objetivo, se eliminaran los items asociados.', function(btn){
                            if(btn === 'yes'){
-                               //some code
-                           }
-                           else{
+                               for(i=0; i < selectedNodes.length; i++){
+                                    store.getNodeById(selectedNodes[i].id).remove();
+                                }
+                                store.sync();
+                                evaluateDataTree();
+                           } else{
                               //some code
                            }
                          });
@@ -69,11 +63,79 @@
                         Ext.Msg.alert("", "No hay items selecionados.");
                     }
                 },
-                iconCls: 'icon-delete',
                 glyph :'xf002@FontAwesome',
-                text: 'Delete',
+                text: 'Eliminar',
                 disabled: true,
                 itemId: 'btnDelete',
+            });
+            var refreshBtn = Ext.create("Ext.Button", {
+                itemId: 'refreshBtn',
+                text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                glyph: 'xf021@FontAwesome',
+                xtype: 'button',
+                disabled: true,
+                handler: function(){
+                    store.load({
+                        callback: function(r,options,success){
+                            evaluateDataTree();
+                        }
+                    });
+                }
+            });
+            var startPrePlanningBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Iniciar planificación', '¿Desea iniciar la planificación?<br/>Al iniciar el proceso de planificación se importaran los items de su periodo 2014 para que seleccione los que desea para el siguiente periodo.', function(btn){
+                            if(btn === 'yes'){
+                                tree.body.mask("Iniciando planificación...");
+                                Ext.Ajax.request({
+                                 url: '{{ path('pequiven_pre_planning_start_pre_planning') }}',
+                                 success: function(response, opts) {
+                                    tree.body.unmask();
+                                    store.load({
+                                        callback: function(r,options,success){
+                                            evaluateDataTree();
+                                        }
+                                    });
+                                 },
+                                 failure: function(response, opts) {
+                                    console.log('server-side failure with status code ' + response.status);
+                                 }
+                              });
+                            } 
+                     });
+                    
+                },
+                itemId: 'startPrePlanningBtn',
+                glyph: 'xf073@FontAwesome',
+                text: 'Iniciar planificación',
+                disabled: true
+            });
+            
+            var returnChangesBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Restaurar matriz', '¿Desea restaurar la matriz de planificación?<br/>Recuere que al restaurarla se construira nuevamente la matriz.', function(btn){
+                       if(btn === 'yes'){
+                           tree.body.mask("Devolviendo los cambios...");
+                           Ext.Ajax.request({
+                            url: '{{ path('pequiven_pre_planning_return_changes') }}',
+                            success: function(response, opts) {
+                               tree.body.unmask();
+                               store.load();
+                            },
+                            failure: function(response, opts) {
+                               console.log('server-side failure with status code ' + response.status);
+                            }
+                         });
+                       } else {
+                          //some code
+                       }
+                    });
+
+                },
+                glyph :'xf122@FontAwesome',
+                text: 'Devolver los cambios',
+                itemId: 'btnReturnChanges',
+                disabled: true,
             });
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
@@ -90,11 +152,8 @@
                 listeners: {
                     itemclick:{
                         fn: function(view, record, item, index, e){
-{#                            console.log(record.get('id'));#}
                             if (tree.getSelectionModel().hasSelection()) {
                                 btnDelete.setDisabled(false);
-                                var selectedNode = tree.getSelectionModel().getSelection();
-{#                                console.log(selectedNode);#}
                             } else {
                                 btnDelete.setDisabled(true);
                             }
@@ -103,20 +162,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [{
-                        iconCls: 'icon-add',
-                        text: 'Iniciar planificación',
-                        scope: this,
-{#                        handler: this.onAddClick#}
-                    }, btnDelete,{
-                        itemId: 'refreshBtn',
-                            text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
-                            iconCls: 'icon-refresh',
-                            xtype: 'button',
-                            handler: function(){
-                                store.load();
-                            }
-                       }
+                    items: [startPrePlanningBtn, returnChangesBtn,refreshBtn,btnDelete
                     ]
                 }],
                 columns: [{
@@ -128,7 +174,22 @@
                 }]
             });
             
-            store.load();
+            var evaluateDataTree = function(){
+                   var root = tree.getRootNode();
+                    var hasChilren = (root.childNodes.length  != 0);
+                    startPrePlanningBtn.setDisabled(hasChilren);
+                    
+                    returnChangesBtn.setDisabled(!hasChilren);
+                    refreshBtn.setDisabled(!hasChilren);
+                    btnDelete.setDisabled(!hasChilren);
+                    return hasChilren;
+            };
+            
+            store.load({
+                callback: function(r,options,success){
+                    evaluateDataTree();
+                }
+            });
         });
     </script>
 {% endblock javascript %}

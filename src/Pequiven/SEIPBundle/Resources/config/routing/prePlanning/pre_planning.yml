@@ -21,3 +21,24 @@ pequiven_pre_planning_get_pre_planning:
     requirements:
         _format: html|json
     methods: [GET]
+    
+pequiven_pre_planning_delete_pre_planning:
+    path: /delete-pre-planning
+    defaults:
+        _controller: pequiven.controller.pre_planning:deletePrePlanningAction
+        _format: json
+    methods: [POST]
+    
+pequiven_pre_planning_return_changes:
+    path: /return-changes
+    defaults:
+        _controller: pequiven.controller.pre_planning:returnChangesAction
+        _format: json
+    methods: [GET]
+    
+pequiven_pre_planning_start_pre_planning:
+    path: /start-prep-lanning
+    defaults:
+        _controller: pequiven.controller.pre_planning:startPrePlanningAction
+        _format: json
+    methods: [GET]

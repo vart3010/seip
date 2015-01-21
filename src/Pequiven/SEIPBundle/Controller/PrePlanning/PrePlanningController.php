@@ -39,6 +39,108 @@ class PrePlanningController extends ResourceController
     public function getPrePlanningAction(Request $request)
     {
         $user = $this->getUser();
+        $prePlanningService = $this->getPrePlanningService();
+        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+        $structureTree = array();
+        if($rootTreePrePlannig){
+            $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
+        }
+
+        $data = array(
+            "success" => true,
+            "text" =>  ".",
+            "children"=> $structureTree
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Elimina items de mi nodo
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function deletePrePlanningAction(Request $request)
+    {
+        $dataRequest = $request->request->all();
+        $ids = array();
+        foreach ($dataRequest as $value) {
+            if(is_int($value)){
+                $ids[$value] = $value;
+            }
+            if(isset($value['id'])){
+                $ids[$value['id']] = $value['id'];
+            }
+        }
+        $success = false;
+        if(count($ids) > 0){
+            $em = $this->getDoctrine()->getManager();
+            $repository = $this->getRepository();
+            $resources = $repository->findIn($ids);
+            foreach ($resources as $resource) {
+                $em->remove($resource);
+            }
+            $em->flush();
+            $success = true;
+        }
+        $data = array(
+            "success" => $success,
+            "data" => $ids
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    public function returnChangesAction() 
+    {
+        $user = $this->getUser();
+        $prePlanningService = $this->getPrePlanningService();
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+        if($rootTreePrePlannig){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($rootTreePrePlannig);
+            $em->flush();
+            
+            $objetivesArray = $this->getObjetivesArray();
+            $prePlanningService->buildTreePrePlannig($objetivesArray);
+        }
+        $success = true;
+        $data = array(
+            "success" => $success,
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    public function startPrePlanningAction() 
+    {
+        $user = $this->getUser();
+        $prePlanningService = $this->getPrePlanningService();
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+        if($rootTreePrePlannig){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($rootTreePrePlannig);
+            $em->flush();
+        }
+            
+        $objetivesArray = $this->getObjetivesArray();
+        $prePlanningService->buildTreePrePlannig($objetivesArray);
+        
+        $success = true;
+        $data = array(
+            "success" => $success,
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    private function getObjetivesArray() {
+        $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
         $objetivesArray = array();
         
@@ -59,24 +161,10 @@ class PrePlanningController extends ResourceController
                 $objetivesArray[$parent->getId()]['childrens'][$objetive->getId()] = $objetive;
             }
         }
-        $prePlanningService = $this->getPrePlanningService();
-        
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
-        if(!$rootTreePrePlannig){
-            $rootTreePrePlannig = $prePlanningService->buildTreePrePlannig($objetivesArray);
-        }
-        $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
-
-        $data = array(
-            "success" => true,
-            "text" =>  ".",
-            "children"=> $structureTree
-        );
-        $view = $this->view($data);
-        return $this->handleView($view);
+        return $objetivesArray;
     }
-    
+
+
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
