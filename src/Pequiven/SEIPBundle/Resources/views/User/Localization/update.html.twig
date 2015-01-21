@@ -1,0 +1,22 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block body %}
+    {% set user = localization.configuration.user %}
+    {{ contentHeader(
+        {(path('pequiven_seip_user_show',{'id':user.id})):("pequiven_seip.user.user"|trans)},
+        ('pequiven_seip.user.localization.localization'|trans),
+        ('pequiven_seip.actions.update'|trans)
+    ) }}
+    {{ form_errors(form) }}
+    <form action="{{ path('pequiven_localization_update',{'id':localization.id}) }}" method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_seip.user.localization.localization'|trans }} ({{ user }})</legend>
+            {% include 'PequivenSEIPBundle:User:Localization/_form.html.twig' %}
+        </fieldset>
+        {{ actions.update() }}
+    </form>
+{% endblock body %}

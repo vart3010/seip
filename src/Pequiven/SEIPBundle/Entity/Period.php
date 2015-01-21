@@ -3,14 +3,14 @@
 namespace Pequiven\SEIPBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Pequiven\SEIPBundle\Model\Period as Base;
 /**
  * Periodo
  *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="name_idx", columns={"name"})})
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  */
-class Period
+class Period extends Base
 {
     /**
      * @var integer
@@ -28,12 +28,20 @@ class Period
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+    /**
+     * Description del periodo
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
 
     /**
      * Fecha de inicio
      * @var \DateTime
      *
-     * @ORM\Column(name="dateStart", type="date")
+     * @ORM\Column(name="dateStart", type="date", nullable=false)
      */
     private $dateStart;
 
@@ -41,7 +49,7 @@ class Period
      * Fecha fin
      * @var \DateTime
      *
-     * @ORM\Column(name="dateEnd", type="date")
+     * @ORM\Column(name="dateEnd", type="date", nullable=false)
      */
     private $dateEnd;
 
@@ -53,6 +61,53 @@ class Period
      */
     private $status = true;
 
+    /**
+     * Fecha inicio de notificación de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartNotificationArrangementProgram;
+
+    /**
+     * Fecha fin de notificación de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndNotificationArrangementProgram;
+
+    /**
+     * Fecha inicio de carga de programas de gestion.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartLoadArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartLoadArrangementProgram;
+
+    /**
+     * Fecha fin de carga de programas de gestión.
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndLoadArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndLoadArrangementProgram;
+
+    /**
+     * Fecha inicio de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartClearanceNotificationArrangementProgram;
+
+    /**
+     * Fecha fin de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndClearanceNotificationArrangementProgram;
 
     /**
      * Get id
@@ -156,7 +211,160 @@ class Period
         return $this->status;
     }
     
+    function getDescription() {
+        return $this->description;
+    }
+
+    /**
+     * 
+     * @param type $description
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    function setDescription($description) {
+        $this->description = $description;
+        
+        return $this;
+    }
+
     public function __toString() {
-        return $this->name;
+        return $this->description;
+    }
+
+    /**
+     * Set dateStartNotificationArrangementProgram
+     *
+     * @param \DateTime $dateStartNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateStartNotificationArrangementProgram($dateStartNotificationArrangementProgram)
+    {
+        $this->dateStartNotificationArrangementProgram = $dateStartNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartNotificationArrangementProgram()
+    {
+        return $this->dateStartNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateEndNotificationArrangementProgram
+     *
+     * @param \DateTime $dateEndNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateEndNotificationArrangementProgram($dateEndNotificationArrangementProgram)
+    {
+        $this->dateEndNotificationArrangementProgram = $dateEndNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndNotificationArrangementProgram()
+    {
+        return $this->dateEndNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateStartLoadArrangementProgram
+     *
+     * @param \DateTime $dateStartLoadArrangementProgram
+     * @return Period
+     */
+    public function setDateStartLoadArrangementProgram($dateStartLoadArrangementProgram)
+    {
+        $this->dateStartLoadArrangementProgram = $dateStartLoadArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartLoadArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartLoadArrangementProgram()
+    {
+        return $this->dateStartLoadArrangementProgram;
+    }
+
+    /**
+     * Set dateEndLoadArrangementProgram
+     *
+     * @param \DateTime $dateEndLoadArrangementProgram
+     * @return Period
+     */
+    public function setDateEndLoadArrangementProgram($dateEndLoadArrangementProgram)
+    {
+        $this->dateEndLoadArrangementProgram = $dateEndLoadArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndLoadArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndLoadArrangementProgram()
+    {
+        return $this->dateEndLoadArrangementProgram;
+    }
+
+    /**
+     * Set dateStartClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateStartClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateStartClearanceNotificationArrangementProgram($dateStartClearanceNotificationArrangementProgram)
+    {
+        $this->dateStartClearanceNotificationArrangementProgram = $dateStartClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartClearanceNotificationArrangementProgram()
+    {
+        return $this->dateStartClearanceNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateEndClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateEndClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateEndClearanceNotificationArrangementProgram($dateEndClearanceNotificationArrangementProgram)
+    {
+        $this->dateEndClearanceNotificationArrangementProgram = $dateEndClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndClearanceNotificationArrangementProgram()
+    {
+        return $this->dateEndClearanceNotificationArrangementProgram;
     }
 }

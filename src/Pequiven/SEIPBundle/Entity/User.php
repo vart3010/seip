@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Pequiven\MasterBundle\Entity\Rol;
+use Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface;
+use Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface;
 
 /**
  * User model
@@ -20,7 +22,7 @@ use Pequiven\MasterBundle\Entity\Rol;
  * })
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface
+class User extends BaseUser implements UserInterface,UserBoxInterface
 {
     
     /**
@@ -147,6 +149,14 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
      * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\User\Configuration",inversedBy="user",cascade={"persist","remove"})
      */
     private $configuration;
+    
+    /**
+     * Boxes o widgets del usuario
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Box\ModelBox
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Box\ModelBox",mappedBy="user")
+     */
+    private $boxes;
 
     /**
      * Constructor
@@ -159,6 +169,8 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         $this->arrangementPrograms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervisors = new \Doctrine\Common\Collections\ArrayCollection();
         $this->supervised = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->boxes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -477,6 +489,23 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     {
         return $this->goals;
     }
+    
+    /**
+     * 
+     */
+    public function isAllowSuperAdmin(){
+        $isSuperAdmin = false;
+        $level = Rol::ROLE_SUPER_ADMIN;
+        $groups = $this->getGroups();
+        foreach ($groups as $group) {
+            if($group->getLevel() == $level)
+            {
+                $isSuperAdmin = true;
+            }
+        }
+        return $isSuperAdmin;
+    }
+    
     /**
      * Devuelve el nivel del rol asignado
      * @return integer
@@ -486,14 +515,41 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
         if(!isset($this->levelByGroup)){
             $level = 0;
             $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
             foreach ($groups as $group) {
-                if($group->getLevel() > $level){
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
                     $level = $group->getLevel();
                 }
             }
             $this->levelByGroup = $level;
         }
         return $this->levelByGroup;
+    }
+    
+    public function getRealGroup() {
+        if(!isset($this->realGroup)){
+            $level = 0;
+            $groups = $this->getGroups();
+            $groupsLevelAdmin = array(
+                Rol::ROLE_ADMIN,
+                Rol::ROLE_SUPER_ADMIN
+            );
+            $realGroup = null;
+            foreach ($groups as $group) {
+                if($group->getLevel() > $level && !in_array($group->getLevel(), $groupsLevelAdmin))
+                {
+                    $level = $group->getLevel();
+                    $realGroup = $group;
+                }
+            }
+            $this->levelByGroup = $level;
+            $this->realGroup = $realGroup;
+        }
+        return $this->realGroup;
     }
     
     /**
@@ -632,5 +688,40 @@ class User extends BaseUser implements \Tecnocreaciones\Vzla\GovernmentBundle\Mo
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+    
+    
+
+    /**
+     * Add boxes
+     *
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
+     * @return User
+     */
+    public function addModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
+    {
+        $this->boxes[] = $boxes;
+
+        return $this;
+    }
+
+    /**
+     * Remove boxes
+     *
+     * @param \Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes
+     */
+    public function removeModelBox(\Tecnocreaciones\Bundle\BoxBundle\Model\ModelBoxInterface $boxes)
+    {
+        $this->boxes->removeElement($boxes);
+    }
+
+    /**
+     * Get boxes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModelBoxes()
+    {
+        return $this->boxes;
     }
 }

@@ -59,12 +59,12 @@ class GerenciaSecondRepository extends baseEntityRepository {
     function createPaginatorGerenciaSecond(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         
-        $queryBuilder->leftJoin('o.gerencia', 'g');
-        $queryBuilder->leftJoin('o.complejo', 'c');
+        $queryBuilder->leftJoin('gs.gerencia', 'g');
+        $queryBuilder->leftJoin('gs.complejo', 'c');
 
         //Filtro gerencia 2da Línea
         if(isset($criteria['gerenciaSecond'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$criteria['gerenciaSecond']."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
         }
         //Filtro gerencia 1ra Línea
         if(isset($criteria['gerenciaFirst'])){
@@ -85,19 +85,19 @@ class GerenciaSecondRepository extends baseEntityRepository {
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        
+        $criteria->remove('view_planning');
         //Filtro de gerencia de segunda linea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){
             $complejo = $criteria->remove('complejo');
             $queryBuilder
-                        ->andWhere('o.complejo = :complejo');
+                        ->andWhere('gs.complejo = :complejo');
             
             if($typeManagement == \Pequiven\MasterBundle\Model\GerenciaSecond::TYPE_MANAGEMENT_MODULAR){
                 $queryBuilder
-                        ->andWhere('o.modular = :typeManagement');
+                        ->andWhere('gs.modular = :typeManagement');
             }else{
                 $queryBuilder
-                        ->andWhere('o.vinculante = :typeManagement');
+                        ->andWhere('gs.vinculante = :typeManagement');
             }
             $queryBuilder
                     ->setParameter('typeManagement', true)
@@ -105,11 +105,50 @@ class GerenciaSecondRepository extends baseEntityRepository {
                 ;
         }else if(($gerencia = $criteria->remove('gerencia')) != null){
             $queryBuilder
-                    ->innerJoin('o.gerencia', 'g')
+                    ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('gs.gerenciaVinculants', 'gv')
                     ->andWhere('g.id = :gerencia')
+                    ->orWhere('gv.id = :gerencia')
                     ->setParameter('gerencia', $gerencia)
                 ;
         }
         return $queryBuilder->getQuery()->getResult();
+    }
+    
+    
+    public function findByGerenciaFirst($options = array()){
+        $qb = $this->getQueryBuilder();
+        
+        if(isset($options['gerencia'])){
+            $qb->andWhere('gs.gerencia = '.$options['gerencia']);
+            $qb->leftJoin('gs.gerenciaVinculants', 'gv');
+            $qb->orWhere('gv.id = '.$options['gerencia']);
+        }
+        
+        $qb->andWhere('gs.enabled = :enabled');
+        
+        $qb->setParameter('enabled', true);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function findWithObjetives($id) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('gs_ob')
+            ->addSelect('gs_ob_c')
+            ->addSelect('gs_ob_p')
+            ->leftJoin('gs.operationalObjectives', 'gs_ob')
+            ->leftJoin('gs_ob.childrens', 'gs_ob_c')
+            ->leftJoin('gs_ob.parents', 'gs_ob_p')
+            ->andWhere('gs.id = :gerencia')
+            ->setParameter('gerencia', $id)
+                ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    protected function getAlias() {
+        return 'gs';
     }
 }

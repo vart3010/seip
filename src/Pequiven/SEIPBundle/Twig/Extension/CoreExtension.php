@@ -23,6 +23,7 @@ class CoreExtension extends \Twig_Extension
             new \Twig_SimpleFunction('print_error', array($this,'printError'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('contentHeader', array($this,'contentHeader'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('generateLink', array($this,'generateLink'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('generateLinkUrlOnly', array($this,'generateLinkUrlOnly'), array('is_safe' => array('html'))),
         );
     }
     
@@ -59,11 +60,15 @@ class CoreExtension extends \Twig_Extension
             $parameters[] = $item;
         }
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $periodDescription = '';
+        if($period){
+            $periodDescription = $period->getDescription();
+        }
         
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
-                'period' => $period
+                'period' => $periodDescription
             )
         );
     }
@@ -78,15 +83,27 @@ class CoreExtension extends \Twig_Extension
     }
     
     /**
-     * Genera un link para mostrar el objeto
+     * Genera un link completo para mostrar el objeto
      * 
      * @param type $entity
      * @param type $type
      * @return type
      */
-    function generateLink($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT)
+    function generateLink($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT,array $parameters = array())
     {
-        return $this->container->get('seip.service.link_generator')->generate($entity,$type);
+        return $this->container->get('seip.service.link_generator')->generate($entity,$type,$parameters);
+    }
+    
+    /**
+     * Genera solo la url de el objeto
+     * 
+     * @param type $entity
+     * @param type $type
+     * @return type
+     */
+    function generateLinkUrlOnly($entity,$type = \Pequiven\SEIPBundle\Service\LinkGenerator::TYPE_LINK_DEFAULT,array $parameters = array())
+    {
+        return $this->container->get('seip.service.link_generator')->generateOnlyUrl($entity,$type,$parameters);
     }
     
     /**

@@ -13,6 +13,8 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.formula.variable:
         class: Pequiven\MasterBundle\Admin\Formula\VariableAdmin
         tags:
@@ -66,14 +68,3 @@ services:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setModelManager, [@seip.model.manager]]
             - [ setContainer, [@service_container]]
-            
-    sonata.admin.user.configuration:
-        class: Pequiven\MasterBundle\Admin\User\ConfigurationAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%", label_catalogue: "admin",label: "Configuracion del usuario" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\User\Configuration
-            - ~
-        calls:
-            - [ setTranslationDomain, [admin]]

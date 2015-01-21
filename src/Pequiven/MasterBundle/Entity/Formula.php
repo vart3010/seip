@@ -108,6 +108,36 @@ class Formula extends modelFormula
      */
     protected $variables;
     
+    /**
+     * Variable para calcular el valor Real.
+     * @var \Pequiven\MasterBundle\Entity\Formula\Variable
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    protected $variableToRealValue;
+    
+    /**
+     * Variable para calcular el valor Plan.
+     * @var \Pequiven\MasterBundle\Entity\Formula\Variable
+     * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
+     */
+    protected $variableToPlanValue;
+
+    /**
+     * Ecuacion para calcular el valor real (Se puede usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="sourceEquationReal", type="text",nullable=true)
+     */
+    private $sourceEquationReal;
+    
+    /**
+     * Ecuacion para calcular el valor planificado (Se puede usar las variables de la formula)
+     * 
+     * @var string
+     * @ORM\Column(name="sourceEquationPlan", type="text",nullable=true)
+     */
+    private $sourceEquationPlan;
+    
     public function __construct() {
         $this->variables = new ArrayCollection();
     }
@@ -362,6 +392,94 @@ class Formula extends modelFormula
         return $this->equationReal;
     }
     
+    /**
+     * Retorna el tipo de calculo de la formula
+     * @return integer
+     */
+    function getTypeOfCalculation() 
+    {
+        return $this->typeOfCalculation;
+    }
+    
+    /**
+     * Establece el tipo de calculo de la formula
+     * 
+     * @param integer $typeOfCalculation Formula::TYPE_CALCULATION_*
+     * @return Formula
+     */
+    function setTypeOfCalculation($typeOfCalculation) {
+        $this->typeOfCalculation = $typeOfCalculation;
+        
+        return $this;
+    }
+    
+    /**
+     * Set variableToRealValue
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variableToRealValue
+     * @return Formula
+     */
+    public function setVariableToRealValue(\Pequiven\MasterBundle\Entity\Formula\Variable $variableToRealValue = null)
+    {
+        $this->variableToRealValue = $variableToRealValue;
+
+        return $this;
+    }
+
+    /**
+     * Get variableToRealValue
+     *
+     * @return \Pequiven\MasterBundle\Entity\Formula\Variable 
+     */
+    public function getVariableToRealValue()
+    {
+        return $this->variableToRealValue;
+    }
+
+    /**
+     * Set variableToPlanValue
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variableToPlanValue
+     * @return Formula
+     */
+    public function setVariableToPlanValue(\Pequiven\MasterBundle\Entity\Formula\Variable $variableToPlanValue = null)
+    {
+        $this->variableToPlanValue = $variableToPlanValue;
+
+        return $this;
+    }
+
+    /**
+     * Get variableToPlanValue
+     *
+     * @return \Pequiven\MasterBundle\Entity\Formula\Variable 
+     */
+    public function getVariableToPlanValue()
+    {
+        return $this->variableToPlanValue;
+    }
+    
+    
+    function getSourceEquationReal() {
+        return $this->sourceEquationReal;
+    }
+
+    function getSourceEquationPlan() {
+        return $this->sourceEquationPlan;
+    }
+
+    function setSourceEquationReal($sourceEquationReal) {
+        $this->sourceEquationReal = $sourceEquationReal;
+        
+        return $this;
+    }
+
+    function setSourceEquationPlan($sourceEquationPlan) {
+        $this->sourceEquationPlan = $sourceEquationPlan;
+        
+        return $this;
+    }
+
     public function __toString() {
         return $this->getEquation() ?: '-';
     }

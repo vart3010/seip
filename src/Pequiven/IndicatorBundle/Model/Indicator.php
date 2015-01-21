@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author matias
  */
-abstract class Indicator 
+abstract class Indicator implements IndicatorInterface
 {
     /**
      * Tipo de calculo por formula y valores de las variables manuales
@@ -101,5 +101,13 @@ abstract class Indicator
             throw new Exception(sprintf('The type of calculation "%s" dont exist',$this->typeOfCalculation));
         }
         return $typesOfCalculation[$this->typeOfCalculation];
+    }
+    
+    public function hasNotification()
+    {
+        if(count($this->getValuesIndicator()) > 0){
+            return true;
+        }
+        return false;
     }
 }

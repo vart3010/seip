@@ -64,6 +64,13 @@ class ComplejoRepository extends EntityRepository
     
     function findComplejos(array $criteria = array()) {
         $qb = $this->getQueryBuilder();
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if(($complejo = $criteria->remove('id'))){
+            $qb
+                    ->andWhere('c.id = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
+        }
         return $qb->getQuery()->getResult();
     }
     

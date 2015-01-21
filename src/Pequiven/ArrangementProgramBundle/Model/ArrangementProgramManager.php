@@ -88,8 +88,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
     public function isAllowToSendToDraft(ArrangementProgram $entity) {
         $user = $this->getUser();
         $valid = false;
-        if( ($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
-                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true) 
+        if( (($entity->getStatus() === ArrangementProgram::STATUS_IN_REVIEW) &&
+                ($entity->getCreatedBy() === $user || $this->isAllowToReview($entity) === true || $this->isAllowToApprove($entity) === true)) || ($user->isAllowSuperAdmin()) 
             ){
             $valid = true;
         }
@@ -191,8 +191,9 @@ class ArrangementProgramManager implements ContainerAwareInterface
      * @param ArrangementProgram $entity
      * @return boolean
      */
-    public function isAllowToNotity(ArrangementProgram $entity) {
+    public function isAllowToNotity(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $entity) {
         $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        $details = $entity->getDetails();
         $valid = false;
         if (!$configuration) {
             return $valid;
@@ -200,8 +201,12 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $user = $this->getUser();
 
         if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
-            $valid = true;
+            $periodService = $this->getPeriodService();
+            if($periodService->isAllowNotifyArrangementProgram() === true || ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0) ){
+                $valid = true;
+            }
         }
+        
         return $valid;
     }
 
@@ -215,10 +220,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $permission = true;
         $user = $this->getUser();
         if ($entity->isNotificable() === false || 
-            ($this->isAllowToNotity($entity) === false && 
-                $this->isAllowToApprove($entity) === false && 
-                $this->isAllowToReview($entity) === false && 
-                $entity->getCreatedBy() !== $user) === true ) {
+            ($this->isAllowToNotity($entity) === false)
+                ) {
             $permission = false;
         }
         return $permission;
@@ -302,5 +305,13 @@ class ArrangementProgramManager implements ContainerAwareInterface
         }
 
         return $this->container->get('security.context');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

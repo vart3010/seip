@@ -1,16 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\SEIPBundle\Model\Box\Tactic;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
+
 /**
- * Description of SummaryIndicatorCharged
+ * Resumen de los indicadores cargados a nivel tactico.
  *
  * @author matias
  */
@@ -25,12 +20,14 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     }
     
     public function getParameters() {
-        $em = $this->getDoctrine()->getManager();
-        
         $datas = $this->getDataIndicatorTacticGroup();
         return array(
             'indicatorTactic' => $datas['indicatorTactic']
             );
+    }
+    
+    public function getDescription() {
+        return 'Resumen de los indicadores cargados a nivel tactico.';
     }
     
     /**
@@ -63,5 +60,20 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $datas['indicatorTactic'] = $indicatorTactic;
         
         return $datas;
+    }
+    
+    public function getTranslationDomain() {
+        return 'PequivenSEIPBundle';
+    }
+    
+    public function hasPermission() {
+        return $this->isGranted(array('ROLE_WORKER_PLANNING'));
+    }
+    
+    public function getAreasNotPermitted() 
+    {
+        return array(
+            \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
+        );
     }
 }

@@ -1,0 +1,44 @@
+pequiven_seip_result_notify_arrangementprogram:
+    path: /notify/arrangementprogram.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:indexAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_seip_result_notify_indicator_strategic:
+    path: /notify/indicator/strategic
+    defaults: 
+        _controller: pequiven.controller.indicatorstrategic:listAction
+    
+pequiven_seip_result_notify_indicator_tactic:
+    path: /notify/indicator/tactic
+    defaults: 
+        _controller: pequiven.controller.indicatortactic:listAction
+        
+pequiven_seip_result_notify_indicator_operative:
+    path: /notify/indicator/operative
+    defaults: 
+        _controller: pequiven.controller.indicatoroperative:listAction
+
+pequiven_seip_result_visualize_by_gerencia:
+    path: /visualize/by-gerencia.{_format}
+    defaults:
+        _controller: pequiven.controller.result:listResultAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]
+    
+pequiven_seip_result_visualize_gerencia:
+    path: /visualize/gerencia/{level}/{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.result:showMonitorAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+        level: 2|3
+    methods: [GET]

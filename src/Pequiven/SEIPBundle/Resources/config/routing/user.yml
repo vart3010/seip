@@ -75,3 +75,7 @@ pequiven_seip_user_add_configuration:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_user_localization:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/user/localization.yml"
+    prefix:   /localization

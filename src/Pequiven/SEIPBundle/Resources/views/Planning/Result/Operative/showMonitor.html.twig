@@ -3,32 +3,77 @@
 {% block body %}
         
     {{ contentHeader(
-        (entity.getDescription())
+        (entity)
     ) }}
-        
-    <div class="inline-label">
-        <span class="bold">{{ 'result.objetiveOperative' |trans }}</span>
-        <br><br>
-        {#<ul class="fa-ul">
-            {% for objetive in object %}
-                <li>
-                    {% set result = objetive.getResult %}
-                    <span class="meter {% if result > 0 and result <= 30 %}red-gradient{% endif %}{% if result > 30 and result < 70 %}orange-gradient{% endif%}{% if result > 70 %}green-gradient{% endif %}"></span>
-                    <span class="meter {% if result > 30 and result < 70 %}orange-gradient{% endif%}{% if result > 70 %}green-gradient{% endif %}"></span>
-                    <span class="meter {% if result > 70 %}green-gradient{% endif %}"></span>
-                    {{ result|number_format(2) }}% - {{ generateLink(objetive) }}
-                </li>
-            {% else %}
-                <b>{{ 'result.not_objetives_in_level' |trans }}</b>
-            {% endfor  %}
-        </ul>#}
-        {% include 'PequivenObjetiveBundle:Common:childrens.html.twig' with {'entity':{'childrens':object}} %}
-    </div>
-    <br>
-    <div ng-controller="DashboardController" ng-init="renderChartResult('chartContainerResult','{{ "result.captionObjetiveOperative"|trans }}','{{ "result.subCaptionObjetiveOperative"|trans }}',{{ categories|json_encode() }},{{ resultIndicator|json_encode() }},{{ resultArrangementProgram|json_encode() }})" class="dashboard" style="height: {{ heightChart }}px;background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
+    
+    <div ng-controller="DashboardController" class="dashboard" ng-init="renderChartResult('chartContainerResult',{{ data|json_encode() }})" style="height: {{ heightChart }}px;">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
             <!-- This div will hold the chart generated in the footer -->
         </div>
+    </div>
+    <br>
+    <div class="inline-label">
+        <br><br>
+        <ul class="fa-ul">
+            {% set limitTruncate = 110 %}
+            {% for t in tree %}
+                <li>
+                        {% set p = t['parent'] %}
+                        {% set avancedUsed = p.getResult %}
+                        {% set avancedUsedText = avancedUsed %}
+                        {% set href = generateLinkUrlOnly(p,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
+                        {% if href != '' %}
+                            <a href="{{ href }}">
+                        {% endif %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                        {% if href != '' %}
+                            </a>
+                        {% endif %}
+                        {% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
+                        ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - 
+                        
+                        {{ generateLink(p,null,{truncate:limitTruncate}) }}
+                    <ul class="fa-ul">
+                    {% for chlid in t['child'] %}
+                        <li>
+                            {% set avancedUsed = chlid.getResult %}
+                            {% set avancedUsedText = avancedUsed %}
+                            {% set href = generateLinkUrlOnly(chlid,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
+                            {% if href != '' %}
+                                <a href="{{ href }}">
+                            {% endif %}
+                                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {% if href != '' %}
+                                </a>
+                            {% endif %}
+                            {{ generateLink(chlid,null,{truncate:limitTruncate}) }}
+                            
+                                <ul class="fa-ul">
+                                {% for ch in chlid.childrens %}
+                                    {% if ch.getGerenciaByLevel  == entity %}
+                                        <li>
+                                            {% set avancedUsed = ch.getResult %}
+                                            {% set avancedUsedText = avancedUsed %}
+                                            {% set href = generateLinkUrlOnly(ch,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
+                                            {% if href != '' %}
+                                                <a href="{{ href }}">
+                                            {% endif %}
+                                                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                                            {% if href != '' %}
+                                                </a>
+                                            {% endif %}
+                                            {{ generateLink(ch,null,{truncate:limitTruncate}) }}
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock body %}
 {% block stylesheets %}
@@ -44,7 +89,6 @@
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-
     </script>
 
 {% endblock %}

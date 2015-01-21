@@ -81,6 +81,7 @@ class ObjetiveRepository extends EntityRepository {
      */
     public function getByParent($objetiveParentsArray,$options = array()){
         $securityContext = $this->getSecurityContext();
+        $user = $this->getUser();
         
         $query = $this->createQueryBuilder('o');
         $query
@@ -100,7 +101,9 @@ class ObjetiveRepository extends EntityRepository {
         } else{
             if(!isset($options['searchByRef'])){
                 if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    $query->andWhere("o.gerencia = " . $securityContext->getToken()->getUser()->getGerencia()->getId());
+                    if(!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){
+                        $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
+                    }
                 }
             }
         }
@@ -122,6 +125,47 @@ class ObjetiveRepository extends EntityRepository {
                 ;
 
         return $query->getQuery()->getResult();
+    }
+    
+    /**
+     * Crea un paginador para los objetivos de acuerdo al nivel del mismo
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder->andWhere('o.enabled = 1');
+        
+        if(isset($criteria['description'])){
+            $description = $criteria['description'];
+            unset($criteria['description']);
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+        }
+        if(isset($criteria['objetiveLevel'])){
+            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+        }
+        if(isset($criteria['gerenciaFirst'])){
+            if((int)$criteria['gerenciaFirst'] == 0){
+
+            } else{
+                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+            }
+        }
+        
+        if(isset($criteria['gerenciaSecond'])){
+            if((int)$criteria['gerenciaSecond'] > 0){
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
+            } else{
+                unset($criteria['gerenciaSecond']);
+            }
+        }
+        
+        $queryBuilder->groupBy('o.ref');
+        $queryBuilder->orderBy('o.ref');
+
+        return $this->getPaginator($queryBuilder);
     }
     
     /**
@@ -349,16 +393,17 @@ class ObjetiveRepository extends EntityRepository {
         }
         $localidad = $user->getComplejo();
         $gerenciasTypeComplejo = $gerenciasTypeComplejoId = array();
-        foreach ($localidad->getGerencias() as $gerencia) {
-            $gerenciaGroup = $gerencia->getGerenciaGroup();
-            
-            if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
-                $gerenciasTypeComplejo [] = $gerencia;
-                $gerenciasTypeComplejoId[] = $gerencia->getId();
+        if($localidad){
+            foreach ($localidad->getGerencias() as $gerencia) {
+                $gerenciaGroup = $gerencia->getGerenciaGroup();
+
+                if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
+                    $gerenciasTypeComplejo [] = $gerencia;
+                    $gerenciasTypeComplejoId[] = $gerencia->getId();
+                }
             }
         }
         if(count($gerenciasTypeComplejo) > 0){
-            $localidad = $gerencia->getComplejo();
             $qbMedular = $this->getQueryAllEnabled();
             $qbMedular
                 ->innerJoin("o.objetiveLevel","ol")
@@ -382,7 +427,7 @@ class ObjetiveRepository extends EntityRepository {
         return $qb;
     }
     
-    function findTacticalObjetives($user)
+    function findTacticalObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -392,15 +437,29 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * Busca los objetivos tácticos del usuario logueado
+     * @return type
+     */
     function findOperativeObjetives($user,array $criteria = array())
     {
         $qb = $this->getQueryAllEnabled();
@@ -419,11 +478,20 @@ class ObjetiveRepository extends EntityRepository {
                 ;
         }
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE){
+        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
             $qb
                 ->andWhere("g.id = :gerencia")
                 ->setParameter("gerencia", $user->getGerencia())
                 ;
+        } elseif($criteria['view_planning']){
+            if($gerencia = $criteria->remove('gerencia') != null){
+                
+            }
+            $qb
+                ->andWhere("g.id = :gerencia")
+                ->setParameter("gerencia", $gerencia)
+                ;
+            $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
@@ -469,7 +537,7 @@ class ObjetiveRepository extends EntityRepository {
     
     
     /**
-     * 
+     * Función que devuelve el nivel operativo para la matriz de objetivos
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return type
      */
@@ -504,7 +572,7 @@ class ObjetiveRepository extends EntityRepository {
     }
     
     /**
-     * 
+     * Función que devuelve el nivel estratégico para la matriz de objetivos
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
      * @return type
      */
@@ -529,11 +597,6 @@ class ObjetiveRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
     
-    
-    public function getMatrizObjetives(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
-        return $gerencia->getDescription();
-    }
-    
     public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond){
         $qb = $this->getQueryBuilder();
         
@@ -545,6 +608,25 @@ class ObjetiveRepository extends EntityRepository {
         $qb->setParameter('enabled', true);
         $qb->setParameter('idGerenciaSecond', $gerenciaSecond->getId());
         
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retorna los objetivos estrategicos del periodo.
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return type
+     */
+    public function findAllStrategicByPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('o.objetiveLevel = :objetiveLevel')
+            ->andWhere('o.period = :period')
+            ;
+        $qb
+            ->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO)
+            ->setParameter('period', $period)
+            ;
         return $qb->getQuery()->getResult();
     }
 }

@@ -31,6 +31,11 @@ pequiven_indicator:
         main: Tipo de calculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
+        simple_average: Promedio simple
+        real_and_plan_automatic: Plan y Real automático
+        real_automatic: Real automático
+        accumulate: Acumulativo de cada carga
+        real_and_plan_from_eq: Plan y real a partir de ecuación
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
