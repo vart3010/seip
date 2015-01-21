@@ -492,17 +492,23 @@ class ArrangementProgramRepository extends EntityRepository
                     $queryBuilder
                             ->innerJoin('ap.details', 'd')
                             ->andWhere($queryBuilder->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'))
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
                         ;
                 } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
                     $queryBuilder
                             ->innerJoin('ap.details', 'd')
                             ->andWhere($queryBuilder->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'))
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
                         ;
                 } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
                     $queryBuilder
                             ->innerJoin('ap.details', 'd')
                             ->andWhere('d.notificationInProgressByUser IS NOT NULL')
                             ->andWhere('ap.totalAdvance > 0')
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
                             ;
                 }
             }

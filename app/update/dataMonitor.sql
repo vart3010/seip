@@ -1,11 +1,11 @@
 -- ADMON Y SERVICIOS
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 10, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 12 WHERE fk_gerencia = 26;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 10, indOperativeOriginal = 9, arrangementProgramTactic = 0, arrangementProgramOperative = 14 WHERE fk_gerencia = 26;
 -- A.I.T.
 UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 0, objOperativeOriginal = 24, indOperativeOriginal = 18, arrangementProgramTactic = 0, arrangementProgramOperative = 68 WHERE fk_gerencia = 23;
 -- ASEG Y SOPORTE DE PROYECTOS
-UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 6, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 31;
+UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 6, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 8 WHERE fk_gerencia = 31;
 -- ASUNTOS PÚBLICOS
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 18, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 18 WHERE fk_gerencia = 27;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 18, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 20 WHERE fk_gerencia = 27;
 -- AUDITORÍA INTERNA
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 29, indOperativeOriginal = 19, arrangementProgramTactic = 0, arrangementProgramOperative = 29 WHERE fk_gerencia = 19;
 -- CONSULTORIA JURÍDICA
