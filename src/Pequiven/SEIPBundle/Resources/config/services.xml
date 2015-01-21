@@ -121,6 +121,11 @@
         <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Modelo de Programas de Gestión de acuerdo a la gerencia seleccionada y ordenado por los status disponibles en el sistema -->
+        <service id="arrangement_program.summary_total_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryTotalBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Programas de Gestión que guardan relación con el usuario logueado -->
         <service id="arrangement_program.my_summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\MyArrangementProgramsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>

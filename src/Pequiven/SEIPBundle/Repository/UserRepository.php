@@ -22,12 +22,12 @@ class UserRepository extends EntityRepository
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
+        
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
-            ->setParameter('level', $level)
             ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
@@ -36,12 +36,16 @@ class UserRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->isNotNull('u.gerencia'))
                 ->andWhere("u.gerencia != ''")
+                ->setParameter('level', $level)
                 ;
+        }elseif($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == true){
+            $qb->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         }else{
             if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
                 $qb
                     ->andWhere('u.gerencia = :gerencia')
                     ->setParameter('gerencia', $user->getGerencia())
+                    ->setParameter('level', $level)
                     ;
             }
         }
