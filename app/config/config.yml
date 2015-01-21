@@ -136,9 +136,11 @@ tecnocreaciones_vzla_government:
 tpg_extjs:
     entities:
         - @PequivenArrangementProgramBundle/Entity/
+        - @PequivenSEIPBundle/Entity/PrePlanning/
     remoting:
         bundles:
             - PequivenArrangementProgramBundle
+            - PequivenSEIPBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"

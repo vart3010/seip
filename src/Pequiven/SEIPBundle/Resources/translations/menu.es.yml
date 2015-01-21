@@ -120,3 +120,4 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
+                    planning_next_period: Planificación %period%

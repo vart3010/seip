@@ -1,0 +1,195 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block stylesheet %}
+    <style>
+        .x-grid-tree-node-expanded .x-tree-icon-parent {
+            background-image: none;
+        }
+        
+    </style>
+{% endblock stylesheet  %}
+    
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            enabled: true
+        });Ext.Loader.setPath('Ext.ux', '../ux');
+
+        Ext.require([
+            'Ext.data.*',
+            'Ext.grid.*',
+            'Ext.tree.*',
+            'Ext.tip.*',
+            'Ext.ux.CheckColumn'
+        ]);
+
+        Ext.onReady(function() {
+            Ext.tip.QuickTipManager.init();
+
+            var store = Ext.create('Ext.data.TreeStore', {
+                model: 'Pequiven.SEIPBundle.Entity.PrePlanning.PrePlanning',
+                proxy: {
+                    type: 'ajax',
+                    //the store will get the content from the .json file
+                    api: {
+                        {#create: 'createPersons',#}
+                        read: 'get-pre-planning.json',
+                        {#update: 'updatePersons',#}
+                        destroy: 'delete-pre-planning'
+                    }
+                },
+                folderSort: true,
+            });
+            var btnDelete = Ext.create("Ext.Button", {
+                handler: function () {
+                    if (tree.getSelectionModel().hasSelection()) {
+                        var selectedNodes = tree.getSelectionModel().getSelection();
+                        var i = 0;
+                        Ext.Msg.confirm('Eliminar', '¿Desea eliminar '+(selectedNodes.length)+' items?<br/>Recuere que al eliminar un objetivo, se eliminaran los items asociados.', function(btn){
+                           if(btn === 'yes'){
+                               for(i=0; i < selectedNodes.length; i++){
+                                    store.getNodeById(selectedNodes[i].id).remove();
+                                }
+                                store.sync();
+                                evaluateDataTree();
+                           } else{
+                              //some code
+                           }
+                         });
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados.");
+                    }
+                },
+                glyph :'xf002@FontAwesome',
+                text: 'Eliminar',
+                disabled: true,
+                itemId: 'btnDelete',
+            });
+            var refreshBtn = Ext.create("Ext.Button", {
+                itemId: 'refreshBtn',
+                text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                glyph: 'xf021@FontAwesome',
+                xtype: 'button',
+                disabled: true,
+                handler: function(){
+                    store.load({
+                        callback: function(r,options,success){
+                            evaluateDataTree();
+                        }
+                    });
+                }
+            });
+            var startPrePlanningBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Iniciar planificación', '¿Desea iniciar la planificación?<br/>Al iniciar el proceso de planificación se importaran los items de su periodo 2014 para que seleccione los que desea para el siguiente periodo.', function(btn){
+                            if(btn === 'yes'){
+                                tree.body.mask("Iniciando planificación...");
+                                Ext.Ajax.request({
+                                 url: '{{ path('pequiven_pre_planning_start_pre_planning') }}',
+                                 success: function(response, opts) {
+                                    tree.body.unmask();
+                                    store.load({
+                                        callback: function(r,options,success){
+                                            evaluateDataTree();
+                                        }
+                                    });
+                                 },
+                                 failure: function(response, opts) {
+                                    console.log('server-side failure with status code ' + response.status);
+                                 }
+                              });
+                            } 
+                     });
+                    
+                },
+                itemId: 'startPrePlanningBtn',
+                glyph: 'xf073@FontAwesome',
+                text: 'Iniciar planificación',
+                disabled: true
+            });
+            
+            var returnChangesBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Restaurar matriz', '¿Desea restaurar la matriz de planificación?<br/>Recuere que al restaurarla se construira nuevamente la matriz.', function(btn){
+                       if(btn === 'yes'){
+                           tree.body.mask("Devolviendo los cambios...");
+                           Ext.Ajax.request({
+                            url: '{{ path('pequiven_pre_planning_return_changes') }}',
+                            success: function(response, opts) {
+                               tree.body.unmask();
+                               store.load();
+                            },
+                            failure: function(response, opts) {
+                               console.log('server-side failure with status code ' + response.status);
+                            }
+                         });
+                       } else {
+                          //some code
+                       }
+                    });
+
+                },
+                glyph :'xf122@FontAwesome',
+                text: 'Devolver los cambios',
+                itemId: 'btnReturnChanges',
+                disabled: true,
+            });
+            
+            //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
+            var tree = Ext.create('Ext.tree.Panel', {
+                title: 'Planificación 2015',
+{#                width: 700,#}
+                height: 500,
+                renderTo: Ext.getBody(),
+                collapsible: false,
+                useArrows: true,
+                rootVisible: false,
+                store: store,
+                multiSelect: true,
+                listeners: {
+                    itemclick:{
+                        fn: function(view, record, item, index, e){
+                            if (tree.getSelectionModel().hasSelection()) {
+                                btnDelete.setDisabled(false);
+                            } else {
+                                btnDelete.setDisabled(true);
+                            }
+                        }
+                    }
+                },
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: [startPrePlanningBtn, returnChangesBtn,refreshBtn,btnDelete
+                    ]
+                }],
+                columns: [{
+                    xtype: 'treecolumn', //this is so we know which column will show the tree
+                    text: 'Nombre',
+                    sortable: false,
+                    dataIndex: 'name',
+                    flex: 1
+                }]
+            });
+            
+            var evaluateDataTree = function(){
+                   var root = tree.getRootNode();
+                    var hasChilren = (root.childNodes.length  != 0);
+                    startPrePlanningBtn.setDisabled(hasChilren);
+                    
+                    returnChangesBtn.setDisabled(!hasChilren);
+                    refreshBtn.setDisabled(!hasChilren);
+                    btnDelete.setDisabled(!hasChilren);
+                    return hasChilren;
+            };
+            
+            store.load({
+                callback: function(r,options,success){
+                    evaluateDataTree();
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}

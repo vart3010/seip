@@ -7,10 +7,14 @@
     <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
     <script src="{{ url('bazinga_jstranslation_js') }}"></script>
     
-    <link rel="stylesheet" type="text/css" href="{{ asset("ext/base/base.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset("ext/build/packages/ext-theme-gray/build/resources/ext-theme-gray-all.css") }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/font-awesome/css/font-awesome.min.css') }}">
+        
     {% block stylesheets '' %}
     {% block stylesheet '' %}
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset("ext/base/base.css") }}" />
+        
     <script type="text/javascript" src="{{ asset("ext/build/ext-all.js") }}"></script>
     <script type="text/javascript" src="{{ asset("ext/build/packages/ext-locale/build/ext-locale-" ~ app.request.locale ~ ".js") }}"></script>
     
@@ -49,7 +53,7 @@
 </head>
 <body>
     {% block content %}
-        
+    
     {% endblock content %}
 </body>
 </html>

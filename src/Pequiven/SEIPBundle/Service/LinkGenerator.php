@@ -110,8 +110,13 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
             }
         }
         
+        if(isset($parameters['_onlyIcon']) && $parameters['_onlyIcon'] === true){
+            return $entityConfig['icon'];
+        }
+        
         $icon = sprintf('<i class="%s"></i>',$entityConfig['icon']);
         $href = $this->buildUrl($entity, $entityConfig);
+        $entityConfig['url'] = $href;
         if(isset($parameters['_onlyUrl']) && $parameters['_onlyUrl'] === true){
             return $href;
         }
@@ -125,6 +130,9 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
             $link = sprintf('%s&nbsp;&nbsp;%s',$icon,$label);
         }
         
+        if(isset($parameters['_onlyConf']) && $parameters['_onlyConf'] === true){
+            return $entityConfig;
+        }
         return $link;
     }
     
@@ -146,16 +154,17 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
      */
     protected function getEntityConf($entity)
     {
+        $entityClass = get_class($entity);
         if($this->init === false){
             $this->boot();
         }
-        if(preg_match('/'. \Doctrine\Common\Persistence\Proxy::MARKER .'/',$entity)){
-            $entity = \Doctrine\Common\Util\ClassUtils::getRealClass($entity);
+        if(preg_match('/'. \Doctrine\Common\Persistence\Proxy::MARKER .'/',$entityClass)){
+            $entityClass = \Doctrine\Common\Util\ClassUtils::getRealClass($entityClass);
         }
-        if(!isset($this->configsObjects[$entity])){
-            throw new Exception(sprintf('The config for entity "%s", not defined',$entity));
+        if(!isset($this->configsObjects[$entityClass])){
+            throw new Exception(sprintf('The config for entity "%s", not defined',$entityClass));
         }
-        return $this->configsObjects[$entity];
+        return $this->configsObjects[$entityClass];
     }
     
     /**
@@ -180,11 +189,10 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
      */
     public function generate($entity,$type = self::TYPE_LINK_DEFAULT,$parameters = array())
     {
-        $entityClass = get_class($entity);
         if($type === null){
             $type = self::TYPE_LINK_DEFAULT;
         }
-        $entityConfig = $this->getEntityConf($entityClass);
+        $entityConfig = $this->getEntityConf($entity);
         $link = '';
         if($entityConfig){
             $link = $this->generateFromConfig($entity,$entityConfig,$type,$parameters);
@@ -194,17 +202,31 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
     
     public function generateOnlyUrl($entity,$type = self::TYPE_LINK_DEFAULT,$parameters = array())
     {
-        $entityClass = get_class($entity);
-        if($type === null){
-            $type = self::TYPE_LINK_DEFAULT;
-        }
-        $entityConfig = $this->getEntityConf($entityClass);
-        $link = '';
         $parameters['_onlyUrl'] = true;
-        if($entityConfig){
-            $link = $this->generateFromConfig($entity,$entityConfig,$type,$parameters);
+        return $this->generate($entity,$type,$parameters);
+    }
+    
+    public function getUnicodeIcon($entity,$type = self::TYPE_LINK_DEFAULT,$parameters = array())
+    {
+        $parameters['_onlyIcon'] = true;
+        $icon = $this->generate($entity,$type,$parameters);
+        $iconsDefinition = $this->getIconsDefinition();
+        if(!isset($iconsDefinition[$icon])){
+            throw new \InvalidArgumentException('The icon definition "%s", not found!',$icon);
         }
-        return $link;
+        $unicode = $iconsDefinition[$icon]['unicode'];
+        return $unicode;
+    }
+    
+    /**
+     * Retornal la configuracion de una entidad
+     * @param type $entity
+     * @return type
+     */
+    public function getConfigFromEntity($entity) {
+        $parameters = array();
+        $parameters['_onlyConf'] = true;
+        return $this->generate($entity,null,$parameters);
     }
     
     /**
