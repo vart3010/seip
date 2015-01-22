@@ -46,6 +46,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request)
     {
+        $seipConfiguration = $this->getSeipConfiguration();
+        
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -57,7 +59,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
-        $this->addMenuPrePlanning($menu, $section);
+        if($seipConfiguration->isEnablePrePlanning()){
+            $this->addMenuPrePlanning($menu, $section);
+        }
         //$this->addExampleMenu($menu, $section);
 
 //        $menu->addChild('support', array(
@@ -270,8 +274,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     }
     
     private function addMenuPrePlanning(ItemInterface $menu, $section) {
-        
-        $periodName = 2015;
+        $nextPeriod = $this->getPeriodService()->getNextPeriod();
+        $periodName = 'No Definido';
+        if($nextPeriod){
+            $periodName = $nextPeriod->getName();
+        }
         $child = $this->factory->createItem('preplanning',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
@@ -974,5 +981,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //		
 //        return null;
 //    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
+    }
     
 }

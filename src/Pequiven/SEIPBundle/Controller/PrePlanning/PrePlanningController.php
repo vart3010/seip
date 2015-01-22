@@ -24,6 +24,10 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 class PrePlanningController extends ResourceController
 {
     public function indexAction(Request $request) {
+        $seipConfiguration = $this->getSeipConfiguration();
+        if($seipConfiguration->isEnablePrePlanning() == false){
+            throw $this->createAccessDeniedHttpException('La pre-planificacion no se encuentra habilitada.');
+        }
         return parent::indexAction($request);
     }
     
@@ -197,5 +201,14 @@ class PrePlanningController extends ResourceController
     private function getPrePlanningService()
     {
         return $this->container->get('seip.service.preplanning');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
     }
 }

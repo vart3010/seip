@@ -16,3 +16,7 @@ ALTER TABLE Period ADD dateStartClearanceNotificationArrangementProgram DATE DEF
 ALTER TABLE Period ADD parent_id INT DEFAULT NULL;
 ALTER TABLE Period ADD CONSTRAINT FK_C2141BF8727ACA70 FOREIGN KEY (parent_id) REFERENCES Period (id);
 CREATE UNIQUE INDEX UNIQ_C2141BF8727ACA70 ON Period (parent_id);
+CREATE TABLE Period_audit (id INT NOT NULL, rev INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) DEFAULT NULL, description VARCHAR(255) DEFAULT NULL, dateStart DATE DEFAULT NULL, dateEnd DATE DEFAULT NULL, status TINYINT(1) DEFAULT NULL, dateStartNotificationArrangementProgram DATE DEFAULT NULL, dateEndNotificationArrangementProgram DATE DEFAULT NULL, dateStartLoadArrangementProgram DATE DEFAULT NULL, dateEndLoadArrangementProgram DATE DEFAULT NULL, dateStartClearanceNotificationArrangementProgram DATE DEFAULT NULL, dateEndClearanceNotificationArrangementProgram DATE DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE Period ADD deletedAt DATETIME DEFAULT NULL;
+
+INSERT INTO `seip_dev`.`Configuration` (`id`, `group_id`, `keyIndex`, `value`, `description`, `active`, `createdAt`, `updatedAt`) VALUES (NULL, '1', 'PRE_PLANNING_ENABLE_PRE_PLANNING', '1', 'Habilita la pre planificacion del periodo siguiente', '1', '2015-01-22 00:00:00', NULL);
