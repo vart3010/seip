@@ -35,9 +35,9 @@
                     type: 'ajax',
                     //the store will get the content from the .json file
                     api: {
-                        {#create: 'createPersons',#}
+                        create: 'createPersons',
                         read: 'get-pre-planning.json',
-                        {#update: 'updatePersons',#}
+                        update: 'updatePersons',
                         destroy: 'delete-pre-planning'
                     }
                 },
@@ -140,9 +140,9 @@
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
-                title: 'Planificación 2015',
-{#                width: 700,#}
-                height: 500,
+                title: 'Planificación {{ app.request.get('period') }}',
+                width: 1000,
+                height: 600,
                 renderTo: Ext.getBody(),
                 collapsible: false,
                 useArrows: true,
@@ -171,7 +171,21 @@
                     sortable: false,
                     dataIndex: 'name',
                     flex: 1
-                }]
+                    },
+                    {
+                        xtype: 'checkcolumn',
+                        header: '¿Importar?',
+                        dataIndex: 'toImport',
+                        width: 80,
+                        stopSelection: false,
+                        listeners: {
+                            checkchange: function(column, recordIndex, checked){
+                                store.sync();
+                                console.log('Importar');
+                            }
+                        }
+                    }
+                ]
             });
             
             var evaluateDataTree = function(){

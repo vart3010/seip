@@ -13,7 +13,8 @@ namespace Pequiven\MasterBundle\Model;
  *
  * @author matias
  */
-class Gerencia {
+abstract class Gerencia implements GerenciaFirstInterface
+{
     
     //Referencias de las Gerencias de 1ra Línea
     //Morón
@@ -106,5 +107,21 @@ class Gerencia {
     
     public function __toString() {
         return $this->description;
+    }
+    
+    /**
+     * Devuelve los objetivos a nivel tactico porque es una gerencia de segunda linea.
+     * @return type
+     */
+    public function getObjetives() {
+        $objetives = array();
+        $tacticalObjectives = $this->getTacticalObjectives();
+        foreach ($tacticalObjectives as $objetive) {
+            if($objetive->getObjetiveLevel()->getLevel() !== \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
+                continue;
+            }
+            $objetives[] = $objetive;
+        }
+        return $objetives;
     }
 }

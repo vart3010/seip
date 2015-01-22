@@ -64,6 +64,20 @@ class PeriodService extends ContainerAware
         return $period;
     }
     
+    /**
+     * Retorna el periodo siguiente
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getNextPeriod()
+    {
+        $nextPeriod = null;
+        $periodActive = $this->getPeriodActive();
+        if($periodActive){
+            $nextPeriod = $periodActive->getChild();
+        }
+        return $nextPeriod;
+    }
+    
     private function isGranted($roles) {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');

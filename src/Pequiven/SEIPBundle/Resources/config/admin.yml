@@ -68,3 +68,14 @@ services:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setModelManager, [@seip.model.manager]]
             - [ setContainer, [@service_container]]
+            
+    sonata.admin.core.period:
+        class: Pequiven\MasterBundle\Admin\PeriodAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Periodo" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Period
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

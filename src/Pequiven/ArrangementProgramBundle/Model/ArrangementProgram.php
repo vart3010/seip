@@ -13,7 +13,6 @@ abstract class ArrangementProgram
 {
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
-    const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
     
     /**
      * Resumen Tipo "Cargados"

@@ -11,12 +11,18 @@
 
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
+use Pequiven\ObjetiveBundle\Model\ObjetiveLevel;
+
 /**
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 interface TypePrePlanningInterface 
 {
+    const LEVEL_DEFAULT = ObjetiveLevel::LEVEL_DEFAULT;
+    const LEVEL_ESTRATEGICO = ObjetiveLevel::LEVEL_ESTRATEGICO;
+    const LEVEL_TACTICO = ObjetiveLevel::LEVEL_TACTICO;
+    const LEVEL_OPERATIVO = ObjetiveLevel::LEVEL_OPERATIVO;
     /**
      * Tipo objetivo
      */
@@ -29,6 +35,10 @@ interface TypePrePlanningInterface
      * Tipo indicador
      */
     const TYPE_OBJECT_INDICATOR = 3;
+    /**
+     * Tipo meta de programa de gestion
+     */
+    const TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL = 4;
     
     public function setIdObject($idObject);
     

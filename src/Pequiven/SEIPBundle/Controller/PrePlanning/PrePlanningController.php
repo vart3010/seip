@@ -24,6 +24,10 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 class PrePlanningController extends ResourceController
 {
     public function indexAction(Request $request) {
+        $seipConfiguration = $this->getSeipConfiguration();
+        if($seipConfiguration->isEnablePrePlanning() == false){
+            throw $this->createAccessDeniedHttpException('La pre-planificacion no se encuentra habilitada.');
+        }
         return parent::indexAction($request);
     }
     
@@ -36,6 +40,11 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Obtiene el arbol construido para el usuario
+     * @param Request $request
+     * @return type
+     */
     public function getPrePlanningAction(Request $request)
     {
         $user = $this->getUser();
@@ -94,6 +103,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Reconstruyendo el arbol nuevamente.
+     * @return type
+     */
     public function returnChangesAction() 
     {
         $user = $this->getUser();
@@ -116,6 +129,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Iniciando el proceso de planificacion
+     * @return type
+     */
     public function startPrePlanningAction() 
     {
         $user = $this->getUser();
@@ -139,6 +156,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Obtener los objetivos para construir el arbol
+     * @return type
+     */
     private function getObjetivesArray() {
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
@@ -147,7 +168,19 @@ class PrePlanningController extends ResourceController
         if($rol == Rol::ROLE_MANAGER_SECOND){
             $gerenciaSecond = $user->getGerenciaSecond();
             $objetivesOperational = $gerenciaSecond->getOperationalObjectives();
-            foreach ($objetivesOperational as $objetive){
+            $objetivesArray = $this->getDataFromObjetives($objetivesOperational);
+        }else if($rol == Rol::ROLE_MANAGER_FIRST){
+            $gerencia = $user->getGerencia();
+            $tacticalObjectives = $gerencia->getObjetives();
+            $objetivesArray = $this->getDataFromObjetives($tacticalObjectives);
+        }
+        return $objetivesArray;
+    }
+    private function getDataFromObjetives($objetives)
+    {
+        $objetivesArray = array();
+        foreach ($objetives as $objetive){
+//                var_dump('object user '.$objetive->getRef());
                 $parents = $objetive->getParents();
                 foreach ($parents as $parent) {
                     if(isset($objetivesArray[$parent->getId()])){
@@ -160,9 +193,16 @@ class PrePlanningController extends ResourceController
                 }
                 $objetivesArray[$parent->getId()]['childrens'][$objetive->getId()] = $objetive;
             }
-        }
+//                foreach ($objetivesArray as $value) {
+//                    var_dump('parent '.$value['parent']->getRef());
+//                    foreach ($value['childrens'] as $child) {
+//                        var_dump('child '.$child->getRef());
+//                    }
+//                }
+//        var_dump($objetivesArray);
         return $objetivesArray;
     }
+
 
 
     /**
@@ -180,5 +220,14 @@ class PrePlanningController extends ResourceController
     private function getPrePlanningService()
     {
         return $this->container->get('seip.service.preplanning');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
     }
 }

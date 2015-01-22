@@ -18,8 +18,6 @@ namespace Pequiven\SEIPBundle\Model\PrePlanning;
  */
 abstract class PrePlanning  implements PrePlanningInterface
 {
-    private $originObject;
-
     /**
      * Nombre para el nodo root.
      */
@@ -46,39 +44,13 @@ abstract class PrePlanning  implements PrePlanningInterface
      */
     protected $parameters;
     
-    public function setOriginObject($object)
-    {
-        $idObject = $object->getId();
-        $class = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($object));
-        if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
-            $typeObject = self::TYPE_OBJECT_OBJETIVE;
-            if($object->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO){
-                $this->setRequiresApproval(true);
-            }
-        }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
-            $typeObject = self::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
-        }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){
-            $typeObject = self::TYPE_OBJECT_INDICATOR;
-        }else {
-            throw new \InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
-        }
-        $this->setName((string)$object);
-        $this->setTypeObject($typeObject);
-        $this->setIdObject($idObject);
-        $this->originObject = $object;
-//        var_dump($class);
-    }
-    function getOriginObject() {
-        return $this->originObject;
-    }
-    
-    function getParameter($name)
+    function getParameter($name,$default = null)
     {
         $parameters = $this->getParameters();
         if(isset($parameters[$name])){
             return $parameters[$name];
         }
-        return null;
+        return $default;
     }
     
     function setParameter($key,$value) {

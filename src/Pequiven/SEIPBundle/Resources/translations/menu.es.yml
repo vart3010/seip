@@ -120,4 +120,7 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
-                    planning_next_period: Planificación %period%
+                    pre_planning:
+                        main: Planificación %period%
+                        tactic: Táctico
+                        operative: Operativo
