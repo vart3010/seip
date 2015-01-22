@@ -335,7 +335,6 @@ class IndicatorRepository extends baseEntityRepository {
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
                 ->innerJoin('i.objetives', 'o')
-                ->innerJoin('o.gerencia', 'g')
                 ->andWhere('i.enabled = 1')
                 ->andWhere('o.enabled = 1')
                 ->andWhere('i.tmp = 0')
@@ -348,6 +347,9 @@ class IndicatorRepository extends baseEntityRepository {
         
         //Filtro nivel del Indicador
         if(($level = $criteria->remove('indicatorLevel')) !== null){
+            if($level > IndicatorLevel::LEVEL_ESTRATEGICO){
+                $queryBuilder->innerJoin('o.gerencia', 'g');
+            }
             $queryBuilder->andWhere("i.indicatorLevel = " . $level);
         }
         
