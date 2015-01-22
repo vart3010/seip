@@ -55,13 +55,27 @@ class PeriodService extends ContainerAware
     }
     
     /**
-     * 
+     * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
     function getPeriodActive()
     {
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         return $period;
+    }
+    
+    /**
+     * Retorna el periodo siguiente
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getNextPeriod()
+    {
+        $nextPeriod = null;
+        $periodActive = $this->getPeriodActive();
+        if($periodActive){
+            $nextPeriod = $periodActive->getChild();
+        }
+        return $nextPeriod;
     }
     
     private function isGranted($roles) {

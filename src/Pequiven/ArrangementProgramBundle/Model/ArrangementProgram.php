@@ -13,7 +13,31 @@ abstract class ArrangementProgram
 {
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
-    const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
+    
+    /**
+     * Resumen Tipo "Cargados"
+     */
+    const SUMMARY_TYPE_CHARGED = 'CHARGED';
+    
+    /**
+     * Resumen Por Status
+     */
+    const SUMMARY_TYPE_BY_STATUS = 'BY_STATUS';
+    
+    /**
+     * Resumen Por Notificados
+     */
+    const SUMMARY_TYPE_NOTIFIED = 'NOTIFIED';
+    
+    /**
+     * Resumen Por No Notificados
+     */
+    const SUMMARY_TYPE_NOT_NOTIFIED = 'NOT_NOTIFIED';
+    
+    /**
+     * Resumen Por Notificados pero con Notificación en Progreso
+     */
+    const SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS = 'NOTIFIED_BUT_STILL_IN_PROGRESS';
     
     /**
      * Estatus borrador

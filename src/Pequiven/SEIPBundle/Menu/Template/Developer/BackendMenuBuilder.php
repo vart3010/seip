@@ -46,6 +46,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request)
     {
+        $seipConfiguration = $this->getSeipConfiguration();
+        
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -57,6 +59,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
+        if($seipConfiguration->isEnablePrePlanning()){
+            $this->addMenuPrePlanning($menu, $section);
+        }
         //$this->addExampleMenu($menu, $section);
 
 //        $menu->addChild('support', array(
@@ -169,7 +174,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child = $this->factory->createItem('planning',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
-                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',),
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
@@ -268,6 +273,35 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $menu->addChild($child);
     }
     
+    private function addMenuPrePlanning(ItemInterface $menu, $section) {
+        $nextPeriod = $this->getPeriodService()->getNextPeriod();
+        $periodName = 'No Definido';
+        if($nextPeriod){
+            $periodName = $nextPeriod->getName();
+        }
+        $child = $this->factory->createItem('preplanning',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.main', $section),array('%period%' => $periodName)));
+        $child->addChild('preplanning_tactic',array(
+            'route' => 'pequiven_pre_planning_index',//Route
+            'labelAttributes' => array('icon' => 'fa fa-cube'),
+            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
+        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
+        
+        $child->addChild('preplanning_operative',array(
+            'route' => 'pequiven_pre_planning_index',//Route
+            'labelAttributes' => array('icon' => 'fa fa-cog'),
+            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        
+        $menu->addChild($child);
+    }
+
+
     /**
      * Construye y añade el menu de objetivos
      * @param ItemInterface $menu
@@ -846,6 +880,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
             
+            $visualize
+                ->addChild('arrangement_programs.for_notifying', array(
+                    'route' => 'pequiven_seip_arrangementprogram_for_notifying',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_notifying', $section)));
+            
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -947,5 +987,22 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //		
 //        return null;
 //    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
+    }
     
 }

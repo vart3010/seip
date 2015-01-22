@@ -1,6 +1,8 @@
 {#% extends "::base.html.twig" %#}
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
 {% block title %}- {{ 'pequiven.arrangement_program.arrangement_programs'|trans }}{% endblock %}
 
 {% set route_index = urlReturn %}
@@ -21,6 +23,11 @@
 
     <div ng-controller="TableFormatController">
         <div ng-controller="ReportArrangementProgramController">
+            <div class="with-padding">
+                <div class="columns">
+                    {{ boxRender.renderBox('pequiven_seip_box_arrangementprogram_summary_total')|raw }}
+                </div>
+            </div>
             <details class="details margin-bottom" open="">
                 <input type="hidden" id="planning" value="VIEW_PLANNING">
                 <summary role="button" aria-expanded="true">
@@ -61,7 +68,7 @@
                             <label class="bold">{{ 'pequiven.arrangement_program.status.status'|trans }}</label>
                             <br/>
                             <div class="with-mid-padding">
-                                <select class="select2 input-xlarge" ng-model="model.arrangementProgramStatus" ng-options="value as value.description for (key,value) in data.arrangementProgramStatusLabels">
+                                <select class="select2 input-xlarge" id="selectStatus" ng-model="model.arrangementProgramStatus" ng-options="value as value.description for (key,value) in data.arrangementProgramStatusLabels">
                                     <option value=''></option>
                                 </select>
                             </div>
@@ -155,7 +162,6 @@
 {% block javascript %}
     {{ parent() }}
     <script type="text/javascript">
-        
         $(document).ready(function()
         {
             

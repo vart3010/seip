@@ -43,6 +43,7 @@ app:
                         list: Lista
                         assigned: Asignados
                         for_reviewing_or_approving: Por revisar o aprobar
+                        for_notifying: Por notificar
                         temaplate: Desde plantilla
                         add:
                             main: Cargar
@@ -119,3 +120,7 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
+                    pre_planning:
+                        main: Planificación %period%
+                        tactic: Táctico
+                        operative: Operativo

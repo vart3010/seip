@@ -67,7 +67,7 @@
             
             
             <!-- En caso de que el usuario tenga rol diferente a gerente de 2da línea -->
-            {% if (false != is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'])) %}
+            {% if (false == is_granted(['ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'])) %}
                 <fieldset class="fieldset">
                     <legend class="legend">{{ 'form.selectionOfObjetiveOperative'|trans }}</legend>
                 {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}

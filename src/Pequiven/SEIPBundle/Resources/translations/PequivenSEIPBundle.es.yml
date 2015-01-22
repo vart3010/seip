@@ -105,6 +105,7 @@ pequiven_seip:
     #Buttons
     buttons:
         export_xls: Exportar
+        refresh: Refrescar
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -149,6 +150,9 @@ pequiven_seip:
         responsibles_pg: Responsable(s) del programa de gestión
         responsibles_goals: Responsable(s) de las metas
         type_template: Tipo de plantilla
+        notified: Notificados
+        not_notified: Sin Notificación
+        notified_but_still_in_progress: Notificados pero con proceso sin cerrar
     tooltips:
         click_to_show: Click para ver
     area:
@@ -164,6 +168,11 @@ pequiven_seip:
         user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
         the_management_program_does_not_progress_loaded: El programa de gestión "%arrangementProgram%" no tiene avances cargados.
         the_indicator_has_not_loaded_values: El indicador "%indicator%" no tiene valores cargados.
+    pre_planning:
+        pre_planning: Planificación %period%
+        tactic: Táctico
+        operative: Operativo
+        
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
