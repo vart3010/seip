@@ -16,7 +16,7 @@ use Doctrine\Common\Util\ClassUtils;
 use InvalidArgumentException;
 use LogicException;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
-use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
+use Pequiven\MasterBundle\Model\Rol;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
@@ -83,15 +83,21 @@ class PrePlanningService extends ContainerAware
     private function setOriginObject(PrePlanning $prePlanning,$object)
     {
         $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        $requiresApproval = false;
+        if($rol == Rol::ROLE_MANAGER_SECOND){
+            $requiresApproval = true;
+        }else if($rol == Rol::ROLE_MANAGER_FIRST){
+            
+        }
+        
         $idObject = $object->getId();
         $class = ClassUtils::getRealClass(get_class($object));
         $levelObject = PrePlanning::LEVEL_DEFAULT;
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
-            if($levelObject == ObjetiveLevel::LEVEL_TACTICO){
-                $prePlanning->setRequiresApproval(true);
-            }
+            $prePlanning->setRequiresApproval($requiresApproval);
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
             $type = $object->getType();

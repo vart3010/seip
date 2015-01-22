@@ -139,6 +139,13 @@ class PrePlanning extends Model
      * @ORM\Column(name="requiresApproval",type="boolean")
      */
     protected $requiresApproval = false;
+    
+    /**
+     * ¿para importar?
+     * @var boolean
+     * @ORM\Column(name="toImport",type="boolean")
+     */
+    private $toImport = false;
 
     /**
      * Constructor
@@ -488,6 +495,16 @@ class PrePlanning extends Model
     function setLevelObject($levelObject) 
     {
         $this->levelObject = $levelObject;
+        
+        return $this;
+    }
+    
+    function getToImport() {
+        return $this->toImport;
+    }
+
+    function setToImport($toImport) {
+        $this->toImport = $toImport;
         
         return $this;
     }

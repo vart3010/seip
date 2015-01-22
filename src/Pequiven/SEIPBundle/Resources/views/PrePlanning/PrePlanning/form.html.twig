@@ -35,9 +35,9 @@
                     type: 'ajax',
                     //the store will get the content from the .json file
                     api: {
-                        {#create: 'createPersons',#}
+                        create: 'createPersons',
                         read: 'get-pre-planning.json',
-                        {#update: 'updatePersons',#}
+                        update: 'updatePersons',
                         destroy: 'delete-pre-planning'
                     }
                 },
@@ -171,7 +171,21 @@
                     sortable: false,
                     dataIndex: 'name',
                     flex: 1
-                }]
+                    },
+                    {
+                        xtype: 'checkcolumn',
+                        header: '¿Importar?',
+                        dataIndex: 'toImport',
+                        width: 80,
+                        stopSelection: false,
+                        listeners: {
+                            checkchange: function(column, recordIndex, checked){
+                                store.sync();
+                                console.log('Importar');
+                            }
+                        }
+                    }
+                ]
             });
             
             var evaluateDataTree = function(){
