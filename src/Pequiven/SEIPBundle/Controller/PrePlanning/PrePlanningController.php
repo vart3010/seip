@@ -36,6 +36,11 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Obtiene el arbol construido para el usuario
+     * @param Request $request
+     * @return type
+     */
     public function getPrePlanningAction(Request $request)
     {
         $user = $this->getUser();
@@ -94,6 +99,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Reconstruyendo el arbol nuevamente.
+     * @return type
+     */
     public function returnChangesAction() 
     {
         $user = $this->getUser();
@@ -116,6 +125,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Iniciando el proceso de planificacion
+     * @return type
+     */
     public function startPrePlanningAction() 
     {
         $user = $this->getUser();
@@ -139,6 +152,10 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Obtener los objetivos para construir el arbol
+     * @return type
+     */
     private function getObjetivesArray() {
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();

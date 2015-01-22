@@ -100,6 +100,7 @@ class PrePlanningService extends ContainerAware
     private function getLeaf(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning $root) {
         $icon = $root->getParameter('icon');
         $url = $root->getParameter('url');
+        $expanded = $root->getParameter('expanded',true);
         $name = $root->getName();
         $limitName = 130;
         $nameSumary = $name;
@@ -127,7 +128,7 @@ class PrePlanningService extends ContainerAware
             'id' => $root->getId(),'name' => $name,'leaf' => true, 'iconCls' => $icon
         );
         if(count($root->getChildrens()) > 0){
-            $child['expanded'] = true;
+            $child['expanded'] = $expanded;
             $child['children'] = $this->getStructureTree($root->getChildrens());
             unset($child['leaf']);
         }
@@ -144,7 +145,7 @@ class PrePlanningService extends ContainerAware
         $arrangementPrograms = $objetive->getArrangementPrograms();
         $indicators = $objetive->getIndicators();
         
-        $this->addDataFromObjetive($prePlannig, $arrangementPrograms);
+        $this->addDataFromArrangementPrograms($prePlannig, $arrangementPrograms);
         $this->addDataFromObjetive($prePlannig, $indicators);
     }
 
@@ -161,6 +162,28 @@ class PrePlanningService extends ContainerAware
             $configEntity = $linkGeneratorService->getConfigFromEntity($prePlannigChild->getOriginObject());
             $prePlannigChild->setParameters($configEntity);
             $prePlannig->addChildren($prePlannigChild);
+        }
+    }
+    /**
+     * Añade elementos del programa de gestion
+     * @param PrePlanning $prePlannig
+     * @param type $objects
+     */
+    private function addDataFromArrangementPrograms(PrePlanning &$prePlannig,&$objects) {
+        $linkGeneratorService = $this->getLinkGeneratorService();
+        foreach ($objects as $object) {
+            $prePlannigChild = $this->createNew();
+            $prePlannigChild->setOriginObject($object);
+            $configEntity = $linkGeneratorService->getConfigFromEntity($prePlannigChild->getOriginObject());
+            $configEntity['expanded'] = false;
+            $prePlannigChild->setParameters($configEntity);
+            $prePlannig->addChildren($prePlannigChild);
+            
+            foreach ($object->getTimeline()->getGoals() as $goal) {
+                $prePlannigSubChild = $this->createNew();
+                $prePlannigSubChild->setOriginObject($goal);
+                $prePlannigChild->addChildren($prePlannigSubChild);
+            }
         }
     }
     

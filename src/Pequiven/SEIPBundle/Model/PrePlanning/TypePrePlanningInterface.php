@@ -29,6 +29,10 @@ interface TypePrePlanningInterface
      * Tipo indicador
      */
     const TYPE_OBJECT_INDICATOR = 3;
+    /**
+     * Tipo meta de programa de gestion
+     */
+    const TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL = 4;
     
     public function setIdObject($idObject);
     

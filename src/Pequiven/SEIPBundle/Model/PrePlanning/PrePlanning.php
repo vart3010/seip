@@ -59,6 +59,8 @@ abstract class PrePlanning  implements PrePlanningInterface
             $typeObject = self::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
         }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){
             $typeObject = self::TYPE_OBJECT_INDICATOR;
+        }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\Goal'){
+            $typeObject = self::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL;
         }else {
             throw new \InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
@@ -72,13 +74,13 @@ abstract class PrePlanning  implements PrePlanningInterface
         return $this->originObject;
     }
     
-    function getParameter($name)
+    function getParameter($name,$default = null)
     {
         $parameters = $this->getParameters();
         if(isset($parameters[$name])){
             return $parameters[$name];
         }
-        return null;
+        return $default;
     }
     
     function setParameter($key,$value) {
