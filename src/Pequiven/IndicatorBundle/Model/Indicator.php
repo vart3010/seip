@@ -22,6 +22,16 @@ abstract class Indicator implements IndicatorInterface
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
     
     /**
+     * Indicador con resultado
+     */
+    const INDICATOR_WITH_RESULT = 1;
+    
+    /**
+     * Indicador sin resultado
+     */
+    const INDICATOR_WITHOUT_RESULT = 0;
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)

@@ -11,7 +11,7 @@ UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperati
 -- CONSULTORIA JURÍDICA
 UPDATE seip_monitor SET objTacticOriginal = 5, indTacticOriginal = 3, objOperativeOriginal = 47, indOperativeOriginal = 54, arrangementProgramTactic = 0, arrangementProgramOperative = 56 WHERE fk_gerencia = 20;
 -- CONTRATACIONES
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 3, indOperativeOriginal = 3, arrangementProgramTactic = 0, arrangementProgramOperative = 7 WHERE fk_gerencia = 21;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 3, indOperativeOriginal = 3, arrangementProgramTactic = 0, arrangementProgramOperative = 9 WHERE fk_gerencia = 21;
 -- CONTROL DE GESTIÓN DE PRESIDENCIA
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 1, objOperativeOriginal = 4, indOperativeOriginal = 4, arrangementProgramTactic = 0, arrangementProgramOperative = 4 WHERE fk_gerencia = 12;
 -- DESARROLLO SOCIAL

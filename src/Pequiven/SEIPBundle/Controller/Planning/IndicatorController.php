@@ -36,6 +36,11 @@ class IndicatorController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
+     * @param Request $request
+     * @return type
+     */
     function listAction(Request $request)
     {
         $level = $request->get('level');

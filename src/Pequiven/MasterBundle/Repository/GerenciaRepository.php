@@ -78,7 +78,7 @@ class GerenciaRepository extends baseEntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
         }
         
-        if(!$this->getSecurityContext()->isGranted(array('ROLE_WORKER_PLANNING','ROLE_DIRECTIVE'))){
+        if(!$this->getSecurityContext()->isGranted(array('ROLE_WORKER_PLANNING','ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
             $queryBuilder->andWhere('g.id = '.$user->getGerencia()->getId());
         }
         
