@@ -167,6 +167,9 @@ pequiven_seip:
         the_indicator_has_not_loaded_values: El indicador "%indicator%" no tiene valores cargados.
     pre_planning:
         pre_planning: Planificación %period%
+        tactic: Táctico
+        operative: Operativo
+        
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

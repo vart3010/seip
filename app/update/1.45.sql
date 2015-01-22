@@ -12,3 +12,7 @@ CREATE TABLE revisions (id INT AUTO_INCREMENT NOT NULL, timestamp DATETIME NOT N
 
 -- Actualizacion de la tabla periodo
 ALTER TABLE Period ADD dateStartClearanceNotificationArrangementProgram DATE DEFAULT NULL, ADD dateEndClearanceNotificationArrangementProgram DATE DEFAULT NULL;
+-- Actualizacion del periodo para relacionarlo
+ALTER TABLE Period ADD parent_id INT DEFAULT NULL;
+ALTER TABLE Period ADD CONSTRAINT FK_C2141BF8727ACA70 FOREIGN KEY (parent_id) REFERENCES Period (id);
+CREATE UNIQUE INDEX UNIQ_C2141BF8727ACA70 ON Period (parent_id);

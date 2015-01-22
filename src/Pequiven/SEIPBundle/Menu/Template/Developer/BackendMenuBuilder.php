@@ -57,13 +57,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
-        $period = 2015;
-        $menu->addChild('planning_next_period',array(
-            'route' => 'pequiven_pre_planning_index',//Route
-            'labelAttributes' => array('icon' => 'fa fa-calendar'),
-            'routeParameters' => array('period' => $period),
-        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning_next_period', $section),array('%period%' => $period)));
-        
+        $this->addMenuPrePlanning($menu, $section);
         //$this->addExampleMenu($menu, $section);
 
 //        $menu->addChild('support', array(
@@ -275,6 +269,32 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $menu->addChild($child);
     }
     
+    private function addMenuPrePlanning(ItemInterface $menu, $section) {
+        
+        $periodName = 2015;
+        $child = $this->factory->createItem('preplanning',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.main', $section),array('%period%' => $periodName)));
+        $child->addChild('preplanning_tactic',array(
+            'route' => self::ROUTE_DEFAULT,//Route
+            'labelAttributes' => array('icon' => 'fa fa-cube'),
+            'routeParameters' => array('period' => $periodName),
+        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
+        
+        $child->addChild('preplanning_operative',array(
+            'route' => 'pequiven_pre_planning_index',//Route
+            'labelAttributes' => array('icon' => 'fa fa-cog'),
+            'routeParameters' => array('period' => $periodName),
+        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        
+        $menu->addChild($child);
+    }
+
+
     /**
      * Construye y añade el menu de objetivos
      * @param ItemInterface $menu

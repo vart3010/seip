@@ -108,6 +108,21 @@ class Period extends Base
      * @ORM\Column(name="dateEndClearanceNotificationArrangementProgram", type="date", nullable=true)
      */
     private $dateEndClearanceNotificationArrangementProgram;
+    
+    /**
+     * Periodo anterior o padre
+     * 
+     * @var type 
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",inversedBy="child")
+     */
+    private $parent;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",mappedBy="parent")
+     */
+    private $child;
 
     /**
      * Get id
