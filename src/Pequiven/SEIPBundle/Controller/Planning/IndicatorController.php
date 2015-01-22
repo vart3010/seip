@@ -2,6 +2,7 @@
 
 namespace Pequiven\SEIPBundle\Controller\Planning;
 
+use Pequiven\IndicatorBundle\Entity\Indicator;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -82,10 +83,19 @@ class IndicatorController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
         if ($request->get('_format') == 'html') {
+            $labelsSummary = array();
+            foreach (Indicator::getLabelsSummary() as $key => $value) {
+                $labelsSummary[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenIndicatorBundle'),
+                );
+            }
+            
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'level' => $level,
+                'labelsSummary' => $labelsSummary
             );
             $view->setData($data);
         } else {

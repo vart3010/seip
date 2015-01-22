@@ -1377,12 +1377,14 @@ angular.module('seipModule.controllers', [])
             $scope.data = {
                 complejos: null,
                 first_line_managements: null,
-                second_line_managements: null
+                second_line_managements: null,
+                indicatorSummaryLabels: null
             };
             $scope.model = {
                 complejo: null,
                 firstLineManagement: null,
-                secondLineManagement: null
+                secondLineManagement: null,
+                indicatorMiscellaneous: null
             };
             
             //Busca las localidades
@@ -1485,6 +1487,14 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+            //Scope de Misceláneo                                                              
+            $scope.$watch("model.indicatorMiscellaneous", function(newParams, oldParams) {
+                if ($scope.model.indicatorMiscellaneous != null && $scope.model.indicatorMiscellaneous.id != undefined) {
+                    $scope.tableParams.$params.filter['miscellaneous'] = $scope.model.indicatorMiscellaneous.id;
+                } else {
+                    $scope.tableParams.$params.filter['miscellaneous'] = null;
                 }
             });
             

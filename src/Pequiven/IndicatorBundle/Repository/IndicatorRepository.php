@@ -368,6 +368,18 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere("o.gerenciaSecond = " . $gerenciaSecond);
         }
         
+        //Filtro Misceláneo
+        if(($miscellaneous = $criteria->remove('miscellaneous')) !== null){
+            if($miscellaneous == Indicator::INDICATOR_WITHOUT_FORMULA){
+                $queryBuilder->andWhere('i.formula IS NULL');
+            } elseif ($miscellaneous == Indicator::INDICATOR_WITH_RESULT){
+                $queryBuilder->andWhere('i.progressToDate > 0');
+            } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
+                $queryBuilder->andWhere('i.progressToDate = 0');
+            }
+            
+        }
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     

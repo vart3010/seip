@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\Box\Operative;
+namespace Pequiven\SEIPBundle\Model\Box\Indicator\Operative;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 /**
