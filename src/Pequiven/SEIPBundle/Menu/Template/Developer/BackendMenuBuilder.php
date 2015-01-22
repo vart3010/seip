@@ -287,15 +287,15 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.main', $section),array('%period%' => $periodName)));
         $child->addChild('preplanning_tactic',array(
-            'route' => self::ROUTE_DEFAULT,//Route
+            'route' => 'pequiven_pre_planning_index',//Route
             'labelAttributes' => array('icon' => 'fa fa-cube'),
-            'routeParameters' => array('period' => $periodName),
+            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
         
         $child->addChild('preplanning_operative',array(
             'route' => 'pequiven_pre_planning_index',//Route
             'labelAttributes' => array('icon' => 'fa fa-cog'),
-            'routeParameters' => array('period' => $periodName),
+            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
         
         $menu->addChild($child);

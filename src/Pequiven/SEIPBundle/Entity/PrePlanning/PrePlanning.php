@@ -23,7 +23,6 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * 
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningRepository")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @Extjs\Model
  * @Extjs\ModelProxy("/pre-planning/pre-planning")
  */
@@ -78,19 +77,20 @@ class PrePlanning extends Model
     private $updatedAt;
     
     /**
-     * Fecha de eliminacion
-     * 
-     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
-     */
-    private $deletedAt;
-    
-    /**
      * Tipo de objeto (O,PG,I)
      * 
      * @var integer
      * @ORM\Column(name="typeObject",type="integer")
      */
     private $typeObject = self::TYPE_OBJECT_ROOT_NODE;
+    
+    /**
+     * Nivel del objeto
+     * 
+     * @var integer
+     * @ORM\Column(name="levelObject",type="integer")
+     */
+    private $levelObject = self::LEVEL_DEFAULT;
     
     /**
      * Identificador del objeto que se va a planificar
@@ -478,5 +478,17 @@ class PrePlanning extends Model
     public function isRequiresApproval()
     {
         return $this->getRequiresApproval();
+    }
+    
+    function getLevelObject() 
+    {
+        return $this->levelObject;
+    }
+
+    function setLevelObject($levelObject) 
+    {
+        $this->levelObject = $levelObject;
+        
+        return $this;
     }
 }

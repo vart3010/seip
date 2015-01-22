@@ -168,7 +168,19 @@ class PrePlanningController extends ResourceController
         if($rol == Rol::ROLE_MANAGER_SECOND){
             $gerenciaSecond = $user->getGerenciaSecond();
             $objetivesOperational = $gerenciaSecond->getOperationalObjectives();
-            foreach ($objetivesOperational as $objetive){
+            $objetivesArray = $this->getDataFromObjetives($objetivesOperational);
+        }else if($rol == Rol::ROLE_MANAGER_FIRST){
+            $gerencia = $user->getGerencia();
+            $tacticalObjectives = $gerencia->getObjetives();
+            $objetivesArray = $this->getDataFromObjetives($tacticalObjectives);
+        }
+        return $objetivesArray;
+    }
+    private function getDataFromObjetives($objetives)
+    {
+        $objetivesArray = array();
+        foreach ($objetives as $objetive){
+//                var_dump('object user '.$objetive->getRef());
                 $parents = $objetive->getParents();
                 foreach ($parents as $parent) {
                     if(isset($objetivesArray[$parent->getId()])){
@@ -181,9 +193,16 @@ class PrePlanningController extends ResourceController
                 }
                 $objetivesArray[$parent->getId()]['childrens'][$objetive->getId()] = $objetive;
             }
-        }
+//                foreach ($objetivesArray as $value) {
+//                    var_dump('parent '.$value['parent']->getRef());
+//                    foreach ($value['childrens'] as $child) {
+//                        var_dump('child '.$child->getRef());
+//                    }
+//                }
+//        var_dump($objetivesArray);
         return $objetivesArray;
     }
+
 
 
     /**

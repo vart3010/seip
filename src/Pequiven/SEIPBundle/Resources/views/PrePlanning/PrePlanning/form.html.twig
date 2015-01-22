@@ -140,7 +140,7 @@
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
-                title: 'Planificación 2015',
+                title: 'Planificación {{ app.request.get('period') }}',
                 width: 1000,
                 height: 600,
                 renderTo: Ext.getBody(),
