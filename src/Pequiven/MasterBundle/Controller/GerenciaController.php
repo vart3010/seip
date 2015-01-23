@@ -180,7 +180,7 @@ class GerenciaController extends baseController {
         $form = $this->getForm($resource);
 
         if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
-            $form->submit($request,false);
+            $form->submit($request,true);
             if($form->isValid()){
                 $this->domainManager->update($resource);
 

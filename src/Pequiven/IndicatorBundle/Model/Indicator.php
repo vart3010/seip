@@ -22,6 +22,26 @@ abstract class Indicator implements IndicatorInterface
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
     
     /**
+     * Indicador con fórmula asociada
+     */
+    const INDICATOR_WITH_FORMULA = 'INDICATOR_WITH_FORMULA';
+    
+    /**
+     * Indicador sin fórmula asociada
+     */
+    const INDICATOR_WITHOUT_FORMULA = 'INDICATOR_WITHOUT_FORMULA';
+    
+    /**
+     * Indicador con resultado
+     */
+    const INDICATOR_WITH_RESULT = 'INDICATOR_WITH_RESULT';
+    
+    /**
+     * Indicador sin resultado
+     */
+    const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
+    
+    /**
      * @var integer
      * 
      * @ORM\Column(name="typeOfCalculation", type="integer", nullable=false)
@@ -35,6 +55,12 @@ abstract class Indicator implements IndicatorInterface
      * @ORM\JoinColumn(name="fk_indicator_level", referencedColumnName="id",nullable = false)
      */
     protected $indicatorLevel;
+    
+    /**
+     * Etiqueta del tipo de resumen de los indicadores
+     * @var type 
+     */
+    protected $labelSummary = '';
     
     /**
      * Set indicatorLevel
@@ -109,5 +135,34 @@ abstract class Indicator implements IndicatorInterface
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Retorna las etiquetas definidas para los tipos de resumen
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsSummary()
+    {
+        static $labelsStatus = array(
+            self::INDICATOR_WITH_FORMULA => 'pequiven_indicator.summary.with_formula',
+            self::INDICATOR_WITHOUT_FORMULA => 'pequiven_indicator.summary.without_formula',
+            self::INDICATOR_WITH_RESULT => 'pequiven_indicator.summary.with_result',
+            self::INDICATOR_WITHOUT_RESULT => 'pequiven_indicator.summary.without_result',
+        );
+        return $labelsStatus;
+    }
+    
+    /**
+     * Retorna la etiqueta que corresponde a un estatus del programa de gestion
+     * @return string
+     */
+    function getLabelSummary()
+    {
+        $labels = $this->getLabelsSummary();
+        if(isset($labels[$this->labelSummary])){
+            return $labels[$this->labelSummary];
+        }
     }
 }

@@ -134,7 +134,12 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository
-                
+        pequiven_seip.generic_data:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\GenericDataController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository        
         pequiven.result:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Result

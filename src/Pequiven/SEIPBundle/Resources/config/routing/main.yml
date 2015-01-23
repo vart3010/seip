@@ -17,6 +17,10 @@ pequiven_planning_result:
 pequiven_result:
     resource: "@PequivenSEIPBundle/Resources/config/routing/result.yml"
     prefix:   /result
+
+pequiven_generic_data:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/generic_data.yml"
+    prefix:   /generic_data
 pequiven_api:
     resource: "@PequivenSEIPBundle/Resources/config/routing/api/result.yml"
     prefix:   /api

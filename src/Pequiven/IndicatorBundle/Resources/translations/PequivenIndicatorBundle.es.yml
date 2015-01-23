@@ -48,6 +48,11 @@ pequiven_indicator:
         last_notification_by: Última persona que cargo resultados
         last_notification_at: Fecha de última carga
         last_formula_used: Última formula utilizada
+    summary:
+        with_formula: Con Fórmula de Evaluación
+        without_formula: Sin Fórmula de Evaluación
+        with_result: Con Resultado Notificados
+        without_result: Sin Resultados Notificados
 form:
     ref: Nro. de Referencia
     indicator: Indicador
