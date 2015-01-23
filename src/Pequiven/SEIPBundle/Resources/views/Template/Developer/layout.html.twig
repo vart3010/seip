@@ -43,7 +43,7 @@
         
         var baseDependecies = baseDependeciesLayout;
         var dependencies = [
-                {% javascripts output='compiled/angular_modules.js' 
+                {% javascripts output='compiled/seip_angular_modules.js' 
                    filter='uglifyjs2' 
                     'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
                     'bundles/pequivenseip/angular/modules/seipModule.js'
@@ -118,7 +118,7 @@
        'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js'
         
         filter='uglifyjs2' 
-        output='compiled/javascript_base.js'
+        output='compiled/seip_javascript_base.js'
     %}
         <script src="{{ asset_url }}"></script>
       {% endjavascripts %}
