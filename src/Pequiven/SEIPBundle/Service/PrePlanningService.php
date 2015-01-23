@@ -232,7 +232,8 @@ class PrePlanningService extends ContainerAware
             'iconCls' => $icon,
             'editable' => $root->isEditable(),
             'parentId' => $parentId,
-            'toImport' => $root->getToImport()
+            'toImport' => $root->getToImport(),
+            'status' => $root->getStatus()
         );
         if(count($root->getChildrens()) > 0){
             

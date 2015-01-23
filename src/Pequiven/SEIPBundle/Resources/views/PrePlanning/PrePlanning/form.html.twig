@@ -35,6 +35,7 @@
                     { name: 'id', type: 'int' },
                     { name: 'name', type: 'string' },
                     { name: "toImport", type: "boolean" },
+                    { name: "status", type: "int" }
                 ]
             });
             
@@ -135,8 +136,6 @@
                                console.log('server-side failure with status code ' + response.status);
                             }
                          });
-                       } else {
-                          //some code
                        }
                     });
 
@@ -163,11 +162,23 @@
             
             var importBtn = Ext.create("Ext.Button", {
                 handler: function () {
-{#                    tree.body.mask("Guardando los cambios...");#}
+                    var items = store.data.items;
+                    var i;
+                    var itemsToImport = [];
+                    for(i=0;i < items.length; i++){
+                        if(items[i].get('status') == 0 && items[i].get('toImport') == true){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
+                       if(btn === 'yes'){
+                           tree.body.mask("Importando los items...");
+                       };
+                    });
                 },
                 glyph :'xf0c5@FontAwesome',
                 text: 'Importar',
-                itemId: 'saveChangeBtn',
+                itemId: 'importBtn',
             });
             
             var selectParent = function(node,checked){
@@ -249,6 +260,22 @@
                             if(record.get('editable')){
                                return this.defaultRenderer(value, metaData);
                             }
+                        }
+                    },
+                    {
+                        text: 'Estatus',
+                        dataIndex: 'status',
+                        width: 80,
+                        stopSelection: false,
+                        renderer: function(value, metaData, record){
+                            var status = null;
+                            if(record.get('editable')){
+                                status = '<span class="red">No importado</span>';
+                                if(record.get('status')){
+                                    status = '<span class="green">Importado</span>';
+                                }
+                            }
+                           return status;
                         }
                     }
                 ]
