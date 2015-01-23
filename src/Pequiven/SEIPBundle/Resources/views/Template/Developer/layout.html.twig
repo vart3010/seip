@@ -29,7 +29,7 @@
             {% javascripts 
                    output='compiled/baseDependecies.js'  
                    filter='uglifyjs2' 
-                   'bundles/bazingajstranslation/js/translator.min.js'
+
                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js'
                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js'
                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js'
@@ -38,7 +38,6 @@
                 %}
                  '{{ asset_url }}',
             {% endjavascripts %}
-            '{{ url('bazinga_jstranslation_js') }}'
         ];
         
         var baseDependecies = baseDependeciesLayout;
@@ -99,6 +98,8 @@
     {# Generador de rutas desde javascript #}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
     
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
     
