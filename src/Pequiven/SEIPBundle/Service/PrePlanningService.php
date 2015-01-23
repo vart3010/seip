@@ -84,6 +84,7 @@ class PrePlanningService extends ContainerAware
     {
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
+        $isEditable = false;
         $requiresApproval = false;
         if($rol == Rol::ROLE_MANAGER_SECOND){
             $requiresApproval = true;
@@ -127,10 +128,17 @@ class PrePlanningService extends ContainerAware
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
+        if($rol == Rol::ROLE_MANAGER_SECOND && $levelObject == PrePlanning::LEVEL_OPERATIVO){
+            $isEditable = true;
+        }else if($rol == Rol::ROLE_MANAGER_FIRST && $levelObject == PrePlanning::LEVEL_TACTICO){
+            $isEditable = true;
+        }
+        
         $prePlanning->setName(((string)$object));
         $prePlanning->setTypeObject($typeObject);
         $prePlanning->setIdObject($idObject);
         $prePlanning->setLevelObject($levelObject);
+        $prePlanning->setEditable($isEditable);
     }
     
     private function buildChildren($childrens,&$prePlannig) {
@@ -210,13 +218,28 @@ class PrePlanningService extends ContainerAware
                 $name .= ' <span class="red">(Requiere Aprobación)</span>';
             }
         }
+        $parentId = null;
+        if($root->getParent()){
+            $parentId = $root->getParent()->getId();
+        }
+//        $root->leaf = true;
+//        $root->iconCls = $icon;
+//        $root->parentId = $parentId;
         $child = array(
-            'id' => $root->getId(),'name' => $name,'leaf' => true, 'iconCls' => $icon
+            'id' => $root->getId(),
+            'name' => $name,
+            'leaf' => true,
+            'iconCls' => $icon,
+            'editable' => $root->isEditable(),
+            'parentId' => $parentId,
+            'toImport' => $root->getToImport()
         );
         if(count($root->getChildrens()) > 0){
+            
             $child['expanded'] = $expanded;
             $child['children'] = $this->getStructureTree($root->getChildrens());
-            unset($child['leaf']);
+//            unset($child['leaf']);
+            $child['leaf'] = false;
         }
         return $child;
     }

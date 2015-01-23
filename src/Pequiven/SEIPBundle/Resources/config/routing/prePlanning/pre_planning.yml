@@ -42,3 +42,10 @@ pequiven_pre_planning_start_pre_planning:
         _controller: pequiven.controller.pre_planning:startPrePlanningAction
         _format: json
     methods: [GET]
+    
+pequiven_pre_planning_update:
+    path: /update-pre-planning
+    defaults:
+        _controller: pequiven.controller.pre_planning:updatePrePlanningAction
+        _format: json
+    methods: [POST]

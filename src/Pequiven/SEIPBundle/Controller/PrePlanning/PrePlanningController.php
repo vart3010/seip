@@ -59,7 +59,7 @@ class PrePlanningController extends ResourceController
 
         $data = array(
             "success" => true,
-            "text" =>  ".",
+            "text" =>  "Root",
             "children"=> $structureTree
         );
         $view = $this->view($data);
@@ -156,6 +156,35 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    public function updatePrePlanningAction(Request $request) 
+    {
+        $dataRequest = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $repository = $this->getRepository();
+        
+        if(isset($dataRequest['toImport'])){
+            $resource = $repository->find($dataRequest['id']);
+            $resource->setToImport((boolean)$dataRequest['toImport']);
+            $em->persist($resource);
+        } else {
+            foreach ($dataRequest as $key => $value) {
+                if(!isset($value['toImport'])){
+                    $value['toImport'] = false;
+                }
+                $resource = $repository->find($value['id']);
+                $resource->setToImport((boolean)$value['toImport']);
+                $em->persist($resource);
+            }
+        }
+        
+        $em->flush();
+        $data = array(
+            "success" => true,
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
     /**
      * Obtener los objetivos para construir el arbol
      * @return type
@@ -176,6 +205,7 @@ class PrePlanningController extends ResourceController
         }
         return $objetivesArray;
     }
+    
     private function getDataFromObjetives($objetives)
     {
         $objetivesArray = array();
@@ -202,8 +232,6 @@ class PrePlanningController extends ResourceController
 //        var_dump($objetivesArray);
         return $objetivesArray;
     }
-
-
 
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService

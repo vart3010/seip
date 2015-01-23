@@ -146,6 +146,13 @@ class PrePlanning extends Model
      * @ORM\Column(name="toImport",type="boolean")
      */
     private $toImport = false;
+    
+    /**
+     * ¿Es editable?
+     * @var boolean
+     * @ORM\Column(name="editable",type="boolean")
+     */
+    private $editable = false;
 
     /**
      * Constructor
@@ -508,4 +515,15 @@ class PrePlanning extends Model
         
         return $this;
     }
+    function isEditable()
+    {
+        return $this->editable;
+    }
+
+    function setEditable($editable) {
+        $this->editable = $editable;
+        
+        return $this;
+    }
+
 }

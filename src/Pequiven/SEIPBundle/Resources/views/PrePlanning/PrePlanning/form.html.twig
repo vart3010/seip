@@ -28,20 +28,29 @@
 
         Ext.onReady(function() {
             Ext.tip.QuickTipManager.init();
-
+            
+            Ext.define('PrePlanning', {
+                extend: 'Ext.data.Model',
+                fields: [
+                    { name: 'id', type: 'int' },
+                    { name: 'name', type: 'string' },
+                    { name: "toImport", type: "boolean" },
+                ]
+            });
+            
             var store = Ext.create('Ext.data.TreeStore', {
-                model: 'Pequiven.SEIPBundle.Entity.PrePlanning.PrePlanning',
+                model: 'PrePlanning',
                 proxy: {
                     type: 'ajax',
                     //the store will get the content from the .json file
                     api: {
                         create: 'createPersons',
                         read: 'get-pre-planning.json',
-                        update: 'updatePersons',
+                        update: 'update-pre-planning',
                         destroy: 'delete-pre-planning'
                     }
                 },
-                folderSort: true,
+                autoSync:false
             });
             var btnDelete = Ext.create("Ext.Button", {
                 handler: function () {
@@ -63,7 +72,7 @@
                         Ext.Msg.alert("", "No hay items selecionados.");
                     }
                 },
-                glyph :'xf002@FontAwesome',
+                glyph :'xf12d@FontAwesome',
                 text: 'Eliminar',
                 disabled: true,
                 itemId: 'btnDelete',
@@ -135,8 +144,49 @@
                 glyph :'xf122@FontAwesome',
                 text: 'Devolver los cambios',
                 itemId: 'btnReturnChanges',
-                disabled: true,
+                disabled: true
             });
+            
+            var saveChangeBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    tree.body.mask("Guardando los cambios...");
+                    store.sync({
+                        callback: function(r,options,success){
+                           tree.body.unmask();
+                        }
+                    });
+                },
+                glyph :'xf0c7@FontAwesome',
+                text: 'Guardar cambios',
+                itemId: 'saveChangeBtn',
+            });
+            
+            var selectParent = function(node,checked){
+                if(node.get('editable') == true){
+                    node.set('toImport',checked);
+                }
+                var parentNode = node.parentNode;
+                if(parentNode != undefined){
+                    if(parentNode.get('editable') == true){
+                        parentNode.set('toImport',checked);
+                    }
+                    
+                    if(parentNode.parentNode != undefined){
+                        selectParent(parentNode.parentNode,checked);
+                    }
+                }
+            };
+            var selectChild = function(childNodes,checked){
+                var i;
+                for(i = 0; i < childNodes.length; i++){
+                    if(childNodes[i].get('editable') == true){
+                        childNodes[i].set('toImport',checked);
+                    }
+                    if(childNodes[i].childNodes.length > 0){
+                        selectChild(childNodes[i].childNodes);
+                    }
+                }
+            };
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
@@ -162,8 +212,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [startPrePlanningBtn, returnChangesBtn,refreshBtn,btnDelete
-                    ]
+                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete ]
                 }],
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree
@@ -180,8 +229,16 @@
                         stopSelection: false,
                         listeners: {
                             checkchange: function(column, recordIndex, checked){
-                                store.sync();
-                                console.log('Importar');
+                                if(checked){
+                                    selectParent(store.data.items[recordIndex],checked);
+                                }else{
+                                    selectChild(store.data.items[recordIndex].childNodes,checked);
+                                }
+                            }
+                        },
+                        renderer: function(value, metaData, record){
+                            if(record.get('editable')){
+                               return this.defaultRenderer(value, metaData);
                             }
                         }
                     }
@@ -196,6 +253,7 @@
                     returnChangesBtn.setDisabled(!hasChilren);
                     refreshBtn.setDisabled(!hasChilren);
                     btnDelete.setDisabled(!hasChilren);
+                    saveChangeBtn.setDisabled(!hasChilren);
                     return hasChilren;
             };
             
