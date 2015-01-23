@@ -161,6 +161,15 @@
                 itemId: 'saveChangeBtn',
             });
             
+            var importBtn = Ext.create("Ext.Button", {
+                handler: function () {
+{#                    tree.body.mask("Guardando los cambios...");#}
+                },
+                glyph :'xf0c5@FontAwesome',
+                text: 'Importar',
+                itemId: 'saveChangeBtn',
+            });
+            
             var selectParent = function(node,checked){
                 if(node.get('editable') == true){
                     node.set('toImport',checked);
@@ -212,7 +221,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete ]
+                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete,importBtn ]
                 }],
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree
