@@ -153,6 +153,8 @@ pequiven_seip:
         not_notified: Sin Notificación
         notified_but_still_in_progress: Notificados pero con proceso sin cerrar
         miscellaneous: Misceláneo
+        excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
+        includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
     tooltips:
         click_to_show: Click para ver
     area:

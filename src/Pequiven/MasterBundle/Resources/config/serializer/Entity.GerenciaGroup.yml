@@ -1,4 +1,4 @@
-Pequiven\MasterBundle\Entity\Gerencia:
+Pequiven\MasterBundle\Entity\GerenciaGroup:
     exclusion_policy: ALL
     properties:
         id:
@@ -19,12 +19,6 @@ Pequiven\MasterBundle\Entity\Gerencia:
         description:
             expose: true
             groups: [api_list]
-        ref:
+        groupName:
             expose: true
             groups: [api_list]
-        complejo:
-            expose: true
-            groups: [complejo]
-        gerenciaGroup:
-            expose: true
-            groups: [gerencia_group]

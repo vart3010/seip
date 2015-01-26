@@ -9,6 +9,7 @@
 namespace Pequiven\MasterBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Pequiven\MasterBundle\Entity\Gerencia;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 /**
  * Description of GerenciaSecondRepository
@@ -118,14 +119,36 @@ class GerenciaSecondRepository extends baseEntityRepository {
                     ->setParameter('complejo', $complejo)
                 ;
         } else if(($gerencia = $criteria->remove('gerencia')) != null){
-            $queryBuilder
+            $complejo = $criteria->remove('complejo');
+            if(($typeSupport = $criteria->remove('type_gerencia_support')) != null){
+                $queryBuilder
+                    ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('g.gerenciaSecondVinculants', 'gv')
+                ;
+                if($typeSupport == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Solo se da para el caso de que la gerencia este en Sede Corporativa
+                    $queryBuilder
+                            ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia AND gs.complejo = :complejo','gv.modular = 1 AND g.id = :gerencia'))
+                            ;
+                } elseif($typeSupport == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Solo se da para las gerencias generales de los complejos
+                    $queryBuilder
+                        ->leftJoin('gs.gerenciaSupports', 'gsp')
+                        ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia','gsp.id = :gerencia'))
+                        ;
+                }
+                $queryBuilder->setParameter('complejo', $complejo);
+            } else{
+                $queryBuilder
                     ->innerJoin('gs.gerencia', 'g')
                     ->leftJoin('gs.gerenciaVinculants', 'gv')
-                    ->andWhere('g.id = :gerencia')
-                    ->orWhere('gv.id = :gerencia')
-                    ->setParameter('gerencia', $gerencia)
                 ;
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia'));
+            }
+            
+            $queryBuilder
+                    ->setParameter('gerencia', $gerencia)
+                    ;
         }
+        
         return $queryBuilder->getQuery()->getResult();
     }
     
