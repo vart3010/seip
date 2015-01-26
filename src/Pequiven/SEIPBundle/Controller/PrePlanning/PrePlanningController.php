@@ -156,6 +156,11 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Actualiza los items de preplanificacion
+     * @param Request $request
+     * @return type
+     */
     public function updatePrePlanningAction(Request $request) 
     {
         $dataRequest = $request->request->all();
@@ -164,7 +169,7 @@ class PrePlanningController extends ResourceController
         
         if(isset($dataRequest['toImport'])){
             $resource = $repository->find($dataRequest['id']);
-            $resource->setToImport((boolean)$dataRequest['toImport']);
+            $resource->setToImport($dataRequest['toImport']);
             $em->persist($resource);
         } else {
             foreach ($dataRequest as $key => $value) {
@@ -172,12 +177,27 @@ class PrePlanningController extends ResourceController
                     $value['toImport'] = false;
                 }
                 $resource = $repository->find($value['id']);
-                $resource->setToImport((boolean)$value['toImport']);
+                $resource->setToImport($value['toImport']);
                 $em->persist($resource);
             }
         }
         
         $em->flush();
+        $data = array(
+            "success" => true,
+        );
+        $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    public function importAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        $prePlanningService = $this->getPrePlanningService();
+        
+        
         $data = array(
             "success" => true,
         );

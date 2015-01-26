@@ -34,7 +34,7 @@
                 fields: [
                     { name: 'id', type: 'int' },
                     { name: 'name', type: 'string' },
-                    { name: "toImport", type: "boolean" },
+                    { name: "toImport", type: "int" },
                     { name: "status", type: "int" }
                 ]
             });
@@ -158,13 +158,61 @@
                 glyph :'xf0c7@FontAwesome',
                 text: 'Guardar cambios',
                 itemId: 'saveChangeBtn',
+                disabled: true
             });
             
+            var itemsToImportCurrent = 0;
+            var itemsToImportLength = 0;
+            var itemsToImportTimeOut = null;
+            var itemsToImportReady = true;
+            var itemsToImport = [];
+            
+            var functionImportarItem = function(item){
+                var name = item.get('name');
+                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Importando "+name+ "...");
+                var urlImport = Routing.generate('pequiven_pre_planning_import',{id:item.get('id')});
+                Ext.Ajax.request({
+                url: urlImport,
+                    success: function(response, opts) {
+                       tree.body.unmask();
+                       tree.body.mask("Item "+(itemsToImportCurrent + 1)+" importado correctamente...");
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       callAjaxItemToImport();
+                    },
+                    failure: function(response, opts) {
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+{#                       item.set('status','Error');#}
+                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       tree.body.unmask();
+                       console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            };
+            
+            var callAjaxItemToImport = function (){
+                if(itemsToImportLength > itemsToImportCurrent){
+                    itemsToImportTimeOut = setTimeout(function(){
+                        if(itemsToImportReady){
+                            itemsToImportReady = false;
+                            tree.body.unmask();
+                            functionImportarItem(itemsToImport[itemsToImportCurrent]);
+                            itemsToImportCurrent++;
+                        }
+                    },1000);
+                }else{
+                    tree.body.unmask();
+                    Ext.Msg.alert('Correcto',"Se importaron "+itemsToImportLength+" item(s) correctamente...");
+                    store.load();
+                }
+            };
             var importBtn = Ext.create("Ext.Button", {
                 handler: function () {
                     var items = store.data.items;
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
                     var i;
-                    var itemsToImport = [];
                     for(i=0;i < items.length; i++){
                         if(items[i].get('status') == 0 && items[i].get('toImport') == true){
                             itemsToImport.push(items[i]);
@@ -172,13 +220,16 @@
                     }
                     Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
                        if(btn === 'yes'){
-                           tree.body.mask("Importando los items...");
-                       };
+                            itemsToImportLength = itemsToImport.length;
+                            tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                            callAjaxItemToImport();
+                        }
                     });
                 },
                 glyph :'xf0c5@FontAwesome',
                 text: 'Importar',
                 itemId: 'importBtn',
+                disabled: true
             });
             
             var selectParent = function(node,checked){
@@ -207,7 +258,23 @@
                     }
                 }
             };
-            
+             
+            var storeComboBoxStatus = Ext.create('Ext.data.SimpleStore', {
+                    fields: ['id', 'label'],
+                    data : [ 
+                        [0,'Seleccione'],
+                        [1,'Si'],
+                        [2,'No']
+                    ]
+                });
+            // the edit combo
+            var comboStatus = new Ext.form.ComboBox({
+              store: storeComboBoxStatus,
+              valueField: "id",
+              displayField: "label",
+              allowBlank: true
+            });
+             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
                 title: 'Planificación {{ app.request.get('period') }}',
@@ -219,6 +286,12 @@
                 rootVisible: false,
                 store: store,
                 multiSelect: true,
+                selType: 'cellmodel',
+                plugins: [
+                    Ext.create('Ext.grid.plugin.CellEditing', {
+                        clicksToEdit: 1
+                    })
+                ],
                 listeners: {
                     itemclick:{
                         fn: function(view, record, item, index, e){
@@ -227,6 +300,23 @@
                             } else {
                                 btnDelete.setDisabled(true);
                             }
+                        }
+                    },
+                    beforeedit: function (editor, context, eOpts) {
+                        return context.record.get('editable');
+                    },
+                    edit: function(a,b,c){
+                        var recordIndex = b.rowIdx;
+                        var checked = false;
+                        if(b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_DEFAULT') }}' || b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_NO') }}'){
+                            checked = false;
+                        }else{
+                            checked = true;
+                        }
+                        if(checked){
+                            selectParent(store.data.items[recordIndex],b.value);
+                        }else{
+                            selectChild(store.data.items[recordIndex].childNodes,b.value);
                         }
                     }
                 },
@@ -242,23 +332,14 @@
                     flex: 1
                     },
                     {
-                        xtype: 'checkcolumn',
                         header: '¿Importar?',
                         dataIndex: 'toImport',
-                        width: 80,
-                        stopSelection: false,
-                        listeners: {
-                            checkchange: function(column, recordIndex, checked){
-                                if(checked){
-                                    selectParent(store.data.items[recordIndex],checked);
-                                }else{
-                                    selectChild(store.data.items[recordIndex].childNodes,checked);
-                                }
-                            }
-                        },
-                        renderer: function(value, metaData, record){
+                        editor: comboStatus,
+                        renderer: function(value ,metaData, record) {
+                            var idx = storeComboBoxStatus.find('id', value)
+                            var rec = storeComboBoxStatus.getAt(idx);
                             if(record.get('editable')){
-                               return this.defaultRenderer(value, metaData);
+                                return rec.get('label');                    
                             }
                         }
                     },
@@ -290,6 +371,7 @@
                     refreshBtn.setDisabled(!hasChilren);
                     btnDelete.setDisabled(!hasChilren);
                     saveChangeBtn.setDisabled(!hasChilren);
+                    importBtn.setDisabled(!hasChilren);
                     return hasChilren;
             };
             

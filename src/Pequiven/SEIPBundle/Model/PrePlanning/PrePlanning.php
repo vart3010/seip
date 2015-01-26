@@ -39,6 +39,21 @@ abstract class PrePlanning  implements PrePlanningInterface
     const STATUS_APPROVED = 1;
     
     /**
+     * No se ha seleccionado nada (Vacio)
+     */
+    const TO_IMPORT_DEFAULT = 0;
+    
+    /**
+     * Si desea importar
+     */
+    const TO_IMPORT_YES = 1;
+    
+    /**
+     * No desea importar
+     */
+    const TO_IMPORT_NO = 2;
+    
+    /**
      * Parametros de la pre planificacion
      * @var type 
      */

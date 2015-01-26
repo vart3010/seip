@@ -143,9 +143,9 @@ class PrePlanning extends Model
     /**
      * ¿para importar?
      * @var boolean
-     * @ORM\Column(name="toImport",type="boolean")
+     * @ORM\Column(name="toImport",type="integer")
      */
-    private $toImport = false;
+    private $toImport = self::TO_IMPORT_DEFAULT;
     
     /**
      * ¿Es editable?
