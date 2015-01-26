@@ -377,8 +377,12 @@ abstract class ArrangementProgram
                 
             }
         }
-        $dateStartReal = clone($dateStartPlanned);
-        $dateEndReal = clone($dateEndPlanned);
+        if($dateStartPlanned){
+            $dateStartReal = clone($dateStartPlanned);
+        }
+        if($dateEndPlanned){
+            $dateEndReal = clone($dateEndPlanned);
+        }
         if($realMonthDateStart != 13){
             $dateStartReal->setDate($dateStartReal->format('Y'), $realMonthDateStart, 1);
         }

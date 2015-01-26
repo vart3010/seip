@@ -356,7 +356,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
-            $result = $indicator->getTotalPlan() - $indicator->getResult();
+            $result = 100 - $indicator->getResult();
             $indicator->setProgressToDate($result);
         }
         

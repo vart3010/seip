@@ -295,7 +295,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsTactic = 'No Aplica';
+                $textArrangementProgramsTactic = 'No cargado';
             }
             $activeSheet->setCellValue('M'.$row, $textArrangementProgramsTactic);
             
@@ -321,7 +321,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsOperative.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsOperative = 'No Aplica';
+                $textArrangementProgramsOperative = 'No Cargado';
             }
             $activeSheet->setCellValue('V'.$row, $textArrangementProgramsOperative);
             

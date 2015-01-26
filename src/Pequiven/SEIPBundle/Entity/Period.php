@@ -94,6 +94,22 @@ class Period extends Base
     private $dateEndLoadArrangementProgram;
 
     /**
+     * Fecha inicio de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartClearanceNotificationArrangementProgram;
+
+    /**
+     * Fecha fin de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndClearanceNotificationArrangementProgram;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -304,5 +320,51 @@ class Period extends Base
     public function getDateEndLoadArrangementProgram()
     {
         return $this->dateEndLoadArrangementProgram;
+    }
+
+    /**
+     * Set dateStartClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateStartClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateStartClearanceNotificationArrangementProgram($dateStartClearanceNotificationArrangementProgram)
+    {
+        $this->dateStartClearanceNotificationArrangementProgram = $dateStartClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartClearanceNotificationArrangementProgram()
+    {
+        return $this->dateStartClearanceNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateEndClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateEndClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateEndClearanceNotificationArrangementProgram($dateEndClearanceNotificationArrangementProgram)
+    {
+        $this->dateEndClearanceNotificationArrangementProgram = $dateEndClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndClearanceNotificationArrangementProgram()
+    {
+        return $this->dateEndClearanceNotificationArrangementProgram;
     }
 }
