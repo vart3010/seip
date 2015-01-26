@@ -675,6 +675,26 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 typeManagement: null
             };
+            var selectsDisable = [];
+            $scope.disableSelect = function(id){
+                selectsDisable.push(id);
+                angular.element('#'+id).select('enable',false);
+            };
+            
+            var setEnableSelect = function (id,enabled){
+                var i;
+                var isEnable = true;
+                for(i=0; i < selectsDisable.length; i++){
+                    if(selectsDisable[i] == id){
+                        isEnable = false;
+                    }
+                }
+                if(isEnable == true){
+                    angular.element('#selectComplejos').select2("enable",enabled)
+                }else{
+                    angular.element('#selectComplejos').select2("enable",false)
+                }
+            };
             
             //Objetivo Táctico
             if(!isPlanning){
@@ -796,8 +816,8 @@ angular.module('seipModule.controllers', [])
                             $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
                                 $scope.model.complejo = selected;
                             });
-                            var selectComplejos = angular.element('#selectComplejos');
-                            selectComplejos.select2("enable",false);
+                            var selectComplejos = angular.element('#');
+                            setEnableSelect('selectComplejos',false);
                         }
                     });
             }
@@ -913,20 +933,18 @@ angular.module('seipModule.controllers', [])
             });
             //Filtro de modular y vinculante
             $scope.$watch("model.typeManagement", function(newParams, oldParams) {
-                var selectComplejos = angular.element('#selectComplejos');
                 var firstLineManagement = angular.element('#firstLineManagement');
                 if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
                     $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
                     $scope.resetViewNotified();
                     if($scope.model.typeManagement.id == 0){//Si el filtro es modular
-                        selectComplejos.select2('enable',false);
-                        firstLineManagement.select2('enable',false);
+                        setEnableSelect('selectComplejos',false);
+                        setEnableSelect('firstLineManagement',false);
                     }
                 } else {
-                    
                     $scope.tableParams.$params.filter['typeManagement'] = null;
-                    selectComplejos.select2('enable',true);
-                    firstLineManagement.select2('enable',true);
+                    setEnableSelect('selectComplejos',true);
+                    setEnableSelect('firstLineManagement',true);
                 }
             });
         })
