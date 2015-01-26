@@ -345,12 +345,21 @@ class IndicatorRepository extends baseEntityRepository {
             
         }
         
-        //Excluir Gerencias de Apoyo
+        //Filtro Gerencias de Apoyo
         if(($support = $criteria->remove('type_gerencia_support')) != null){
-            if($support == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){
-                
-            } elseif($support == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){
+            if($support == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Incluir Gerencias de Apoyo
                 $queryBuilder
+                        ->innerJoin('o.gerenciaSecond', 'gs')
+                        ->leftJoin('gs.gerenciaSupports', 'gsp')
+                        ->orWhere('gsp.id = :gerencia')
+                        ->setParameter('gerencia', $gerencia)
+                        ;
+                if($gerenciaSecond != null){
+                    $queryBuilder->andWhere('gs.id = '.$gerenciaSecond);
+                }
+            } elseif($support == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Excluir Gerencias de Apoyo
+                if($gerencia != null){
+                    $queryBuilder
                         ->innerJoin('o.gerenciaSecond', 'gs')
                         ->innerJoin('gs.gerencia', 'g1')
                         ->leftJoin('g1.gerenciaSecondVinculants', 'gv')
@@ -358,6 +367,15 @@ class IndicatorRepository extends baseEntityRepository {
                         ->setParameter('gerencia', $gerencia)
                         ->setParameter('complejo', $complejo)
                     ;
+                } else{
+                    $queryBuilder
+                        ->innerJoin('o.gerenciaSecond', 'gs')
+                        ->innerJoin('gs.gerencia', 'g1')
+                        ->leftJoin('g1.gerenciaSecondVinculants', 'gv')
+                        ->andWhere($queryBuilder->expr()->orX('gs.complejo = :complejo','gv.modular = 1'))
+                        ->setParameter('complejo', $complejo)
+                    ;
+                }
             }
         }
         

@@ -128,6 +128,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
                 if($typeSupport == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Solo se da para el caso de que la gerencia este en Sede Corporativa
                     $queryBuilder
                             ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia AND gs.complejo = :complejo','gv.modular = 1 AND g.id = :gerencia'))
+                            ->setParameter('complejo', $complejo)
                             ;
                 } elseif($typeSupport == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Solo se da para las gerencias generales de los complejos
                     $queryBuilder
@@ -135,7 +136,6 @@ class GerenciaSecondRepository extends baseEntityRepository {
                         ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia','gsp.id = :gerencia'))
                         ;
                 }
-                $queryBuilder->setParameter('complejo', $complejo);
             } else{
                 $queryBuilder
                     ->innerJoin('gs.gerencia', 'g')
