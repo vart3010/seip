@@ -758,6 +758,9 @@ angular.module('seipModule.controllers', [])
                             }
                         });
             }
+            $scope.setSelectFirsLineManagement = function(value){
+                $scope.model.firstLineManagement = value;
+            };
             //Busca las gerencias de segunda linea
             $scope.getSecondLineManagement = function(gerencia){
                 var parameters = {
@@ -800,6 +803,11 @@ angular.module('seipModule.controllers', [])
                         if($scope.model.complejo != null){
                             $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
                                 $scope.model.complejo = selected;
+                                if($scope.model.firstLineManagement != undefined){
+                                    $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.model.complejo.gerencias, function(selected) {
+                                        $scope.model.firstLineManagement = selected;
+                                    });
+                                }
                             });
                         }
                     });
