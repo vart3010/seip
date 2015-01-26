@@ -35,7 +35,12 @@ class ArrangementProgramController extends SEIPController
                 unset($criteria['firstLineManagement']);
                 unset($criteria['complejo']);
             }
+        }elseif($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+            
+            $criteria['firstLineManagement'] = $user->getGerencia()->getId();
+            $criteria['complejo'] = $user->getComplejo()->getId();
         }
+        
         if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,

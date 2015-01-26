@@ -482,7 +482,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ;
         }
         
-        //VISTA PLANIFICACIÓN POR GERENCIA
+        //VISTA DE ESTADÍSTICA E INFORMACIÓN POR GERENCIA
         if(isset($criteria['view_planning'])){
             if($criteria['view_planning'] == true){
                 $criteria->remove('view_planning');

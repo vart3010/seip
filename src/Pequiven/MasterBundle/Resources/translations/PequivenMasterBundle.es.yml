@@ -4,6 +4,7 @@ pequiven_master:
                 gerencia_first: Gerencia 1ra Línea
                 gerencia_second: Gerencia 2da Línea
                 gerencia_second_vinculant: Gerencias Vinculantes
+                gerencia_second_support: Gerencias de Apoyo
                 add: Añadir
                 registerIndicator: Registrar Indicador
                 list: Lista

@@ -153,6 +153,7 @@ pequiven_seip:
         notified: Notificados
         not_notified: Sin Notificación
         notified_but_still_in_progress: Notificados pero con proceso sin cerrar
+        miscellaneous: Misceláneo
     tooltips:
         click_to_show: Click para ver
     area:

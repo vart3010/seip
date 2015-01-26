@@ -180,7 +180,7 @@ class GerenciaController extends baseController {
         $form = $this->getForm($resource);
 
         if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
-            $form->submit($request,false);
+            $form->submit($request,true);
             if($form->isValid()){
                 $this->domainManager->update($resource);
 
@@ -295,7 +295,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsTactic = 'No Aplica';
+                $textArrangementProgramsTactic = 'No cargado';
             }
             $activeSheet->setCellValue('M'.$row, $textArrangementProgramsTactic);
             
@@ -321,7 +321,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsOperative.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsOperative = 'No Aplica';
+                $textArrangementProgramsOperative = 'No Cargado';
             }
             $activeSheet->setCellValue('V'.$row, $textArrangementProgramsOperative);
             
