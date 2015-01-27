@@ -18,7 +18,7 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class PrePlanningApprovalItemRepository extends EntityRepository
+class PrePlanningItemRepository extends EntityRepository
 {
     
 }

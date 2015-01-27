@@ -192,12 +192,11 @@ class PrePlanningController extends ResourceController
     
     public function importAction(Request $request)
     {
-        $resource = $this->findOr404($request);
+        $prePlanning = $this->findOr404($request);
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
         $prePlanningService = $this->getPrePlanningService();
-        
-        
+        $prePlanningService->importItem($prePlanning, $user);
         $data = array(
             "success" => true,
         );

@@ -24,7 +24,7 @@ abstract class PrePlanning  implements PrePlanningInterface
     const DEFAULT_NAME = 'ROOT-NODE';
     
     /**
-     * Tipo objetivo
+     * Tipo de objeto (Root) este tipo no tiene instancia
      */
     const TYPE_OBJECT_ROOT_NODE = 0;
     
@@ -36,7 +36,7 @@ abstract class PrePlanning  implements PrePlanningInterface
     /**
      * Estatus aprobado
      */
-    const STATUS_APPROVED = 1;
+    const STATUS_IMPORTED = 1;
     
     /**
      * No se ha seleccionado nada (Vacio)
@@ -70,5 +70,27 @@ abstract class PrePlanning  implements PrePlanningInterface
     
     function setParameter($key,$value) {
         $this->parameters[$key] = $value;
+    }
+    
+    public static function getTypeObjectRepository($typeObject) {
+        $typeObjectsRepository = self::getTypeObjectsRepository();
+        if(!isset($typeObjectsRepository[$typeObject])){
+            throw new \InvalidArgumentException(sprintf('The type object "%s", is not defined for prePlanning',$typeObject));
+        }
+    }
+    
+    /**
+     * Devuelve los repositorios de los tipos de objetos que se pueden importar
+     * 
+     * @return array
+     */
+    public static function getTypeObjectsRepository()
+    {
+        return array(
+            self::TYPE_OBJECT_OBJETIVE => 'Pequiven\ObjetiveBundle\Repository\ObjetiveRepository',
+            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository',
+            self::TYPE_OBJECT_INDICATOR => 'Pequiven\IndicatorBundle\Repository\IndicatorRepository',
+            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'Pequiven\ArrangementProgramBundle\Repository\GoalRepository',
+        );
     }
 }

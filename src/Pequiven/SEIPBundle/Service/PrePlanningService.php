@@ -139,6 +139,7 @@ class PrePlanningService extends ContainerAware
         $prePlanning->setIdObject($idObject);
         $prePlanning->setLevelObject($levelObject);
         $prePlanning->setEditable($isEditable);
+        $prePlanning->setUser($user);
     }
     
     private function buildChildren($childrens,&$prePlannig) {
@@ -192,12 +193,12 @@ class PrePlanningService extends ContainerAware
         }
         if($root->isRequiresApproval()){
             $em = $this->getDoctrine()->getManager();
-            $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningApprovalItem');
-            $prePlanningApprovalItem = $repository->findOneBy(array(
+            $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem');
+            $prePlanningItem = $repository->findOneBy(array(
                 'typeObject' => $root->getTypeObject(),
                 'idObject' => $root->getIdObject(),
             ));
-            if($prePlanningApprovalItem){
+            if($prePlanningItem){
                 $name .= ' <span class="green">(Aprobado)</span>';
             }else{
                 $name .= ' <span class="red">(Requiere Aprobación)</span>';
@@ -225,11 +226,26 @@ class PrePlanningService extends ContainerAware
         return $child;
     }
     
-    function importItem(PrePlanning $prePlanning) 
+    function importItem(PrePlanning $prePlanning,User $user) 
     {
-        $prePlanningApprovalItem = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningApprovalItem();
+        $prePlanningItem = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem();
+        if($prePlanning->getStatus() == PrePlanning::STATUS_DRAFT){
+            $idObject = $prePlanning->getIdObject();
+            $typeObject = $prePlanning->getTypeObject();
+            
+            $prePlanningItem->setPrePlanning($prePlanning);
+            $prePlanningItem->setIdObject($idObject);
+            $prePlanningItem->setTypeObject($typeObject);
+            
+            $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
+        }
     }
     
+    private function findItemInstance(PrePlanning $prePlanning) 
+    {
+        $idObject = $prePlanning->getIdObject();
+        $typeObject = $prePlanning->getTypeObject();
+    }
 
     /**
      * Extrae elementos del objetivo

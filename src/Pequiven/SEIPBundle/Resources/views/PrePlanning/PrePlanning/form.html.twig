@@ -175,7 +175,7 @@
                 url: urlImport,
                     success: function(response, opts) {
                        tree.body.unmask();
-                       tree.body.mask("Item "+(itemsToImportCurrent + 1)+" importado correctamente...");
+                       tree.body.mask("Item #"+(itemsToImportCurrent)+" importado correctamente...");
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
                        callAjaxItemToImport();
@@ -218,13 +218,17 @@
                             itemsToImport.push(items[i]);
                         }
                     }
-                    Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
-                       if(btn === 'yes'){
-                            itemsToImportLength = itemsToImport.length;
-                            tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                            callAjaxItemToImport();
-                        }
-                    });
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
+                           if(btn === 'yes'){
+                                itemsToImportLength = itemsToImport.length;
+                                tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                callAjaxItemToImport();
+                            }
+                        });
+                    }else{
+                        Ext.Msg.alert("", "No hay items selecionados para importar.");
+                    }
                 },
                 glyph :'xf0c5@FontAwesome',
                 text: 'Importar',

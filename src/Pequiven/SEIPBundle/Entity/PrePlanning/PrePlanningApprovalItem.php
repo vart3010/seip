@@ -19,10 +19,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningApprovalItemRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningItemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\TypePrePlanningInterface
+class PrePlanningItem implements \Pequiven\SEIPBundle\Model\PrePlanning\TypePrePlanningInterface
 {
     /**
      * @var integer
@@ -79,7 +79,15 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-
+    
+    /**
+     *
+     * @var PrePlanning
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $prePlanning;
+    
     /**
      * Get id
      *
@@ -114,7 +122,7 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return PrePlanningApprovalItem
+     * @return PrePlanningItem
      */
     public function setCreatedAt($createdAt)
     {
@@ -137,7 +145,7 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return PrePlanningApprovalItem
+     * @return PrePlanningItem
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -160,7 +168,7 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return PrePlanningApprovalItem
+     * @return PrePlanningItem
      */
     public function setDeletedAt($deletedAt)
     {
@@ -183,7 +191,7 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
      * Set user
      *
      * @param \Pequiven\SEIPBundle\Entity\User $user
-     * @return PrePlanningApprovalItem
+     * @return PrePlanningItem
      */
     public function setUser(\Pequiven\SEIPBundle\Entity\User $user = null)
     {
@@ -214,5 +222,28 @@ class PrePlanningApprovalItem implements \Pequiven\SEIPBundle\Model\PrePlanning\
         $this->idObject = $idObject;
         
         return $this;
+    }
+
+    /**
+     * Set prePlanning
+     *
+     * @param \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning $prePlanning
+     * @return PrePlanningItem
+     */
+    public function setPrePlanning(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning $prePlanning)
+    {
+        $this->prePlanning = $prePlanning;
+
+        return $this;
+    }
+
+    /**
+     * Get prePlanning
+     *
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning 
+     */
+    public function getPrePlanning()
+    {
+        return $this->prePlanning;
     }
 }
