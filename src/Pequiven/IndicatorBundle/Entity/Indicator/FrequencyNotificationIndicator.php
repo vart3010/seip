@@ -58,6 +58,12 @@ class FrequencyNotificationIndicator
      * @ORM\Column(name="days", type="integer")
      */
     private $days;
+
+    /**
+     * Cantidad de resultados de la frecuencia
+     * @ORM\Column(name="numberResultsFrequency", type="integer")
+     */
+    private $numberResultsFrequency = 0;
     
     /**
      * Habilitado o no.
@@ -226,5 +232,28 @@ class FrequencyNotificationIndicator
     public function getEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * Set numberResultsFrequency
+     *
+     * @param integer $numberResultsFrequency
+     * @return FrequencyNotificationIndicator
+     */
+    public function setNumberResultsFrequency($numberResultsFrequency)
+    {
+        $this->numberResultsFrequency = $numberResultsFrequency;
+
+        return $this;
+    }
+
+    /**
+     * Get numberResultsFrequency
+     *
+     * @return integer 
+     */
+    public function getNumberResultsFrequency()
+    {
+        return $this->numberResultsFrequency;
     }
 }

@@ -31,6 +31,7 @@ class IndicatorController extends ResourceController
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'errorFormula' => $errorFormula,
+                'indicatorService' => $indicatorService,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));

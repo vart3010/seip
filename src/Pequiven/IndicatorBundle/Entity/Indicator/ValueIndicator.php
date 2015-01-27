@@ -4,6 +4,7 @@ namespace Pequiven\IndicatorBundle\Entity\Indicator;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator as Model;
 
 /**
  * Valor del indicador
@@ -12,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="seip_indicator_value")
  * @ORM\Entity()
  */
-class ValueIndicator
+class ValueIndicator extends Model
 {
     /**
      * @var integer
@@ -60,14 +61,7 @@ class ValueIndicator
      * @var decimal
      * @ORM\Column(name="valueOfIndicator", type="float",precision = 3)
      */
-    protected $valueOfIndicator;
-    
-    /**
-     * Parametros que se usaron en las variables de las formulas
-     * @var array
-     * @ORM\Column(name="formulaParameters",type="array",nullable=false)
-     */
-    protected $formulaParameters;
+    protected $valueOfIndicator = 0.0;
 
     /**
      * Indicador

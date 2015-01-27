@@ -32,6 +32,7 @@ class CoreExtension extends \Twig_Extension
             new \Twig_SimpleFilter('str_pad', function($input, $padlength, $padstring='', $padtype = STR_PAD_LEFT){
                 return str_pad($input, $padlength, $padstring, $padtype);
             }),
+            new \Twig_SimpleFilter('myNumberFormat', array($this,'myNumberFormat')),
         );
     }
     
@@ -80,6 +81,16 @@ class CoreExtension extends \Twig_Extension
             <span>$error</span>
         </div>";
         return $base;
+    }
+    
+    /**
+     * Filtro para formatear numero.
+     * @param type $value
+     * @param type $decimals
+     * @return type
+     */
+    function myNumberFormat($value,$decimals = 2) {
+        return number_format($value,$decimals,'.',',');
     }
     
     /**

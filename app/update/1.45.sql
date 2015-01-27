@@ -21,3 +21,20 @@ ALTER TABLE Period ADD deletedAt DATETIME DEFAULT NULL;
 
 -- PD: Crear periodo 2015 por administrador.
 INSERT INTO `Configuration` (`id`, `group_id`, `keyIndex`, `value`, `description`, `active`, `createdAt`, `updatedAt`) VALUES (NULL, '1', 'PRE_PLANNING_ENABLE_PRE_PLANNING', '1', 'Habilita la pre planificacion del periodo siguiente', '1', '2015-01-22 00:00:00', NULL);
+
+ALTER TABLE seip_indicator ADD arrangementRange_id INT DEFAULT NULL;
+UPDATE seip_indicator i,seip_arrangement_range ar SET i.arrangementRange_id = ar.id WHERE ar.fk_indicator = i.id;
+
+ALTER TABLE seip_indicator ADD CONSTRAINT FK_6092D6A69B33E358 FOREIGN KEY (arrangementRange_id) REFERENCES seip_arrangement_range (id);
+CREATE UNIQUE INDEX UNIQ_6092D6A69B33E358 ON seip_indicator (arrangementRange_id);
+ALTER TABLE seip_indicator_audit ADD arrangementRange_id INT DEFAULT NULL;
+ALTER TABLE seip_arrangement_range DROP FOREIGN KEY FK_845D408CB06D4A23;
+DROP INDEX UNIQ_845D408CB06D4A23 ON seip_arrangement_range;
+ALTER TABLE seip_arrangement_range DROP fk_indicator;
+-- Por defecto frecuencia de notificacion mensual
+UPDATE `seip_indicator` i SET frequencyNotificationIndicator_id = 3 WHERE i.frequencyNotificationIndicator_id IS NULL;
+
+-- Agregando campo a frecuencia de indicador
+ALTER TABLE seip_c_indicator_frequency_notification ADD numberResultsFrequency INT NOT NULL;
+ALTER TABLE seip_c_indicator_frequency_notification_audit ADD numberResultsFrequency INT DEFAULT NULL;
+UPDATE `seip_c_indicator_frequency_notification` SET `numberResultsFrequency` = '12' WHERE `seip_c_indicator_frequency_notification`.`id` = 3;
