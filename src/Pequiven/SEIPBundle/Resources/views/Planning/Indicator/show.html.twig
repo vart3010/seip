@@ -33,7 +33,7 @@
         <p class="inline-label">
             <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
             
-            {% set advances = indicator.progressToDate|number_format(2) %}
+            {% set advances = indicator.progressToDate|myNumberFormat %}
             {% set advancesClass = 'red-gradient' %}
             {% if advances >= 50 %}
                 {% set advancesClass = 'orange-gradient' %}
@@ -54,14 +54,19 @@
              <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.formula'|trans }}</label>
-                    {{ indicator.formula }}
+                    {% set formula = indicator.formula %}
+                    {% if formula %}
+                        {{ indicator.formula }}
+                    {% else %}
+                        <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
+                    {% endif %}
                 </p>
              </div>
              <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.total_plan'|trans }}</label>
                     {% if indicator.totalPlan > 0 %}
-                        {{ indicator.totalPlan }}
+                        {{ indicator.totalPlan|myNumberFormat }}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}
@@ -93,13 +98,17 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
                     {{ indicator.typeOfCalculationLabel|trans }}
+                    {%  if indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC') and formula != null and formula.getTypeOfCalculation != constant('Pequiven\\MasterBundle\\Entity\\Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC') %}
+                        <span class="tag red-bg">{{ ('pequiven_indicator.errors.not_support_formula'|trans) }}</span>
+                    {% endif %}
                 </p>
              </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
-                    {% if indicator.frequencyNotificationIndicator != null %}
-                        {{ indicator.frequencyNotificationIndicator }}
+                    {% set frequencyNotificationIndicator = indicator.frequencyNotificationIndicator %}
+                    {% if frequencyNotificationIndicator != null %}
+                        {{ frequencyNotificationIndicator }}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}
@@ -119,7 +128,15 @@
                     <label class="label">{{ 'form.associated_indicators'|trans }}</label>
                     <ul class="fa-ul">
                         {% for child in indicator.childrens %}
-                            <li>{{ generateLink(child) }}</li>
+                            <li>{{ generateLink(child) }}
+                                {% if indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC') %}
+                                    &nbsp;
+                                    {% set validChild = indicatorService.validateChildOfParent(child) %}
+                                    {% if  validChild != null %}
+                                        <span class="tag red-bg">{{ validChild }}</span>
+                                    {% endif %}
+                                {% endif %}
+                                </li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -137,6 +154,7 @@
 
         {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
     {% endif %}
+    &nbsp;
     {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
             {
                 routeUpdateResult: 'pequiven_planning_update_result_indicator',

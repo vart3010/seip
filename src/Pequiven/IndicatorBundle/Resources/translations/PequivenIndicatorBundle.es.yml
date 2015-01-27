@@ -53,6 +53,15 @@ pequiven_indicator:
         without_formula: Sin Fórmula de Evaluación
         with_result: Con Resultado Notificados
         without_result: Sin Resultados Notificados
+    errors:
+        frequency_not_assigned_parent: Frecuencia no asignada al padre.
+        formula_unassigned_parent: Fórmula no asignada al padre.
+        assigned_frequency_not_support: Frecuencia asignada no compatible.
+        not_support_formula_parent: Fórmula del padre no compatible.
+        formula_unassigned: Fórmula no asignada.
+        not_support_formula: Fórmula no compatible.
+        trends_should_be_equal: Las tendencias deben ser iguales.
+        
 form:
     ref: Nro. de Referencia
     indicator: Indicador

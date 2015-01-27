@@ -31,4 +31,10 @@ ALTER TABLE seip_indicator_audit ADD arrangementRange_id INT DEFAULT NULL;
 ALTER TABLE seip_arrangement_range DROP FOREIGN KEY FK_845D408CB06D4A23;
 DROP INDEX UNIQ_845D408CB06D4A23 ON seip_arrangement_range;
 ALTER TABLE seip_arrangement_range DROP fk_indicator;
+-- Por defecto frecuencia de notificacion mensual
+UPDATE `seip_indicator` i SET frequencyNotificationIndicator_id = 3 WHERE i.frequencyNotificationIndicator_id IS NULL;
 
+-- Agregando campo a frecuencia de indicador
+ALTER TABLE seip_c_indicator_frequency_notification ADD numberResultsFrequency INT NOT NULL;
+ALTER TABLE seip_c_indicator_frequency_notification_audit ADD numberResultsFrequency INT DEFAULT NULL;
+UPDATE `seip_c_indicator_frequency_notification` SET `numberResultsFrequency` = '12' WHERE `seip_c_indicator_frequency_notification`.`id` = 3;
