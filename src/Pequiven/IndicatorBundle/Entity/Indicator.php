@@ -225,7 +225,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="indicator",cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="indicator",cascade={"remove"})
      */
     protected $arrangementRange;
 

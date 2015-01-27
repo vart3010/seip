@@ -114,6 +114,16 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% if (indicator.childrens | length) > 0 %}
+                <div class="inline-label">
+                    <label class="label">{{ 'form.associated_indicators'|trans }}</label>
+                    <ul class="fa-ul">
+                        {% for child in indicator.childrens %}
+                            <li>{{ generateLink(child) }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </div>
     </fieldset>
         <br /><br />

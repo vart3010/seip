@@ -88,6 +88,7 @@ form:
     no_appy: No aplica
     period: Período
     objetives: Objetivos
+    associated_indicators: Indicadores asociados
     total_plan: Plan anual
     
     arrangementRangeType: Tipo de Rango
