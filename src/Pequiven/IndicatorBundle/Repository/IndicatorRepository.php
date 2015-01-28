@@ -10,6 +10,7 @@ namespace Pequiven\IndicatorBundle\Repository;
 
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Pequiven\MasterBundle\Entity\Gerencia;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 
 /**
@@ -97,48 +98,7 @@ class IndicatorRepository extends baseEntityRepository {
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
-//        $queryBuilder = $this->getQueryBuilder();
-//        $queryBuilder
-//                ->innerJoin('i.objetives', 'o_o')
-//                ->andWhere('i.enabled = 1')
-//                ->andWhere('o_o.enabled = 1')
-//                ;
-//        $queryBuilder->andWhere('i.tmp = 0');
-//        
-//        //Filtro por referencia o descripción
-//        if(isset($criteria['description'])){
-//            $description = $criteria['description'];
-//            unset($criteria['description']);
-//            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('i.description', "'%".$description."%'"),$queryBuilder->expr()->like('i.ref', "'%".$description."%'")));
-//        }
-//        
-//        //Filtro nivel del Indicador
-//        if(isset($criteria['indicatorLevel'])){
-//            $queryBuilder->andWhere("i.indicatorLevel = " . $criteria['indicatorLevel']);
-//        }
-//        
-//        //Filtro Gerencia 1ra Línea
-//        if(isset($criteria['gerenciaFirst'])){
-//            if((int)$criteria['gerenciaFirst'] == 0){
-//
-//            } else{
-//                $queryBuilder->andWhere('o_o.gerencia = ' . (int)$criteria['gerenciaFirst']);
-//            }
-//        }
-//        
-//        //Filtro Gerencia 2da Línea
-//        if(isset($criteria['gerenciaSecond'])){
-//            if((int)$criteria['gerenciaSecond'] > 0){
-//                $queryBuilder->andWhere("o_o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
-//            } else{
-//                unset($criteria['gerenciaSecond']);
-//            }
-//        }
-//        
-//        $queryBuilder->groupBy('i.ref');
-//        $queryBuilder->orderBy('i.ref');
-//
-//        return $this->getPaginator($queryBuilder);
+        $criteria['for_view'] = true;
         return parent::createPaginator($criteria, $orderBy);
     }
     
@@ -334,11 +294,16 @@ class IndicatorRepository extends baseEntityRepository {
         
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
-                ->innerJoin('i.objetives', 'o')
                 ->andWhere('i.enabled = 1')
-                ->andWhere('o.enabled = 1')
                 ->andWhere('i.tmp = 0')
                 ;
+        
+        if(($forView = $criteria->remove('for_view')) !== null){
+            $queryBuilder
+                    ->innerJoin('i.objetives', 'o')
+                    ->andWhere('o.enabled = 1')
+                    ;
+        }
         
         //Filtro por referencia o descripción
         if(($description = $criteria->remove('description')) !== null){
@@ -378,6 +343,40 @@ class IndicatorRepository extends baseEntityRepository {
                 $queryBuilder->andWhere('i.progressToDate = 0');
             }
             
+        }
+        
+        //Filtro Gerencias de Apoyo
+        if(($support = $criteria->remove('type_gerencia_support')) != null){
+            if($support == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Incluir Gerencias de Apoyo
+                $queryBuilder
+                        ->innerJoin('o.gerenciaSecond', 'gs')
+                        ->leftJoin('gs.gerenciaSupports', 'gsp')
+                        ->orWhere('gsp.id = :gerencia')
+                        ->setParameter('gerencia', $gerencia)
+                        ;
+                if($gerenciaSecond != null){
+                    $queryBuilder->andWhere('gs.id = '.$gerenciaSecond);
+                }
+            } elseif($support == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Excluir Gerencias de Apoyo
+                if($gerencia != null){
+                    $queryBuilder
+                        ->innerJoin('o.gerenciaSecond', 'gs')
+                        ->innerJoin('gs.gerencia', 'g1')
+                        ->leftJoin('g1.gerenciaSecondVinculants', 'gv')
+                        ->andWhere($queryBuilder->expr()->orX('g1.id = :gerencia AND gs.complejo = :complejo','gv.modular = 1 AND g1.id = :gerencia'))
+                        ->setParameter('gerencia', $gerencia)
+                        ->setParameter('complejo', $complejo)
+                    ;
+                } else{
+                    $queryBuilder
+                        ->innerJoin('o.gerenciaSecond', 'gs')
+                        ->innerJoin('gs.gerencia', 'g1')
+                        ->leftJoin('g1.gerenciaSecondVinculants', 'gv')
+                        ->andWhere($queryBuilder->expr()->orX('gs.complejo = :complejo','gv.modular = 1'))
+                        ->setParameter('complejo', $complejo)
+                    ;
+                }
+            }
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());

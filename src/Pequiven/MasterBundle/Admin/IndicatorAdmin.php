@@ -39,6 +39,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
+            ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
             ->add('goal')

@@ -842,10 +842,12 @@ angular.module('seipModule.controllers', [])
                 var selectStatus = angular.element('#selectStatus');
                 selectStatus.select2("val",'');
             };
+            //Método que reinicia los filtros para la vista de planificación
             $scope.resetViewNotified = function() {
                 $scope.tableParams.$params.filter['view_planning'] = null;
                 $scope.tableParams.$params.filter['type'] = null;
             };
+            //Ver el resumen de programas de gestión por status
             $scope.viewByStatus = function(status){
                 $scope.tableParams.$params.filter['status'] = status;
                 var selectStatus = angular.element('#selectStatus');
@@ -1399,6 +1401,10 @@ angular.module('seipModule.controllers', [])
             var selectComplejo = angular.element("#selectComplejos");
             var selectFirstLineManagement = angular.element("#selectFirstLineManagement");
             var selectSecondLineManagement = angular.element("#selectSecondLineManagement");
+            var selectExclude = angular.element('#excludeGerenciaSecondSupport');
+            var selectInclude = angular.element('#includeGerenciaSecondSupport');
+            var sectionExcludeGerenciaSecondSupport = angular.element("#sectionExcludeGerenciaSecondSupport");
+            var sectionIncludeGerenciaSecondSupport = angular.element("#sectionIncludeGerenciaSecondSupport");
             
             $scope.data = {
                 complejos: null,
@@ -1412,6 +1418,13 @@ angular.module('seipModule.controllers', [])
                 secondLineManagement: null,
                 indicatorMiscellaneous: null
             };
+            
+            //Carga de Configuración por defecto
+            $scope.initPage = function(){
+                selectSecondLineManagement.select2("enable",false);
+            };
+            
+            $scope.initPage();
             
             //Busca las localidades
             $scope.getComplejos = function(){
@@ -1457,6 +1470,20 @@ angular.module('seipModule.controllers', [])
                     parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
                 }
                 
+                if(selectExclude.is(':checked')){
+                    parameters.filter['type_gerencia_support'] = 'TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT';
+                    parameters.filter['complejo'] = $scope.model.complejo.id;
+                } else{
+                    
+                }
+                
+                if(selectInclude.is(':checked')){
+                    parameters.filter['type_gerencia_support'] = 'TYPE_WITH_GERENCIA_SECOND_SUPPORT';
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                } else{
+                    
+                }
+                
                 $http.get(Routing.generate('pequiven_seip_second_line_management',parameters))
                     .success(function(data) {
                         $scope.data.second_line_managements = data;
@@ -1466,6 +1493,35 @@ angular.module('seipModule.controllers', [])
                             });
                         }
                     });
+            };
+            
+            //Al hacer click en el check de exclusión de gerencias de apoyo
+            $scope.excludeGerenciaSecondSupport = function(){
+                if(selectExclude.is(':checked')){
+                    if($scope.model.firstLineManagement != null){
+                        $scope.getSecondLineManagement();
+                        selectSecondLineManagement.select2("val",'');
+                        $scope.tableParams.$params.filter['type_gerencia_support'] = 'TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT';
+                    } else{
+                        $scope.tableParams.$params.filter['type_gerencia_support'] = 'TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT';
+                    }
+                } else{
+                    $scope.getSecondLineManagement();
+                    selectSecondLineManagement.select2("val",'');
+                    $scope.tableParams.$params.filter['type_gerencia_support'] = null;
+                }
+            };
+            
+            $scope.includeGerenciaSecondSupport = function(){
+                if(selectInclude.is(':checked')){
+                    $scope.getSecondLineManagement();
+                    selectSecondLineManagement.select2("val",'');
+                    $scope.tableParams.$params.filter['type_gerencia_support'] = 'TYPE_WITH_GERENCIA_SECOND_SUPPORT';
+                } else{
+                    $scope.getSecondLineManagement();
+                    selectSecondLineManagement.select2("val",'');
+                    $scope.tableParams.$params.filter['type_gerencia_support'] = null;
+                }
             };
             
             if(level == 1){
@@ -1481,21 +1537,41 @@ angular.module('seipModule.controllers', [])
             $scope.$watch("model.complejo", function(newParams, oldParams) {
                 if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
                     $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+                    if(level > 2){
+                        if($scope.model.complejo.ref == 'CORP.'){
+                            sectionExcludeGerenciaSecondSupport.show();
+                            sectionIncludeGerenciaSecondSupport.hide();
+                        } else{
+                            sectionExcludeGerenciaSecondSupport.hide();
+                            sectionIncludeGerenciaSecondSupport.show();
+                        }
+                    }
                     //Al cambiar el select de localidad
                     selectComplejo.change(function() {
                         selectFirstLineManagement.select2("val",'');
-                        if(level > 2){
+                        if(level > 2){//Nivel Operativo
                             selectSecondLineManagement.select2("val",'');
                         }
                     });
                 } else {
                     $scope.tableParams.$params.filter['complejo'] = null;
+                    selectExclude.prop("checked",false);
+                    selectSecondLineManagement.select2("enable",false);
+                    selectSecondLineManagement.select2("val",'');
                 }
             });
             //Scope de Gerencia de 1ra Línea
             $scope.$watch("model.firstLineManagement", function(newParams, oldParams) {
                 if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
                     $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    selectSecondLineManagement.select2("enable",true);
+                    if($scope.model.firstLineManagement.gerenciaGroup.groupName == 'CORP'){
+                        sectionExcludeGerenciaSecondSupport.show();
+                        sectionIncludeGerenciaSecondSupport.hide();
+                    } else if ($scope.model.firstLineManagement.gerenciaGroup.groupName == 'COMP'){
+                        sectionExcludeGerenciaSecondSupport.hide();
+                        sectionIncludeGerenciaSecondSupport.show();
+                    }
                     //Al cambiar la gerencia de 1ra línea
                     selectFirstLineManagement.change(function() {
                         if(level > 2){
@@ -1504,15 +1580,19 @@ angular.module('seipModule.controllers', [])
                     });
                 } else {
                     $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                    selectSecondLineManagement.select2("enable",false);
+                    selectSecondLineManagement.select2("val",'');
                 }
             });
-            
             //Scope de Gerencia de 2da Línea
             $scope.$watch("model.secondLineManagement", function(newParams, oldParams) {
                 if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
                     $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                    selectExclude.prop("checked",false);
+                    selectInclude.prop("checked",false);
                 } else {
                     $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                    $scope.tableParams.$params.filter['type_gerencia_support'] = null;
                 }
             });
             //Scope de Misceláneo                                                              
@@ -1523,30 +1603,6 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['miscellaneous'] = null;
                 }
             });
-            
-//            $scope.gerenciaSecond = null;
-//            $scope.gerenciaFirst = null;
-//            var gerencia = 0;
-//            $scope.$watch("gerenciaFirst", function() {
-//                if ($scope.gerenciaFirst != null && $scope.gerenciaFirst != undefined)
-//                {
-//                    if(gerencia != $scope.gerenciaFirst){
-//                        gerencia = $scope.gerenciaFirst;
-//                        $scope.tableParams.$params.filter['gerenciaSecond'] = null;
-//                    }
-//                    $scope.tableParams.$params.filter['gerenciaFirst'] = $scope.gerenciaFirst;
-//                } else {
-//                    $scope.tableParams.$params.filter['gerenciaFirst'] = null;
-//                }
-//            });
-//            $scope.$watch("gerenciaSecond", function() {
-//                if ($scope.gerenciaSecond != null && $scope.gerenciaSecond != undefined)
-//                {
-//                    $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
-//                } else {
-//                    $scope.tableParams.$params.filter['gerenciaSecond'] = null;
-//                }
-//            });
         })
         .controller('TableIndicatorStrategicController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
