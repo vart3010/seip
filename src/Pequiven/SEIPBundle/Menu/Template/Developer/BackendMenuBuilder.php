@@ -59,7 +59,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
-        if($seipConfiguration->isEnablePrePlanning()){
+        if($seipConfiguration->isEnablePrePlanning() && $this->isGranted('ROLE_PRE_PLANNING_ENABLE')){
             $this->addMenuPrePlanning($menu, $section);
         }
         //$this->addExampleMenu($menu, $section);
@@ -1005,4 +1005,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         return $this->container->get('seip.configuration');
     }
     
+    private function isGranted($roles) {
+        return $this->securityContext->isGranted($roles);
+    }
 }
