@@ -16,6 +16,16 @@ namespace Pequiven\MasterBundle\Model;
 abstract class Gerencia implements GerenciaFirstInterface
 {
     
+    /**
+     * Incluye las gerencias de apoyo
+     */
+    const TYPE_WITH_GERENCIA_SECOND_SUPPORT = 'TYPE_WITH_GERENCIA_SECOND_SUPPORT';
+    
+    /**
+     * Excluye las gerencias de apoyo
+     */
+    const TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT = 'TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT';
+    
     //Referencias de las Gerencias de 1ra Línea
     //Morón
     const REF_GERENCIA_GENERAL_CPM = 1;

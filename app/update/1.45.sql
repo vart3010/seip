@@ -12,6 +12,9 @@ CREATE TABLE revisions (id INT AUTO_INCREMENT NOT NULL, timestamp DATETIME NOT N
 
 -- Actualizacion de la tabla periodo
 ALTER TABLE Period ADD dateStartClearanceNotificationArrangementProgram DATE DEFAULT NULL, ADD dateEndClearanceNotificationArrangementProgram DATE DEFAULT NULL;
+
+
+
 -- Actualizacion del periodo para relacionarlo
 ALTER TABLE Period ADD parent_id INT DEFAULT NULL;
 ALTER TABLE Period ADD CONSTRAINT FK_C2141BF8727ACA70 FOREIGN KEY (parent_id) REFERENCES Period (id);
@@ -38,3 +41,13 @@ UPDATE `seip_indicator` i SET frequencyNotificationIndicator_id = 3 WHERE i.freq
 ALTER TABLE seip_c_indicator_frequency_notification ADD numberResultsFrequency INT NOT NULL;
 ALTER TABLE seip_c_indicator_frequency_notification_audit ADD numberResultsFrequency INT DEFAULT NULL;
 UPDATE `seip_c_indicator_frequency_notification` SET `numberResultsFrequency` = '12' WHERE `seip_c_indicator_frequency_notification`.`id` = 3;
+
+CREATE TABLE PrePlanning (id INT AUTO_INCREMENT NOT NULL, parent_id INT DEFAULT NULL, user_id INT DEFAULT NULL, period_id INT DEFAULT NULL, name LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, typeObject INT NOT NULL, levelObject INT NOT NULL, idObject INT DEFAULT NULL, status INT NOT NULL, parameters LONGTEXT NOT NULL COMMENT '(DC2Type:json_array)', requiresApproval TINYINT(1) NOT NULL, toImport INT NOT NULL, editable TINYINT(1) NOT NULL, INDEX IDX_BFBCFF4F727ACA70 (parent_id), INDEX IDX_BFBCFF4FA76ED395 (user_id), INDEX IDX_BFBCFF4FEC8B7ADE (period_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE PrePlanningItem (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, typeObject INT NOT NULL, idObject INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deletedAt DATETIME DEFAULT NULL, prePlanning_id INT NOT NULL, INDEX IDX_D168B90FA76ED395 (user_id), UNIQUE INDEX UNIQ_D168B90F8110757F (prePlanning_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE PrePlanning ADD CONSTRAINT FK_BFBCFF4F727ACA70 FOREIGN KEY (parent_id) REFERENCES PrePlanning (id);
+ALTER TABLE PrePlanning ADD CONSTRAINT FK_BFBCFF4FA76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
+ALTER TABLE PrePlanning ADD CONSTRAINT FK_BFBCFF4FEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+ALTER TABLE PrePlanningItem ADD CONSTRAINT FK_D168B90FA76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
+ALTER TABLE PrePlanningItem ADD CONSTRAINT FK_D168B90F8110757F FOREIGN KEY (prePlanning_id) REFERENCES PrePlanning (id);
+
+INSERT INTO `Period` (`id`, `name`, `dateStart`, `dateEnd`, `status`, `description`, `dateStartNotificationArrangementProgram`, `dateEndNotificationArrangementProgram`, `dateStartLoadArrangementProgram`, `dateEndLoadArrangementProgram`, `dateStartClearanceNotificationArrangementProgram`, `dateEndClearanceNotificationArrangementProgram`, `deletedAt`, `parent_id`) VALUES (NULL, '2015', '2015-01-01', '2015-12-31', '0', 'Periodo-2015', '2015-01-01', '2015-01-01', '2015-01-01', '2015-01-01', '2015-01-01', '2015-01-01', NULL, '1');
