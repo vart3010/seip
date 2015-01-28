@@ -19,6 +19,7 @@ use Pequiven\ArrangementBundle\Model\ArrangementRange as modelArrangementRange;
  *
  * @ORM\Table(name="seip_arrangement_range")
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementBundle\Repository\ArrangementRangeRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
 class ArrangementRange extends modelArrangementRange {
@@ -65,16 +66,15 @@ class ArrangementRange extends modelArrangementRange {
     /**
      * Objetive
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive
-     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive",inversedBy="arrangementRange")
-     * @ORM\JoinColumn(name="fk_objetive", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive",mappedBy="arrangementRange")
+     
      */
     private $objetive;
     
     /**
      * Indicator
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\OneToOne(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="arrangementRange")
-     * @ORM\JoinColumn(name="fk_indicator", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="arrangementRange")
      */
     private $indicator;
     
@@ -305,7 +305,11 @@ class ArrangementRange extends modelArrangementRange {
      */
     private $enabled = true;    
 
-
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Get id
      *
@@ -1119,5 +1123,15 @@ class ArrangementRange extends modelArrangementRange {
     public function getEnabled()
     {
         return $this->enabled;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
 }

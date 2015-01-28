@@ -21,8 +21,8 @@ class ResultListerner implements EventSubscriberInterface, ContainerAwareInterfa
         return array(
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_FINISH_THE_NOTIFICATION_PROCESS => 'onPostFinishTheNotificationProcess',
             SeipEvents::RESULT_ARRANGEMENT_PROGRAM_UPDATE => 'onPostFinishTheNotificationProcess',
-            SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreValueIndicatorPreUpdate',
-            SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreValueIndicatorPreUpdate',
+//            SeipEvents::VALUE_INDICATOR_PRE_UPDATE => 'onPreValueIndicatorPreUpdate',
+//            SeipEvents::VALUE_INDICATOR_PRE_ADD => 'onPreValueIndicatorPreUpdate',
         );
     }
     

@@ -9,7 +9,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\BoxInterface;
 
 /**
  * Servicio para renderizar los box
- *
+ * 
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
 class BoxRender implements ContainerAwareInterface
@@ -19,6 +19,12 @@ class BoxRender implements ContainerAwareInterface
      * @var array
      */
     private $boxs;
+    /**
+     * Todos los box disponibles agrupados por nombres
+     * @var array
+     */
+    private $boxsByName;
+    
     /**
      * Javascript de los box por grupos
      * @var array
@@ -51,6 +57,19 @@ class BoxRender implements ContainerAwareInterface
         return $this->boxs;
     }
     
+    function getBoxsByName() 
+    {
+        if($this->boxsByName === null){
+            $this->boxsByName = array();
+            foreach ($this->getBoxs() as $group => $boxes) {
+                foreach ($boxes as $box) {
+                    $this->boxsByName[$box->getName()] = $box;
+                }
+            }
+        }
+        return $this->boxsByName;
+    }
+
     function countBox() {
         return $this->quantityBox;
     }
@@ -69,6 +88,7 @@ class BoxRender implements ContainerAwareInterface
             if(isset($this->boxs[$group][$box->getName()])){
                 throw new Exception(sprintf('Box "%s" already exists!',$box->getName()));
             }
+            $box->setContainer($this->container);
             $this->boxs[$group][$box->getName()] = $box;
         }
         $this->quantityBox++;

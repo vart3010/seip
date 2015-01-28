@@ -17,24 +17,24 @@ app:
                         objetives:
                             main: Objetivos
                             add:
-                                main: Añadir
+                                main: Cargar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Mostrar Carga
+                                main: Visualizar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                         indicators:
                             main: Indicadores
                             add:
-                                main: Añadir
+                                main: Cargar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
                             list:
-                                main: Mostrar Carga
+                                main: Visualizar
                                 strategic: Estratégico
                                 tactic: Táctico
                                 operative: Operativo
@@ -43,9 +43,10 @@ app:
                         list: Lista
                         assigned: Asignados
                         for_reviewing_or_approving: Por revisar o aprobar
+                        for_notifying: Por notificar
                         temaplate: Desde plantilla
                         add:
-                            main: Añadir
+                            main: Cargar
                             tactic: Táctico
                             operative: Operativo
                             other: Otro
@@ -55,29 +56,34 @@ app:
                         complejo:
                             main: Complejos
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         gerencia_first:
                             main: Gerencia 1ra Línea
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         gerencia_second:
                             main: Gerencia 2da Línea
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         cargo:
                             main: Cargos
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         personal:
                             main: Personal PQV
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                         rol:
                             main: Roles
                             list: Lista
-                            add: Añadir
+                            add: Cargar
                     planning:
-                        main: Planificación
+                        main: Estadística e información
+                        objetives:
+                            main: Objetivos
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
                         indicators:
                             main: Indicadores
                             strategic: Estratégico
@@ -89,3 +95,32 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                    objetives:
+                        main: Objetivos
+                        visualize:
+                            main: Visualizar
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
+                        matrices_objectives:
+                            Matrices de objetivos
+                    results:
+                        main: Resultados
+                        visualize:
+                            main: Visualizar
+                            strategic: Estratégico
+                            tactic: Táctico
+                            operative: Operativo
+                            by_gerencia: Por gerencia
+                        notify:
+                            main: Notificar
+                            indicators: Indicadores
+                            arrangement_programs: Programas de Gestión
+                        period:
+                            main: Periodo
+                            objetives: Objetivos
+                            indicators: Indicadores
+                    pre_planning:
+                        main: Planificación %period%
+                        tactic: Táctico
+                        operative: Operativo

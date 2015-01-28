@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario
             new FOS\RestBundle\FOSRestBundle(),//Servicios Rest
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),//Generado de rutas javascript
+            new FOS\OAuthServerBundle\FOSOAuthServerBundle(),//Auth2 protocolo
             
             new JMS\SerializerBundle\JMSSerializerBundle(),//Serializador de objetos en json y xml
             new JMS\TranslationBundle\JMSTranslationBundle(),//Traductor optimizado
@@ -46,6 +47,8 @@ class AppKernel extends Kernel
             new Sonata\AdminBundle\SonataAdminBundle(),//Administracion
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new Sonata\UserBundle\SonataUserBundle(),
+            
+            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),//Bundle para auditar entidades
             
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla

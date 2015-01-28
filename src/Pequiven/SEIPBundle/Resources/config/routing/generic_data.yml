@@ -1,0 +1,32 @@
+pequiven_seip_complejos:
+    path: /complejos.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getComplejosAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+
+pequiven_seip_first_line_management:
+    path: /first-line-management.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getFirstLineManagementAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_seip_second_line_management:
+    path: /second-line-management.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getSecondLineManagementAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true

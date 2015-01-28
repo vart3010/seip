@@ -1,0 +1,40 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+    <div class="block large-margin-bottom">
+        <div class="block-title">
+            <h3>Resumen Programas de Gestión</h3>
+        </div>
+        <ul class="events">
+            <li>
+                <p class="event-description">{{ 'pequiven.arrangement_program.status.charged'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.charged|length }}</p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus({{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_DRAFT') }})">{{ 'pequiven.arrangement_program.status.draft'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.draft|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW') }}')">{{ 'pequiven.arrangement_program.status.in_review'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.in_review|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') }}')">{{ 'pequiven.arrangement_program.status.revised'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.revised|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') }}')">{{ 'pequiven.arrangement_program.status.approved'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.approved|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REJECTED') }}')">{{ 'pequiven.arrangement_program.status.rejected'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.rejected|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewByStatus('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_FINISHED') }}')">{{ 'pequiven.arrangement_program.status.finished'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.finished|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewNotified('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::SUMMARY_TYPE_NOTIFIED') }}')">{{ 'pequiven.arrangement_program.status.notified'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.notified|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewNotified('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED') }}')">{{ 'pequiven.arrangement_program.status.not_notified'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.not_notified|length }}</a></p>
+            </li>
+            <li>
+                <p class="event-description"><a href="#" ng-click="viewNotified('{{ constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS') }}')">{{ 'pequiven.arrangement_program.status.notified_but_still_in_progress'|trans ({}, 'PequivenArrangementProgramBundle') }}: {{ summary.notified_but_still_in_progress|length }}</a></p>
+            </li>
+        </ul>
+    </div>
+</div>

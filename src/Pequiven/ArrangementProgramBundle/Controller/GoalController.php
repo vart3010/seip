@@ -122,6 +122,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
     {
         $entity = new Goal();
         $form = $this->createCreateForm($entity,$typeForm);
+        $form->remove('responsibles');
         return array(
             'goal' => $form->createView(),
         );

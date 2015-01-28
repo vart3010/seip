@@ -67,12 +67,22 @@ class GerenciaRepository extends baseEntityRepository
      */
     function createPaginatorGerenciaFirst(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
+        $user = $this->getUser();
+        $queryBuilder->leftJoin('g.complejo', 'c');
 
         if(isset($criteria['description'])){
-            $description = $criteria['description'];
-            unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$description."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['description']."%'"));
         }
+        //Filtro localidad
+        if(isset($criteria['complejo'])){
+            $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        
+        if(!$this->getSecurityContext()->isGranted(array('ROLE_WORKER_PLANNING','ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            $queryBuilder->andWhere('g.id = '.$user->getGerencia()->getId());
+        }
+        
+        
 //        if(isset($criteria['rif'])){
 //            $rif = $criteria['rif'];
 //            unset($criteria['rif']);
@@ -80,8 +90,8 @@ class GerenciaRepository extends baseEntityRepository
 //        }
 //var_dump($queryBuilder->getQuery()->getSQL());
 //die();
-        $this->applyCriteria($queryBuilder, $criteria);
-        $this->applySorting($queryBuilder, $orderBy);
+//        $this->applyCriteria($queryBuilder, $criteria);
+//        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -98,6 +108,25 @@ class GerenciaRepository extends baseEntityRepository
                 ;
         }
         return $queryBuilder->getQuery()->getResult();
+    }
+ 
+    public function findWithObjetives($id) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('g_ot')
+            ->addSelect('g_ot_c')
+            ->addSelect('g_ot_p')
+            ->leftJoin('g.tacticalObjectives', 'g_ot')
+            ->leftJoin('g_ot.childrens', 'g_ot_c')
+            ->leftJoin('g_ot.parents', 'g_ot_p')
+            ->leftJoin('g_ot.objetiveLevel', 'g_ot_ol')
+            ->andWhere('g.id = :gerencia')
+            ->andWhere('g_ot_ol.level = :level')
+            ->setParameter('gerencia', $id)
+            ->setParameter('level',  \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                ;
+        return $qb->getQuery()->getOneOrNullResult();
     }
     
     protected function getAlias() {

@@ -135,6 +135,9 @@ class ObjetiveTacticController extends baseController {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
 
+            $periodService = $this->get('pequiven_arrangement_program.service.period');
+            $period = $periodService->getPeriodActive();
+            
 //            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
             $data['tendency'] = (int) $data['tendency'];
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
@@ -162,6 +165,7 @@ class ObjetiveTacticController extends baseController {
                         ${$nameObject . $i}->resetIndicators();
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject . $i}->setGerencia($gerencia);
+                        ${$nameObject . $i}->setPeriod($period);
                         ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
@@ -189,6 +193,7 @@ class ObjetiveTacticController extends baseController {
                             ${$nameObject . $j} = clone $object;
                             ${$nameObject . $j}->resetIndicators();
                             ${$nameObject . $j}->setGerencia($gerencia);
+                            ${$nameObject . $j}->setPeriod($period);
                             ${$nameObject . $j}->setRef($totalRef[$j]);
                             if (isset($data['indicators'])) {
                                 foreach ($data['indicators'] as $value) {
@@ -206,6 +211,7 @@ class ObjetiveTacticController extends baseController {
                 //Si el usuario tiene rol Gerente General de Complejo o Gerente 1ra línea
             } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
                 $object->setGerencia($user->getGerencia());
+                $object->setPeriod($period);
                 $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
                 if($totalRef[0] != $data['ref']){
                     $this->updateIndicatorRef($data, $totalRef);
@@ -226,6 +232,7 @@ class ObjetiveTacticController extends baseController {
                     $this->updateIndicatorRef($data, $totalRef);
                 }
                 $object->setRef($totalRef[0]);
+                $object->setPeriod($period);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));

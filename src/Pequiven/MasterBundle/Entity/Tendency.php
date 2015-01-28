@@ -15,14 +15,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\MasterBundle\Model\Tendency as modelTendency;
 
 /**
- * Tendency
+ * Tendencia
  *
  * @ORM\Table(name="seip_c_tendency")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\TendencyRepository")
  * @author matias
  */
 class Tendency extends modelTendency {
-    //put your code here
     /**
      * @var integer
      *

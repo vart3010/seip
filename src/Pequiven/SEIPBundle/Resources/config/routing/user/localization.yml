@@ -1,0 +1,30 @@
+pequiven_localization_create:
+    path: /{userId}/create
+    defaults:
+        _controller: pequiven.controller.localization:createAction
+        _format: html
+        _sylius:
+            form: pequiven_seipbundle_user_localization
+    requirements:
+        configurationId: "\d+"
+    methods: [GET|POST|PUT]
+    
+pequiven_localization_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.localization:updateAction
+        _format: html
+        _sylius:
+            form: pequiven_seipbundle_user_localization
+    requirements:
+        id: "\d+"
+    methods: [GET|POST]
+    
+pequiven_localization_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.localization:deleteAction
+        _format: html
+    requirements:
+        id: "\d+"
+    methods: [POST|DELETE]

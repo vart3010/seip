@@ -13,7 +13,31 @@ abstract class ArrangementProgram
 {
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
-    const TYPE_ARRANGEMENT_PROGRAM_OTHER = 3;
+    
+    /**
+     * Resumen Tipo "Cargados"
+     */
+    const SUMMARY_TYPE_CHARGED = 'CHARGED';
+    
+    /**
+     * Resumen Por Status
+     */
+    const SUMMARY_TYPE_BY_STATUS = 'BY_STATUS';
+    
+    /**
+     * Resumen Por Notificados
+     */
+    const SUMMARY_TYPE_NOTIFIED = 'NOTIFIED';
+    
+    /**
+     * Resumen Por No Notificados
+     */
+    const SUMMARY_TYPE_NOT_NOTIFIED = 'NOT_NOTIFIED';
+    
+    /**
+     * Resumen Por Notificados pero con Notificación en Progreso
+     */
+    const SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS = 'NOTIFIED_BUT_STILL_IN_PROGRESS';
     
     /**
      * Estatus borrador
@@ -258,6 +282,10 @@ abstract class ArrangementProgram
             'weight' => 0,
             'advances' => 0,
             'advancesPlanned' => 0,
+            'dateStartPlanned' => null,
+            'dateStartReal' => null,
+            'dateEndPlanned' => null,
+            'dateEndReal' => null,
         );
         $limitMonthToNow = false;
         $month = null;
@@ -272,11 +300,23 @@ abstract class ArrangementProgram
         $timeline = $this->getTimeline();
         $advancesGoalDetailsReal = array();
         $advancesGoalDetailsPlanned = array();
+        $dateStartPlanned = $dateStartReal = $dateEndPlanned = $dateEndReal = null;
+        $realMonthDateStart = 13;
+        $realMonthDateEnd = -1;
         
         if($timeline){
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
+                //Buscar la fecha de inicio planificada
+                if($dateStartPlanned === null || $dateStartPlanned > $goal->getStartDate()){
+                    $dateStartPlanned = $goal->getStartDate();
+                }
+                //Buscar la fecha de fin planificada
+                if($dateEndPlanned === null || $dateEndPlanned < $goal->getEndDate()){
+                    $dateEndPlanned = $goal->getEndDate();
+                }
                 $goalDetails = $goal->getGoalDetails();
+                
                 $weight = 0;
                 if($goalDetails !== null && $goalDetails->getGoal() !== null){
                     $weight = $goalDetails->getGoal()->getWeight();
@@ -301,6 +341,14 @@ abstract class ArrangementProgram
                         }
                         $advancesGoalDetailsReal[$nameProperty] += $advanceReal;
                         $advancesReal +=  $advanceReal;
+                        
+                        $month = GoalDetails::getMonthOfReal($nameProperty);
+                        if($real > 0 && $realMonthDateStart > $month ){
+                            $realMonthDateStart = $month;
+                        }
+                        if($real > 0 && $realMonthDateEnd < $month){
+                           $realMonthDateEnd =  $month;
+                        }
                     }
                     if(preg_match('/'.$nameMatchPlanned.'/i', $methodName)){
                         $class = $method->getDeclaringClass();
@@ -308,7 +356,7 @@ abstract class ArrangementProgram
                             continue;
                         }
                         if($limitMonthToNow === true){
-                            $plannedString = lcfirst(str_replace('get', '', $methodName));
+                            $plannedString = GoalDetails::getRealNameProperty($methodName);
                             $plannedMonth = GoalDetails::getMonthOfPlanned($plannedString);
                             if($plannedMonth > $month){
                                 continue;
@@ -328,11 +376,28 @@ abstract class ArrangementProgram
                 
             }
         }
+        if($dateStartPlanned){
+            $dateStartReal = clone($dateStartPlanned);
+        }
+        if($dateEndPlanned){
+            $dateEndReal = clone($dateEndPlanned);
+        }
+        if($realMonthDateStart != 13){
+            $dateStartReal->setDate($dateStartReal->format('Y'), $realMonthDateStart, 1);
+        }
+        if($realMonthDateEnd != -1){
+            $dateEndReal->setDate($dateEndReal->format('Y'), $realMonthDateEnd, \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($dateEndReal->format('Y'), $realMonthDateEnd));
+        }
+        
         $summary['advances'] = $advancesReal;
         $summary['weight'] = $totalWeight;
         $summary['advancesPlanned'] = $advancesPlanned;
         $summary['detailsAdvancesPlanned'] = $advancesGoalDetailsPlanned;
         $summary['detailsAdvancesReal'] = $advancesGoalDetailsReal;
+        $summary['dateStartPlanned'] = $dateStartPlanned;
+        $summary['dateEndPlanned'] = $dateEndPlanned;
+        $summary['dateStartReal'] = $dateStartReal;
+        $summary['dateEndReal'] = $dateEndReal;
         return $summary;
     }
     

@@ -20,9 +20,9 @@ class BoxBundleExtension extends \Twig_Extension
         );
     }
     
-    function renderArea($areaName)
+    function renderArea($areas)
     {
-        return $this->getAreaRender()->renderArea($areaName);
+        return $this->getAreaRender()->renderArea($areas);
     }
     
     /**

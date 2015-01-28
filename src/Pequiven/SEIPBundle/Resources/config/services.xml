@@ -101,6 +101,9 @@
         <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Period" />
         </service>
+        <service id="pequiven.repository.pre_planning" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning" />
+        </service>
         <service id="twig.extension.seip.core" class="Pequiven\SEIPBundle\Twig\Extension\CoreExtension" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="twig.loader" />
@@ -121,30 +124,54 @@
         <service id="arrangement_program.summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Modelo de Programas de Gestión de acuerdo a la gerencia seleccionada y ordenado por los status disponibles en el sistema -->
+        <service id="arrangement_program.summary_total_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\SummaryTotalBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Modelo de Programas de Gestión que guardan relación con el usuario logueado -->
         <service id="arrangement_program.my_summary_box" class="Pequiven\SEIPBundle\Model\Box\ArrangementProgram\MyArrangementProgramsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Tácticos Agrupados por Grupo de Gerencia de 1ra Línea -->
-        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
+        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Indicator\Tactic\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Tácticos por Grupo de Gerencia de 1ra Línea -->
-        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorChargedByGroup">
+        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Tactic\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos Agrupados por Grupo de Gerencia de 1ra Línea -->
-        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorCharged">
+        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
-        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
+        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box de dashboard de planificacion -->
+        <service id="operative.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box de dashboard generico -->
+        <service id="operative.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Model\Box\AreaDefinition">
+            <tag name="tecnocreaciones_box.area" />
+        </service>
+        <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
+        <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
+        <service id="pequiven_seip.area.adapter.box_default" class="Pequiven\SEIPBundle\Model\Box\BoxDefaultAdapter">
+            <tag name="tecnocreaciones_box.area.adapter" />
         </service>
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
             <call method="setContainer">
-                <argument type="service" id="service_container" />
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
@@ -161,5 +188,18 @@
 <!--        <service id="pequiven.form.user" class="Pequiven\SEIPBundle\Form\User">
             <tag name="form.type" alias="pequiven_seipbundle_user" />
         </service>-->
+        <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
+        </service>
+        <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.service.preplanning" class="Pequiven\SEIPBundle\Service\PrePlanningService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
 </container>

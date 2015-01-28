@@ -76,7 +76,7 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
-     * Retorna los programas de gestion que tengan de responsable al usuario que cuenta como una
+     * Retorna los programas de gestion que tengan de responsable el usuario
      */
     function findByUserAndPeriodNotGoals(User $user,Period $period,array $criteria = array())
     {
@@ -119,6 +119,63 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
+     * Programas de Gestión Cargados y por status (en borrador, en revisión, revisados, aprobados, rechazados y finalizados)
+     * @param array $criteria
+     * @return type
+     */
+    public function getSummaryCharged(array $criteria = null){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $gerencia = $criteria['gerencia'];
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->leftJoin('ap.tacticalObjective','to')
+            ->andWhere('to.gerencia = '.$gerencia)
+                ;
+        if(isset($criteria['type']) && $criteria['type'] == ArrangementProgram::SUMMARY_TYPE_CHARGED){
+            $qb
+                ->andWhere('ap.status <= :status')
+                ->setParameter('status', ArrangementProgram::STATUS_APPROVED);
+            $criteria->remove('type');
+        } else{
+            $status = $criteria->remove('status');
+            $qb
+                ->andWhere('ap.status = :status')
+                ->setParameter('status', $status);
+        }
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retorna los Programas de Gestión por Notificados, No Notificados o con Proceso de Notificación sin cerrar
+     * @param array $criteria
+     */
+    public function getNotified(array $criteria = null){
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $gerencia = $criteria['gerencia'];
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->leftJoin('ap.tacticalObjective','to')
+            ->andWhere('to.gerencia = '.$gerencia)
+            ->andWhere('ap.status = :status')
+            ->innerJoin('ap.details', 'd')
+            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
+                ;
+        if(isset($criteria['type'])){
+            if($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
+                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'));
+            } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
+                $qb->andWhere($qb->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'));
+            } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
+                $qb->andWhere('d.notificationInProgressByUser IS NOT NULL');
+                $qb->andWhere('ap.totalAdvance > 0');
+            }
+        } 
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
      * 
      * @param array $criteria
      * @param array $orderBy
@@ -137,17 +194,23 @@ class ArrangementProgramRepository extends EntityRepository
      */
     public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
         $this->getUser();
-        
-        $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
-        if(isset($criteria['gerencia'])){
-            $queryBuilder->andWhere('o.gerencia = ' . $criteria['gerencia']);
-        }
-        
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
-
-        return $this->getPaginator($queryBuilder);
+        return parent::createPaginator($criteria, $orderBy);
+//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+//        
+//        $queryBuilder = $this->getCollectionQueryBuilder();
+//        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
+//        if(($gerencia = $criteria->remove('gerencia')) != null){
+//            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
+//        }
+//        
+//        if(isset($criteria['status'])){
+//            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
+//        }
+//        
+////        $this->applyCriteria($queryBuilder, $criteria);
+////        $this->applySorting($queryBuilder, $orderBy);
+//
+//        return $this->getPaginator($queryBuilder);
     }
     
     /**
@@ -190,7 +253,71 @@ class ArrangementProgramRepository extends EntityRepository
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
         
-        $results = $queryBuilder->getQuery()->getResult();
+        $results = $queryBuilder->getQuery()->getResult();        
+        $filterResults = array();
+        foreach ($results as $result) {
+            if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $gerenciaSecondToNotify = null;
+                $objetiveOperative = $result->getOperationalObjective();
+                $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+                if(
+                    $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                    && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                    && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                    )
+                    {
+                    $gerenciaSecondToNotify = $gerenciaSecond;
+                }
+                if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
+                    continue;
+                }
+            }
+            $filterResults[] = $result;
+        }
+        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
+        $pagerfanta->setContainer($this->container);
+        return $pagerfanta;
+    }
+    
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para notificar
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByNotified(array $criteria = null, array $orderBy = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $user = $criteria->remove('ap.user');
+        
+        $user->getId();
+        $period = $criteria->remove('ap.period');
+        
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $this->applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('to_g_c')
+                ;
+        
+        $queryBuilder
+            ->innerJoin('to_g.configuration','to_g_c');
+        
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToNotify', 'to_g_c_apn');
+        
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apn.id = :user'));
+        $queryBuilder
+            ->andWhere('ap.period = :period')
+            ->setParameter('period', $period)
+            ;
+        
+        $queryBuilder->setParameter('user', $user);
+        $this->applySorting($queryBuilder, $orderBy);
+        
+        $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
         foreach ($results as $result) {
             if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
@@ -257,6 +384,13 @@ class ArrangementProgramRepository extends EntityRepository
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('oo')
+                ->addSelect('gs')
+                ;
+                
         $queryBuilder
                     ->leftJoin('ap.tacticalObjective', 'to')
                     ->leftJoin('to.gerencia', 'to_g')
@@ -346,6 +480,38 @@ class ArrangementProgramRepository extends EntityRepository
             $queryBuilder
                     ->setParameter('typeManagement', true)
                 ;
+        }
+        
+        //VISTA DE ESTADÍSTICA E INFORMACIÓN POR GERENCIA
+        if(isset($criteria['view_planning'])){
+            if($criteria['view_planning'] == true){
+                $criteria->remove('view_planning');
+                $type = $criteria['type'];
+                $criteria->remove('type');
+                if($type == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere($queryBuilder->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'))
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
+                        ;
+                } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere($queryBuilder->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'))
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
+                        ;
+                } elseif($type == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
+                    $queryBuilder
+                            ->innerJoin('ap.details', 'd')
+                            ->andWhere('d.notificationInProgressByUser IS NOT NULL')
+                            ->andWhere('ap.totalAdvance > 0')
+                            ->andWhere('ap.status = :status')
+                            ->setParameter('status', ArrangementProgram::STATUS_APPROVED)
+                            ;
+                }
+            }
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());

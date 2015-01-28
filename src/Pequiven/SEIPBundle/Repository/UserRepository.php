@@ -15,18 +15,19 @@ class UserRepository extends EntityRepository
 {
     /**
      * Retornar el query con los usuario a los cuales le puedo asignar programas de gestion tacticos
+     * 
      * @return type
      */
     function findQueryToAssingTacticArrangementProgram($criteria = array()){
         $qb = $this->getQueryBuilder();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
+        
         $qb
             ->innerJoin('u.groups','g')
             ->andWhere($qb->expr()->orX('g.level <= :level','u.id = :user'))
             ->andWhere('g.level >= :minLevel')
             ->andWhere('g.typeRol = :typeRol')
-            ->setParameter('level', $level)
             ->setParameter('minLevel', \Pequiven\MasterBundle\Entity\Rol::ROLE_WORKER_PQV)
             ->setParameter('user', $user)
             ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
@@ -35,12 +36,16 @@ class UserRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->isNotNull('u.gerencia'))
                 ->andWhere("u.gerencia != ''")
+                ->setParameter('level', $level)
                 ;
+        }elseif($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == true){
+            $qb->setParameter('level', \Pequiven\MasterBundle\Entity\Rol::ROLE_DIRECTIVE);
         }else{
             if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
                 $qb
                     ->andWhere('u.gerencia = :gerencia')
                     ->setParameter('gerencia', $user->getGerencia())
+                    ->setParameter('level', $level)
                     ;
             }
         }
@@ -63,6 +68,26 @@ class UserRepository extends EntityRepository
             $orX->add($qb->expr()->orX('u.gerenciaSecond = :gerencia'));
             $qb->setParameter('gerencia', $gerencia);
         }
+        
+        $qbUserConfiguration = $this->getQueryBuilder();
+        
+        $qbUserConfiguration
+            ->select('u.id')
+            ->innerJoin('u.configuration', 'u_c')
+            ->innerJoin('u_c.localizations', 'u_c_l')
+            ->innerJoin('u_c_l.gerencia', 'u_c_l_g')
+            ->andWhere('u_c_l_g.id = :gerencia')
+            ->setParameter('gerencia', $user->getGerencia())
+            ;
+            $resultUserConfiguration = $qbUserConfiguration->getQuery()->getResult();
+            $idUsersConfiguration = array();
+            foreach ($resultUserConfiguration as $value) {
+                $idUsersConfiguration[$value['id']] = $value['id'];
+            }
+            if(count($idUsersConfiguration) > 0){
+                $qb->orWhere($qb->expr()->in('u.id', $idUsersConfiguration));
+            }
+       
         $qb->andWhere($orX);
         
         $qb->setMaxResults(50);
@@ -314,6 +339,18 @@ class UserRepository extends EntityRepository
         return $this->getPaginator($queryBuilder);
     }
     
+    function findUserByNumPersonal($numPersonal)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('u.numPersonal = :numPersonal')
+            ->innerJoin('u.groups','g')
+            ->andWhere('g.typeRol = :typeRol')
+            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+            ->setParameter('numPersonal', $numPersonal)
+            ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
     protected function getAlias() {
         return 'u';
     }

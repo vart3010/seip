@@ -109,3 +109,51 @@ body > a:focus
 .icon-refresh {
     background-image: url(images/arrow_refresh.png) !important;
 }
+
+.fa {
+    background-image: none;
+    padding-top: 5px;
+    padding-left: 2px;
+}
+.fa-tasks {
+    content: '\f0ae';
+}
+.fa-cog {
+    content: '\f013';
+}
+.fa-cube {
+    content: '\f1b2';
+}
+.fa-line-chart {
+    content: '\f201';
+}
+.fa-cubes {
+    content: '\f1b3';
+}
+
+a:hover {
+    color: #09f;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+    -webkit-tap-highlight-color: #349edb;
+}
+a, a:active {
+    color: #607890;
+}
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+.red {
+    color: #e90202;
+}
+.green {
+    color: #28d600;
+}

@@ -91,3 +91,6 @@ Pequiven\ArrangementBundle\Entity\ArrangementRange:
         enabled:
             expose: true
             groups: [api_list]
+        objetive:
+            expose: true
+            groups: [objetive]

@@ -10,4 +10,6 @@ namespace Pequiven\SEIPBundle\Service;
 interface LinkGeneratorInterface
 {
     public static function getConfigObjects();
+    
+    public function getIconsDefinition();
 }

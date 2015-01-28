@@ -16,7 +16,7 @@ use Tecnocreaciones\Bundle\ToolsBundle\Entity\Configuration\BaseGroup as Group;
 
 /**
  * Configuracion del sistema
- * Service seip.configuration
+ * Service (seip.configuration)
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  */
 class Configuration extends ConfigurationManager
@@ -45,6 +45,11 @@ class Configuration extends ConfigurationManager
      * Habilitar el envio de correo electronico en los eventos del programa de gestion
      */
     const ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS = 'ARRANGEMENT_PROGRAM_SEND_EMAIL_NOTIFICATIONS';
+    
+    /**
+     * Habilita la pre planificacion del periodo siguiente
+     */
+    const PRE_PLANNING_ENABLE_PRE_PLANNING = 'PRE_PLANNING_ENABLE_PRE_PLANNING';
     
     /**
      * Obtiene el tiempo de que se tomara en cuenta para mostrar los indicadores
@@ -148,6 +153,27 @@ class Configuration extends ConfigurationManager
     function setSupportIntegratedManagementSystem($default,$description = 'Compatibilidad con el sistema integrado de gestion (SIG)', Group $group = null)
     {
         $this->set(self::SUPPORT_INTEGRATED_MANAGEMENT_SYSTEM, $default,$description,$group);
+        return $this;
+    }
+    
+    /**
+     * Retorna si esta habilitada compatibilidad con el sistema integrado de gestion (SIG)
+     * 
+     * @param boolean $default
+     * @return boolean
+     */
+    function isEnablePrePlanning($default = false) {
+        return (boolean)$this->get(self::PRE_PLANNING_ENABLE_PRE_PLANNING, $default);
+    }
+    
+    /**
+     * Establece valor si esta habilitada compatibilidad con el sistema integrado de gestion (SIG)
+     * 
+     * @param string $default
+     */
+    function setEnablePrePlanning($default = false,$description = 'Habilita la pre planificacion del periodo siguiente', Group $group = null)
+    {
+        $this->set(self::PRE_PLANNING_ENABLE_PRE_PLANNING, (boolean)$default,$description,$group);
         return $this;
     }
 }

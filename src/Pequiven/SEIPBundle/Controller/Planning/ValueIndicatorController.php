@@ -39,16 +39,16 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             
             
             $valueIndicator = $this->resourceResolver->getResource(
-            $this->getRepository(),
-            'findOneBy',
-            array(array('id' => $request->get('id',0))));
+                $this->getRepository(),
+                'findOneBy',
+                array(array('id' => $request->get('id',0))));
             
             if(!$valueIndicator){
                 $valueIndicator = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator();
-                $indicator->setValueFinal($previusValue + $value);
             }else{
-                $indicator->setValueFinal($value - $previusValue);
             }
+            $resultService = $this->container->get('seip.service.result');
+            $resultService->refreshValueIndicator($indicator);
             
             $valueIndicator
                 ->setFormulaParameters($data)
@@ -80,6 +80,10 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $this->save($valueIndicator,true);
 
                 $this->domainManager->dispatchEvent('post_update', $event);
+            }
+            //Refrescar resultados del indicador padre.
+            if($indicator->getParent() !== null){
+                $resultService->refreshValueIndicator($indicator->getParent());
             }
             
         }

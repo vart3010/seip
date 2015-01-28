@@ -25,29 +25,28 @@
         var interpolateStartSymbol = "{$";
         var interpolateEndSymbol = "$}";
         
-        var baseDependecies = [
-          '{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}',
-          '{{ url('bazinga_jstranslation_js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js') }}',
-          '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js') }}'
+        var baseDependeciesLayout = [
+            {% javascripts 
+                   output='compiled/baseDependecies.js'  
+                   filter='uglifyjs2' 
+
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table/ng-table.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/ng-table-export/ng-table-export.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-route/angular-route.min.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-sanitize/angular-sanitize.min.js'
+                   'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-resource/angular-resource.min.js'
+                %}
+                 '{{ asset_url }}',
+            {% endjavascripts %}
         ];
+        
+        var baseDependecies = baseDependeciesLayout;
         var dependencies = [
-            {# En desarrollo se cargan individuales y en produccion se combinan en uno, hay un bug que da error combinandolos en desarrollo #}
-          {% if app.debug %}
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/tableFormat1Module.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/sfTranslatorModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/modules/notifyModule.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/services.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/controllers.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/filters.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/directives.js') }}',
-              '{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/js/mainApp.js') }}',
-          {% else %}
-                {% javascripts output='js/compiled/angular_modules.js' 
+                {% javascripts output='compiled/seip_angular_modules.js' 
+                   filter='uglifyjs2' 
+                    'bundles/pequivenseip/jquery-number-master/jquery.number.min.js'
+                    'bundles/pequivenseip/angular/modules/seipModule.js'
+                    'bundles/tecnocreacionesvzlagovernment/template/developer/angular/app/bower_components/angular-cookies/angular-cookies.min.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/tableFormat1Module.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/sfTranslatorModule.js'
                     '@TecnocreacionesVzlaGovernmentBundle/Resources/public/template/developer/angular/app/js/modules/notificationBarModule/notificationBarModule.js'
@@ -60,8 +59,6 @@
                 %}
                   '{{ asset_url }}',
                 {% endjavascripts %}
-            {% endif %}
-            ''
         ];
         
         {# Agrego las dependencias de modulos de angularjs del proyecto #}
@@ -77,11 +74,13 @@
             
             $script(joinDependencias,'bundle');
             $script.ready('bundle', function() {
-              // when all is done, execute bootstrap angular application
-                angular.element(document).ready(function() {
-                  angular.bootstrap(document, ['mainApp']);
-                });
-            });
+                jQuery(document).ready(function(){
+                    // when all is done, execute bootstrap angular application
+                    angular.element(document).ready(function() {
+                        angular.bootstrap(document, ['mainApp']);
+                    });//fin boot angular
+                });//fin ready jquery
+            });//fin bundle
         });
       </script>
 {% endblock head_base %}
@@ -89,7 +88,7 @@
 {% block stylesheets_base %}
     {{ parent() }}
     <!-- jquery-ui -->
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/main.css') }}">
     <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/font-awesome/css/font-awesome.min.css') }}">
 {% endblock stylesheets_base %}
@@ -99,16 +98,35 @@
     {# Generador de rutas desde javascript #}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+    <script src="{{ url('bazinga_jstranslation_js') }}"></script>
     
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
     
 {% endblock javascripts_base %}
 
-{% block javascripts %}
-    {{ parent() }}
+{% block javascripts_core %}
     <!-- jQuery-ui -->
     <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/jquery-ui.min.js?v=1') }}"></script>
-    <script src="{{ asset('bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js?v=1') }}"></script>
+    {% javascripts 
+       '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.navigable.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.scroll.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tooltip.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.modal.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/libs/tinycon.min.js'
+       'bundles/pequivenseip/jquery-ui.custom/i18n/datepicker-es.js'
+       'bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.tabs.js'
+        
+        filter='uglifyjs2' 
+        output='compiled/seip_javascript_base.js'
+    %}
+        <script src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+{% endblock  %}
+
+{% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
             $.datepicker.regional['es'] = {

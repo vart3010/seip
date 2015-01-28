@@ -278,4 +278,7 @@ class Rol extends modelRol
     {
         return $this->typeRol;
     }
+    public function __toString() {
+        return $this->getDescription();
+    }
 }

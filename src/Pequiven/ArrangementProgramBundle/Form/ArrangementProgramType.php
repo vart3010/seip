@@ -107,7 +107,8 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                         },
                         'empty_value' => 'pequiven.select',
                         'required' => true,
-                ));
+                    ))
+                    ;
                         
             }elseif($object->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
             

@@ -53,7 +53,7 @@
 
         <!-- Additional styles -->
         {% block stylesheets_base '' %}
-            {% stylesheets output='css/compiled/main_developer.css' filter='cssrewrite' 
+            {% stylesheets output='compiled/seip_modal_main_developer.css' filter='cssrewrite' 
                 '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/main.css'
                 '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/css/gobierno-vzla.css'
             %}
@@ -164,7 +164,7 @@
         </script>
         {% endblock content %}
         {# Bloque para cargar archivos javascript bases #}
-            {% javascripts output='css/compiled/main_developer.js' 
+            {% javascripts output='compiled/main_developer.js' 
             '@TecnocreacionesVzlaGovernmentBundle/Resources/assets/js/main.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>

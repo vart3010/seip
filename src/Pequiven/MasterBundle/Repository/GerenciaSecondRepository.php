@@ -9,6 +9,7 @@
 namespace Pequiven\MasterBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Pequiven\MasterBundle\Entity\Gerencia;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 /**
  * Description of GerenciaSecondRepository
@@ -59,12 +60,12 @@ class GerenciaSecondRepository extends baseEntityRepository {
     function createPaginatorGerenciaSecond(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         
-        $queryBuilder->leftJoin('o.gerencia', 'g');
-        $queryBuilder->leftJoin('o.complejo', 'c');
+        $queryBuilder->leftJoin('gs.gerencia', 'g');
+        $queryBuilder->leftJoin('gs.complejo', 'c');
 
         //Filtro gerencia 2da Línea
         if(isset($criteria['gerenciaSecond'])){
-            $queryBuilder->andWhere($queryBuilder->expr()->like('o.description', "'%".$criteria['gerenciaSecond']."%'"));
+            $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
         }
         //Filtro gerencia 1ra Línea
         if(isset($criteria['gerenciaFirst'])){
@@ -81,35 +82,117 @@ class GerenciaSecondRepository extends baseEntityRepository {
         return $this->getPaginator($queryBuilder);
     }
     
+    /**
+     * Filtro de Gerencia de 2da Línea para las diferentes listas en el sistema
+     * @param array $criteria
+     * @return type
+     */
     function findGerenciaSecond(array $criteria = null)
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
-        //Filtro de gerencia de segunda linea modular y vinculante
+        if(isset($criteria['view_planning'])){
+            $criteria->remove('view_planning');
+        }
+        
+        $queryBuilder
+                ->andWhere('gs.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ;
+        
+        //Filtro de gerencia de segunda línea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){
             $complejo = $criteria->remove('complejo');
             $queryBuilder
-                        ->andWhere('o.complejo = :complejo');
+                        ->andWhere('gs.complejo = :complejo');
             
             if($typeManagement == \Pequiven\MasterBundle\Model\GerenciaSecond::TYPE_MANAGEMENT_MODULAR){
                 $queryBuilder
-                        ->andWhere('o.modular = :typeManagement');
+                        ->andWhere('gs.modular = :typeManagement');
             }else{
                 $queryBuilder
-                        ->andWhere('o.vinculante = :typeManagement');
+                        ->andWhere('gs.vinculante = :typeManagement');
             }
             $queryBuilder
                     ->setParameter('typeManagement', true)
                     ->setParameter('complejo', $complejo)
                 ;
-        }else if(($gerencia = $criteria->remove('gerencia')) != null){
-            $queryBuilder
-                    ->innerJoin('o.gerencia', 'g')
-                    ->andWhere('g.id = :gerencia')
-                    ->setParameter('gerencia', $gerencia)
+        } else if(($gerencia = $criteria->remove('gerencia')) != null){
+            $complejo = $criteria->remove('complejo');
+            if(($typeSupport = $criteria->remove('type_gerencia_support')) != null){
+                $queryBuilder
+                    ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('g.gerenciaSecondVinculants', 'gv')
                 ;
+                if($typeSupport == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Solo se da para el caso de que la gerencia este en Sede Corporativa
+                    $queryBuilder
+                            ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia AND gs.complejo = :complejo','gv.modular = 1 AND g.id = :gerencia'))
+                            ->setParameter('complejo', $complejo)
+                            ;
+                } elseif($typeSupport == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Solo se da para las gerencias generales de los complejos
+                    $queryBuilder
+                        ->leftJoin('gs.gerenciaSupports', 'gsp')
+                        ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia','gsp.id = :gerencia'))
+                        ;
+                }
+            } else{
+                $queryBuilder
+                    ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('gs.gerenciaVinculants', 'gv')
+                ;
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia'));
+            }
+            
+            $queryBuilder
+                    ->setParameter('gerencia', $gerencia)
+                    ;
         }
+        
         return $queryBuilder->getQuery()->getResult();
+    }
+    
+    /**
+     * Gerencias de Segunda Línea de acuerdo a una gerencia de 1ra línea
+     * @param type $options
+     * @return type
+     */
+    public function findByGerenciaFirst($options = array()){
+        $qb = $this->getQueryBuilder();
+        
+        if(isset($options['gerencia'])){
+            $qb->andWhere('gs.gerencia = '.$options['gerencia']);
+            $qb->leftJoin('gs.gerenciaVinculants', 'gv');
+            $qb->orWhere('gv.id = '.$options['gerencia']);
+        }
+        
+        $qb
+            ->andWhere('gs.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ;
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function findWithObjetives($id) 
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('gs_ob')
+            ->addSelect('gs_ob_c')
+            ->addSelect('gs_ob_p')
+            ->leftJoin('gs.operationalObjectives', 'gs_ob')
+            ->leftJoin('gs_ob.childrens', 'gs_ob_c')
+            ->leftJoin('gs_ob.parents', 'gs_ob_p')
+            ->andWhere('gs.id = :gerencia')
+            ->andWhere('gs.enabled = :enabled')
+            ->setParameter('gerencia', $id)
+            ->setParameter('enabled', true)
+                ;
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    protected function getAlias() {
+        return 'gs';
     }
 }

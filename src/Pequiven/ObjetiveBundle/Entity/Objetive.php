@@ -14,9 +14,10 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="seip_objetive")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface {
-
+class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface 
+{
     //Texto a mostrar en los select
     protected $descriptionSelect;
     
@@ -189,7 +190,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     private $tendency;
     
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", inversedBy="objetives", cascade={"persist","remove"})
      * @ORM\JoinTable(name="seip_objetives_indicators")
      */
     private $indicators;
@@ -198,6 +199,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -253,10 +255,21 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",mappedBy="objetive",cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="objetive",cascade={"remove"})
      */
     protected $arrangementRange;
 
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
+     */
+    private $lastDateCalculateResult;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Constructor
      */
@@ -1048,6 +1061,16 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
         return $this;
     }
     
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+
     /**
      * Get weight
      *
@@ -1065,4 +1088,10 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
         $result = ( $this->getResult() * $this->getWeight()) / 100;
         return $result;
     }
+    
+    public function updateLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = new \DateTime();
+    }
+    
 }

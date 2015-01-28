@@ -11,7 +11,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 interface BoxInterface extends ContainerAwareInterface
 {
     function getName();
-            
+    
+    function getDescription();
+    
+    function getTranslationDomain();
+    
     function getParameters();
     
     function getTemplateName();
@@ -23,4 +27,8 @@ interface BoxInterface extends ContainerAwareInterface
     function getAssetsCss();
 
     function getGroups();
+    
+    function getAreasNotPermitted();
+    
+    function getAreasPermitted();
 }

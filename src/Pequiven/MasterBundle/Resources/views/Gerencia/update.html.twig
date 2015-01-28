@@ -44,7 +44,17 @@
             {{ form_errors(form.direction) }}
         </div>
         <div class="field-block button-height">
-            <label>Revisores</label>
+            {{ form_label(form.gerenciaSecondVinculants) }}
+            {{ form_widget(form.gerenciaSecondVinculants) }}
+            {{ form_errors(form.gerenciaSecondVinculants) }}
+        </div>
+        <div class="field-block button-height">
+            {{ form_label(form.gerenciaSecondSupports) }}
+            {{ form_widget(form.gerenciaSecondSupports) }}
+            {{ form_errors(form.gerenciaSecondSupports) }}
+        </div>
+        <div class="field-block button-height">
+            <label>Revisores #<b>{$ model.arrangementProgramUserToRevisers.length $}</b></label>
             <div id="gerencia_configuration_arrangementProgramUserToRevisers" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUserToRevisers',{{ gerenciafirst.configuration.arrangementProgramUserToRevisers|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUserToRevisers')"></div>
             <input ng-repeat="user in model.arrangementProgramUserToRevisers" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUserToRevisers][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
@@ -54,7 +64,7 @@
             {% endif %}
         </div>
         <div class="field-block button-height">
-            <label>Aprueban tacticos</label>
+            <label>Aprueban tacticos #<b>{$ model.arrangementProgramUsersToApproveTactical.length  $}</b></label>
             <div id="gerencia_configuration_arrangementProgramUsersToApproveTactical" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveTactical',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveTactical|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToApproveTactical')" ></div>
             <input ng-repeat="user in model.arrangementProgramUsersToApproveTactical" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveTactical][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToApproveTactical) }}
@@ -64,7 +74,7 @@
             {% endif %}
         </div>
         <div class="field-block button-height">
-            <label>Aprueban operativos</label>
+            <label>Aprueban operativos #<b>{$ model.arrangementProgramUsersToApproveOperative.length $}</b></label>
             <div id="gerencia_configuration_arrangementProgramUsersToApproveOperative"  style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToApproveOperative',{{ gerenciafirst.configuration.arrangementProgramUsersToApproveOperative|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToApproveOperative')"></div>
             <input ng-repeat="user in model.arrangementProgramUsersToApproveOperative" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToApproveOperative][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToApproveOperative) }}
@@ -74,7 +84,7 @@
             {% endif %}
         </div>
         <div class="field-block button-height">
-            <label>Notifican programas</label>
+            <label>Notifican programas #<b>{$ model.arrangementProgramUsersToNotify.length $}</b></label>
             <div id="gerencia_configuration_arrangementProgramUsersToNotify" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramUsersToNotify',{{ gerenciafirst.configuration.arrangementProgramUsersToNotify|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramUsersToNotify')"></div>
             <input ng-repeat="user in model.arrangementProgramUsersToNotify" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramUsersToNotify][]" value="{$ user.id $}" />
             {#{{ form_label(form.configuration.arrangementProgramUsersToNotify) }}
@@ -84,7 +94,6 @@
             {% endif %}
         </div>
         {{ form_widget(form._token) }}
-        
         
         {{ actions.update() }}
     </form>
@@ -122,6 +131,8 @@
             $("#gerencia_configuration_arrangementProgramUsersToApproveTactical").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToApproveOperative").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToNotify").select2(parametersUsers);
+            $("#pequiven_masterbundle_gerencia_gerenciaSecondVinculants").select2();
+            $("#pequiven_masterbundle_gerencia_gerenciaSecondSupports").select2();
         });
     </script>
 {% endblock javascript %}

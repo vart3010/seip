@@ -12,8 +12,10 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class IndicatorAdmin extends Admin
-{
+class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
+{   
+    private $container;
+    
     protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
         $childrensParameters = array(
@@ -37,6 +39,7 @@ class IndicatorAdmin extends Admin
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
+            ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
             ->add('goal')
@@ -74,5 +77,24 @@ class IndicatorAdmin extends Admin
             ->add('valueFinal')
             ->add('enabled')
             ;
+    }
+    
+    public function postUpdate($object) 
+    {
+//        $objetives = $object->getObjetives();
+//        $this->getResultService()->updateResultOfObjects($objetives);
+    }
+    
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
+    }
+    
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
     }
 }

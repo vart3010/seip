@@ -157,8 +157,9 @@ class GerenciaController extends baseController {
     
     public function showAction(Request $request) {
         $user = $this->getUser();
+        $securityContext = $this->container->get('security.context');
         
-//        if($user->getGerenciaSecond()->getId() == 50 && $user->getComplejo()->getId() == 5){
+        if($user->getGerenciaSecond()->getId() == 50){
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
@@ -168,9 +169,9 @@ class GerenciaController extends baseController {
             $groups = array_merge(array('api_list'), $request->get('_groups',array()));
             $view->getSerializationContext()->setGroups($groups);
             return $this->handleView($view);
-//        } else{
-//            return 'false';
-//        }
+        } else{
+            return 'false';
+        }
     }
     
     public function updateAction(Request $request)
@@ -179,11 +180,7 @@ class GerenciaController extends baseController {
         $form = $this->getForm($resource);
 
         if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
-            $form->submit($request);
-//            var_dump($resource->getConfiguration()->getArrangementProgramUserToRevisers()->count());
-//            var_dump($form->isValid());
-//            var_dump($form->getErrorsAsString());
-//            die;
+            $form->submit($request,true);
             if($form->isValid()){
                 $this->domainManager->update($resource);
 
@@ -194,16 +191,6 @@ class GerenciaController extends baseController {
         if ($this->config->isApiRequest()) {
             return $this->handleView($this->view($form));
         }
-        if($request->isMethod('GET')){
-//            $configuration = $form->remove('configuration');
-//            $configuration = $form->get('configuration');
-//            $configuration->remove('arrangementProgramUserToRevisers');
-//            $configuration->remove('arrangementProgramUsersToApproveTactical');
-//            $configuration->remove('arrangementProgramUsersToApproveOperative');
-//            $configuration->remove('arrangementProgramUsersToNotify');
-//            var_dump('AA');
-//            DIE;
-        }
 
         $view = $this
             ->view()
@@ -213,8 +200,6 @@ class GerenciaController extends baseController {
                 'form'                           => $form->createView()
             ))
         ;
-//        print_r($_POST);
-//        var_dump($form->getErrorsAsString());die;
         return $this->handleView($view);
     }
     
@@ -226,12 +211,13 @@ class GerenciaController extends baseController {
     {
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);
+        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);//Obtenemos la gerencia
         
+        //Obtenemos la sección operativa de la matriz de objetivos
         $sectionOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionOperativeByGerencia($gerencia);
         $resource = $this->findOr404($request);
         
-        //Formato para tdo el dcumento
+        //Formato para todo el documento
         $styleArrayBordersContent = array(
           'borders' => array(
             'allborders' => array(
@@ -281,24 +267,37 @@ class GerenciaController extends baseController {
         $rowHeight = 70;//Alto de la fila
         
         //Objetivo Táctico
-        $beforeObjTacRef = $sectionOperative[0]['ObjTacRef'];
+        $beforeObjTacRef = $totalOperative > 0 ? $sectionOperative[0]['ObjTacRef'] : '';//Referencia de la fila pasada
         $contRepObjTac = 0;//Contador que cuenta los objetivos tácticos repetidos
         $contObjTac = 1;//Contador que cuenta el número de objetivos tácticos
         $rowIniTac = 8;//Fila inicial para hacer mergecell en el nivel táctico
         $rowFinTac = 8;//Fila final para hacer mergecell en el nivel táctico
         
         //Objetivo Operativo
-        $beforeObjOpeRef = $sectionOperative[0]['ObjOpeRef'];
+        $beforeObjOpeRef = $totalOperative > 0 ? $sectionOperative[0]['ObjOpeRef'] : '';
         $contRepObjOpe = 0;//Contador que cuenta los objetivos operativos repetidos
         
         //Indicador Operativo
-        $beforeIndOpeRef = $sectionOperative[0]['IndOpeRef'];
+        $beforeIndOpeRef = $totalOperative > 0 ? $sectionOperative[0]['IndOpeRef'] : '';
         $contRepIndOpe = 0;//Contador que cuenta los indicadores operativos repetidos
         
-        //Recorremos los resultados obtenidos
+        //Recorremos los resultados obtenidos del nivel operativo
         foreach($sectionOperative as $result){
             $activeSheet->setCellValue('G'.$row, $result['ObjTacRef'].' '.$result['ObjTac']);
             $activeSheet->setCellValue('H'.$row, $result['ObjTacGoal']);
+            //Seteamos los programas de gestión a nivel táctico
+            $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $result['ObjTacRef']));
+            $arrangementProgramsTactic = $objetiveTactic->getArrangementPrograms();
+            $totalArrangementProgramsTactic = count($arrangementProgramsTactic);
+            $textArrangementProgramsTactic = '';
+            if($totalArrangementProgramsTactic > 0){
+                foreach($arrangementProgramsTactic as $arrangementProgram){
+                    $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
+                }
+            } else{
+                $textArrangementProgramsTactic = 'No cargado';
+            }
+            $activeSheet->setCellValue('M'.$row, $textArrangementProgramsTactic);
             
             $activeSheet->setCellValue('N'.$row, $result['ObjOpeRef'].' '.$result['ObjOpe']);
             $activeSheet->setCellValue('O'.$row, $result['ObjOpeGerencia']);
@@ -312,6 +311,19 @@ class GerenciaController extends baseController {
             $activeSheet->setCellValue('S'.$row, $textIndOpeFormula);
 //            $activeSheet->setCellValue('T'.$row, $result['IndOpeGoal']);
             $activeSheet->setCellValue('U'.$row, $textIndOpePeso);
+            //Seteamos los programas de gestión a nivel operativo
+            $objetiveOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $result['ObjOpeRef']));
+            $arrangementProgramsOperative = $objetiveOperative->getArrangementPrograms();
+            $totalArrangementProgramsOperative = count($arrangementProgramsOperative);
+            $textArrangementProgramsOperative = '';
+            if($totalArrangementProgramsOperative > 0){
+                foreach($arrangementProgramsOperative as $arrangementProgram){
+                    $textArrangementProgramsOperative.= $arrangementProgram->getRef() . "\n";
+                }
+            } else{
+                $textArrangementProgramsOperative = 'No Cargado';
+            }
+            $activeSheet->setCellValue('V'.$row, $textArrangementProgramsOperative);
             
             if($contResult > 1){
                 

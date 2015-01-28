@@ -23,6 +23,9 @@ class ObjetiveAdmin extends Admin
             ->add('complejo')
             ->add('gerencia')
             ->add('gerenciaSecond')
+            ->add('parents')
+            ->add('indicators')
+            ->add('period')
             ->add('evalObjetive',null,array(
                 'required' => false,
             ))
