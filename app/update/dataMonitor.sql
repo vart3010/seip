@@ -5,7 +5,7 @@ UPDATE seip_monitor SET objTacticOriginal = 3, indTacticOriginal = 0, objOperati
 -- ASEG Y SOPORTE DE PROYECTOS
 UPDATE seip_monitor SET objTacticOriginal = 1, indTacticOriginal = 0, objOperativeOriginal = 6, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 6 WHERE fk_gerencia = 31;
 -- ASUNTOS PÚBLICOS
-UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 16, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 19 WHERE fk_gerencia = 27;
+UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 0, objOperativeOriginal = 16, indOperativeOriginal = 0, arrangementProgramTactic = 0, arrangementProgramOperative = 23 WHERE fk_gerencia = 27;
 -- AUDITORÍA INTERNA
 UPDATE seip_monitor SET objTacticOriginal = 2, indTacticOriginal = 2, objOperativeOriginal = 29, indOperativeOriginal = 19, arrangementProgramTactic = 0, arrangementProgramOperative = 30 WHERE fk_gerencia = 19;
 -- CONSULTORIA JURÍDICA
