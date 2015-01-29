@@ -53,7 +53,7 @@ class PrePlanningItemClone extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idCloneObject",type="integer",nullable=true)
+     * @ORM\Column(name="idCloneObject",type="integer",nullable=false)
      */
     private $idCloneObject;
     
@@ -61,7 +61,7 @@ class PrePlanningItemClone extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idSourceObjec",type="integer",nullable=true)
+     * @ORM\Column(name="idSourceObjec",type="integer",nullable=false)
      */
     private $idSourceObject;
     
@@ -86,6 +86,7 @@ class PrePlanningItemClone extends Model
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     

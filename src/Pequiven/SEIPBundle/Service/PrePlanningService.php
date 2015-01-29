@@ -284,7 +284,7 @@ class PrePlanningService extends ContainerAware
         if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
         {
             foreach ($parents as $parent) {
-                $this->getCloneService()->cloneObject($parent);
+                $this->getCloneService()->cloneItem($parent);
             }
         }
     }

@@ -45,6 +45,46 @@ interface TypePrePlanningInterface
      */
     const TYPE_OBJECT_RESULT = 5;
     
+    /**
+     * Tipo de objeto de tendencia
+     */
+    const TYPE_OBJECT_TENDENCY = 6;
+    
+    /**
+     * Tipo de objeto de formula
+     */
+    const TYPE_OBJECT_FORMULA = 7;
+    
+    /**
+     * Tipo de objeto de nivel de formula
+     */
+    const TYPE_OBJECT_FORMULA_LEVEL = 8;
+    
+    /**
+     * Tipo de objeto de rango
+     */
+    const TYPE_OBJECT_ARRANGEMENT_RANGE = 9;
+    
+    /**
+     * Tipo de objeto de nivel de objetivo
+     */
+    const TYPE_OBJECT_OBJETIVE_LEVEL = 10;
+    
+    /**
+     * Tipo de objeto de frecuencia de notificacion
+     */
+    const TYPE_OBJECT_FREQUENCY_NOTIFICATION_INDICATOR = 11;
+    
+    /**
+     * Tipo de objeto de variable
+     */
+    const TYPE_OBJECT_VARIABLE = 12;
+    
+    /**
+     * Tipo de objeto de variable
+     */
+    const TYPE_OBJECT_INDICATOR_LEVEL = 13;
+    
     public function setIdSourceObject($idSourceObject);
     
     public function setTypeObject($typeObject);

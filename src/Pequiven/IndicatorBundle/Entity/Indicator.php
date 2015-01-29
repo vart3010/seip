@@ -147,6 +147,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -614,7 +615,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return Indicator
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $this->period = $period;
 
@@ -958,7 +959,6 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             
             $this->childrens = new ArrayCollection();
             $this->progressToDate = 0;
-            $this->arrangementRange = clone($this->arrangementRange);
         }
     }
 }

@@ -404,20 +404,6 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
         $this->lastDateCalculateResult = new \DateTime();
     }
     
-    public function __clone() {
-        if($this->id > 0){
-            $this->id = null;
-            
-            $this->createdAt = null;
-            $this->updatedAt = null;
-            
-            $this->resultDetails = new ResultDetails();
-            $this->lastDateCalculateResult = null;
-            
-            $this->objetive = null;
-        }
-    }
-    
     function setChildrens($childrens) 
     {
         $this->childrens = $childrens;
@@ -429,5 +415,19 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
 
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            
+            $this->resultDetails = new ResultDetails();
+            $this->lastDateCalculateResult = null;
+            
+            $this->period = null;
+        }
     }
 }

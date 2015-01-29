@@ -121,6 +121,7 @@ class PrePlanning extends Model
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     

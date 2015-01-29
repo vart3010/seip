@@ -55,6 +55,14 @@ abstract class PrePlanningTypeObject implements TypePrePlanningInterface
             self::TYPE_OBJECT_INDICATOR => 'Pequiven\IndicatorBundle\Entity\Indicator',
             self::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'Pequiven\ArrangementProgramBundle\Entity\Goal',
             self::TYPE_OBJECT_RESULT => 'Pequiven\SEIPBundle\Entity\Result\Result',
+            self::TYPE_OBJECT_TENDENCY => 'Pequiven\MasterBundle\Entity\Tendency',
+            self::TYPE_OBJECT_FORMULA => 'Pequiven\MasterBundle\Entity\Formula',
+            self::TYPE_OBJECT_FORMULA_LEVEL => 'Pequiven\MasterBundle\Entity\FormulaLevel',
+            self::TYPE_OBJECT_ARRANGEMENT_RANGE => 'Pequiven\ArrangementBundle\Entity\ArrangementRange',
+            self::TYPE_OBJECT_OBJETIVE_LEVEL => 'Pequiven\ObjetiveBundle\Entity\ObjetiveLevel',
+            self::TYPE_OBJECT_FREQUENCY_NOTIFICATION_INDICATOR => 'Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator',
+            self::TYPE_OBJECT_VARIABLE => 'Pequiven\MasterBundle\Entity\Formula\Variable',
+            self::TYPE_OBJECT_INDICATOR_LEVEL => 'Pequiven\IndicatorBundle\Entity\IndicatorLevel',
         );
     }
     
@@ -71,7 +79,7 @@ abstract class PrePlanningTypeObject implements TypePrePlanningInterface
         $typeObjectsRepository = self::getTypeObjects();
         $typeObject = array_search($className, $typeObjectsRepository);
         if($typeObject === false){
-            throw new \Exception(sprintf('The type object for class "%s" is not defined',$className));
+            throw new \Exception(sprintf('The type object for class "%s" is not defined in type object',$className));
         }
         return $typeObject;
     }

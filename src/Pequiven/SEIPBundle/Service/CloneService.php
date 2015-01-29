@@ -31,9 +31,10 @@ use Exception;
  */
 class CloneService extends ContainerAware
 {
-    public function cloneObject($object) 
+    private $cacheObject;
+    
+    public function cloneItem($object) 
     {
-        
         $user = $this->getUser();
         
         $className = ClassUtils::getRealClass(get_class($object));
@@ -48,7 +49,7 @@ class CloneService extends ContainerAware
         $entity = null;
         switch ($type):
             case PrePlanningItemClone::TYPE_OBJECT_OBJETIVE:
-                $entity = $this->cloneObjetive($object);
+                $entity = $this->cloneObject($object);
                 break;
             default :
                 throw new Exception(sprintf('No se puede clonar este objeto "%s"',$className));
@@ -87,6 +88,11 @@ class CloneService extends ContainerAware
             $classNameClonned = PrePlanningItemClone::getTypeObjectOf($typeObject);
             $entity = $em->getRepository($classNameClonned)->find($idCloneObject);
         }
+        
+        if($entity){
+            $this->addToCache($entity,$this->generateId($object));
+            $this->addToCache($entity,$this->generateId($entity));
+        }
         return $entity;
     }
     
@@ -96,9 +102,11 @@ class CloneService extends ContainerAware
         
         if(!$entity){
             $entity = clone($objetive);
+            $this->saveClone($entity, $objetive);
+            
             $indicators = new ArrayCollection();
             foreach ($entity->getIndicators() as $indicator) {
-                $indicators->add($this->cloneIndicator($indicator));
+                $indicators->add($this->cloneObject($indicator));
             }
             $entity->setIndicators($indicators);
 
@@ -106,40 +114,56 @@ class CloneService extends ContainerAware
             $entity->setResults(new ArrayCollection());
             
             foreach ($results as $result) {
-                $cloneResult = $this->cloneResult($result);
+                $cloneResult = $this->cloneObject($result,true);
                 $entity->addResult($cloneResult);
             }
 
             if($entity->getArrangementRange()){
-                $entity->setArrangementRange($this->cloneArrangementRange($entity->getArrangementRange()));
+                $entity->setArrangementRange($this->cloneObject($entity->getArrangementRange(),true));
             }
-            if($objetive->getObjetiveLevel()){
-                $objetiveLevel = $objetive->getObjetiveLevel();
+            if($entity->getObjetiveLevel())
+            {
+                $objetiveLevel = $entity->getObjetiveLevel();
                 if($objetiveLevel->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
                     $entity->setRef($objetive->getRef());
                 }
-                $entity->setObjetiveLevel($this->cloneObjetiveLevel($objetive->getObjetiveLevel()));
+                $entity->setObjetiveLevel($this->cloneObject($entity->getObjetiveLevel(),true));
             }
-            $this->saveClone($entity, $objetive);
+            $this->persist($entity, true);
         }
         return $entity;
     }
 
-    private function cloneIndicator(Indicator $indicator) 
+    private function cloneIndicator(Indicator $indicator,$andFlush = true) 
     {
         $entity = $this->findCloneInstance($indicator);
         if(!$entity){
             $entity = clone($indicator);
             
             if($entity->getTendency()){
-                $entity->setTendency($this->cloneTendency($entity->getTendency()));
+                $entity->setTendency($this->cloneObject($entity->getTendency()));
             }
             if($entity->getFormula()){
-                $entity->setFormula($this->cloneFormula($entity->getFormula()));
+                $entity->setFormula($this->cloneObject($entity->getFormula()));
             }
             
+            if($entity->getFrequencyNotificationIndicator()){
+                $entity->setFrequencyNotificationIndicator($this->cloneFrequencyNotificationIndicator($entity->getFrequencyNotificationIndicator()));
+            }
+            if($indicator->getParent()){
+                $indicator->setParent($this->cloneObject($indicator->getParent()));
+            }
+            if($entity->getParent()){
+                $entity->setParent($this->cloneObject($entity->getParent()));
+            }
+            if($entity->getArrangementRange()){
+                $entity->setArrangementRange($this->cloneObject($entity->getArrangementRange()));
+            }
+            if($entity->getIndicatorLevel()){
+                $entity->setIndicatorLevel($this->cloneObject($entity->getIndicatorLevel()));
+            }
+            $this->saveClone($entity, $indicator,$andFlush);
         }
-        throw new Exception('Implementame'.__FUNCTION__);
         return $entity;
     }
     
@@ -160,14 +184,28 @@ class CloneService extends ContainerAware
             $entity = clone($formula);
             
             if($entity->getFormulaLevel()){
-                $entity->setFormulaLevel($this->cloneFormulaLevel($entity->getFormulaLevel()));
+                $entity->setFormulaLevel($this->cloneObject($entity->getFormulaLevel()));
             }
+            $variables = new ArrayCollection();
+            foreach ($entity->getVariables() as $variable) 
+            {
+                $variables->add($this->cloneObject($variable));
+            }
+            $entity->setVariables($variables);
+            
+            if($entity->getVariableToRealValue()){
+                $entity->setVariableToRealValue($this->cloneObject($entity->getVariableToRealValue()));
+            }
+            if($entity->getVariableToPlanValue()){
+                $entity->setVariableToPlanValue($this->cloneObject($entity->getVariableToPlanValue()));
+            }
+            
+            $this->saveClone($entity, $formula);
         }
         return $entity;
     }
 
-
-    private function cloneResult(Result $result)
+    private function cloneResult(Result $result,$andFlush = true)
     {
         $entity = $this->findCloneInstance($result);
         if(!$entity){
@@ -176,48 +214,83 @@ class CloneService extends ContainerAware
             $childrens = $entity->getChildrens();
             $entity->setChildrens(new ArrayCollection());
             foreach ($childrens as $child) {
-                $result->addChildren($this->cloneResult($child));
+                $entity->addChildren($this->cloneObject($child));
             }
-            
-//            Bucle
-//            if($entity->getParent()){
-//                $entity->setParent($this->cloneResult($entity->getParent()));
+            //Bug de recursividad aqui cuando se clona un objetivo
+//            if($entity->getObjetive()){
+//                $entity->setObjetive($this->cloneObject($entity->getObjetive()));
 //            }
-            if($entity->getObjetive()){
-                $entity->setObjetive($this->cloneObjetive($entity->getObjetive()));
-            }
-            $this->saveClone($entity, $result);
+            $this->saveClone($entity, $result,$andFlush);
         }
         
         return $entity;
     }
     
-    private function cloneFormulaLevel(\Pequiven\MasterBundle\Entity\FormulaLevel $formulaLevel) {
-        throw new Exception('Implementame '.__FUNCTION__);
+    private function cloneFormulaLevel(\Pequiven\MasterBundle\Entity\FormulaLevel $formulaLevel) 
+    {
+        $entity = $this->findCloneInstance($formulaLevel);
+        if(!$entity){
+            $entity = clone($formulaLevel);
+            $this->saveClone($entity, $formulaLevel);
+        }
+        
+        return $entity;
     }
 
 
-    private function cloneArrangementRange(ArrangementRange $arrangementRange)
+    private function cloneArrangementRange(ArrangementRange $arrangementRange,$andFlush = true)
     {
         throw new Exception('Implementame '.__FUNCTION__);
     }
     
-    private function cloneObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel)
+    private function cloneObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel,$andFlush = true)
     {
-        throw new Exception('Implementame '.__FUNCTION__);
+        $entity = $this->findCloneInstance($objetiveLevel);
+        if(!$entity){
+            $entity = clone($objetiveLevel);
+            $this->saveClone($entity, $objetiveLevel,$andFlush);
+        }
+        
+        return $entity;
+    }
+    
+    private function cloneIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $objetiveLevel,$andFlush = true)
+    {
+        $entity = $this->findCloneInstance($objetiveLevel);
+        if(!$entity){
+            $entity = clone($objetiveLevel);
+            $this->saveClone($entity, $objetiveLevel,$andFlush);
+        }
+        return $entity;
+    }
+    
+    private function cloneFrequencyNotificationIndicator(Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator)
+    {
+        $entity = $this->findCloneInstance($frequencyNotificationIndicator);
+        if(!$entity){
+            $entity = clone($frequencyNotificationIndicator);
+            $this->saveClone($entity, $frequencyNotificationIndicator);
+        }
+        return $entity;
     }
     
     private function cloneVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variable)
     {
-        throw new Exception('Implementame '.__FUNCTION__);
+        $entity = $this->findCloneInstance($variable);
+        if(!$entity){
+            $entity = clone($variable);
+            $this->saveClone($entity, $variable);
+        }
+        return $entity;
     }
     
-    private function saveClone(&$cloneObject,$sourceObject)
+    private function saveClone(&$cloneObject,$sourceObject,$andFlush = true)
     {
+//        var_dump($this->getPeriodToClone()->getId());
+        $prePlanningItemClone = new PrePlanningItemClone();
         $cloneObject->setPeriod($this->getPeriodToClone());
         
-        $this->persist($cloneObject,true);
-        $prePlanningItemClone = new PrePlanningItemClone();
+        $this->persist($cloneObject,$andFlush);
         
         $idCloneObject = $cloneObject->getId();
         $idSourceObject = $sourceObject->getId();
@@ -225,13 +298,70 @@ class CloneService extends ContainerAware
         $className = ClassUtils::getRealClass(get_class($sourceObject));
         $typeObject = PrePlanning::getTypeByClass($className);
         
+        if($idCloneObject === null || $idSourceObject === null){
+            throw new Exception(sprintf('The idSourceObject(%s) or idCloneObject(%s) can not  be null. Log andFlush(%s),ClassName(%s).',$idSourceObject,$idCloneObject,$andFlush,$className));
+        }
         $prePlanningItemClone->setIdCloneObject($idCloneObject);
         $prePlanningItemClone->setIdSourceObject($idSourceObject);
         $prePlanningItemClone->setPeriod($this->getPeriodService()->getPeriodActive());
         $prePlanningItemClone->setTypeObject($typeObject);
         $prePlanningItemClone->setUser($this->getUser());
         
-        $this->persist($prePlanningItemClone,true);
+        $this->persist($prePlanningItemClone,$andFlush);
+        
+        $this->addToCache($cloneObject,$this->generateId($sourceObject));
+        $this->addToCache($cloneObject,$this->generateId($cloneObject));
+    }
+
+    private function cloneObject($sourceObject,$andFlush = true) 
+    {
+        $className = ClassUtils::getRealClass(get_class($sourceObject));
+        $typeObject = PrePlanning::getTypeByClass($className);
+        
+        $supportObjects = array(
+            PrePlanning::TYPE_OBJECT_OBJETIVE => 'cloneObjetive',
+            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'SIM_IMPLEMENTAR',
+            PrePlanning::TYPE_OBJECT_INDICATOR => 'cloneIndicator',
+            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'SIM_IMPLEMENTAR',
+            PrePlanning::TYPE_OBJECT_RESULT => 'cloneResult',
+            PrePlanning::TYPE_OBJECT_TENDENCY => 'cloneTendency',
+            PrePlanning::TYPE_OBJECT_FORMULA => 'cloneFormula',
+            PrePlanning::TYPE_OBJECT_FORMULA_LEVEL => 'cloneFormulaLevel',
+            PrePlanning::TYPE_OBJECT_ARRANGEMENT_RANGE => 'cloneArrangementRange',
+            PrePlanning::TYPE_OBJECT_OBJETIVE_LEVEL => 'cloneObjetiveLevel',
+            PrePlanning::TYPE_OBJECT_FREQUENCY_NOTIFICATION_INDICATOR => 'cloneFrequencyNotificationIndicator',
+            PrePlanning::TYPE_OBJECT_VARIABLE => 'cloneVariable',
+            PrePlanning::TYPE_OBJECT_INDICATOR_LEVEL => 'cloneIndicatorLevel',
+        );
+        $method = $supportObjects[$typeObject];
+        $entity = $this->getFromCache($sourceObject);
+        if($entity === null){
+            $entity = call_user_func_array(array($this,$method), array($sourceObject,$andFlush));
+        }
+        return $entity;
+    }
+    
+    private function addToCache($object,$idCache)
+    {
+        $this->cacheObject[$idCache] = $object;
+    }
+    
+    private function getFromCache($object)
+    {
+        $entity = null;
+        $idCache = $this->generateId($object);
+        if(isset($this->cacheObject[$idCache])){
+            $entity = $this->cacheObject[$idCache];
+        }
+        return $entity;
+    }
+
+
+    private function generateId($object)
+    {
+        $className = ClassUtils::getRealClass(get_class($object));
+        $idCache = md5($className).'__'.$object->getId();
+        return $idCache;
     }
 
 
@@ -243,7 +373,6 @@ class CloneService extends ContainerAware
             $em->flush();
         }
     }
-
 
     private function isGranted($roles)
     {

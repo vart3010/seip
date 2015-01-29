@@ -16,7 +16,7 @@ ALTER TABLE seip_result ADD CONSTRAINT FK_102C15ABEC8B7ADE FOREIGN KEY (period_i
 CREATE INDEX IDX_102C15ABEC8B7ADE ON seip_result (period_id);
 ALTER TABLE seip_result_audit ADD period_id INT DEFAULT NULL;
 
-UPDATE seip_result SET period_id = 1 WHERE period_id IS NULL;
+UPDATE seip_result SET period_id = 1 WHERE 1;
 ALTER TABLE seip_result CHANGE period_id period_id INT NOT NULL;
 
 -- Renombrando tablas
@@ -24,3 +24,49 @@ ALTER TABLE PrePlanning CHANGE idobject idSourceObject INT DEFAULT NULL;
 ALTER TABLE PrePlanningItem CHANGE idobject idSourceObject INT DEFAULT NULL;
 
 -- Result tiene periodo, ACTUALIZAR ADMIN.
+
+ALTER TABLE PrePlanning CHANGE period_id period_id INT DEFAULT NULL;
+ALTER TABLE PrePlanningItemClone CHANGE period_id period_id INT DEFAULT NULL;
+
+-- ALTER TABLE seip_c_tendency ADD period_id INT DEFAULT NULL;
+ALTER TABLE Variable ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_formula_level ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_c_formula ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_objetive_level ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_indicator CHANGE period_id period_id INT DEFAULT NULL;
+ALTER TABLE seip_c_indicator_frequency_notification ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_arrangement_range ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_indicator_level ADD period_id INT DEFAULT NULL;
+
+UPDATE PrePlanning SET period_id = 1 WHERE 1;
+UPDATE PrePlanningItemClone SET period_id = 1 WHERE 1;
+UPDATE seip_c_tendency SET period_id = 1 WHERE 1;
+UPDATE Variable SET period_id = 1 WHERE 1;
+UPDATE seip_formula_level SET period_id = 1 WHERE 1;
+UPDATE seip_c_formula SET period_id = 1 WHERE 1;
+UPDATE seip_objetive_level SET period_id = 1 WHERE 1;
+UPDATE seip_indicator SET period_id = 1 WHERE 1;
+UPDATE seip_c_indicator_frequency_notification SET period_id = 1 WHERE 1;
+UPDATE seip_arrangement_range SET period_id = 1 WHERE 1;
+UPDATE seip_indicator_level SET period_id = 1 WHERE 1;
+
+
+ALTER TABLE seip_c_tendency ADD CONSTRAINT FK_9FBD486AEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_9FBD486AEC8B7ADE ON seip_c_tendency (period_id);
+ALTER TABLE Variable ADD CONSTRAINT FK_353BE5DBEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_353BE5DBEC8B7ADE ON Variable (period_id);
+ALTER TABLE Variable_audit ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_formula_level ADD CONSTRAINT FK_97617C60EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_97617C60EC8B7ADE ON seip_formula_level (period_id);
+ALTER TABLE seip_c_formula ADD CONSTRAINT FK_441A844FEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_441A844FEC8B7ADE ON seip_c_formula (period_id);
+ALTER TABLE seip_c_formula_audit ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_objetive_level ADD CONSTRAINT FK_5F46829FEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_5F46829FEC8B7ADE ON seip_objetive_level (period_id);
+ALTER TABLE seip_c_indicator_frequency_notification ADD CONSTRAINT FK_5D4F23D6EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_5D4F23D6EC8B7ADE ON seip_c_indicator_frequency_notification (period_id);
+ALTER TABLE seip_c_indicator_frequency_notification_audit ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_arrangement_range ADD CONSTRAINT FK_845D408CEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_845D408CEC8B7ADE ON seip_arrangement_range (period_id);
+ALTER TABLE seip_indicator_level ADD CONSTRAINT FK_86BCBA8AEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_86BCBA8AEC8B7ADE ON seip_indicator_level (period_id);
