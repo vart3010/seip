@@ -280,10 +280,9 @@ class IndicatorRepository extends baseEntityRepository {
         $qb->leftJoin('i.objetives', 'obj');
         $qb->leftJoin('i.formula', 'f');
         
-        $qb->andWhere('i.enabled = :enabled');
+        $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('obj.id = :idObjetive');
         
-        $qb->setParameter('enabled', true);
         $qb->setParameter('idObjetive', $objetive->getId());
         
         $qb->orderBy('i.ref');
