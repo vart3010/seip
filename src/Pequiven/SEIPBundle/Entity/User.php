@@ -495,10 +495,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
      */
     public function isAllowSuperAdmin(){
         $isSuperAdmin = false;
-        $level = Rol::ROLE_SUPER_ADMIN;
+        $groupsLevelAdmin = array(
+            Rol::ROLE_ADMIN,
+            Rol::ROLE_SUPER_ADMIN
+        );
+//        $level = Rol::ROLE_SUPER_ADMIN;
         $groups = $this->getGroups();
         foreach ($groups as $group) {
-            if($group->getLevel() == $level)
+            if(in_array($group->getLevel(), $groupsLevelAdmin))
             {
                 $isSuperAdmin = true;
             }
