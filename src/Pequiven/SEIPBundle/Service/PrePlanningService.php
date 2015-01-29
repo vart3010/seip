@@ -15,11 +15,14 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Util\ClassUtils;
 use InvalidArgumentException;
 use LogicException;
-use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\IndicatorBundle\Model\IndicatorLevel;
 use Pequiven\MasterBundle\Model\Rol;
+use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\SEIPBundle\Entity\Period;
-use Pequiven\SEIPBundle\Entity\User;
 use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
+use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem;
+use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -84,15 +87,18 @@ class PrePlanningService extends ContainerAware
     {
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
+        $configuration = $user->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
+        
         $isEditable = false;
         $requiresApproval = false;
-        if($rol == Rol::ROLE_MANAGER_SECOND){
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null){
             $requiresApproval = true;
-        }else if($rol == Rol::ROLE_MANAGER_FIRST){
+        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null){
             
         }
         
-        $idObject = $object->getId();
+        $idSourceObject = $object->getId();
         $class = ClassUtils::getRealClass(get_class($object));
         $levelObject = PrePlanning::LEVEL_DEFAULT;
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
@@ -102,41 +108,41 @@ class PrePlanningService extends ContainerAware
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
             $type = $object->getType();
-            if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $levelObject = PrePlanning::LEVEL_TACTICO;
-            }else if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
         }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){
             $typeObject = PrePlanning::TYPE_OBJECT_INDICATOR;
-            if($object->getIndicatorLevel()->getLevel() == \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO){
+            if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
                 $levelObject = PrePlanning::LEVEL_ESTRATEGICO;
-            }else if($object->getIndicatorLevel()->getLevel() == \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO){
+            }else if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
                 $levelObject = PrePlanning::LEVEL_TACTICO;
-            }else if($object->getIndicatorLevel()->getLevel() == \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO){
+            }else if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\Goal'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL;
             $type = $object->getTimeline()->getArrangementProgram()->getType();
             
-            if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $levelObject = PrePlanning::LEVEL_TACTICO;
-            }else if($type == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
-        if($rol == Rol::ROLE_MANAGER_SECOND && $levelObject == PrePlanning::LEVEL_OPERATIVO){
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null && $levelObject == PrePlanning::LEVEL_OPERATIVO){
             $isEditable = true;
-        }else if($rol == Rol::ROLE_MANAGER_FIRST && $levelObject == PrePlanning::LEVEL_TACTICO){
+        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null && $levelObject == PrePlanning::LEVEL_TACTICO){
             $isEditable = true;
         }
         
         $prePlanning->setName(((string)$object));
         $prePlanning->setTypeObject($typeObject);
-        $prePlanning->setIdObject($idObject);
+        $prePlanning->setIdSourceObject($idSourceObject);
         $prePlanning->setLevelObject($levelObject);
         $prePlanning->setEditable($isEditable);
         $prePlanning->setUser($user);
@@ -196,7 +202,7 @@ class PrePlanningService extends ContainerAware
             $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem');
             $prePlanningItem = $repository->findOneBy(array(
                 'typeObject' => $root->getTypeObject(),
-                'idObject' => $root->getIdObject(),
+                'idSourceObject' => $root->getIdSourceObject(),
             ));
             if($prePlanningItem){
                 $name .= ' <span class="green">(Aprobado)</span>';
@@ -226,26 +232,66 @@ class PrePlanningService extends ContainerAware
         return $child;
     }
     
-    function importItem(PrePlanning $prePlanning,User $user) 
+    public function importItem(PrePlanning $prePlanning,User $user) 
     {
-        $prePlanningItem = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem();
-        if($prePlanning->getStatus() == PrePlanning::STATUS_DRAFT){
-            $idObject = $prePlanning->getIdObject();
+        $configuration = $user->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
+        $gerencia = $prePlanningConfiguration->getGerencia();
+        $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
+        $prePlanningItem = new PrePlanningItem();
+        if($prePlanning->getStatus() == PrePlanning::STATUS_DRAFT)
+        {
+            $nextPeriod = $this->getPeriodService()->getNextPeriod();
+            
+            $levelObject = $prePlanning->getLevelObject();
+            $idSourceObject = $prePlanning->getIdSourceObject();
             $typeObject = $prePlanning->getTypeObject();
             
-            $prePlanningItem->setPrePlanning($prePlanning);
-            $prePlanningItem->setIdObject($idObject);
-            $prePlanningItem->setTypeObject($typeObject);
+            if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
+                $prePlanningItem->setPrePlanning($prePlanning);
+                $prePlanningItem->setIdSourceObject($idSourceObject);
+                $prePlanningItem->setTypeObject($typeObject);
+                
+            }elseif($levelObject == PrePlanning::LEVEL_OPERATIVO && $gerenciaSecond !== null){
+                
+            }
+           
+            $itemInstance = $this->getCloneService()->findItemInstance($idSourceObject,$typeObject);
+            if($itemInstance){
+                $this->cloneItem($itemInstance,$prePlanning);
+            }
             
             $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
         }
     }
     
-    private function findItemInstance(PrePlanning $prePlanning) 
+    private function cloneItem($itemInstance,PrePlanning $prePlanning)
     {
-        $idObject = $prePlanning->getIdObject();
+        $itemClone = clone($itemInstance);
+        $itemClone->setSourceImported($itemInstance);
         $typeObject = $prePlanning->getTypeObject();
+        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
+            $this->cloneItemObjetive($itemClone);
+        }
+        
     }
+    
+    private function cloneItemObjetive(Objetive $objetive)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $parents = $objetive->getParents();
+        $level = $objetive->getObjetiveLevel()->getLevel();
+        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+        {
+            foreach ($parents as $parent) {
+                $this->getCloneService()->cloneObject($parent);
+            }
+        }
+    }
+    
+    
+    
+    
 
     /**
      * Extrae elementos del objetivo
@@ -380,5 +426,17 @@ class PrePlanningService extends ContainerAware
         $str = str_replace(array_keys($invalid), array_values($invalid), $str);
 
         return $str;
+    }
+    
+    private function isGranted($roles) {
+        return $this->container->get('security.context')->isGranted($roles);
+    }
+    
+    /**
+     * 
+     * @return CloneService
+     */
+    private function getCloneService() {
+        return $this->container->get('seip.service.clone');
     }
 }

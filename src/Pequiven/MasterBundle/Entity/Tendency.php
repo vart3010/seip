@@ -21,7 +21,8 @@ use Pequiven\MasterBundle\Model\Tendency as modelTendency;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\TendencyRepository")
  * @author matias
  */
-class Tendency extends modelTendency {
+class Tendency extends modelTendency 
+{
     /**
      * @var integer
      *
@@ -255,5 +256,16 @@ class Tendency extends modelTendency {
     
     public function __toString() {
         return $this->getDescription() ? $this->getDescription() : '-';
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+        }
     }
 }

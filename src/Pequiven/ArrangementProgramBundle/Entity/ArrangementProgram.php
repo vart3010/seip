@@ -5,6 +5,8 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Entity\Result\ResultItemInterface;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
  * Programa de gestion
@@ -12,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
-class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
+class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer

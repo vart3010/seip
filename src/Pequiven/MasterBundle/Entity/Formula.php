@@ -483,4 +483,17 @@ class Formula extends modelFormula
     public function __toString() {
         return $this->getEquation() ?: '-';
     }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            // TODO
+            $this->formulaLevel = null;
+            $this->variables = null;
+        }
+    }
 }

@@ -96,9 +96,9 @@ class PrePlanning extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idObject",type="integer",nullable=true)
+     * @ORM\Column(name="idSourceObject",type="integer",nullable=true)
      */
-    private $idObject;
+    private $idSourceObject;
 
     /**
      * Estatus de la plafinicacion
@@ -266,26 +266,26 @@ class PrePlanning extends Model
     }
 
     /**
-     * Set idObject
+     * Set idSourceObject
      *
-     * @param integer $idObject
+     * @param integer $idSourceObject
      * @return PrePlanning
      */
-    public function setIdObject($idObject)
+    public function setIdSourceObject($idSourceObject)
     {
-        $this->idObject = $idObject;
+        $this->idSourceObject = $idSourceObject;
 
         return $this;
     }
 
     /**
-     * Get idObject
+     * Get idSourceObject
      *
      * @return integer 
      */
-    public function getIdObject()
+    public function getIdSourceObject()
     {
-        return $this->idObject;
+        return $this->idSourceObject;
     }
 
     /**

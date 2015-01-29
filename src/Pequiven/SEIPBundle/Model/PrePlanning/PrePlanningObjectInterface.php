@@ -12,16 +12,13 @@
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
 /**
- *
+ * Item que se puede importar entre periodos
+ * 
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface
+interface PrePlanningObjectInterface 
 {
-    public function setLevelObject($levelObject);
+    function setSourceImported($object);
     
-    public function setName($name);
-    
-    public function getParameters();
-    
-    public function setRequiresApproval($requiresApproval);
+    function getSourceImported($object);
 }

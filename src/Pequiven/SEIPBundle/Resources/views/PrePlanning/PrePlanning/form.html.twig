@@ -6,10 +6,21 @@
         .x-grid-tree-node-expanded .x-tree-icon-parent {
             background-image: none;
         }
-        
+        .x-panel-header-default {
+            background-color: #bd0000;
+            background-image: none;
+            border: 2px solid #e60101;
+        }
+        #title-1025-textEl {
+            color: #ffffff;
+        }
+        .x-panel-header-default-top {
+            -webkit-box-shadow: #f42a41 0 1px 0 0 inset;
+            -moz-box-shadow: #f42a41 0 1px 0 0 inset;
+            box-shadow: #f42a41 0 1px 0 0 inset;
+        }
     </style>
 {% endblock stylesheet  %}
-    
 
 {% block javascript %}
     {{ parent() }}
@@ -98,7 +109,7 @@
                             if(btn === 'yes'){
                                 tree.body.mask("Iniciando planificación...");
                                 Ext.Ajax.request({
-                                 url: '{{ path('pequiven_pre_planning_start_pre_planning') }}',
+                                 url: '{{ path('pequiven_pre_planning_start_pre_planning',{level: app.request.get('level')}) }}',
                                  success: function(response, opts) {
                                     tree.body.unmask();
                                     store.load({
@@ -127,7 +138,7 @@
                        if(btn === 'yes'){
                            tree.body.mask("Devolviendo los cambios...");
                            Ext.Ajax.request({
-                            url: '{{ path('pequiven_pre_planning_return_changes') }}',
+                            url: '{{ path('pequiven_pre_planning_return_changes',{level:app.request.get('level')}) }}',
                             success: function(response, opts) {
                                tree.body.unmask();
                                store.load();

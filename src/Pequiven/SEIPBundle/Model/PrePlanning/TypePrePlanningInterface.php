@@ -40,7 +40,12 @@ interface TypePrePlanningInterface
      */
     const TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL = 4;
     
-    public function setIdObject($idObject);
+    /**
+     * Tipo de objeto resultado
+     */
+    const TYPE_OBJECT_RESULT = 5;
+    
+    public function setIdSourceObject($idSourceObject);
     
     public function setTypeObject($typeObject);
 }

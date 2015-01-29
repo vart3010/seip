@@ -53,9 +53,9 @@ class PrePlanningItem implements \Pequiven\SEIPBundle\Model\PrePlanning\TypePreP
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idObject",type="integer",nullable=true)
+     * @ORM\Column(name="idSourceObject",type="integer",nullable=true)
      */
-    private $idObject;
+    private $idSourceObject;
     
     /**
      * Date created
@@ -109,13 +109,13 @@ class PrePlanningItem implements \Pequiven\SEIPBundle\Model\PrePlanning\TypePreP
     }
 
     /**
-     * Get idObject
+     * Get idSourceObject
      *
      * @return integer 
      */
-    public function getIdObject()
+    public function getIdSourceObject()
     {
-        return $this->idObject;
+        return $this->idSourceObject;
     }
 
     /**
@@ -217,9 +217,9 @@ class PrePlanningItem implements \Pequiven\SEIPBundle\Model\PrePlanning\TypePreP
         return $this;
     }
 
-    function setIdObject($idObject) 
+    function setIdSourceObject($idSourceObject) 
     {
-        $this->idObject = $idObject;
+        $this->idSourceObject = $idSourceObject;
         
         return $this;
     }

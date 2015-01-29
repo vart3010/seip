@@ -87,3 +87,7 @@ app:
             generic: Lo sentimos, ha ocurrido un error.
             403: Usted no tiene permisos para acceder a esta sección.
             404: La página que esta tratando de acceder no existe.
+            
+ROLE_MENU_PRE_PLANNING_ENABLE: Menu de Pre-Planificación habilitada
+ROLE_MENU_PRE_PLANNING_TACTIC: Menu de Pre-Planificación - Tactico
+ROLE_MENU_PRE_PLANNING_OPERATIVE: Menu de Pre-Planificación - Operativo

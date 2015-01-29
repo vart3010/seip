@@ -107,21 +107,26 @@ class PrePlanningController extends ResourceController
      * Reconstruyendo el arbol nuevamente.
      * @return type
      */
-    public function returnChangesAction() 
+    public function returnChangesAction(Request $request) 
     {
-        $user = $this->getUser();
-        $prePlanningService = $this->getPrePlanningService();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
-        if($rootTreePrePlannig){
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rootTreePrePlannig);
-            $em->flush();
-            
-            $objetivesArray = $this->getObjetivesArray();
-            $prePlanningService->buildTreePrePlannig($objetivesArray);
-        }
+        $level = $request->get('level',null);
         $success = true;
+        if($level){
+            $user = $this->getUser();
+            $prePlanningService = $this->getPrePlanningService();
+            $periodActive = $this->getPeriodService()->getPeriodActive();
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+            if($rootTreePrePlannig){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($rootTreePrePlannig);
+                $em->flush();
+
+                $objetivesArray = $this->getObjetivesArray($level);
+                $prePlanningService->buildTreePrePlannig($objetivesArray);
+            }
+        }else{
+            $success = false;
+        }
         $data = array(
             "success" => $success,
         );
@@ -133,22 +138,28 @@ class PrePlanningController extends ResourceController
      * Iniciando el proceso de planificacion
      * @return type
      */
-    public function startPrePlanningAction() 
+    public function startPrePlanningAction(Request $request) 
     {
-        $user = $this->getUser();
-        $prePlanningService = $this->getPrePlanningService();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
-        if($rootTreePrePlannig){
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rootTreePrePlannig);
-            $em->flush();
-        }
-            
-        $objetivesArray = $this->getObjetivesArray();
-        $prePlanningService->buildTreePrePlannig($objetivesArray);
-        
+        $level = $request->get('level',null);
         $success = true;
+        if($level){
+            $user = $this->getUser();
+            $prePlanningService = $this->getPrePlanningService();
+            $periodActive = $this->getPeriodService()->getPeriodActive();
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+            if($rootTreePrePlannig){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($rootTreePrePlannig);
+                $em->flush();
+            }
+
+            $objetivesArray = $this->getObjetivesArray($level);
+            $prePlanningService->buildTreePrePlannig($objetivesArray);
+        }else{
+            $success = false;
+        }
+        
+        
         $data = array(
             "success" => $success,
         );
@@ -190,11 +201,15 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Accion para importar los items
+     * @param Request $request
+     * @return type
+     */
     public function importAction(Request $request)
     {
         $prePlanning = $this->findOr404($request);
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
         $prePlanningService = $this->getPrePlanningService();
         $prePlanningService->importItem($prePlanning, $user);
         $data = array(
@@ -208,17 +223,20 @@ class PrePlanningController extends ResourceController
      * Obtener los objetivos para construir el arbol
      * @return type
      */
-    private function getObjetivesArray() {
+    private function getObjetivesArray($level)
+    {
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
+        $configuration = $user->getConfiguration();
+
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $objetivesArray = array();
         
-        if($rol == Rol::ROLE_MANAGER_SECOND){
-            $gerenciaSecond = $user->getGerenciaSecond();
+        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO && $prePlanningConfiguration->getGerenciaSecond() !== null){
+            $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
             $objetivesOperational = $gerenciaSecond->getOperationalObjectives();
             $objetivesArray = $this->getDataFromObjetives($objetivesOperational);
-        }else if($rol == Rol::ROLE_MANAGER_FIRST){
-            $gerencia = $user->getGerencia();
+        }else if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO && $prePlanningConfiguration->getGerencia() !== null){
+            $gerencia = $prePlanningConfiguration->getGerencia();
             $tacticalObjectives = $gerencia->getObjetives();
             $objetivesArray = $this->getDataFromObjetives($tacticalObjectives);
         }
