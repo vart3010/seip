@@ -1,0 +1,79 @@
+<?php
+
+/*
+ * This file is part of the TecnoCreaciones package.
+ * 
+ * (c) www.tecnocreaciones.com
+ * 
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Pequiven\SEIPBundle\Controller\User;
+
+use Symfony\Component\HttpFoundation\Request;
+use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
+
+/**
+ * Controlador de pre planificacion
+ *
+ * @author Carlos Mendoza <inhack20@gmail.com>
+ */
+class PrePlanningConfigurationController extends ResourceController
+{
+    public function createAction(Request $request) {
+        $resource = $this->createNew();
+        $form = $this->getForm($resource);
+        $user = $this->get('pequiven.repository.user')->find($request->get('userId'));
+        
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $resource->setConfiguration($user->getConfiguration());
+            $resource = $this->domainManager->create($resource);
+
+            return $this->redirect($this->generateUrl('pequiven_seip_user_show',array('id' => $user->getId())));
+        }
+        
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView(),
+                'user' => $user
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
+     public function updateAction(Request $request) {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+
+            $this->domainManager->update($resource);
+            $user = $resource->getConfiguration()->getUser();
+            return $this->redirect($this->generateUrl('pequiven_seip_user_show',array('id' => $user->getId())));
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+}

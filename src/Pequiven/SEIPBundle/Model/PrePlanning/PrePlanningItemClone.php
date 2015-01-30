@@ -12,16 +12,11 @@
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
 /**
+ * Description of PrePlanningItemClone
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface
+abstract class PrePlanningItemClone extends PrePlanningTypeObject
 {
-    public function setLevelObject($levelObject);
-    
-    public function setName($name);
-    
-    public function getParameters();
-    
-    public function setRequiresApproval($requiresApproval);
+
 }

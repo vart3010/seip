@@ -9,19 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\PrePlanning;
+namespace Pequiven\SEIPBundle\Repository\PrePlanning;
+
+use Doctrine\ORM\EntityRepository;
 
 /**
+ * Respositorio de items clonados
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface
+class PrePlanningItemCloneRepository extends EntityRepository
 {
-    public function setLevelObject($levelObject);
-    
-    public function setName($name);
-    
-    public function getParameters();
-    
-    public function setRequiresApproval($requiresApproval);
+    //put your code here
 }

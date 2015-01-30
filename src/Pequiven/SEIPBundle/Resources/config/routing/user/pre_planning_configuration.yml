@@ -1,0 +1,30 @@
+pequiven_pre_planning_configuration_create:
+    path: /{userId}/create
+    defaults:
+        _controller: pequiven.controller.pre_planning_configuration:createAction
+        _format: html
+        _sylius:
+            form: pequiven_seipbundle_user_pre_planning_configuration
+    requirements:
+        configurationId: "\d+"
+    methods: [GET|POST|PUT]
+    
+pequiven_pre_planning_configuration_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.pre_planning_configuration:updateAction
+        _format: html
+        _sylius:
+            form: pequiven_seipbundle_user_pre_planning_configuration
+    requirements:
+        id: "\d+"
+    methods: [GET|POST]
+    
+pequiven_pre_planning_configuration_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.pre_planning_configuration:deleteAction
+        _format: html
+    requirements:
+        id: "\d+"
+    methods: [POST|DELETE]

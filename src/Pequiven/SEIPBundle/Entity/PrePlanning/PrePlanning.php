@@ -96,9 +96,9 @@ class PrePlanning extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idObject",type="integer",nullable=true)
+     * @ORM\Column(name="idSourceObject",type="integer",nullable=true)
      */
-    private $idObject;
+    private $idSourceObject;
 
     /**
      * Estatus de la plafinicacion
@@ -121,6 +121,7 @@ class PrePlanning extends Model
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -153,6 +154,14 @@ class PrePlanning extends Model
      * @ORM\Column(name="editable",type="boolean")
      */
     private $editable = false;
+    
+    /**
+     * Nivel de la planificacion de la plafinicacion
+     * 
+     * @var integer
+     * @ORM\Column(name="levelPlanning",type="integer",nullable=false)
+     */
+    private $levelPlanning = self::LEVEL_DEFAULT;
 
     /**
      * Constructor
@@ -266,26 +275,26 @@ class PrePlanning extends Model
     }
 
     /**
-     * Set idObject
+     * Set idSourceObject
      *
-     * @param integer $idObject
+     * @param integer $idSourceObject
      * @return PrePlanning
      */
-    public function setIdObject($idObject)
+    public function setIdSourceObject($idSourceObject)
     {
-        $this->idObject = $idObject;
+        $this->idSourceObject = $idSourceObject;
 
         return $this;
     }
 
     /**
-     * Get idObject
+     * Get idSourceObject
      *
      * @return integer 
      */
-    public function getIdObject()
+    public function getIdSourceObject()
     {
-        return $this->idObject;
+        return $this->idSourceObject;
     }
 
     /**
@@ -522,6 +531,18 @@ class PrePlanning extends Model
 
     function setEditable($editable) {
         $this->editable = $editable;
+        
+        return $this;
+    }
+    
+    function getLevelPlanning() 
+    {
+        return $this->levelPlanning;
+    }
+
+    function setLevelPlanning($levelPlanning) 
+    {
+        $this->levelPlanning = $levelPlanning;
         
         return $this;
     }

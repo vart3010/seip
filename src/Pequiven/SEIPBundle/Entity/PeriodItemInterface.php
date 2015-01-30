@@ -9,19 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\PrePlanning;
+namespace Pequiven\SEIPBundle\Entity;
 
 /**
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface
+interface PeriodItemInterface 
 {
-    public function setLevelObject($levelObject);
+    function setPeriod(Period $period);
     
-    public function setName($name);
-    
-    public function getParameters();
-    
-    public function setRequiresApproval($requiresApproval);
 }

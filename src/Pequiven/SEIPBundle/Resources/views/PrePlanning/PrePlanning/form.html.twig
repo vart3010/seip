@@ -6,10 +6,21 @@
         .x-grid-tree-node-expanded .x-tree-icon-parent {
             background-image: none;
         }
-        
+        .x-panel-header-default {
+            background-color: #bd0000;
+            background-image: none;
+            border: 2px solid #e60101;
+        }
+        #title-1025-textEl {
+            color: #ffffff;
+        }
+        .x-panel-header-default-top {
+            -webkit-box-shadow: #f42a41 0 1px 0 0 inset;
+            -moz-box-shadow: #f42a41 0 1px 0 0 inset;
+            box-shadow: #f42a41 0 1px 0 0 inset;
+        }
     </style>
 {% endblock stylesheet  %}
-    
 
 {% block javascript %}
     {{ parent() }}
@@ -35,7 +46,8 @@
                     { name: 'id', type: 'int' },
                     { name: 'name', type: 'string' },
                     { name: "toImport", type: "int" },
-                    { name: "status", type: "int" }
+                    { name: "status", type: "int" },
+                    { name: '_statusLabel', type: 'string' }
                 ]
             });
             
@@ -46,7 +58,7 @@
                     //the store will get the content from the .json file
                     api: {
                         create: 'createPersons',
-                        read: 'get-pre-planning.json',
+                        read: '{{ path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level')}) }}',
                         update: 'update-pre-planning',
                         destroy: 'delete-pre-planning'
                     }
@@ -98,7 +110,7 @@
                             if(btn === 'yes'){
                                 tree.body.mask("Iniciando planificación...");
                                 Ext.Ajax.request({
-                                 url: '{{ path('pequiven_pre_planning_start_pre_planning') }}',
+                                 url: '{{ path('pequiven_pre_planning_start_pre_planning',{level: app.request.get('level')}) }}',
                                  success: function(response, opts) {
                                     tree.body.unmask();
                                     store.load({
@@ -127,7 +139,7 @@
                        if(btn === 'yes'){
                            tree.body.mask("Devolviendo los cambios...");
                            Ext.Ajax.request({
-                            url: '{{ path('pequiven_pre_planning_return_changes') }}',
+                            url: '{{ path('pequiven_pre_planning_return_changes',{level:app.request.get('level')}) }}',
                             success: function(response, opts) {
                                tree.body.unmask();
                                store.load();
@@ -221,9 +233,15 @@
                     if(itemsToImport.length > 0){
                         Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
                            if(btn === 'yes'){
-                                itemsToImportLength = itemsToImport.length;
-                                tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                                callAjaxItemToImport();
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                        callAjaxItemToImport();
+                                    }
+                                });
                             }
                         });
                     }else{
@@ -307,7 +325,8 @@
                         }
                     },
                     beforeedit: function (editor, context, eOpts) {
-                        return context.record.get('editable');
+                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                        return (context.record.get('editable') && context.record.get('status') == status);
                     },
                     edit: function(a,b,c){
                         var recordIndex = b.rowIdx;
@@ -342,7 +361,8 @@
                         renderer: function(value ,metaData, record) {
                             var idx = storeComboBoxStatus.find('id', value)
                             var rec = storeComboBoxStatus.getAt(idx);
-                            if(record.get('editable')){
+                            var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                            if(record.get('editable') && record.get('status') == status){
                                 return rec.get('label');                    
                             }
                         }
@@ -353,14 +373,11 @@
                         width: 80,
                         stopSelection: false,
                         renderer: function(value, metaData, record){
-                            var status = null;
+                            var statusLabel = null;
                             if(record.get('editable')){
-                                status = '<span class="red">No importado</span>';
-                                if(record.get('status')){
-                                    status = '<span class="green">Importado</span>';
-                                }
+                                statusLabel = record.get('_statusLabel');
                             }
-                           return status;
+                           return statusLabel;
                         }
                     }
                 ]
