@@ -2,6 +2,7 @@ pequiven_pre_planning_index:
     path: /
     defaults:
         _controller: pequiven.controller.pre_planning:indexAction
+        _format: html
     methods: [GET]
     
 pequiven_pre_planning_form:
@@ -17,7 +18,7 @@ pequiven_pre_planning_get_pre_planning:
     path: /get-pre-planning.{_format}
     defaults:
         _controller: pequiven.controller.pre_planning:getPrePlanningAction
-        _format: html
+        _format: json
     requirements:
         _format: html|json
     methods: [GET]

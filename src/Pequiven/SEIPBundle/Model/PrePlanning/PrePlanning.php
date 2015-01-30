@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
+use Pequiven\ObjetiveBundle\Model\ObjetiveLevel;
+
 /**
  * Modelo de pre-planificacion
  *
@@ -52,7 +54,7 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
      * No desea importar
      */
     const TO_IMPORT_NO = 2;
-    
+
     /**
      * Parametros de la pre planificacion
      * @var type 

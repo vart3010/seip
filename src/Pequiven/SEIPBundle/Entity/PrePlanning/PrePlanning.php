@@ -154,6 +154,14 @@ class PrePlanning extends Model
      * @ORM\Column(name="editable",type="boolean")
      */
     private $editable = false;
+    
+    /**
+     * Nivel de la planificacion de la plafinicacion
+     * 
+     * @var integer
+     * @ORM\Column(name="levelPlanning",type="integer",nullable=false)
+     */
+    private $levelPlanning = self::LEVEL_DEFAULT;
 
     /**
      * Constructor
@@ -523,6 +531,18 @@ class PrePlanning extends Model
 
     function setEditable($editable) {
         $this->editable = $editable;
+        
+        return $this;
+    }
+    
+    function getLevelPlanning() 
+    {
+        return $this->levelPlanning;
+    }
+
+    function setLevelPlanning($levelPlanning) 
+    {
+        $this->levelPlanning = $levelPlanning;
         
         return $this;
     }

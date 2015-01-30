@@ -81,7 +81,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         //Menu de Resultados
         $this->addMenuResults($menu, $section);
         
-        
         //Menú Gestión Estratégica
 //        $this->addArrangementStrategicMenu($menu, $section);
         

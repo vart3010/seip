@@ -94,3 +94,5 @@ ALTER TABLE seip_indicator_level CHANGE period_id period_id INT NOT NULL;
 ALTER TABLE seip_indicator CHANGE period_id period_id INT NOT NULL;
 ALTER TABLE seip_c_indicator_frequency_notification CHANGE period_id period_id INT NOT NULL;
 ALTER TABLE seip_arrangement_range CHANGE period_id period_id INT NOT NULL;
+
+ALTER TABLE PrePlanning ADD levelPlanning INT NOT NULL;

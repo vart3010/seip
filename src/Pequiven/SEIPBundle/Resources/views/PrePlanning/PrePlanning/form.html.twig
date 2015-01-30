@@ -58,7 +58,7 @@
                     //the store will get the content from the .json file
                     api: {
                         create: 'createPersons',
-                        read: 'get-pre-planning.json',
+                        read: '{{ path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level')}) }}',
                         update: 'update-pre-planning',
                         destroy: 'delete-pre-planning'
                     }

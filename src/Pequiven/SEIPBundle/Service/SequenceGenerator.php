@@ -83,7 +83,6 @@ class SequenceGenerator
                 continue;
             }
             $valueExplode = explode('.', $value);
-//            $valueExplode = explode('.', '1.2.1.');
             for($i = ($lengthRefPartent + 1); $i > 0; $i--){
                 if($valueExplode[$i] == ''){
                     continue;
@@ -91,6 +90,7 @@ class SequenceGenerator
                 $lastDigitTemp = $valueExplode[$i];
                 break;
             }
+            $lastDigitTemp = (int)str_replace('m', '', $lastDigitTemp);
             if($lastDigitTemp > $lastDigit){
                 $lastDigit = $lastDigitTemp;
             }

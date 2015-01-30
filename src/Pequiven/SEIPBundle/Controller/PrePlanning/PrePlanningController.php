@@ -47,20 +47,22 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
+        $level = $request->get('level');
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
         
         $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
         $structureTree = array();
+     
         if($rootTreePrePlannig){
             $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
         }
-
+        
         $data = array(
             "success" => true,
             "text" =>  "Root",
-            "children"=> $structureTree
+            "children"=> $structureTree,
         );
         $view = $this->view($data);
         return $this->handleView($view);
@@ -115,14 +117,14 @@ class PrePlanningController extends ResourceController
             $user = $this->getUser();
             $prePlanningService = $this->getPrePlanningService();
             $periodActive = $this->getPeriodService()->getPeriodActive();
-            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
             if($rootTreePrePlannig){
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($rootTreePrePlannig);
                 $em->flush();
 
                 $objetivesArray = $this->getObjetivesArray($level);
-                $prePlanningService->buildTreePrePlannig($objetivesArray);
+                $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
             }
         }else{
             $success = false;
@@ -146,7 +148,7 @@ class PrePlanningController extends ResourceController
             $user = $this->getUser();
             $prePlanningService = $this->getPrePlanningService();
             $periodActive = $this->getPeriodService()->getPeriodActive();
-            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
             if($rootTreePrePlannig){
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($rootTreePrePlannig);
@@ -154,11 +156,10 @@ class PrePlanningController extends ResourceController
             }
 
             $objetivesArray = $this->getObjetivesArray($level);
-            $prePlanningService->buildTreePrePlannig($objetivesArray);
+            $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
         }else{
             $success = false;
         }
-        
         
         $data = array(
             "success" => $success,

@@ -40,10 +40,10 @@ class PrePlanningService extends ContainerAware
      * @param User $user
      * @return type
      */
-    public function findRootTreePrePlannig(Period $period,  User $user) {
+    public function findRootTreePrePlannig(Period $period,  User $user,$level) {
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning');
-        $rootPrePlanning = $repository->findTreePrePlanning($period,$user);
+        $rootPrePlanning = $repository->findTreePrePlanning($period,$user,$level);
         return $rootPrePlanning;
     }
     
@@ -52,7 +52,7 @@ class PrePlanningService extends ContainerAware
      * @param type $objetivesArray
      * @return type
      */
-    public function buildTreePrePlannig($objetivesArray){
+    public function buildTreePrePlannig($objetivesArray,$levelPlanning){
         $linkGeneratorService = $this->getLinkGeneratorService();
         $root = $this->createNew();
         foreach ($objetivesArray as $objetiveArray) {
@@ -75,6 +75,7 @@ class PrePlanningService extends ContainerAware
         $root->setName(PrePlanning::DEFAULT_NAME);
         $root->setUser($user);
         $root->setPeriod($period);
+        $root->setLevelPlanning($levelPlanning);
         
         $em = $this->getDoctrine()->getManager();
         $em->persist($root);
@@ -197,17 +198,13 @@ class PrePlanningService extends ContainerAware
         if($url != ''){
             $name = sprintf('<a href="%s" target="_blank" title="%s">%s</a>',$url,$name,$nameSumary);
         }
+        $itemInstance = $this->getCloneService()->findInstancePrePlanning($root);
+        $itemInstanceCloned = $this->getCloneService()->findCloneInstance($itemInstance);
         if($root->isRequiresApproval()){
-            $em = $this->getDoctrine()->getManager();
-            $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem');
-            $prePlanningItem = $repository->findOneBy(array(
-                'typeObject' => $root->getTypeObject(),
-                'idSourceObject' => $root->getIdSourceObject(),
-            ));
-            if($prePlanningItem){
+            if($itemInstanceCloned){
                 $name .= ' <span class="green">(Aprobado)</span>';
             }else{
-                $name .= ' <span class="red">(Requiere Aprobación)</span>';
+//                $name .= ' <span class="red">(Requiere Aprobación)</span>';
             }
         }
         $parentId = null;
@@ -226,8 +223,6 @@ class PrePlanningService extends ContainerAware
             '_statusLabel' => '<span class="red">No importado</span>',
         );
         
-        $itemInstance = $this->getCloneService()->findInstancePrePlanning($root);
-        $itemInstanceCloned = $this->getCloneService()->findCloneInstance($itemInstance);
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;
             $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned);
@@ -252,39 +247,62 @@ class PrePlanningService extends ContainerAware
             $cloneService = $this->getCloneService();
             $sequenceGenerator = $this->getSequenceGenerator();
             $levelObject = $prePlanning->getLevelObject();
-            if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
-                $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
-                if($itemInstance){
-                    $typeObject = $prePlanning->getTypeObject();
+            $typeObject = $prePlanning->getTypeObject();
+            $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
+            if($itemInstance){
+                if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
+                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
+                            $parents = $itemInstance->getParents();
+                            $level = $itemInstance->getObjetiveLevel()->getLevel();
+
+                            if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                            {
+                                $parentsCloned = array();
+                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
+                                    $cloneObjetive = $cloneService->cloneObject($parent);
+                                    $parentsCloned[] = $cloneObjetive;
+                                }
+                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                                if(!$itemInstanceCloned){
+                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                                    foreach ($parentsCloned as $parentCloned) {
+                                        $parentCloned->addChildren($itemInstanceCloned);
+                                        $this->persist($parentCloned);
+                                    }
+                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+                                    $itemInstanceCloned->setRef($ref);
+                                    $this->persist($itemInstanceCloned);
+                                }
+                            }
+
+                        }
+                }elseif($levelObject == PrePlanning::LEVEL_OPERATIVO && $gerenciaSecond !== null){
                     if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
-                        $parents = $itemInstance->getParents();
                         $level = $itemInstance->getObjetiveLevel()->getLevel();
-                        
-                        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                        $parents = $itemInstance->getParents();
+
+                        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO)
                         {
                             $parentsCloned = array();
-                            foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
-                                $cloneObjetive = $cloneService->cloneObject($parent);
-                                $parentsCloned[] = $cloneObjetive;
-                            }
-                            $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-                            if(!$itemInstanceCloned){
-                                $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-                                foreach ($parentsCloned as $parentCloned) {
-                                    $parentCloned->addChildren($itemInstanceCloned);
-                                    $this->persist($parentCloned);
+                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
+                                    $cloneObjetive = $cloneService->cloneObject($parent);
+                                    $parentsCloned[] = $cloneObjetive;
                                 }
-                                $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
-                                $itemInstanceCloned->setRef($ref);
-                                $this->persist($itemInstanceCloned);
-                            }
+                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                                if(!$itemInstanceCloned){
+                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                                    foreach ($parentsCloned as $parentCloned) {
+                                        $parentCloned->addChildren($itemInstanceCloned);
+                                        $this->persist($parentCloned);
+                                    }
+                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+                                    $itemInstanceCloned->setRef($ref);
+                                    $this->persist($itemInstanceCloned);
+                                }
                         }
-                        
                     }
                 }
-            }elseif($levelObject == PrePlanning::LEVEL_OPERATIVO && $gerenciaSecond !== null){
-                
-            }
+            }//FIN item instance
            
             
             $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
