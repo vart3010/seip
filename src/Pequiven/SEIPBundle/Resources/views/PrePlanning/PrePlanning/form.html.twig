@@ -233,9 +233,15 @@
                     if(itemsToImport.length > 0){
                         Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
                            if(btn === 'yes'){
-                                itemsToImportLength = itemsToImport.length;
-                                tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                                callAjaxItemToImport();
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                        callAjaxItemToImport();
+                                    }
+                                });
                             }
                         });
                     }else{

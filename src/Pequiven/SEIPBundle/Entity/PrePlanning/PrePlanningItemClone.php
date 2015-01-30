@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningItemClone as Model;
  * Item clonado
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="entity_idx", columns={"typeObject", "period_id","idSourceObject"})})
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningItemCloneRepository")
  */
 class PrePlanningItemClone extends Model
@@ -61,7 +61,7 @@ class PrePlanningItemClone extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idSourceObjec",type="integer",nullable=false)
+     * @ORM\Column(name="idSourceObject",type="integer",nullable=false)
      */
     private $idSourceObject;
     

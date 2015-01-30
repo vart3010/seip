@@ -36,7 +36,7 @@ abstract class PrePlanningTypeObject implements TypePrePlanningInterface
     {
         return array(
             self::TYPE_OBJECT_OBJETIVE => 'Pequiven\\ObjetiveBundle\\Repository\\ObjetiveRepository',
-            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository',
+            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram',
             self::TYPE_OBJECT_INDICATOR => 'Pequiven\IndicatorBundle\Repository\IndicatorRepository',
             self::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'Pequiven\ArrangementProgramBundle\Repository\GoalRepository',
         );

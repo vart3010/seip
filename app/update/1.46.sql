@@ -41,6 +41,7 @@ ALTER TABLE seip_indicator CHANGE period_id period_id INT DEFAULT NULL;
 ALTER TABLE seip_c_indicator_frequency_notification ADD period_id INT DEFAULT NULL;
 ALTER TABLE seip_arrangement_range ADD period_id INT DEFAULT NULL;
 ALTER TABLE seip_indicator_level ADD period_id INT DEFAULT NULL;
+ALTER TABLE Goal ADD period_id INT DEFAULT NULL;
 
 UPDATE PrePlanning SET period_id = 1 WHERE 1;
 UPDATE PrePlanningItemClone SET period_id = 1 WHERE 1;
@@ -53,6 +54,7 @@ UPDATE seip_indicator SET period_id = 1 WHERE 1;
 UPDATE seip_c_indicator_frequency_notification SET period_id = 1 WHERE 1;
 UPDATE seip_arrangement_range SET period_id = 1 WHERE 1;
 UPDATE seip_indicator_level SET period_id = 1 WHERE 1;
+UPDATE Goal SET period_id = 1 WHERE 1;
 
 
 ALTER TABLE seip_c_tendency ADD CONSTRAINT FK_9FBD486AEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
@@ -74,6 +76,9 @@ ALTER TABLE seip_arrangement_range ADD CONSTRAINT FK_845D408CEC8B7ADE FOREIGN KE
 CREATE INDEX IDX_845D408CEC8B7ADE ON seip_arrangement_range (period_id);
 ALTER TABLE seip_indicator_level ADD CONSTRAINT FK_86BCBA8AEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
 CREATE INDEX IDX_86BCBA8AEC8B7ADE ON seip_indicator_level (period_id);
+ALTER TABLE Goal CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE Goal ADD CONSTRAINT FK_5CEE4410EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_5CEE4410EC8B7ADE ON Goal (period_id);
 
 CREATE TABLE seip_user_configuration_pre_planning (id INT AUTO_INCREMENT NOT NULL, configuration_id INT NOT NULL, gerencia_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, gerenciaSecond_id INT DEFAULT NULL, UNIQUE INDEX UNIQ_AAFDA11473F32DD8 (configuration_id), INDEX IDX_AAFDA114B8A96BDB (gerencia_id), INDEX IDX_AAFDA1145A2F2234 (gerenciaSecond_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE seip_user_configuration_pre_planning ADD CONSTRAINT FK_AAFDA11473F32DD8 FOREIGN KEY (configuration_id) REFERENCES seip_user_configuration (id);
@@ -96,3 +101,7 @@ ALTER TABLE seip_c_indicator_frequency_notification CHANGE period_id period_id I
 ALTER TABLE seip_arrangement_range CHANGE period_id period_id INT NOT NULL;
 
 ALTER TABLE PrePlanning ADD levelPlanning INT NOT NULL;
+ALTER TABLE ArrangementProgram ADD description LONGTEXT DEFAULT NULL;
+
+ALTER TABLE PrePlanningItemClone CHANGE idsourceobjec idSourceObject INT NOT NULL;
+CREATE UNIQUE INDEX entity_idx ON PrePlanningItemClone (typeObject, period_id, idSourceObject);

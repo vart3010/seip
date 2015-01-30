@@ -202,7 +202,7 @@ class PrePlanningService extends ContainerAware
         $itemInstanceCloned = $this->getCloneService()->findCloneInstance($itemInstance);
         if($root->isRequiresApproval()){
             if($itemInstanceCloned){
-                $name .= ' <span class="green">(Aprobado)</span>';
+//                $name .= ' <span class="green">(Aprobado)</span>';
             }else{
 //                $name .= ' <span class="red">(Requiere Aprobación)</span>';
             }
@@ -225,7 +225,12 @@ class PrePlanningService extends ContainerAware
         
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;
-            $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned);
+            //Las metas no tienen link por lo tanto genero el link del programa
+            if($root->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
+                $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned->getTimeline()->getArrangementProgram());
+            }else{
+                $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned);
+            }
             $child['_statusLabel'] = sprintf('<a href="%s" target="_blank"><span class="green">Importado</span></a>',$configEntity['url']);
         }
         if(count($root->getChildrens()) > 0){
@@ -299,6 +304,16 @@ class PrePlanningService extends ContainerAware
                                     $itemInstanceCloned->setRef($ref);
                                     $this->persist($itemInstanceCloned);
                                 }
+                        }
+                    }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM){
+                        $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                        if(!$itemInstanceCloned){
+                            $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                        }
+                    }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
+                        $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                        if(!$itemInstanceCloned){
+                            $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                         }
                     }
                 }

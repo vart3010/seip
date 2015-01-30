@@ -336,11 +336,52 @@ class CloneService extends ContainerAware
         return $entity;
     }
     
+    private function cloneArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
+    {
+        $entity = $this->findCloneInstance($arrangementProgram);
+        if(!$entity){
+            $entity = $this->_clone($arrangementProgram);
+            
+            if($entity->getTacticalObjective()){
+                $entity->setTacticalObjective($this->cloneObject($entity->getTacticalObjective()));
+            }
+            
+            if($entity->getOperationalObjective()){
+                $entity->setOperationalObjective($this->cloneObject($entity->getOperationalObjective()));
+            }
+            
+            $entity->setPeriod($this->getPeriodToClone());
+            $sequenceGenerator = $this->container->get('seip.sequence_generator');
+            
+            $entity->setRef($sequenceGenerator->getNextArrangementProgram($entity));
+            $entity->setCreatedBy($this->getUser());
+            
+            $this->saveClone($entity, $arrangementProgram,$andFlush);
+        }
+        return $entity;
+    }
+    
+    private function cloneArrangementProgramGoal(\Pequiven\ArrangementProgramBundle\Entity\Goal $goal,$andFlush = true)
+    {
+        $entity = $this->findCloneInstance($goal);
+        if(!$entity){
+            $entity = $this->_clone($goal);
+            
+            $arrangementProgramCloned = $this->cloneObject($entity->getTimeline()->getArrangementProgram());
+            $timeline = $arrangementProgramCloned->getTimeline();
+            
+            $entity->setGoalDetails(new \Pequiven\ArrangementProgramBundle\Entity\GoalDetails());
+            $entity->setTimeline($timeline);
+            
+            $this->saveClone($entity, $goal,$andFlush);
+        }
+        return $entity;
+    }
+    
     private function cloneExample(\Pequiven\MasterBundle\Entity\Operator $operator,$andFlush = true)
     {
         throw new Exception('IMPLEMENTAME '.__FUNCTION__);
     }
-
 
     private function saveClone(&$cloneObject,&$sourceObject,$andFlush = true)
     {
@@ -378,9 +419,9 @@ class CloneService extends ContainerAware
         
         $supportObjects = array(
             PrePlanning::TYPE_OBJECT_OBJETIVE => 'cloneObjetive',
-            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'SIM_IMPLEMENTAR',
+            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'cloneArrangementProgram',
             PrePlanning::TYPE_OBJECT_INDICATOR => 'cloneIndicator',
-            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'SIM_IMPLEMENTAR',
+            PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'cloneArrangementProgramGoal',
             PrePlanning::TYPE_OBJECT_RESULT => 'cloneResult',
             PrePlanning::TYPE_OBJECT_TENDENCY => 'cloneTendency',
             PrePlanning::TYPE_OBJECT_FORMULA => 'cloneFormula',
