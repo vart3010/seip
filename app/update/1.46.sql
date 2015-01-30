@@ -10,6 +10,10 @@ CREATE UNIQUE INDEX UNIQ_C239594B93DEE346 ON seip_objetive (sourceImported_id);
 ALTER TABLE seip_objetive_audit ADD sourceImported_id INT DEFAULT NULL;
 
 
+--ACTUALIZAR PLANIFICACION DESDE ACA
+
+CREATE TABLE PrePlanningItemClone (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, period_id INT NOT NULL, typeObject INT NOT NULL, idCloneObject INT NOT NULL, idSourceObjec INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_11613ADBA76ED395 (user_id), INDEX IDX_11613ADBEC8B7ADE (period_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
 -- Agregando periodo a resultado
 ALTER TABLE seip_result ADD period_id INT DEFAULT NULL;
 ALTER TABLE seip_result ADD CONSTRAINT FK_102C15ABEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
@@ -28,7 +32,7 @@ ALTER TABLE PrePlanningItem CHANGE idobject idSourceObject INT DEFAULT NULL;
 ALTER TABLE PrePlanning CHANGE period_id period_id INT DEFAULT NULL;
 ALTER TABLE PrePlanningItemClone CHANGE period_id period_id INT DEFAULT NULL;
 
--- ALTER TABLE seip_c_tendency ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_c_tendency ADD period_id INT DEFAULT NULL;
 ALTER TABLE Variable ADD period_id INT DEFAULT NULL;
 ALTER TABLE seip_formula_level ADD period_id INT DEFAULT NULL;
 ALTER TABLE seip_c_formula ADD period_id INT DEFAULT NULL;
@@ -70,3 +74,23 @@ ALTER TABLE seip_arrangement_range ADD CONSTRAINT FK_845D408CEC8B7ADE FOREIGN KE
 CREATE INDEX IDX_845D408CEC8B7ADE ON seip_arrangement_range (period_id);
 ALTER TABLE seip_indicator_level ADD CONSTRAINT FK_86BCBA8AEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
 CREATE INDEX IDX_86BCBA8AEC8B7ADE ON seip_indicator_level (period_id);
+
+CREATE TABLE seip_user_configuration_pre_planning (id INT AUTO_INCREMENT NOT NULL, configuration_id INT NOT NULL, gerencia_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, gerenciaSecond_id INT DEFAULT NULL, UNIQUE INDEX UNIQ_AAFDA11473F32DD8 (configuration_id), INDEX IDX_AAFDA114B8A96BDB (gerencia_id), INDEX IDX_AAFDA1145A2F2234 (gerenciaSecond_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE seip_user_configuration_pre_planning ADD CONSTRAINT FK_AAFDA11473F32DD8 FOREIGN KEY (configuration_id) REFERENCES seip_user_configuration (id);
+ALTER TABLE seip_user_configuration_pre_planning ADD CONSTRAINT FK_AAFDA114B8A96BDB FOREIGN KEY (gerencia_id) REFERENCES seip_c_gerencia (id);
+ALTER TABLE seip_user_configuration_pre_planning ADD CONSTRAINT FK_AAFDA1145A2F2234 FOREIGN KEY (gerenciaSecond_id) REFERENCES seip_c_gerencia_second (id);
+ALTER TABLE PrePlanning CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE PrePlanningItemClone CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE PrePlanningItemClone ADD CONSTRAINT FK_11613ADBA76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
+ALTER TABLE PrePlanningItemClone ADD CONSTRAINT FK_11613ADBEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+ALTER TABLE seip_c_tendency CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE Variable CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_formula_level CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_c_formula CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_objetives_parents DROP PRIMARY KEY;
+ALTER TABLE seip_objetives_parents ADD PRIMARY KEY (parent_id, children_id);
+ALTER TABLE seip_objetive_level CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_indicator_level CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_indicator CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_c_indicator_frequency_notification CHANGE period_id period_id INT NOT NULL;
+ALTER TABLE seip_arrangement_range CHANGE period_id period_id INT NOT NULL;

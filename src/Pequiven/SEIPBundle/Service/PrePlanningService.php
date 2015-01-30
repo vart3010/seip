@@ -238,60 +238,45 @@ class PrePlanningService extends ContainerAware
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $gerencia = $prePlanningConfiguration->getGerencia();
         $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
-        $prePlanningItem = new PrePlanningItem();
-        if($prePlanning->getStatus() == PrePlanning::STATUS_DRAFT)
+        if($prePlanning->getToImport() == PrePlanning::TO_IMPORT_YES)// && $prePlanning->getStatus() == PrePlanning::STATUS_DRAFT
         {
-            $nextPeriod = $this->getPeriodService()->getNextPeriod();
-            
+            $cloneService = $this->getCloneService();
             $levelObject = $prePlanning->getLevelObject();
-            $idSourceObject = $prePlanning->getIdSourceObject();
-            $typeObject = $prePlanning->getTypeObject();
-            
             if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
-                $prePlanningItem->setPrePlanning($prePlanning);
-                $prePlanningItem->setIdSourceObject($idSourceObject);
-                $prePlanningItem->setTypeObject($typeObject);
-                
+                $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
+                if($itemInstance){
+                    $typeObject = $prePlanning->getTypeObject();
+                    if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
+                        $parents = $itemInstance->getParents();
+                        $level = $itemInstance->getObjetiveLevel()->getLevel();
+                        
+                        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+                        {
+                            $parentsCloned = array();
+                            foreach ($parents as $parent) {
+                                $parentsCloned[] = $cloneService->cloneObject($parent);
+                            }
+                            if(!$cloneService->findCloneInstance($itemInstance)){
+                                $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                                foreach ($parentsCloned as $parentCloned) {
+                                    $parentCloned->addChildren($itemInstanceCloned);
+                                    $this->persist($parentCloned);
+                                    $this->persist($itemInstanceCloned);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
             }elseif($levelObject == PrePlanning::LEVEL_OPERATIVO && $gerenciaSecond !== null){
                 
             }
            
-            $itemInstance = $this->getCloneService()->findItemInstance($idSourceObject,$typeObject);
-            if($itemInstance){
-                $this->cloneItem($itemInstance,$prePlanning);
-            }
             
             $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
+            $this->persist($prePlanning,true);
         }
-    }
-    
-    private function cloneItem($itemInstance,PrePlanning $prePlanning)
-    {
-        $itemClone = clone($itemInstance);
-        $itemClone->setSourceImported($itemInstance);
-        $typeObject = $prePlanning->getTypeObject();
-        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
-            $this->cloneItemObjetive($itemClone);
-        }
-        
-    }
-    
-    private function cloneItemObjetive(Objetive $objetive)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $parents = $objetive->getParents();
-        $level = $objetive->getObjetiveLevel()->getLevel();
-        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-        {
-            foreach ($parents as $parent) {
-                $this->getCloneService()->cloneItem($parent);
-            }
-        }
-    }
-    
-    
-    
-    
+    }  
 
     /**
      * Extrae elementos del objetivo
@@ -349,7 +334,9 @@ class PrePlanningService extends ContainerAware
      * @return PrePlanning
      */
     private function createNew(){
-        return new PrePlanning();
+        $prePlanning = new PrePlanning();
+        $prePlanning->setPeriod($this->getPeriodService()->getPeriodActive());
+        return $prePlanning;
     }
 
 
@@ -438,5 +425,14 @@ class PrePlanningService extends ContainerAware
      */
     private function getCloneService() {
         return $this->container->get('seip.service.clone');
+    }
+    
+    private function persist(&$object,$andFlush = false) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->persist($object);
+        if($andFlush === true){
+            $em->flush();
+        }
     }
 }

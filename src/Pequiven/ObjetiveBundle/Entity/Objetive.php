@@ -172,15 +172,15 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     private $gerenciaSecond;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parents", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist"})
+     * @ORM\JoinTable(name="seip_objetives_parents",
+     *      joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")})
      */
     private $childrens;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="childrens")
-     * @ORM\JoinTable(name="seip_objetives_parents",
-     *      joinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="childrens")
      */
     private $parents;
     
@@ -272,14 +272,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
-    /**
-     * Objeto origen a partir del que se exporto
-     * 
-     * @var Objetive
-     * @ORM\OneToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive")
-     */
-    private $sourceImported;
 
     /**
      * Constructor
@@ -719,7 +711,8 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      */
     public function addChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
     {
-        $this->childrens[] = $childrens;
+        $childrens->addParent($this);
+        $this->childrens->add($childrens);
 
         return $this;
     }
@@ -752,8 +745,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      */
     public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
     {
-        //$parents->addChildren($this);
-        $this->parents[] = $parents;
+        $this->parents->add($parents);
 
         return $this;
     }
@@ -1107,8 +1099,16 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    function setIndicators($indicators) {
+        $this->indicators = $indicators;
+    }
+    
+    function setResults($results) {
+        $this->results = $results;
+    }
+    
     public function __clone() {
-        if($this->id > 0){
+        if($this->id){
             $this->id = null;
             $this->createdAt = null;
             $this->updatedAt = null;
@@ -1116,6 +1116,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->ref = null;
             
             $this->childrens = new ArrayCollection();
+            $this->parents = new ArrayCollection();
             
             $this->period = null;
             $this->reviewedBy = null;
@@ -1130,22 +1131,5 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
             $this->deletedAt = null;
         }
     }
-    
-    function getSourceImported() 
-    {
-        return $this->sourceImported;
-    }
 
-    function setSourceImported($sourceImported)
-    {
-        $this->sourceImported = $sourceImported;
-    }
-    
-    function setIndicators($indicators) {
-        $this->indicators = $indicators;
-    }
-    
-    function setResults($results) {
-        $this->results = $results;
-    }
 }

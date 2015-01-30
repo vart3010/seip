@@ -90,7 +90,7 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
     private $parent;
     
     /**
-     * Objetivos que impacta
+     * Objetivos que impacta TODO: PILA AQUI CON EL PERSIST
      * 
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
      * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")

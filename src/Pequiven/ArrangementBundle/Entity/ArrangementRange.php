@@ -1154,4 +1154,19 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
         
         return $this;
     }
+    
+    public function __clone() {
+        if($this->id){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->objetive = null;
+            $this->indicator = null;
+            
+            $this->period = null;
+        }
+    }
 }
