@@ -11,7 +11,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 /**
  * Programa de gestion
  *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="ref_idx", columns={"ref"})})
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
  */
 class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface

@@ -241,6 +241,7 @@ class PrePlanningService extends ContainerAware
         if($prePlanning->getToImport() == PrePlanning::TO_IMPORT_YES)// && $prePlanning->getStatus() == PrePlanning::STATUS_DRAFT
         {
             $cloneService = $this->getCloneService();
+            $sequenceGenerator = $this->getSequenceGenerator();
             $levelObject = $prePlanning->getLevelObject();
             if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
                 $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
@@ -253,16 +254,20 @@ class PrePlanningService extends ContainerAware
                         if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
                         {
                             $parentsCloned = array();
-                            foreach ($parents as $parent) {
-                                $parentsCloned[] = $cloneService->cloneObject($parent);
+                            foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
+                                $cloneObjetive = $cloneService->cloneObject($parent);
+                                $parentsCloned[] = $cloneObjetive;
                             }
-                            if(!$cloneService->findCloneInstance($itemInstance)){
+                            $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                            if(!$itemInstanceCloned){
                                 $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                                 foreach ($parentsCloned as $parentCloned) {
                                     $parentCloned->addChildren($itemInstanceCloned);
                                     $this->persist($parentCloned);
-                                    $this->persist($itemInstanceCloned);
                                 }
+                                $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+                                $itemInstanceCloned->setRef($ref);
+                                $this->persist($itemInstanceCloned);
                             }
                         }
                         
@@ -434,5 +439,14 @@ class PrePlanningService extends ContainerAware
         if($andFlush === true){
             $em->flush();
         }
+    }
+    
+    /**
+     * Generador de secuencia
+     * @return SequenceGenerator
+     */
+    private function getSequenceGenerator()
+    {
+        return $this->container->get('seip.sequence_generator');
     }
 }
