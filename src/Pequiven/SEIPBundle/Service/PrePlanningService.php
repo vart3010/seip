@@ -222,8 +222,17 @@ class PrePlanningService extends ContainerAware
             'editable' => $root->isEditable(),
             'parentId' => $parentId,
             'toImport' => $root->getToImport(),
-            'status' => $root->getStatus()
+            'status' => $root->getStatus(),
+            '_statusLabel' => '<span class="red">No importado</span>',
         );
+        
+        $itemInstance = $this->getCloneService()->findInstancePrePlanning($root);
+        $itemInstanceCloned = $this->getCloneService()->findCloneInstance($itemInstance);
+        if($itemInstanceCloned){
+            $child['status'] = PrePlanning::STATUS_IMPORTED;
+            $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned);
+            $child['_statusLabel'] = sprintf('<a href="%s" target="_blank"><span class="green">Importado</span></a>',$configEntity['url']);
+        }
         if(count($root->getChildrens()) > 0){
             $child['expanded'] = $expanded;
             $child['children'] = $this->getStructureTree($root->getChildrens());

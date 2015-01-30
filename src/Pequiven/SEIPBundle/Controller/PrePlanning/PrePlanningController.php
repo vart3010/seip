@@ -230,14 +230,28 @@ class PrePlanningController extends ResourceController
 
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $objetivesArray = array();
+        $periodActive = $this->getPeriodService()->getPeriodActive();
         
         if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO && $prePlanningConfiguration->getGerenciaSecond() !== null){
             $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
-            $objetivesOperational = $gerenciaSecond->getOperationalObjectives();
+            $objetivesOperational = array();
+            foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
+                if($objetive->getPeriod() !== $periodActive){
+                    continue;
+                }
+                $objetivesOperational []= $objetive;
+            }
+            
             $objetivesArray = $this->getDataFromObjetives($objetivesOperational);
         }else if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO && $prePlanningConfiguration->getGerencia() !== null){
             $gerencia = $prePlanningConfiguration->getGerencia();
-            $tacticalObjectives = $gerencia->getObjetives();
+            $tacticalObjectives = array();
+            foreach ($gerencia->getObjetives() as $objetive) {
+                if($objetive->getPeriod() !== $periodActive){
+                    continue;
+                }
+                $tacticalObjectives []= $objetive;
+            }
             $objetivesArray = $this->getDataFromObjetives($tacticalObjectives);
         }
         return $objetivesArray;
@@ -247,7 +261,6 @@ class PrePlanningController extends ResourceController
     {
         $objetivesArray = array();
         foreach ($objetives as $objetive){
-//                var_dump('object user '.$objetive->getRef());
                 $parents = $objetive->getParents();
                 foreach ($parents as $parent) {
                     if(isset($objetivesArray[$parent->getId()])){

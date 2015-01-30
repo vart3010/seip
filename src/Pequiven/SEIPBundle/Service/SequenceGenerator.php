@@ -65,9 +65,9 @@ class SequenceGenerator
     public function getNextRefChildObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
     {
         $parents = $objetive->getParents();
-        
-        if(count($parents) == 0){
-            throw new Exception(sprintf('The objetive "%s (%s)" is not defined parent',(string)$objetive,$objetive->getId()));
+        $quantityParents = count($parents);
+        if($quantityParents == 0){
+            throw new \Exception(sprintf('The objetive "%s (%s)" is not defined parent',(string)$objetive,$objetive->getId()));
         }
         $lastParent = $parents[count($parents) - 1]; 
         $refParent = $lastParent->getRef();
@@ -97,7 +97,11 @@ class SequenceGenerator
         }
         $lastDigit++;
         
-        $nextRef = $refParent . $lastDigit.'.';
+        $sufix = '';
+        if($quantityParents > 1){
+            $sufix = 'm';
+        }
+        $nextRef = $refParent . $lastDigit.'.'.$sufix;
         
 //        var_dump('ID Parent '.$lastParent->getId());
 //        var_dump('ID child '.$objetive->getId());

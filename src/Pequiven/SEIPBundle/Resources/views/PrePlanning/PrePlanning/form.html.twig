@@ -46,7 +46,8 @@
                     { name: 'id', type: 'int' },
                     { name: 'name', type: 'string' },
                     { name: "toImport", type: "int" },
-                    { name: "status", type: "int" }
+                    { name: "status", type: "int" },
+                    { name: '_statusLabel', type: 'string' }
                 ]
             });
             
@@ -318,7 +319,8 @@
                         }
                     },
                     beforeedit: function (editor, context, eOpts) {
-                        return context.record.get('editable');
+                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                        return (context.record.get('editable') && context.record.get('status') == status);
                     },
                     edit: function(a,b,c){
                         var recordIndex = b.rowIdx;
@@ -353,7 +355,8 @@
                         renderer: function(value ,metaData, record) {
                             var idx = storeComboBoxStatus.find('id', value)
                             var rec = storeComboBoxStatus.getAt(idx);
-                            if(record.get('editable')){
+                            var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                            if(record.get('editable') && record.get('status') == status){
                                 return rec.get('label');                    
                             }
                         }
@@ -364,14 +367,11 @@
                         width: 80,
                         stopSelection: false,
                         renderer: function(value, metaData, record){
-                            var status = null;
+                            var statusLabel = null;
                             if(record.get('editable')){
-                                status = '<span class="red">No importado</span>';
-                                if(record.get('status')){
-                                    status = '<span class="green">Importado</span>';
-                                }
+                                statusLabel = record.get('_statusLabel');
                             }
-                           return status;
+                           return statusLabel;
                         }
                     }
                 ]
