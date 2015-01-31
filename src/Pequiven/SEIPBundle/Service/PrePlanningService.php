@@ -223,6 +223,18 @@ class PrePlanningService extends ContainerAware
             'status' => $root->getStatus(),
             '_statusLabel' => '<span class="red">No importado</span>',
         );
+        if($root->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
+            &&  $root->getParent() 
+//            && $root->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM
+            && $root->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL
+        )
+        {
+            $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($root->getParent());
+            $parentItemInstanceCloned = $this->getCloneService()->findCloneInstance($parentItemInstance);
+            if(!$parentItemInstanceCloned){
+                $child['editable'] = false;
+            }
+        }
         
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;

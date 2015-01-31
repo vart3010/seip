@@ -374,9 +374,9 @@
                         stopSelection: false,
                         renderer: function(value, metaData, record){
                             var statusLabel = null;
-                            if(record.get('editable')){
+{#                            if(record.get('editable')){#}
                                 statusLabel = record.get('_statusLabel');
-                            }
+{#                            }#}
                            return statusLabel;
                         }
                     }
