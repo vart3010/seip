@@ -163,7 +163,7 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere("i.indicatorLevel = " . $criteria['indicatorLevel']);
         }
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT')) && !isset($criteria['gerencia'])){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -239,6 +239,8 @@ class IndicatorRepository extends baseEntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
+        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT'))){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
         if(isset($criteria['gerenciaFirst'])){
@@ -278,10 +280,9 @@ class IndicatorRepository extends baseEntityRepository {
         $qb->leftJoin('i.objetives', 'obj');
         $qb->leftJoin('i.formula', 'f');
         
-        $qb->andWhere('i.enabled = :enabled');
+        $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('obj.id = :idObjetive');
         
-        $qb->setParameter('enabled', true);
         $qb->setParameter('idObjetive', $objetive->getId());
         
         $qb->orderBy('i.ref');

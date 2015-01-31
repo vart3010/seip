@@ -243,7 +243,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive",cascade={"remove"})
      */
     private $results;
     

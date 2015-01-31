@@ -536,7 +536,6 @@ class GerenciaController extends baseController {
             $row++;
             $contResult++;
         }
-//        die();
         
 //        $activeSheet->getProtection()
 //                    ->setSheet(true)

@@ -486,9 +486,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
         
         $valuesIndicator = $indicator->getValuesIndicator();
-        if(count($valuesIndicator) < $frequencyNotificationIndicator->getNumberResultsFrequency()){
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
             $user = $this->getUser();
-            for($i= count($valuesIndicator);$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
                 $valueIndicator = new Indicator\ValueIndicator();
                 $valueIndicator
                     ->setFormula($formula)

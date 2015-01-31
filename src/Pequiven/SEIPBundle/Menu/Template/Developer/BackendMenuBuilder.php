@@ -456,7 +456,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         
                         $thirdchild->addChild($itemIndicatorsOperative);
                         
-                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT'))){
                         $thirdchild->addChild($itemIndicatorsTactic);
                         
                         $thirdchild->addChild($itemIndicatorsOperative);

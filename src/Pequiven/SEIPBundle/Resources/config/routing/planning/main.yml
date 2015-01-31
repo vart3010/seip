@@ -1,10 +1,6 @@
 pequiven_planning_arrangement_program:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/arrangement_program.yml"
     prefix:   /arrangementprogram
-
-pequiven_value_indicator:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/value_indicator.yml"
-    prefix:   /value-indicator
     
 pequiven_update:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/update.yml"

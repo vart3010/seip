@@ -163,7 +163,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ;
         if(isset($criteria['type'])){
             if($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
-                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'));
+                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL AND ap.totalAdvance > 0','ap.totalAdvance > 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
                 $qb->andWhere($qb->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
