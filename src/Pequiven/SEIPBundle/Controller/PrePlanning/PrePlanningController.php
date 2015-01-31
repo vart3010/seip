@@ -243,19 +243,29 @@ class PrePlanningController extends ResourceController
     {
         $resource = $this->findOr404($request);
         $success = false;
+        $data = array();
         if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
-            $lastItem = $request->get('lastItem',false);
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
             $user = $this->getUser();
             $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
             
             $success = true;
-            if($lastItem == true){
+            if($lastItem === true){
                 //enviar correo
+                $periodActive = $this->getPeriodService()->getPeriodActive();
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
             }
         }
-        $data = array(
-            "success" => $success,
-        );
+        
+        $data["success"] = $success;
+        
         $view = $this->view($data);
         
         return $this->handleView($view);

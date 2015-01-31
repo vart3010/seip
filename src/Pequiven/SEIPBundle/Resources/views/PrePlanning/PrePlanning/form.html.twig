@@ -206,11 +206,11 @@
             var functionSendToRevisionItem = function(item){
                 var name = item.get('name');
                 tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a revisión "+name+ "...");
-                var lastItem = false;
+                var lastItem = 0;
                 if((itemsToImportCurrent + 1) == itemsToImportLength){
-                    lastItem = true;
+                    lastItem = 1;
                 }
-                var urlImport = Routing.generate('pequiven_pre_planning_send_to_review',{id:item.get('id'),lastItem: lastItem});
+                var urlImport = Routing.generate('pequiven_pre_planning_send_to_review',{id:item.get('id'),lastItem: lastItem,level: level});
                 Ext.Ajax.request({
                 url: urlImport,
                     success: function(response, opts) {

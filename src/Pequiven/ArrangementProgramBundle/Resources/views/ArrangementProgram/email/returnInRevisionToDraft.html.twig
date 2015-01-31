@@ -4,9 +4,9 @@
     El programa de gestión {{ arrangementProgram.ref }} fue retornado a borrador - SEIP
 {% endblock subject %}
 
-{% block contet_html %}
+{% block content_html %}
     El usuario <b>{{ user.getFullNameUser }}</b> acaba de retornar el programa de gestión 
-    <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },true)) }}">{{ arrangementProgram.ref }}</a> a borrador.
+    <a href="{{ url('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a> a borrador.
     
     {% include 'PequivenArrangementProgramBundle:ArrangementProgram:email/detailsArrangementProgram.html.twig' %}
-{% endblock contet_html %}
+{% endblock content_html %}
