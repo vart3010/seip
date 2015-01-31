@@ -248,6 +248,7 @@ class IndicatorOperativeController extends baseController {
         $em->getConnection()->beginTransaction();
 
         $arrangementRange->setIndicator($indicator);
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
         //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
@@ -516,4 +517,11 @@ class IndicatorOperativeController extends baseController {
         return $ref;
     }
 
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 }

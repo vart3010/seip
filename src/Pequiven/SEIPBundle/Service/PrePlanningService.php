@@ -259,31 +259,6 @@ class PrePlanningService extends ContainerAware
             $typeObject = $prePlanning->getTypeObject();
             $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
             if($itemInstance){
-//                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
-//                            $parents = $itemInstance->getParents();
-//                            $level = $itemInstance->getObjetiveLevel()->getLevel();
-//
-//                            if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-//                            {
-//                                $parentsCloned = array();
-//                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
-//                                    $cloneObjetive = $cloneService->cloneObject($parent);
-//                                    $parentsCloned[] = $cloneObjetive;
-//                                }
-//                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-//                                if(!$itemInstanceCloned){
-//                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-//                                    foreach ($parentsCloned as $parentCloned) {
-//                                        $parentCloned->addChildren($itemInstanceCloned);
-//                                        $this->persist($parentCloned);
-//                                    }
-//                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
-//                                    $itemInstanceCloned->setRef($ref);
-//                                    $this->persist($itemInstanceCloned);
-//                                }
-//                            }
-//
-//                        }
                     if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
                         $level = $itemInstance->getObjetiveLevel()->getLevel();
                         $parents = $itemInstance->getParents();
