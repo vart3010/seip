@@ -47,7 +47,7 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
-        set_time_limit(45);
+        set_time_limit(60);
         ini_set("memory_limit","256M");
         
         $level = $request->get('level');
@@ -122,6 +122,8 @@ class PrePlanningController extends ResourceController
      */
     public function returnChangesAction(Request $request) 
     {
+        set_time_limit(60);
+        ini_set("memory_limit","256M");
         $level = $request->get('level',null);
         $success = true;
         if($level){
@@ -153,7 +155,7 @@ class PrePlanningController extends ResourceController
      */
     public function startPrePlanningAction(Request $request) 
     {
-        set_time_limit(45);
+        set_time_limit(60);
         ini_set("memory_limit","256M");
         $level = $request->get('level',null);
         $success = false;
@@ -223,7 +225,7 @@ class PrePlanningController extends ResourceController
      */
     public function importAction(Request $request)
     {
-        set_time_limit(45);
+        set_time_limit(60);
         ini_set("memory_limit","256M");
         
         $prePlanning = $this->findOr404($request);
