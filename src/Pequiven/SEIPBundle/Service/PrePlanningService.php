@@ -58,14 +58,14 @@ class PrePlanningService extends ContainerAware
         foreach ($objetivesArray as $objetiveArray) {
             $objetive = $objetiveArray['parent'];
             $prePlannig = $this->createNew();
-            $this->setOriginObject($prePlannig,$objetive);
+            $this->setOriginObject($prePlannig,$objetive,$levelPlanning);
             $configEntity = $linkGeneratorService->getConfigFromEntity($objetive);
             $prePlannig->setParameters($configEntity);
             
             $childrens = $objetiveArray['childrens'];
-            $this->extractDataFromObjective($prePlannig, $objetive);
+            $this->extractDataFromObjective($prePlannig, $objetive,$levelPlanning);
             
-            $this->buildChildren($childrens, $prePlannig);
+            $this->buildChildren($childrens, $prePlannig,$levelPlanning);
             
             $root->addChildren($prePlannig);
         }
@@ -84,19 +84,18 @@ class PrePlanningService extends ContainerAware
         return $root;
     }
     
-    private function setOriginObject(PrePlanning $prePlanning,$object)
+    private function setOriginObject(PrePlanning $prePlanning,$object,$levelPlanning)
     {
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
         $configuration = $user->getConfiguration();
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         
         $isEditable = false;
         $requiresApproval = false;
-        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null){
-            $requiresApproval = true;
-        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null){
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null){
             
+        }elseif($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null){
+            $requiresApproval = true;
         }
         
         $idSourceObject = $object->getId();
@@ -135,9 +134,9 @@ class PrePlanningService extends ContainerAware
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
-        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null && $levelObject == PrePlanning::LEVEL_OPERATIVO){
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null && $levelObject == PrePlanning::LEVEL_OPERATIVO && $levelPlanning == PrePlanning::LEVEL_OPERATIVO){
             $isEditable = true;
-        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null && $levelObject == PrePlanning::LEVEL_TACTICO){
+        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null && $levelObject == PrePlanning::LEVEL_TACTICO && $levelPlanning == PrePlanning::LEVEL_TACTICO){
             $isEditable = true;
         }
         
@@ -149,19 +148,19 @@ class PrePlanningService extends ContainerAware
         $prePlanning->setUser($user);
     }
     
-    private function buildChildren($childrens,&$prePlannig) {
+    private function buildChildren($childrens,&$prePlannig,$levelPlanning) {
         $linkGeneratorService = $this->getLinkGeneratorService();
         foreach ($childrens as $children) {
                 $prePlannigChild = $this->createNew();
-                $this->setOriginObject($prePlannigChild,$children);
+                $this->setOriginObject($prePlannigChild,$children,$levelPlanning);
                 $configEntity = $linkGeneratorService->getConfigFromEntity($children);
                 $prePlannigChild->setParameters($configEntity);
 
-                $this->extractDataFromObjective($prePlannigChild, $children);
+                $this->extractDataFromObjective($prePlannigChild, $children,$levelPlanning);
                 if(count($children->getChildrens()) > 0){
                     $subChildren = $children->getChildrens();
 //                    var_dump(count($subChildren));
-                    $this->buildChildren($subChildren, $prePlannigChild);
+                    $this->buildChildren($subChildren, $prePlannigChild,$levelPlanning);
 //                    $prePlannigChild->addChildren($prePlannigSubChild);
                 }
                 $prePlannig->addChildren($prePlannigChild);
@@ -247,41 +246,44 @@ class PrePlanningService extends ContainerAware
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $gerencia = $prePlanningConfiguration->getGerencia();
         $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
-        if($prePlanning->getToImport() == PrePlanning::TO_IMPORT_YES)// && $prePlanning->getStatus() == PrePlanning::STATUS_DRAFT
+        if($prePlanning->getToImport() == PrePlanning::TO_IMPORT_YES && $prePlanning->getStatus() == PrePlanning::STATUS_DRAFT)
         {
             $cloneService = $this->getCloneService();
             $sequenceGenerator = $this->getSequenceGenerator();
             $levelObject = $prePlanning->getLevelObject();
+            if($levelObject == PrePlanning::LEVEL_TACTICO && !$this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC')){
+                throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel tactico.');
+            }elseif ($levelObject == PrePlanning::LEVEL_OPERATIVO && !$this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE')) {
+                throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel operativo.');
+            }
             $typeObject = $prePlanning->getTypeObject();
             $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
             if($itemInstance){
-                if($levelObject == PrePlanning::LEVEL_TACTICO && $gerencia !== null){
-                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
-                            $parents = $itemInstance->getParents();
-                            $level = $itemInstance->getObjetiveLevel()->getLevel();
-
-                            if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
-                            {
-                                $parentsCloned = array();
-                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
-                                    $cloneObjetive = $cloneService->cloneObject($parent);
-                                    $parentsCloned[] = $cloneObjetive;
-                                }
-                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-                                if(!$itemInstanceCloned){
-                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-                                    foreach ($parentsCloned as $parentCloned) {
-                                        $parentCloned->addChildren($itemInstanceCloned);
-                                        $this->persist($parentCloned);
-                                    }
-                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
-                                    $itemInstanceCloned->setRef($ref);
-                                    $this->persist($itemInstanceCloned);
-                                }
-                            }
-
-                        }
-                }elseif($levelObject == PrePlanning::LEVEL_OPERATIVO && $gerenciaSecond !== null){
+//                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
+//                            $parents = $itemInstance->getParents();
+//                            $level = $itemInstance->getObjetiveLevel()->getLevel();
+//
+//                            if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO)
+//                            {
+//                                $parentsCloned = array();
+//                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
+//                                    $cloneObjetive = $cloneService->cloneObject($parent);
+//                                    $parentsCloned[] = $cloneObjetive;
+//                                }
+//                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+//                                if(!$itemInstanceCloned){
+//                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+//                                    foreach ($parentsCloned as $parentCloned) {
+//                                        $parentCloned->addChildren($itemInstanceCloned);
+//                                        $this->persist($parentCloned);
+//                                    }
+//                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+//                                    $itemInstanceCloned->setRef($ref);
+//                                    $this->persist($itemInstanceCloned);
+//                                }
+//                            }
+//
+//                        }
                     if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
                         $level = $itemInstance->getObjetiveLevel()->getLevel();
                         $parents = $itemInstance->getParents();
@@ -316,12 +318,9 @@ class PrePlanningService extends ContainerAware
                             $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                         }
                     }
-                }
+                    $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
+                    $this->persist($prePlanning,true);
             }//FIN item instance
-           
-            
-            $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
-            $this->persist($prePlanning,true);
         }
     }  
 
@@ -330,12 +329,12 @@ class PrePlanningService extends ContainerAware
      * @param PrePlanning $prePlannig
      * @param Objetive $objetive
      */
-    private function extractDataFromObjective(PrePlanning &$prePlannig,Objetive &$objetive) {
+    private function extractDataFromObjective(PrePlanning &$prePlannig,Objetive &$objetive,$levelPlanning) {
         $arrangementPrograms = $objetive->getArrangementPrograms();
         $indicators = $objetive->getIndicators();
         
-        $this->addDataFromArrangementPrograms($prePlannig, $arrangementPrograms);
-        $this->addDataFromObjetive($prePlannig, $indicators);
+        $this->addDataFromArrangementPrograms($prePlannig, $arrangementPrograms,$levelPlanning);
+        $this->addDataFromObjetive($prePlannig, $indicators,$levelPlanning);
     }
 
     /**
@@ -343,11 +342,11 @@ class PrePlanningService extends ContainerAware
      * @param PrePlanning $prePlannig
      * @param type $objects
      */
-    private function addDataFromObjetive(PrePlanning &$prePlannig,&$objects) {
+    private function addDataFromObjetive(PrePlanning &$prePlannig,&$objects,$levelPlanning) {
         $linkGeneratorService = $this->getLinkGeneratorService();
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
-            $this->setOriginObject($prePlannigChild,$object);
+            $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $prePlannigChild->setParameters($configEntity);
             $prePlannig->addChildren($prePlannigChild);
@@ -358,11 +357,11 @@ class PrePlanningService extends ContainerAware
      * @param PrePlanning $prePlannig
      * @param type $objects
      */
-    private function addDataFromArrangementPrograms(PrePlanning &$prePlannig,&$objects) {
+    private function addDataFromArrangementPrograms(PrePlanning &$prePlannig,&$objects,$levelPlanning) {
         $linkGeneratorService = $this->getLinkGeneratorService();
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
-            $this->setOriginObject($prePlannigChild,$object);
+            $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $configEntity['expanded'] = false;
             $prePlannigChild->setParameters($configEntity);
@@ -370,7 +369,7 @@ class PrePlanningService extends ContainerAware
             
             foreach ($object->getTimeline()->getGoals() as $goal) {
                 $prePlannigSubChild = $this->createNew();
-                $this->setOriginObject($prePlannigSubChild,$goal);
+                $this->setOriginObject($prePlannigSubChild,$goal,$levelPlanning);
                 $prePlannigChild->addChildren($prePlannigSubChild);
             }
         }
