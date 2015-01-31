@@ -195,7 +195,6 @@
                     failure: function(response, opts) {
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
-{#                       item.set('status','Error');#}
                        Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
                        tree.body.unmask();
                        console.log('server-side failure with status code ' + response.status);
