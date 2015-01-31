@@ -240,7 +240,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive",cascade={"remove"})
      */
     private $results;
     
