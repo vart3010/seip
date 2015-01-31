@@ -232,10 +232,10 @@ class ResultController extends ResourceController {
                 if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OF_RESULT){
                     foreach ($result->getChildrens() as $child) {
                         if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                            $totalIndicator += $child->getResultWithWeight();
+                            $totalIndicator += ($child->getResultWithWeight()*$result->getWeight())/100;
                             $flagResultIndicator = $flagResultIndicatorInternal = true;
                         }elseif($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
-                            $totalObjetives+= $child->getResultWithWeight();
+                            $totalObjetives+= ($child->getResultWithWeight()*$result->getWeight())/100;
                             $flagResultObjetives = $flagResultObjetivesInternal = true;
                         }
                     }
