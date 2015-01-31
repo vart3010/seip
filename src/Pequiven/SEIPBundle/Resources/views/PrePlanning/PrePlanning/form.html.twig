@@ -36,7 +36,7 @@
             'Ext.tip.*',
             'Ext.ux.CheckColumn'
         ]);
-
+        var level = '{{ app.request.get('level') }}';
         Ext.onReady(function() {
             Ext.tip.QuickTipManager.init();
             
@@ -178,6 +178,7 @@
             var itemsToImportTimeOut = null;
             var itemsToImportReady = true;
             var itemsToImport = [];
+            var functionActionItem = function(item){};
             
             var functionImportarItem = function(item){
                 var name = item.get('name');
@@ -202,19 +203,46 @@
                 });
             };
             
+            var functionSendToRevisionItem = function(item){
+                var name = item.get('name');
+                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a revisión "+name+ "...");
+                var lastItem = false;
+                if((itemsToImportCurrent + 1) == itemsToImportLength){
+                    lastItem = true;
+                }
+                var urlImport = Routing.generate('pequiven_pre_planning_send_to_review',{id:item.get('id'),lastItem: lastItem});
+                Ext.Ajax.request({
+                url: urlImport,
+                    success: function(response, opts) {
+                       tree.body.unmask();
+                       tree.body.mask("Item #"+(itemsToImportCurrent)+" enviado a revisión correctamente...");
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       callAjaxItemToImport();
+                    },
+                    failure: function(response, opts) {
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       tree.body.unmask();
+                       console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            };
+            
             var callAjaxItemToImport = function (){
                 if(itemsToImportLength > itemsToImportCurrent){
                     itemsToImportTimeOut = setTimeout(function(){
                         if(itemsToImportReady){
                             itemsToImportReady = false;
                             tree.body.unmask();
-                            functionImportarItem(itemsToImport[itemsToImportCurrent]);
+                            functionActionItem(itemsToImport[itemsToImportCurrent]);
                             itemsToImportCurrent++;
                         }
                     },1000);
                 }else{
                     tree.body.unmask();
-                    Ext.Msg.alert('Correcto',"Se importo "+itemsToImportLength+" item(s) correctamente.");
+                    Ext.Msg.alert('Correcto',"Se enviaron "+itemsToImportLength+" item(s) correctamente.");
                     store.load();
                 }
             };
@@ -238,6 +266,7 @@
                                         tree.body.unmask();
                                         itemsToImportLength = itemsToImport.length;
                                         tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                        functionActionItem = functionImportarItem;
                                         callAjaxItemToImport();
                                     }
                                 });
@@ -258,8 +287,9 @@
                     itemsToImport = [];
                     itemsToImportCurrent = 0;
                     var i;
+                    var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
                     for(i=0;i < items.length; i++){
-                        if(items[i].get('status') == 0 && items[i].get('toImport') == true){
+                        if(items[i].get('status') == status && items[i].get('toImport') == true){
                             itemsToImport.push(items[i]);
                         }
                     }
@@ -271,14 +301,15 @@
                                     callback: function(r,options,success){
                                         tree.body.unmask();
                                         itemsToImportLength = itemsToImport.length;
-                                        {#tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                                        callAjaxItemToImport();#}
+                                        tree.body.mask('Enviado a revisión '+itemsToImportLength+" item(s)...");
+                                        functionActionItem = functionSendToRevisionItem;
+                                        callAjaxItemToImport();
                                     }
                                 });
                             }
                         });
-                    }else{
-                        Ext.Msg.alert("", "No hay items selecionados para importar.");
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados para enviar a revisión.");
                     }
                 },
                 glyph :'xf064@FontAwesome',

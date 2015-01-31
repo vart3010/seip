@@ -239,6 +239,28 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    public function sendToReviewAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $success = false;
+        if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
+            $lastItem = $request->get('lastItem',false);
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            
+            $success = true;
+            if($lastItem == true){
+                //enviar correo
+            }
+        }
+        $data = array(
+            "success" => $success,
+        );
+        $view = $this->view($data);
+        
+        return $this->handleView($view);
+    }
+    
     /**
      * Obtener los objetivos para construir el arbol
      * @return type

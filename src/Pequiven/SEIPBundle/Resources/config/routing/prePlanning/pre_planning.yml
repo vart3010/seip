@@ -70,10 +70,12 @@ pequiven_pre_planning_review:
         _format: html|json
         
 pequiven_pre_planning_send_to_review:
-    path: /{level}/send-to-review.{_format}
+    path: /{id}/send-to-review.{_format}
     defaults:
         _controller: pequiven.controller.pre_planning:sendToReviewAction
-        _format: html
+        _format: json
     methods: [GET]
     requirements:
         _format: html|json
+    options:
+        expose: true
