@@ -13,6 +13,7 @@ use Pequiven\SEIPBundle\Model\Result\Result as ModelResult;
  * @ORM\Table(name="seip_result")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Result\ResultRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Result extends ModelResult implements ResultItemInterface
 {
@@ -101,6 +102,11 @@ class Result extends ModelResult implements ResultItemInterface
      * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
      */
     private $lastDateCalculateResult;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     /**
      * Constructor
@@ -392,4 +398,17 @@ class Result extends ModelResult implements ResultItemInterface
     {
         $this->lastDateCalculateResult = new \DateTime();
     }
+    
+        
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+
 }
