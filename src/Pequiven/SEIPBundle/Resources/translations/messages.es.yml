@@ -91,3 +91,5 @@ app:
 ROLE_MENU_PRE_PLANNING_ENABLE: Menu de Pre-Planificación habilitada
 ROLE_MENU_PRE_PLANNING_TACTIC: Menu de Pre-Planificación - Tactico
 ROLE_MENU_PRE_PLANNING_OPERATIVE: Menu de Pre-Planificación - Operativo
+ROLE_MENU_PRE_PLANNING_REVIEW: Menu de Pre-Planificación - Revisiones
+ROLE_PRE_PLANNING_IMPORT: Acción de Pre-Planificación - Importar items

@@ -59,3 +59,12 @@ pequiven_pre_planning_import:
     methods: [GET]
     options:
         expose: true
+        
+pequiven_pre_planning_review:
+    path: /review.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:reviewAction
+        _format: html
+    methods: [GET]
+    requirements:
+        _format: html|json

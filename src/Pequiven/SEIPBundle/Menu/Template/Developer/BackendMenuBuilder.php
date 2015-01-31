@@ -301,6 +301,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
         }
         
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_REVIEW')){
+            $child->addChild('preplanning_review',array(
+                'route' => 'pequiven_pre_planning_review',//Route
+                'labelAttributes' => array('icon' => 'fa fa-sitemap'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
+        }
+        
         $menu->addChild($child);
     }
 

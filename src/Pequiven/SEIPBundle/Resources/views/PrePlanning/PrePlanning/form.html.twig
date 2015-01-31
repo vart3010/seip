@@ -253,6 +253,40 @@
                 itemId: 'importBtn',
                 disabled: true
             });
+            var sendToReviewBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    var items = store.data.items;
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
+                    var i;
+                    for(i=0;i < items.length; i++){
+                        if(items[i].get('status') == 0 && items[i].get('toImport') == true){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Enviar a revisión', '¿Desea enviar a revisión '+(itemsToImport.length)+' item(s) seleccionados?', function(btn){
+                           if(btn === 'yes'){
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        {#tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                        callAjaxItemToImport();#}
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        Ext.Msg.alert("", "No hay items selecionados para importar.");
+                    }
+                },
+                glyph :'xf064@FontAwesome',
+                text: 'Enviar a revisión',
+                itemId: 'sendToReviewBtn',
+                disabled: true
+            });
             
             var selectParent = function(node,checked){
                 if(node.get('editable') == true){
@@ -345,7 +379,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete,importBtn ]
+                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_PRE_PLANNING_IMPORT') %}importBtn{% else %}sendToReviewBtn{% endif %} ]
                 }],
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree
@@ -393,6 +427,7 @@
                     btnDelete.setDisabled(!hasChilren);
                     saveChangeBtn.setDisabled(!hasChilren);
                     importBtn.setDisabled(!hasChilren);
+                    sendToReviewBtn.setDisabled(!hasChilren);
                     return hasChilren;
             };
             
