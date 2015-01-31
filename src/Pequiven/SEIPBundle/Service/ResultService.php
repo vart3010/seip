@@ -324,6 +324,21 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
+        $idIndicatorsProduccionEstable = array();
+        $idIndicatorsProduccionEstable[] = 1021;
+        $idIndicatorsProduccionEstable[] = 1022;
+        $idIndicatorsProduccionEstable[] = 1023;
+        $idIndicatorsProduccionEstable[] = 1024;
+        $idIndicatorsProduccionEstable[] = 1025;
+        $idIndicatorsProduccionEstable[] = 1026;
+        $idIndicatorsProduccionEstable[] = 1027;
+        $idIndicatorsProduccionEstable[] = 1029;
+        $idIndicatorsProduccionEstable[] = 1030;
+        $idIndicatorsProduccionEstable[] = 1031;
+        $idIndicatorsProduccionEstable[] = 1032;
+        $idIndicatorsProduccionEstable[] = 1033;
+        $idIndicatorsProduccionEstable[] = 1038;
+        
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -362,6 +377,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = 100 - $indicator->getResult();
             $indicator->setProgressToDate($result);
+        }elseif($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+            if(in_array($indicator->getId(),$idIndicatorsProduccionEstable)){
+                $arrangementRange = $indicator->getArrangementRange();
+                $result = $indicator->getValueFinal();
+                if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                    $indicator->setProgressToDate($result);
+                } elseif(($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()) || ($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom())){
+                    $result = $result/2;
+                    $indicator->setProgressToDate($result);
+                } elseif($result <= $arrangementRange->getRankBottomMixedBottom() || $result >= $arrangementRange->getRankBottomMixedTop()){
+                    $result = 0;
+                    $indicator->setProgressToDate($result);
+                }
+            }
         }
         
         $em = $this->getDoctrine()->getManager();
