@@ -337,7 +337,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $idIndicatorsProduccionEstable[] = 1031;
         $idIndicatorsProduccionEstable[] = 1032;
         $idIndicatorsProduccionEstable[] = 1033;
-        $idIndicatorsProduccionEstable[] = 1038;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1028;
         
         $details = $indicator->getDetails();
         if(!$details){
@@ -380,7 +382,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }elseif($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
             if(in_array($indicator->getId(),$idIndicatorsProduccionEstable)){
                 $arrangementRange = $indicator->getArrangementRange();
-                $result = $indicator->getValueFinal();
+                $result = $indicator->getResult();
                 if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
                     $indicator->setProgressToDate($result);
                 } elseif(($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()) || ($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom())){
