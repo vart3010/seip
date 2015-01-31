@@ -19,17 +19,23 @@
             </thead>
             <tbody>
                 {% set pre_planning_configuration = configuration.prePlanningConfiguration %}
+                {% if pre_planning_configuration %}
                 {% set idLocalization = 'pre_planning_configuration-' ~ pre_planning_configuration.id %}
-                <tr id="{{ idLocalization }}">
-                    <td>{{ pre_planning_configuration.gerencia }}</td>
-                    <td>{{ pre_planning_configuration.gerenciaSecond }}</td>
-                    <td class="align-right vertical-center">
-                        <span class="button-group compact">
-                            <a href="{{ path('pequiven_pre_planning_configuration_update',{id:pre_planning_configuration.id}) }}" class="button icon-pencil">{{ 'pequiven_seip.actions.update'|trans }}</a>
-                            {{ buttons.delete_mini(path('pequiven_pre_planning_configuration_delete',{id:pre_planning_configuration.id}),null,idLocalization) }}
-                        </span>
-                    </td>
-                </tr>
+                    <tr id="{{ idLocalization }}">
+                        <td>{{ pre_planning_configuration.gerencia }}</td>
+                        <td>{{ pre_planning_configuration.gerenciaSecond }}</td>
+                        <td class="align-right vertical-center">
+                            <span class="button-group compact">
+                                <a href="{{ path('pequiven_pre_planning_configuration_update',{id:pre_planning_configuration.id}) }}" class="button icon-pencil">{{ 'pequiven_seip.actions.update'|trans }}</a>
+                                {{ buttons.delete_mini(path('pequiven_pre_planning_configuration_delete',{id:pre_planning_configuration.id}),null,idLocalization) }}
+                            </span>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">No hay configuración agregada.</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
 
