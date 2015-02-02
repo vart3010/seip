@@ -54,7 +54,7 @@
                             
                                 <ul class="fa-ul">
                                 {% for ch in chlid.childrens %}
-                                    {% if ch.getGerenciaByLevel  == entity %}
+                                    {% if ch.getDeletedAt is null %}
                                         <li>
                                             {% set avancedUsed = ch.getResult %}
                                             {% set avancedUsedText = avancedUsed %}
