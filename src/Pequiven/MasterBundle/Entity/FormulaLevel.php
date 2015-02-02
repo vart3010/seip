@@ -20,7 +20,8 @@ use Pequiven\MasterBundle\Model\FormulaLevel as modelFormulaLevel;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\FormulaLevelRepository")
  * @author matias
  */
-class FormulaLevel extends modelFormulaLevel {
+class FormulaLevel extends modelFormulaLevel implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
+{
     
     /**
      * @var integer
@@ -89,6 +90,15 @@ class FormulaLevel extends modelFormulaLevel {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
 
     /**
      * Get id
@@ -287,5 +297,26 @@ class FormulaLevel extends modelFormulaLevel {
     public function __toString()
     {
         return $this->getDescription()?: '-';
+    }
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = 0;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            $this->period = null;
+        }
     }
 }

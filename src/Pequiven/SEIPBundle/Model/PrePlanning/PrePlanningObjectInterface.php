@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Repository\PrePlanning;
-
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
 /**
- * Aprobaciones de los item de pre planificacion
- *
+ * Item que se puede importar entre periodos
+ * 
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class PrePlanningItemRepository extends EntityRepository
+interface PrePlanningObjectInterface 
 {
+    function setSourceImported($object);
     
+    function getSourceImported($object);
 }

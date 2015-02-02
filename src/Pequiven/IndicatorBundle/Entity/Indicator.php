@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
  * Indicator
@@ -16,7 +17,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
-class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
+class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -146,6 +147,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -613,7 +615,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return Indicator
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $this->period = $period;
 
@@ -933,5 +935,30 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     function setProgressToDate($progressToDate) {
         $this->progressToDate = $progressToDate;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            
+            $this->createdAt = null;
+            $this->lastDateCalculateResult = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->period = null;
+            
+            $this->valuesIndicator = new ArrayCollection();
+            
+            $this->valueFinal = 0;
+            
+            $this->histories = new ArrayCollection();
+            $this->observations = new ArrayCollection();
+            $this->details = new Indicator\IndicatorDetails();
+            
+            $this->childrens = new ArrayCollection();
+            $this->progressToDate = 0;
+        }
     }
 }

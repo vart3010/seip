@@ -193,8 +193,8 @@ class ObjetiveOperativeController extends baseController
 
             $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
-            $periodService = $this->get('pequiven_arrangement_program.service.period');
-            $period = $periodService->getPeriodActive();
+            $object->setPeriod($this->getPeriodService()->getPeriodActive());
+            $period = $this->getPeriodService()->getPeriodActive();
 
             //Si el usuario tiene rol directivo
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
@@ -555,6 +555,8 @@ class ObjetiveOperativeController extends baseController
         
         $j = 1;
         $i = 0;
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        
         foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
             if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
                 $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
@@ -590,6 +592,7 @@ class ObjetiveOperativeController extends baseController
                     ${$nameObject . $i}->setOprankBottomBasic($arrangementRangeOriginals[$p]->getOprankBottomBasic());
                     ${$nameObject . $i}->setOpRankBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankBottomMixedTop());
                     ${$nameObject . $i}->setOpRankBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankBottomMixedBottom());
+                    ${$nameObject . $i}->setPeriod($periodActive);
                     
                     $em->persist(${$nameObject . $i});
                     $i++;
@@ -1246,4 +1249,11 @@ class ObjetiveOperativeController extends baseController
         return true;
     }
 
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 }

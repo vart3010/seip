@@ -25,6 +25,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:
@@ -45,6 +46,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
             
     sonata.admin.indicator.frequency_notification:
         class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
@@ -56,6 +58,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.indicator.indicator:
         class: Pequiven\MasterBundle\Admin\IndicatorAdmin
         tags:

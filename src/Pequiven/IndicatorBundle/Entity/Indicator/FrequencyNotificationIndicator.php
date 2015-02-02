@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="seip_c_indicator_frequency_notification")
  * @ORM\Entity()
  */
-class FrequencyNotificationIndicator
+class FrequencyNotificationIndicator implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
      * @var integer
@@ -71,7 +71,16 @@ class FrequencyNotificationIndicator
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled = true;
-
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
+    
     /**
      * Get id
      *
@@ -255,5 +264,26 @@ class FrequencyNotificationIndicator
     public function getNumberResultsFrequency()
     {
         return $this->numberResultsFrequency;
+    }
+    
+    function getPeriod() 
+    {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) 
+    {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->period = null;
+        }
     }
 }

@@ -158,7 +158,7 @@ class ObjetiveStrategicController extends baseController {
                     $object->addIndicator($indicator);
                 }
             }
-
+            $object->setPeriod($this->getPeriodService()->getPeriodActive());
             $em->persist($object);
 
             try {
@@ -314,5 +314,12 @@ class ObjetiveStrategicController extends baseController {
 
         return $ref;
     }
-
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 }
