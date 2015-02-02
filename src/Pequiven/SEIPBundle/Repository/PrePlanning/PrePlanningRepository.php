@@ -26,7 +26,9 @@ class PrePlanningRepository extends EntityRepository
      * @param \Pequiven\SEIPBundle\Entity\User $user
      * @return type
      */
-    public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user) {
+    public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user,$levelPlanning)
+    {
+        
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('p_c')
@@ -38,10 +40,12 @@ class PrePlanningRepository extends EntityRepository
             ->andWhere('p.period = :period')
             ->andWhere('p.user = :user')
             ->andWhere('p.name = :name')
+            ->andWhere('p.levelPlanning = :levelPlanning')
             ->andWhere('p.typeObject = :typeObject')
             ->andWhere($qb->expr()->isNull('p.parent'))
             ->setParameter('period', $period)
             ->setParameter('user', $user)
+            ->setParameter('levelPlanning', $levelPlanning)
             ->setParameter('name', \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::DEFAULT_NAME)
             ->setParameter('typeObject', \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::TYPE_OBJECT_ROOT_NODE)
             ;

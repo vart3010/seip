@@ -21,7 +21,8 @@ use Pequiven\IndicatorBundle\Model\IndicatorLevel as modelIndicatorLevel;
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorLevelRepository")
  * @author matias
  */
-class IndicatorLevel extends modelIndicatorLevel {
+class IndicatorLevel extends modelIndicatorLevel implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
+{
     
     /**
      * @var integer
@@ -82,6 +83,15 @@ class IndicatorLevel extends modelIndicatorLevel {
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
 
     /**
      * Get id
@@ -252,5 +262,28 @@ class IndicatorLevel extends modelIndicatorLevel {
     public function getUserUpdatedAt()
     {
         return $this->userUpdatedAt;
+    }
+    
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->period = null;
+        }
     }
 }

@@ -26,3 +26,12 @@ pequiven_result:
     requirements:
         level: 1|2|3
     methods: [GET]
+    
+pequiven_result_recalculate:
+    path: /recalculate.{_format}
+    defaults:
+        _controller: pequiven.controller.result:recalculateAction
+        _format: html
+    methods: [GET|POST]
+    options:
+        expose: true

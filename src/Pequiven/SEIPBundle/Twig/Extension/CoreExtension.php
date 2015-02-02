@@ -74,11 +74,12 @@ class CoreExtension extends \Twig_Extension
         );
     }
     
-    function printError($error) {
+    function printError($error,array $parameters = array(),$translationDomain = 'messages') {
         $path = $this->generateAsset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png');
+        $errorTrans = $this->trans($error,$parameters,$translationDomain);
         $base = "<div class='alert alert-danger-seip margin-bottom wrapped anthracite-bg with-mid-padding align-center' style='min-height:20px;font-size: 19px'>
         <img src='$path' style='width:21px;height:21px;padding-right: 6px'>
-            <span>$error</span>
+            <span>$errorTrans</span>
         </div>";
         return $base;
     }
@@ -141,4 +142,9 @@ class CoreExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     private $container;
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
 }

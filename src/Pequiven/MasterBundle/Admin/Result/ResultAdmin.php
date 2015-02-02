@@ -12,8 +12,10 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class ResultAdmin extends Admin
+class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface 
 {
+    protected $container;
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')
@@ -57,6 +59,7 @@ class ResultAdmin extends Admin
     
     public function prePersist($object) 
     {
+        $object->setPeriod($this->getPeriodService()->getPeriodActive());
         $parent = $object->getParent();
         if($parent != null){
             $object->setObjetive(null);
@@ -68,5 +71,17 @@ class ResultAdmin extends Admin
         if($parent != null){
             $object->setObjetive(null);
         }
+    }
+
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+        $this->container = $container;
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

@@ -290,6 +290,21 @@ class IndicatorRepository extends baseEntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('i_o')
+            ->leftJoin('i.objetives', 'i_o')
+            ->innerJoin('i.indicatorLevel', 'i_il')
+            ->andWhere('i.period = :period')
+            ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
+            ->orderBy('i_il.level','DESC')
+            ->setParameter('period', $period)
+            ;
+        return $qb;
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         

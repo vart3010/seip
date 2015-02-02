@@ -153,6 +153,12 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\User\LocalizationController
                 model: Pequiven\SEIPBundle\Entity\User\Localization
+        pequiven.pre_planning_configuration:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User/PrePlanningConfiguration
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\PrePlanningConfigurationController
+                model: Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration
         pequiven.pre_planning:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:PrePlanning/PrePlanning

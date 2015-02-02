@@ -59,7 +59,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
-        if($seipConfiguration->isEnablePrePlanning() && $this->isGranted('ROLE_PRE_PLANNING_ENABLE')){
+        if($seipConfiguration->isEnablePrePlanning() && $this->isGranted('ROLE_MENU_PRE_PLANNING_ENABLE')){
             $this->addMenuPrePlanning($menu, $section);
         }
         //$this->addExampleMenu($menu, $section);
@@ -80,7 +80,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
         //Menu de Resultados
         $this->addMenuResults($menu, $section);
-        
         
         //Menú Gestión Estratégica
 //        $this->addArrangementStrategicMenu($menu, $section);
@@ -268,6 +267,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
         
+        //ROLE_WORKER_PLANNING_RECALCULATE_RESULT
+        $subchild->addChild('planning.results.recalculate', array(
+                                'route' => 'pequiven_result_recalculate',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.recalculate', $section)));
+        
         $child->addChild($subchild);
         
         $menu->addChild($child);
@@ -286,17 +291,29 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.main', $section),array('%period%' => $periodName)));
-        $child->addChild('preplanning_tactic',array(
-            'route' => 'pequiven_pre_planning_index',//Route
-            'labelAttributes' => array('icon' => 'fa fa-cube'),
-            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
-        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC')){
+            $child->addChild('preplanning_tactic',array(
+                'route' => 'pequiven_pre_planning_index',//Route
+                'labelAttributes' => array('icon' => 'fa fa-cube'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
+        }
         
-        $child->addChild('preplanning_operative',array(
-            'route' => 'pequiven_pre_planning_index',//Route
-            'labelAttributes' => array('icon' => 'fa fa-cog'),
-            'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
-        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE')){
+            $child->addChild('preplanning_operative',array(
+                'route' => 'pequiven_pre_planning_index',//Route
+                'labelAttributes' => array('icon' => 'fa fa-cog'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        }
+        
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_REVIEW')){
+            $child->addChild('preplanning_review',array(
+                'route' => 'pequiven_pre_planning_review',//Route
+                'labelAttributes' => array('icon' => 'fa fa-sitemap'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
+        }
         
         $menu->addChild($child);
     }

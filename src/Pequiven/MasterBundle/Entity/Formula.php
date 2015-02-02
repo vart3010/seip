@@ -21,7 +21,7 @@ use Pequiven\MasterBundle\Model\Formula as modelFormula;
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\FormulaRepository")
  * @author matias
  */
-class Formula extends modelFormula 
+class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     
     /**
@@ -137,6 +137,15 @@ class Formula extends modelFormula
      * @ORM\Column(name="sourceEquationPlan", type="text",nullable=true)
      */
     private $sourceEquationPlan;
+    
+     /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
     
     public function __construct() {
         $this->variables = new ArrayCollection();
@@ -482,5 +491,31 @@ class Formula extends modelFormula
 
     public function __toString() {
         return $this->getEquation() ?: '-';
+    }
+    
+    function setVariables($variables) {
+        $this->variables = $variables;
+    }
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->period = null;
+        }
     }
 }

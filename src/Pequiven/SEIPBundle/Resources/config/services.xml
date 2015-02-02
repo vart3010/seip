@@ -191,12 +191,20 @@
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
         </service>
+        <service id="pequiven_arrangement_program.form.preplanningconfiguration" class="Pequiven\SEIPBundle\Form\User\PrePlanningConfigurationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_pre_planning_configuration" />
+        </service>
         <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
         <service id="seip.service.preplanning" class="Pequiven\SEIPBundle\Service\PrePlanningService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.service.clone" class="Pequiven\SEIPBundle\Service\CloneService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

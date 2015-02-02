@@ -15,7 +15,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\UserBundle\Admin\Entity\UserAdmin as Base;
 
 /**
- * Description of UserAdmin
+ * Administrador de usuario
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  */
