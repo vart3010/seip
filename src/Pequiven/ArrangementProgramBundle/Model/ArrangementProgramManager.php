@@ -202,7 +202,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
 
         if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
             $periodService = $this->getPeriodService();
-            if($periodService->isAllowNotifyArrangementProgram() === true || ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0) ){
+            // ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+            if($periodService->isAllowNotifyArrangementProgram() === true){
                 $valid = true;
             }
         }
