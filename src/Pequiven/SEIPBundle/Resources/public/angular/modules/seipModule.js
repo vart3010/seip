@@ -1864,7 +1864,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id,data) {
+            $scope.renderChartResult = function(id,data,gerencia) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1879,7 +1879,7 @@ angular.module('seipModule.controllers', [])
                                 "exportenabled": "1",
                                 "exportatclient": "0",
                                 "exportFormats": "PDF= Exportar como PDF",
-                                "exportFileName": "Resultados",
+                                "exportFileName": "Gráfico Resultados "+gerencia,
                                 "exporthandler": "http://107.21.74.91/",
                                 "html5exporthandler": "http://107.21.74.91/",
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
