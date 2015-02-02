@@ -95,6 +95,7 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            recalculate: Recalcular resultados
                     objetives:
                         main: Objetivos
                         visualize:
