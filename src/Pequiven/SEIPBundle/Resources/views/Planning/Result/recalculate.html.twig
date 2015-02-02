@@ -2,10 +2,10 @@
 
 {% block body %}
     <p class="wrapped align-center button-height">
-        <button type="button" class="button blue-gradient glossy" onclick="recalculateArrangementprogram()">Recalcular programas</button>
+        <button type="button" class="button blue-gradient glossy" onclick="recalculateArrangementprogram()">Recalcular <span id="spanArrangementprogram"></span> programas</button>
     </p>
     <p class="wrapped align-center button-height">
-        <button type="button" class="button blue-gradient glossy" onclick="recalculateIndicator()">Recalcular indicadores</button>
+        <button type="button" class="button blue-gradient glossy" onclick="recalculateIndicator()">Recalcular <span id="spanIndicator"></span> indicadores</button>
     </p>
 {% endblock body %}
 
@@ -14,7 +14,10 @@
         var resultsArrangementprogram = {{ resultsArrangementprogram|json_encode()|raw }};
         var resultsIndicator = {{ resultsIndicator|json_encode()|raw }};
         var cancelAjax = false;
-        
+        $(document).ready(function(){
+            $('#spanArrangementprogram').html("#"+resultsArrangementprogram.length);
+            $('#spanIndicator').html("#"+resultsIndicator.length);
+        });
         function recalculateArrangementprogram()
         {
             cancelAjax = false;
@@ -131,8 +134,9 @@
                                        progress.hideProgressStripes().changeProgressBarColor('green-gradient'); 
                                     }
                                 }
-                            }).error(function(){
-                                 status.text('ERROR: Recalculando '+ref+'...');
+                            }).error(function(a,b,c,f){
+                                 var jsonResponse = $.parseJSON(a.responseText);
+                                 status.text('ERROR: Recalculando '+ref+' ('+jsonResponse.message+')...');
                                  progress.changeProgressBarColor('red-gradient');
                             }); 
                         }

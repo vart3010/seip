@@ -186,6 +186,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            $em = $this->getDoctrine()->getManager();
+            $indicators = $objetive->getIndicators();
+            foreach ($arrangementPrograms as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            foreach ($indicators as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            $em->flush();
             throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         

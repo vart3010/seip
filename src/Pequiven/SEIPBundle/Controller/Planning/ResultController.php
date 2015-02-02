@@ -296,6 +296,9 @@ class ResultController extends ResourceController {
     
     public function recalculateAction(Request $request)
     {
+        if(!$this->getSecurityContext()->isGranted('ROLE_PLANNING_RECALCULATE_RESULT')){
+            throw $this->createAccessDeniedHttpException();
+        }
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('recalculate.html'))
@@ -303,23 +306,30 @@ class ResultController extends ResourceController {
         ;
         $arrangementprogramRepository = $this->get('pequiven_seip.repository.arrangementprogram');
         $indicatorRepository = $this->get('pequiven.repository.indicator');
-//        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
-//        $view->setData($resources);
         if($request->isMethod('POST'))
         {
             $resultService = $this->getResultService();
             $id = $request->get('id');
             $type = $request->get('type');
-            if($type == 1){
-                $resource = $arrangementprogramRepository->find($id);
-                $resultService->refreshValueArrangementProgram($resource);
-            }elseif($type == 2){
-                $resource = $indicatorRepository->find($id);
-                $resultService->refreshValueIndicator($resource);
+            $data = array();
+            $data['success'] = false;
+            try {
+                if($type == 1){
+                    $resource = $arrangementprogramRepository->find($id);
+                    $resultService->refreshValueArrangementProgram($resource);
+                }elseif($type == 2){
+                    $resource = $indicatorRepository->find($id);
+                    $resultService->refreshValueIndicator($resource);
+                }
+                $data['success'] = true;
+            } catch (\Exception $exc) {
+                $success = false;
+                $data['code'] = $exc->getCode();
+                $data['message'] = $exc->getMessage();
+                $view->setStatusCode(500);
             }
-            $view->setData(array(
-                'success'  => true,
-            ));
+
+            $view->setData($data);
             return $this->handleView($view);
         }
         

@@ -595,6 +595,10 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     {
         $this->lastDateCalculateResult = new \DateTime();
     }
+    public function clearLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = null;
+    }
     
     public function __clone() {
         if($this->id){
