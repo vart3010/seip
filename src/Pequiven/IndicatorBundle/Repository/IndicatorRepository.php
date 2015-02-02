@@ -163,7 +163,7 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere("i.indicatorLevel = " . $criteria['indicatorLevel']);
         }
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT')) && !isset($criteria['gerencia'])){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -239,6 +239,8 @@ class IndicatorRepository extends baseEntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
+        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT'))){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
         if(isset($criteria['gerenciaFirst'])){
@@ -278,10 +280,9 @@ class IndicatorRepository extends baseEntityRepository {
         $qb->leftJoin('i.objetives', 'obj');
         $qb->leftJoin('i.formula', 'f');
         
-        $qb->andWhere('i.enabled = :enabled');
+        $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('obj.id = :idObjetive');
         
-        $qb->setParameter('enabled', true);
         $qb->setParameter('idObjetive', $objetive->getId());
         
         $qb->orderBy('i.ref');
@@ -289,19 +290,33 @@ class IndicatorRepository extends baseEntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('i_o')
+            ->leftJoin('i.objetives', 'i_o')
+            ->innerJoin('i.indicatorLevel', 'i_il')
+            ->andWhere('i.period = :period')
+            ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
+            ->orderBy('i_il.level','DESC')
+            ->setParameter('period', $period)
+            ;
+        return $qb;
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
-                ->andWhere('i.enabled = 1')
                 ->andWhere('i.tmp = 0')
                 ;
         
         if(($forView = $criteria->remove('for_view')) !== null){
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
-                    ->andWhere('o.enabled = 1')
+                    ->andWhere('o.deletedAt IS NULL')
                     ;
         }
         
@@ -338,9 +353,10 @@ class IndicatorRepository extends baseEntityRepository {
             if($miscellaneous == Indicator::INDICATOR_WITHOUT_FORMULA){
                 $queryBuilder->andWhere('i.formula IS NULL');
             } elseif ($miscellaneous == Indicator::INDICATOR_WITH_RESULT){
-                $queryBuilder->andWhere('i.progressToDate > 0');
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('i.progressToDate > 0','i.lastDateCalculateResult IS NOT NULL'));
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
                 $queryBuilder->andWhere('i.progressToDate = 0');
+                $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
             }
             
         }

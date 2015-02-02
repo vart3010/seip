@@ -1,0 +1,2 @@
+-- Buscar id de metas de un programa de gestion para agrgar personas.
+SELECT ap.ref,g.id,g.name FROM `ArrangementProgram` ap INNER JOIN Timeline t ON t.id = ap.timeline_id INNER JOIN Goal g ON g.timeline_id = t.id WHERE ap.id = 2186;

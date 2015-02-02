@@ -31,6 +31,10 @@ class ArrangementProgramRepository extends EntityRepository
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
             ->addSelect('ap_t_g_r_g')
+            ->addSelect('ap_to')
+            ->addSelect('ap_oo')
+            ->innerJoin('ap.tacticalObjective', 'ap_to')
+            ->leftJoin('ap.operationalObjective','ap_oo')
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
@@ -163,7 +167,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ;
         if(isset($criteria['type'])){
             if($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
-                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'));
+                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL AND ap.totalAdvance > 0','ap.totalAdvance > 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
                 $qb->andWhere($qb->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
@@ -379,6 +383,21 @@ class ArrangementProgramRepository extends EntityRepository
         $this->applySorting($qb, $orderBy);
         
         return $this->getPaginator($qb);
+    }
+    
+    public function findQueryWithResultNull(Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('ap_to')
+            ->addSelect('ap_oo')
+            ->innerJoin('ap.tacticalObjective', 'ap_to')
+            ->leftJoin('ap.operationalObjective','ap_oo')
+            ->andWhere('ap.period = :period')
+            ->andWhere($qb->expr()->isNull('ap.lastDateCalculateResult'))
+            ->setParameter('period', $period)
+            ;
+        return $qb;
     }
     
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {

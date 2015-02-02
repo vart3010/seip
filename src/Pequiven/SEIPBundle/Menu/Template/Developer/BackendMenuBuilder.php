@@ -267,6 +267,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
         
+        //ROLE_WORKER_PLANNING_RECALCULATE_RESULT
+        $subchild->addChild('planning.results.recalculate', array(
+                                'route' => 'pequiven_result_recalculate',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.recalculate', $section)));
+        
         $child->addChild($subchild);
         
         $menu->addChild($child);
@@ -299,6 +305,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'fa fa-cog'),
                 'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        }
+        
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_REVIEW')){
+            $child->addChild('preplanning_review',array(
+                'route' => 'pequiven_pre_planning_review',//Route
+                'labelAttributes' => array('icon' => 'fa fa-sitemap'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
         }
         
         $menu->addChild($child);
@@ -358,7 +372,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                 }
                 
-                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')) && $this->securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -448,7 +462,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         
                         $thirdchild->addChild($itemIndicatorsOperative);
                         
-                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT'))){
                         $thirdchild->addChild($itemIndicatorsTactic);
                         
                         $thirdchild->addChild($itemIndicatorsOperative);
@@ -459,7 +473,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $menuIndicators->addChild($thirdchild);
                     
                      //Menú Nivel 3: Registro de Indicadores
-                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')) && $this->securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                         $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.add',
                                 $this->getSubLevelOptions(array(
                                     'uri' => 'add',

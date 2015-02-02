@@ -26,7 +26,9 @@ class PrePlanningRepository extends EntityRepository
      * @param \Pequiven\SEIPBundle\Entity\User $user
      * @return type
      */
-    public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user,$levelPlanning) {
+    public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user,$levelPlanning)
+    {
+        
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('p_c')

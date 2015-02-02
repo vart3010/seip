@@ -14,6 +14,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Table(name="seip_result")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Result\ResultRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Result extends ModelResult implements ResultItemInterface,PeriodItemInterface
 {
@@ -111,6 +112,11 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     /**
      * Constructor
@@ -429,5 +435,16 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
             
             $this->period = null;
         }
+    }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
 }

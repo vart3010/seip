@@ -41,6 +41,16 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
     const STATUS_IMPORTED = 1;
     
     /**
+     * Estatus en revision
+     */
+    const STATUS_IN_REVIEW = 2;
+    
+    /**
+     * Estatus aprobado
+     */
+    const STATUS_APPROVED = 3;
+    
+    /**
      * No se ha seleccionado nada (Vacio)
      */
     const TO_IMPORT_DEFAULT = 0;

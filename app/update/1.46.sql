@@ -10,7 +10,7 @@ CREATE UNIQUE INDEX UNIQ_C239594B93DEE346 ON seip_objetive (sourceImported_id);
 ALTER TABLE seip_objetive_audit ADD sourceImported_id INT DEFAULT NULL;
 
 
---ACTUALIZAR PLANIFICACION DESDE ACA
+-- ACTUALIZAR PLANIFICACION DESDE ACA
 
 CREATE TABLE PrePlanningItemClone (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, period_id INT NOT NULL, typeObject INT NOT NULL, idCloneObject INT NOT NULL, idSourceObjec INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_11613ADBA76ED395 (user_id), INDEX IDX_11613ADBEC8B7ADE (period_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
@@ -105,3 +105,5 @@ ALTER TABLE ArrangementProgram ADD description LONGTEXT DEFAULT NULL;
 
 ALTER TABLE PrePlanningItemClone CHANGE idsourceobjec idSourceObject INT NOT NULL;
 CREATE UNIQUE INDEX entity_idx ON PrePlanningItemClone (typeObject, period_id, idSourceObject);
+
+ALTER TABLE PrePlanning CHANGE name name VARCHAR(255) NOT NULL;

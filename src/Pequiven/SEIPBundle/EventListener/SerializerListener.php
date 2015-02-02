@@ -555,6 +555,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $object->getId()))
         );
         $event->getVisitor()->addData('linkToExportMatriz', $this->generateUrl('pequiven_gerenciafirst_export', array('id' => $object->getId())));
+        $event->getVisitor()->addData('linkToExportResult', $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $object->getId())));
         $event->getVisitor()->addData('_links',$links);
     }
     
@@ -563,6 +564,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $links = array(
             'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId()))
         );
+        $event->getVisitor()->addData('linkToExportResult', $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId())));
         $event->getVisitor()->addData('_links',$links);
     }
     

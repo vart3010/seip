@@ -5,6 +5,7 @@
 {% set level = app.request.get('level') %}
 {% set period = app.request.get('period') %}
 {% set valid = true %}
+{% set labelGerencia = '' %}
 
 {% block body %}
     {% set levelLabel = '' %}
@@ -15,22 +16,27 @@
         {% set valid = false %}
         {{ print_error('pequiven_seip.errors.the_user_has_no_defined_configuration_planning',{'%user%':app.user},'PequivenSEIPBundle') }}
     {% endif %}
-    
-    {% if level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
-        {% set levelLabel = 'operative' %}
-        
-        {% if valid and configuration.prePlanningConfiguration.gerenciaSecond == null %}
-            {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_operative_level',{'%user%':app.user},'PequivenSEIPBundle') }}
-            {% set valid = false %}
+    {% if valid %}
+        {% if level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+            {% set levelLabel = 'operative' %}
+
+            {% if configuration.prePlanningConfiguration.gerenciaSecond == null %}
+                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_operative_level',{'%user%':app.user},'PequivenSEIPBundle') }}
+                {% set valid = false %}
+            {% else %}
+                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerenciaSecond }) %}
+            {% endif %}
+        {% elseif level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
+            {% set levelLabel = 'tactic' %}
+
+            {% if configuration.prePlanningConfiguration.gerencia == null %}
+                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_tactical_level',{'%user%':app.user},'PequivenSEIPBundle') }}
+                {% set valid = false %}
+            {% else %}
+                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerencia }) %}
+            {% endif %}
         {% endif %}
-    {% elseif level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
-        {% set levelLabel = 'tactic' %}
-        
-        {% if valid and configuration.prePlanningConfiguration.gerencia == null %}
-            {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_tactical_level',{'%user%':app.user},'PequivenSEIPBundle') }}
-            {% set valid = false %}
-        {% endif %}
-    {% endif %}
+    {% endif %}    
     
     
     
@@ -40,6 +46,7 @@
         )
     }}
     {% if valid %}
+        <b>{{ labelGerencia }}</b><br/>
         <div id="form-pre-plannig" style="width: 100%;min-height: 600px"></div>
     {% endif %}
 {% endblock body %}

@@ -180,7 +180,7 @@ class CloneService extends ContainerAware
             }
             
             if($entity->getFrequencyNotificationIndicator()){
-                $entity->setFrequencyNotificationIndicator($this->cloneFrequencyNotificationIndicator($entity->getFrequencyNotificationIndicator()));
+                $entity->setFrequencyNotificationIndicator($this->cloneObject($entity->getFrequencyNotificationIndicator()));
             }
             if($indicator->getParent()){
                 $indicator->setParent($this->cloneObject($indicator->getParent()));
@@ -201,39 +201,41 @@ class CloneService extends ContainerAware
     
     private function cloneTendency(\Pequiven\MasterBundle\Entity\Tendency $tendency)
     {
-        $entity = $this->findCloneInstance($tendency);
-        if(!$entity){
-            $entity = $this->_clone($tendency);
-            $this->saveClone($entity, $tendency);
-        }
+        $entity = $tendency;
+//        $entity = $this->findCloneInstance($tendency);
+//        if(!$entity){
+//            $entity = $this->_clone($tendency);
+//            $this->saveClone($entity, $tendency);
+//        }
         return $entity;
     }
     
     private function cloneFormula(\Pequiven\MasterBundle\Entity\Formula $formula)
     {
-        $entity = $this->findCloneInstance($formula);
-        if(!$entity){
-            $entity = $this->_clone($formula);
-            
-            if($entity->getFormulaLevel()){
-                $entity->setFormulaLevel($this->cloneObject($entity->getFormulaLevel()));
-            }
-            $variables = new ArrayCollection();
-            foreach ($entity->getVariables() as $variable) 
-            {
-                $variables->add($this->cloneObject($variable));
-            }
-            $entity->setVariables($variables);
-            
-            if($entity->getVariableToRealValue()){
-                $entity->setVariableToRealValue($this->cloneObject($entity->getVariableToRealValue()));
-            }
-            if($entity->getVariableToPlanValue()){
-                $entity->setVariableToPlanValue($this->cloneObject($entity->getVariableToPlanValue()));
-            }
-            
-            $this->saveClone($entity, $formula);
-        }
+        $entity = $formula;
+//        $entity = $this->findCloneInstance($formula);
+//        if(!$entity){
+//            $entity = $this->_clone($formula);
+//            
+//            if($entity->getFormulaLevel()){
+//                $entity->setFormulaLevel($this->cloneObject($entity->getFormulaLevel()));
+//            }
+//            $variables = new ArrayCollection();
+//            foreach ($entity->getVariables() as $variable) 
+//            {
+//                $variables->add($this->cloneObject($variable));
+//            }
+//            $entity->setVariables($variables);
+//            
+//            if($entity->getVariableToRealValue()){
+//                $entity->setVariableToRealValue($this->cloneObject($entity->getVariableToRealValue()));
+//            }
+//            if($entity->getVariableToPlanValue()){
+//                $entity->setVariableToPlanValue($this->cloneObject($entity->getVariableToPlanValue()));
+//            }
+//            
+//            $this->saveClone($entity, $formula);
+//        }
         return $entity;
     }
 
@@ -260,12 +262,13 @@ class CloneService extends ContainerAware
     
     private function cloneFormulaLevel(\Pequiven\MasterBundle\Entity\FormulaLevel $formulaLevel) 
     {
-        $entity = $this->findCloneInstance($formulaLevel);
-        if(!$entity){
-            $entity = $this->_clone($formulaLevel);
-            $this->saveClone($entity, $formulaLevel);
-        }
-        
+        $entity = $formulaLevel;
+//        $entity = $this->findCloneInstance($formulaLevel);
+//        if(!$entity){
+//            $entity = $this->_clone($formulaLevel);
+//            $this->saveClone($entity, $formulaLevel);
+//        }
+//        
         return $entity;
     }
 
@@ -297,42 +300,46 @@ class CloneService extends ContainerAware
     
     private function cloneObjetiveLevel(\Pequiven\ObjetiveBundle\Entity\ObjetiveLevel $objetiveLevel,$andFlush = true)
     {
-        $entity = $this->findCloneInstance($objetiveLevel);
-        if(!$entity){
-            $entity = $this->_clone($objetiveLevel);
-            $this->saveClone($entity, $objetiveLevel,$andFlush);
-        }
+        $entity = $objetiveLevel;
+//        $entity = $this->findCloneInstance($objetiveLevel);
+//        if(!$entity){
+//            $entity = $this->_clone($objetiveLevel);
+//            $this->saveClone($entity, $objetiveLevel,$andFlush);
+//        }
         
         return $entity;
     }
     
     private function cloneIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $objetiveLevel,$andFlush = true)
     {
-        $entity = $this->findCloneInstance($objetiveLevel);
-        if(!$entity){
-            $entity = $this->_clone($objetiveLevel);
-            $this->saveClone($entity, $objetiveLevel,$andFlush);
-        }
+        $entity = $objetiveLevel;
+//        $entity = $this->findCloneInstance($objetiveLevel);
+//        if(!$entity){
+//            $entity = $this->_clone($objetiveLevel);
+//            $this->saveClone($entity, $objetiveLevel,$andFlush);
+//        }
         return $entity;
     }
     
     private function cloneFrequencyNotificationIndicator(Indicator\FrequencyNotificationIndicator $frequencyNotificationIndicator)
     {
-        $entity = $this->findCloneInstance($frequencyNotificationIndicator);
-        if(!$entity){
-            $entity = $this->_clone($frequencyNotificationIndicator);
-            $this->saveClone($entity, $frequencyNotificationIndicator);
-        }
+        $entity = $frequencyNotificationIndicator;
+//        $entity = $this->findCloneInstance($frequencyNotificationIndicator);
+//        if(!$entity){
+//            $entity = $this->_clone($frequencyNotificationIndicator);
+//            $this->saveClone($entity, $frequencyNotificationIndicator);
+//        }
         return $entity;
     }
     
     private function cloneVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variable)
     {
-        $entity = $this->findCloneInstance($variable);
-        if(!$entity){
-            $entity = $this->_clone($variable);
-            $this->saveClone($entity, $variable);
-        }
+        $entity = $variable;
+//        $entity = $this->findCloneInstance($variable);
+//        if(!$entity){
+//            $entity = $this->_clone($variable);
+//            $this->saveClone($entity, $variable);
+//        }
         return $entity;
     }
     

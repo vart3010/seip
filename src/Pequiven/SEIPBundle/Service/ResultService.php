@@ -186,10 +186,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            $em = $this->getDoctrine()->getManager();
+            $indicators = $objetive->getIndicators();
+            foreach ($arrangementPrograms as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            foreach ($indicators as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            $em->flush();
             throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            if($countResult == 0){
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
@@ -279,12 +293,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function updateResultOfObjects($objects,$andFlush = true) 
     {
+        if($objects === null){
+            return;
+        }
         if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
         {
             $objects = array($objects);
         }
         foreach ($objects as $object) {
-            foreach ($object->getResults() as $result) 
+            foreach ($object->getResults() as $result)
             {
                 $this->calculateResult($result,$andFlush);
             }
@@ -324,6 +341,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
+        $idIndicatorsProduccionEstable = array();
+        $idIndicatorsProduccionEstable[] = 1021;
+        $idIndicatorsProduccionEstable[] = 1022;
+        $idIndicatorsProduccionEstable[] = 1023;
+        $idIndicatorsProduccionEstable[] = 1024;
+        $idIndicatorsProduccionEstable[] = 1025;
+        $idIndicatorsProduccionEstable[] = 1026;
+        $idIndicatorsProduccionEstable[] = 1027;
+        $idIndicatorsProduccionEstable[] = 1029;
+        $idIndicatorsProduccionEstable[] = 1030;
+        $idIndicatorsProduccionEstable[] = 1031;
+        $idIndicatorsProduccionEstable[] = 1032;
+        $idIndicatorsProduccionEstable[] = 1033;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1028;
+        
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -357,11 +391,28 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
+        if(!$tendenty){
+            throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
+        }
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = 100 - $indicator->getResult();
             $indicator->setProgressToDate($result);
+        }elseif($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+            if(in_array($indicator->getId(),$idIndicatorsProduccionEstable)){
+                $arrangementRange = $indicator->getArrangementRange();
+                $result = $indicator->getResult();
+                if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                    $indicator->setProgressToDate($result);
+                } elseif(($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()) || ($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom())){
+                    $result = $result/2;
+                    $indicator->setProgressToDate($result);
+                } elseif($result <= $arrangementRange->getRankBottomMixedBottom() || $result >= $arrangementRange->getRankBottomMixedTop()){
+                    $result = 0;
+                    $indicator->setProgressToDate($result);
+                }
+            }
         }
         
         $em = $this->getDoctrine()->getManager();
@@ -486,9 +537,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
         
         $valuesIndicator = $indicator->getValuesIndicator();
-        if(count($valuesIndicator) < $frequencyNotificationIndicator->getNumberResultsFrequency()){
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
             $user = $this->getUser();
-            for($i= count($valuesIndicator);$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
                 $valueIndicator = new Indicator\ValueIndicator();
                 $valueIndicator
                     ->setFormula($formula)

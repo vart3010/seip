@@ -923,6 +923,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    public function clearLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = null;
+    }
+    
     function getDeletedAt() {
         return $this->deletedAt;
     }

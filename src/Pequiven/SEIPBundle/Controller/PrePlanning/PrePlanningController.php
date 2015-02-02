@@ -47,13 +47,24 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
+        set_time_limit(60);
+        ini_set("memory_limit","256M");
+        
         $level = $request->get('level');
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
+        $node = (int)$request->get('node',null);
         
         $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+        
         $structureTree = array();
+        if(is_int($node) && $node > 0)
+        {
+            $em = $this->getDoctrine()->getManager();
+            $rootTreePrePlannig =  $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning')->find($node);
+        }else{
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+        }
      
         if($rootTreePrePlannig){
             $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
@@ -111,6 +122,8 @@ class PrePlanningController extends ResourceController
      */
     public function returnChangesAction(Request $request) 
     {
+        set_time_limit(60);
+        ini_set("memory_limit","256M");
         $level = $request->get('level',null);
         $success = true;
         if($level){
@@ -142,8 +155,10 @@ class PrePlanningController extends ResourceController
      */
     public function startPrePlanningAction(Request $request) 
     {
+        set_time_limit(60);
+        ini_set("memory_limit","256M");
         $level = $request->get('level',null);
-        $success = true;
+        $success = false;
         if($level){
             $user = $this->getUser();
             $prePlanningService = $this->getPrePlanningService();
@@ -157,6 +172,7 @@ class PrePlanningController extends ResourceController
 
             $objetivesArray = $this->getObjetivesArray($level);
             $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $success = true;
         }else{
             $success = false;
         }
@@ -209,14 +225,49 @@ class PrePlanningController extends ResourceController
      */
     public function importAction(Request $request)
     {
+        set_time_limit(60);
+        ini_set("memory_limit","256M");
+        
         $prePlanning = $this->findOr404($request);
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
-        $prePlanningService->importItem($prePlanning, $user);
+        $success = $prePlanningService->importItem($prePlanning, $user);
         $data = array(
-            "success" => true,
+            "success" => $success,
         );
         $view = $this->view($data);
+        return $this->handleView($view);
+    }
+    
+    public function sendToReviewAction(Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $success = false;
+        $data = array();
+        if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            
+            $success = true;
+            if($lastItem === true){
+                //enviar correo
+                $periodActive = $this->getPeriodService()->getPeriodActive();
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            }
+        }
+        
+        $data["success"] = $success;
+        
+        $view = $this->view($data);
+        
         return $this->handleView($view);
     }
     

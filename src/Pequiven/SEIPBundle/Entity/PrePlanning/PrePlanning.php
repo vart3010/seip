@@ -41,7 +41,7 @@ class PrePlanning extends Model
      * Nombre de la planificacion
      * 
      * @var string
-     * @ORM\Column(name="name",type="text")
+     * @ORM\Column(name="name",type="string",length=255)
      */
     private $name;
 
