@@ -169,6 +169,13 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $lastDateCalculateResult;
     
+    /**
+     *
+     * @var boolean
+     * @ORM\Column(name="isAvailableInResult",type="boolean")
+     */
+    private $isAvailableInResult = true;
+
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -598,6 +605,11 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function clearLastDateCalculateResult() 
     {
         $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return $this->isAvailableInResult;
     }
     
     public function __clone() {

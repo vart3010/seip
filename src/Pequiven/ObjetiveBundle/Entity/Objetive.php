@@ -1099,6 +1099,15 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    public function clearLastDateCalculateResult() {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return true;
+    }
+    
     function setIndicators($indicators) {
         $this->indicators = $indicators;
     }

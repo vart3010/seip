@@ -21,9 +21,21 @@
             color: #F9F9F9;
         }
     </style>
-    {% include 'PequivenSEIPBundle:Core:email/header.html.twig' %}
-    <br/>
-        {% block content_html '' %}
-    <br/>
-    {% include 'PequivenSEIPBundle:Core:email/footer.html.twig' %}
+    <table>
+        <tr>
+            <td>
+                {% include 'PequivenSEIPBundle:Core:email/header.html.twig' %}
+            </td>
+        </tr>
+        <tr style="height: 200px">
+            <td style="vertical-align: top;padding: 10px">
+                {% block content_html '' %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% include 'PequivenSEIPBundle:Core:email/footer.html.twig' %}
+            </td>
+        </tr>
+    </table>
 {% endblock body_html %}
