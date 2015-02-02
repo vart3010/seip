@@ -609,7 +609,11 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     
     public function isAvailableInResult() 
     {
-        return $this->isAvailableInResult;
+        $valid = $this->isAvailableInResult;
+        if($this->getStatus() == self::STATUS_REJECTED){
+            $valid = false;
+        }
+        return $valid;
     }
     
     public function __clone() {

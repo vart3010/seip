@@ -178,7 +178,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
             if($countArrangementPrograms > 0){
                 foreach ($arrangementPrograms as $arrangementProgram){
-                    if($arrangementProgram->getStatus() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED){
+                    if(!$arrangementProgram->isAvailableInResult()){
                         continue;
                     }
                     $countResult++;
@@ -186,6 +186,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            //Fix error al configurar mal la regla del resultado en el PG
             $em = $this->getDoctrine()->getManager();
             $indicators = $objetive->getIndicators();
             foreach ($arrangementPrograms as $value) {
@@ -201,7 +202,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
-            if($countResult == 0){
+            if($countResult == 0){//Fix division por cero
                 $countResult = 1;
             }
             $total = ($total / $countResult);
@@ -262,7 +263,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         continue;
                     }
                 }
-                
+                if(!$item->isAvailableInResult()){
+                    continue;
+                }
                 $countResult++;
                 $total += $item->getResult();
             }
@@ -273,12 +276,19 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         continue;
                     }
                 }
+                if(!$item->isAvailableInResult()){
+                    continue;
+                }
                 
                 $countResult++;
                 $total += $item->getResultWithWeight();
             }
         }
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            //Fix division por cero
+            if($countResult == 0){
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
