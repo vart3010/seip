@@ -294,6 +294,8 @@ class IndicatorRepository extends baseEntityRepository {
     {
         $qb = $this->getQueryBuilder();
         $qb
+            ->addSelect('i_o')
+            ->leftJoin('i.objetives', 'i_o')
             ->innerJoin('i.indicatorLevel', 'i_il')
             ->andWhere('i.period = :period')
             ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))

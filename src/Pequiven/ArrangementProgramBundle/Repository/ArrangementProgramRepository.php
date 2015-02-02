@@ -385,6 +385,10 @@ class ArrangementProgramRepository extends EntityRepository
     {
         $qb = $this->getQueryBuilder();
         $qb
+            ->addSelect('ap_to')
+            ->addSelect('ap_oo')
+            ->innerJoin('ap.tacticalObjective', 'ap_to')
+            ->leftJoin('ap.operationalObjective','ap_oo')
             ->andWhere('ap.period = :period')
             ->andWhere($qb->expr()->isNull('ap.lastDateCalculateResult'))
             ->setParameter('period', $period)
