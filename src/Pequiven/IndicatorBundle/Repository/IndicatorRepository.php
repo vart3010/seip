@@ -310,14 +310,13 @@ class IndicatorRepository extends baseEntityRepository {
         
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
-                ->andWhere('i.enabled = 1')
                 ->andWhere('i.tmp = 0')
                 ;
         
         if(($forView = $criteria->remove('for_view')) !== null){
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
-                    ->andWhere('o.enabled = 1')
+                    ->andWhere('o.deletedAt IS NULL')
                     ;
         }
         
