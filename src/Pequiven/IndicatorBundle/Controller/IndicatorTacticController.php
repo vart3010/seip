@@ -115,8 +115,11 @@ class IndicatorTacticController extends baseController {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_tactic_registration");
 
+            $periodService = $this->get('pequiven_arrangement_program.service.period');
+            $period = $periodService->getPeriodActive();
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
+            $refIndicator = $data['ref'];
 
             $data['tendency'] = (int)$data['tendency'];
             $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
@@ -125,6 +128,7 @@ class IndicatorTacticController extends baseController {
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_TACTICO));
             $object->setIndicatorLevel($indicatorLevel);
+            $object->setPeriod($period);
 
             //En caso de que el Indicador tenga Fórmula se obtiene y se setea respectivamente
             if (isset($data['formula'])) {
@@ -144,7 +148,7 @@ class IndicatorTacticController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
+            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('ref' => $refIndicator));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
@@ -269,6 +273,7 @@ class IndicatorTacticController extends baseController {
         $em->getConnection()->beginTransaction();
 
         $arrangementRange->setIndicator($indicator);
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
         //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
@@ -494,4 +499,11 @@ class IndicatorTacticController extends baseController {
         return $ref;
     }
 
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 }

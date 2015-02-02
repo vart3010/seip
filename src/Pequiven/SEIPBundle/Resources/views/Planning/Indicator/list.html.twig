@@ -2,9 +2,14 @@
 
 {% trans_default_domain 'PequivenIndicatorBundle' %}
 
-{% block title %}- {{ 'pequiven_indicator.indicator_strategic'|trans }}{% endblock %}
+
+
+{% block title %}- {{ 'pequiven_indicator.indicators'|trans }}{% endblock %}
 
 {% set route_index = 'pequiven_indicator_menu_list_strategic' %}
+{% set levelStrategic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
+{% set levelTactic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_TACTICO') %}
+{% set levelOperative = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_OPERATIVO') %}
 {% block body %}
     {% set labelHeader = {
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
@@ -20,18 +25,80 @@
     <input type="hidden" id="level" value="{{ level }}">
     <div ng-controller="TableFormatController">
         <div ng-controller="TableIndicatorController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                
+                <div class="with-padding">
+                    <div class="columns">
+                        {% if (level > levelStrategic) %}
+                            <!-- Filtro Localidad -->
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.complejo'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" ng-change="getFirstLineManagement()" ng-options="value as value.description for (key,value) in data.complejos">
+                                        <option value=''></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Filtro Gerencia 1ra Línea -->
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.first_line_management'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding">
+                                    <select class="select2 input-xlarge" id="selectFirstLineManagement" {% if (level > levelTactic) %} ng-change="getSecondLineManagement()" {% endif %} ng-model="model.firstLineManagement" ng-options="value as value.description group by model.complejo.description for (key,value) in data.first_line_managements" >
+                                        <option value=''></option>
+                                    </select>
+                                </div>
+                            </div>
+                            {% if (level > levelTactic) %}
+                                <!-- Filtro Gerencia 2da Línea -->
+                                <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                    <label class="bold">{{ 'pequiven_seip.filters.management_second_line'|trans({},'PequivenSEIPBundle') }}</label>
+                                    <br/>
+                                    <div class="with-mid-padding">
+                                        <select class="select2 input-xlarge" id="selectSecondLineManagement" ng-model="model.secondLineManagement" ng-options="value as value.description group by (value.complejo.ref + ' - '+value.gerencia.description) for (key,value) in data.second_line_managements" >
+                                            <option value=''></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <!-- Filtro para las diferentes -->
+                        <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_seip.filters.miscellaneous'|trans({},'PequivenSEIPBundle') }}</label>
+                            <br/>
+                            <div class="with-mid-padding">
+                                <select class="select2 input-xlarge" id="selectMiscellaneous" ng-model="model.indicatorMiscellaneous" ng-options="value as value.description for (key,value) in data.indicatorSummaryLabels">
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                         {% if (level > levelTactic) %}
+                            <!-- Checkbox Gerencias de Aooyo -->
+                            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <span id ="sectionExcludeGerenciaSecondSupport" class="hide">
+                                    <label class="bold">{{ 'pequiven_seip.filters.excludeGerenciaSecondSupport'|trans({},'PequivenSEIPBundle') }}</label>&nbsp;<input id="excludeGerenciaSecondSupport" type="checkbox" ng-click="excludeGerenciaSecondSupport()">
+                                </span>
+                                <br/>
+                                <span id ="sectionIncludeGerenciaSecondSupport" class="hide">
+                                    <label class="bold">{{ 'pequiven_seip.filters.includeGerenciaSecondSupport'|trans({},'PequivenSEIPBundle') }}</label>&nbsp;<input id="includeGerenciaSecondSupport" type="checkbox" ng-click="includeGerenciaSecondSupport()">
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </details>
+            
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info">
-                    {% if (level > 1) %}
-                    <h3>Gerencia 1ra Línea: </h3><select ng-model="gerenciaFirst" id="selectGerenciaFirst" class="select2-offscreen populate" style="width:300px;"></select>
-                    {% endif %}
-                    {% if (level == 3) %}
-                    <h3>Gerencia 2da Línea: </h3><select ng-model="gerenciaSecond" id="selectGerenciaSecond" class="select2-offscreen populate" style="width:300px;"></select>
-                    {% endif %}
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ apiDataUrl }}" export-csv="csv" class="table table-responsive table-extra-info" ng-init="data.indicatorSummaryLabels = {{ labelsSummary|serialize }}" >
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} {% if (level > levelTactic) %} ({$ result.gerenciaSecond $}) {% endif %}</a>
                             </td>
                         </tr>
                     </tbody>
@@ -45,145 +112,16 @@
     {{ parent() }}
     <script type="text/javascript">
         
-        var selectGerenciaFirst =  $("#selectGerenciaFirst"),//Select de Gerencia de 1ra Línea
-            selectGerenciaSecond =  $("#selectGerenciaSecond"),//Select de Gerencia de 2da Línea
-            inputHiddenLevel = $("#level"),//
-            inputHiddenRoleName = $("rolUser")//
-        ;
-        
         $(document).ready(function()
         {
             charge();
             
             function charge(){
-               chargeSelectGerenciaFirst();
-               selectGerenciaSecond.select2({
-
+               $('.select2').select2({
+                allowClear: true
                 });
-                selectGerenciaSecond.select2("enable",false);
             }
         });
-        
-        selectGerenciaFirst.on("select2-selecting", function(e) {
-            if(inputHiddenLevel.val() == 3){
-                chargeSelectGerenciaSecond(e);
-            }
-        })
-        
-        //Función que actualiza el select de indicadores en caso de que se cambie la lína estratégica o se agregue un nuevo indicador a partir de este formulario
-        function chargeSelectGerenciaFirst(){
-            var data = {
-            };
-            $.ajax({
-                type: 'post',
-                url: '{{ path("indicatorGerenciaFirstTactic") }}',
-                data: data,
-                success: function(data) {
-
-                    if(typeof data[0].empty === 'undefined'){
-                        var cantidad = data.length;
-                        var text = '';
-                        text = text + '<option value="0">Todas</option>';
-                        text = text + '<optgroup label="' + data[0].optGroup + '">';
-
-                        for(var i=0, total = data.length; i<total; i++){
-                            if(i == 0){
-                                text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                            } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) < cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                            } else if (data[i].idComplejo != data[i-1].idComplejo && (i + 1) == cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                            } else if ((i+1) == cantidad){
-                                text = text +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                            } else{
-                                text = text + '<option value="' + data[i].id + '" >' + data[i].description + '</option>';
-                            }
-                        }
-                        
-                        selectGerenciaFirst.append(text);
-                        chargeSelect2GerenciaFirst("full");
-                    } else{
-                        chargeSelect2GerenciaFirst("empty");
-                    }
-                }
-            });
-        }
-        
-        function chargeSelectGerenciaSecond(e){
-            var data = {
-                gerencia: $.trim(e.val),
-            };
-            $.ajax({
-                type: 'post',
-                url: '{{ path("indicatorGerenciaSecondOperative") }}',
-                data: data,
-                success: function(data) {
-                                    
-                    $("#selectGerenciaSecond optgroup").remove();
-                    $("#selectGerenciaSecond option[value]").remove();
-
-                    if(typeof data[0].empty === 'undefined'){
-                        var cantidad = data.length;
-                        var text = '';
-                        text = text + '<option value="0">Todas</option>';
-                        
-                        text = text + '<optgroup label="' + data[0].optGroup + '">';
-
-                        for(var i=0, total = data.length; i<total; i++){
-                            if(i == 0){
-                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
-                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) < cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '">' + data[i].description + '</option>';
-                            } else if (data[i].idGroup != data[i-1].idGroup && (i + 1) == cantidad ){
-                                text = text + '</optgroup> <optgroup label="' + data[i].optGroup + '">' +'<option value="' + data[i].id + '" >' + data[i].description + '</option> </optgroup>';
-                            } else if ((i+1) == cantidad){
-                                text = text +'<option value="' + data[i].id + '">' + data[i].description + '</option> </optgroup>';
-                            } else{
-                                text = text + '<option value="' + data[i].id + '">' + data[i].description + '</option>';
-                            }
-                        }
-                        selectGerenciaSecond.append(text);
-                        selectGerenciaSecond.select2({
-                        });
-                        selectGerenciaSecond.select2("enable",true);
-                    } else{
-                        chargeSelect2GerenciaSecond("empty");
-                    }
-                }
-            });
-        }
-        
-        //Función que carga el select2 de Gerencia de 2da Línea
-        function chargeSelect2GerenciaSecond(type){
-            selectGerenciaSecond.select2({
-                placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
-                formatNoMatches: function(term) {
-                    if(type == 'full'){
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                    } else if (type == 'empty'){
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
-                    } else {
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                    }
-                }
-            });
-        }
-        
-        //Función que carga el select2 de Gerencia de 1ra Línea
-        function chargeSelect2GerenciaFirst(type){
-            selectGerenciaFirst.select2({
-                placeholder: '{{ 'form.messages.selectObjetiveStrategicPlaceholder'|trans }}',
-                formatNoMatches: function(term) {
-                    if(type == 'full'){
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                    } else if (type == 'empty'){
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoResult'|trans }}";
-                    } else {
-                        return "{{ 'form.messages.selectObjetiveStrategicFormatNoMatcher'|trans }}";
-                    }
-                }
-            });
-        }
         
         function getTableExtraInfo(data)
             {
@@ -191,17 +129,6 @@
 
                 response = response + 'Fórmula: ' + data.formula.equation;
                 
-                {#var totalIndicators = data.indicators.length;
-                if(totalIndicators > 0){
-                    response = response + '<strong>{{ 'pequiven_objetive.popup.indicators'|trans }}:</strong><br>';
-                    for(var i = 0; i < totalIndicators; i++){
-                        response = response + data.indicators[i].ref + data.indicators[i].description;
-                        if(data.indicators[i].formula){
-                            response = response + '&nbsp;Fórmula: ' + data.indicators[i].formula.equation;
-                        }
-                        response = response + '<br>';
-                    }
-                }#}
                 return response;
             }
     </script>

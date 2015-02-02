@@ -13,8 +13,14 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
  */
 class ResultService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
+    protected $errors;
+    
     protected $container;
- 
+    
+    public function __construct() {
+        $this->errors = array();
+    }
+    
     /**
      * Devuelve un resultado por el tipo
      * @param array $results Pequiven\SEIPBundle\Model\Result
@@ -180,10 +186,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            $em = $this->getDoctrine()->getManager();
+            $indicators = $objetive->getIndicators();
+            foreach ($arrangementPrograms as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            foreach ($indicators as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            $em->flush();
             throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            if($countResult == 0){
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
@@ -273,12 +293,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function updateResultOfObjects($objects,$andFlush = true) 
     {
+        if($objects === null){
+            return;
+        }
         if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
         {
             $objects = array($objects);
         }
         foreach ($objects as $object) {
-            foreach ($object->getResults() as $result) 
+            foreach ($object->getResults() as $result)
             {
                 $this->calculateResult($result,$andFlush);
             }
@@ -318,6 +341,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
+        $idIndicatorsProduccionEstable = array();
+        $idIndicatorsProduccionEstable[] = 1021;
+        $idIndicatorsProduccionEstable[] = 1022;
+        $idIndicatorsProduccionEstable[] = 1023;
+        $idIndicatorsProduccionEstable[] = 1024;
+        $idIndicatorsProduccionEstable[] = 1025;
+        $idIndicatorsProduccionEstable[] = 1026;
+        $idIndicatorsProduccionEstable[] = 1027;
+        $idIndicatorsProduccionEstable[] = 1029;
+        $idIndicatorsProduccionEstable[] = 1030;
+        $idIndicatorsProduccionEstable[] = 1031;
+        $idIndicatorsProduccionEstable[] = 1032;
+        $idIndicatorsProduccionEstable[] = 1033;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1020;
+        $idIndicatorsProduccionEstable[] = 1028;
+        
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -333,25 +373,46 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
             $typeOfCalculation = $formula->getTypeOfCalculation();
-            if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                $this->calculateFormulaSimpleAverage($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                $this->calculateFormulaRealPlanAutomatic($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
-                $this->calculateFormulaRealAutomatic($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
-                $this->calculateFormulaAccumulate($indicator);
-            }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
+            if($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_MANUALLY){
+                if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+                    $this->calculateFormulaSimpleAverage($indicator);
+                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $this->calculateFormulaRealPlanAutomatic($indicator);
+                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+                    $this->calculateFormulaRealAutomatic($indicator);
+                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
+                    $this->calculateFormulaAccumulate($indicator);
+                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                    $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
+                }
+            }else{
+                $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
             }
         }
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
+        if(!$tendenty){
+            throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
+        }
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
-            $result = $indicator->getTotalPlan() - $indicator->getResult();
+            $result = 100 - $indicator->getResult();
             $indicator->setProgressToDate($result);
+        }elseif($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+            if(in_array($indicator->getId(),$idIndicatorsProduccionEstable)){
+                $arrangementRange = $indicator->getArrangementRange();
+                $result = $indicator->getResult();
+                if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                    $indicator->setProgressToDate($result);
+                } elseif(($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()) || ($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom())){
+                    $result = $result/2;
+                    $indicator->setProgressToDate($result);
+                } elseif($result <= $arrangementRange->getRankBottomMixedBottom() || $result >= $arrangementRange->getRankBottomMixedTop()){
+                    $result = 0;
+                    $indicator->setProgressToDate($result);
+                }
+            }
         }
         
         $em = $this->getDoctrine()->getManager();
@@ -366,6 +427,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $objetives = $indicator->getObjetives();
         
         $this->updateResultOfObjects($objetives);
+        
+        if($indicator->getParent() !== null){
+            $this->refreshValueIndicator($indicator->getParent(),true);
+        }
     }
     
      /**
@@ -413,6 +478,101 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator
                 ->setTotalPlan($totalPlan)
                 ->setValueFinal($value);
+        if($indicator->getParent() !== null){
+            $this->refreshValueIndicator($indicator->getParent());
+        }
+    }
+    
+    /**
+     * Calcula la formula con plan y real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    private function calculateFormulaRealPlanAutomaticFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    {
+        $childrens = $indicator->getChildrens();
+        $indicatorService = $this->getIndicatorService();
+        
+        $resultsItems = array();
+        foreach ($childrens as $child) {
+            $i = 0;
+            $formula = $child->getFormula();
+            
+            foreach ($child->getValuesIndicator() as $valueIndicator) {
+                if(!isset($resultsItems[$i])){
+                    $resultsItems[$i] = array('plan' => 0.0,'real' => 0.0);
+                }
+                $plan = $real = 0.0;
+                $formulaParameters = $valueIndicator->getFormulaParameters();
+                
+                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+                    $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                    $plan = $formulaParameters[$variableToPlanValueName];
+                    $real = $formulaParameters[$variableToRealValueName];
+                }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                    $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+                    $plan = $result['plan'];
+                    $real = $result['real'];
+                }
+                
+                $resultsItems[$i]['plan'] = $resultsItems[$i]['plan'] + $plan;
+                $resultsItems[$i]['real'] = $resultsItems[$i]['real'] + $real;
+                $i++;
+                
+            }//fin for each
+        }//fin for each childrens
+        
+        $totalPlan = $totalReal = 0.0;
+        //Calcular el total plan y real.
+        foreach ($resultsItems as $resultItem) {
+            $totalPlan += $resultItem['plan'];
+            $totalReal += $resultItem['real'];
+        }
+        $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
+        
+        //Actualizar valores de los resultados del indicador padre.
+        $formula = $indicator->getFormula();
+        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        
+        $valuesIndicator = $indicator->getValuesIndicator();
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
+            $user = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+                $valueIndicator = new Indicator\ValueIndicator();
+                $valueIndicator
+                    ->setFormula($formula)
+                    ->setCreatedBy($user)
+                ;
+                $indicator->addValuesIndicator($valueIndicator);
+            }
+        }
+        $i = 0;
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+            $formulaUsed = $valueIndicator->getFormula();
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $plan = $real = 0.0;
+            if(isset($resultsItems[$i])){
+                $plan = $resultsItems[$i]['plan'];
+                $real = $resultsItems[$i]['real'];
+            }
+            $valueIndicator->setParameter($variableToPlanValueName, $plan);
+            $valueIndicator->setParameter($variableToRealValueName, $real);
+            $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
+            $valueIndicator->setValueOfIndicator($value);
+            $i++;
+        }
+        $indicator
+            ->setTotalPlan($totalPlan)
+            ->setValueFinal($totalReal);
     }
     
     /**
@@ -422,32 +582,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     private function calculateFormulaRealPlanAutomaticFromEQ(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
-        $indicatorService = $this->getIndicatorService();
-        
         $formula = $indicator->getFormula();
         
-        $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
-        $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
-        
-        $equation_real = $equation_plan = 0.0;
-        
         $valuesIndicator = $indicator->getValuesIndicator();
-        $totalPlan = $totalReal = $value = 0.0;
+        $totalPlan = $totalReal = $value = $equation_real = $equation_plan = 0.0;
+        
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             
-            foreach ($formulaParameters as $name => $value) {
-                $$name = 0;
-                if(isset($formulaParameters[$name])){
-                    $$name = $value;
-                }
-            }
-            
-            eval(sprintf('$equation_real = %s;',$sourceEquationReal));
-            eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-            
-            $totalPlan += $equation_plan;
-            $totalReal += $equation_real;
+            $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+            $totalPlan += $result['plan'];
+            $totalReal += $result['real'];
         }
         
         $value = $totalReal;
@@ -456,6 +601,31 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setValueFinal($value);
     }
     
+    private function getFormulaResultFromEQ(Formula $formula,$formulaParameters)
+    {
+        $equation_real = $equation_plan = 0.0;
+        
+        $indicatorService = $this->getIndicatorService();
+        $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
+        $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
+        
+        foreach ($formulaParameters as $name => $value) {
+                $$name = 0;
+                if(isset($formulaParameters[$name])){
+                    $$name = $value;
+                }
+            }
+
+        eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+        eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+        
+        return array(
+            'real' => $equation_real,
+            'plan' => $equation_plan,
+        );
+    }
+
+
     /**
      * Calcula la formula con real a partir de la formula
      * 
@@ -495,6 +665,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator->setValueFinal($value);
     }
     
+    /**
+     * Obtiene el resumen del resultado de mis hijos
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @param type $childrens
+     * @return type
+     */
     public function getResultChildresObjetives(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive,$childrens) {
         $myProgress = $myContribution = $myContributionWithWeight = $myDuty = $myDutyWithWeight = 0.0;
         $result = $this->getResultByType($objetive->getResults(),  \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_OBJECTIVE);
@@ -531,6 +707,85 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         );
     }
     
+    /**
+     * Valida que los objetivos tengan avances
+     * @param array $objetives
+     * @return boolean
+     */
+    public function validateAdvanceOfObjetives($objetives,$valid = true) {
+        
+        $limitErrors = 10;
+//        var_dump('Pasados - '.count($objetives));
+        foreach ($objetives as $objetive) {
+            $childrens = $objetive->getChildrens();
+//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
+            $arrangementPrograms = $objetive->getArrangementPrograms();
+            //Se evalua que los programas de gestion tengan notificacion.
+            foreach ($arrangementPrograms as $arrangementProgram) {
+                $details = $arrangementProgram->getDetails();
+                $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
+                    array(
+                        'id' => $arrangementProgram->getId()
+                    ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                );
+                $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$arrangementProgram);
+                //Se evalua que la notificacion no este en progeso
+                if($details->getNotificationInProgressByUser() !== null){
+                    $this->addErrorTrans('pequiven_seip.errors.user_must_complete_notification_process_management_program',array(
+                        '%user%' => $details->getNotificationInProgressByUser(),
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $valid = false;
+                    continue;
+                }
+                //Se evalua que no tenga avance cargado
+                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $valid = false;
+                }
+            }
+            
+            $indicators = $objetive->getIndicators();
+            foreach ($indicators as $indicator) {
+                if($indicator->hasNotification() === false){
+                    $url = $this->generateUrl('pequiven_indicator_show',
+                        array(
+                            'id' => $indicator->getId()
+                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+                        '%indicator%' => $link,
+                    ));
+                    $valid = false;
+                }
+            }
+            
+            if(count($childrens) > 0){
+                $valid =  $this->validateAdvanceOfObjetives($childrens,$valid);
+            }
+            if(!$valid && count($this->errors) > $limitErrors){
+                return false;
+            }
+        }
+        return $valid;
+    }
+    
+    private function addErrorTrans($error,array $parameters = array()) {
+        if(is_array($error)){
+            $this->errors = array_merge($this->errors,$error);
+        }else{
+            $message = $this->trans($error,$parameters,'PequivenSEIPBundle');
+            $this->errors[md5($message)] = $message;
+        }
+    }
+    
+    function getErrors() {
+        return $this->errors;
+    }
+
     /**
      * Shortcut to return the Doctrine Registry service.
      *
@@ -584,5 +839,26 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
 }

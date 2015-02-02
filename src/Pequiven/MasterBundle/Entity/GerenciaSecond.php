@@ -135,11 +135,20 @@ class GerenciaSecond extends modelGerenciaSecond {
      * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", mappedBy="gerenciaSecondVinculants")
      */
     private $gerenciaVinculants;
+    
+    /**
+     * Gerencia Apoyo
+     * 
+     * @var \Pequiven\MasterBundle\Entity\Gerencia
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\Gerencia", mappedBy="gerenciaSecondSupports")
+     */
+    private $gerenciaSupports;
 
     public function __construct() {
         parent::__construct();
         $this->operationalObjectives = new ArrayCollection();
         $this->gerenciaVinculants = new ArrayCollection();
+        $this->gerenciaSupports = new ArrayCollection();
     }
     
     /**
@@ -516,5 +525,39 @@ class GerenciaSecond extends modelGerenciaSecond {
     public function getGerenciaVinculants()
     {
         return $this->gerenciaVinculants;
+    }
+
+    /**
+     * Add gerenciaSupports
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports
+     * @return GerenciaSecond
+     */
+    public function addGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports)
+    {
+        $gerenciaSupports->addGerenciaSecond($this);
+        $this->gerenciaSupports[] = $gerenciaSupports;
+
+        return $this;
+    }
+
+    /**
+     * Remove gerenciaSupports
+     *
+     * @param \Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports
+     */
+    public function removeGerenciaSupport(\Pequiven\MasterBundle\Entity\Gerencia $gerenciaSupports)
+    {
+        $this->gerenciaSupports->removeElement($gerenciaSupports);
+    }
+
+    /**
+     * Get gerenciaSupports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGerenciaSupports()
+    {
+        return $this->gerenciaSupports;
     }
 }

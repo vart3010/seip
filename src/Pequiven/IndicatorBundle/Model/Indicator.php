@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author matias
  */
-abstract class Indicator 
+abstract class Indicator implements IndicatorInterface
 {
     /**
      * Tipo de calculo por formula y valores de las variables manuales
@@ -20,6 +20,26 @@ abstract class Indicator
      * Tipo de calculo por formula y valores de las variables automaticos
      */
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
+    
+    /**
+     * Indicador con fórmula asociada
+     */
+    const INDICATOR_WITH_FORMULA = 'INDICATOR_WITH_FORMULA';
+    
+    /**
+     * Indicador sin fórmula asociada
+     */
+    const INDICATOR_WITHOUT_FORMULA = 'INDICATOR_WITHOUT_FORMULA';
+    
+    /**
+     * Indicador con resultado
+     */
+    const INDICATOR_WITH_RESULT = 'INDICATOR_WITH_RESULT';
+    
+    /**
+     * Indicador sin resultado
+     */
+    const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
     
     /**
      * @var integer
@@ -35,6 +55,12 @@ abstract class Indicator
      * @ORM\JoinColumn(name="fk_indicator_level", referencedColumnName="id",nullable = false)
      */
     protected $indicatorLevel;
+    
+    /**
+     * Etiqueta del tipo de resumen de los indicadores
+     * @var type 
+     */
+    protected $labelSummary = '';
     
     /**
      * Set indicatorLevel
@@ -101,5 +127,42 @@ abstract class Indicator
             throw new Exception(sprintf('The type of calculation "%s" dont exist',$this->typeOfCalculation));
         }
         return $typesOfCalculation[$this->typeOfCalculation];
+    }
+    
+    public function hasNotification()
+    {
+        if(count($this->getValuesIndicator()) > 0){
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Retorna las etiquetas definidas para los tipos de resumen
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsSummary()
+    {
+        static $labelsStatus = array(
+            self::INDICATOR_WITH_FORMULA => 'pequiven_indicator.summary.with_formula',
+            self::INDICATOR_WITHOUT_FORMULA => 'pequiven_indicator.summary.without_formula',
+            self::INDICATOR_WITH_RESULT => 'pequiven_indicator.summary.with_result',
+            self::INDICATOR_WITHOUT_RESULT => 'pequiven_indicator.summary.without_result',
+        );
+        return $labelsStatus;
+    }
+    
+    /**
+     * Retorna la etiqueta que corresponde a un estatus del programa de gestion
+     * @return string
+     */
+    function getLabelSummary()
+    {
+        $labels = $this->getLabelsSummary();
+        if(isset($labels[$this->labelSummary])){
+            return $labels[$this->labelSummary];
+        }
     }
 }

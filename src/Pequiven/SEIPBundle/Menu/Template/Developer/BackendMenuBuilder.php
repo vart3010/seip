@@ -46,6 +46,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     public function createSidebarMenu(Request $request)
     {
+        $seipConfiguration = $this->getSeipConfiguration();
+        
         $menu = $this->factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'big-menu',
@@ -57,6 +59,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             'labelAttributes' => array('icon' => 'icon-home'),
         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.home', $section)));
         
+        if($seipConfiguration->isEnablePrePlanning() && $this->isGranted('ROLE_MENU_PRE_PLANNING_ENABLE')){
+            $this->addMenuPrePlanning($menu, $section);
+        }
         //$this->addExampleMenu($menu, $section);
 
 //        $menu->addChild('support', array(
@@ -75,7 +80,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
         //Menu de Resultados
         $this->addMenuResults($menu, $section);
-        
         
         //Menú Gestión Estratégica
 //        $this->addArrangementStrategicMenu($menu, $section);
@@ -169,7 +173,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $child = $this->factory->createItem('planning',
                 $this->getSubLevelOptions(array(
                     'uri' => null,
-                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                    'labelAttributes' => array('icon' => 'fa fa-bar-chart',),
                 ))
                 )
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
@@ -263,11 +267,58 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.operative', $section)));
         
+        //ROLE_WORKER_PLANNING_RECALCULATE_RESULT
+        $subchild->addChild('planning.results.recalculate', array(
+                                'route' => 'pequiven_result_recalculate',
+                            ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.recalculate', $section)));
+        
         $child->addChild($subchild);
         
         $menu->addChild($child);
     }
     
+    private function addMenuPrePlanning(ItemInterface $menu, $section) {
+        $nextPeriod = $this->getPeriodService()->getNextPeriod();
+        $periodName = 'No Definido';
+        if($nextPeriod){
+            $periodName = $nextPeriod->getName();
+        }
+        $child = $this->factory->createItem('preplanning',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-calendar',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.main', $section),array('%period%' => $periodName)));
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC')){
+            $child->addChild('preplanning_tactic',array(
+                'route' => 'pequiven_pre_planning_index',//Route
+                'labelAttributes' => array('icon' => 'fa fa-cube'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
+        }
+        
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE')){
+            $child->addChild('preplanning_operative',array(
+                'route' => 'pequiven_pre_planning_index',//Route
+                'labelAttributes' => array('icon' => 'fa fa-cog'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
+        }
+        
+        if($this->isGranted('ROLE_MENU_PRE_PLANNING_REVIEW')){
+            $child->addChild('preplanning_review',array(
+                'route' => 'pequiven_pre_planning_review',//Route
+                'labelAttributes' => array('icon' => 'fa fa-sitemap'),
+                'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
+        }
+        
+        $menu->addChild($child);
+    }
+
+
     /**
      * Construye y añade el menu de objetivos
      * @param ItemInterface $menu
@@ -321,7 +372,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                 }
                 
-                if($this->securityContext->isGranted('ROLE_WORKER_PLANNING')){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
+                if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')) && $this->securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea o que tenga rol de planificación
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -411,7 +462,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         
                         $thirdchild->addChild($itemIndicatorsOperative);
                         
-                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+                    } elseif($this->securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT'))){
                         $thirdchild->addChild($itemIndicatorsTactic);
                         
                         $thirdchild->addChild($itemIndicatorsOperative);
@@ -422,7 +473,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $menuIndicators->addChild($thirdchild);
                     
                      //Menú Nivel 3: Registro de Indicadores
-                    if(!$this->securityContext->isGranted(array('ROLE_WORKER_PQV','ROLE_SUPERVISER'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
+                    if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX')) && $this->securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){//Si el usuario tiene un rol superior o igual que gerente de 2da línea
                         $thirdchild = $this->factory->createItem('arrangement_strategic.indicators.add',
                                 $this->getSubLevelOptions(array(
                                     'uri' => 'add',
@@ -846,6 +897,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
             
+            $visualize
+                ->addChild('arrangement_programs.for_notifying', array(
+                    'route' => 'pequiven_seip_arrangementprogram_for_notifying',
+                ))
+            ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_notifying', $section)));
+            
             $subchild = $this->factory->createItem('arrangement_programs.add.main',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
@@ -948,4 +1005,24 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //        return null;
 //    }
     
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
+    }
+    
+    private function isGranted($roles) {
+        return $this->securityContext->isGranted($roles);
+    }
 }

@@ -1,0 +1,471 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+{% block stylesheet %}
+    <style>
+        .x-grid-tree-node-expanded .x-tree-icon-parent {
+            background-image: none;
+        }
+        .x-panel-header-default {
+            background-color: #bd0000;
+            background-image: none;
+            border: 2px solid #e60101;
+        }
+        #title-1025-textEl {
+            color: #ffffff;
+        }
+        .x-panel-header-default-top {
+            -webkit-box-shadow: #f42a41 0 1px 0 0 inset;
+            -moz-box-shadow: #f42a41 0 1px 0 0 inset;
+            box-shadow: #f42a41 0 1px 0 0 inset;
+        }
+    </style>
+{% endblock stylesheet  %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        Ext.Loader.setConfig({
+            enabled: true
+        });Ext.Loader.setPath('Ext.ux', '../ux');
+
+        Ext.require([
+            'Ext.data.*',
+            'Ext.grid.*',
+            'Ext.tree.*',
+            'Ext.tip.*',
+            'Ext.ux.CheckColumn'
+        ]);
+        var level = '{{ app.request.get('level') }}';
+        Ext.onReady(function() {
+            Ext.tip.QuickTipManager.init();
+            
+            Ext.define('PrePlanning', {
+                extend: 'Ext.data.Model',
+                fields: [
+                    { name: 'id', type: 'int' },
+                    { name: 'name', type: 'string' },
+                    { name: "toImport", type: "int" },
+                    { name: "status", type: "int" },
+                    { name: '_statusLabel', type: 'string' }
+                ]
+            });
+            
+            var store = Ext.create('Ext.data.TreeStore', {
+                model: 'PrePlanning',
+                proxy: {
+                    type: 'ajax',
+                    //the store will get the content from the .json file
+                    api: {
+                        create: 'createPersons',
+                        read: '{{ path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level')}) }}',
+                        update: 'update-pre-planning',
+                        destroy: 'delete-pre-planning'
+                    }
+                },
+                autoSync:false
+            });
+            var btnDelete = Ext.create("Ext.Button", {
+                handler: function () {
+                    if (tree.getSelectionModel().hasSelection()) {
+                        var selectedNodes = tree.getSelectionModel().getSelection();
+                        var i = 0;
+                        Ext.Msg.confirm('Eliminar', '¿Desea eliminar '+(selectedNodes.length)+' items?<br/>Recuere que al eliminar un objetivo, se eliminaran los items asociados.', function(btn){
+                           if(btn === 'yes'){
+                               for(i=0; i < selectedNodes.length; i++){
+                                    store.getNodeById(selectedNodes[i].id).remove();
+                                }
+                                store.sync();
+                                evaluateDataTree();
+                           } else{
+                              //some code
+                           }
+                         });
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados.");
+                    }
+                },
+                glyph :'xf12d@FontAwesome',
+                text: 'Eliminar',
+                disabled: true,
+                itemId: 'btnDelete',
+            });
+            var refreshBtn = Ext.create("Ext.Button", {
+                itemId: 'refreshBtn',
+                text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                glyph: 'xf021@FontAwesome',
+                xtype: 'button',
+                disabled: true,
+                handler: function(){
+                    store.load({
+                        callback: function(r,options,success){
+                            evaluateDataTree();
+                        }
+                    });
+                }
+            });
+            var startPrePlanningBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Iniciar planificación', '¿Desea iniciar la planificación?<br/>Al iniciar el proceso de planificación se importaran los items de su periodo 2014 para que seleccione los que desea para el siguiente periodo.', function(btn){
+                            if(btn === 'yes'){
+                                tree.body.mask("Iniciando planificación...");
+                                Ext.Ajax.request({
+                                 url: '{{ path('pequiven_pre_planning_start_pre_planning',{level: app.request.get('level')}) }}',
+                                 success: function(response, opts) {
+                                    tree.body.unmask();
+                                    store.load({
+                                        callback: function(r,options,success){
+                                            evaluateDataTree();
+                                        }
+                                    });
+                                 },
+                                 failure: function(response, opts) {
+                                    console.log('server-side failure with status code ' + response.status);
+                                 }
+                              });
+                            } 
+                     });
+                    
+                },
+                itemId: 'startPrePlanningBtn',
+                glyph: 'xf073@FontAwesome',
+                text: 'Iniciar planificación',
+                disabled: true
+            });
+            
+            var returnChangesBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    Ext.Msg.confirm('Restaurar matriz', '¿Desea restaurar la matriz de planificación?<br/>Recuere que al restaurarla se construira nuevamente la matriz.', function(btn){
+                       if(btn === 'yes'){
+                           tree.body.mask("Devolviendo los cambios...");
+                           Ext.Ajax.request({
+                            url: '{{ path('pequiven_pre_planning_return_changes',{level:app.request.get('level')}) }}',
+                            success: function(response, opts) {
+                               tree.body.unmask();
+                               store.load();
+                            },
+                            failure: function(response, opts) {
+                               console.log('server-side failure with status code ' + response.status);
+                            }
+                         });
+                       }
+                    });
+
+                },
+                glyph :'xf122@FontAwesome',
+                text: 'Devolver los cambios',
+                itemId: 'btnReturnChanges',
+                disabled: true
+            });
+            
+            var saveChangeBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    tree.body.mask("Guardando los cambios...");
+                    store.sync({
+                        callback: function(r,options,success){
+                           tree.body.unmask();
+                        }
+                    });
+                },
+                glyph :'xf0c7@FontAwesome',
+                text: 'Guardar cambios',
+                itemId: 'saveChangeBtn',
+                disabled: true
+            });
+            
+            var itemsToImportCurrent = 0;
+            var itemsToImportLength = 0;
+            var itemsToImportTimeOut = null;
+            var itemsToImportReady = true;
+            var itemsToImport = [];
+            var functionActionItem = function(item){};
+            
+            var functionImportarItem = function(item){
+                var name = item.get('name');
+                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Importando "+name+ "...");
+                var urlImport = Routing.generate('pequiven_pre_planning_import',{id:item.get('id')});
+                Ext.Ajax.request({
+                url: urlImport,
+                    success: function(response, opts) {
+                       tree.body.unmask();
+                       tree.body.mask("Item #"+(itemsToImportCurrent)+" importado correctamente...");
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       callAjaxItemToImport();
+                    },
+                    failure: function(response, opts) {
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       tree.body.unmask();
+                       console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            };
+            
+            var functionSendToRevisionItem = function(item){
+                var name = item.get('name');
+                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a revisión "+name+ "...");
+                var lastItem = 0;
+                if((itemsToImportCurrent + 1) == itemsToImportLength){
+                    lastItem = 1;
+                }
+                var urlImport = Routing.generate('pequiven_pre_planning_send_to_review',{id:item.get('id'),lastItem: lastItem,level: level});
+                Ext.Ajax.request({
+                url: urlImport,
+                    success: function(response, opts) {
+                       tree.body.unmask();
+                       tree.body.mask("Item #"+(itemsToImportCurrent)+" enviado a revisión correctamente...");
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       callAjaxItemToImport();
+                    },
+                    failure: function(response, opts) {
+                       clearTimeout(itemsToImportTimeOut);
+                       itemsToImportReady = true;
+                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       tree.body.unmask();
+                       console.log('server-side failure with status code ' + response.status);
+                    }
+                });
+            };
+            
+            var callAjaxItemToImport = function (){
+                if(itemsToImportLength > itemsToImportCurrent){
+                    itemsToImportTimeOut = setTimeout(function(){
+                        if(itemsToImportReady){
+                            itemsToImportReady = false;
+                            tree.body.unmask();
+                            functionActionItem(itemsToImport[itemsToImportCurrent]);
+                            itemsToImportCurrent++;
+                        }
+                    },1000);
+                }else{
+                    tree.body.unmask();
+                    Ext.Msg.alert('Correcto',"Se enviaron "+itemsToImportLength+" item(s) correctamente.");
+                    store.load();
+                }
+            };
+            var importBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    var items = store.data.items;
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
+                    var i;
+                    for(i=0;i < items.length; i++){
+                        if(items[i].get('status') == 0 && items[i].get('toImport') == true){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
+                           if(btn === 'yes'){
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                        functionActionItem = functionImportarItem;
+                                        callAjaxItemToImport();
+                                    }
+                                });
+                            }
+                        });
+                    }else{
+                        Ext.Msg.alert("", "No hay items selecionados para importar.");
+                    }
+                },
+                glyph :'xf0c5@FontAwesome',
+                text: 'Importar',
+                itemId: 'importBtn',
+                disabled: true
+            });
+            var sendToReviewBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    var items = store.data.items;
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
+                    var i;
+                    var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                    for(i=0;i < items.length; i++){
+                        if(items[i].get('status') == status && items[i].get('toImport') == true){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Enviar a revisión', '¿Desea enviar a revisión '+(itemsToImport.length)+' item(s) seleccionados?', function(btn){
+                           if(btn === 'yes'){
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        tree.body.mask('Enviado a revisión '+itemsToImportLength+" item(s)...");
+                                        functionActionItem = functionSendToRevisionItem;
+                                        callAjaxItemToImport();
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados para enviar a revisión.");
+                    }
+                },
+                glyph :'xf064@FontAwesome',
+                text: 'Enviar a revisión',
+                itemId: 'sendToReviewBtn',
+                disabled: true
+            });
+            
+            var selectParent = function(node,checked){
+                if(node.get('editable') == true){
+                    node.set('toImport',checked);
+                }
+                var parentNode = node.parentNode;
+                if(parentNode != undefined){
+                    if(parentNode.get('editable') == true){
+                        parentNode.set('toImport',checked);
+                    }
+                    
+                    if(parentNode.parentNode != undefined){
+                        selectParent(parentNode.parentNode,checked);
+                    }
+                }
+            };
+            var selectChild = function(childNodes,checked){
+                var i;
+                for(i = 0; i < childNodes.length; i++){
+                    if(childNodes[i].get('editable') == true){
+                        childNodes[i].set('toImport',checked);
+                    }
+                    if(childNodes[i].childNodes.length > 0){
+                        selectChild(childNodes[i].childNodes);
+                    }
+                }
+            };
+             
+            var storeComboBoxStatus = Ext.create('Ext.data.SimpleStore', {
+                    fields: ['id', 'label'],
+                    data : [ 
+                        [0,'Seleccione'],
+                        [1,'Si'],
+                        [2,'No']
+                    ]
+                });
+            // the edit combo
+            var comboStatus = new Ext.form.ComboBox({
+              store: storeComboBoxStatus,
+              valueField: "id",
+              displayField: "label",
+              allowBlank: true
+            });
+             
+            //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
+            var tree = Ext.create('Ext.tree.Panel', {
+                title: 'Planificación {{ app.request.get('period') }}',
+                width: 1000,
+                height: 600,
+                renderTo: Ext.getBody(),
+                collapsible: false,
+                useArrows: true,
+                rootVisible: false,
+                store: store,
+                multiSelect: true,
+                selType: 'cellmodel',
+                plugins: [
+                    Ext.create('Ext.grid.plugin.CellEditing', {
+                        clicksToEdit: 1
+                    })
+                ],
+                listeners: {
+                    itemclick:{
+                        fn: function(view, record, item, index, e){
+                            if (tree.getSelectionModel().hasSelection()) {
+                                btnDelete.setDisabled(false);
+                            } else {
+                                btnDelete.setDisabled(true);
+                            }
+                        }
+                    },
+                    beforeedit: function (editor, context, eOpts) {
+                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                        return (context.record.get('editable') && context.record.get('status') == status);
+                    },
+                    edit: function(a,b,c){
+                        var recordIndex = b.rowIdx;
+                        var checked = false;
+                        if(b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_DEFAULT') }}' || b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_NO') }}'){
+                            checked = false;
+                        }else{
+                            checked = true;
+                        }
+                        if(checked){
+                            selectParent(store.data.items[recordIndex],b.value);
+                        }else{
+                            selectChild(store.data.items[recordIndex].childNodes,b.value);
+                        }
+                    }
+                },
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_PRE_PLANNING_IMPORT') %}importBtn{% else %}sendToReviewBtn{% endif %} ]
+                }],
+                columns: [{
+                    xtype: 'treecolumn', //this is so we know which column will show the tree
+                    text: 'Nombre',
+                    sortable: false,
+                    dataIndex: 'name',
+                    flex: 1
+                    },
+                    {
+                        header: '¿Importar?',
+                        dataIndex: 'toImport',
+                        editor: comboStatus,
+                        renderer: function(value ,metaData, record) {
+                            var idx = storeComboBoxStatus.find('id', value)
+                            var rec = storeComboBoxStatus.getAt(idx);
+                            var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                            if(record.get('editable') && record.get('status') == status){
+                                return rec.get('label');                    
+                            }
+                        }
+                    },
+                    {
+                        text: 'Estatus',
+                        dataIndex: 'status',
+                        width: 80,
+                        stopSelection: false,
+                        renderer: function(value, metaData, record){
+                            var statusLabel = null;
+{#                            if(record.get('editable')){#}
+                                statusLabel = record.get('_statusLabel');
+{#                            }#}
+                           return statusLabel;
+                        }
+                    }
+                ]
+            });
+            
+            var evaluateDataTree = function(){
+                   var root = tree.getRootNode();
+                    var hasChilren = (root.childNodes.length  != 0);
+                    startPrePlanningBtn.setDisabled(hasChilren);
+                    
+                    returnChangesBtn.setDisabled(!hasChilren);
+                    refreshBtn.setDisabled(!hasChilren);
+                    btnDelete.setDisabled(!hasChilren);
+                    saveChangeBtn.setDisabled(!hasChilren);
+                    importBtn.setDisabled(!hasChilren);
+                    sendToReviewBtn.setDisabled(!hasChilren);
+                    return hasChilren;
+            };
+            
+            store.load({
+                callback: function(r,options,success){
+                    evaluateDataTree();
+                }
+            });
+        });
+    </script>
+{% endblock javascript %}

@@ -35,7 +35,12 @@ class ArrangementProgramController extends SEIPController
                 unset($criteria['firstLineManagement']);
                 unset($criteria['complejo']);
             }
+        }elseif($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+            
+            $criteria['firstLineManagement'] = $user->getGerencia()->getId();
+            $criteria['complejo'] = $user->getComplejo()->getId();
         }
+        
         if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
@@ -114,6 +119,7 @@ class ArrangementProgramController extends SEIPController
         $repository = $this->getRepository();
         $user = $this->getUser();
         $level = $user->getLevelRealByGroup();
+        $boxRender = $this->get('tecnocreaciones_box.render');
         
         $idGerencia = $request->get("idGerencia");
         $typeGroup = $request->get("typeGroup");
@@ -177,6 +183,7 @@ class ArrangementProgramController extends SEIPController
                 'user' => $user,
                 'url' => $url,
                 'urlReturn' => $urlReturn,
+                'boxRender' => $boxRender,
                 'gerencia' => $gerencia
             ));
         }else{
@@ -275,6 +282,18 @@ class ArrangementProgramController extends SEIPController
         $method = 'createPaginatorByAssigned';
         $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
         $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function forNotifyingAction(Request $request){
+        $method = 'createPaginatorByNotified';
+        $route = 'pequiven_seip_arrangementprogram_for_notifying';
+        $template = 'forNotifying.html';
         return $this->getSummaryResponse($request,$method,$route,$template);
     }
     

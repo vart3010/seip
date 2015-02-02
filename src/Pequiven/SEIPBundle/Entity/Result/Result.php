@@ -5,6 +5,7 @@ namespace Pequiven\SEIPBundle\Entity\Result;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Model\Result\Result as ModelResult;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
  * Resultado
@@ -13,8 +14,9 @@ use Pequiven\SEIPBundle\Model\Result\Result as ModelResult;
  * @ORM\Table(name="seip_result")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\Result\ResultRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Result extends ModelResult implements ResultItemInterface
+class Result extends ModelResult implements ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -89,7 +91,7 @@ class Result extends ModelResult implements ResultItemInterface
     private $parent;
     
     /**
-     * Objetivos que impacta
+     * Objetivos que impacta TODO: PILA AQUI CON EL PERSIST
      * 
      * @var \Pequiven\ObjetiveBundle\Entity\Objetive Objetivo
      * @ORM\ManyToOne(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="results")
@@ -101,6 +103,20 @@ class Result extends ModelResult implements ResultItemInterface
      * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
      */
     private $lastDateCalculateResult;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     /**
      * Constructor
@@ -215,11 +231,12 @@ class Result extends ModelResult implements ResultItemInterface
     /**
      * Add childrens
      *
-     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $childrens
+     * @param \Pequiven\SEIPBundle\Entity\Result\Result $childrens
      * @return Result
      */
-    public function addChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
+    public function addChildren(\Pequiven\SEIPBundle\Entity\Result\Result $childrens)
     {
+        $childrens->setParent($this);
         $this->childrens->add($childrens);
 
         return $this;
@@ -391,5 +408,43 @@ class Result extends ModelResult implements ResultItemInterface
     public function updateLastDateCalculateResult() 
     {
         $this->lastDateCalculateResult = new \DateTime();
+    }
+    
+    function setChildrens($childrens) 
+    {
+        $this->childrens = $childrens;
+    }
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            
+            $this->resultDetails = new ResultDetails();
+            $this->lastDateCalculateResult = null;
+            
+            $this->period = null;
+        }
+    }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
 }

@@ -18,18 +18,29 @@ namespace Pequiven\SEIPBundle\Controller\Api;
  */
 class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
 {
+    private $errors;
+    
+    private function addErrorTrans($error,array $parameters = array()) {
+        if(is_array($error)){
+            $this->errors = array_merge($this->errors,$error);
+        }else{
+            $message = $this->trans($error,$parameters,'PequivenSEIPBundle');
+            $this->errors[md5($message)] = $message;
+        }
+    }
     function getUserItemsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $this->errors= array();
         $numPersonal = $request->get('numPersonal');
         $periodName = $request->get('period');
 
-        $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = $errors = array();
+        $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         
         if($periodName === null){
-            $errors[] = 'Debe especificar el período de su consulta.';
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_the_period_inquiry');
         }
         if($numPersonal === null){
-            $errors[] = 'Debe especificar el numero del personal a consultar.';
+            $this->addErrorTrans('pequiven_seip.errors.you_must_specify_number_staff_consult');
         }
         
         $period = $this->container->get('pequiven.repository.period')->findOneBy(array(
@@ -39,23 +50,29 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         $user = $this->get('pequiven_seip.repository.user')->findUserByNumPersonal($numPersonal);
         
         if(!$user && $numPersonal != ''){
-            $errors[] = sprintf('El numero de personal "%s" no existe',$numPersonal);
+            $this->addErrorTrans('pequiven_seip.errors.the_number_staff_does_not_exist',array(
+                '%numPersonal%' => $numPersonal,
+            ));
         }
         
         if($periodName != '' && !$period){
-            $errors[] = sprintf('El período "%s" no existe.',$periodName);
+            $this->addErrorTrans('pequiven_seip.errors.the_period_does_not_exist',array(
+                '%period%' => $periodName
+            ));
         }
         $canBeEvaluated = true;
         
-        if(count($errors) == 0){
+        if(count($this->errors) == 0){
             //Repositorios
             $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
             $arrangementProgramRepository = $this->container->get('pequiven_seip.repository.arrangementprogram');
+            $allArrangementPrograms = $arrangementProgramsObjects = $allIndicators = array();
 
             //Programas de gestion donde es responsable
             $arrangementProgramsGoals = $arrangementProgramRepository->findByUserAndPeriodNotGoals($user,$period,$criteria);
             foreach ($arrangementProgramsGoals as $arrangementProgramsGoal) {
-                $arrangementPrograms[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
+                $arrangementProgramsObjects[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
+                $allArrangementPrograms[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
                 $arrangementProgramsForObjetives[$arrangementProgramsGoal->getId()] = $arrangementProgramsGoal;
             }
 
@@ -65,32 +82,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$goal->getId()] = $goal;
                 $arrangementProgram = $goal->getTimeline()->getArrangementProgram();
                 $arrangementProgramsForObjetives[$arrangementProgram->getId()] = $arrangementProgram;
+                $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
             }
             $this->getObjetiveFromPrograms($arrangementProgramsForObjetives, $objetives);
             
-            $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
-            foreach ($arrangementProgramsForObjetives as $arrangementProgram) {
-                $details = $arrangementProgram->getDetails();
-                $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
-                                    array(
-                                        'id' => $arrangementProgram->getId()
-                                    ),$referenceType
-                                );
-                $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$arrangementProgram);
-                //Se evalua que la notificacion no este en progeso
-                if($details->getNotificationInProgressByUser() !== null){
-                    $errors[] = sprintf('El usuario "%s" debe finalizar el proceso de notificación en el programa de gestión "%s".',$details->getNotificationInProgressByUser(),$link);
-                    $canBeEvaluated = false;
-                    continue;
-                }
-                //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $errors[] = sprintf('El programa de gestión "%s" no tiene avances cargados.',$link);
-                    $canBeEvaluated = false;
-                }
-            }
-
-            foreach ($arrangementPrograms as $key => $arrangementProgram) {
+            foreach ($arrangementProgramsObjects as $key => $arrangementProgram) {
                 $period = $arrangementProgram->getPeriod();
                 
                 $summary = $arrangementProgram->getSummary();
@@ -106,32 +102,61 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'description' => $arrangementProgram->getRef(),
                     'result' => $this->formatResult($arrangementProgram->getResult()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $realDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($realDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $realDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($realDateEnd)
                     ),
                 );
             }
 
+            if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
+                $gerenciaFirst = $user->getGerencia();
+                if($gerenciaFirst){
+                    foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
+                        $objetives[$objetive->getId()] = $objetive;
+                    }
+                }
+            } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
+                $gerenciaSecond = $user->getGerenciaSecond();
+                if($gerenciaSecond){
+                    foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
+                        $objetives[$objetive->getId()] = $objetive;
+                    }
+                }
+            }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
+                $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
+                foreach ($objetivesStrategic as $objetive) {
+                    $objetives[$objetive->getId()] = $objetive;
+                }
+            }
+            
+            //Recorrer todos los objetivos
             foreach ($objetives as $key => $objetive) {
                 $period = $objetive->getPeriod();
                 $planDateStart = $period->getDateStart();
                 $planDateEnd = $period->getDateEnd();
+                
+                foreach ($objetive->getArrangementPrograms() as $arrangementProgram) {
+                    $allArrangementPrograms[$arrangementProgram->getId()] = $arrangementProgram;
+                }
+                foreach ($objetive->getIndicators() as $indicator) {
+                    $allIndicators[$indicator->getId()] = $indicator;;
+                }
                 
                 $data = array(
                     'id' => sprintf('OB-%s',$objetive->getId()),
                     'description' => $objetive->getDescription(),
                     'result' => $this->formatResult($objetive->getResult()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $planDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($planDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $planDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($planDateEnd)
                     ),
                 );
                 if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO){
@@ -161,24 +186,80 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     'description' => $goal->getName(),
                     'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
                     'dateStart' => array(
-                        'plan' => $planDateStart,
-                        'real' => $realDateStart
+                        'plan' => $this->formatDateTime($planDateStart),
+                        'real' => $this->formatDateTime($realDateStart)
                     ),
                     'dateEnd' => array(
-                        'plan' => $planDateEnd,
-                        'real' => $realDateEnd
+                        'plan' => $this->formatDateTime($planDateEnd),
+                        'real' => $this->formatDateTime($realDateEnd)
                     ),
                 );
+            }
+            $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL;
+            foreach ($allArrangementPrograms as $arrangementProgram) {
+                $details = $arrangementProgram->getDetails();
+                $url = $this->generateUrl('pequiven_seip_arrangementprogram_show',
+                    array(
+                        'id' => $arrangementProgram->getId()
+                    ),$referenceType
+                );
+                $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$arrangementProgram);
+                //Se evalua que la notificacion no este en progeso
+                if($details->getNotificationInProgressByUser() !== null){
+                    $this->addErrorTrans('pequiven_seip.errors.user_must_complete_notification_process_management_program',array(
+                        '%user%' => $details->getNotificationInProgressByUser(),
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $canBeEvaluated = false;
+                    continue;
+                }
+                //Se evalua que no tenga avance cargado
+                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+                        '%arrangementProgram%' => $link,
+                    ));
+                    $canBeEvaluated = false;
+                }
+            }
+            foreach ($allIndicators as $indicator) {
+                if($indicator->hasNotification() === false){
+                    $url = $this->generateUrl('pequiven_indicator_show',
+                        array(
+                            'id' => $indicator->getId()
+                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+                        '%indicator%' => $link,
+                    ));
+                    $canBeEvaluated = false;
+                }
+            }
+            
+//            var_dump($this->errors);
+//            die;
+//            var_dump(count($objetives));
+//            die;
+            $resultService = $this->getResultService();
+            $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
+//            var_dump($isValidAdvance);
+            if(!$isValidAdvance){
+//                var_dump($resultService->getErrors());
+//                die;
+                $canBeEvaluated = $isValidAdvance;
+                $this->addErrorTrans($resultService->getErrors());
             }
 
             //Se evalua que tenga por lo menos un item
             if(count($goals) == 0 && count($arrangementPrograms) == 0 && count($objetives) == 0){
                 $canBeEvaluated = false;
-                $errors[] = sprintf('El usuario "%s" no tiene items asociados para su evaluación.',$user);
+                $this->addErrorTrans('pequiven_seip.errors.user_has_no_associated_items_evaluation',array(
+                    '%user%' => $user,
+                ));
             }
         }//endif if count errors
         
-        if(!$canBeEvaluated || count($errors) > 0){
+        if(!$canBeEvaluated || count($this->errors) > 0){
             $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         }
         
@@ -199,10 +280,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     ),
                 ),
             ),
-            'errors' => $errors,
+            'errors' => $this->errors,
             'success' => true,
         );
-        if(!$canBeEvaluated || count($errors) > 0){
+        if(!$canBeEvaluated || count($this->errors) > 0){
             $data['success'] = false;
         }
         $view = $this->view($data);
@@ -222,7 +303,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $objetive = $arrangementProgram->getOperationalObjective();
             }elseif ($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC) {
-                $objetive = $arrangementProgram->getOperationalObjective();
+                $objetive = $arrangementProgram->getTacticalObjective();
             }
             if($objetive){
                 $objetives[$objetive->getId()] = $objetive;
@@ -230,7 +311,41 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         }
     }
     
+    /**
+     * Formatea los decimales antes de enviar los resultados.
+     * @param type $result
+     * @return type
+     */
     private function formatResult($result){
-        return number_format($result,3);
+        return number_format($result,2);
+    }
+    
+    /**
+     * Formatea la fecha antes de enviarla en la api.
+     * 
+     * @param type $date
+     * @return type
+     */
+    private function formatDateTime($date) {
+        $r = '';
+        if(is_a($date, 'DateTime')){
+            $r = $date->format('d-m-Y');
+        }else{
+            $r = $date;
+        }
+        return $r;
+    }
+
+    /**
+     * Servicio de resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    private function getResultService(){
+        return $this->container->get('seip.service.result');
+}
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->get('translator')->trans($id, $parameters, $domain);
     }
 }

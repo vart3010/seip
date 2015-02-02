@@ -81,6 +81,10 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
 
                 $this->domainManager->dispatchEvent('post_update', $event);
             }
+            //Refrescar resultados del indicador padre.
+            if($indicator->getParent() !== null){
+                $resultService->refreshValueIndicator($indicator->getParent());
+            }
             
         }
         

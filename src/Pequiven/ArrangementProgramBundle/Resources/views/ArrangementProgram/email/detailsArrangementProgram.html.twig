@@ -8,7 +8,7 @@
     </tr>
     <tr>
         <th>Referencia</th>
-        <td><a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },false)) }}">{{ arrangementProgram.ref }}</a><td>
+        <td><a href="{{ url('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id }) }}">{{ arrangementProgram.ref }}</a><td>
     </tr>
     <tr>
         <th>Localidad</th>
@@ -35,5 +35,5 @@
     {% endif%}
 </table>
 <br/>
-Para mayor información acerca del programa de gestión, por favor de click <a href="{{ asset(path('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id },false)) }}">aquí</a>.
+Para mayor información acerca del programa de gestión, por favor de click <a href="{{ url('pequiven_seip_arrangementprogram_show',{id: arrangementProgram.id }) }}">aquí</a>.
     

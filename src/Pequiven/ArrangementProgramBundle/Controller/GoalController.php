@@ -42,6 +42,7 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $entity->setPeriod($this->getPeriodService()->getPeriodActive());
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -245,5 +246,13 @@ class GoalController extends \Pequiven\SEIPBundle\Controller\SEIPController
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

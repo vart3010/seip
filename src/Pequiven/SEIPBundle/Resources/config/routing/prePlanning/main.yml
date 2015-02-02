@@ -1,0 +1,3 @@
+pequiven_preplanning:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/prePlanning/pre_planning.yml"
+#    prefix:   /pre-planning

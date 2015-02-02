@@ -30,6 +30,14 @@ class Configuration
     private $localizations;
     
     /**
+     * Pre-Planificacion
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration",mappedBy="configuration")
+     */
+    private $prePlanningConfiguration;
+    
+    /**
      * Usuario asociado a la configuracion
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
@@ -141,5 +149,28 @@ class Configuration
     
     public function __toString() {
         return $this->id.'';
+    }
+
+    /**
+     * Set prePlanningConfiguration
+     *
+     * @param \Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration $prePlanningConfiguration
+     * @return Configuration
+     */
+    public function setPrePlanningConfiguration(\Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration $prePlanningConfiguration = null)
+    {
+        $this->prePlanningConfiguration = $prePlanningConfiguration;
+
+        return $this;
+    }
+
+    /**
+     * Get prePlanningConfiguration
+     *
+     * @return \Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration 
+     */
+    public function getPrePlanningConfiguration()
+    {
+        return $this->prePlanningConfiguration;
     }
 }

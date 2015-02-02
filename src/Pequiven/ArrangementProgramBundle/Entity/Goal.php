@@ -16,7 +16,7 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Goal
+class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
      * @var integer
@@ -108,6 +108,15 @@ class Goal
      * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
+    
+    /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -379,9 +388,33 @@ class Goal
         return $this->name;
     }
     
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return ArrangementProgram
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+    
     public function __clone() {
         if($this->id > 0){
-           $this->id = null; 
+           $this->id = null;
+           
            $this->goalDetails = clone($this->goalDetails);
            $this->goalDetails->setGoal($this);
         }

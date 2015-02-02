@@ -5,6 +5,7 @@ pequiven:
         my_arrangement_program: Mis programas de gestión
         not_arrangement_program_assigned: No tiene programas de gestión asignados.
         for_reviewing_or_approving: Por revisar o aprobar
+        for_notifying: Por notificar
         assigned: Asignados
         total_planned: Total planificado
         write_observation: Escriba una observación
@@ -70,6 +71,10 @@ pequiven:
             rejected: Rechazado
             approved: Aprobado
             finished: Finalizado
+            charged: Cargados
+            notified: Notificados
+            not_notified: No Notificados
+            notified_but_still_in_progress: Notificados pero con proceso sin cerrar
         buttons:
             revised: Revisado
             send_to_review: Enviar a revisión

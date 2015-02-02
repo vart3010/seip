@@ -4,11 +4,14 @@ namespace Pequiven\SEIPBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\Period as Base;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
  * Periodo
  *
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="name_idx", columns={"name"})})
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Period extends Base
 {
@@ -59,7 +62,7 @@ class Period extends Base
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status = true;
+    private $status = false;
 
     /**
      * Fecha inicio de notificación de programas de gestion.
@@ -92,6 +95,42 @@ class Period extends Base
      * @ORM\Column(name="dateEndLoadArrangementProgram", type="date", nullable=true)
      */
     private $dateEndLoadArrangementProgram;
+
+    /**
+     * Fecha inicio de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateStartClearanceNotificationArrangementProgram;
+
+    /**
+     * Fecha fin de holgura de notificación de programas de gestion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndClearanceNotificationArrangementProgram", type="date", nullable=true)
+     */
+    private $dateEndClearanceNotificationArrangementProgram;
+    
+    /**
+     * Periodo anterior o padre
+     * 
+     * @var type 
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",inversedBy="child")
+     */
+    private $parent;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period",mappedBy="parent")
+     */
+    private $child;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
 
     /**
      * Get id
@@ -211,7 +250,7 @@ class Period extends Base
     }
 
     public function __toString() {
-        return $this->description;
+        return $this->getDescription()?:'-';
     }
 
     /**
@@ -304,5 +343,120 @@ class Period extends Base
     public function getDateEndLoadArrangementProgram()
     {
         return $this->dateEndLoadArrangementProgram;
+    }
+
+    /**
+     * Set dateStartClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateStartClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateStartClearanceNotificationArrangementProgram($dateStartClearanceNotificationArrangementProgram)
+    {
+        $this->dateStartClearanceNotificationArrangementProgram = $dateStartClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartClearanceNotificationArrangementProgram()
+    {
+        return $this->dateStartClearanceNotificationArrangementProgram;
+    }
+
+    /**
+     * Set dateEndClearanceNotificationArrangementProgram
+     *
+     * @param \DateTime $dateEndClearanceNotificationArrangementProgram
+     * @return Period
+     */
+    public function setDateEndClearanceNotificationArrangementProgram($dateEndClearanceNotificationArrangementProgram)
+    {
+        $this->dateEndClearanceNotificationArrangementProgram = $dateEndClearanceNotificationArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndClearanceNotificationArrangementProgram
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndClearanceNotificationArrangementProgram()
+    {
+        return $this->dateEndClearanceNotificationArrangementProgram;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $parent
+     * @return Period
+     */
+    public function setParent(\Pequiven\SEIPBundle\Entity\Period $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set child
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $child
+     * @return Period
+     */
+    public function setChild(\Pequiven\SEIPBundle\Entity\Period $child = null)
+    {
+        $this->child = $child;
+
+        return $this;
+    }
+
+    /**
+     * Get child
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getChild()
+    {
+        return $this->child;
+    }
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * @return Period
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 }

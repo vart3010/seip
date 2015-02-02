@@ -9,6 +9,7 @@
 namespace Pequiven\MasterBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Pequiven\MasterBundle\Entity\Gerencia;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
 /**
  * Description of GerenciaSecondRepository
@@ -81,12 +82,26 @@ class GerenciaSecondRepository extends baseEntityRepository {
         return $this->getPaginator($queryBuilder);
     }
     
+    /**
+     * Filtro de Gerencia de 2da Línea para las diferentes listas en el sistema
+     * @param array $criteria
+     * @return type
+     */
     function findGerenciaSecond(array $criteria = null)
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        $criteria->remove('view_planning');
-        //Filtro de gerencia de segunda linea modular y vinculante
+        
+        if(isset($criteria['view_planning'])){
+            $criteria->remove('view_planning');
+        }
+        
+        $queryBuilder
+                ->andWhere('gs.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ;
+        
+        //Filtro de gerencia de segunda línea modular y vinculante
         if(($typeManagement = $criteria->remove('typeManagement')) != null){
             $complejo = $criteria->remove('complejo');
             $queryBuilder
@@ -103,19 +118,45 @@ class GerenciaSecondRepository extends baseEntityRepository {
                     ->setParameter('typeManagement', true)
                     ->setParameter('complejo', $complejo)
                 ;
-        }else if(($gerencia = $criteria->remove('gerencia')) != null){
-            $queryBuilder
+        } else if(($gerencia = $criteria->remove('gerencia')) != null){
+            $complejo = $criteria->remove('complejo');
+            if(($typeSupport = $criteria->remove('type_gerencia_support')) != null){
+                $queryBuilder
+                    ->innerJoin('gs.gerencia', 'g')
+                    ->leftJoin('g.gerenciaSecondVinculants', 'gv')
+                ;
+                if($typeSupport == Gerencia::TYPE_WITHOUT_GERENCIA_SECOND_SUPPORT){//Solo se da para el caso de que la gerencia este en Sede Corporativa
+                    $queryBuilder
+                            ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia AND gs.complejo = :complejo','gv.modular = 1 AND g.id = :gerencia'))
+                            ->setParameter('complejo', $complejo)
+                            ;
+                } elseif($typeSupport == Gerencia::TYPE_WITH_GERENCIA_SECOND_SUPPORT){//Solo se da para las gerencias generales de los complejos
+                    $queryBuilder
+                        ->leftJoin('gs.gerenciaSupports', 'gsp')
+                        ->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia','gsp.id = :gerencia'))
+                        ;
+                }
+            } else{
+                $queryBuilder
                     ->innerJoin('gs.gerencia', 'g')
                     ->leftJoin('gs.gerenciaVinculants', 'gv')
-                    ->andWhere('g.id = :gerencia')
-                    ->orWhere('gv.id = :gerencia')
-                    ->setParameter('gerencia', $gerencia)
                 ;
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('g.id = :gerencia','gv.id = :gerencia'));
+            }
+            
+            $queryBuilder
+                    ->setParameter('gerencia', $gerencia)
+                    ;
         }
+        
         return $queryBuilder->getQuery()->getResult();
     }
     
-    
+    /**
+     * Gerencias de Segunda Línea de acuerdo a una gerencia de 1ra línea
+     * @param type $options
+     * @return type
+     */
     public function findByGerenciaFirst($options = array()){
         $qb = $this->getQueryBuilder();
         
@@ -125,9 +166,10 @@ class GerenciaSecondRepository extends baseEntityRepository {
             $qb->orWhere('gv.id = '.$options['gerencia']);
         }
         
-        $qb->andWhere('gs.enabled = :enabled');
-        
-        $qb->setParameter('enabled', true);
+        $qb
+            ->andWhere('gs.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ;
         
         return $qb->getQuery()->getResult();
     }
@@ -143,7 +185,9 @@ class GerenciaSecondRepository extends baseEntityRepository {
             ->leftJoin('gs_ob.childrens', 'gs_ob_c')
             ->leftJoin('gs_ob.parents', 'gs_ob_p')
             ->andWhere('gs.id = :gerencia')
+            ->andWhere('gs.enabled = :enabled')
             ->setParameter('gerencia', $id)
+            ->setParameter('enabled', true)
                 ;
         return $qb->getQuery()->getOneOrNullResult();
     }

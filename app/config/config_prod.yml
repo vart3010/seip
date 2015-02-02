@@ -4,7 +4,7 @@ imports:
 framework:
     templating:
         assets_base_urls: 
-            http:   [%main_cdn%]
+            http:   ["%main_cdn%"]
 #    validation:
 #        cache: apc
 

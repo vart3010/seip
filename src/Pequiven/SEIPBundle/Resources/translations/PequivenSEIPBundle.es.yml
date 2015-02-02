@@ -46,6 +46,8 @@ pequiven_seip:
         user: Usuario
         localization:
             localization: Localización
+        pre_planning_configuration:
+            main: Pre-Planificación
     actions:
         create: Crear
         add: Añadir
@@ -105,6 +107,8 @@ pequiven_seip:
     #Buttons
     buttons:
         export_xls: Exportar
+        export_result: Exportar Resultados
+        refresh: Refrescar
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -149,12 +153,36 @@ pequiven_seip:
         responsibles_pg: Responsable(s) del programa de gestión
         responsibles_goals: Responsable(s) de las metas
         type_template: Tipo de plantilla
+        notified: Notificados
+        not_notified: Sin Notificación
+        notified_but_still_in_progress: Notificados pero con proceso sin cerrar
+        miscellaneous: Misceláneo
+        excludeGerenciaSecondSupport: Excluir Gerencias de Apoyo
+        includeGerenciaSecondSupport: Incluir Gerencias de Apoyo
     tooltips:
         click_to_show: Click para ver
     area:
         main: Area principal
         events: Area de eventos
         dashboard: Bienvenida
+    errors:
+        you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
+        you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
+        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe
+        the_period_does_not_exist.: El período "%period%" no existe.
+        user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.
+        user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
+        the_management_program_does_not_progress_loaded: El programa de gestión "%arrangementProgram%" no tiene avances cargados.
+        the_indicator_has_not_loaded_values: El indicador "%indicator%" no tiene valores cargados.
+        the_user_has_no_defined_configuration_planning: El usuario "%user%" no tiene la configuración requerida para realizar la pre planificacion.
+        the_user_not_configured_pre_plan_the_tactical_level: El usuario "%user%" no esta configurado para pre planificar el nivel táctico.
+        the_user_not_configured_pre_plan_the_operative_level: El usuario "%user%" no esta configurado para pre planificar el nivel operativo.
+    pre_planning:
+        pre_planning: Planificación %period%
+        tactic: Táctico
+        operative: Operativo
+        pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
+        
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

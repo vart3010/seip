@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: config/template.yml }
     - { resource: config/sonata.yml }
+    - { resource: config/sylius_resource.yml }
     - { resource: @PequivenSEIPBundle/Resources/config/admin.yml }
 
 framework:
@@ -34,6 +35,7 @@ twig:
     form:
         resources:
             - 'PequivenSEIPBundle:Template:Form/fields.html.twig'
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -135,9 +137,11 @@ tecnocreaciones_vzla_government:
 tpg_extjs:
     entities:
         - @PequivenArrangementProgramBundle/Entity/
+        - @PequivenSEIPBundle/Entity/PrePlanning/
     remoting:
         bundles:
             - PequivenArrangementProgramBundle
+            - PequivenSEIPBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -179,154 +183,10 @@ fos_oauth_server:
     auth_code_class:     Pequiven\SEIPBundle\Entity\Api\AuthCode
     service:
         user_provider: fos_user.user_provider.username
-
-sylius_resource:
-    resources:
-        pequiven.seipmonitor:
-            driver: doctrine/orm
-            classes:
-                model: Pequiven\SEIPBundle\Entity\Monitor
-                controller: Pequiven\SEIPBundle\Controller\MonitorController
-                repository: Pequiven\SEIPBundle\Repository\MonitorRepository
-        pequiven.objetive:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:Planning/Objetive
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\Planning\ObjetiveController
-                model: Pequiven\ObjetiveBundle\Entity\Objetive
-                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
-        #Objetivo estratégico
-        pequiven.objetivestrategic:
-            driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Strategic:list.html.twig
-            classes:
-                model: Pequiven\ObjetiveBundle\Entity\Objetive
-                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveStrategicController
-                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
-        #Objetivo táctico
-        pequiven.objetivetactic:
-            driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Tactic
-            classes:
-                model: Pequiven\ObjetiveBundle\Entity\Objetive
-                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveTacticController
-                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
-        #Objetivo operativo
-        pequiven.objetiveoperative:
-            driver: doctrine/orm
-            templates: PequivenObjetiveBundle:Operative:list.html.twig
-            classes:
-                model: Pequiven\ObjetiveBundle\Entity\Objetive
-                controller: Pequiven\ObjetiveBundle\Controller\ObjetiveOperativeController
-                repository: Pequiven\ObjetiveBundle\Repository\ObjetiveRepository
-        pequiven.indicator:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:Planning/Indicator
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\Planning\IndicatorController
-                model: Pequiven\IndicatorBundle\Entity\Indicator
-                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
-        pequiven.value_indicator:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:Planning/ValueIndicator
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicatorController
-                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
-        #Indicador estratégico
-        pequiven.indicatorstrategic:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\IndicatorBundle\Controller\IndicatorStrategicController
-                model: Pequiven\IndicatorBundle\Entity\Indicator
-                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
-        #Indicador táctico
-        pequiven.indicatortactic:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\IndicatorBundle\Controller\IndicatorTacticController
-                model: Pequiven\IndicatorBundle\Entity\Indicator
-                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
-        #Indicador operativo
-        pequiven.indicatoroperative:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\IndicatorBundle\Controller\IndicatorOperativeController
-                model: Pequiven\IndicatorBundle\Entity\Indicator
-                repository: Pequiven\IndicatorBundle\Repository\IndicatorRepository
-                
-        #Maestro gerencia 1ra línea
-        pequiven.gerenciafirst:
-            driver: doctrine/orm
-            templates: PequivenMasterBundle:Gerencia
-            classes:
-                model: Pequiven\MasterBundle\Entity\Gerencia
-                controller: Pequiven\MasterBundle\Controller\GerenciaController
-                repository: Pequiven\MasterBundle\Repository\GerenciaRepository
-        #Maestro gerencia 2da línea
-        pequiven.gerenciasecond:
-            driver: doctrine/orm
-            templates: PequivenMasterBundle:GerenciaSecond
-            classes:
-                model: Pequiven\MasterBundle\Entity\GerenciaSecond
-                controller: Pequiven\MasterBundle\Controller\GerenciaSecondController
-                repository: Pequiven\MasterBundle\Repository\GerenciaSecondRepository
-        #Nivel de Acceso por Usuario
-        pequiven_seip.userpermission:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\UserPermissionController
-                model: Pequiven\SEIPBundle\Entity\UserPermission
-                repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository
-        pequiven_seip.arrangementprogram:
-            driver: doctrine/orm
-            templates: PequivenArrangementProgramBundle:ArrangementProgram
-            classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\ArrangementProgramController
-                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
-        pequiven_seip.arrangementprogram_template:
-            driver: doctrine/orm
-            templates: PequivenArrangementProgramBundle:ArrangementProgramTemplate
-            classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\ArrangementProgramTemplateController
-                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate
-                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramTemplateRepository
-        pequiven_seip.arrangementprogram_data:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
-                model: Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-                repository: Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository
-        pequiven_seip.arrangementprogram_goal:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\GoalController
-                model: Pequiven\ArrangementProgramBundle\Entity\Goal
-                repository: Pequiven\ArrangementProgramBundle\Repository\GoalRepository
-        pequiven_seip.complejo:
-            driver: doctrine/orm
-            classes:
-                controller: Pequiven\ArrangementProgramBundle\Controller\GenericDataController
-                model: Pequiven\MasterBundle\Entity\Complejo
-                repository: Pequiven\MasterBundle\Repository\ComplejoRepository
-        pequiven_seip.user:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:User
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\UserController
-                model: Pequiven\SEIPBundle\Entity\User
-                repository: Pequiven\SEIPBundle\Repository\UserRepository
-                
-        pequiven.result:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:Planning/Result
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\Planning\ResultController
-                model: Pequiven\SEIPBundle\Entity\Result
-                repository: Pequiven\SEIPBundle\Repository\Result\ResultRepository
-        pequiven.localization:
-            driver: doctrine/orm
-            templates: PequivenSEIPBundle:User/Localization
-            classes:
-                controller: Pequiven\SEIPBundle\Controller\User\LocalizationController
-                model: Pequiven\SEIPBundle\Entity\User\Localization
+        
+simple_things_entity_audit:
+        global_ignore_columns:
+            - created_at
+            - updated_at
+            - deletedAt
+            - createdAt

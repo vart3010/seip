@@ -29,7 +29,10 @@ class PeriodService extends ContainerAware
         $period = $this->getPeriodActive();
         $now = new \DateTime();
         
-        if($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()){
+        if(
+            ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()) ||
+            ($now >= $period->getDateStartClearanceNotificationArrangementProgram() && $now <= $period->getDateEndClearanceNotificationArrangementProgram() && $this->isGranted('ROLE_ARRANGEMENT_PROGRAM_CLEARANCE'))
+          ){
             $result = true;
         }
         return $result;
@@ -52,12 +55,34 @@ class PeriodService extends ContainerAware
     }
     
     /**
-     * 
+     * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
     function getPeriodActive()
     {
         $period = $this->container->get('pequiven.repository.period')->findOneActive();
         return $period;
+    }
+    
+    /**
+     * Retorna el periodo siguiente
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getNextPeriod()
+    {
+        $nextPeriod = null;
+        $periodActive = $this->getPeriodActive();
+        if($periodActive){
+            $nextPeriod = $periodActive->getChild();
+        }
+        return $nextPeriod;
+    }
+    
+    private function isGranted($roles) {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context')->isGranted($roles);
     }
 }

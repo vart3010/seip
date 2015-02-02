@@ -1,0 +1,81 @@
+pequiven_pre_planning_index:
+    path: /
+    defaults:
+        _controller: pequiven.controller.pre_planning:indexAction
+        _format: html
+    methods: [GET]
+    
+pequiven_pre_planning_form:
+    path: /get-form
+    defaults:
+        _controller: pequiven.controller.pre_planning:getFormAction
+        _format: html
+    requirements:
+        _format: html
+    methods: [GET]
+    
+pequiven_pre_planning_get_pre_planning:
+    path: /get-pre-planning.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:getPrePlanningAction
+        _format: json
+    requirements:
+        _format: html|json
+    methods: [GET]
+    
+pequiven_pre_planning_delete_pre_planning:
+    path: /delete-pre-planning
+    defaults:
+        _controller: pequiven.controller.pre_planning:deletePrePlanningAction
+        _format: json
+    methods: [POST]
+    
+pequiven_pre_planning_return_changes:
+    path: /return-changes
+    defaults:
+        _controller: pequiven.controller.pre_planning:returnChangesAction
+        _format: json
+    methods: [GET]
+    
+pequiven_pre_planning_start_pre_planning:
+    path: /start-prep-lanning
+    defaults:
+        _controller: pequiven.controller.pre_planning:startPrePlanningAction
+        _format: json
+    methods: [GET]
+    
+pequiven_pre_planning_update:
+    path: /update-pre-planning
+    defaults:
+        _controller: pequiven.controller.pre_planning:updatePrePlanningAction
+        _format: json
+    methods: [POST]
+
+pequiven_pre_planning_import:
+    path: /{id}/import
+    defaults:
+        _controller: pequiven.controller.pre_planning:importAction
+        _format: json
+    methods: [GET]
+    options:
+        expose: true
+        
+pequiven_pre_planning_review:
+    path: /review.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:reviewAction
+        _format: html
+    methods: [GET]
+    requirements:
+        _format: html|json
+        
+pequiven_pre_planning_send_to_review:
+    path: /{id}/send-to-review.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:sendToReviewAction
+        _format: json
+    methods: [GET]
+    requirements:
+        _format: html|json
+    options:
+        expose: true

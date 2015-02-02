@@ -9,7 +9,7 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Description of ObjetiveRepository
+ * Repositorio del objetivo
  *
  * @author matias
  */
@@ -608,6 +608,25 @@ class ObjetiveRepository extends EntityRepository {
         $qb->setParameter('enabled', true);
         $qb->setParameter('idGerenciaSecond', $gerenciaSecond->getId());
         
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * Retorna los objetivos estrategicos del periodo.
+     * 
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return type
+     */
+    public function findAllStrategicByPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('o.objetiveLevel = :objetiveLevel')
+            ->andWhere('o.period = :period')
+            ;
+        $qb
+            ->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO)
+            ->setParameter('period', $period)
+            ;
         return $qb->getQuery()->getResult();
     }
 }
