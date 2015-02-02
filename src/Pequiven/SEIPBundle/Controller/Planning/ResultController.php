@@ -315,8 +315,10 @@ class ResultController extends ResourceController {
             $data['success'] = false;
             try {
                 if($type == 1){
-                    $resource = $arrangementprogramRepository->find($id);
-                    $resultService->refreshValueArrangementProgram($resource);
+                    $resource = $arrangementprogramRepository->findWithData($id);
+                    if($resource){
+                        $resultService->refreshValueArrangementProgram($resource);
+                    }
                 }elseif($type == 2){
                     $resource = $indicatorRepository->find($id);
                     $resultService->refreshValueIndicator($resource);
@@ -326,6 +328,7 @@ class ResultController extends ResourceController {
                 $success = false;
                 $data['code'] = $exc->getCode();
                 $data['message'] = $exc->getMessage();
+                $data['id'] = $id;
                 $view->setStatusCode(500);
             }
 

@@ -293,12 +293,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function updateResultOfObjects($objects,$andFlush = true) 
     {
+        if($objects === null){
+            return;
+        }
         if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
         {
             $objects = array($objects);
         }
         foreach ($objects as $object) {
-            foreach ($object->getResults() as $result) 
+            foreach ($object->getResults() as $result)
             {
                 $this->calculateResult($result,$andFlush);
             }
@@ -388,6 +391,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
+        if(!$tendenty){
+            throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
+        }
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
