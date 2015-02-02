@@ -269,8 +269,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
         //ROLE_WORKER_PLANNING_RECALCULATE_RESULT
         $subchild->addChild('planning.results.recalculate', array(
-                                'route' => 'pequiven_result_list',
-                                'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
+                                'route' => 'pequiven_result_recalculate',
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.recalculate', $section)));
         

@@ -294,6 +294,54 @@ class ResultController extends ResourceController {
         );
     }
     
+    public function recalculateAction(Request $request)
+    {
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('recalculate.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $arrangementprogramRepository = $this->get('pequiven_seip.repository.arrangementprogram');
+        $indicatorRepository = $this->get('pequiven.repository.indicator');
+//        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+//        $view->setData($resources);
+        if($request->isMethod('POST'))
+        {
+            $resultService = $this->getResultService();
+            $id = $request->get('id');
+            $type = $request->get('type');
+            if($type == 1){
+                $resource = $arrangementprogramRepository->find($id);
+                $resultService->refreshValueArrangementProgram($resource);
+            }elseif($type == 2){
+                $resource = $indicatorRepository->find($id);
+                $resultService->refreshValueIndicator($resource);
+            }
+            $view->setData(array(
+                'success'  => true,
+            ));
+            return $this->handleView($view);
+        }
+        
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $qbArrangementprogram = $arrangementprogramRepository->findQueryWithResultNull($period);
+        $qbArrangementprogram->select('ap.id,ap.ref');
+        $resultsArrangementprogram = $qbArrangementprogram->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        
+        $qbIndicator = $indicatorRepository->findQueryWithResultNull($period);
+        $qbIndicator->select('i.id,i.ref');
+        $resultsIndicator = $qbIndicator->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        
+        
+        $view->setData(array(
+            'resultsArrangementprogram' => $resultsArrangementprogram,
+            'resultsIndicator' => $resultsIndicator
+        ));
+        
+        return $this->handleView($view);
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->get('translator')->trans($id, $parameters, $domain);
@@ -305,5 +353,13 @@ class ResultController extends ResourceController {
      */
     private function getResultService(){
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

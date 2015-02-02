@@ -190,6 +190,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            if($countResult == 0){
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer

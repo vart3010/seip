@@ -381,6 +381,17 @@ class ArrangementProgramRepository extends EntityRepository
         return $this->getPaginator($qb);
     }
     
+    public function findQueryWithResultNull(Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere('ap.period = :period')
+            ->andWhere($qb->expr()->isNull('ap.lastDateCalculateResult'))
+            ->setParameter('period', $period)
+            ;
+        return $qb;
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         

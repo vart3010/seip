@@ -1,0 +1,150 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig" %}
+
+{% block body %}
+    <p class="wrapped align-center button-height">
+        <button type="button" class="button blue-gradient glossy" onclick="recalculateArrangementprogram()">Recalcular programas</button>
+    </p>
+    <p class="wrapped align-center button-height">
+        <button type="button" class="button blue-gradient glossy" onclick="recalculateIndicator()">Recalcular indicadores</button>
+    </p>
+{% endblock body %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        var resultsArrangementprogram = {{ resultsArrangementprogram|json_encode()|raw }};
+        var resultsIndicator = {{ resultsIndicator|json_encode()|raw }};
+        var cancelAjax = false;
+        
+        function recalculateArrangementprogram()
+        {
+            cancelAjax = false;
+            openLoadingModal(resultsArrangementprogram,1);
+        }
+        function recalculateIndicator()
+        {
+            cancelAjax = false;
+            openLoadingModal(resultsIndicator,2);
+        }
+        
+        // Demo loading modal
+        function openLoadingModal(data,type)
+        {
+                var timeout;
+
+                $.modal({
+                        contentAlign: 'center',
+                        width: 400,
+                        title: 'Cargando',
+                        content: '<div style="line-height: 25px; padding: 0 0 10px"><span id="modal-status">Conectando al servidor...</span><br><span id="modal-progress">0%</span></div>',
+                    buttons: {},
+                    scrolling: false,
+                    actions: {
+                        'Cancel': {
+                            color: 'red',
+                            click: function (win) {
+                                cancelAjax = true;
+                                win.closeModal();
+                            }
+                        }
+                    },
+                    onOpen: function ()
+                    {
+                        // Progress bar
+                        var progress = $('#modal-progress').progress(data.length, {
+                            size: 370,
+                            style: 'large',
+                            barClasses: ['anthracite-gradient', 'glossy'],
+                            stripes: true,
+                            darkStripes: false,
+                            showValue: false
+                        }),
+                            // Loading state
+                            loaded = 0,
+                            // Window
+                            win = $(this),
+                            // Status text
+                            status = $('#modal-status'),
+                            // Function to simulate loading
+                            simulateLoading = function ()
+                            {
+                                ++loaded;
+                                progress.setProgressValue(loaded + '%', true);
+                                if (loaded === 100)
+                                {
+                                    progress.hideProgressStripes().changeProgressBarColor('green-gradient');
+                                    status.text('Listo!');
+                                    /*win.getModalContentBlock().message('Content loaded!', {
+                                     classes: ['green-gradient', 'align-center'],
+                                     arrow: 'bottom'
+                                     });*/
+                                    setTimeout(function () {
+                                        win.closeModal();
+                                    }, 1500);
+                                }
+                                else
+                                {
+                                    if (loaded === 1)
+                                    {
+                                        status.text('Loading data...');
+                                        progress.changeProgressBarColor('blue-gradient');
+                                    }
+                                    else if (loaded === 25)
+                                    {
+                                        status.text('Loading assets (1/3)...');
+                                    }
+                                    else if (loaded === 45)
+                                    {
+                                        status.text('Loading assets (2/3)...');
+                                    }
+                                    else if (loaded === 85)
+                                    {
+                                        status.text('Loading assets (3/3)...');
+                                    }
+                                    else if (loaded === 92)
+                                    {
+                                        status.text('Initializing...');
+                                    }
+                                    timeout = setTimeout(simulateLoading, 50);
+                                }
+                            };
+
+                        // Start
+                        {#timeout = setTimeout(simulateLoading, 2000);#}
+                        var i = 0;
+                        function callAjax (data)
+                        {
+                           loaded = (100 * i) / data.length;
+                           progress.setProgressValue(loaded.toFixed(2) + '%', true);
+                           var ref = data[i].ref;
+                           status.text('('+i+'/'+(data.length)+')Recalculando '+ref+'...');
+                           var url = Routing.generate('pequiven_result_recalculate',{id:data[i].id,type: type,_format:'json'});
+                            $.ajax({
+                                type: "POST",
+                                url: url
+                            }).done(function(){
+                                progress.changeProgressBarColor('blue-gradient');
+                                i++;
+                                if(cancelAjax == false){
+                                    if(i < data.length){
+                                       callAjax(data);
+                                    }else{
+                                       progress.hideProgressStripes().changeProgressBarColor('green-gradient'); 
+                                    }
+                                }
+                            }).error(function(){
+                                 status.text('ERROR: Recalculando '+ref+'...');
+                                 progress.changeProgressBarColor('red-gradient');
+                            }); 
+                        }
+                        callAjax(data,0);
+                    },
+                    onClose: function ()
+                    {
+                        // Stop simulated loading if needed
+                        cancelAjax = true;
+                    }
+                });
+            }
+            ;
+    </script>
+{% endblock javascript %}
