@@ -928,6 +928,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->lastDateCalculateResult = null;
     }
     
+    public function isAvailableInResult() 
+    {
+        return true;
+    }
+    
     function getDeletedAt() {
         return $this->deletedAt;
     }

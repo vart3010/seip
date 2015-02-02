@@ -410,6 +410,15 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    public function clearLastDateCalculateResult() {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return true;
+    }
+    
     function setChildrens($childrens) 
     {
         $this->childrens = $childrens;
