@@ -352,9 +352,10 @@ class IndicatorRepository extends baseEntityRepository {
             if($miscellaneous == Indicator::INDICATOR_WITHOUT_FORMULA){
                 $queryBuilder->andWhere('i.formula IS NULL');
             } elseif ($miscellaneous == Indicator::INDICATOR_WITH_RESULT){
-                $queryBuilder->andWhere('i.progressToDate > 0');
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('i.progressToDate > 0','i.lastDateCalculateResult IS NOT NULL'));
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
                 $queryBuilder->andWhere('i.progressToDate = 0');
+                $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
             }
             
         }

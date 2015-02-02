@@ -107,6 +107,7 @@ pequiven_seip:
     #Buttons
     buttons:
         export_xls: Exportar
+        export_result: Exportar Resultados
         refresh: Refrescar
     edit: Editar
     save: Guardar
