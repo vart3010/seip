@@ -46,7 +46,9 @@ class ArrangementProgramAdmin extends Admin
                 'required' => false,
             ))
             ->add('description')
-            ->add('isAvailableInResult')
+            ->add('isAvailableInResult',null,array(
+                'required' => false,
+            ))
             ;
     }
     
