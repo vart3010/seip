@@ -42,6 +42,9 @@ sonata_admin:
         information:
             GUEST:    [VIEW, LIST]
             STAFF:    [EDIT, LIST, CREATE]
+            EDIT:     [EDIT,VIEW, LIST]
+            CREATE:   [CREATE, VIEW, LIST]
+            DELETE:   [DELETE, VIEW, LIST]
             EDITOR:   [OPERATOR, EXPORT]
             ADMIN:    [MASTER]
         # permissions not related to an object instance and also to be available when objects do not exist
