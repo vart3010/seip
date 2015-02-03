@@ -317,6 +317,7 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
                     ->andWhere('o.deletedAt IS NULL')
+                    ->andWhere('i.deletedAt IS NULL')
                     ;
         }
         
