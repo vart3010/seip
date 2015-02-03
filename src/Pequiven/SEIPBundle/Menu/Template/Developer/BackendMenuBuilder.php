@@ -89,7 +89,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         
         //Menú Administración
-        if($this->securityContext->isGranted('ROLE_ADMIN')){
+        if($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))){
             $menu->addChild('admin', array(
                 'route' => 'sonata_admin_dashboard',
                 'labelAttributes' => array('icon' => 'icon-card'),
