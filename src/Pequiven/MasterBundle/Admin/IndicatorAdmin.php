@@ -31,7 +31,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('formula')
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
-            ->add('valueFinal');
+            ->add('valueFinal')
+            ->add('childrens');
     }
     
     protected function configureFormFields(FormMapper $form) {

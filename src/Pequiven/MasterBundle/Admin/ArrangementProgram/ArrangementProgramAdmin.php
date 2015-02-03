@@ -41,9 +41,12 @@ class ArrangementProgramAdmin extends Admin
         $form
             ->add('ref')
             ->add('period')
-            ->add('tacticalObjective')
-            ->add('operationalObjective',null,array(
+            ->add('tacticalObjective','sonata_type_model_autocomplete',array(
+                'property' => array('ref','description')
+            ))
+            ->add('operationalObjective','sonata_type_model_autocomplete',array(
                 'required' => false,
+                'property' => array('ref','description')
             ))
             ->add('description')
             ->add('isAvailableInResult',null,array(
