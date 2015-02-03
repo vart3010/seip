@@ -13,6 +13,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  *
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="ref_idx", columns={"ref"})})
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
@@ -175,7 +176,12 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="isAvailableInResult",type="boolean")
      */
     private $isAvailableInResult = true;
-
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -616,7 +622,35 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         return $valid;
     }
     
-    public function __clone() {
+    function getDescription() {
+        return $this->description;
+    }
+
+    function getIsAvailableInResult() {
+        return $this->isAvailableInResult;
+    }
+
+    function setDescription($description) {
+        $this->description = $description;
+    }
+
+    function setIsAvailableInResult($isAvailableInResult) {
+        $this->isAvailableInResult = $isAvailableInResult;
+    }
+
+    function getDeletedAt() 
+    {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) 
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+    
+    public function __clone() 
+    {
         if($this->id){
             $this->id = null;
             $this->ref = null;

@@ -24,7 +24,7 @@ abstract class Objetive implements ObjetiveInterface
      * Programas de gestion a nivel tactico
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="tacticalObjective")
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="tacticalObjective",cascade={"remove"})
      */
     protected $tacticalArrangementPrograms;
     
@@ -32,7 +32,7 @@ abstract class Objetive implements ObjetiveInterface
      * Programas de gestion a nivel operativo
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
-     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="operationalObjective")
+     * @ORM\OneToMany(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram",mappedBy="operationalObjective",cascade={"remove"})
      */
     protected $operationalArrangementPrograms;
     

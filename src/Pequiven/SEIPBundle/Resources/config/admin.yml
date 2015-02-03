@@ -82,3 +82,47 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.arrangement_program:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programas de gestion", label: "Programas de gestion" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.goal:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programas de gestion", label: "Metas" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\Goal
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.goal_details:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalDetailsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programas de gestion", label: "Detalles de metas" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\GoalDetails
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.timeline:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\TimelineAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programas de gestion", label: "Linea de tiempo" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\Timeline
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

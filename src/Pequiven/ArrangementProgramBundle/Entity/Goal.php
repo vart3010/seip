@@ -7,6 +7,7 @@ const GOAL_TYPE_TEMPLATE = 'template';
 
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Meta
@@ -15,6 +16,7 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
@@ -104,7 +106,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * Detalles de la meta
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="goal",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="goal",cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
@@ -117,6 +119,11 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -384,8 +391,9 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
         return $this->responsibles;
     }
     
-    public function __toString() {
-        return $this->name;
+    public function __toString() 
+    {
+        return $this->getName()?:'-';
     }
     
     /**
@@ -409,6 +417,16 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     public function getPeriod()
     {
         return $this->period;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
     }
     
     public function __clone() {
