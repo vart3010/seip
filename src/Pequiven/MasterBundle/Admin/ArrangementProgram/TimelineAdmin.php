@@ -32,11 +32,25 @@ class TimelineAdmin extends Admin
         ;
     }
     
+    protected function configureFormFields(FormMapper $form) 
+    {
+         $form
+            ->add('goals','sonata_type_model_autocomplete',array(
+                'property' => 'name',
+                'multiple' => true,
+            ))
+            ->add('arrangementProgram',null,array(
+                'disabled' => true
+            ))
+        ;
+    }
+    
     protected function configureListFields(ListMapper $list) 
     {
         $list
             ->addIdentifier('id')
             ->add('arrangementProgram')
+            ->add('goals')
         ;
     }
 }

@@ -31,6 +31,7 @@ class GoalAdmin extends Admin
             ->add('endDate')
             ->add('weight')
             ->add('observations')
+            ->add('responsibles')
             ;
     }
     
@@ -41,6 +42,10 @@ class GoalAdmin extends Admin
             ->add('startDate','sonata_type_date_picker',array())
             ->add('endDate','sonata_type_date_picker',array())
             ->add('weight')
+            ->add('responsibles','sonata_type_model_autocomplete',array(
+                'property' => 'username',
+                'multiple' => true,
+            ))
             ->add('observations')
             ;
     }
