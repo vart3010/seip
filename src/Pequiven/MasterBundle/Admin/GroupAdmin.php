@@ -21,6 +21,11 @@ use Sonata\UserBundle\Admin\Entity\GroupAdmin as BaseGroupAdmin;
  */
 class GroupAdmin extends BaseGroupAdmin
 {
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('name')
+            ;
+    }
     /**
      * {@inheritdoc}
      */

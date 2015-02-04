@@ -16,6 +16,21 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
 {
     protected $container;
     
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
+    {
+        $show
+            ->add('description')
+            ->add('weight')
+            ->add('typeResult')
+            ->add('typeCalculation','choice',array(
+                'choices' => \Pequiven\SEIPBundle\Model\Result\Result::getTypeCalculations(),
+                'translation_domain' => 'PequivenSEIPBundle'
+            ))
+            ->add('objetive')
+            ->add('parent')
+            ;
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')

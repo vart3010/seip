@@ -72,7 +72,8 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ;
     }
     
-    protected function configureListFields(ListMapper $list) {
+    protected function configureListFields(ListMapper $list)
+    {
         $list
             ->addIdentifier('description')
             ->addIdentifier('equation')
@@ -93,10 +94,7 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
         if($errorFormula !== null){
             $flashBag = $this->getRequest()->getSession()->getFlashBag();
             $flashBag->add("error",$errorFormula);
-//            $this->getRequest()->getSession()->getFlashBag()->add("success",$errorFormula);
         }
-        
-        
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

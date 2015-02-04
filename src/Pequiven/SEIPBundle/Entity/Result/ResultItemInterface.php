@@ -27,4 +27,14 @@ interface ResultItemInterface
      * Guarda la fecha de la ultima vez que se calculo el resultado
      */
     function updateLastDateCalculateResult();
+    
+    /**
+     * Limpia la fecha de la ultima vez que se calculo el resultado
+     */
+    function clearLastDateCalculateResult();
+    
+    /**
+     * Funcion para incluir o excluir el resultado de los calculos
+     */
+    function isAvailableInResult();
 }

@@ -16,6 +16,16 @@ class FrequencyNotificationIndicatorAdmin extends Admin implements \Symfony\Comp
 {
     private $container;
     
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show)
+    {
+         $show
+            ->add('description')
+            ->add('textAbbr')
+            ->add('days')
+            ->add('enabled')
+                ;
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')

@@ -1012,7 +1012,14 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
     
     public function __toString() {
-        return $this->getDescriptionSelect();
+        $description = $this->getDescription();
+        $limit = 100;
+        if(strlen($description) > $limit)
+    {
+            $description = substr($this->getDescription(), 0,$limit);
+        }
+        $toString = $this->getRef().' '.$description;
+        return $toString?:'-';
     }
     
     public function getDescriptionWithGerenciaSecond()
@@ -1097,6 +1104,15 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function updateLastDateCalculateResult() 
     {
         $this->lastDateCalculateResult = new \DateTime();
+    }
+    
+    public function clearLastDateCalculateResult() {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return true;
     }
     
     function setIndicators($indicators) {

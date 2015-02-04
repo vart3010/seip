@@ -3,12 +3,14 @@
 namespace Pequiven\ArrangementProgramBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Linea de tiempo
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\TimelineRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Timeline
 {
@@ -52,7 +54,13 @@ class Timeline
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate",mappedBy="timeline")
      */
     private $arrangementProgramTemplate;
-
+    
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Constructor
      */
@@ -182,5 +190,23 @@ class Timeline
     public function getArrangementProgramTemplate()
     {
         return $this->arrangementProgramTemplate;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+    
+    public function __toString() 
+    {
+        $toString = (string)$this->getArrangementProgram().' ';
+        $toString.= (string)$this->getArrangementProgramTemplate().' ';
+        $toString.= sprintf(' (%s)',count($this->getGoals()));
+        return $toString;
     }
 }

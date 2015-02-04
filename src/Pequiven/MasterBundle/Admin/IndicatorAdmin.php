@@ -16,6 +16,24 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
 {   
     private $container;
     
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('ref')
+            ->add('description')
+            ->add('typeOfCalculation','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('refParent')
+            ->add('totalPlan')
+            ->add('weight')
+            ->add('goal')
+            ->add('formula')
+            ->add('tendency')
+            ->add('frequencyNotificationIndicator')
+            ->add('valueFinal');
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
         $childrensParameters = array(
