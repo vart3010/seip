@@ -62,6 +62,7 @@ pequiven_seip:
         actions: Acciones
     results:
         results: Resultados
+        resultsByGerencia: Resultados %gerencia%
         result: Resultado
         weight: Peso
         no_results: No hay resultados asociados al objetivo.
@@ -116,7 +117,7 @@ pequiven_seip:
     #Roles
     role:
         super_administrator: Super Administrador
-        administrator: Administporrador
+        administrator: Administrador
         directive: Ejecutivo
         directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%

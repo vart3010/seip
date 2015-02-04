@@ -13,10 +13,10 @@
     </div>
     <br>
     <div class="inline-label">
-        {#<a href="{$ result.linkToExportResult $}" class="button">
+        <a href="{{ linkToExportResult }}" class="button">
             <span class="button-icon"><span class="icon-download"></span></span>
             {{ 'pequiven_seip.buttons.export_result'|trans({},'PequivenSEIPBundle') }}
-        </a>#}
+        </a>
         <br><br>
         <ul class="fa-ul">
             {% set limitTruncate = 110 %}
