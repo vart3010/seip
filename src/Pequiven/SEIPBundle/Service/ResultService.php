@@ -867,6 +867,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
     
+    function generateAsset($path,$packageName = null){
+        return $this->container->get('templating.helper.assets')
+               ->getUrl($path, $packageName);
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
