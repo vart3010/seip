@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -15,8 +16,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class IndicatorController extends ResourceController
 {
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
         $resource = $this->findOr404($request);
+        
+        $level = $resource->getIndicatorLevel()->getLevel();
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC',
+            IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_VIEW_TACTIC',
+            IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE',
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
         
         $errorFormula = null;
         if($resource->getFormula() !== null){
@@ -40,16 +56,31 @@ class IndicatorController extends ResourceController
     
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
+     * 
      * @param Request $request
      * @return type
      */
     function listAction(Request $request)
     {
         $level = $request->get('level');
+        
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC',
+            IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_VIEW_TACTIC',
+            IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE',
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-
+        
         $criteria['indicatorLevel'] = $level;
 
         if ($this->config->isPaginated()) {
@@ -217,5 +248,14 @@ class IndicatorController extends ResourceController
         $response->setData($gerenciaSecondChildren);
 
         return $response;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

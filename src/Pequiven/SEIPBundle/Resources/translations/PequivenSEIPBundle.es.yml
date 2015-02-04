@@ -227,6 +227,8 @@ pequiven_seip:
             
             role_seip_result_list_by_management: Usted no tiene permiso para ver la lista de los resultados por gerencia.
             role_seip_result_list_period: Usted no tiene permiso para ver la lista de los resultados por periodo.
+            role_seip_result_view_tactic: Usted no tiene permiso para ver resultados a nivel tactico.
+            role_seip_result_view_operative: Usted no tiene permiso para ver resultados a nivel operativo.
             
             role_seip_planning_list_objective_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
             role_seip_planning_list_objective_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
