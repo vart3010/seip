@@ -1,0 +1,13 @@
+<span title="{{ ((avancedUsed ? avancedUsed : '0')|number_format(2)) | str_pad(5,'0') }}%">
+    {% if avancedUsed > 0 and avancedUsed <= 30 %}<img src="{{ images.bad }}" height="20" width="20" >{% endif %}
+    {% if avancedUsed > 30 and avancedUsed < 70 %}<img src="{{ images.middle }}" height="20" width="20" >{% endif%}
+    {% if avancedUsed > 70 %}<img src="{{ images.good }}" height="20" width="20">{% endif %}
+</span>
+{% if avancedUsedText is not defined %}
+    {% set avancedUsedText = avancedUsed %}
+{% endif %}
+{{ ((avancedUsedText ? avancedUsedText : '0')|number_format(2)) | str_pad(5,'0') }}% - 
+
+{# Limpiar variables #}
+{% set avancedUsedText = null %}
+{% set avancedUsed = null %}

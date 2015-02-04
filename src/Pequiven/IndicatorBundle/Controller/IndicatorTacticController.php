@@ -26,15 +26,15 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  *
  * @author matias
  */
-class IndicatorTacticController extends baseController {
-    //put your code here
-
+class IndicatorTacticController extends baseController 
+{
     /**
      * @Template("PequivenIndicatorBundle:Tactic:list.html.twig")
      * @return type
      */
     public function listAction() {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_TACTIC');
+        
         return array(
         );
     }
@@ -45,10 +45,8 @@ class IndicatorTacticController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function indicatorListAction(Request $request) {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_TACTIC');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -98,8 +96,10 @@ class IndicatorTacticController extends baseController {
      * @return type
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
-
+    public function createAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_TACTIC');
+        
         $form = $this->createForm($this->get('pequiven_indicator.tactic.registration.form.type'));
         //$form->handleRequest($request);
         $lastId = '';
@@ -505,5 +505,14 @@ class IndicatorTacticController extends baseController {
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

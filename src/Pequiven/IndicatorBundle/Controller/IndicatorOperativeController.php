@@ -1,22 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\IndicatorBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
-use Pequiven\IndicatorBundle\Form\Type\Operative\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
@@ -27,14 +16,13 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  * @author matias
  */
 class IndicatorOperativeController extends baseController {
-    //put your code here
-
     /**
      * @Template("PequivenIndicatorBundle:Operative:list.html.twig")
      * @return type
      */
     public function listAction() {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_OPERATIVE');
+        
         return array(
         );
     }
@@ -45,10 +33,8 @@ class IndicatorOperativeController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function indicatorListAction(Request $request) {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_OPERATIVE');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -99,7 +85,10 @@ class IndicatorOperativeController extends baseController {
      * @return type
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_OPERATIVE');
+        
         $periodService = $this->get('pequiven_arrangement_program.service.period');
         $period = $periodService->getPeriodActive();
         $form = $this->createForm($this->get('pequiven_indicator.operative.registration.form.type'));
@@ -523,5 +512,14 @@ class IndicatorOperativeController extends baseController {
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

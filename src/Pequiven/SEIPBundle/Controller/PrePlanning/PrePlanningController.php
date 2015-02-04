@@ -23,15 +23,20 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
  */
 class PrePlanningController extends ResourceController
 {
-    public function indexAction(Request $request) {
-        $seipConfiguration = $this->getSeipConfiguration();
-        if($seipConfiguration->isEnablePrePlanning() == false){
-            throw $this->createAccessDeniedHttpException('La pre-planificacion no se encuentra habilitada.');
-        }
+    private static $levels = array(
+        PrePlanning::LEVEL_TACTICO => 'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
+        PrePlanning::LEVEL_OPERATIVO => 'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+    );
+    
+    public function indexAction(Request $request) 
+    {
+        $this->checkSecurity($request);
         return parent::indexAction($request);
     }
     
-    public function getFormAction() {
+    public function getFormAction(Request $request) 
+    {
+        $this->checkSecurity($request);
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form.html'))
@@ -47,6 +52,7 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         
@@ -87,6 +93,8 @@ class PrePlanningController extends ResourceController
      */
     public function deletePrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
+        
         $dataRequest = $request->request->all();
         $ids = array();
         foreach ($dataRequest as $value) {
@@ -122,6 +130,7 @@ class PrePlanningController extends ResourceController
      */
     public function returnChangesAction(Request $request) 
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         $level = $request->get('level',null);
@@ -155,6 +164,7 @@ class PrePlanningController extends ResourceController
      */
     public function startPrePlanningAction(Request $request) 
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         $level = $request->get('level',null);
@@ -191,6 +201,7 @@ class PrePlanningController extends ResourceController
      */
     public function updatePrePlanningAction(Request $request) 
     {
+        $this->checkSecurity($request);
         $dataRequest = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $repository = $this->getRepository();
@@ -225,6 +236,7 @@ class PrePlanningController extends ResourceController
      */
     public function importAction(Request $request)
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         
@@ -241,6 +253,7 @@ class PrePlanningController extends ResourceController
     
     public function sendToReviewAction(Request $request)
     {
+        $this->checkSecurity($request);
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
@@ -359,5 +372,28 @@ class PrePlanningController extends ResourceController
     private function getSeipConfiguration()
     {
         return $this->container->get('seip.configuration');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Evalua la seguridad de la seccion
+     * @param Request $request
+     */
+    private function checkSecurity(Request $request)
+    {
+         $level = $request->get('level');
+        $rol = null;
+        if(isset(self::$levels[$level])){
+            $rol = self::$levels[$level];
+        }
+        $this->getSecurityService()->checkSecurity($rol);
     }
 }

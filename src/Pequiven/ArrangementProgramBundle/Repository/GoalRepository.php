@@ -32,8 +32,10 @@ class GoalRepository extends EntityRepository
             ->andWhere('ap_r.id != :responsible')
             ->andWhere('ap.period = :period')
             ->andWhere('g_r.id = :responsible')
+            ->andWhere('ap.status != :status')
             ->setParameter('period', $period)
             ->setParameter('responsible', $user)
+            ->setParameter('status', \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED);
             ;
         if(isset($criteria['notArrangementProgram'])){
             $qb->andWhere('ap.id != :arrangementProgram');

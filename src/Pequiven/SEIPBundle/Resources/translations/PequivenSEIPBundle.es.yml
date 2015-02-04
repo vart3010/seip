@@ -62,6 +62,7 @@ pequiven_seip:
         actions: Acciones
     results:
         results: Resultados
+        resultsByGerencia: Resultados %gerencia%
         result: Resultado
         weight: Peso
         no_results: No hay resultados asociados al objetivo.
@@ -116,7 +117,7 @@ pequiven_seip:
     #Roles
     role:
         super_administrator: Super Administrador
-        administrator: Administporrador
+        administrator: Administrador
         directive: Ejecutivo
         directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%
@@ -182,7 +183,76 @@ pequiven_seip:
         tactic: Táctico
         operative: Operativo
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
-        
+    security:
+        permission_denied: Permiso denegado!
+        403:
+            role_seip_pre_planning_create_tactic: Usted no tiene permiso para crear pre-planificación a nivel tactico.
+            role_seip_pre_planning_create_operative: Usted no tiene permiso para crear pre-planificación a nivel operativo.
+            role_seip_pre_planning_create_review: Usted no tiene permiso para revisar la pre-planificación.
+            role_seip_pre_planning_list_review: Usted no tiene permiso para listar la pre-planificación.
+            role_seip_pre_planning_view_tactic: Usted no tiene permiso para visualizar la pre-planificación a nivel tactico.
+            role_seip_pre_planning_view_operative: Usted no tiene permiso para visualizar la pre-planificación a nivel operativo.
+            role_seip_pre_planning_operation_import_matrix: Usted no tiene permiso para imporar la pre-planificación.
+            
+            role_seip_objective_list_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
+            role_seip_objective_list_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
+            role_seip_objective_list_operative: Usted no tiene permiso para ver la lista de los objetivos operativos.
+            role_seip_objective_list_matrix_objectives: Usted no tiene permiso para ver la lista de la matriz de objetivos.
+            role_seip_objective_view_strategic: Usted no tiene permiso para ver los objetivos estrategicos.
+            role_seip_objective_view_tactic: Usted no tiene permiso para ver los objetivos tacticos.
+            role_seip_objective_view_operative: Usted no tiene permiso para ver los objetivos operativos.
+            role_seip_objective_create_strategic: Usted no tiene permiso para crear objetivos estrategicos.
+            role_seip_objective_create_tactic: Usted no tiene permiso para crear objetivos tacticos.
+            role_seip_objective_create_operative: Usted no tiene permiso para crear objetivos operativos.
+            
+            role_seip_arrangement_program_list_all: Usted no tiene permiso para ver la lista de los programas de gestión.
+            role_seip_arrangement_program_list_assigned: Usted no tiene permiso para ver la lista de los programas de gestión asignados.
+            role_seip_arrangement_program_list_reviewing_or_approving: Usted no tiene permiso para ver la lista de los programas de gestión por revisar o aprobar.
+            role_seip_arrangement_program_list_for_notifying: Usted no tiene permiso para ver la lista de los programas de gestión por notificar.
+            role_seip_arrangement_program_view_tactic: Usted no tiene permiso para ver los programas de gestión a nivel tactico.
+            role_seip_arrangement_program_view_operative: Usted no tiene permiso para ver los programas de gestión a nivel operativo.
+            role_seip_arrangement_program_create_tactic: Usted no tiene permiso para crear programa de gestión a nivel tactico.
+            role_seip_arrangement_program_create_operative: Usted no tiene permiso para crear programa de gestión a nivel operativo.
+            role_seip_arrangement_program_create_from_template: Usted no tiene permiso para crear programa de gestión a partir de plantillas.
+            
+            role_seip_indicator_list_strategic: Usted no tiene permiso para ver la lista de los indicadores estrategicos.
+            role_seip_indicator_list_tactic: Usted no tiene permiso para ver la lista de los indicadores tacticos.
+            role_seip_indicator_list_operative: Usted no tiene permiso para ver la lista de los indicadores operativos.
+            role_seip_indicator_view_strategic: Usted no tiene permiso para ver los indicadores estrategicos.
+            role_seip_indicator_view_tactic: Usted no tiene permiso para ver los indicadores tacticos.
+            role_seip_indicator_view_operative: Usted no tiene permiso para ver los indicadores operativos.
+            role_seip_indicator_create_strategic: Usted no tiene permiso para crear indicadores estrategicos.
+            role_seip_indicator_create_tactic: Usted no tiene permiso para crear indicadores tacticos.
+            role_seip_indicator_create_operative: Usted no tiene permiso para crear indicadores operativos.
+            
+            role_seip_result_list_by_management: Usted no tiene permiso para ver la lista de los resultados por gerencia.
+            role_seip_result_list_period: Usted no tiene permiso para ver la lista de los resultados por periodo.
+            role_seip_result_view_tactic: Usted no tiene permiso para ver resultados a nivel tactico.
+            role_seip_result_view_operative: Usted no tiene permiso para ver resultados a nivel operativo.
+            
+            role_seip_planning_list_objective_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
+            role_seip_planning_list_objective_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
+            role_seip_planning_list_objective_operative: Usted no tiene permiso para ver la lista de los objetivos operativos.
+            role_seip_planning_list_objective_matrix_objectives: Usted no tiene permiso para ver la lista de la matriz de objetivos.
+            role_seip_planning_list_indicator_strategic: Usted no tiene permiso para ver la lista de los indicadores estrategicos.
+            role_seip_planning_list_indicator_tactic: Usted no tiene permiso para ver la lista de los indicadores tacticos.
+            role_seip_planning_list_indicator_operative: Usted no tiene permiso para ver la lista de los indicadores operativos.
+            role_seip_planning_list_result_all: Usted no tiene permiso para ver la lista de los resultados.
+            role_seip_planning_list_arrangement_program: Usted no tiene permiso para ver la lista de los programas de gestión.
+            role_seip_planning_view_objective_strategic: Usted no tiene permiso para ver objetivos estrategicos.
+            role_seip_planning_view_objective_tactic: Usted no tiene permiso para ver objetivos tacticos.
+            role_seip_planning_view_objective_operative: Usted no tiene permiso para ver objetivos operativos.
+            role_seip_planning_view_indicator_strategic: Usted no tiene permiso para ver indicadores estrategicos.
+            role_seip_planning_view_indicator_tactic: Usted no tiene permiso para ver indicadores tacticos.
+            role_seip_planning_view_indicator_operative: Usted no tiene permiso para ver indicadores operativos.
+            role_seip_planning_view_arrangement_program_tactic: Usted no tiene permiso para ver programas de gestión tacticos.
+            role_seip_planning_view_arrangement_program_operative: Usted no tiene permiso para ver programas de gestión operativos.
+            role_seip_planning_view_result_tactic: Usted no tiene permiso para ver los resultados a nivel tactico.
+            role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
+            role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
+        error:
+            the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

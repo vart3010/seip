@@ -96,6 +96,9 @@ app:
                             tactic: Táctico
                             operative: Operativo
                             recalculate: Recalcular resultados
+                        operations:
+                            main: Operaciones
+                            recalculate_results: Recalcular resultados
                     objetives:
                         main: Objetivos
                         visualize:
