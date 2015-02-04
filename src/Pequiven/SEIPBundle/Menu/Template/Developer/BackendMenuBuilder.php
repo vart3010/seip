@@ -65,7 +65,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         //$this->addExampleMenu($menu, $section);
 
         //Menu de objetivos
-        if($this->isGranted('ROLE_SEIP_OBJETIVE_*')){
+        if($this->isGranted('ROLE_SEIP_OBJECTIVE_*')){
             $this->addMenuObjetives($menu, $section);
         }
         
@@ -183,7 +183,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ))
             )->setLabel($this->translate(sprintf('app.backend.menu.%s.objetives.visualize.main', $section)));
             
-            if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJETIVE_*')){
+            if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJECTIVE_*')){
                 $subchild = $this->factory->createItem('planning.visualize.objetives',
                             $this->getSubLevelOptions(array(
                             'uri' => null,
@@ -191,7 +191,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                         )
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.main', $section)));
-                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJETIVE_STRATEGIC')){
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJECTIVE_STRATEGIC')){
                     $subchild->addChild('planning.visualize.objetives.strategic', array(
                                 'route' => 'pequiven_objetive_list',
                                 'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO)
@@ -199,14 +199,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.strategic', $section)));
                 }
 
-                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJETIVE_TACTIC')){
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJECTIVE_TACTIC')){
                     $subchild->addChild('planning.visualize.objetives.tactic', array(
                                 'route' => 'pequiven_objetive_list',
                                 'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO)
                             ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.tactic', $section)));
                 }
-                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJETIVE_OPERATIVE')){
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJECTIVE_OPERATIVE')){
                     $subchild->addChild('planning.visualize.objetives.operative', array(
                                 'route' => 'pequiven_objetive_list',
                                 'routeParameters' => array('level' => \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO)
@@ -214,7 +214,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.operative', $section)));
                 }
                 
-                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJETIVE_MATRIX_OBJECTIVES')){
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES')){
                     $subchild->addChild('planning.visualize.objetive.matriz',
                     array(
                     'uri' => null,
@@ -364,7 +364,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 ->setLabel($this->translate(sprintf('app.backend.menu.%s.objetives.main', $section)));
         
             
-                if($this->isGranted('ROLE_SEIP_OBJETIVE_LIST_*')){
+                if($this->isGranted('ROLE_SEIP_OBJECTIVE_LIST_*')){
                     //Menú Nivel 2: Visualizar
                     $visualize = $this->factory->createItem('objetives.visualize',
                             $this->getSubLevelOptions(array(
@@ -373,26 +373,26 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             ))
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.objetives.visualize.main', $section)));
                     //Menú Nivel 3: Item de visulizar
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_LIST_STRATEGIC')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC')){
                         $visualize->addChild('arrangement_strategic.objetives.list.strategic', array(
                                 'route' => 'pequiven_objetive_menu_list_strategic',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.strategic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_LIST_TACTIC')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_LIST_TACTIC')){
                         $visualize->addChild('arrangement_strategic.objetives.list.tactic', array(
                                 'route' => 'pequiven_objetive_menu_list_tactic',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.tactic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_LIST_OPERATIVE')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_LIST_OPERATIVE')){
                         $visualize->addChild('arrangement_strategic.objetives.list.operative', array(
                                 'route' => 'pequiven_objetive_menu_list_operative',
                             ))
                             ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.list.operative', $section)));
                     }
                     
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_LIST_MATRIX_OBJECTIVES')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES')){
                         //Matrices objectives
                         $visualize->addChild('objetives.matrices_objectives',
                             array(
@@ -405,7 +405,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $menuObjetives->addChild($visualize);
                 }
             
-                if($this->isGranted('ROLE_SEIP_OBJETIVE_CREATE_*')){
+                if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_*')){
                     $thirdchild = $this->factory->createItem('arrangement_strategic.objetives.add',
                             $this->getSubLevelOptions(array(
                                 'uri' => 'add',
@@ -414,19 +414,19 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.main',$section)));
                     
                     //Si el usuario logueado es Rol Ejecutivo o Ejecutivo Asignado
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_CREATE_STRATEGIC')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_STRATEGIC')){
                         $thirdchild->addChild('arrangement_strategic.objetives.add.strategic', array(
                             'route' => 'pequiven_objetive_menu_add_strategic',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.strategic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_CREATE_TACTIC')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_TACTIC')){
                         $thirdchild->addChild('arrangement_strategic.objetives.add.tactic', array(
                             'route' => 'pequiven_objetive_menu_add_tactic',
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_strategic.objetives.add.tactic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_OBJETIVE_CREATE_OPERATIVE')){
+                    if($this->isGranted('ROLE_SEIP_OBJECTIVE_CREATE_OPERATIVE')){
                         $thirdchild->addChild('arrangement_strategic.objetives.add.operative', array(
                             'route' => 'pequiven_objetive_menu_add_operative',
                         ))
