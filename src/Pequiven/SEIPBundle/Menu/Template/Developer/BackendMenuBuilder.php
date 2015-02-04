@@ -74,8 +74,10 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuObjetives($menu, $section);
         }
         
-        //Menú Programas de Gestión
-        $this->addArrangementProgramsMenu($menu, $section);
+            //Menú Programas de Gestión
+        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_*')){
+            $this->addArrangementProgramsMenu($menu, $section);
+        }
         
         //Menu de indicadores
         $this->addMenuIndicators($menu, $section);
