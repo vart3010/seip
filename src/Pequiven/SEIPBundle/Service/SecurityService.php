@@ -39,13 +39,19 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             throw $this->createAccessDeniedHttpException($this->buildMessage('the_pre_planning_is_not_enabled', 'error'));
         }
     }
-
+    
+    /**
+     * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
+     * @param type $rol
+     * @param type $parameters
+     * @throws type
+     */
     public function checkSecurity($rol,$parameters = null) {
         if($rol === null){
             throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
         }
         $valid = $this->getSecurityContext()->isGranted($rol,$parameters);
-        if(!$valid){
+        if($valid){
             throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
         }
         $methodValidMap = $this->getMethodValidMap();
@@ -55,19 +61,16 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
+    /**
+     * Genera el mensaje de error
+     * @param type $rol
+     * @param type $prefix
+     * @return type
+     */
     private function buildMessage($rol,$prefix = '403')
     {
         return $this->trans(sprintf('pequiven_seip.security.%s.%s', $prefix,strtolower($rol)));
     }
-
-    private function getMessagesException($object)
-    {
-        $className = ClassUtils::getRealClass(get_class($object));
-        static $messages = array(
-            'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram' => 'Programa de gestion'
-        );
-    }
-
 
     /**
      * Returns a AccessDeniedHttpException.

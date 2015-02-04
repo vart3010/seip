@@ -32,10 +32,7 @@ class GerenciaController extends baseController {
      * @return type
      */
     public function listAction(){
-//        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-//            array(
-//
-//            ));
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES');
         return array(
             
         );
@@ -209,6 +206,8 @@ class GerenciaController extends baseController {
      */
     public function exportAction(Request $request)
     {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES');
+        
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);//Obtenemos la gerencia
@@ -559,5 +558,14 @@ class GerenciaController extends baseController {
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }
