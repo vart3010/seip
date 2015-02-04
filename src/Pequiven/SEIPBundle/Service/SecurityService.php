@@ -50,14 +50,20 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         if($rol === null){
             throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
         }
-        $valid = $this->getSecurityContext()->isGranted($rol,$parameters);
-        if($valid){
-            throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+        $roles = $rol;
+        if(!is_array($rol)){
+            $roles = array($rol);
         }
-        $methodValidMap = $this->getMethodValidMap();
-        if(isset($methodValidMap[$rol])){
-            $method = $methodValidMap[$rol];
-            $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+        $valid = $this->getSecurityContext()->isGranted($roles,$parameters);
+        foreach ($roles as $rol) {
+            if(!$valid){
+                throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+            }
+            $methodValidMap = $this->getMethodValidMap();
+            if(isset($methodValidMap[$rol])){
+                $method = $methodValidMap[$rol];
+                $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+            }
         }
     }
     

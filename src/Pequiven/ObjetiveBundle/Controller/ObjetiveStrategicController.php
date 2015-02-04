@@ -35,7 +35,8 @@ class ObjetiveStrategicController extends baseController {
      */
     public function showAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
+        
         $id = $request->get("id");
         //$ref = $request->get("ref");
         $em = $this->getDoctrine()->getManager();

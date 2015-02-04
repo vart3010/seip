@@ -28,7 +28,7 @@ class ResultController extends ResourceController
      */
     public function listResultAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT','ROLE_SEIP_PLANNING_LIST_RESULT_ALL'));
         
         $em = $this->getDoctrine();
         
@@ -93,8 +93,8 @@ class ResultController extends ResourceController
         
         $rol = null;
         $rolByLevel = array(
-            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA => 'ROLE_SEIP_RESULT_VIEW_TACTIC',
-            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND => 'ROLE_SEIP_RESULT_VIEW_OPERATIVE',
+            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA => array('ROLE_SEIP_RESULT_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_RESULT_TACTIC'),
+            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND => array('ROLE_SEIP_RESULT_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_RESULT_OPERATIVE')
         );
         if(isset($rolByLevel[$level])){
             $rol = $rolByLevel[$level];
@@ -258,9 +258,8 @@ class ResultController extends ResourceController
      */
     public function recalculateAction(Request $request)
     {
-        if(!$this->getSecurityContext()->isGranted('ROLE_PLANNING_RECALCULATE_RESULT')){
-            throw $this->createAccessDeniedHttpException();
-        }
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_PLANNING_OPERATION_RECALCULATE_RESULT');
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('recalculate.html'))

@@ -24,9 +24,9 @@ class IndicatorController extends ResourceController
         
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC',
-            IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_VIEW_TACTIC',
-            IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE',
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
         );
         if(isset($roleByLevel[$level])){
             $rol = $roleByLevel[$level];
@@ -67,9 +67,9 @@ class IndicatorController extends ResourceController
         
         $rol = null;
         $roleByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC',
-            IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_VIEW_TACTIC',
-            IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE',
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
         );
         if(isset($roleByLevel[$level])){
             $rol = $roleByLevel[$level];

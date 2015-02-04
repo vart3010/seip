@@ -32,7 +32,7 @@ class GerenciaController extends baseController {
      * @return type
      */
     public function listAction(){
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         return array(
             
         );
@@ -206,7 +206,7 @@ class GerenciaController extends baseController {
      */
     public function exportAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');

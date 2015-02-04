@@ -49,7 +49,7 @@ class ObjetiveTacticController extends baseController {
      */
     public function showAction(Request $request) 
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
         
         $view = $this
             ->view()

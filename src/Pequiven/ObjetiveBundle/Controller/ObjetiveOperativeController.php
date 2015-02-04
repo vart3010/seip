@@ -47,7 +47,7 @@ class ObjetiveOperativeController extends baseController
      */
     public function showAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE');
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE'));
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
