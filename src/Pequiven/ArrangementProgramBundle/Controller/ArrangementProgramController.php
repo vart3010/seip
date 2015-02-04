@@ -21,10 +21,13 @@ class ArrangementProgramController extends SEIPController
 {
     /**
      * Muestra los programas de gestion
+     * 
      * @param Request $request
      * @return type
      */
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request) 
+    {
+        
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
@@ -1348,5 +1351,14 @@ class ArrangementProgramController extends SEIPController
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

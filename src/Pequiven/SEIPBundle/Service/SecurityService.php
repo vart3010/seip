@@ -12,25 +12,52 @@
 namespace Pequiven\SEIPBundle\Service;
 
 /**
- * Servicio para evaluar la seguridad en la aplicacion
- *
+ * Servicio para evaluar la seguridad en la aplicacion (seip.service.security)
+ * 
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class SecurityService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
     private $container;
     
-    public function isGranted($rol,$object = null) {
-        $valid = $this->getSecurityContext()->isGranted($rol);
-        if(!$valid){
-            throw $this->createAccessDeniedHttpException($this->buildRoleMessage($rol));
-        }
-        
+    private function getMethodValidMap()
+    {
+        return array(
+            'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC' => 'evaluatePrePlanning',
+            'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE' => 'evaluatePrePlanning',
+        );
     }
     
-    private function buildRoleMessage($rol)
+    /**
+     * Evalua que tambien se encuentre habilitado la pre-planificacion
+     * @throws type
+     */
+    private function evaluatePrePlanning()
     {
-        return $this->trans(sprintf('pequiven_seip.security.403.%s',  strtolower($rol)));
+        $seipConfiguration = $this->getSeipConfiguration();
+        if($seipConfiguration->isEnablePrePlanning() === false){
+            throw $this->createAccessDeniedHttpException($this->buildMessage('the_pre_planning_is_not_enabled', 'error'));
+        }
+    }
+
+    public function checkSecurity($rol,$parameters = null) {
+        if($rol === null){
+            throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
+        }
+        $valid = $this->getSecurityContext()->isGranted($rol,$parameters);
+        if(!$valid){
+            throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+        }
+        $methodValidMap = $this->getMethodValidMap();
+        if(isset($methodValidMap[$rol])){
+            $method = $methodValidMap[$rol];
+            $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+        }
+    }
+    
+    private function buildMessage($rol,$prefix = '403')
+    {
+        return $this->trans(sprintf('pequiven_seip.security.%s.%s', $prefix,strtolower($rol)));
     }
 
     private function getMessagesException($object)
@@ -56,6 +83,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      */
     private function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
     {
+        $this->setFlash('error', $message);
         return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
     }
     
@@ -75,7 +103,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      */
     protected function setFlash($type,$message,$parameters = array(),$domain = 'flashes')
     {
-        return $this->get('session')->getBag('flashes')->add($type,$this->trans($message, $parameters, $domain));
+        return $this->container->get('session')->getBag('flashes')->add($type,$message);
     }
     
     /**
@@ -116,6 +144,15 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
 
         return $user;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    private function getSeipConfiguration()
+    {
+        return $this->container->get('seip.configuration');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

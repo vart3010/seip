@@ -184,6 +184,7 @@ pequiven_seip:
         operative: Operativo
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     security:
+        permission_denied: Permiso denegado!
         403:
             role_seip_pre_planning_create_tactic: Usted no tiene permiso para crear pre-planificación a nivel tactico.
             role_seip_pre_planning_create_operative: Usted no tiene permiso para crear pre-planificación a nivel operativo.
@@ -247,7 +248,9 @@ pequiven_seip:
             role_seip_planning_view_result_tactic: Usted no tiene permiso para ver los resultados a nivel tactico.
             role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
-        
+        error:
+            the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
