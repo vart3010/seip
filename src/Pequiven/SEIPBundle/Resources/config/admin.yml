@@ -170,3 +170,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.indicator.value_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\ValueIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
