@@ -292,6 +292,17 @@ class ValueIndicator extends Model
     }
     
     public function __toString() {
-        return $this->valueOfIndicator ?''.$this->valueOfIndicator:'-';
+        $toString = '';
+        if($this->id){
+            $toString .= $this->id.')   ';
+        }
+        $toString.= ' '.$this->valueOfIndicator.' ';
+        if(count($this->formulaParameters) > 0){
+            $toString.= '   ';
+            foreach ($this->formulaParameters as $key => $value) {
+                $toString.= sprintf('[%s => %s]',$key,$value);
+            }
+        }
+        return $toString ?:'-';
     }
 }
