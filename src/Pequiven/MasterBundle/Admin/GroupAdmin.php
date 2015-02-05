@@ -31,7 +31,7 @@ class GroupAdmin extends BaseGroupAdmin
     protected function configureFormFields(\Sonata\AdminBundle\Form\FormMapper $formMapper) {
         $formMapper
             ->add('name')
-            ->add('description')
+//            ->add('description')
             ->add('roles', 'sonata_security_roles', array(
                 'expanded' => true,
                 'multiple' => true,
@@ -59,5 +59,12 @@ class GroupAdmin extends BaseGroupAdmin
                 'translation_domain' => $this->getTranslationDomain()
             ))
         ;
+    }
+    public function prePersist($object) {
+        $object->setDescription($object->getName());
+    }
+    
+    public function preUpdate($object) {
+        $object->setDescription($object->getName());
     }
 }
