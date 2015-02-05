@@ -1,8 +1,10 @@
 pequiven_pre_planning_index:
-    path: /{period}
+    path: /{period}.{_format}
     defaults:
         _controller: pequiven.controller.pre_planning:indexAction
         _format: html
+    requirements:
+        _format: html|json
     methods: [GET]
     
 pequiven_pre_planning_create:

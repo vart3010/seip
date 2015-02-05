@@ -253,4 +253,8 @@ class GerenciaGroup extends modelGerenciaGroup {
     {
         return $this->userUpdatedAt;
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }

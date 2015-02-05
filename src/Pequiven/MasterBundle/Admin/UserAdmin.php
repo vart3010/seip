@@ -59,6 +59,20 @@ class UserAdmin extends Base
                 ->add('gplusUid', null, array('required' => false))
                 ->add('gplusName', null, array('required' => false))
             ->end()
+            ->with('Localization')
+                ->add('complejo', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+                ->add('gerencia', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+                ->add('gerenciaSecond', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+            ->end()
         ;
         
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {

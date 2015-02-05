@@ -101,7 +101,7 @@ class PrePlanningService extends ContainerAware
         
         $idSourceObject = $object->getId();
         $class = ClassUtils::getRealClass(get_class($object));
-        $levelObject = PrePlanning::LEVEL_DEFAULT;
+        $levelObject = null;
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
