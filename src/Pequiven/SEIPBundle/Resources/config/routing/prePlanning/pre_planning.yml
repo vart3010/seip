@@ -1,7 +1,14 @@
 pequiven_pre_planning_index:
-    path: /
+    path: /{period}
     defaults:
         _controller: pequiven.controller.pre_planning:indexAction
+        _format: html
+    methods: [GET]
+    
+pequiven_pre_planning_create:
+    path: /{level}/{period}/create
+    defaults:
+        _controller: pequiven.controller.pre_planning:createAction
         _format: html
     methods: [GET]
     
@@ -59,15 +66,6 @@ pequiven_pre_planning_import:
     methods: [GET]
     options:
         expose: true
-        
-pequiven_pre_planning_review:
-    path: /review.{_format}
-    defaults:
-        _controller: pequiven.controller.pre_planning:reviewAction
-        _format: html
-    methods: [GET]
-    requirements:
-        _format: html|json
         
 pequiven_pre_planning_send_to_review:
     path: /{id}/send-to-review.{_format}

@@ -30,8 +30,20 @@ class PrePlanningController extends ResourceController
     
     public function indexAction(Request $request) 
     {
-        $this->checkSecurity($request);
+        $this->checkSecurity($request,'ROLE_SEIP_PRE_PLANNING_LIST_REVIEW');
+        
         return parent::indexAction($request);
+    }
+    
+    public function createAction(Request $request) 
+    {
+        $this->checkSecurity($request);
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        return $this->handleView($view);
     }
     
     public function getFormAction(Request $request) 
@@ -160,6 +172,7 @@ class PrePlanningController extends ResourceController
     
     /**
      * Iniciando el proceso de planificacion
+     * 
      * @return type
      */
     public function startPrePlanningAction(Request $request) 
@@ -196,6 +209,7 @@ class PrePlanningController extends ResourceController
     
     /**
      * Actualiza los items de preplanificacion
+     * 
      * @param Request $request
      * @return type
      */
@@ -231,6 +245,7 @@ class PrePlanningController extends ResourceController
     
     /**
      * Accion para importar los items
+     * 
      * @param Request $request
      * @return type
      */
@@ -251,9 +266,16 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Envia la planificacion a revision
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function sendToReviewAction(Request $request)
     {
         $this->checkSecurity($request);
+        
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
@@ -387,12 +409,13 @@ class PrePlanningController extends ResourceController
      * Evalua la seguridad de la seccion
      * @param Request $request
      */
-    private function checkSecurity(Request $request)
+    private function checkSecurity(Request $request,$rol = null)
     {
-         $level = $request->get('level');
-        $rol = null;
-        if(isset(self::$levels[$level])){
-            $rol = self::$levels[$level];
+        if($rol === null){
+            $level = $request->get('level');
+            if(isset(self::$levels[$level])){
+                $rol = self::$levels[$level];
+            }
         }
         $this->getSecurityService()->checkSecurity($rol);
     }

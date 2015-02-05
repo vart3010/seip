@@ -312,7 +312,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             
             if($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC')){
                 $preplanningAdd->addChild('preplanning.add.tactic',array(
-                    'route' => 'pequiven_pre_planning_index',//Route
+                    'route' => 'pequiven_pre_planning_create',//Route
                     'labelAttributes' => array('icon' => 'fa fa-cube'),
                     'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.tactic', $section)));
@@ -320,7 +320,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             if($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE')){
                 $preplanningAdd->addChild('preplanning.add.operative',array(
-                    'route' => 'pequiven_pre_planning_index',//Route
+                    'route' => 'pequiven_pre_planning_create',//Route
                     'labelAttributes' => array('icon' => 'fa fa-cog'),
                     'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.operative', $section)));
@@ -337,9 +337,9 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             
             if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_REVIEW')){
                 $visualize->addChild('preplanning.visualize.review',array(
-                    'route' => 'pequiven_pre_planning_review',//Route
+                    'route' => 'pequiven_pre_planning_index',//Route
                     'labelAttributes' => array('icon' => 'fa fa-sitemap'),
-                    'routeParameters' => array('period' => $periodName,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+                    'routeParameters' => array('period' => $periodName),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
             }
             $child->addChild($visualize);
