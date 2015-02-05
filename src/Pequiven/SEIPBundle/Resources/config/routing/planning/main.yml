@@ -5,3 +5,7 @@ pequiven_planning_arrangement_program:
 pequiven_update:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/update.yml"
     prefix:   /updater
+    
+pequiven_seip_user_routes:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/user.yml"
+    prefix:   /user
