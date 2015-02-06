@@ -23,6 +23,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class PrePlanningUser 
 {
+    const FORM_PLANNING = 'planning';
+    const FORM_STATISTICS = 'statistics';
+    
     /**
      * Estatus borrador
      */

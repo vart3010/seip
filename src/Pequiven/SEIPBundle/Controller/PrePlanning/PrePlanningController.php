@@ -41,10 +41,17 @@ class PrePlanningController extends ResourceController
     
     public function getFormAction(Request $request) 
     {
+        $type = $request->get('type');
+        $formTemplate = 'form.html';
+        if($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_PLANNING){
+            $formTemplate = 'formImportPlanning.html'; 
+        } elseif ($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_STATISTICS){
+            $formTemplate = 'formImportStatistics.html';
+        }
         $this->checkSecurity($request);
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('form.html'))
+            ->setTemplate($this->config->getTemplate($formTemplate))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         return $this->handleView($view);

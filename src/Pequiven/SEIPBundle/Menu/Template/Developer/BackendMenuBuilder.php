@@ -339,14 +339,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild('preplanning.visualize.planning',array(
                     'route' => 'pequiven_pre_planning_user_index',//Route
                     'labelAttributes' => array('icon' => ''),
-                    'routeParameters' => array('period' => $periodName),
+                    'routeParameters' => array('period' => $periodName,'type' => \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_PLANNING),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.planning', $section)));
             }
             if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_STATISTICS')){
                 $visualize->addChild('preplanning.visualize.statistics',array(
-                    'route' => 'pequiven_pre_planning_user_index_indicator',//Route
+                    'route' => 'pequiven_pre_planning_user_index',//Route
                     'labelAttributes' => array('icon' => ''),
-                    'routeParameters' => array('period' => $periodName),
+                    'routeParameters' => array('period' => $periodName,'type' => \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_STATISTICS),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.statistics', $section)));
             }
             $child->addChild($visualize);

@@ -18,7 +18,7 @@
     {% endif %}
     {{ contentHeader(
             ("pequiven_seip.pre_planning.pre_planning"|trans({'%period%':period})),
-            { ( path('pequiven_pre_planning_user_index',{'period':period}) ):("pequiven_seip.pre_planning.revision"|trans)},
+            { ( path('pequiven_pre_planning_user_index',{'period':period,type:app.request.get('type') }) ):("pequiven_seip.pre_planning.revision"|trans)},
             ( ("pequiven_seip.pre_planning." ~ levelLabel) |trans())
         )
     }}
@@ -29,7 +29,7 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period, 'node':pre_planning_user.prePlanningRoot.id}) }}" style="padding:0;width:100%;height:600px"/>');
+            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period, 'node':pre_planning_user.prePlanningRoot.id,type:app.request.get('type')}) }}" style="padding:0;width:100%;height:600px"/>');
         });
     </script>
 {% endblock javascript %}
