@@ -109,23 +109,6 @@ class PrePlanning extends Model
     private $status = self::STATUS_DRAFT;
     
     /**
-     * Usuario dueño del arbol
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $user;
-    
-    /**
-     * Periodo.
-     * @var \Pequiven\SEIPBundle\Entity\Period
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $period;
-    
-    /**
      * Parametros de la preplanificacion
      * 
      * @ORM\Column(name="parameters",type="json_array")
@@ -162,6 +145,13 @@ class PrePlanning extends Model
      * @ORM\Column(name="levelPlanning",type="integer",nullable=false)
      */
     private $levelPlanning = self::LEVEL_DEFAULT;
+    
+    /**
+     * Usuario dueño de la PrePlanificacion 
+     * @var PrePlanningUser
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser",mappedBy="prePlanningRoot")
+     */
+    private $prePlanningUser;
 
     /**
      * Constructor
@@ -344,52 +334,6 @@ class PrePlanning extends Model
     }
 
     /**
-     * Set user
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $user
-     * @return PrePlanning
-     */
-    public function setUser(\Pequiven\SEIPBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set period
-     *
-     * @param \Pequiven\SEIPBundle\Entity\Period $period
-     * @return PrePlanning
-     */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
-    {
-        $this->period = $period;
-
-        return $this;
-    }
-
-    /**
-     * Get period
-     *
-     * @return \Pequiven\SEIPBundle\Entity\Period 
-     */
-    public function getPeriod()
-    {
-        return $this->period;
-    }
-
-    /**
      * Set name
      *
      * @param string $name
@@ -547,4 +491,37 @@ class PrePlanning extends Model
         return $this;
     }
 
+
+    /**
+     * Get editable
+     *
+     * @return boolean 
+     */
+    public function getEditable()
+    {
+        return $this->editable;
+    }
+
+    /**
+     * Set prePlanningUser
+     *
+     * @param \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser $prePlanningUser
+     * @return PrePlanning
+     */
+    public function setPrePlanningUser(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser $prePlanningUser = null)
+    {
+        $this->prePlanningUser = $prePlanningUser;
+
+        return $this;
+    }
+
+    /**
+     * Get prePlanningUser
+     *
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser 
+     */
+    public function getPrePlanningUser()
+    {
+        return $this->prePlanningUser;
+    }
 }

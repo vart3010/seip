@@ -55,6 +55,9 @@ pequiven_seip:
         delete: Eliminar
         update: Editar
     headers:
+        ref: Referencia
+        status: Estatus
+        username: Usuario
         location: Localidad
         gerencia: Gerencia
         gerenciaSecond:  Gerencia de 2da linea
@@ -183,6 +186,12 @@ pequiven_seip:
         list: Lista
         tactic: Táctico
         operative: Operativo
+        revision: Revisión
+        status:
+            draft: Borrador
+            imported: Importado
+            in_review: En revisión
+            approved: Aprobado
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     security:
         permission_denied: Permiso denegado!

@@ -46,4 +46,13 @@ class SEIPController extends ResourceController
     protected function getSeipConfiguration() {
         return $this->get('seip.configuration');
     }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

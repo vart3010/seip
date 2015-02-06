@@ -5,6 +5,7 @@ pequiven_pre_planning_index:
         _format: html
     requirements:
         _format: html|json
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_create:
@@ -12,15 +13,17 @@ pequiven_pre_planning_create:
     defaults:
         _controller: pequiven.controller.pre_planning:createAction
         _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_form:
-    path: /get-form
+    path: /{level}/{period}/get-form
     defaults:
         _controller: pequiven.controller.pre_planning:getFormAction
         _format: html
     requirements:
         _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_get_pre_planning:

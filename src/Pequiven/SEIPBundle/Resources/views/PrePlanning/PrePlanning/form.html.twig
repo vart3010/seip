@@ -51,6 +51,12 @@
                 ]
             });
             
+            {% set urlRead = '' %}
+            {% if app.request.query.has('node') %}
+                {% set urlRead = path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level'),'node':app.request.get('node')} ) %}
+            {% else %}
+                {% set urlRead = path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level')} ) %}
+            {% endif %}
             var store = Ext.create('Ext.data.TreeStore', {
                 model: 'PrePlanning',
                 proxy: {
@@ -58,9 +64,9 @@
                     //the store will get the content from the .json file
                     api: {
                         create: 'createPersons',
-                        read: '{{ path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level')}) }}',
+                        read: '{{ urlRead }}',
                         update: 'update-pre-planning',
-                        destroy: 'delete-pre-planning'
+                        destroy: '{{ path('pequiven_pre_planning_delete_pre_planning',{level:app.request.get('level')}) }}'
                     }
                 },
                 autoSync:false
@@ -95,7 +101,7 @@
                 text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
                 glyph: 'xf021@FontAwesome',
                 xtype: 'button',
-                disabled: true,
+                disabled: false,
                 handler: function(){
                     store.load({
                         callback: function(r,options,success){
@@ -360,6 +366,8 @@
               displayField: "label",
               allowBlank: true
             });
+            
+            var buttonsAllow = [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_SEIP_PRE_PLANNING_IMPORT_MATRIX') %}importBtn{% else %}sendToReviewBtn{% endif %} ];
              
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
@@ -409,7 +417,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_SEIP_PRE_PLANNING_IMPORT_MATRIX') %}importBtn{% else %}sendToReviewBtn{% endif %} ]
+                    items: buttonsAllow
                 }],
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree
@@ -453,7 +461,6 @@
                     startPrePlanningBtn.setDisabled(hasChilren);
                     
                     returnChangesBtn.setDisabled(!hasChilren);
-                    refreshBtn.setDisabled(!hasChilren);
                     btnDelete.setDisabled(!hasChilren);
                     saveChangeBtn.setDisabled(!hasChilren);
                     importBtn.setDisabled(!hasChilren);

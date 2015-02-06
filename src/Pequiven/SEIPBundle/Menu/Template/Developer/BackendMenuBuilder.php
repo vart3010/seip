@@ -337,7 +337,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             
             if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_REVIEW')){
                 $visualize->addChild('preplanning.visualize.review',array(
-                    'route' => 'pequiven_pre_planning_index',//Route
+                    'route' => 'pequiven_pre_planning_user_index',//Route
                     'labelAttributes' => array('icon' => 'fa fa-sitemap'),
                     'routeParameters' => array('period' => $periodName),
                 ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));

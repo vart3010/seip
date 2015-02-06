@@ -116,6 +116,31 @@ class SequenceGenerator
         return $nextRef;
     }
     
+    public function getNextRefPrePlanningUser(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser $prePlanningUser)
+    {
+        $qb = $this->sequenceGenerator->createQueryBuilder();
+        $qb
+            ->from('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser', 'p')
+            ;
+        
+        $gerencia = 'ERROR';
+        if($prePlanningUser->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_TACTICO){
+            $type = 'TAC';
+            $gerencia = $prePlanningUser->getGerenciaFirst()->getAbbreviation();
+        }
+        if($prePlanningUser->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_OPERATIVO){
+            $type = 'OPT';
+            $gerencia = $prePlanningUser->getGerenciaSecond()->getAbbreviation();
+        }
+        $year = $prePlanningUser->getPeriod()->getYear();
+        $mask = 'P-{year}-{gerencia}-{type}-{000}';
+        return $this->sequenceGenerator->generateNext($qb,$mask,'ref',array(
+            'gerencia' => strtoupper($gerencia),
+            'type' => $type,
+            'year' => $year,
+        ));
+    }
+    
     public function setSequenceGenerator(\Tecnocreaciones\Bundle\ToolsBundle\Service\SequenceGenerator $sequenceGenerator) {
         $this->sequenceGenerator = $sequenceGenerator;
     }

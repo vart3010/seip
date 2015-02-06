@@ -165,3 +165,9 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning
+        pequiven.pre_planning_user:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:PrePlanning/PrePlanningUser
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
+                model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser

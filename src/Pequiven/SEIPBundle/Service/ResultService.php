@@ -405,7 +405,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
         }
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
-            
+            //Si la tendencia maxima sobrepasa la 
+            $result = $indicator->getResult();
+            if($result > 100){
+                $result = 100;
+            }
+            $indicator->setProgressToDate($result);
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = 100 - $indicator->getResult();
             $indicator->setProgressToDate($result);

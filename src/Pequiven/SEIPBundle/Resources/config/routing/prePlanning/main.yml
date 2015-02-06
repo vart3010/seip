@@ -1,3 +1,6 @@
 pequiven_preplanning:
     resource: "@PequivenSEIPBundle/Resources/config/routing/prePlanning/pre_planning.yml"
 #    prefix:   /pre-planning
+pequiven_preplanning_user:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/prePlanning/pre_planning_user.yml"
+    prefix:   /user

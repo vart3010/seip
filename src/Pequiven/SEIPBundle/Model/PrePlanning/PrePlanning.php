@@ -83,4 +83,20 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
     function setParameter($key,$value) {
         $this->parameters[$key] = $value;
     }
+    
+    function getLabelStatus()
+    {
+        $status = $this->getStatus();
+        $labelOfStatus = $this->getLabelOfStatus();
+        return $labelOfStatus[$status];
+    }
+    public function getLabelOfStatus()
+    {
+        return array(
+            self::STATUS_DRAFT => 'pequiven_seip.pre_planning.status.draft',
+            self::STATUS_IMPORTED => 'pequiven_seip.pre_planning.status.imported',
+            self::STATUS_IN_REVIEW => 'pequiven_seip.pre_planning.status.in_review',
+            self::STATUS_APPROVED => 'pequiven_seip.pre_planning.status.approved',
+        );
+    }
 }

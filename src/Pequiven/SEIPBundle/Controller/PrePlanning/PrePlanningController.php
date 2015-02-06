@@ -125,8 +125,11 @@ class PrePlanningController extends ResourceController
         {
             $em = $this->getDoctrine()->getManager();
             $rootTreePrePlannig =  $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning')->find($node);
-        }else{
+        } else {
             $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+            if($rootTreePrePlannig){
+                $rootTreePrePlannig = $rootTreePrePlannig->getPrePlanningRoot();
+            }
         }
      
         if($rootTreePrePlannig){
@@ -324,14 +327,16 @@ class PrePlanningController extends ResourceController
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
         if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
             $lastItem = (boolean)$request->get('lastItem',false);
             $level = $request->get('level',null);
             
             $user = $this->getUser();
             $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
-            
             $success = true;
+            $em->persist($resource);
             if($lastItem === true){
                 //enviar correo
                 $periodActive = $this->getPeriodService()->getPeriodActive();
@@ -341,7 +346,9 @@ class PrePlanningController extends ResourceController
                     'email_send'
                 );
                 $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
+                $em->persist($rootTreePrePlannig);
             }
+            $em->flush();
         }
         
         $data["success"] = $success;

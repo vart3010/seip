@@ -17,7 +17,32 @@ CREATE TABLE seip_c_complejo_audit (id INT NOT NULL, rev INT NOT NULL, fk_user_c
 CREATE TABLE seip_c_gerencia_audit (id INT NOT NULL, rev INT NOT NULL, fk_user_created_at INT DEFAULT NULL, fk_user_updated_at INT DEFAULT NULL, fk_complejo INT DEFAULT NULL, fk_direction INT DEFAULT NULL, configuration_id INT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, description VARCHAR(100) DEFAULT NULL, ref VARCHAR(100) DEFAULT NULL, abbreviation VARCHAR(100) DEFAULT NULL, modular TINYINT(1) DEFAULT NULL, vinculante TINYINT(1) DEFAULT NULL, enabled TINYINT(1) DEFAULT NULL, gerenciaGroup_id INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE seip_c_gerencia_second_audit (id INT NOT NULL, rev INT NOT NULL, fk_user_created_at INT DEFAULT NULL, fk_user_updated_at INT DEFAULT NULL, fk_complejo INT DEFAULT NULL, fk_gerencia INT DEFAULT NULL, configuration_id INT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, description VARCHAR(100) DEFAULT NULL, ref VARCHAR(100) DEFAULT NULL, abbreviation VARCHAR(100) DEFAULT NULL, modular TINYINT(1) DEFAULT NULL, vinculante TINYINT(1) DEFAULT NULL, enabled TINYINT(1) DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
-
 -- Nuevas audiciones
 ALTER TABLE seip_indicator_value ADD deletedAt DATETIME DEFAULT NULL;
 CREATE TABLE seip_indicator_value_audit (id INT NOT NULL, rev INT NOT NULL, indicator_id INT DEFAULT NULL, fk_formula INT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, valueOfIndicator DOUBLE PRECISION DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, formulaParameters LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', createdBy_id INT DEFAULT NULL, updatedBy_id INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+-- Tabla de la pre planificacion por usuario
+CREATE TABLE PrePlanningUser (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, period_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, prePlanningRoot_id INT NOT NULL, INDEX IDX_43E04A58A76ED395 (user_id), INDEX IDX_43E04A58EC8B7ADE (period_id), UNIQUE INDEX UNIQ_43E04A582D5CFCAF (prePlanningRoot_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A58A76ED395 FOREIGN KEY (user_id) REFERENCES seip_user (id);
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A58EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A582D5CFCAF FOREIGN KEY (prePlanningRoot_id) REFERENCES PrePlanning (id);
+ALTER TABLE PrePlanningUser ADD gerenciaFirst_id INT DEFAULT NULL, ADD serenciaSecond_id INT DEFAULT NULL, CHANGE user_id user_id INT NOT NULL;
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A585BC1F178 FOREIGN KEY (gerenciaFirst_id) REFERENCES seip_c_gerencia (id);
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A583E769C86 FOREIGN KEY (serenciaSecond_id) REFERENCES seip_c_gerencia_second (id);
+CREATE INDEX IDX_43E04A585BC1F178 ON PrePlanningUser (gerenciaFirst_id);
+CREATE INDEX IDX_43E04A583E769C86 ON PrePlanningUser (serenciaSecond_id);
+ALTER TABLE PrePlanning DROP FOREIGN KEY FK_BFBCFF4FEC8B7ADE;
+ALTER TABLE PrePlanning DROP FOREIGN KEY FK_BFBCFF4FA76ED395;
+DROP INDEX IDX_BFBCFF4FA76ED395 ON PrePlanning;
+DROP INDEX IDX_BFBCFF4FEC8B7ADE ON PrePlanning;
+ALTER TABLE PrePlanning DROP period_id, DROP user_id;
+ALTER TABLE PrePlanningUser ADD levelPlanning INT NOT NULL;
+ALTER TABLE PrePlanningUser DROP FOREIGN KEY FK_43E04A583E769C86;
+DROP INDEX IDX_43E04A583E769C86 ON PrePlanningUser;
+ALTER TABLE PrePlanningUser CHANGE serenciasecond_id gerenciaSecond_id INT DEFAULT NULL;
+ALTER TABLE PrePlanningUser ADD CONSTRAINT FK_43E04A585A2F2234 FOREIGN KEY (gerenciaSecond_id) REFERENCES seip_c_gerencia_second (id);
+CREATE INDEX IDX_43E04A585A2F2234 ON PrePlanningUser (gerenciaSecond_id);
+ALTER TABLE PrePlanningUser ADD status INT NOT NULL;
+CREATE UNIQUE INDEX planning_idx ON PrePlanningUser (user_id, period_id, levelPlanning);
+ALTER TABLE PrePlanningUser ADD ref VARCHAR(30) NOT NULL;
+CREATE UNIQUE INDEX planninguser_ref_idx ON PrePlanningUser (ref);
