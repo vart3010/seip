@@ -5,3 +5,5 @@ Se implemento acl:
 app/console init:acl
 app/console sonata:admin:setup-acl
 app/console sonata:admin:generate-object-acl
+
+Se agreo nuevas entidades al administrador (Gerencia, Gerencia de segunda, Grupo de gerencia, Complejo).

@@ -1013,10 +1013,10 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     
     public function __toString() {
         $description = $this->getDescription();
-        $limit = 100;
+        $limit = 80;
         if(strlen($description) > $limit)
     {
-            $description = substr($this->getDescription(), 0,$limit);
+            $description = substr($this->getDescription(), 0,$limit).'...';
         }
         $toString = $this->getRef().' '.$description;
         return $toString?:'-';

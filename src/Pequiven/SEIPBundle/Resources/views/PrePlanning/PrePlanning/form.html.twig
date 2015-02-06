@@ -409,7 +409,7 @@
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
-                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_PRE_PLANNING_IMPORT') %}importBtn{% else %}sendToReviewBtn{% endif %} ]
+                    items: [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, {% if is_granted('ROLE_SEIP_PRE_PLANNING_IMPORT_MATRIX') %}importBtn{% else %}sendToReviewBtn{% endif %} ]
                 }],
                 columns: [{
                     xtype: 'treecolumn', //this is so we know which column will show the tree

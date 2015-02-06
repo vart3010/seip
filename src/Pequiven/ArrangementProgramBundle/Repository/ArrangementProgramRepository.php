@@ -88,8 +88,11 @@ class ArrangementProgramRepository extends EntityRepository
         $qb->innerJoin('ap.responsibles', 'ap_r')
            ->andWhere('ap_r.id = :responsible')
            ->andWhere('ap.period = :period')
+           ->andWhere('ap.status != :status')
            ->setParameter('responsible', $user)
-           ->setParameter('period', $period);
+           ->setParameter('period', $period)
+           ->setParameter('status', ArrangementProgram::STATUS_REJECTED);
+        
         if(isset($criteria['notArrangementProgram'])){
             $qb->andWhere('ap.id != :arrangementProgram');
             $qb->setParameter('arrangementProgram', $criteria['notArrangementProgram']);

@@ -21,10 +21,14 @@ class ArrangementProgramController extends SEIPController
 {
     /**
      * Muestra los programas de gestion
+     * 
      * @param Request $request
      * @return type
      */
-    public function indexAction(Request $request) {
+    public function indexAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ALL');
+        
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
@@ -113,7 +117,10 @@ class ArrangementProgramController extends SEIPController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
-    public function arrangementProgramByGerenciaAction(Request $request) {
+    public function arrangementProgramByGerenciaAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ALL');
+        
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
@@ -274,11 +281,14 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
-     * 
+     * Retorna los programas de gestion por aprobar o revisar.
      * @param Request $request
      * @return type
      */
-    function forReviewingApprovingAction(Request $request){
+    function forReviewingApprovingAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_REVIEWING_OR_APPROVING');
+        
         $method = 'createPaginatorByAssigned';
         $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
         $template = 'forReviewingApproving.html';
@@ -290,10 +300,28 @@ class ArrangementProgramController extends SEIPController
      * @param Request $request
      * @return type
      */
-    function forNotifyingAction(Request $request){
+    function forNotifyingAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING');
+        
         $method = 'createPaginatorByNotified';
         $route = 'pequiven_seip_arrangementprogram_for_notifying';
         $template = 'forNotifying.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
+     * Retorna la vista de los asignados.
+     * @param Request $request
+     * @return type
+     */
+    public function assignedAction(Request $request) 
+    {    
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ASSIGNED');
+        
+        $method = 'createPaginatorByAssignedResponsibles';
+        $route = 'pequiven_seip_arrangementprogram_assigned';
+        $template = 'assignedIndex.html';
         return $this->getSummaryResponse($request,$method,$route,$template);
     }
     
@@ -384,19 +412,6 @@ class ArrangementProgramController extends SEIPController
         }
         return $this->handleView($view);
     }
-
-    /**
-     * Retorna la vista de los asignados.
-     * @param Request $request
-     * @return type
-     */
-    public function assignedAction(Request $request) 
-    {    
-        $method = 'createPaginatorByAssignedResponsibles';
-        $route = 'pequiven_seip_arrangementprogram_assigned';
-        $template = 'assignedIndex.html';
-        return $this->getSummaryResponse($request,$method,$route,$template);
-    }
     
     /**
      * Creates a new ArrangementProgram entity.
@@ -406,6 +421,17 @@ class ArrangementProgramController extends SEIPController
     public function createAction(Request $request)
     {
         $type = $request->get("type");
+        
+        $rol = null;
+        $rolesByType = array(
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC',
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE',
+        );
+        if(isset($rolesByType[$type])){
+            $rol = $rolesByType[$type];
+        }
+        $this->getSecurityService()->checkSecurity($rol);
+        
         $entity = new ArrangementProgram();
         $user = $this->getUser();
         $periodService = $this->getPeriodService();
@@ -424,6 +450,9 @@ class ArrangementProgramController extends SEIPController
                 ->setCreatedBy($user);
         $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
         if($request->isMethod('GET') === true && ($templateSourceId = $request->get('templateSource',null)) !== null){
+            
+            $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE');
+            
             $templateSource = $this->get('pequiven_seip.repository.arrangementprogram_template')->find($templateSourceId);
             if(!$templateSource){
                 throw $this->createNotFoundException('TemplateSource not found!');
@@ -481,23 +510,6 @@ class ArrangementProgramController extends SEIPController
     }
 
     /**
-     * Creates a form to create a ArrangementProgram entity.
-     *
-     * @param ArrangementProgram $entity The entity
-     *
-     * @return Form The form
-     */
-    private function createCreateForm(ArrangementProgram $entity,array $parameters)
-    {
-        $form = $this->createForm('arrangementprogram', $entity, array(
-            'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
-            'method' => 'POST',
-        ));
-
-        return $form;
-    }
-
-    /**
      * Finds and displays a ArrangementProgram entity.
      *
      * @Template()
@@ -513,6 +525,16 @@ class ArrangementProgramController extends SEIPController
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ArrangementProgram entity.');
         }
+        
+        $rol = null;
+        $rolesByType = array(
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC',
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE',
+        );
+        if(isset($rolesByType[$entity->getType()])){
+            $rol = $rolesByType[$entity->getType()];
+        }
+        $this->getSecurityService()->checkSecurity($rol);
 
         $deleteForm = $this->createDeleteForm($id);
         
@@ -1338,6 +1360,23 @@ class ArrangementProgramController extends SEIPController
             $entity->addObservation($observation);
     }
     
+    /**
+     * Creates a form to create a ArrangementProgram entity.
+     *
+     * @param ArrangementProgram $entity The entity
+     *
+     * @return Form The form
+     */
+    private function createCreateForm(ArrangementProgram $entity,array $parameters)
+    {
+        $form = $this->createForm('arrangementprogram', $entity, array(
+            'action' => $this->generateUrl('pequiven_arrangementprogram_create',$parameters),
+            'method' => 'POST',
+        ));
+
+        return $form;
+    }
+    
     protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
         return parent::trans($id, $parameters, $domain);
     }
@@ -1348,5 +1387,14 @@ class ArrangementProgramController extends SEIPController
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

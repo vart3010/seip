@@ -23,15 +23,77 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
  */
 class PrePlanningController extends ResourceController
 {
-    public function indexAction(Request $request) {
-        $seipConfiguration = $this->getSeipConfiguration();
-        if($seipConfiguration->isEnablePrePlanning() == false){
-            throw $this->createAccessDeniedHttpException('La pre-planificacion no se encuentra habilitada.');
+    private static $levels = array(
+        PrePlanning::LEVEL_TACTICO => 'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
+        PrePlanning::LEVEL_OPERATIVO => 'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+    );
+    
+    public function indexAction(Request $request)
+    {
+        $this->checkSecurity($request,'ROLE_SEIP_PRE_PLANNING_LIST_REVIEW');
+        
+        $period = $request->get('period');
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        
+        
+        $criteria['period'] = $this->getPeriodService()->getPeriodActive();
+        $criteria['parent'] = null;
+        
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginator',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
         }
-        return parent::indexAction($request);
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('index.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
+            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array('period' => $period),$formatData));
+        }
+        return $this->handleView($view);
     }
     
-    public function getFormAction() {
+    public function createAction(Request $request) 
+    {
+        $this->checkSecurity($request);
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        return $this->handleView($view);
+    }
+    
+    public function getFormAction(Request $request) 
+    {
+        $this->checkSecurity($request);
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('form.html'))
@@ -47,6 +109,7 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         
@@ -87,6 +150,8 @@ class PrePlanningController extends ResourceController
      */
     public function deletePrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
+        
         $dataRequest = $request->request->all();
         $ids = array();
         foreach ($dataRequest as $value) {
@@ -122,6 +187,7 @@ class PrePlanningController extends ResourceController
      */
     public function returnChangesAction(Request $request) 
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         $level = $request->get('level',null);
@@ -151,10 +217,12 @@ class PrePlanningController extends ResourceController
     
     /**
      * Iniciando el proceso de planificacion
+     * 
      * @return type
      */
     public function startPrePlanningAction(Request $request) 
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         $level = $request->get('level',null);
@@ -186,11 +254,13 @@ class PrePlanningController extends ResourceController
     
     /**
      * Actualiza los items de preplanificacion
+     * 
      * @param Request $request
      * @return type
      */
     public function updatePrePlanningAction(Request $request) 
     {
+        $this->checkSecurity($request);
         $dataRequest = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $repository = $this->getRepository();
@@ -220,11 +290,13 @@ class PrePlanningController extends ResourceController
     
     /**
      * Accion para importar los items
+     * 
      * @param Request $request
      * @return type
      */
     public function importAction(Request $request)
     {
+        $this->checkSecurity($request);
         set_time_limit(60);
         ini_set("memory_limit","256M");
         
@@ -239,8 +311,16 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Envia la planificacion a revision
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function sendToReviewAction(Request $request)
     {
+        $this->checkSecurity($request);
+        
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
@@ -359,5 +439,29 @@ class PrePlanningController extends ResourceController
     private function getSeipConfiguration()
     {
         return $this->container->get('seip.configuration');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Evalua la seguridad de la seccion
+     * @param Request $request
+     */
+    private function checkSecurity(Request $request,$rol = null)
+    {
+        if($rol === null){
+            $level = $request->get('level');
+            if(isset(self::$levels[$level])){
+                $rol = self::$levels[$level];
+            }
+        }
+        $this->getSecurityService()->checkSecurity($rol);
     }
 }

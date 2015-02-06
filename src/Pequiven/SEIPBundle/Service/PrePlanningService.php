@@ -93,15 +93,15 @@ class PrePlanningService extends ContainerAware
         
         $isEditable = false;
         $requiresApproval = false;
-        if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null){
+        if($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC') && $prePlanningConfiguration->getGerencia() !== null){
             
-        }elseif($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null){
+        }elseif($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null){
             $requiresApproval = true;
         }
         
         $idSourceObject = $object->getId();
         $class = ClassUtils::getRealClass(get_class($object));
-        $levelObject = PrePlanning::LEVEL_DEFAULT;
+        $levelObject = null;
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
@@ -135,9 +135,9 @@ class PrePlanningService extends ContainerAware
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
-        if($this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null && $levelObject == PrePlanning::LEVEL_OPERATIVO && $levelPlanning == PrePlanning::LEVEL_OPERATIVO){
+        if($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE') && $prePlanningConfiguration->getGerenciaSecond() !== null && $levelObject == PrePlanning::LEVEL_OPERATIVO && $levelPlanning == PrePlanning::LEVEL_OPERATIVO){
             $isEditable = true;
-        }else if($this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC') && $prePlanningConfiguration->getGerencia() !== null && $levelObject == PrePlanning::LEVEL_TACTICO && $levelPlanning == PrePlanning::LEVEL_TACTICO){
+        }else if($this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC') && $prePlanningConfiguration->getGerencia() !== null && $levelObject == PrePlanning::LEVEL_TACTICO && $levelPlanning == PrePlanning::LEVEL_TACTICO){
             $isEditable = true;
         }
         
@@ -271,9 +271,9 @@ class PrePlanningService extends ContainerAware
             $cloneService = $this->getCloneService();
             $sequenceGenerator = $this->getSequenceGenerator();
             $levelObject = $prePlanning->getLevelObject();
-            if($levelObject == PrePlanning::LEVEL_TACTICO && !$this->isGranted('ROLE_MENU_PRE_PLANNING_TACTIC')){
+            if($levelObject == PrePlanning::LEVEL_TACTICO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC')){
                 throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel tactico.');
-            }elseif ($levelObject == PrePlanning::LEVEL_OPERATIVO && !$this->isGranted('ROLE_MENU_PRE_PLANNING_OPERATIVE')) {
+            }elseif ($levelObject == PrePlanning::LEVEL_OPERATIVO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE')) {
                 throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel operativo.');
             }
             $typeObject = $prePlanning->getTypeObject();

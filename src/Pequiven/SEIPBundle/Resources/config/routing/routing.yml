@@ -80,7 +80,3 @@ listArrangementProgramByGroup:
     requirements:
         idGerencia: "\d+"
     methods: [GET]
-    
-pequiven_seip_user_routes:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/user.yml"
-    prefix:   /user

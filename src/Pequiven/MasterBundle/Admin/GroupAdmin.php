@@ -24,16 +24,47 @@ class GroupAdmin extends BaseGroupAdmin
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
         $show
             ->add('name')
+            ->add('description')
             ;
     }
+    
+    protected function configureFormFields(\Sonata\AdminBundle\Form\FormMapper $formMapper) {
+        $formMapper
+            ->add('name')
+//            ->add('description')
+            ->add('roles', 'sonata_security_roles', array(
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+                'translation_domain' => $this->getTranslationDomain()
+            ))
+        ;
+    }
+    
+    protected function configureDatagridFilters(\Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper) {
+        $datagridMapper
+            ->add('name')
+            ->add('description')
+        ;
+    }
+    
     /**
      * {@inheritdoc}
      */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
-            ->add('roles')
+            ->addIdentifier('description')
+            ->add('roles',null,array(
+                'translation_domain' => $this->getTranslationDomain()
+            ))
         ;
+    }
+    public function prePersist($object) {
+        $object->setDescription($object->getName());
+    }
+    
+    public function preUpdate($object) {
+        $object->setDescription($object->getName());
     }
 }

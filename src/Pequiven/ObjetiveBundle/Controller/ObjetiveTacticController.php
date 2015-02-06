@@ -36,7 +36,9 @@ class ObjetiveTacticController extends baseController {
      * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
      * @return type
      */
-    public function listAction() {
+    public function listAction() 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
         return array(
         );
     }
@@ -45,7 +47,10 @@ class ObjetiveTacticController extends baseController {
      * Finds and displays a Objetive entity of level Tactic by Id.
      *
      */
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
@@ -64,11 +69,8 @@ class ObjetiveTacticController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function objetiveListAction(Request $request) {
-
-//        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -120,7 +122,8 @@ class ObjetiveTacticController extends baseController {
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
     public function createAction(Request $request) {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_TACTIC');
+        
         $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
 
         $nameObject = 'object';
@@ -783,4 +786,12 @@ class ObjetiveTacticController extends baseController {
         return $this->container->get('pequiven_arrangement_program.service.period');
     }
 
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

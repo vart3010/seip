@@ -1,61 +1,38 @@
-{% extends "::base.html.twig" %}
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% set level = app.request.get('level') %}
 {% set period = app.request.get('period') %}
-{% set valid = true %}
-{% set labelGerencia = '' %}
 
 {% block body %}
-    {% set levelLabel = '' %}
-    
-    {% set configuration = app.user.configuration %}
-    {% if  configuration and configuration.prePlanningConfiguration != null %}
-    {% else %}
-        {% set valid = false %}
-        {{ print_error('pequiven_seip.errors.the_user_has_no_defined_configuration_planning',{'%user%':app.user},'PequivenSEIPBundle') }}
-    {% endif %}
-    {% if valid %}
-        {% if level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
-            {% set levelLabel = 'operative' %}
-
-            {% if configuration.prePlanningConfiguration.gerenciaSecond == null %}
-                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_operative_level',{'%user%':app.user},'PequivenSEIPBundle') }}
-                {% set valid = false %}
-            {% else %}
-                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerenciaSecond }) %}
-            {% endif %}
-        {% elseif level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
-            {% set levelLabel = 'tactic' %}
-
-            {% if configuration.prePlanningConfiguration.gerencia == null %}
-                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_tactical_level',{'%user%':app.user},'PequivenSEIPBundle') }}
-                {% set valid = false %}
-            {% else %}
-                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerencia }) %}
-            {% endif %}
-        {% endif %}
-    {% endif %}    
-    
-    
-    
     {{ contentHeader(
             ("pequiven_seip.pre_planning.pre_planning"|trans({'%period%':period})),
-            ( ("pequiven_seip.pre_planning." ~ levelLabel) |trans())
+            ( ("pequiven_seip.pre_planning.list") |trans())
         )
     }}
-    {% if valid %}
-        <b>{{ labelGerencia }}</b><br/>
-        <div id="form-pre-plannig" style="width: 100%;min-height: 600px"></div>
-    {% endif %}
+    <div ng-controller="TableFormatController">
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_pre_planning_index',{_format:'json',period: period}) }}" export-csv="csv" class="table table-responsive">
+                <tbody>
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven_seip.username'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ result._links.self.href $}">{$ result.name $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.username'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ result._links.self.href $}">{$ result.status $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.username'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ result._links.self.href $}">{$ result.user.username $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.username'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ result._links.self.href $}">{$ result.user.rol $}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock body %}
 
 
-{% block javascript %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period}) }}" style="padding:0;width:100%;height:600px"/>');
-        });
-    </script>
-{% endblock javascript %}

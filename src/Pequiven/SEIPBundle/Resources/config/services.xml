@@ -214,5 +214,14 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="seip.service.security" class="Pequiven\SEIPBundle\Service\SecurityService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.security.access.role_hierarchy_voter" class="Pequiven\SEIPBundle\Security\Authorization\Voter\SeipRoleHierarchyVoter" public="false">
+            <argument type="service" id="security.role_hierarchy" />
+            <tag name="security.voter" priority="245" />
+        </service>
     </services>
 </container>
