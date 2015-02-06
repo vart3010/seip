@@ -202,7 +202,10 @@ pequiven_seip:
             role_seip_pre_planning_list_review: Usted no tiene permiso para listar la pre-planificación.
             role_seip_pre_planning_view_tactic: Usted no tiene permiso para visualizar la pre-planificación a nivel tactico.
             role_seip_pre_planning_view_operative: Usted no tiene permiso para visualizar la pre-planificación a nivel operativo.
-            role_seip_pre_planning_operation_import_matrix: Usted no tiene permiso para imporar la pre-planificación.
+            role_seip_pre_planning_operation_import_objetive: Usted no tiene permiso para imporar objetivos de la pre-planificación.
+            role_seip_pre_planning_operation_import_indicator: Usted no tiene permiso para imporar indicadores de la pre-planificación.
+            role_seip_pre_planning_operation_import_arrangement_program: Usted no tiene permiso para imporar programas de gestión de la pre-planificación.
+            role_seip_pre_planning_operation_import_arrangement_program_goal: Usted no tiene permiso para imporar metas de programas de gestión de la pre-planificación.
             
             role_seip_objective_list_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
             role_seip_objective_list_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.

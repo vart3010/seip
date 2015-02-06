@@ -13,7 +13,7 @@
     }}
     <div ng-controller="TableFormatController">
         <div loading-container="tableParams.settings().$loading">
-            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_pre_planning_user_index',{_format:'json',period: period}) }}" export-csv="csv" class="table table-responsive">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path(route_index,{_format:'json',period: period}) }}" export-csv="csv" class="table table-responsive">
                 <tbody>
                     <tr ng-repeat="result in $data" data="{$ result|json $}">
                         <td data-title="'{{ 'pequiven_seip.headers.ref'|trans }}'" filter="{'name' : 'text'}">

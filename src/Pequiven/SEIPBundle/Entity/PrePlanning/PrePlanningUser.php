@@ -41,6 +41,7 @@ class PrePlanningUser
      * Estatus aprobado
      */
     const STATUS_APPROVED = 3;
+    
     /**
      * @var integer
      *
@@ -132,6 +133,36 @@ class PrePlanningUser
      */
     private $status = self::STATUS_DRAFT;
     
+    /**
+     * ¿Contiene objetivos?
+     * 
+     * @var boolean
+     * @ORM\Column(name="contentObjetive",type="boolean")
+     */
+    private $contentObjetive = false;
+    
+    /**
+     * ¿Contiene indicadores?
+     * 
+     * @var boolean
+     * @ORM\Column(name="contentIndicator",type="boolean")
+     */
+    private $contentIndicator = false;
+    /**
+     * ¿Contiene Programas de gestion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="contentArrangementProgram",type="boolean")
+     */
+    private $contentArrangementProgram = false;
+    /**
+     * ¿Contiene Metas Programas de gestion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="contentArrangementProgramGoal",type="boolean")
+     */
+    private $contentArrangementProgramGoal = false;
+
     /**
      * Get id
      *
@@ -370,5 +401,97 @@ class PrePlanningUser
     public function getRef()
     {
         return $this->ref;
+    }
+
+    /**
+     * Set contentObjetive
+     *
+     * @param boolean $contentObjetive
+     * @return PrePlanningUser
+     */
+    public function setContentObjetive($contentObjetive)
+    {
+        $this->contentObjetive = $contentObjetive;
+
+        return $this;
+    }
+
+    /**
+     * Get contentObjetive
+     *
+     * @return boolean 
+     */
+    public function getContentObjetive()
+    {
+        return $this->contentObjetive;
+    }
+
+    /**
+     * Set contentIndicator
+     *
+     * @param boolean $contentIndicator
+     * @return PrePlanningUser
+     */
+    public function setContentIndicator($contentIndicator)
+    {
+        $this->contentIndicator = $contentIndicator;
+
+        return $this;
+    }
+
+    /**
+     * Get contentIndicator
+     *
+     * @return boolean 
+     */
+    public function getContentIndicator()
+    {
+        return $this->contentIndicator;
+    }
+
+    /**
+     * Set contentArrangementProgram
+     *
+     * @param boolean $contentArrangementProgram
+     * @return PrePlanningUser
+     */
+    public function setContentArrangementProgram($contentArrangementProgram)
+    {
+        $this->contentArrangementProgram = $contentArrangementProgram;
+
+        return $this;
+    }
+
+    /**
+     * Get contentArrangementProgram
+     *
+     * @return boolean 
+     */
+    public function getContentArrangementProgram()
+    {
+        return $this->contentArrangementProgram;
+    }
+
+    /**
+     * Set contentArrangementProgramGoal
+     *
+     * @param boolean $contentArrangementProgramGoal
+     * @return PrePlanningUser
+     */
+    public function setContentArrangementProgramGoal($contentArrangementProgramGoal)
+    {
+        $this->contentArrangementProgramGoal = $contentArrangementProgramGoal;
+
+        return $this;
+    }
+
+    /**
+     * Get contentArrangementProgramGoal
+     *
+     * @return boolean 
+     */
+    public function getContentArrangementProgramGoal()
+    {
+        return $this->contentArrangementProgramGoal;
     }
 }

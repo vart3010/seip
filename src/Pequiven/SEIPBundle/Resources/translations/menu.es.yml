@@ -128,4 +128,5 @@ app:
                         main: Planificación %period%
                         tactic: Táctico
                         operative: Operativo
-                        review: Revisiones
+                        planning: Planificación
+                        statistics: Estadística

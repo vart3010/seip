@@ -69,7 +69,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuObjetives($menu, $section);
         }
         
-            //Menú Programas de Gestión
+        //Menú Programas de Gestión
         if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_*')){
             $this->addArrangementProgramsMenu($menu, $section);
         }
@@ -331,16 +331,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_*')){
             $visualize = $this->factory->createItem('preplanning.visualize',
                 $this->getSubLevelOptions(array(
-                'labelAttributes' => array('icon' => '',),
+                'labelAttributes' => array('icon' => 'fa fa-sitemap',),
                 ))
             )->setLabel($this->translate(sprintf('app.backend.menu.%s.objetives.visualize.main', $section)));
             
-            if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_REVIEW')){
-                $visualize->addChild('preplanning.visualize.review',array(
+            if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_PLANNING')){
+                $visualize->addChild('preplanning.visualize.planning',array(
                     'route' => 'pequiven_pre_planning_user_index',//Route
-                    'labelAttributes' => array('icon' => 'fa fa-sitemap'),
+                    'labelAttributes' => array('icon' => ''),
                     'routeParameters' => array('period' => $periodName),
-                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.review', $section)));
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.planning', $section)));
+            }
+            if($this->isGranted('ROLE_SEIP_PRE_PLANNING_LIST_STATISTICS')){
+                $visualize->addChild('preplanning.visualize.statistics',array(
+                    'route' => 'pequiven_pre_planning_user_index_indicator',//Route
+                    'labelAttributes' => array('icon' => ''),
+                    'routeParameters' => array('period' => $periodName),
+                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.pre_planning.statistics', $section)));
             }
             $child->addChild($visualize);
         }

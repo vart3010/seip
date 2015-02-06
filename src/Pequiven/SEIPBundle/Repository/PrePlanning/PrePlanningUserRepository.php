@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Repository\PrePlanning;
 
+use Pequiven\SEIPBundle\Entity\Period;
+use Pequiven\SEIPBundle\Entity\User;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -23,13 +25,12 @@ class PrePlanningUserRepository extends EntityRepository
     /**
      * Devuelve el root de una pre planificacion
      * 
-     * @param \Pequiven\SEIPBundle\Entity\Period $period
-     * @param \Pequiven\SEIPBundle\Entity\User $user
+     * @param Period $period
+     * @param User $user
      * @return type
      */
-    public function findTreePrePlanning(\Pequiven\SEIPBundle\Entity\Period $period,  \Pequiven\SEIPBundle\Entity\User $user,$levelPlanning)
+    public function findTreePrePlanning(Period $period,  User $user,$levelPlanning)
     {
-        
         $qb = $this->getQueryBuilder();
         $qb
             ->addSelect('p_p')
@@ -44,6 +45,25 @@ class PrePlanningUserRepository extends EntityRepository
             ->setParameter('levelPlanning', $levelPlanning)
             ;
         return $qb->getQuery()->getOneOrNullResult();
+    }
+    
+    function findWithIndicators(Period $period,array $criteria,$orderBy = null)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('p_p')
+                
+            ->innerJoin('p.prePlanningRoot', 'p_p')
+                
+            ->andWhere('p.period = :period')
+            ->andWhere('p.contentIndicator = :contentIndicator')
+            ->setParameter('period', $period)
+            ->setParameter('contentIndicator', true)
+            ;
+        $this->applyCriteria($qb,$criteria);
+        $this->applySorting($qb,$orderBy);
+        
+        return $this->getPaginator($qb);
     }
     
     protected function getAlias() {

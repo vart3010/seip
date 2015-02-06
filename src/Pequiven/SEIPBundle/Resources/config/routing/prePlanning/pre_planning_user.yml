@@ -1,7 +1,17 @@
 pequiven_pre_planning_user_index:
-    path: /{period}.{_format}
+    path: /planning/{period}.{_format}
     defaults:
         _controller: pequiven.controller.pre_planning_user:indexAction
+        _format: html
+    requirements:
+        _format: html|json
+        period: "\d+"
+    methods: [GET]
+    
+pequiven_pre_planning_user_index_indicator:
+    path: /statistics/{period}.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning_user:indexIndicatorAction
         _format: html
     requirements:
         _format: html|json

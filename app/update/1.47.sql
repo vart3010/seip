@@ -46,3 +46,4 @@ ALTER TABLE PrePlanningUser ADD status INT NOT NULL;
 CREATE UNIQUE INDEX planning_idx ON PrePlanningUser (user_id, period_id, levelPlanning);
 ALTER TABLE PrePlanningUser ADD ref VARCHAR(30) NOT NULL;
 CREATE UNIQUE INDEX planninguser_ref_idx ON PrePlanningUser (ref);
+ALTER TABLE PrePlanningUser ADD contentObjetive TINYINT(1) NOT NULL, ADD contentIndicator TINYINT(1) NOT NULL, ADD contentArrangementProgram TINYINT(1) NOT NULL, ADD contentArrangementProgramGoal TINYINT(1) NOT NULL;

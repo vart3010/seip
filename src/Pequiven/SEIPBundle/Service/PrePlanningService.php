@@ -34,6 +34,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class PrePlanningService extends ContainerAware 
 {
     /**
+     *
+     * @var \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    private $currentBuildPrePlanning;
+    
+    /**
      * Busca el arbol creado para la exportacion de items al siguiente periodo
      * 
      * @param Period $period
@@ -63,6 +69,8 @@ class PrePlanningService extends ContainerAware
         $linkGeneratorService = $this->getLinkGeneratorService();
         $user = $this->getUser();
         $period = $this->getPeriodService()->getPeriodActive();
+        $prePlanningUser = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser();
+        $this->setCurrentBuildPrePlanning($prePlanningUser);
         
         $root = $this->createNew();
         $root->setName(PrePlanning::DEFAULT_NAME);
@@ -86,7 +94,7 @@ class PrePlanningService extends ContainerAware
         $configuration = $user->getConfiguration();
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         
-        $prePlanningUser = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser();
+        
         $prePlanningUser
                 ->setUser($user)
                 ->setPeriod($period)
@@ -131,6 +139,8 @@ class PrePlanningService extends ContainerAware
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
             $prePlanning->setRequiresApproval($requiresApproval);
+            $this->getCurrentBuildPrePlanning()->setContentObjetive(true);
+            
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
             $type = $object->getType();
@@ -139,6 +149,8 @@ class PrePlanningService extends ContainerAware
             }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentArrangementProgram(true);
+            
         }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){
             $typeObject = PrePlanning::TYPE_OBJECT_INDICATOR;
             if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
@@ -148,6 +160,8 @@ class PrePlanningService extends ContainerAware
             }else if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentIndicator(true);
+            
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\Goal'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL;
             $type = $object->getTimeline()->getArrangementProgram()->getType();
@@ -157,6 +171,7 @@ class PrePlanningService extends ContainerAware
             }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentArrangementProgramGoal(true);
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
@@ -527,4 +542,19 @@ class PrePlanningService extends ContainerAware
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    function getCurrentBuildPrePlanning() 
+    {
+        return $this->currentBuildPrePlanning;
+    }
+
+     function setCurrentBuildPrePlanning(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser &$currentBuildPrePlanning) {
+        $this->currentBuildPrePlanning = $currentBuildPrePlanning;
+    }
 }
+
+
