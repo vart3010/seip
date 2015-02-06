@@ -199,6 +199,11 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="pequiven_seip.service.fusion_chart" class="Pequiven\SEIPBundle\Service\FusionChartExportService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="seip.service.preplanning" class="Pequiven\SEIPBundle\Service\PrePlanningService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

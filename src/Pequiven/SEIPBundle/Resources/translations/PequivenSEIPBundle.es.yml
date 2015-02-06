@@ -183,6 +183,8 @@ pequiven_seip:
         tactic: Táctico
         operative: Operativo
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
+    pdf:
+        pageFooter: Página %page%/%totalPage%
         
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada

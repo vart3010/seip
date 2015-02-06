@@ -19,62 +19,83 @@ class SeipPdf extends TCPDF implements ContainerAwareInterface{
      */
     private $container;
     
+    protected $period;
     
-    //Page header
+    protected $footerText;
+    
+    
+    //Header del documento pdf de resultados
     public function Header() {
         // Logo SEIP
         $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_menu_seip.png'); //K_PATH_IMAGES.'logo_example.jpg';
         $this->Image($image_file, 10, 10, 15, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
-        $this->SetFont('helvetica', 'B', 20);
+        $this->SetFont('helvetica', 'B', 16);
         $this->SetTextColor(255,0,0);
         // Title
-        $this->Cell(0, 15, $this->title, 0, false, 'C', 0, '', 0, false, 'T', 'T');
+        $text='<div align="center" style="font-size: 1em;color: red;">'.$this->title.'<br>'.$this->period->getDescription().'</div>';
+        $this->writeHTML($text);
         // Logo Pqv
         $image_file = $this->generateAsset('bundles/pequivenseip/logotipos-pqv/logo_pqv2.gif'); //K_PATH_IMAGES.'logo_example.jpg';
-        $this->Image($image_file, 180, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 270, 10, 15, '', 'GIF', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        // Línea HR
+        $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
+        $this->Line(0, 27, 300, 27, $lineRed);
     }
 
-    // Page footer
+    // Footer del pdf de resultados
     public function Footer() {
-        // Position at 15 mm from bottom
+        // Position at 27 mm from bottom
         $this->SetY(-15);
         // Set font
         $this->SetFont('helvetica', 'I', 8);
         // Page number
-        $this->Cell(0, 10, 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+//        $this->Cell(0, 10, 'Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        
+        $footer = '<div align="center"><span style="color: red;font-size: 1.3em;font-weight: bold;font-variant: small-caps;">'.$this->footerText.'</span><br><span>'.$this->trans('pequiven_seip.pdf.pageFooter', array('%page%' => $this->getAliasNumPage(),'%totalPage%' => $this->getAliasNbPages()),'PequivenSEIPBundle').'</span></div>';
+        $this->writeHTML($footer);
+        
+        //Línea HR
+        $lineRed = array('width' => 1.0, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
+        $this->Line(0, 190, 300, 190, $lineRed);
+
     }
     
     /**
-     * Seteamos el título del documento
-     * @param type $title
+     * Servicio que setea el período
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
      */
-    public function setTitle($title = ''){
-        $this->title = $title;
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period){
+        $this->period = $period;
     }
     
     /**
-     * 
-     * @return type
+     * Texto que va en el footer
+     * @param type $text
      */
-    public function getTitle(){
-        return $this->title;
+    public function setFooterText($text){
+        $this->footerText = $text;
     }
     
     /**
-     * 
+     * Servicio para generar los assets
      * @param type $path
      * @param type $packageName
      * @return type
      */
-    function generateAsset($path,$packageName = null){
+    protected function generateAsset($path,$packageName = null){
         return $this->container->get('templating.helper.assets')
                ->getUrl($path, $packageName);
     }
     
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
     
     /**
-     * 
+     * Servicio que setea el container
      * @param ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container = null) {

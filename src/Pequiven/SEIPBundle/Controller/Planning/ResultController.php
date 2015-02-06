@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
 
+
 /**
  * Description of ResultsController
  *
@@ -158,6 +159,7 @@ class ResultController extends ResourceController {
         $caption = '';
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
             $linkToExportResult = $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $id));
+            $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $id));
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
             $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
@@ -176,6 +178,7 @@ class ResultController extends ResourceController {
             $entity = $gerencia;
         }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
             $linkToExportResult = $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
+            $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
             $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
@@ -296,6 +299,7 @@ class ResultController extends ResourceController {
             'tree' => $tree,
             'resultService' => $resultService,
             'linkToExportResult' => $linkToExportResult,
+            'urlExportFromChart' => $urlExportFromChart,
         );
     }
     
@@ -350,8 +354,7 @@ class ResultController extends ResourceController {
         $qbIndicator = $indicatorRepository->findQueryWithResultNull($period);
         $qbIndicator->select('i.id,i.ref');
         $resultsIndicator = $qbIndicator->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        
-        
+                
         $view->setData(array(
             'resultsArrangementprogram' => $resultsArrangementprogram,
             'resultsIndicator' => $resultsIndicator
@@ -366,9 +369,25 @@ class ResultController extends ResourceController {
      */
     public function exportAction(Request $request)
     {
+        if($request->isMethod('POST')){
+            $exportRequestStream = $request->request->all();
+            $request->request->remove('charttype');
+            $request->request->remove('stream');
+            $request->request->remove('stream_type');
+            $request->request->remove('meta_bgColor');
+            $request->request->remove('meta_bgAlpha');
+            $request->request->remove('meta_DOMId');
+            $request->request->remove('meta_width');
+            $request->request->remove('meta_height');
+            $request->request->remove('parameters');
+            $fusionchartService = $this->getFusionChartExportService();
+            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
+        }
+        
         $showResultObjetives = false;
         $level = $request->get('level');
         $resultService = $this->getResultService();
+        $periodService = $this->getPeriodService();
         $images = array();
         $em = $this->getDoctrine();
         $id = $request->get('id');
@@ -413,21 +432,24 @@ class ResultController extends ResourceController {
             $entity = $gerenciaSecond;
         }
         
-        $pdf = new SeipPdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new SeipPdf('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setContainer($this->container);
-        
+        $pdf->setPeriod($periodService->getPeriodActive());
+        $pdf->setFooterText($this->trans('pequiven_seip.message_footer',array(), 'PequivenSEIPBundle'));
+
         $namePdf = $this->trans('pequiven_seip.results.resultsByGerencia', array('%gerencia%' => $entity->getDescription()), 'PequivenSEIPBundle');
-        $title = $this->trans('pequiven_seip.results.results',array(),'PequivenSEIPBundle');
+//        $title = $this->trans('pequiven_seip.results.results',array(),'PequivenSEIPBundle');
+        $title = $namePdf;
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('SEIP');
         $pdf->setTitle($title);
-        $pdf->SetSubject('TCPDF Tutorial');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->SetSubject('Resultados SEIP');
+        $pdf->SetKeywords('PDF, SEIP, Resultados');
 
         // set default header data
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+//        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
 
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
@@ -450,6 +472,11 @@ class ResultController extends ResourceController {
         // set font
         $pdf->SetFont('times', 'BI', 12);
 
+        if(strlen($fileSVG) > 0){
+            $pdf->AddPage();
+            $pdf->ImageSVG('http://localhost/seip/web/php-export-handler/temp/'.$fileSVG);
+        }
+        
         // add a page
         $pdf->AddPage();
         
@@ -462,8 +489,21 @@ class ResultController extends ResourceController {
 
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
-
-        $pdf->Output($namePdf.'.pdf', 'D');
+        
+        $pdf->Output($namePdf.'.pdf', 'I');
+        die();
+    }
+    
+    /**
+     * Exportar los resultados de la gerencia seleccionada en formato PDF
+     * @param Request $request
+     */
+    public function exportFromChartAction(Request $request){
+        
+        $id = $request->get('id');
+        $level = $request->get('level');
+        
+        return $this->redirect($this->generateUrl('pequiven_seip_result_export', array('level' => $level,'id' => $id)));
     }
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')
@@ -485,6 +525,14 @@ class ResultController extends ResourceController {
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\FusionChartExportService
+     */
+    private function getFusionChartExportService()
+    {
+        return $this->container->get('pequiven_seip.service.fusion_chart');
     }
     
     /**

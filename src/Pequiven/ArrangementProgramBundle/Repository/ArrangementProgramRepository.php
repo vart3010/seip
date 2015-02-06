@@ -533,6 +533,9 @@ class ArrangementProgramRepository extends EntityRepository
             }
         }
         
+        print_r($queryBuilder->getQuery()->getSQL());
+        die();
+        
         parent::applyCriteria($queryBuilder, $criteria->toArray());
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
