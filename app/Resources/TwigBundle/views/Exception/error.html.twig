@@ -1,17 +1,18 @@
 {% extends "::base.html.twig" %}
 {% block body %}
-    <p class="wrapped relative" style="min-height: 130px; font-size: 30px;padding: 2em">
-        <span>
+    <p class="wrapped relative" style="min-height: 130px; padding: 2em">
+        <span style="font-size: 30px;">
             <span class="ribbon"><span class="ribbon-inner red-gradient glossy">{{ status_code }}</span></span>
             <br />
             <br />
             <br />
             <span class="icon-warning red icon-size2 "></span>
-            {{ 'app.http.error.generic'|trans|raw }}
+            {{ 'app.http.error.generic'|trans|raw }}<br/><br/><br/>
         </span>
-        <br /><br /><br />
+        {{ exception.message|trans|raw }}
+    </p>
+        <br /><br />
         <div class="align-center" style="font-size:30px">
             <a href="{{ path('pequiven_seip_default_index') }}"><i class="fa fa-home fa-4x"></i>{{ 'app.http.return_to_home'|trans|raw }}</a>
         </div>
-    </p>
 {% endblock body %}

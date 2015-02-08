@@ -39,7 +39,7 @@ twig:
 
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
+    debug:          false
     use_controller: false
 #    bundles:        ['FOSJsRoutingBundle']
     #java: /usr/bin/java
@@ -183,3 +183,10 @@ fos_oauth_server:
     auth_code_class:     Pequiven\SEIPBundle\Entity\Api\AuthCode
     service:
         user_provider: fos_user.user_provider.username
+        
+simple_things_entity_audit:
+        global_ignore_columns:
+            - created_at
+            - updated_at
+            - deletedAt
+            - createdAt

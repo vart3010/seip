@@ -12,30 +12,29 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
 
 /**
- * Description of ResultsController
+ * Controlador para mostrar los resultados
  *
  * @author matias
  */
-class ResultController extends ResourceController {
-    
+class ResultController extends ResourceController 
+{    
     /**
      * Función que devuelve el paginador con las gerencias de 2da Línea
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function listResultAction(Request $request){
+    public function listResultAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT','ROLE_SEIP_PLANNING_LIST_RESULT_ALL'));
         
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
         $em = $this->getDoctrine();
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $em->getRepository('PequivenMasterBundle:GerenciaSecond');
-        
-        //$criteria['user'] = $user->getId();
         
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
@@ -79,75 +78,28 @@ class ResultController extends ResourceController {
     
     /**
      * Función que renderiza el Monitor de Objetivos Operativos
-     * @Template("PequivenSEIPBundle:Planning:Result/Operative/showMonitor.html.twig")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return type
-     */
-    public function showMonitorOperativeAction(Request $request) {
-        $categories = array();
-        $resultIndicator = array();                
-        $resultArrangementProgram = array();                
-        
-        $em = $this->getDoctrine();
-        $id = $request->get('id');
-        
-        $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $id));
-        $object = $em->getRepository('PequivenObjetiveBundle:Objetive')->getObjetivesByGerenciaSecond($gerenciaSecond);
-        $entity = $gerenciaSecond;
-        
-        //Configuramos el alto del gráfico
-        $totalObjects = count($object);
-        $heightChart = ($totalObjects * 30) + 150;
-        
-        //Data del gráfico
-        foreach($object as $objetive){
-            $refObjetive = $objetive->getRef();
-            $flagResultIndicator = false;
-            $flagResultArrangementProgram = false;
-            $categories[] = array('label' => $refObjetive);
-            foreach($objetive->getResults() as $result){
-                $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                    $resultIndicator[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive);
-                    $flagResultIndicator = true;
-                }
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
-                    $resultArrangementProgram[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '');
-                    $flagResultArrangementProgram = true;
-                }
-            }
-            
-            if(!$flagResultArrangementProgram){
-                $resultArrangementProgram[] = array('value' => bcadd(0,'0',2));
-            }
-            if(!$flagResultIndicator){
-                $resultIndicator[] = array('value' => bcadd(0,'0',2));
-            }
-        }
-        
-
-        return array(
-            'object' => $object,
-            'entity' => $entity,
-            'categories' => $categories,
-            'resultIndicator' => $resultIndicator,
-            'resultArrangementProgram' => $resultArrangementProgram,
-            'heightChart' => $heightChart,
-        );
-    }
-    
-    /**
-     * Función que renderiza el Monitor de Objetivos Operativos
      * 
      * @Template("PequivenSEIPBundle:Planning:Result/Operative/showMonitor.html.twig")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
-    public function showMonitorAction(Request $request) {
+    public function showMonitorAction(Request $request)
+    {
         $categories = array();
+        $linkToExportResult = '';
         $resultIndicator = $resultArrangementProgram = $resultObjetives = array();
         $showResultObjetives = false;
         $level = $request->get('level');
+        
+        $rol = null;
+        $rolByLevel = array(
+            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA => array('ROLE_SEIP_RESULT_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_RESULT_TACTIC'),
+            \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND => array('ROLE_SEIP_RESULT_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_RESULT_OPERATIVE')
+        );
+        if(isset($rolByLevel[$level])){
+            $rol = $rolByLevel[$level];
+        }
+        $this->getSecurityService()->checkSecurity($rol);
         
         $em = $this->getDoctrine();
         $id = $request->get('id');
@@ -155,6 +107,7 @@ class ResultController extends ResourceController {
         $tree = $objetives = array();
         $caption = '';
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
+            $linkToExportResult = $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $id));
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
             $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
@@ -172,6 +125,7 @@ class ResultController extends ResourceController {
             }
             $entity = $gerencia;
         }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
+            $linkToExportResult = $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
             $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
@@ -232,10 +186,10 @@ class ResultController extends ResourceController {
                 if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OF_RESULT){
                     foreach ($result->getChildrens() as $child) {
                         if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                            $totalIndicator += $child->getResultWithWeight();
+                            $totalIndicator += ($child->getResultWithWeight()*$result->getWeight())/100;
                             $flagResultIndicator = $flagResultIndicatorInternal = true;
                         }elseif($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
-                            $totalObjetives+= $child->getResultWithWeight();
+                            $totalObjetives+= ($child->getResultWithWeight()*$result->getWeight())/100;
                             $flagResultObjetives = $flagResultObjetivesInternal = true;
                         }
                     }
@@ -291,7 +245,181 @@ class ResultController extends ResourceController {
             'data' => $data,
             'tree' => $tree,
             'resultService' => $resultService,
+            'linkToExportResult' => $linkToExportResult,
         );
+    }
+    
+    /**
+     * Recalcula los resultados
+     * 
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function recalculateAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_PLANNING_OPERATION_RECALCULATE_RESULT');
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('recalculate.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $arrangementprogramRepository = $this->get('pequiven_seip.repository.arrangementprogram');
+        $indicatorRepository = $this->get('pequiven.repository.indicator');
+        if($request->isMethod('POST'))
+        {
+            $resultService = $this->getResultService();
+            $id = $request->get('id');
+            $type = $request->get('type');
+            $data = array();
+            $data['success'] = false;
+            try {
+                if($type == 1){
+                    $resource = $arrangementprogramRepository->findWithData($id);
+                    if($resource){
+                        $resultService->refreshValueArrangementProgram($resource);
+                    }
+                }elseif($type == 2){
+                    $resource = $indicatorRepository->find($id);
+                    $resultService->refreshValueIndicator($resource);
+                }
+                $data['success'] = true;
+            } catch (\Exception $exc) {
+                $success = false;
+                $data['code'] = $exc->getCode();
+                $data['message'] = $exc->getMessage();
+                $data['id'] = $id;
+                $view->setStatusCode(500);
+            }
+
+            $view->setData($data);
+            return $this->handleView($view);
+        }
+        
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $qbArrangementprogram = $arrangementprogramRepository->findQueryWithResultNull($period);
+        $qbArrangementprogram->select('ap.id,ap.ref');
+        $resultsArrangementprogram = $qbArrangementprogram->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        
+        $qbIndicator = $indicatorRepository->findQueryWithResultNull($period);
+        $qbIndicator->select('i.id,i.ref');
+        $resultsIndicator = $qbIndicator->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        
+        
+        $view->setData(array(
+            'resultsArrangementprogram' => $resultsArrangementprogram,
+            'resultsIndicator' => $resultsIndicator
+        ));
+        
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Exportar los resultados de la gerencia seleccionada en formato PDF
+     * @param Request $request
+     */
+    public function exportAction(Request $request)
+    {
+        $showResultObjetives = false;
+        $level = $request->get('level');
+        $resultService = $this->getResultService();
+        $images = array();
+        $em = $this->getDoctrine();
+        $id = $request->get('id');
+        
+        $tree = $objetives = array();
+        $caption = '';
+        $images['good'] = $resultService->generateAsset('bundles/pequivenseip/logotipos/bullet_green.png');
+        $images['middle'] = $resultService->generateAsset('bundles/pequivenseip/logotipos/bullet_yellow.png');
+        $images['bad'] = $resultService->generateAsset('bundles/pequivenseip/logotipos/bullet_red.png');
+        if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
+            $showResultObjetives = true;
+            $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
+            $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
+            $objetives = $gerencia->getTacticalObjectives();
+            foreach ($objetives as $objetive) {
+                foreach ($objetive->getParents() as $parent) {
+                    if(!isset($tree[(string)$parent])){
+                        $tree[(string)$parent] = array(
+                            'parent' => $parent,
+                            'child' => array(),
+                        );
+                    }
+                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
+                }
+            }
+            $entity = $gerencia;
+        }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
+            $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
+            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
+            $objetives = $gerenciaSecond->getOperationalObjectives();
+            foreach ($objetives as $objetive) {
+                foreach ($objetive->getParents() as $parent) {
+                    if(!isset($tree[(string)$parent])){
+                        $tree[(string)$parent] = array(
+                            'parent' => $parent,
+                            'child' => array(),
+                        );
+                    }
+                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
+                }
+            }
+            $entity = $gerenciaSecond;
+        }
+        
+        $pdf = new SeipPdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setContainer($this->container);
+        
+        $namePdf = $this->trans('pequiven_seip.results.resultsByGerencia', array('%gerencia%' => $entity->getDescription()), 'PequivenSEIPBundle');
+        $title = $this->trans('pequiven_seip.results.results',array(),'PequivenSEIPBundle');
+        
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('SEIP');
+        $pdf->setTitle($title);
+        $pdf->SetSubject('TCPDF Tutorial');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+        // set default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        
+        // set font
+        $pdf->SetFont('times', 'BI', 12);
+
+        // add a page
+        $pdf->AddPage();
+        
+        // set some text to print
+        $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig',array(
+            'entity' => $entity,
+            'tree' => $tree,
+            'resultService' => $resultService,
+            'images' => $images));
+
+        // print a block of text using Write()
+        $pdf->writeHTML($html, true, false, true, false);
+
+        $pdf->Output($namePdf.'.pdf', 'D');
     }
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')
@@ -305,5 +433,31 @@ class ResultController extends ResourceController {
      */
     private function getResultService(){
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\PDF\SeipPdf
+     */
+//    private function getSeipPdf() 
+//    {
+//        return $this->container->get('seip.pdf');
+//    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

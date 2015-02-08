@@ -2,10 +2,12 @@
 
 namespace Pequiven\SEIPBundle\Controller\Planning;
 
+use Pequiven\IndicatorBundle\Entity\Indicator;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -14,8 +16,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class IndicatorController extends ResourceController
 {
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
         $resource = $this->findOr404($request);
+        
+        $level = $resource->getIndicatorLevel()->getLevel();
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
         
         $errorFormula = null;
         if($resource->getFormula() !== null){
@@ -30,19 +47,40 @@ class IndicatorController extends ResourceController
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'errorFormula' => $errorFormula,
+                'indicatorService' => $indicatorService,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
         return $this->handleView($view);
     }
     
+    /**
+     * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
+     * 
+     * @param Request $request
+     * @return type
+     */
     function listAction(Request $request)
     {
         $level = $request->get('level');
+        
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-
+        
         $criteria['indicatorLevel'] = $level;
 
         if ($this->config->isPaginated()) {
@@ -77,10 +115,19 @@ class IndicatorController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
         if ($request->get('_format') == 'html') {
+            $labelsSummary = array();
+            foreach (Indicator::getLabelsSummary() as $key => $value) {
+                $labelsSummary[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenIndicatorBundle'),
+                );
+            }
+            
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'level' => $level,
+                'labelsSummary' => $labelsSummary
             );
             $view->setData($data);
         } else {
@@ -201,5 +248,14 @@ class IndicatorController extends ResourceController
         $response->setData($gerenciaSecondChildren);
 
         return $response;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

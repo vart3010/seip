@@ -134,7 +134,12 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserController
                 model: Pequiven\SEIPBundle\Entity\User
                 repository: Pequiven\SEIPBundle\Repository\UserRepository
-                
+        pequiven_seip.generic_data:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\GenericDataController
+                model: Pequiven\SEIPBundle\Entity\User
+                repository: Pequiven\SEIPBundle\Repository\UserRepository        
         pequiven.result:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Result
@@ -148,9 +153,21 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\User\LocalizationController
                 model: Pequiven\SEIPBundle\Entity\User\Localization
+        pequiven.pre_planning_configuration:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User/PrePlanningConfiguration
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\PrePlanningConfigurationController
+                model: Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration
         pequiven.pre_planning:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:PrePlanning/PrePlanning
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning
+        pequiven.pre_planning_user:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:PrePlanning/PrePlanningUser
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
+                model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser

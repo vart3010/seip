@@ -2,7 +2,7 @@
 <div class="block" ng-init="urlValueIndicatorForm='{{ path('pequiven_value_indicator_get_form',{'idIndicator':indicator.id}) }}'">
     <div class="block-title">
         <h3 class="ng-binding">{$ indicator.valuesIndicator.length $} {{ 'pequiven_indicator.results'|trans }}</h3>
-        {% if is_granted('ROLE_WORKER_PLANNING') %}
+        {% if is_granted(['ROLE_WORKER_PLANNING','ROLE_INDICATOR_ADD_RESULT']) and indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_MANUALLY')  %}
             {% set textAbbr = indicator.frequencyNotificationIndicator ? indicator.frequencyNotificationIndicator.textAbbr : '' %}
             <div class="button-group absolute-right compact">
                 <a class="button icon-list-add " href="" ng-click="loadTemplateValueIndicator()" title="">{{ 'pequiven.add'|trans({},'messages') ~ ' ' ~ (textAbbr|lower) }}&nbsp;#{$ (indicator.valuesIndicator.length + 1) $}</a>

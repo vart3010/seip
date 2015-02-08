@@ -36,7 +36,9 @@ class ObjetiveTacticController extends baseController {
      * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
      * @return type
      */
-    public function listAction() {
+    public function listAction() 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
         return array(
         );
     }
@@ -45,7 +47,10 @@ class ObjetiveTacticController extends baseController {
      * Finds and displays a Objetive entity of level Tactic by Id.
      *
      */
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
@@ -64,11 +69,8 @@ class ObjetiveTacticController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function objetiveListAction(Request $request) {
-
-//        $em = $this->getDoctrine()->getManager();
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -120,7 +122,8 @@ class ObjetiveTacticController extends baseController {
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
     public function createAction(Request $request) {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_TACTIC');
+        
         $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
 
         $nameObject = 'object';
@@ -135,6 +138,8 @@ class ObjetiveTacticController extends baseController {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
 
+            $period = $this->getPeriodService()->getPeriodActive();
+            
 //            $object->setWeight(bcadd(str_replace(',', '.', $data['weight']), '0', 2));
             $data['tendency'] = (int) $data['tendency'];
             $object->setGoal(bcadd(str_replace(',', '.', $data['goal']), '0', 2));
@@ -162,6 +167,7 @@ class ObjetiveTacticController extends baseController {
                         ${$nameObject . $i}->resetIndicators();
                         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject . $i}->setGerencia($gerencia);
+                        ${$nameObject . $i}->setPeriod($period);
                         ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
@@ -189,6 +195,7 @@ class ObjetiveTacticController extends baseController {
                             ${$nameObject . $j} = clone $object;
                             ${$nameObject . $j}->resetIndicators();
                             ${$nameObject . $j}->setGerencia($gerencia);
+                            ${$nameObject . $j}->setPeriod($period);
                             ${$nameObject . $j}->setRef($totalRef[$j]);
                             if (isset($data['indicators'])) {
                                 foreach ($data['indicators'] as $value) {
@@ -206,6 +213,7 @@ class ObjetiveTacticController extends baseController {
                 //Si el usuario tiene rol Gerente General de Complejo o Gerente 1ra línea
             } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
                 $object->setGerencia($user->getGerencia());
+                $object->setPeriod($period);
                 $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => 1));
                 if($totalRef[0] != $data['ref']){
                     $this->updateIndicatorRef($data, $totalRef);
@@ -226,6 +234,7 @@ class ObjetiveTacticController extends baseController {
                     $this->updateIndicatorRef($data, $totalRef);
                 }
                 $object->setRef($totalRef[0]);
+                $object->setPeriod($period);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
                         $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
@@ -363,6 +372,7 @@ class ObjetiveTacticController extends baseController {
 
         $j = 1;
         $i = 0;
+        $periodActive = $this->getPeriodService()->getPeriodActive();
         foreach ($totalRef as $refObjetive) {
             if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
                 $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
@@ -398,6 +408,7 @@ class ObjetiveTacticController extends baseController {
                     ${$nameObject . $i}->setOprankBottomBasic($arrangementRangeOriginals[$p]->getOprankBottomBasic());
                     ${$nameObject . $i}->setOpRankBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankBottomMixedTop());
                     ${$nameObject . $i}->setOpRankBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankBottomMixedBottom());
+                    ${$nameObject . $i}->setPeriod($periodActive);
 
                     $em->persist(${$nameObject . $i});
                     $i++;
@@ -476,6 +487,7 @@ class ObjetiveTacticController extends baseController {
      */
     public function createArrangementRange($objetives = array(), $data = array()) {
         $arrangementRange = new ArrangementRange();
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
         $totalObjetives = count($objetives);
@@ -765,5 +777,21 @@ class ObjetiveTacticController extends baseController {
 
         return true;
     }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

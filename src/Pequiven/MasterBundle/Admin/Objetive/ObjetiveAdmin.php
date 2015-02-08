@@ -14,6 +14,27 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class ObjetiveAdmin extends Admin
 {
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show)
+    {
+         $show
+            ->add('description')
+            ->add('ref')
+            ->add('weight')
+            ->add('goal')
+            ->add('complejo')
+            ->add('gerencia')
+            ->add('gerenciaSecond')
+            ->add('parents')
+            ->add('indicators')
+            ->add('period')
+            ->add('evalObjetive')
+            ->add('evalIndicator')
+            ->add('evalArrangementProgram')
+            ->add('evalSimpleAverage')
+            ->add('evalWeightedAverage')
+            ->add('enabled');
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')
@@ -24,6 +45,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerencia')
             ->add('gerenciaSecond')
             ->add('parents')
+            ->add('indicators')
             ->add('period')
             ->add('evalObjetive',null,array(
                 'required' => false,

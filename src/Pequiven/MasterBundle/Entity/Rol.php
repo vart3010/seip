@@ -67,7 +67,7 @@ class Rol extends modelRol
      *
      * @ORM\Column(name="level", type="integer")
      */
-    private $level;
+    private $level = self::ROLE_DEFAULT;
 
     /**
      * @var boolean
@@ -279,6 +279,6 @@ class Rol extends modelRol
         return $this->typeRol;
     }
     public function __toString() {
-        return $this->getDescription();
+        return $this->getDescription()?:'-';
     }
 }

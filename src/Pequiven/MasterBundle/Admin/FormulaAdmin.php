@@ -72,13 +72,18 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ;
     }
     
-    protected function configureListFields(ListMapper $list) {
+    protected function configureListFields(ListMapper $list)
+    {
         $list
             ->addIdentifier('description')
             ->addIdentifier('equation')
             ->add('equationReal')
             ->add('enabled')
             ;
+    }
+    
+    public function prePersist($object) {
+        $object->setPeriod($this->getPeriodService()->getPeriodActive());
     }
     
     public function preUpdate($object) 
@@ -89,13 +94,18 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
         if($errorFormula !== null){
             $flashBag = $this->getRequest()->getSession()->getFlashBag();
             $flashBag->add("error",$errorFormula);
-//            $this->getRequest()->getSession()->getFlashBag()->add("success",$errorFormula);
         }
-        
-        
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

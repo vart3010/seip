@@ -5,14 +5,17 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\ArrangementProgramBundle\Model\ArrangementProgram as Model;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Entity\Result\ResultItemInterface;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
  * Programa de gestion
  *
- * @ORM\Table()
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="ref_idx", columns={"ref"})})
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
+class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -26,7 +29,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Referencia del programa de gestion
      * @var string
-     * @ORM\Column(name="ref",type="string",length=100)
+     * @ORM\Column(name="ref",type="string",length=100,nullable=false)
      */
     private $ref = null;
 
@@ -64,6 +67,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="process", type="string", length=255, nullable=true)
      */
     private $process;
+
+    /**
+     * Descripcion del programa
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
     
     /**
      * Estatus del programa de gestion
@@ -158,6 +169,18 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="lastDateCalculateResult", type="datetime",nullable=true)
      */
     private $lastDateCalculateResult;
+    
+    /**
+     *
+     * @var boolean
+     * @ORM\Column(name="isAvailableInResult",type="boolean")
+     */
+    private $isAvailableInResult = true;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -584,5 +607,68 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function updateLastDateCalculateResult() 
     {
         $this->lastDateCalculateResult = new \DateTime();
+    }
+    public function clearLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        $valid = $this->isAvailableInResult;
+        if($this->getStatus() == self::STATUS_REJECTED){
+            $valid = false;
+        }
+        return $valid;
+    }
+    
+    function getDescription() {
+        return $this->description;
+    }
+
+    function getIsAvailableInResult() {
+        return $this->isAvailableInResult;
+    }
+
+    function setDescription($description) {
+        $this->description = $description;
+    }
+
+    function setIsAvailableInResult($isAvailableInResult) {
+        $this->isAvailableInResult = $isAvailableInResult;
+    }
+
+    function getDeletedAt() 
+    {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) 
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+    
+    public function __clone() 
+    {
+        if($this->id){
+            $this->id = null;
+            $this->ref = null;
+            $this->period = null;
+            $this->description = null;
+            $this->status = self::STATUS_DRAFT;
+            
+            $this->timeline = new Timeline();
+            $this->createdBy = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            
+            $this->details = new ArrangementProgram\Details();
+            $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->totalAdvance = 0;
+            $this->progressToDate = 0;
+            $this->lastDateCalculateResult = null;
+        }
     }
 }

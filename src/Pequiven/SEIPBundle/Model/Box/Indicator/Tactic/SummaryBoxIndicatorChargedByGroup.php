@@ -1,22 +1,22 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\Box\Tactic;
+namespace Pequiven\SEIPBundle\Model\Box\Indicator\Tactic;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
- * Resumen de los indicadores cargados a nivel tactico.
+ * Resumen de los indicadores cargados a nivel tactico por tipo de gerencia.
  *
  * @author matias
  */
-class SummaryBoxIndicatorCharged extends GenericBox {
+class SummaryBoxIndicatorChargedByGroup extends GenericBox {
     
     public function getName() {
-        return 'pequiven_seip_box_tactic_summaryindicatorcharged';
+            return 'pequiven_seip_box_tactic_summaryindicatorchargedbygroup';
     }
     
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:Monitor:Tactic/summaryIndicatorChargedGerenciaFirstGroup.html.twig';
+        return 'PequivenSEIPBundle:Monitor:Tactic/summaryIndicatorChargedGerenciaFirstByGroup.html.twig';
     }
     
     public function getParameters() {
@@ -27,7 +27,7 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     }
     
     public function getDescription() {
-        return 'Resumen de los indicadores cargados a nivel tactico.';
+        return 'Resumen de los indicadores cargados a nivel tactico por tipo de gerencia.';
     }
     
     /**
@@ -37,26 +37,28 @@ class SummaryBoxIndicatorCharged extends GenericBox {
     public function getDataIndicatorTacticGroup(){
         $em = $this->getDoctrine()->getManager();
         
+        $typeGroup = $this->getRequest()->get("typeGroup");
+        
         $datas = array();
         $indicatorTactic = array();
         $dataLinkTactic = array();
         
-        //Resultados Operativos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorTacticByGerenciaGroup();
+        //Resultados Tácticos
+        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorTacticByGerenciaGroup(array('typeGroup' => $typeGroup));
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanIndTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealIndTactic'] / (float)$resultTactic['PlanIndTactic']) * 100,'0',2);
             $indicatorTactic[] = array(
-                'description' => $resultTactic['Descripcion'],
+                'gerencia' => $resultTactic['Gerencia'],
                 'realTactic' => $resultTactic['RealIndTactic'],
                 'planTactic' => $resultTactic['PlanIndTactic'],
                 'porcTactic' => $resTactic,
                 'res' => (float)$resTactic
             );
-            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic,'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo'])));
+//            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic,'linkTypeGroup' => $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo'])));
         }
         
-        $datas['dataLinkTactic'] = $dataLinkTactic;
+//        $datas['dataLinkTactic'] = $dataLinkTactic;
         $datas['indicatorTactic'] = $indicatorTactic;
         
         return $datas;
@@ -76,4 +78,5 @@ class SummaryBoxIndicatorCharged extends GenericBox {
             \Pequiven\SEIPBundle\Model\Box\AreasBox::EVENTS
         );
     }
+    
 }

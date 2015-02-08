@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
+use Pequiven\SEIPBundle\Entity\Result\ResultItemInterface;
+use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningObjectInterface;
 
 /**
  * Objetive
@@ -16,7 +19,7 @@ use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
  * @ORM\Table(name="seip_objetive")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface 
+class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemInterface
 {
     //Texto a mostrar en los select
     protected $descriptionSelect;
@@ -47,7 +50,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     private $updatedAt;
 
     /**
-     * User
+     * User que lo creo
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(name="fk_user_created_at", referencedColumnName="id")
@@ -55,7 +58,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     private $userCreatedAt;
 
     /**
-     * User
+     * User que lo actualizo
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
      * @ORM\JoinColumn(name="fk_user_updated_at", referencedColumnName="id")
@@ -169,15 +172,15 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     private $gerenciaSecond;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="parents", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist"})
+     * @ORM\JoinTable(name="seip_objetives_parents",
+     *      joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")})
      */
     private $childrens;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="childrens")
-     * @ORM\JoinTable(name="seip_objetives_parents",
-     *      joinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="childrens")
      */
     private $parents;
     
@@ -240,7 +243,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Result\Result", mappedBy="objetive",cascade={"remove"})
      */
     private $results;
     
@@ -255,7 +258,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="objetive",cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="objetive",cascade={"remove","persist"})
      */
     protected $arrangementRange;
 
@@ -269,7 +272,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
      * Constructor
      */
@@ -278,6 +281,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->results = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -707,7 +711,8 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      */
     public function addChildren(\Pequiven\ObjetiveBundle\Entity\Objetive $childrens)
     {
-        $this->childrens[] = $childrens;
+        $childrens->addParent($this);
+        $this->childrens->add($childrens);
 
         return $this;
     }
@@ -740,8 +745,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      */
     public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
     {
-        //$parents->addChildren($this);
-        $this->parents[] = $parents;
+        $this->parents->add($parents);
 
         return $this;
     }
@@ -1008,7 +1012,14 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
     }
     
     public function __toString() {
-        return $this->getDescriptionSelect();
+        $description = $this->getDescription();
+        $limit = 80;
+        if(strlen($description) > $limit)
+    {
+            $description = substr($this->getDescription(), 0,$limit).'...';
+        }
+        $toString = $this->getRef().' '.$description;
+        return $toString?:'-';
     }
     
     public function getDescriptionWithGerenciaSecond()
@@ -1024,6 +1035,7 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
      */
     public function addResult(\Pequiven\SEIPBundle\Entity\Result\Result $results)
     {
+        $results->setObjetive($this);
         $this->results->add($results);
 
         return $this;
@@ -1094,4 +1106,46 @@ class Objetive extends modelObjetive implements \Pequiven\SEIPBundle\Entity\Resu
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    public function clearLastDateCalculateResult() {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return true;
+    }
+    
+    function setIndicators($indicators) {
+        $this->indicators = $indicators;
+    }
+    
+    function setResults($results) {
+        $this->results = $results;
+    }
+    
+    public function __clone() {
+        if($this->id){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->ref = null;
+            
+            $this->childrens = new ArrayCollection();
+            $this->parents = new ArrayCollection();
+            
+            $this->period = null;
+            $this->reviewedBy = null;
+            $this->revisionDate = null;
+            $this->approvedBy = null;
+            $this->approvalDate = null;
+            $this->status = 0;
+            
+            $this->resultOfObjetive = 0;
+            
+            $this->lastDateCalculateResult = null;
+            $this->deletedAt = null;
+        }
+    }
+
 }

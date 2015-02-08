@@ -16,6 +16,27 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
 {   
     private $container;
     
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('ref')
+            ->add('description')
+            ->add('typeOfCalculation','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('refParent')
+            ->add('totalPlan')
+            ->add('weight')
+            ->add('goal')
+            ->add('formula')
+            ->add('tendency')
+            ->add('frequencyNotificationIndicator')
+            ->add('valueFinal')
+            ->add('childrens')
+            ->add('valuesIndicator')
+            ;
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
         $childrensParameters = array(
@@ -39,6 +60,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
+            ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
             ->add('goal')
@@ -78,6 +100,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ;
     }
     
+    public function prePersist($object)
+    {
+        $object->setPeriod($this->getPeriodService()->getPeriodActive());
+    }
+    
     public function postUpdate($object) 
     {
 //        $objetives = $object->getObjetives();
@@ -91,6 +118,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     public function getResultService()
     {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

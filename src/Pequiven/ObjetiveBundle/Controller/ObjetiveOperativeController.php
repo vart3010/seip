@@ -34,7 +34,9 @@ class ObjetiveOperativeController extends baseController
      * @Template("PequivenObjetiveBundle:Operative:list.html.twig")
      * @return type
      */
-    public function listAction() {
+    public function listAction() 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_OPERATIVE');
         return array(
         );
     }
@@ -45,6 +47,7 @@ class ObjetiveOperativeController extends baseController
      */
     public function showAction(Request $request)
     {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE'));
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
@@ -61,11 +64,10 @@ class ObjetiveOperativeController extends baseController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function objetiveListAction(Request $request) {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+    public function objetiveListAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_OPERATIVE');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -166,8 +168,10 @@ class ObjetiveOperativeController extends baseController
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
-
+    public function createAction(Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_OPERATIVE');
+        
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));
 
         $nameObject = 'object';
@@ -193,8 +197,8 @@ class ObjetiveOperativeController extends baseController
 
             $securityContext = $this->container->get('security.context');
             $object->setUserCreatedAt($user);
-            $periodService = $this->get('pequiven_arrangement_program.service.period');
-            $period = $periodService->getPeriodActive();
+            $object->setPeriod($this->getPeriodService()->getPeriodActive());
+            $period = $this->getPeriodService()->getPeriodActive();
 
             //Si el usuario tiene rol directivo
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
@@ -555,6 +559,8 @@ class ObjetiveOperativeController extends baseController
         
         $j = 1;
         $i = 0;
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        
         foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
             if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
                 $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
@@ -590,6 +596,7 @@ class ObjetiveOperativeController extends baseController
                     ${$nameObject . $i}->setOprankBottomBasic($arrangementRangeOriginals[$p]->getOprankBottomBasic());
                     ${$nameObject . $i}->setOpRankBottomMixedTop($arrangementRangeOriginals[$p]->getOpRankBottomMixedTop());
                     ${$nameObject . $i}->setOpRankBottomMixedBottom($arrangementRangeOriginals[$p]->getOpRankBottomMixedBottom());
+                    ${$nameObject . $i}->setPeriod($periodActive);
                     
                     $em->persist(${$nameObject . $i});
                     $i++;
@@ -1246,4 +1253,20 @@ class ObjetiveOperativeController extends baseController
         return true;
     }
 
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

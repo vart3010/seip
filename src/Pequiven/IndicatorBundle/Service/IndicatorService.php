@@ -47,15 +47,14 @@ class IndicatorService implements ContainerAwareInterface
         try {
             eval(sprintf('$equation_real = %s;',$sourceEquationReal));
             eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-            eval(sprintf('$result = %s;',$equationParse));
+            eval(sprintf('$result = @%s;',$equationParse));
         } catch( ErrorException $exc){
 //            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
         } catch (Exception $exc) {
 //            echo $exc->getTraceAsString();
 //            echo 'Excepción capturada 2: ',  $e->getMessage(), "\n";
-            $result = 0;
+            $result = 0.0;
         }
-
         return $result;
     }
     
@@ -164,6 +163,53 @@ class IndicatorService implements ContainerAwareInterface
                 ),'flashes');
             }
         }
+        return $error;
+    }
+    
+    /**
+     * Valida que el indicator hijo sea compatible para calcular resultados de formula automatico.
+     * @param Indicator $indicator
+     * @return type
+     */
+    function validateChildOfParent(Indicator $indicator) 
+    {
+        $error = null;
+        $parent = $indicator->getParent();
+        $formula = $parent->getFormula();
+        $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
+        
+        if($formula != null){
+            if($formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                $error = $this->trans('pequiven_indicator.errors.not_support_formula_parent',array(),'PequivenIndicatorBundle');
+            }
+        }else{
+            $error = $this->trans('pequiven_indicator.errors.formula_unassigned_parent',array(),'PequivenIndicatorBundle');
+        }
+        $tendency = $parent->getTendency();
+        if($error === null){
+            if($indicator->getFrequencyNotificationIndicator() !== null){
+                if($parent->getFrequencyNotificationIndicator() !== $frequencyNotificationIndicator)
+                {
+                    $error = $this->trans('pequiven_indicator.errors.assigned_frequency_not_support',array(),'PequivenIndicatorBundle');
+                }else{
+                    $formulaChild = $indicator->getFormula();
+                    if($formulaChild !== null){
+                        if($formulaChild->getTypeOfCalculation() === Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC || $formulaChild->getTypeOfCalculation() === Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                            if($indicator->getTendency() !== $tendency){
+                                $error = $this->trans('pequiven_indicator.errors.trends_should_be_equal',array(),'PequivenIndicatorBundle');
+                            }
+                        }else{
+                            $error = $this->trans('pequiven_indicator.errors.not_support_formula',array(),'PequivenIndicatorBundle');
+                        }
+                    }else{
+                        $error = $this->trans('pequiven_indicator.errors.formula_unassigned',array(),'PequivenIndicatorBundle');
+                    }
+                }
+            }else{
+                $error = $this->trans('pequiven_indicator.errors.frequency_not_assigned_parent',array(),'PequivenIndicatorBundle');
+            }
+        }
+        
         return $error;
     }
     

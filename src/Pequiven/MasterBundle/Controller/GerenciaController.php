@@ -32,10 +32,7 @@ class GerenciaController extends baseController {
      * @return type
      */
     public function listAction(){
-//        return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:list.html.'.$this->container->getParameter('fos_user.template.engine'),
-//            array(
-//
-//            ));
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         return array(
             
         );
@@ -180,7 +177,7 @@ class GerenciaController extends baseController {
         $form = $this->getForm($resource);
 
         if (($request->isMethod('PUT') || $request->isMethod('POST'))) {
-            $form->submit($request,false);
+            $form->submit($request,true);
             if($form->isValid()){
                 $this->domainManager->update($resource);
 
@@ -209,6 +206,8 @@ class GerenciaController extends baseController {
      */
     public function exportAction(Request $request)
     {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
+        
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');
         $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);//Obtenemos la gerencia
@@ -295,7 +294,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsTactic = 'No Aplica';
+                $textArrangementProgramsTactic = 'No cargado';
             }
             $activeSheet->setCellValue('M'.$row, $textArrangementProgramsTactic);
             
@@ -321,7 +320,7 @@ class GerenciaController extends baseController {
                     $textArrangementProgramsOperative.= $arrangementProgram->getRef() . "\n";
                 }
             } else{
-                $textArrangementProgramsOperative = 'No Aplica';
+                $textArrangementProgramsOperative = 'No Cargado';
             }
             $activeSheet->setCellValue('V'.$row, $textArrangementProgramsOperative);
             
@@ -536,7 +535,6 @@ class GerenciaController extends baseController {
             $row++;
             $contResult++;
         }
-//        die();
         
 //        $activeSheet->getProtection()
 //                    ->setSheet(true)
@@ -560,5 +558,14 @@ class GerenciaController extends baseController {
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
         exit;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

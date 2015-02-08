@@ -79,3 +79,7 @@ pequiven_seip_user_add_configuration:
 pequiven_user_localization:
     resource: "@PequivenSEIPBundle/Resources/config/routing/user/localization.yml"
     prefix:   /localization
+    
+pequiven_user_pre_planning_configuration:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/user/pre_planning_configuration.yml"
+    prefix:   /pre-planning-configuration

@@ -14,7 +14,7 @@ use Pequiven\ObjetiveBundle\Model\ObjetiveLevel as modelObjetiveLevel;
  * @ORM\Table(name="seip_objetive_level")
  * @ORM\Entity(repositoryClass="Pequiven\ObjetiveBundle\Repository\ObjetiveLevelRepository")
  */
-class ObjetiveLevel extends modelObjetiveLevel
+class ObjetiveLevel extends modelObjetiveLevel implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
      * @var integer
@@ -83,7 +83,15 @@ class ObjetiveLevel extends modelObjetiveLevel
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
-
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
 
     /**
      * Get id
@@ -295,5 +303,25 @@ class ObjetiveLevel extends modelObjetiveLevel
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->period = null;
+        }
     }
 }

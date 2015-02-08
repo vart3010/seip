@@ -104,6 +104,9 @@
         <service id="pequiven.repository.pre_planning" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning" />
         </service>
+        <service id="pequiven.repository.pre_planning_user" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningUserRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser" />
+        </service>
         <service id="twig.extension.seip.core" class="Pequiven\SEIPBundle\Twig\Extension\CoreExtension" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="twig.loader" />
@@ -133,19 +136,19 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Tácticos Agrupados por Grupo de Gerencia de 1ra Línea -->
-        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorCharged">
+        <service id="tactic.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Indicator\Tactic\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Tácticos por Grupo de Gerencia de 1ra Línea -->
-        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Tactic\SummaryBoxIndicatorChargedByGroup">
+        <service id="tactic.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Tactic\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos Agrupados por Grupo de Gerencia de 1ra Línea -->
-        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorCharged">
+        <service id="operative.summary_box_indicator_charged" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorCharged">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
-        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Operative\SummaryBoxIndicatorChargedByGroup">
+        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box de dashboard de planificacion -->
@@ -191,6 +194,9 @@
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
         </service>
+        <service id="pequiven_arrangement_program.form.preplanningconfiguration" class="Pequiven\SEIPBundle\Form\User\PrePlanningConfigurationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_pre_planning_configuration" />
+        </service>
         <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -200,6 +206,20 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+        </service>
+        <service id="seip.service.clone" class="Pequiven\SEIPBundle\Service\CloneService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.service.security" class="Pequiven\SEIPBundle\Service\SecurityService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.security.access.role_hierarchy_voter" class="Pequiven\SEIPBundle\Security\Authorization\Voter\SeipRoleHierarchyVoter" public="false">
+            <argument type="service" id="security.role_hierarchy" />
+            <tag name="security.voter" priority="245" />
         </service>
     </services>
 </container>

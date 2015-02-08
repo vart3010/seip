@@ -5,6 +5,10 @@ pequiven_planning_main:
 pequiven_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/indicator.yml"
     prefix:   /indicator
+    
+pequiven_value_indicator:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/value_indicator.yml"
+    prefix:   /value-indicator
 
 pequiven_objetive:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/objetive.yml"
@@ -17,7 +21,10 @@ pequiven_planning_result:
 pequiven_result:
     resource: "@PequivenSEIPBundle/Resources/config/routing/result.yml"
     prefix:   /result
-    
+
+pequiven_generic_data:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/generic_data.yml"
+    prefix:   /generic_data
 pequiven_api:
     resource: "@PequivenSEIPBundle/Resources/config/routing/api/result.yml"
     prefix:   /api

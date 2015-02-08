@@ -1,24 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\ObjetiveBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
-use Pequiven\ObjetiveBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 
@@ -34,8 +21,9 @@ class ObjetiveStrategicController extends baseController {
      * @Template("PequivenObjetiveBundle:Strategic:list.html.twig")
      * @return type
      */
-    public function listAction() {
-
+    public function listAction() 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
         return array(
         );
     }
@@ -47,6 +35,8 @@ class ObjetiveStrategicController extends baseController {
      */
     public function showAction(Request $request)
     {
+        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
+        
         $id = $request->get("id");
         //$ref = $request->get("ref");
         $em = $this->getDoctrine()->getManager();
@@ -71,10 +61,9 @@ class ObjetiveStrategicController extends baseController {
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function objetiveListAction(Request $request) {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+    public function objetiveListAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
 
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
@@ -126,11 +115,9 @@ class ObjetiveStrategicController extends baseController {
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
     public function createAction(Request $request) {
-        //$objetive = new Objetive();
-        //$objetive->addIndicator(new Indicator());
-        //$objetive->addIndicator(new Indicator());
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_STRATEGIC');
+        
         $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
-        //$form->handleRequest($request);
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');
@@ -158,7 +145,7 @@ class ObjetiveStrategicController extends baseController {
                     $object->addIndicator($indicator);
                 }
             }
-
+            $object->setPeriod($this->getPeriodService()->getPeriodActive());
             $em->persist($object);
 
             try {
@@ -314,5 +301,21 @@ class ObjetiveStrategicController extends baseController {
 
         return $ref;
     }
-
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    private function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

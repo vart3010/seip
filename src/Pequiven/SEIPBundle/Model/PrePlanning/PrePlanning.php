@@ -11,12 +11,14 @@
 
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
+use Pequiven\ObjetiveBundle\Model\ObjetiveLevel;
+
 /**
  * Modelo de pre-planificacion
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-abstract class PrePlanning  implements PrePlanningInterface
+abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningInterface
 {
     /**
      * Nombre para el nodo root.
@@ -24,7 +26,7 @@ abstract class PrePlanning  implements PrePlanningInterface
     const DEFAULT_NAME = 'ROOT-NODE';
     
     /**
-     * Tipo objetivo
+     * Tipo de objeto (Root) este tipo no tiene instancia
      */
     const TYPE_OBJECT_ROOT_NODE = 0;
     
@@ -36,8 +38,33 @@ abstract class PrePlanning  implements PrePlanningInterface
     /**
      * Estatus aprobado
      */
-    const STATUS_APPROVED = 1;
+    const STATUS_IMPORTED = 1;
     
+    /**
+     * Estatus en revision
+     */
+    const STATUS_IN_REVIEW = 2;
+    
+    /**
+     * Estatus aprobado
+     */
+    const STATUS_APPROVED = 3;
+    
+    /**
+     * No se ha seleccionado nada (Vacio)
+     */
+    const TO_IMPORT_DEFAULT = 0;
+    
+    /**
+     * Si desea importar
+     */
+    const TO_IMPORT_YES = 1;
+    
+    /**
+     * No desea importar
+     */
+    const TO_IMPORT_NO = 2;
+
     /**
      * Parametros de la pre planificacion
      * @var type 
@@ -55,5 +82,21 @@ abstract class PrePlanning  implements PrePlanningInterface
     
     function setParameter($key,$value) {
         $this->parameters[$key] = $value;
+    }
+    
+    function getLabelStatus()
+    {
+        $status = $this->getStatus();
+        $labelOfStatus = $this->getLabelOfStatus();
+        return $labelOfStatus[$status];
+    }
+    public function getLabelOfStatus()
+    {
+        return array(
+            self::STATUS_DRAFT => 'pequiven_seip.pre_planning.status.draft',
+            self::STATUS_IMPORTED => 'pequiven_seip.pre_planning.status.imported',
+            self::STATUS_IN_REVIEW => 'pequiven_seip.pre_planning.status.in_review',
+            self::STATUS_APPROVED => 'pequiven_seip.pre_planning.status.approved',
+        );
     }
 }

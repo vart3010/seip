@@ -1,0 +1,39 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set level = app.request.get('level') %}
+{% set period = app.request.get('period') %}
+
+{% block body %}
+    {{ contentHeader(
+            ("pequiven_seip.pre_planning.pre_planning"|trans({'%period%':period})),
+            ( ("pequiven_seip.pre_planning.list") |trans())
+        )
+    }}
+    <div ng-controller="TableFormatController">
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_pre_planning_user_index',{_format:'json',period: period,type:app.request.get('type')}) }}" export-csv="csv" class="table table-responsive">
+                <tbody>
+                    <tr ng-repeat="result in $data" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven_seip.headers.ref'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ generateUrl('pequiven_pre_planning_user_show',{id:result.id,type:'{{ app.request.get('type') }}'}) $}">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.headers.gerencia'|trans }}'" filter="{'name' : 'text'}">
+                            <span ng-if="result.gerenciaFirst">{$ result.gerenciaFirst.description $}</span>
+                            <span ng-if="result.gerenciaSecond">{$ result.gerenciaSecond.description $}</span>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.headers.status'|trans }}'" filter="{'name' : 'text'}">
+                            {$ result.status $}
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.headers.username'|trans }}'" filter="{'name' : 'text'}">
+                            <a href="{$ result.user._links.self.href $}">{$ result.user.username $}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock body %}
+
+

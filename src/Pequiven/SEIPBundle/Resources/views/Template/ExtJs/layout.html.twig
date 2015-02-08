@@ -20,6 +20,8 @@
     
     <script type="text/javascript" src="{{ asset("ext/base/toolbar.js") }}"></script>
     <script type="text/javascript" src="{{ path("extjs_generate_model") }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <script type="text/javascript">
         var injectScriptElement = Ext.Loader.injectScriptElement,
             queue = [],

@@ -9,7 +9,7 @@ use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Description of ObjetiveRepository
+ * Repositorio del objetivo
  *
  * @author matias
  */
