@@ -57,4 +57,9 @@ class ValueIndicatorAdmin extends Admin
             ->add('indicator')
             ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
+    }
 }

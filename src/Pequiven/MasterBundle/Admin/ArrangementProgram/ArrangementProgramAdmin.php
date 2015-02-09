@@ -73,4 +73,8 @@ class ArrangementProgramAdmin extends Admin
             ->add('description')
             ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
+        $collection->remove('create');
+    }
 }

@@ -53,4 +53,9 @@ class TimelineAdmin extends Admin
             ->add('goals')
         ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
+    }
 }
