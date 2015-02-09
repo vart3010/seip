@@ -28,58 +28,6 @@ class PrePlanningController extends ResourceController
         PrePlanning::LEVEL_OPERATIVO => 'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
     );
     
-    public function indexAction(Request $request)
-    {
-        $this->checkSecurity($request,'ROLE_SEIP_PRE_PLANNING_LIST_REVIEW');
-        
-        $period = $request->get('period');
-        
-        $criteria = $request->get('filter',$this->config->getCriteria());
-        $sorting = $request->get('sorting',$this->config->getSorting());
-        $repository = $this->getRepository();
-        
-        
-        $criteria['period'] = $this->getPeriodService()->getPeriodActive();
-        $criteria['parent'] = null;
-        
-        if ($this->config->isPaginated()) {
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'createPaginator',
-                array($criteria, $sorting)
-            );
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if(($limit = $request->query->get('limit')) && $limit > 0){
-                if($limit > 100){
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
-            }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'findBy',
-                array($criteria, $sorting, $this->config->getLimit())
-            );
-        }
-
-        $view = $this
-            ->view()
-            ->setTemplate($this->config->getTemplate('index.html'))
-            ->setTemplateVar($this->config->getPluralResourceName())
-        ;
-        if($request->get('_format') == 'html'){
-            $view->setData($resources);
-        }else{
-            $formatData = $request->get('_formatData','default');
-            $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
-            $view->setData($resources->toArray($this->config->getRedirectRoute('index'),array('period' => $period),$formatData));
-        }
-        return $this->handleView($view);
-    }
-    
     public function createAction(Request $request) 
     {
         $this->checkSecurity($request);
@@ -93,10 +41,17 @@ class PrePlanningController extends ResourceController
     
     public function getFormAction(Request $request) 
     {
+        $type = $request->get('type');
+        $formTemplate = 'form.html';
+        if($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_PLANNING){
+            $formTemplate = 'formImportPlanning.html'; 
+        } elseif ($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_STATISTICS){
+            $formTemplate = 'formImportStatistics.html';
+        }
         $this->checkSecurity($request);
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('form.html'))
+            ->setTemplate($this->config->getTemplate($formTemplate))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         return $this->handleView($view);
@@ -125,8 +80,11 @@ class PrePlanningController extends ResourceController
         {
             $em = $this->getDoctrine()->getManager();
             $rootTreePrePlannig =  $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning')->find($node);
-        }else{
+        } else {
             $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+            if($rootTreePrePlannig){
+                $rootTreePrePlannig = $rootTreePrePlannig->getPrePlanningRoot();
+            }
         }
      
         if($rootTreePrePlannig){
@@ -324,14 +282,16 @@ class PrePlanningController extends ResourceController
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
         if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
             $lastItem = (boolean)$request->get('lastItem',false);
             $level = $request->get('level',null);
             
             $user = $this->getUser();
             $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
-            
             $success = true;
+            $em->persist($resource);
             if($lastItem === true){
                 //enviar correo
                 $periodActive = $this->getPeriodService()->getPeriodActive();
@@ -341,7 +301,9 @@ class PrePlanningController extends ResourceController
                     'email_send'
                 );
                 $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
+                $em->persist($rootTreePrePlannig);
             }
+            $em->flush();
         }
         
         $data["success"] = $success;

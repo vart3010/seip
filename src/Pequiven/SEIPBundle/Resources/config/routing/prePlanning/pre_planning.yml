@@ -1,26 +1,19 @@
-pequiven_pre_planning_index:
-    path: /{period}.{_format}
-    defaults:
-        _controller: pequiven.controller.pre_planning:indexAction
-        _format: html
-    requirements:
-        _format: html|json
-    methods: [GET]
-    
 pequiven_pre_planning_create:
     path: /{level}/{period}/create
     defaults:
         _controller: pequiven.controller.pre_planning:createAction
         _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_form:
-    path: /get-form
+    path: /{level}/{period}/get-form
     defaults:
         _controller: pequiven.controller.pre_planning:getFormAction
         _format: html
     requirements:
         _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_get_pre_planning:

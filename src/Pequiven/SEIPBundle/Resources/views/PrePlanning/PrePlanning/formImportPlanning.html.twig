@@ -351,23 +351,23 @@
                 }
             };
              
-            var storeComboBoxStatus = Ext.create('Ext.data.SimpleStore', {
+            var storeComboBoxAcciones = Ext.create('Ext.data.SimpleStore', {
                     fields: ['id', 'label'],
                     data : [ 
-                        [0,'Seleccione'],
-                        [1,'Si'],
-                        [2,'No']
+                        [-1,'Seleccione'],
+                        [{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }},'Enviar a borrador'],
+                        [{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_APPROVED') }},'Aprobar']
                     ]
                 });
             // the edit combo
-            var comboStatus = new Ext.form.ComboBox({
-              store: storeComboBoxStatus,
+            var comboAcciones = new Ext.form.ComboBox({
+              store: storeComboBoxAcciones,
               valueField: "id",
               displayField: "label",
               allowBlank: true
             });
             
-            var buttonsAllow = [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, sendToReviewBtn ];
+            var buttonsAllow = [ saveChangeBtn,refreshBtn,importBtn ];
              
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
@@ -397,7 +397,7 @@
                         }
                     },
                     beforeedit: function (editor, context, eOpts) {
-                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
                         return (context.record.get('editable') && context.record.get('status') == status);
                     },
                     edit: function(a,b,c){
@@ -427,13 +427,13 @@
                     flex: 1
                     },
                     {
-                        header: '¿Importar?',
+                        header: '¿Accion?',
                         dataIndex: 'toImport',
-                        editor: comboStatus,
+                        editor: comboAcciones,
                         renderer: function(value ,metaData, record) {
-                            var idx = storeComboBoxStatus.find('id', value)
-                            var rec = storeComboBoxStatus.getAt(idx);
-                            var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                            var idx = storeComboBoxAcciones.find('id', value)
+                            var rec = storeComboBoxAcciones.getAt(idx);
+                            var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
                             if(record.get('editable') && record.get('status') == status){
                                 return rec.get('label');                    
                             }
@@ -441,15 +441,10 @@
                     },
                     {
                         text: 'Estatus',
-                        dataIndex: 'status',
                         width: 80,
                         stopSelection: false,
                         renderer: function(value, metaData, record){
-                            var statusLabel = null;
-{#                            if(record.get('editable')){#}
-                                statusLabel = record.get('_statusLabel');
-{#                            }#}
-                           return statusLabel;
+                           return record.get('_statusLabel');
                         }
                     }
                 ]

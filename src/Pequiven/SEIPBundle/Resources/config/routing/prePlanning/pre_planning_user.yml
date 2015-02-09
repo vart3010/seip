@@ -1,0 +1,21 @@
+pequiven_pre_planning_user_index:
+    path: /{type}/{period}.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning_user:indexAction
+        _format: html
+    requirements:
+        _format: html|json
+        period: "\d+"
+        type: planning|statistics
+    methods: [GET]
+    
+pequiven_pre_planning_user_show:
+    path: /{type}/{id}/show
+    defaults:
+        _controller: pequiven.controller.pre_planning_user:showAction
+        _format: html
+        id: "\d+"
+        type: planning|statistics
+    methods: [GET]
+    options:
+        expose: true

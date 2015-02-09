@@ -24,4 +24,6 @@ interface PrePlanningInterface
     public function getParameters();
     
     public function setRequiresApproval($requiresApproval);
+    
+    public function getStatus();
 }

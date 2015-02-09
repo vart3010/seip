@@ -34,6 +34,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class PrePlanningService extends ContainerAware 
 {
     /**
+     *
+     * @var \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    private $currentBuildPrePlanning;
+    
+    /**
      * Busca el arbol creado para la exportacion de items al siguiente periodo
      * 
      * @param Period $period
@@ -42,7 +48,7 @@ class PrePlanningService extends ContainerAware
      */
     public function findRootTreePrePlannig(Period $period,  User $user,$level) {
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning');
+        $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser');
         $rootPrePlanning = $repository->findTreePrePlanning($period,$user,$level);
         return $rootPrePlanning;
     }
@@ -53,14 +59,21 @@ class PrePlanningService extends ContainerAware
      * @return type
      */
     public function buildTreePrePlannig($objetivesArray,$levelPlanning){
+        
+        if($levelPlanning == PrePlanning::LEVEL_TACTICO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC')){
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel tactico.');
+        }elseif ($levelPlanning == PrePlanning::LEVEL_OPERATIVO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE')) {
+            throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel operativo.');
+        }
+            
         $linkGeneratorService = $this->getLinkGeneratorService();
         $user = $this->getUser();
         $period = $this->getPeriodService()->getPeriodActive();
+        $prePlanningUser = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser();
+        $this->setCurrentBuildPrePlanning($prePlanningUser);
         
         $root = $this->createNew();
         $root->setName(PrePlanning::DEFAULT_NAME);
-        $root->setUser($user);
-        $root->setPeriod($period);
         $root->setLevelPlanning($levelPlanning);
         
         foreach ($objetivesArray as $objetiveArray) {
@@ -78,8 +91,28 @@ class PrePlanningService extends ContainerAware
             $root->addChildren($prePlannig);
         }
         
+        $configuration = $user->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
+        
+        
+        $prePlanningUser
+                ->setUser($user)
+                ->setPeriod($period)
+                ;
+        if($levelPlanning == PrePlanning::LEVEL_TACTICO && $this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC')){
+            $prePlanningUser->setGerenciaFirst($prePlanningConfiguration->getGerencia());
+        }elseif ($levelPlanning == PrePlanning::LEVEL_OPERATIVO && $this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE')) {
+            $prePlanningUser->setGerenciaSecond($prePlanningConfiguration->getGerenciaSecond());
+        }
+        $prePlanningUser
+            ->setPrePlanningRoot($root)
+            ->setLevelPlanning($levelPlanning)
+            ;
+        $prePlanningUser->setRef($this->getSequenceGenerator()->getNextRefPrePlanningUser($prePlanningUser));
+//        var_dump($prePlanningUser->getRef());die;
+        
         $em = $this->getDoctrine()->getManager();
-        $em->persist($root);
+        $em->persist($prePlanningUser);
         $em->flush();
         
         return $root;
@@ -106,6 +139,8 @@ class PrePlanningService extends ContainerAware
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
             $prePlanning->setRequiresApproval($requiresApproval);
+            $this->getCurrentBuildPrePlanning()->setContentObjetive(true);
+            
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM;
             $type = $object->getType();
@@ -114,6 +149,8 @@ class PrePlanningService extends ContainerAware
             }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentArrangementProgram(true);
+            
         }else if($class == 'Pequiven\IndicatorBundle\Entity\Indicator'){
             $typeObject = PrePlanning::TYPE_OBJECT_INDICATOR;
             if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
@@ -123,6 +160,8 @@ class PrePlanningService extends ContainerAware
             }else if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentIndicator(true);
+            
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\Goal'){
             $typeObject = PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL;
             $type = $object->getTimeline()->getArrangementProgram()->getType();
@@ -132,6 +171,7 @@ class PrePlanningService extends ContainerAware
             }else if($type == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $this->getCurrentBuildPrePlanning()->setContentArrangementProgramGoal(true);
         }else {
             throw new InvalidArgumentException(sprintf('The object class "%s" is not admited',$class));
         }
@@ -146,7 +186,6 @@ class PrePlanningService extends ContainerAware
         $prePlanning->setIdSourceObject($idSourceObject);
         $prePlanning->setLevelObject($levelObject);
         $prePlanning->setEditable($isEditable);
-        $prePlanning->setUser($user);
     }
     
     private function buildChildren($childrens,&$prePlannig,$levelPlanning) {
@@ -160,9 +199,7 @@ class PrePlanningService extends ContainerAware
                 $this->extractDataFromObjective($prePlannigChild, $children,$levelPlanning);
                 if(count($children->getChildrens()) > 0){
                     $subChildren = $children->getChildrens();
-//                    var_dump(count($subChildren));
                     $this->buildChildren($subChildren, $prePlannigChild,$levelPlanning);
-//                    $prePlannigChild->addChildren($prePlannigSubChild);
                 }
                 $prePlannig->addChildren($prePlannigChild);
             }
@@ -221,8 +258,16 @@ class PrePlanningService extends ContainerAware
             'parentId' => $parentId,
             'toImport' => $root->getToImport(),
             'status' => $root->getStatus(),
-            '_statusLabel' => '<span class="red">No importado</span>',
+            '_statusLabel' => '',
         );
+        $classStatus = 'red';
+        if($root->getStatus() == PrePlanning::STATUS_APPROVED){
+            $classStatus = 'green';
+        }elseif($root->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+            $classStatus = 'blue';
+        }
+        $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($root->getLabelStatus()));
+        
         if($root->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
             &&  $root->getParent() 
 //            && $root->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM
@@ -384,7 +429,6 @@ class PrePlanningService extends ContainerAware
      */
     private function createNew(){
         $prePlanning = new PrePlanning();
-        $prePlanning->setPeriod($this->getPeriodService()->getPeriodActive());
         return $prePlanning;
     }
 
@@ -493,4 +537,24 @@ class PrePlanningService extends ContainerAware
     {
         return $this->container->get('seip.sequence_generator');
     }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'PequivenSEIPBundle')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    function getCurrentBuildPrePlanning() 
+    {
+        return $this->currentBuildPrePlanning;
+    }
+
+     function setCurrentBuildPrePlanning(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser &$currentBuildPrePlanning) {
+        $this->currentBuildPrePlanning = $currentBuildPrePlanning;
+    }
 }
+
+
