@@ -54,7 +54,7 @@
                             
                                 <ul class="fa-ul">
                                 {% for ch in chlid.childrens %}
-                                    {% if ch.getDeletedAt is null %}
+                                    {#{% if ((level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA') and ch.getGerencia() == entity) or (level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA_SECOND') and ch.getGerencia().getId() == chlid.getGerencia().getId())) %}#}
                                         <li>
                                             {% set avancedUsed = ch.getResult %}
                                             {% set avancedUsedText = avancedUsed %}
@@ -68,7 +68,7 @@
                                             {% endif %}
                                             {{ generateLink(ch,null,{truncate:limitTruncate}) }}
                                         </li>
-                                    {% endif %}
+{#                                    {% endif %}#}
                                 {% endfor %}
                                 </ul>
                             

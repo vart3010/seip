@@ -134,17 +134,20 @@ class ResultController extends ResourceController
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
-                    if(!isset($tree[(string)$parent])){
-                        $tree[(string)$parent] = array(
-                            'parent' => $parent,
-                            'child' => array(),
-                        );
+                    if($parent->getGerencia()->getId() === $gerenciaSecond->getGerencia()->getId()){
+                        if(!isset($tree[(string)$parent])){
+                            $tree[(string)$parent] = array(
+                                'parent' => $parent,
+                                'child' => array(),
+                            );
+                        }
+                        $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                     }
-                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                 }
             }
             $entity = $gerenciaSecond;
         }
+        
         $subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
         $data = array(
             'dataSource' => array(
@@ -164,58 +167,71 @@ class ResultController extends ResourceController
         
         //Data del gráfico
         foreach($objetives as $objetive){
-            $refObjetive = $objetive->getRef();
-            $flagResultIndicator = $flagResultArrangementProgram = $flagResultObjetives = false;
-            $categories[] = array('label' => $refObjetive);
-            foreach($objetive->getResults() as $result){
-                $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
-                $totalIndicator = 0.0;
-                $totalObjetives = 0.0;
-                $flagResultIndicatorInternal = false;
-                $flagResultObjetivesInternal = false;
-                
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                    $totalIndicator += $result->getResultWithWeight();
-                    $flagResultIndicator = $flagResultIndicatorInternal = true;
-                }
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
-                    $resultArrangementProgram[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '');
-                    $flagResultArrangementProgram = true;
-                }
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
-                    $totalObjetives+= $result->getResultWithWeight();
-                    $flagResultObjetives = $flagResultObjetivesInternal = true;
-                }
-                if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OF_RESULT){
-                    foreach ($result->getChildrens() as $child) {
-                        if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
-                            $totalIndicator += ($child->getResultWithWeight()*$result->getWeight())/100;
-                            $flagResultIndicator = $flagResultIndicatorInternal = true;
-                        }elseif($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
-                            $totalObjetives+= ($child->getResultWithWeight()*$result->getWeight())/100;
-                            $flagResultObjetives = $flagResultObjetivesInternal = true;
-                        }
+            $viewObjetiveInChart = true;
+            
+            if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
+                foreach ($objetive->getParents() as $parent) {
+                    if($parent->getGerencia()->getId() != $entity->getGerencia()->getId()){
+                        $viewObjetiveInChart = false;
                     }
-                }
-                
-                if($flagResultIndicatorInternal === true){
-                    $resultIndicator[] = array('value' => bcadd($totalIndicator,'0',2),'link' => $urlObjetive);
-                }
-                if($flagResultObjetivesInternal === true){
-                    $resultObjetives[] = array('value' => bcadd($totalObjetives,'0',2),'link' => $urlObjetive, 'bgColor' => '');
                 }
             }
             
-            //Completar valores para que no de error.
-            if(!$flagResultArrangementProgram){
-                $resultArrangementProgram[] = array('value' => bcadd(0,'0',2));
-            }
-            if(!$flagResultIndicator){
-                $resultIndicator[] = array('value' => bcadd(0,'0',2));
-                
-            }
-            if(!$flagResultObjetives){
-                $resultObjetives[] = array('value' => bcadd(0,'0',2));
+            if($viewObjetiveInChart){
+            
+                $refObjetive = $objetive->getRef();
+                $flagResultIndicator = $flagResultArrangementProgram = $flagResultObjetives = false;
+                $categories[] = array('label' => $refObjetive);
+                foreach($objetive->getResults() as $result){
+                    $urlObjetive =  $this->generateUrl('objetiveOperative_show', array('id' => $objetive->getId()));
+                    $totalIndicator = 0.0;
+                    $totalObjetives = 0.0;
+                    $flagResultIndicatorInternal = false;
+                    $flagResultObjetivesInternal = false;
+
+                    if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
+                        $totalIndicator += $result->getResultWithWeight();
+                        $flagResultIndicator = $flagResultIndicatorInternal = true;
+                    }
+                    if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
+                        $resultArrangementProgram[] = array('value' => bcadd($result->getResultWithWeight(),'0',2),'link' => $urlObjetive, 'bgColor' => '');
+                        $flagResultArrangementProgram = true;
+                    }
+                    if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
+                        $totalObjetives+= $result->getResultWithWeight();
+                        $flagResultObjetives = $flagResultObjetivesInternal = true;
+                    }
+                    if($result->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OF_RESULT){
+                        foreach ($result->getChildrens() as $child) {
+                            if($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_INDICATOR){
+                                $totalIndicator += ($child->getResultWithWeight()*$result->getWeight())/100;
+                                $flagResultIndicator = $flagResultIndicatorInternal = true;
+                            }elseif($child->getTypeResult() == \Pequiven\SEIPBundle\Model\Result\Result::TYPE_RESULT_OBJECTIVE){
+                                $totalObjetives+= ($child->getResultWithWeight()*$result->getWeight())/100;
+                                $flagResultObjetives = $flagResultObjetivesInternal = true;
+                            }
+                        }
+                    }
+
+                    if($flagResultIndicatorInternal === true){
+                        $resultIndicator[] = array('value' => bcadd($totalIndicator,'0',2),'link' => $urlObjetive);
+                    }
+                    if($flagResultObjetivesInternal === true){
+                        $resultObjetives[] = array('value' => bcadd($totalObjetives,'0',2),'link' => $urlObjetive, 'bgColor' => '');
+                    }
+                }
+
+                //Completar valores para que no de error.
+                if(!$flagResultArrangementProgram){
+                    $resultArrangementProgram[] = array('value' => bcadd(0,'0',2));
+                }
+                if(!$flagResultIndicator){
+                    $resultIndicator[] = array('value' => bcadd(0,'0',2));
+
+                }
+                if(!$flagResultObjetives){
+                    $resultObjetives[] = array('value' => bcadd(0,'0',2));
+                }
             }
         }
         if(count($resultIndicator) > 0){
@@ -250,6 +266,7 @@ class ResultController extends ResourceController
             'resultService' => $resultService,
             'linkToExportResult' => $linkToExportResult,
             'urlExportFromChart' => $urlExportFromChart,
+            'level' => $level,
         );
     }
     
@@ -376,13 +393,15 @@ class ResultController extends ResourceController
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
-                    if(!isset($tree[(string)$parent])){
-                        $tree[(string)$parent] = array(
-                            'parent' => $parent,
-                            'child' => array(),
-                        );
+                    if($parent->getGerencia()->getId() === $gerenciaSecond->getGerencia()->getId()){
+                        if(!isset($tree[(string)$parent])){
+                            $tree[(string)$parent] = array(
+                                'parent' => $parent,
+                                'child' => array(),
+                            );
+                        }
+                        $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                     }
-                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                 }
             }
             $entity = $gerenciaSecond;
@@ -442,14 +461,18 @@ class ResultController extends ResourceController
         $html = $this->renderView('PequivenSEIPBundle:Result:viewPdf.html.twig',array(
             'entity' => $entity,
             'tree' => $tree,
+            'level' => $level,
             'resultService' => $resultService,
             'images' => $images));
+        
+//        print($html);
+//        die();
 
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
         
         $pdf->Output($namePdf.'.pdf', 'D');
-        die();
+//        die();
     }
     
     /**
