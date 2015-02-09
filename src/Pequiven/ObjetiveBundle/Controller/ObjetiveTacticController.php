@@ -257,7 +257,9 @@ class ObjetiveTacticController extends baseController {
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             foreach ($totalRef as $value) {
                 $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
-                $this->createArrangementRange($objetives, $data);
+                foreach($objetives as $objetive){
+                    $this->createArrangementRange($objetive, $data);
+                }
             }
 
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
@@ -485,12 +487,13 @@ class ObjetiveTacticController extends baseController {
      * @return boolean
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createArrangementRange($objetives = array(), $data = array()) {
+    public function createArrangementRange(Objetive $objetive, $data = array()) {
         $arrangementRange = new ArrangementRange();
-        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
-        $totalObjetives = count($objetives);
+        
+        $arrangementRange->setObjetive($objetive);
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
         //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
@@ -548,14 +551,16 @@ class ObjetiveTacticController extends baseController {
                 $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
             }
         }
+        
+        $em->persist($arrangementRange);
 
-        if ($totalObjetives > 0) {
-            foreach ($objetives as $objetive) {
-                $objectArrangementRange = clone $arrangementRange;
-                $objectArrangementRange->setObjetive($objetive);
-                $em->persist($objectArrangementRange);
-            }
-        }
+//        if ($totalObjetives > 0) {
+//            foreach ($objetives as $objetive) {
+//                $objectArrangementRange = clone $arrangementRange;
+//                $objectArrangementRange->setObjetive($objetive);
+//                $em->persist($objectArrangementRange);
+//            }
+//        }
 
         try {
             $em->flush();
