@@ -45,6 +45,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
     
     public function prePersist($object) 
     {
+        \Pequiven\SEIPBundle\Service\ToolService::validateName($object->getName());
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
     }
 
@@ -58,5 +59,9 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    public function preUpdate($object) {
+        \Pequiven\SEIPBundle\Service\ToolService::validateName($object->getName());
     }
 }
