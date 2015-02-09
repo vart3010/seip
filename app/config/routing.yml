@@ -41,7 +41,7 @@ pequiven_seip_route:
 
 pequiven_master_route:
     resource: "@PequivenMasterBundle/Resources/config/routing/routing.yml"
-    prefix:   /planning
+    prefix:   /master
     
 pequiven_objetive_route:
     resource: "@PequivenObjetiveBundle/Resources/config/routing/routing.yml"
