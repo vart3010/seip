@@ -212,7 +212,7 @@ class ObjetiveController extends ResourceController
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
-    private function getSecurityService()
+    protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
     }

@@ -85,4 +85,9 @@ class ObjetiveAdmin extends Admin
             ->add('enabled')
             ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
+    }
 }

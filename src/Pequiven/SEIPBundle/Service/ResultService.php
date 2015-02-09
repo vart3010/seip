@@ -520,16 +520,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $plan = $real = 0.0;
                 $formulaParameters = $valueIndicator->getFormulaParameters();
                 
-                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                    $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-                    $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                    $plan = $formulaParameters[$variableToPlanValueName];
-                    $real = $formulaParameters[$variableToRealValueName];
-                }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                    $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                    $plan = $result['plan'];
-                    $real = $result['real'];
-                }
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+                        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                        $plan = $formulaParameters[$variableToPlanValueName];
+                        $real = $formulaParameters[$variableToRealValueName];
+                    }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+                        $plan = $result['plan'];
+                        $real = $result['real'];
+                    }
                 
                 $resultsItems[$i]['plan'] = $resultsItems[$i]['plan'] + $plan;
                 $resultsItems[$i]['real'] = $resultsItems[$i]['real'] + $real;
@@ -585,6 +585,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $valueIndicator->setValueOfIndicator($value);
             $i++;
         }
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
+//        die;
         $indicator
             ->setTotalPlan($totalPlan)
             ->setValueFinal($totalReal);
@@ -630,7 +633,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $$name = $value;
                 }
             }
-
+            
         eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
         

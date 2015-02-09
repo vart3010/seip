@@ -45,6 +45,13 @@ class TimelineAdmin extends Admin
         ;
     }
     
+    protected function configureDatagridFilters(DatagridMapper $filter) 
+    {
+        $filter
+            ->add('arrangementProgram')
+        ;
+    }
+    
     protected function configureListFields(ListMapper $list) 
     {
         $list
@@ -52,5 +59,10 @@ class TimelineAdmin extends Admin
             ->add('arrangementProgram')
             ->add('goals')
         ;
+    }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
     }
 }

@@ -69,4 +69,8 @@ class GoalAdmin extends Admin
             ->add('weight')
             ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
+        $collection->remove('create');
+    }
 }

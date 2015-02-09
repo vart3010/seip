@@ -91,4 +91,8 @@ class GoalDetailsAdmin extends Admin
             ->add('goal')
             ;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
+        $collection->remove('create');
+    }
 }

@@ -193,6 +193,8 @@ pequiven_seip:
             in_review: En revisión
             approved: Aprobado
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
+    pdf:
+        pageFooter: Página %page%/%totalPage%
     security:
         permission_denied: Permiso denegado!
         403:
@@ -265,7 +267,7 @@ pequiven_seip:
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
-            
+        
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     

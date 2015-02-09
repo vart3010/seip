@@ -1864,7 +1864,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id,data,gerencia) {
+            $scope.renderChartResult = function(id,data,gerencia,url) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1878,8 +1878,8 @@ angular.module('seipModule.controllers', [])
                                 "subCaption": data.dataSource.chart.subCaption,
                                 "exportenabled": "1",
                                 "exportatclient": "0",
-                                "exportFormats": "PDF= Exportar como PDF",
-                                "exportFileName": "Gráfico Resultados "+gerencia,
+                                "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                                "exportFileName": "Grafico Resultados "+gerencia,
                                 "exporthandler": "http://107.21.74.91/",
                                 "html5exporthandler": "http://107.21.74.91/",
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
@@ -1912,6 +1912,9 @@ angular.module('seipModule.controllers', [])
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
+                    console.log(revenueChart);
+                    console.log(revenueChart.v.core().getSVGString());
+                    console.log(revenueChart.v.core().getDataAsCSV());
                 })
             };
         })
