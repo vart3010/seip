@@ -4,6 +4,8 @@ web/git
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
+/app/Resources/ExportedImages/*
+/app/Resources/temp/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /build/
@@ -17,6 +19,8 @@ nbproject/
 /var/spool/
 composer.lock
 /web/media/cache/
+/web/php-export-handler/ExportedImages/*
+/web/php-export-handler/temp/*
 /web/css/
 /web/js/
 /web/compiled/*.js

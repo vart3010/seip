@@ -1,98 +1,43 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
-<style>
-    .meter {
-        display: inline-block;
-        height: 11px;
-        line-height: 11px;
-        width: 4px;
-        margin-left: 1px;
-        margin-right: 1px;
-        background: #999 url(../../bundles/tecnocreacionesvzlagovernment/template/developer/img/old-browsers/style/bg_meter.png) repeat-x;
-        -webkit-background-size: 100% 100%;
-        -moz-background-size: 100% 100%;
-        -o-background-size: 100% 100%;
-        background-size: 100% 100%;
-        background: -webkit-gradient(linear,left top,left bottom,from(#808080),to(#999));
-        background: -webkit-linear-gradient(top,#808080,#999);
-        background: -moz-linear-gradient(top,#808080,#999);
-        background: -ms-linear-gradient(top,#808080,#999);
-        background: -o-linear-gradient(top,#808080,#999);
-        background: linear-gradient(top,#808080,#999);
-        -webkit-box-shadow: inset 0 0 1px rgba(0,0,0,0.75),0 1px 0 rgba(255,255,255,0.25);
-        -moz-box-shadow: inset 0 0 1px rgba(0,0,0,0.75),0 1px 0 rgba(255,255,255,0.25);
-        box-shadow: inset 0 0 1px rgba(0,0,0,0.75),0 1px 0 rgba(255,255,255,0.25);
-    };
-    .fa {
-            display: inline-block;
-            font: normal normal normal 14px/1 FontAwesome;
-            font-size: inherit;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        };
-    .fa-cubes:before {
-        content: "\f1b3";
-    };
-</style>
+
 {% block body %}
-        
-    {{ contentHeader(
+    {#{{ contentHeader(
         (entity)
-    ) }}
+    ) }}#}
     
     <div class="inline-label">
-        <ul style="padding-left: 0;
-        margin-left: 2.14285714em;
-        list-style-type: none;">
-            {% set limitTruncate = 110 %}
+        <ul style="padding-left: 0;margin-left: 2.14285714em;list-style-type: none;">
+            {% set limitTruncate = 100 %}
             {% for t in tree %}
                 <li>
                         {% set p = t['parent'] %}
                         {% set avancedUsed = p.getResult %}
                         {% set images = images %}
                         {% set avancedUsedText = avancedUsed %}
-{#                        {% set href = generateLinkUrlOnly(p,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}#}
-                        {#{% if href != '' %}
-                            <a href="{{ href }}">
-                        {% endif %}#}
                             {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
-                        {#{% if href != '' %}
-                            </a>
-                        {% endif %}#}
+                        
                         {% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
                         ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - 
                         
-                        {{ generateLink(p,null,{truncate:limitTruncate}) }}
-                    <ul class="fa-ul">
+                    OE {{ generateLink(p,null,{truncate:limitTruncate})|striptags|raw }}
+                    <ul style="padding-left: 0;margin-left: 2.14285714em;list-style-type: none;">
                     {% for chlid in t['child'] %}
                         <li>
                             {% set avancedUsed = chlid.getResult %}
                             {% set avancedUsedText = avancedUsed %}
-                            {#{% set href = generateLinkUrlOnly(chlid,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
-                            {% if href != '' %}
-                                <a href="{{ href }}">
-                            {% endif %}#}
                                 {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
-                            {#{% if href != '' %}
-                                </a>
-                            {% endif %}#}
-                            {{ generateLink(chlid,null,{truncate:limitTruncate}) }}
+                                OT {{ generateLink(chlid,null,{truncate:limitTruncate})|striptags|raw }}
                             
-                                <ul class="fa-ul">
+                                <ul style="padding-left: 0;
+                                margin-left: 2.14285714em;
+                                list-style-type: none;">
                                 {% for ch in chlid.childrens %}
                                     {% if ch.getDeletedAt is null %}
                                         <li>
                                             {% set avancedUsed = ch.getResult %}
                                             {% set avancedUsedText = avancedUsed %}
-                                            {#{% set href = generateLinkUrlOnly(ch,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
-                                            {% if href != '' %}
-                                                <a href="{{ href }}">
-                                            {% endif %}#}
                                                 {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
-                                            {#{% if href != '' %}
-                                                </a>
-                                            {% endif %}#}
-                                            {{ generateLink(ch,null,{truncate:limitTruncate}) }}
+                                            OO {{ generateLink(ch,null,{truncate:limitTruncate})|striptags|raw }}
                                         </li>
                                     {% endif %}
                                 {% endfor %}
