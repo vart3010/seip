@@ -428,9 +428,11 @@ class ResultController extends ResourceController
         // set font
         $pdf->SetFont('times', 'BI', 12);
 
+        if(isset($fileSVG)){
         if(strlen($fileSVG) > 0){
             $pdf->AddPage();
             $pdf->ImageSVG('http://localhost/seip/web/php-export-handler/temp/'.$fileSVG);
+        }
         }
         
         // add a page
