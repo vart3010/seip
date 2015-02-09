@@ -448,7 +448,7 @@ class ResultController extends ResourceController
         // print a block of text using Write()
         $pdf->writeHTML($html, true, false, true, false);
         
-        $pdf->Output($namePdf.'.pdf', 'I');
+        $pdf->Output($namePdf.'.pdf', 'D');
         die();
     }
     
