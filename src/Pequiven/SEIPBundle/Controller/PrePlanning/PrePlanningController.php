@@ -16,6 +16,9 @@ use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
+const PHP_TIME_LIMIT = 90;
+const PHP_MEMORY_LIMIT = '256M';
+
 /**
  * Controlador de pre-planificacion
  *
@@ -65,8 +68,8 @@ class PrePlanningController extends ResourceController
     public function getPrePlanningAction(Request $request)
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         
         $level = $request->get('level');
         $user = $this->getUser();
@@ -146,8 +149,8 @@ class PrePlanningController extends ResourceController
     public function returnChangesAction(Request $request) 
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = true;
         if($level){
@@ -181,8 +184,8 @@ class PrePlanningController extends ResourceController
     public function startPrePlanningAction(Request $request) 
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = false;
         if($level){
@@ -255,8 +258,8 @@ class PrePlanningController extends ResourceController
     public function importAction(Request $request)
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         
         $prePlanning = $this->findOr404($request);
         $user = $this->getUser();

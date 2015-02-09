@@ -66,6 +66,8 @@ class PrePlanningService extends ContainerAware
             throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel operativo.');
         }
             
+        $em = $this->getDoctrine()->getManager();
+        
         $linkGeneratorService = $this->getLinkGeneratorService();
         $user = $this->getUser();
         $period = $this->getPeriodService()->getPeriodActive();
@@ -109,9 +111,7 @@ class PrePlanningService extends ContainerAware
             ->setLevelPlanning($levelPlanning)
             ;
         $prePlanningUser->setRef($this->getSequenceGenerator()->getNextRefPrePlanningUser($prePlanningUser));
-//        var_dump($prePlanningUser->getRef());die;
         
-        $em = $this->getDoctrine()->getManager();
         $em->persist($prePlanningUser);
         $em->flush();
         
@@ -221,11 +221,12 @@ class PrePlanningService extends ContainerAware
         return $tree;
     }
     
-    private function getLeaf(PrePlanning $root,$limitCurrentLevel) {
-        $icon = $root->getParameter('icon');
-        $url = $root->getParameter('url');
-        $expanded = $root->getParameter('expanded',true);
-        $name = $this->normalize_str($root->getName());
+    private function getLeaf(PrePlanning $item,$limitCurrentLevel)
+    {
+        $icon = $item->getParameter('icon');
+        $url = $item->getParameter('url');
+        $expanded = $item->getParameter('expanded',true);
+        $name = $this->normalize_str($item->getName());
         $limitName = 130;
         $nameSumary = $name;
         if(strlen($nameSumary) > $limitName){
@@ -235,9 +236,9 @@ class PrePlanningService extends ContainerAware
         if($url != ''){
             $name = sprintf('<a href="%s" target="_blank" title="%s">%s</a>',$url,$name,$nameSumary);
         }
-        $itemInstance = $this->getCloneService()->findInstancePrePlanning($root);
+        $itemInstance = $this->getCloneService()->findInstancePrePlanning($item);
         $itemInstanceCloned = $this->getCloneService()->findCloneInstance($itemInstance);
-        if($root->isRequiresApproval()){
+        if($item->isRequiresApproval()){
             if($itemInstanceCloned){
 //                $name .= ' <span class="green">(Aprobado)</span>';
             }else{
@@ -245,36 +246,37 @@ class PrePlanningService extends ContainerAware
             }
         }
         $parentId = null;
-        if($root->getParent())
+        if($item->getParent())
         {
-            $parentId = $root->getParent()->getId();
+            $parentId = $item->getParent()->getId();
         }
         $child = array(
-            'id' => $root->getId(),
+            'id' => $item->getId(),
             'name' => $name,
             'leaf' => true,
             'iconCls' => $icon,
-            'editable' => $root->isEditable(),
+            'editable' => $item->isEditable(),
             'parentId' => $parentId,
-            'toImport' => $root->getToImport(),
-            'status' => $root->getStatus(),
+            'toImport' => $item->getToImport(),
+            'status' => $item->getStatus(),
             '_statusLabel' => '',
+            '_hasPermissionRevision' => false,
         );
         $classStatus = 'red';
-        if($root->getStatus() == PrePlanning::STATUS_APPROVED){
+        if($item->getStatus() == PrePlanning::STATUS_APPROVED){
             $classStatus = 'green';
-        }elseif($root->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+        }elseif($item->getStatus() == PrePlanning::STATUS_IN_REVIEW){
             $classStatus = 'blue';
         }
-        $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($root->getLabelStatus()));
+        $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($item->getLabelStatus()));
         
-        if($root->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
-            &&  $root->getParent() 
-//            && $root->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM
-            && $root->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL
+        if($item->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
+            &&  $item->getParent() 
+//            && $item->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM
+            && $item->getTypeObject() != PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL
         )
         {
-            $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($root->getParent());
+            $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($item->getParent());
             $parentItemInstanceCloned = $this->getCloneService()->findCloneInstance($parentItemInstance);
             if(!$parentItemInstanceCloned){
                 $child['editable'] = false;
@@ -284,18 +286,30 @@ class PrePlanningService extends ContainerAware
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;
             //Las metas no tienen link por lo tanto genero el link del programa
-            if($root->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
+            if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
                 $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned->getTimeline()->getArrangementProgram());
             }else{
                 $configEntity = $this->getLinkGeneratorService()->getConfigFromEntity($itemInstanceCloned);
             }
             $child['_statusLabel'] = sprintf('<a href="%s" target="_blank"><span class="green">Importado</span></a>',$configEntity['url']);
+        }else{
+            $_hasPermissionRevision = false;
+            if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR')){
+                $_hasPermissionRevision = true;
+            }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_OBJETIVE && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE')){
+                $_hasPermissionRevision = true;
+            }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM')){
+                $_hasPermissionRevision = true;
+            }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL')){
+                $_hasPermissionRevision = true;
+            }
+            $child['_hasPermissionRevision'] = $_hasPermissionRevision;
         }
-        if(count($root->getChildrens()) > 0){
+        if(count($item->getChildrens()) > 0){
             $limitLevel = 2;
             if($limitCurrentLevel < $limitLevel){
                 $child['expanded'] = $expanded;
-                $child['children'] = $this->getStructureTree($root->getChildrens(), ($limitCurrentLevel+1));
+                $child['children'] = $this->getStructureTree($item->getChildrens(), ($limitCurrentLevel+1));
             }else{
                 $child['expanded'] = false;
             }
@@ -554,6 +568,15 @@ class PrePlanningService extends ContainerAware
 
      function setCurrentBuildPrePlanning(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser &$currentBuildPrePlanning) {
         $this->currentBuildPrePlanning = $currentBuildPrePlanning;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }
 
