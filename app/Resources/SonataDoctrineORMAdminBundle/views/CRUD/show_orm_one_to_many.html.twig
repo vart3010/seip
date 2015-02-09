@@ -17,12 +17,12 @@ file that was distributed with this source code.
         {% for element in value%}
             <li><a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a></li>
         {% endfor %}
-    {% elseif field_description.hasassociationadmin and field_description.associationadmin.isGranted('LIST') and field_description.associationadmin.hasRoute('show') %}
+    {% elseif field_description.hasassociationadmin and field_description.associationadmin.isGranted('VIEW') and field_description.associationadmin.hasRoute('show') %}
         {% for element in value%}
             <li><a href="{{ field_description.associationadmin.generateObjectUrl('show', element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a></li>
         {% endfor %}
     {% else %}
-        {{ field_description.associationadmin.isGranted('LIST') }}
+        {{ field_description.associationadmin.isGranted('VIEW') }}
         {% for element in value%}
             <li>{{ element|render_relation_element(field_description) }}</li>
         {% endfor %}
