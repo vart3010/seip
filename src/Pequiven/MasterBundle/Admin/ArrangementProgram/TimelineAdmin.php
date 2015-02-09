@@ -45,6 +45,13 @@ class TimelineAdmin extends Admin
         ;
     }
     
+    protected function configureDatagridFilters(DatagridMapper $filter) 
+    {
+        $filter
+            ->add('arrangementProgram')
+        ;
+    }
+    
     protected function configureListFields(ListMapper $list) 
     {
         $list
