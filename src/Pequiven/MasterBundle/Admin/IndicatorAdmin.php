@@ -131,4 +131,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
+    }
 }
