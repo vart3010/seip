@@ -398,7 +398,8 @@
                     },
                     beforeedit: function (editor, context, eOpts) {
                         var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
-                        return (context.record.get('editable') && context.record.get('status') == status);
+{#                        return (context.record.get('editable') && context.record.get('status') == status);#}
+                        return true;
                     },
                     edit: function(a,b,c){
                         var recordIndex = b.rowIdx;
@@ -427,16 +428,17 @@
                     flex: 1
                     },
                     {
-                        header: '¿Accion?',
-                        dataIndex: 'toImport',
-                        editor: comboAcciones,
+                        xtype: 'checkcolumn',
+                        width: 40,
+                        stopSelection: false,
                         renderer: function(value ,metaData, record) {
                             var idx = storeComboBoxAcciones.find('id', value)
                             var rec = storeComboBoxAcciones.getAt(idx);
                             var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
-                            if(record.get('editable') && record.get('status') == status){
-                                return rec.get('label');                    
-                            }
+{#                            if(record.get('status') == status){#}
+{#                                return rec.get('label');                    #}
+{#                            }#}
+                            return true;
                         }
                     },
                     {
