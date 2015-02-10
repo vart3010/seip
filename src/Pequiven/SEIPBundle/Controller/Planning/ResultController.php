@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
-
+use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * Controlador para mostrar los resultados
@@ -29,7 +29,8 @@ class ResultController extends ResourceController
      */
     public function listResultAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT','ROLE_SEIP_PLANNING_LIST_RESULT_ALL'));
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT','ROLE_SEIP_PLANNING_LIST_RESULT_ALL'));
         
         $em = $this->getDoctrine();
         
@@ -37,6 +38,17 @@ class ResultController extends ResourceController
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $em->getRepository('PequivenMasterBundle:GerenciaSecond');
         
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_ALL')){
+            $user = $this->getUser();
+            $rol = $user->getLevelRealByGroup();
+            if($rol == Rol::ROLE_MANAGER_SECOND){
+                $criteria['gerenciaSecondId'] = $user->getGerenciaSecond();
+            }elseif ($rol == Rol::ROLE_MANAGER_FIRST) {
+                $criteria['gerenciaFirstId'] = $user->getGerencia();
+            }elseif ($rol == Rol::ROLE_GENERAL_COMPLEJO || $rol == Rol::ROLE_DIRECTIVE) {
+                $criteria['complejoId'] = $user->getComplejo();
+            }
+        }
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
@@ -66,7 +78,7 @@ class ResultController extends ResourceController
             ->setTemplate($this->config->getTemplate('list.html'))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','complejo'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','complejo','gerencia'));
         if($request->get('_format') == 'html'){
             $view->setData($resources);
         }else{
@@ -100,7 +112,8 @@ class ResultController extends ResourceController
         if(isset($rolByLevel[$level])){
             $rol = $rolByLevel[$level];
         }
-        $this->getSecurityService()->checkSecurity($rol);
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity($rol);
         
         $em = $this->getDoctrine();
         $id = $request->get('id');
@@ -148,6 +161,9 @@ class ResultController extends ResourceController
             $entity = $gerenciaSecond;
         }
         
+        if(!$securityService->isGranted($rol[1])){
+            $securityService->checkSecurity($rol[0],$entity);
+        }
         $subCaption = $this->trans('result.subCaptionObjetiveOperative',array(),'PequivenSEIPBundle');
         $data = array(
             'dataSource' => array(

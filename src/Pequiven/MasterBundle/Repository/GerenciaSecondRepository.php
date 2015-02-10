@@ -67,13 +67,31 @@ class GerenciaSecondRepository extends baseEntityRepository {
         if(isset($criteria['gerenciaSecond'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
         }
+        if(isset($criteria['gerenciaSecondId'])){
+            $queryBuilder
+                ->andWhere('gs.id = :gerenciaSecondId')
+                ->setParameter('gerenciaSecondId', $criteria['gerenciaSecondId'])
+                ;
+        }
         //Filtro gerencia 1ra Línea
         if(isset($criteria['gerenciaFirst'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['gerenciaFirst']."%'"));
         }
+        if(isset($criteria['gerenciaFirstId'])){
+            $queryBuilder
+                ->andWhere('g.id = :gerenciaFirstId')
+                ->setParameter('gerenciaFirstId', $criteria['gerenciaFirstId'])
+                ;
+        }
         //Filtro localidad
         if(isset($criteria['complejo'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        if(isset($criteria['complejoId'])){
+            $queryBuilder
+                ->andWhere('c.id = :complejoId')
+                ->setParameter('complejoId', $criteria['complejoId'])
+                ;
         }
 
 //        $this->applyCriteria($queryBuilder, $criteria);
