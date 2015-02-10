@@ -33,3 +33,7 @@ ALTER TABLE PrePlanning DROP FOREIGN KEY FK_BFBCFF4FEC8B7ADE;
 DROP INDEX IDX_BFBCFF4FA76ED395 ON PrePlanning;
 DROP INDEX IDX_BFBCFF4FEC8B7ADE ON PrePlanning;
 ALTER TABLE PrePlanning DROP user_id, DROP period_id;
+
+-- Resultado real arrojado por la fórmula de evaluación del indicador
+ALTER TABLE seip_indicator ADD resultReal DOUBLE PRECISION NOT NULL;
+ALTER TABLE seip_indicator_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
