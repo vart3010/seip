@@ -381,7 +381,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ;
         
         $indicatorService = $this->getIndicatorService();
-        
+
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
             $typeOfCalculation = $formula->getTypeOfCalculation();
@@ -401,7 +401,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
             }
         }
-
+        
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
         if(!$tendenty){
@@ -494,7 +494,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $isGood = true;
             }
         }
-        
+
         return $isGood;
     }
     
@@ -507,11 +507,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
         $isMiddle = false;
-        if($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+        if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
             if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
                 $isMiddle = true;
             }
-        } elseif($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+        } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
             if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
                 $isMiddle = true;
             }
@@ -523,7 +523,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
                 $isMiddle = true;
             }
-        } elseif($arrangementRange->getOpRankMiddleTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankMiddleTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+        }
+        if($arrangementRange->getOpRankMiddleTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankMiddleTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
             if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
                 $isMiddle = true;
             }
@@ -540,7 +541,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $isMiddle = true;
             }
         }
-        
+
         return $isMiddle;
     }
     
@@ -552,21 +553,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function calculateStableRangeBad(Indicator &$indicator){
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
+        
         $isBad = false;
-        if($arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
-            if($result < $arrangementRange->getRankBottomMixedBottom()){
+
+        if(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+            if($result < $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
                 $isBad = true;
             }
-        } elseif($arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-            if($result <= $arrangementRange->getRankBottomMixedBottom()){
+        } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+            if($result <= $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
                 $isBad = true;
             }
-        } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN){
-            if($result > $arrangementRange->getRankBottomMixedTop()){
+        } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+            if($result < $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
                 $isBad = true;
             }
-        } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN){
-            if($result >= $arrangementRange->getRankBottomMixedTop()){
+        } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+            if($result <= $arrangementRange->getRankBottomMixedBottom() || $result >= $arrangementRange->getRankBottomMixedTop()){
                 $isBad = true;
             }
         }
@@ -619,9 +622,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator
                 ->setTotalPlan($totalPlan)
                 ->setValueFinal($value);
-        if($indicator->getParent() !== null){
-            $this->refreshValueIndicator($indicator->getParent());
-        }
+//        if($indicator->getParent() !== null){
+//            $this->refreshValueIndicator($indicator->getParent());
+//        }
     }
     
     /**

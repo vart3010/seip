@@ -21,11 +21,11 @@ class Operator {
     const OPERATOR_SMALLER_EQUAL_THAN = 4;
     const OPERATOR_EQUAL = 5;
     
-    const REF_OPERATOR_HIGHER_THAN = '>';
-    const REF_OPERATOR_SMALLER_THAN = '<';
-    const REF_OPERATOR_HIGHER_EQUAL_THAN = '>=';
-    const REF_OPERATOR_SMALLER_EQUAL_THAN = '<=';
-    const REF_OPERATOR_EQUAL = '=';
+    const REF_OPERATOR_HIGHER_THAN = ">";
+    const REF_OPERATOR_SMALLER_THAN = "<";
+    const REF_OPERATOR_HIGHER_EQUAL_THAN = ">=";
+    const REF_OPERATOR_SMALLER_EQUAL_THAN = "<=";
+    const REF_OPERATOR_EQUAL = "=";
     
     public $operatorName = array();
     
