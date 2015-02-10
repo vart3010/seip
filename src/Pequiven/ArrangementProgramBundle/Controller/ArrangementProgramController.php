@@ -528,14 +528,19 @@ class ArrangementProgramController extends SEIPController
         
         $rol = null;
         $rolesByType = array(
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC',
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE',
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC'),
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE'),
         );
         if(isset($rolesByType[$entity->getType()])){
             $rol = $rolesByType[$entity->getType()];
         }
-        $this->getSecurityService()->checkSecurity($rol);
-
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity($rol);
+//        TODO FALTA POR DEFINIR LOS PERMISOS DEL PROGRAMA DE GESTION ESPECIFICO
+//        if(!$securityService->isGranted($rol[1])){
+//            $securityService->checkSecurity($rol[0],$entity);
+//        }
+        
         $deleteForm = $this->createDeleteForm($id);
         
         $arrangementProgramManager = $this->getArrangementProgramManager();

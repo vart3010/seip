@@ -38,9 +38,49 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             
             'ROLE_SEIP_RESULT_VIEW_TACTIC' => 'evaluateTacticResult',
             'ROLE_SEIP_RESULT_VIEW_OPERATIVE' => 'evaluateTacticResult',
+            
+            'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgram',
+            'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE' => 'evaluateTacticArrangementProgram',
         );
     }
     
+    private function evaluateTacticArrangementProgram($rol, \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram)
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                $objetive = $arrangementProgram->getTacticalObjective();
+                $gerencia = $objetive->getGerencia();
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                    $valid = true;
+                }
+            }elseif($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $objetive = $arrangementProgram->getOperationalObjective();
+                $gerenciaSecond = $objetive->getGerenciaSecond();
+                $gerencia = $gerenciaSecond->getGerencia();
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                    $valid = true;
+                }
+            }
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+
+
     /**
      * Evalua que tambien se encuentre habilitado la pre-planificacion
      * @throws type
@@ -241,7 +281,6 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         $quantityRoles = count($roles);
         foreach ($roles as $rol) {
             if(!$valid){
-                var_dump($roles);
                 throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
             }
             $methodValidMap = $this->getMethodValidMap();
