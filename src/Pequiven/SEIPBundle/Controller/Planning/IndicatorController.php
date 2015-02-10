@@ -31,8 +31,12 @@ class IndicatorController extends ResourceController
         if(isset($roleByLevel[$level])){
             $rol = $roleByLevel[$level];
         }
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity($rol);
         
-        $this->getSecurityService()->checkSecurity($rol);
+        if(!$securityService->isGranted($rol[1])){
+            $securityService->checkSecurity($rol[0],$resource);
+        }
         
         $errorFormula = null;
         if($resource->getFormula() !== null){

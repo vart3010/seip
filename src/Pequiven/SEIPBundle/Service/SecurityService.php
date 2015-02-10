@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Service;
 
+use Pequiven\MasterBundle\Entity\Rol;
+
 /**
  * Servicio para evaluar la seguridad en la aplicacion (seip.service.security)
  * 
@@ -25,6 +27,17 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         return array(
             'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC' => 'evaluatePrePlanning',
             'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE' => 'evaluatePrePlanning',
+            
+            'ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC' => 'evaluateStrategicObjetive',
+            'ROLE_SEIP_OBJECTIVE_VIEW_TACTIC' => 'evaluateTacticObjetive',
+            'ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateOperativeObjetive',
+            
+            'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC' => 'evaluateStrategicIndicator',
+            'ROLE_SEIP_INDICATOR_VIEW_TACTIC' => 'evaluateTacticIndicator',
+            'ROLE_SEIP_INDICATOR_VIEW_OPERATIVE' => 'evaluateOperativeIndicator',
+            
+            'ROLE_SEIP_RESULT_VIEW_TACTIC' => 'evaluateTacticResult',
+            'ROLE_SEIP_RESULT_VIEW_OPERATIVE' => 'evaluateTacticResult',
         );
     }
     
@@ -40,13 +53,183 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
+    private function evaluateTacticResult($rol,$entity) 
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            if(is_a($entity, 'Pequiven\MasterBundle\Entity\Gerencia')){
+                $gerencia = $entity;
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                    $valid = true;
+                }
+            }elseif(is_a($entity, 'Pequiven\MasterBundle\Entity\GerenciaSecond')){
+                $gerenciaSecond = $entity;
+                $gerencia = $entity->getGerencia();
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                    $valid = true;
+                }
+            }
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+
+
+    private function evaluateStrategicIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+    
+    function evaluateOperativeIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        $valid = false;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            foreach ($indicator->getObjetives() as $objetive) {
+                $gerenciaSecond = $objetive->getGerenciaSecond();
+                $gerencia = $gerenciaSecond->getGerencia();
+
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                    $valid = true;
+                }
+                
+                if($valid === true){
+                    break;
+                }
+            }
+        }
+        
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+    
+    function evaluateTacticIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        $valid = false;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            foreach ($indicator->getObjetives() as $objetive) {
+                $gerencia = $objetive->getGerencia();
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                    $valid = true;
+                }
+                
+                if($valid === true){
+                    break;
+                }
+            }
+        }
+        
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+    
+    private function evaluateTacticObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    {
+        $valid = false;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            $gerencia = $objetive->getGerencia();
+            if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                $valid = true;
+            }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                $valid = true;
+            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                $valid = true;
+            }
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+    
+    private function evaluateOperativeObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    {
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        $valid = false;
+        if($rol == Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            $gerenciaSecond = $objetive->getGerenciaSecond();
+            $gerencia = $gerenciaSecond->getGerencia();
+            
+            if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                $valid = true;
+            }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                $valid = true;
+            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                $valid = true;
+            }
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+    private function evaluateStrategicObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    {
+        $user = $this->getUser();
+        $valid = false;
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+        }
+        if(!$valid){
+            $this->checkSecurity();
+        }
+    }
+
+
     /**
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
      * @param type $rol
      * @param type $parameters
      * @throws type
      */
-    public function checkSecurity($rol,$parameters = null) {
+    public function checkSecurity($rol = null,$parameters = null) {
         if($rol === null){
             throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
         }
@@ -54,13 +237,15 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         if(!is_array($rol)){
             $roles = array($rol);
         }
-        $valid = $this->getSecurityContext()->isGranted($roles,$parameters);
+        $valid = $this->isGranted($roles,$parameters);
+        $quantityRoles = count($roles);
         foreach ($roles as $rol) {
             if(!$valid){
+                var_dump($roles);
                 throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
             }
             $methodValidMap = $this->getMethodValidMap();
-            if(isset($methodValidMap[$rol])){
+            if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
                 $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
             }
@@ -132,7 +317,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      /**
      * Get a user from the Security Context
      *
-     * @return mixed
+     * @return \Pequiven\SEIPBundle\Entity\User
      *
      * @throws \LogicException If SecurityBundle is not available
      *
@@ -153,6 +338,11 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
 
         return $user;
+    }
+    
+    function isGranted($roles,$object = null)
+    {
+        return $this->getSecurityContext()->isGranted($roles,$object);
     }
     
     /**
