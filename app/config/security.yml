@@ -171,6 +171,6 @@ security:
              # Change these rules to adapt them to your needs
         - { path: ^/admin/, role: ROLE_SONATA_ADMIN }
         
-        - { path: ^/planning/, role: ROLE_WORKER_PLANNING }
+        - { path: ^/planning/, role: ROLE_SEIP_PLANNING_* }
         - { path: ^/api, roles: [ ROLE_API ] }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }

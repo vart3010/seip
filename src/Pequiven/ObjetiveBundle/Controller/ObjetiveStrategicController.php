@@ -8,6 +8,7 @@ use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * Description of ObjetiveStrategicController
@@ -24,6 +25,7 @@ class ObjetiveStrategicController extends baseController {
     public function listAction() 
     {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
+        
         return array(
         );
     }
@@ -35,24 +37,23 @@ class ObjetiveStrategicController extends baseController {
      */
     public function showAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC'));
         
         $id = $request->get("id");
-        //$ref = $request->get("ref");
         $em = $this->getDoctrine()->getManager();
-
+        
         $entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->find($id);
-        //$entity = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $ref));
-
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Objetive entity.');
         }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_STRATEGIC')){
+            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC',$entity);
+        }
+        
         return array(
             'entity'      => $entity
-            //'delete_form' => $deleteForm->createView(),
         );
     }
 

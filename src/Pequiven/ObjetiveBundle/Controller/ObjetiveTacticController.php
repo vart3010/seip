@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+use Pequiven\MasterBundle\Entity\Rol;
 
 /**
  * Description of ObjetiveController
@@ -49,13 +50,19 @@ class ObjetiveTacticController extends baseController {
      */
     public function showAction(Request $request) 
     {
-        $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
+        
+        $resource = $this->findOr404($request);
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC')){
+            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
+        }
         
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
             ->setTemplateVar('entity')
-            ->setData($this->findOr404($request))
+            ->setData($resource)
         ;
 
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
