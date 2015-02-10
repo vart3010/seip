@@ -401,6 +401,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
             }
         }
+
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
         if(!$tendenty){
@@ -426,18 +427,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.',$indicator->getRef(),$indicator->getId()));
             }
             
-            //Rango Verde R*100% (Máximo 100)
-            if($this->calculateStableRangeGood($indicator)){
+            if($this->calculateStableRangeGood($indicator)){//Rango Verde R*100% (Máximo 100)
                 if($result > 100){
                     $result = 100;
                 }
-            }
-            //Rango Medio
-            if($this->calculateStableRangeMiddle($indicator)){
+            } else if($this->calculateStableRangeMiddle($indicator)){//Rango Medio R*50%
                 $result = $result/2;
-            }
-            //Rango Rojo
-            if($this->calculateStableRangeBad($indicator)){
+            } else if($this->calculateStableRangeBad($indicator)){//Rango Rojo R*0%
                 $result = 0;
             }
             
