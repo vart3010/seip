@@ -16,6 +16,10 @@ use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
+const PHP_TIME_LIMIT = 120;
+//const PHP_MEMORY_LIMIT = '256M';
+const PHP_MEMORY_LIMIT = '320M';
+
 /**
  * Controlador de pre-planificacion
  *
@@ -24,8 +28,8 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 class PrePlanningController extends ResourceController
 {
     private static $levels = array(
-        PrePlanning::LEVEL_TACTICO => 'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
-        PrePlanning::LEVEL_OPERATIVO => 'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+        PrePlanning::LEVEL_TACTICO => array('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC','ROLE_SEIP_PRE_PLANNING_VIEW_TACTIC'),
+        PrePlanning::LEVEL_OPERATIVO => array('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE','ROLE_SEIP_PRE_PLANNING_VIEW_OPERATIVE'),
     );
     
     public function createAction(Request $request) 
@@ -65,14 +69,17 @@ class PrePlanningController extends ResourceController
     public function getPrePlanningAction(Request $request)
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         
         $level = $request->get('level');
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
         $node = (int)$request->get('node',null);
-        
+        $nodeRoot = (int)$request->get('nodeRoot',null);
+        if($node == 0 && $nodeRoot > 0){
+            $node = $nodeRoot;
+        }
         $periodActive = $this->getPeriodService()->getPeriodActive();
         
         $structureTree = array();
@@ -146,8 +153,8 @@ class PrePlanningController extends ResourceController
     public function returnChangesAction(Request $request) 
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = true;
         if($level){
@@ -181,8 +188,8 @@ class PrePlanningController extends ResourceController
     public function startPrePlanningAction(Request $request) 
     {
         $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = false;
         if($level){
@@ -254,9 +261,16 @@ class PrePlanningController extends ResourceController
      */
     public function importAction(Request $request)
     {
-        $this->checkSecurity($request);
-        set_time_limit(60);
-        ini_set("memory_limit","256M");
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
         
         $prePlanning = $this->findOr404($request);
         $user = $this->getUser();
@@ -266,6 +280,9 @@ class PrePlanningController extends ResourceController
             "success" => $success,
         );
         $view = $this->view($data);
+        if($success == false){
+            $view->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE);
+        }
         return $this->handleView($view);
     }
     
@@ -301,6 +318,56 @@ class PrePlanningController extends ResourceController
                     'email_send'
                 );
                 $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
+                $em->persist($rootTreePrePlannig);
+            }
+            $em->flush();
+        }
+        
+        $data["success"] = $success;
+        
+        $view = $this->view($data);
+        
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Envia la planificacion a borrador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function sendToDraftAction(Request $request)
+    {
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        
+        $resource = $this->findOr404($request);
+        $success = false;
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($resource->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_DRAFT);
+            $success = true;
+            $em->persist($resource);
+            if($lastItem === true){
+                //enviar correo
+                $periodActive = $this->getPeriodService()->getPeriodActive();
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_DRAFT);
                 $em->persist($rootTreePrePlannig);
             }
             $em->flush();

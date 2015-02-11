@@ -94,15 +94,15 @@ class CloneService extends ContainerAware
         $className = ClassUtils::getRealClass(get_class($object));
         $typeObject = PrePlanning::getTypeByClass($className);
         
-        $cloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
+        $prePlanningCloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
             'idSourceObject' => $idSourceObject,
             'typeObject' => $typeObject,
             'period' => $periodActive
         ));
         $entity = $classNameClonned = null;
-        if($cloneEntityInstance){
-            $typeObject = $cloneEntityInstance->getTypeObject();
-            $idCloneObject = $cloneEntityInstance->getIdCloneObject();
+        if($prePlanningCloneEntityInstance){
+            $typeObject = $prePlanningCloneEntityInstance->getTypeObject();
+            $idCloneObject = $prePlanningCloneEntityInstance->getIdCloneObject();
             $classNameClonned = PrePlanningItemClone::getTypeObjectOf($typeObject);
             $entity = $em->getRepository($classNameClonned)->find($idCloneObject);
         }
@@ -136,14 +136,15 @@ class CloneService extends ContainerAware
             
             $this->saveClone($entity, $objetive);
             
-            if($cloneAll){
-                $indicators = new ArrayCollection();
-                foreach ($entity->getIndicators() as $indicator) {
-                    $indicators->add($this->cloneObject($indicator));
-                }
-                $entity->setIndicators($indicators);
-            }
+//            if($cloneAll){
+//                $indicators = new ArrayCollection();
+//                foreach ($entity->getIndicators() as $indicator) {
+//                    $indicators->add($this->cloneObject($indicator));
+//                }
+//                $entity->setIndicators($indicators);
+//            }
 
+            $entity->setIndicators(new ArrayCollection());
             $results = $entity->getResults();
             $entity->setResults(new ArrayCollection());
             
@@ -170,8 +171,17 @@ class CloneService extends ContainerAware
     {
         $entity = $this->findCloneInstance($indicator);
         if(!$entity){
+            $objetives = new ArrayCollection($indicator->getObjetives()->toArray());
+            
             $entity = $this->_clone($indicator);
             
+//            foreach ($entity->getObjetives() as $objetive) {
+//                var_dump($objetive->getId());
+//                var_dump($objetive->getRef());
+//                var_dump(get_class($objetive));
+////                var_dump($this->cloneObject($objetive));
+//            }
+//            die;
             if($entity->getTendency()){
                 $entity->setTendency($this->cloneObject($entity->getTendency()));
             }
@@ -194,6 +204,11 @@ class CloneService extends ContainerAware
             if($entity->getIndicatorLevel()){
                 $entity->setIndicatorLevel($this->cloneObject($entity->getIndicatorLevel()));
             }
+            
+            foreach ($objetives as $objetive) {
+                $entity->addObjetive($this->cloneObject($objetive));
+            }
+            
             $this->saveClone($entity, $indicator,$andFlush);
         }
         return $entity;
@@ -245,8 +260,14 @@ class CloneService extends ContainerAware
         if(!$entity){
             $entity = $this->_clone($result);
             
+            if($result->getParent() !== null){
+                
+            }
+            
             $childrens = $entity->getChildrens();
             $entity->setChildrens(new ArrayCollection());
+            $this->saveClone($entity, $result,$andFlush);
+            
             foreach ($childrens as $child) {
                 $entity->addChildren($this->cloneObject($child));
             }
@@ -254,7 +275,7 @@ class CloneService extends ContainerAware
 //            if($entity->getObjetive()){
 //                $entity->setObjetive($this->cloneObject($entity->getObjetive()));
 //            }
-            $this->saveClone($entity, $result,$andFlush);
+            $this->persist($entity,true);
         }
         
         return $entity;

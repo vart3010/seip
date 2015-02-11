@@ -538,6 +538,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
+        $objetives->addIndicator($this);
         $this->objetives->add($objetives);
 
         return $this;
@@ -585,13 +586,6 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getArrangementRange()
     {
         return $this->arrangementRange;
-    }
-    
-    /**
-     * Reseteo del objeto "objetivo"
-     */
-    public function resetObjetives(){
-        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -976,6 +970,8 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
             
+            $this->objetives = new ArrayCollection();
+            
             $this->childrens = new ArrayCollection();
             $this->progressToDate = 0;
         }
@@ -983,7 +979,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     /**
      * Set resultReal
-     *
+     *indicators
      * @param float $resultReal
      * @return Indicator
      */
