@@ -358,20 +358,20 @@ class ResultController extends ResourceController
      */
     public function exportAction(Request $request)
     {
-        if($request->isMethod('POST')){
-            $exportRequestStream = $request->request->all();
-            $request->request->remove('charttype');
-            $request->request->remove('stream');
-            $request->request->remove('stream_type');
-            $request->request->remove('meta_bgColor');
-            $request->request->remove('meta_bgAlpha');
-            $request->request->remove('meta_DOMId');
-            $request->request->remove('meta_width');
-            $request->request->remove('meta_height');
-            $request->request->remove('parameters');
-            $fusionchartService = $this->getFusionChartExportService();
-            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
-        }
+//        if($request->isMethod('POST')){
+//            $exportRequestStream = $request->request->all();
+//            $request->request->remove('charttype');
+//            $request->request->remove('stream');
+//            $request->request->remove('stream_type');
+//            $request->request->remove('meta_bgColor');
+//            $request->request->remove('meta_bgAlpha');
+//            $request->request->remove('meta_DOMId');
+//            $request->request->remove('meta_width');
+//            $request->request->remove('meta_height');
+//            $request->request->remove('parameters');
+//            $fusionchartService = $this->getFusionChartExportService();
+//            $fileSVG = $fusionchartService->exportFusionChart($exportRequestStream);
+//        }
         
         $showResultObjetives = false;
         $level = $request->get('level');

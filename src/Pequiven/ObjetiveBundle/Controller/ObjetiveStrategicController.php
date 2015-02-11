@@ -8,6 +8,7 @@ use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
+use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\MasterBundle\Entity\Rol;
 
 /**
@@ -181,11 +182,14 @@ class ObjetiveStrategicController extends baseController {
      * @return boolean
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createArrangementRange($objetives = array(), $data = array()) {
+    public function createArrangementRange(Objetive $objetive, $data = array()) {
         $arrangementRange = new ArrangementRange();
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
-        $totalObjetives = count($objetives);
+//        $totalObjetives = count($objetives);
+        
+        $arrangementRange->setObjetive($objetive);
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
         //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
@@ -243,14 +247,16 @@ class ObjetiveStrategicController extends baseController {
                 $arrangementRange->setOpRankBottomMixedBottom($em->getRepository('PequivenMasterBundle:Operator')->findOneBy(array('id' => $data['opRankBottomBottomBasic'])));
             }
         }
+        
+        $em->persist($arrangementRange);
 
-        if ($totalObjetives > 0) {
-            foreach ($objetives as $objetive) {
-                $objectArrangementRange = clone $arrangementRange;
-                $objectArrangementRange->setObjetive($objetive);
-                $em->persist($objectArrangementRange);
-            }
-        }
+//        if ($totalObjetives > 0) {
+//            foreach ($objetives as $objetive) {
+//                $objectArrangementRange = clone $arrangementRange;
+//                $objectArrangementRange->setObjetive($objetive);
+//                $em->persist($objectArrangementRange);
+//            }
+//        }
 
         try {
             $em->flush();

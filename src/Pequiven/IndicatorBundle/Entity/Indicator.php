@@ -225,6 +225,14 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $progressToDate = 0;
     
     /**
+     * Resultado arrojado por la fórmula de evaluación del indicador
+     * 
+     * @var integer
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
+    
+    /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="indicator",cascade={"remove"})
@@ -971,5 +979,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->childrens = new ArrayCollection();
             $this->progressToDate = 0;
         }
+    }
+    
+    /**
+     * Set resultReal
+     *
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
+
+        return $this;
+    }
+
+    /**
+     * Get resultReal
+     *
+     * @return float 
+     */
+    public function getResultReal()
+    {
+        return $this->resultReal;
     }
 }
