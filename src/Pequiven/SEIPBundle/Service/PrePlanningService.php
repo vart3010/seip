@@ -278,8 +278,12 @@ class PrePlanningService extends ContainerAware
             }
         }
         
-        if($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned){
+        if(($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned) || (!$itemInstanceCloned && $item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR'))){
             $item->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            $this->persist($item,true);
+        }
+        if($itemInstanceCloned && $item->getStatus() != PrePlanning::STATUS_IMPORTED){
+            $item->setStatus(PrePlanning::STATUS_IMPORTED);
             $this->persist($item,true);
         }
         
