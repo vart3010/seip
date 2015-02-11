@@ -37,3 +37,8 @@ ALTER TABLE PrePlanning DROP user_id, DROP period_id;
 -- Resultado real arrojado por la fórmula de evaluación del indicador
 ALTER TABLE seip_indicator ADD resultReal DOUBLE PRECISION NOT NULL;
 ALTER TABLE seip_indicator_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
+
+-- Status del trabajador
+ALTER TABLE seip_user ADD status_worker INT NOT NULL;
+ALTER TABLE seip_user_audit ADD status_worker INT DEFAULT NULL;
+UPDATE seip_user SET status_worker = 1;

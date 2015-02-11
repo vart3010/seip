@@ -13,6 +13,7 @@ namespace Pequiven\MasterBundle\Admin;
 
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\UserBundle\Admin\Entity\UserAdmin as Base;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Administrador de usuario
@@ -28,6 +29,11 @@ class UserAdmin extends Base
                 ->add('email')
                 ->add('plainPassword', 'text', array(
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+                ))
+                ->add('statusWorker','choice',array(
+                    'choices' => CommonObject::getLabelsStatusWorker(),
+                    'label' => 'pequiven_seip.status_worker',
+                    'translation_domain' => 'PequivenSEIPBundle',
                 ))
             ->end()
             ->with('Groups')

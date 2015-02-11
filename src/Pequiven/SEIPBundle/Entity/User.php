@@ -8,6 +8,7 @@ use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Pequiven\MasterBundle\Entity\Rol;
 use Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface;
 use Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * User model
@@ -157,6 +158,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Box\ModelBox",mappedBy="user")
      */
     private $boxes;
+    
+    /**
+     * Estatus del trabajador
+     * @var integer
+     *
+     * @ORM\Column(name="status_worker", type="integer")
+     */
+    protected $statusWorker = 1;
 
     /**
      * Constructor
@@ -727,5 +736,28 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
     public function getModelBoxes()
     {
         return $this->boxes;
+    }
+    
+    /**
+     * Set status worker
+     *
+     * @param integer $statusWorker
+     * @return ArrangementProgram
+     */
+    public function setStatusWorker($statusWorker)
+    {
+        $this->statusWorker = $statusWorker;
+
+        return $this;
+    }
+
+    /**
+     * Get status worker
+     *
+     * @return integer 
+     */
+    public function getStatusWorker()
+    {
+        return $this->statusWorker;
     }
 }

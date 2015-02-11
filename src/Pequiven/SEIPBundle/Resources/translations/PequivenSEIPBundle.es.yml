@@ -39,6 +39,7 @@ pequiven_seip:
     firstname: Nombre
     lastname: Apellido
     numPersonal: Número de Personal
+    status_worker: Status del Trabajador
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
