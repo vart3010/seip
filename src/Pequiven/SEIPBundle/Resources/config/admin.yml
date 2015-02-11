@@ -127,6 +127,18 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.arrangement_range.arrangement_range:
+        class: Pequiven\MasterBundle\Admin\ArrangementRangeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Rango de gestion", label: "Rango de gestión" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementBundle\Entity\ArrangementRange
+            - ~
+        calls:
+            - [ setTranslationDomain, [PequivenMasterBundle]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.user.complejo:
         class: Pequiven\MasterBundle\Admin\User\ComplejoAdmin
         tags:

@@ -253,4 +253,8 @@ class Operator extends modelOperator {
     {
         return $this->enabled;
     }
+    
+    public function __toString() {
+        return $this->ref;
+    }
 }

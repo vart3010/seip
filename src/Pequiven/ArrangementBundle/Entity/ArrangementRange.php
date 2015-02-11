@@ -1169,4 +1169,8 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
             $this->period = null;
         }
     }
+    
+    public function __toString() {
+        return (string)$this->id;
+    }
 }
