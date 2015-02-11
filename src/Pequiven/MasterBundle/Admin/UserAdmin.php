@@ -124,6 +124,23 @@ class UserAdmin extends Base
         }
     }
     
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureDatagridFilters(\Sonata\AdminBundle\Datagrid\DatagridMapper $filterMapper)
+    {
+        $filterMapper
+            ->add('id')
+            ->add('username')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('numPersonal')
+            ->add('locked')
+            ->add('email')
+            ->add('groups')
+        ;
+    }
+    
     public function preUpdate($user) {
         parent::preUpdate($user);
         if($user->getConfiguration() == null){

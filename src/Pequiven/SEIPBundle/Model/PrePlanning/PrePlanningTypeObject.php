@@ -74,6 +74,16 @@ abstract class PrePlanningTypeObject implements TypePrePlanningInterface
         return $typeObjectsRepository[$typeObject];
     }
     
+    public static function isValidTypeObject($typeObject) 
+    {
+        $typeObjectsRepository = self::getTypeObjects();
+        $valid = false;
+        if(isset($typeObjectsRepository[$typeObject])){
+           $valid = true;
+        }
+        return $valid;
+    }
+    
     public static function getTypeByClass($className)
     {
         $typeObjectsRepository = self::getTypeObjects();

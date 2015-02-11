@@ -136,14 +136,15 @@ class CloneService extends ContainerAware
             
             $this->saveClone($entity, $objetive);
             
-            if($cloneAll){
-                $indicators = new ArrayCollection();
-                foreach ($entity->getIndicators() as $indicator) {
-                    $indicators->add($this->cloneObject($indicator));
-                }
-                $entity->setIndicators($indicators);
-            }
+//            if($cloneAll){
+//                $indicators = new ArrayCollection();
+//                foreach ($entity->getIndicators() as $indicator) {
+//                    $indicators->add($this->cloneObject($indicator));
+//                }
+//                $entity->setIndicators($indicators);
+//            }
 
+            $entity->setIndicators(new ArrayCollection());
             $results = $entity->getResults();
             $entity->setResults(new ArrayCollection());
             
@@ -245,8 +246,14 @@ class CloneService extends ContainerAware
         if(!$entity){
             $entity = $this->_clone($result);
             
+            if($result->getParent() !== null){
+                
+            }
+            
             $childrens = $entity->getChildrens();
             $entity->setChildrens(new ArrayCollection());
+            $this->saveClone($entity, $result,$andFlush);
+            
             foreach ($childrens as $child) {
                 $entity->addChildren($this->cloneObject($child));
             }
@@ -254,7 +261,7 @@ class CloneService extends ContainerAware
 //            if($entity->getObjetive()){
 //                $entity->setObjetive($this->cloneObject($entity->getObjetive()));
 //            }
-            $this->saveClone($entity, $result,$andFlush);
+            $this->persist($entity,true);
         }
         
         return $entity;

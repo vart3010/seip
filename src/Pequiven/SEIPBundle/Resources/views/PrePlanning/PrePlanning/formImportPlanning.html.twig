@@ -56,8 +56,8 @@
                     { name: '_iconCls', type: 'string' }
                 ]
             });
-            
-            {% set urlRead = path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level'),'node':app.request.get('node'),referral:'import'} ) %}
+            {% set urlRead = path('pequiven_pre_planning_get_pre_planning',{level:app.request.get('level'),nodeRoot:app.request.get('node'),referral:'import'} ) %}
+            var urlRead = "{{ urlRead|raw }}";
             var store = Ext.create('Ext.data.TreeStore', {
                 model: 'PrePlanning',
                 proxy: {
@@ -65,7 +65,7 @@
                     //the store will get the content from the .json file
                     api: {
                         create: 'createPersons',
-                        read: '{{ urlRead }}',
+                        read: urlRead,
                         update: 'update-pre-planning',
                         destroy: '{{ path('pequiven_pre_planning_delete_pre_planning',{level:app.request.get('level')}) }}'
                     }
@@ -75,6 +75,11 @@
                         name: 'checkBox'
                     }
                 ],
+                root: {        
+                  expanded: false,
+                  children : []
+                },
+                autoLoad:false,
                 autoSync:false
             });
             var btnDelete = Ext.create("Ext.Button", {
@@ -266,23 +271,17 @@
                     var i;
                     var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
                     for(i=0;i < items.length; i++){
-                        if(items[i].get('status') == status && items[i].get('checkBox') == true){
+                        if(items[i].get('status') == status && items[i].get('checkBox') == true && items[i].get('_hasPermissionRevision') == true ){
                             itemsToImport.push(items[i]);
                         }
                     }
                     if(itemsToImport.length > 0){
                         Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
                            if(btn === 'yes'){
-                               tree.body.mask("Guardando los cambios...");
-                                store.sync({
-                                    callback: function(r,options,success){
-                                        tree.body.unmask();
-                                        itemsToImportLength = itemsToImport.length;
-                                        tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                                        functionActionItem = functionImportarItem;
-                                        callAjaxItemToImport();
-                                    }
-                                });
+                                itemsToImportLength = itemsToImport.length;
+                                tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                functionActionItem = functionImportarItem;
+                                callAjaxItemToImport();
                             }
                         });
                     }else{
@@ -332,12 +331,12 @@
             });
             
             var selectParent = function(node,checked){
-                if(node.get('editable') == true){
+                if(node.get('hasPermissionRevision') == true){
                     node.set('checkBox',checked);
                 }
                 var parentNode = node.parentNode;
                 if(parentNode != undefined){
-                    if(parentNode.get('editable') == true){
+                    if(parentNode.get('hasPermissionRevision') == true){
                         parentNode.set('checkBox',checked);
                     }
                     
@@ -349,7 +348,7 @@
             var selectChild = function(childNodes,checked){
                 var i;
                 for(i = 0; i < childNodes.length; i++){
-                    if(childNodes[i].get('editable') == true){
+                    if(childNodes[i].get('hasPermissionRevision') == true){
                         childNodes[i].set('checkBox',checked);
                     }
                     if(childNodes[i].childNodes.length > 0){
@@ -370,6 +369,7 @@
                 useArrows: true,
                 rootVisible: false,
                 store: store,
+                autoLoad:false,
                 multiSelect: true,
                 selType: 'cellmodel',
                 plugins: [
@@ -387,21 +387,6 @@
                             }
                         }
                     },
-                    beforeedit: function (editor, context, eOpts) {
-                        var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
-                        return (context.record.get('editable') && context.record.get('status') == status);
-{#                        return true;#}
-                    },
-                    edit: function(a,b,c){
-                        var recordIndex = b.rowIdx;
-                        var checked = false;
-                        if(b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_DEFAULT') }}' || b.value == '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::TO_IMPORT_NO') }}'){
-                            checked = false;
-                        }else{
-                            checked = true;
-                        }
-                        
-                    }
                 },
                 dockedItems: [{
                     xtype: 'toolbar',
@@ -477,6 +462,5 @@
                 }
             });
         });
-        console.log('initttt');
     </script>
 {% endblock javascript %}

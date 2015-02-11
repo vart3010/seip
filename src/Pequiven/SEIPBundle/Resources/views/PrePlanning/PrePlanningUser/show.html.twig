@@ -29,7 +29,7 @@
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period, 'node':pre_planning_user.prePlanningRoot.id,type:app.request.get('type')}) }}" style="padding:0;width:100%;height:600px"/>');
+            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period, node:pre_planning_user.prePlanningRoot.id,type:app.request.get('type')}) }}" style="padding:0;width:100%;height:600px"/>');
         });
     </script>
 {% endblock javascript %}

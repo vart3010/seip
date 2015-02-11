@@ -27,8 +27,8 @@ const PHP_MEMORY_LIMIT = '256M';
 class PrePlanningController extends ResourceController
 {
     private static $levels = array(
-        PrePlanning::LEVEL_TACTICO => 'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
-        PrePlanning::LEVEL_OPERATIVO => 'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+        PrePlanning::LEVEL_TACTICO => array('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC','ROLE_SEIP_PRE_PLANNING_VIEW_TACTIC'),
+        PrePlanning::LEVEL_OPERATIVO => array('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE','ROLE_SEIP_PRE_PLANNING_VIEW_OPERATIVE'),
     );
     
     public function createAction(Request $request) 
@@ -75,7 +75,10 @@ class PrePlanningController extends ResourceController
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
         $node = (int)$request->get('node',null);
-        
+        $nodeRoot = (int)$request->get('nodeRoot',null);
+        if($node == 0 && $nodeRoot > 0){
+            $node = $nodeRoot;
+        }
         $periodActive = $this->getPeriodService()->getPeriodActive();
         
         $structureTree = array();
@@ -257,7 +260,14 @@ class PrePlanningController extends ResourceController
      */
     public function importAction(Request $request)
     {
-        $this->checkSecurity($request);
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        
         set_time_limit(PHP_TIME_LIMIT);
         ini_set("memory_limit",PHP_MEMORY_LIMIT);
         
@@ -269,6 +279,9 @@ class PrePlanningController extends ResourceController
             "success" => $success,
         );
         $view = $this->view($data);
+        if($success == false){
+            $view->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE);
+        }
         return $this->handleView($view);
     }
     
