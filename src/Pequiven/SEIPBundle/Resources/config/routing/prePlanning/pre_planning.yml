@@ -72,3 +72,14 @@ pequiven_pre_planning_send_to_review:
         _format: html|json
     options:
         expose: true
+        
+pequiven_pre_planning_send_to_draft:
+    path: /{id}/send-to-draft.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:sendToDraftAction
+        _format: json
+    methods: [GET]
+    requirements:
+        _format: html|json
+    options:
+        expose: true

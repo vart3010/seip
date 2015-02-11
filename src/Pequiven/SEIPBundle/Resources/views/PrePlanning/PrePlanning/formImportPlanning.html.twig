@@ -196,7 +196,14 @@
             var itemsToImportReady = true;
             var itemsToImport = [];
             var functionActionItem = function(item){};
+            var functionActionItemCallback = function(){};
             
+            var functionImportarItemCallback = function(){
+                Ext.Msg.alert('Correcto',"Se importaron "+itemsToImportLength+" item(s) correctamente.");
+            };
+            var functionSendToDraftItemCallback = function(){
+                Ext.Msg.alert('Correcto',"Se enviaron "+itemsToImportLength+" item(s) a borrador correctamente.");
+            };
             var functionImportarItem = function(item){
                 var name = item.get('name');
                 tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Importando "+name+ "...");
@@ -220,19 +227,19 @@
                 });
             };
             
-            var functionSendToRevisionItem = function(item){
+            var functionSendToDraftItem = function(item){
                 var name = item.get('name');
-                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a revisión "+name+ "...");
+                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a borrador "+name+ "...");
                 var lastItem = 0;
                 if((itemsToImportCurrent + 1) == itemsToImportLength){
                     lastItem = 1;
                 }
-                var urlImport = Routing.generate('pequiven_pre_planning_send_to_review',{id:item.get('id'),lastItem: lastItem,level: level});
+                var urlImport = Routing.generate('pequiven_pre_planning_send_to_draft',{id:item.get('id'),lastItem: lastItem,level: level});
                 Ext.Ajax.request({
                 url: urlImport,
                     success: function(response, opts) {
                        tree.body.unmask();
-                       tree.body.mask("Item #"+(itemsToImportCurrent)+" enviado a revisión correctamente...");
+                       tree.body.mask("Item #"+(itemsToImportCurrent)+" enviado a borrador correctamente...");
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
                        callAjaxItemToImport();
@@ -240,7 +247,7 @@
                     failure: function(response, opts) {
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
-                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       Ext.Msg.alert('Error',"Ocurrio un error enviado a borrador el item "+name+"...");
                        tree.body.unmask();
                        console.log('server-side failure with status code ' + response.status);
                     }
@@ -259,7 +266,7 @@
                     },1000);
                 }else{
                     tree.body.unmask();
-                    Ext.Msg.alert('Correcto',"Se importaron "+itemsToImportLength+" item(s) correctamente.");
+                    functionActionItemCallback();
                     store.load();
                 }
             };
@@ -281,6 +288,7 @@
                                 itemsToImportLength = itemsToImport.length;
                                 tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
                                 functionActionItem = functionImportarItem;
+                                functionActionItemCallback = functionImportarItemCallback;
                                 callAjaxItemToImport();
                             }
                         });
@@ -308,16 +316,11 @@
                     if(itemsToImport.length > 0){
                         Ext.Msg.confirm('Enviar a revisión', '¿Desea enviar a borrador '+(itemsToImport.length)+' item(s) seleccionados?', function(btn){
                            if(btn === 'yes'){
-                               tree.body.mask("Guardando los cambios...");
-                                store.sync({
-                                    callback: function(r,options,success){
-                                        tree.body.unmask();
-                                        itemsToImportLength = itemsToImport.length;
-                                        tree.body.mask('Enviado a revisión '+itemsToImportLength+" item(s)...");
-                                        functionActionItem = functionSendToRevisionItem;
-                                        callAjaxItemToImport();
-                                    }
-                                });
+                               itemsToImportLength = itemsToImport.length;
+                               tree.body.mask('Enviado a borrador '+itemsToImportLength+" item(s)...");
+                               functionActionItem = functionSendToDraftItem;
+                               functionActionItemCallback = functionSendToDraftItemCallback;
+                               callAjaxItemToImport();
                             }
                         });
                     } else {

@@ -331,6 +331,56 @@ class PrePlanningController extends ResourceController
     }
     
     /**
+     * Envia la planificacion a borrador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function sendToDraftAction(Request $request)
+    {
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        
+        $resource = $this->findOr404($request);
+        $success = false;
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($resource->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_DRAFT);
+            $success = true;
+            $em->persist($resource);
+            if($lastItem === true){
+                //enviar correo
+                $periodActive = $this->getPeriodService()->getPeriodActive();
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_DRAFT);
+                $em->persist($rootTreePrePlannig);
+            }
+            $em->flush();
+        }
+        
+        $data["success"] = $success;
+        
+        $view = $this->view($data);
+        
+        return $this->handleView($view);
+    }
+    
+    /**
      * Obtener los objetivos para construir el arbol
      * @return type
      */
