@@ -536,10 +536,9 @@ class ArrangementProgramController extends SEIPController
         }
         $securityService = $this->getSecurityService();
         $securityService->checkSecurity($rol);
-//        TODO FALTA POR DEFINIR LOS PERMISOS DEL PROGRAMA DE GESTION ESPECIFICO
-//        if(!$securityService->isGranted($rol[1])){
-//            $securityService->checkSecurity($rol[0],$entity);
-//        }
+        if(!$securityService->isGranted($rol[1])){
+            $securityService->checkSecurity($rol[0],$entity);
+        }
         
         $deleteForm = $this->createDeleteForm($id);
         
