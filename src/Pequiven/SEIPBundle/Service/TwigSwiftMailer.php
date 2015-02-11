@@ -17,18 +17,8 @@ class TwigSwiftMailer {
         $this->twig = $twig;
     }
     
-    /**
-     * @param string $templateName
-     * @param array  $context
-     * @param string $fromEmail
-     * @param string $toEmail
-     */
-    public function sendMessage($templateName, array $context, $fromEmail, $toEmail)
+    public function renderMessage($templateName, $context, $fromEmail, $toEmail)
     {
-        if($fromEmail === null){
-            $fromEmail ='seip@pequiven.com';
-        }
-        
         $template = $this->twig->loadTemplate($templateName);
         $subject = $template->renderBlock('subject', $context);
         $textBody = $template->renderBlock('body_text', $context);
@@ -45,7 +35,18 @@ class TwigSwiftMailer {
         } else {
             $message->setBody($textBody);
         }
-        
-        $this->mailer->send($message);
+        return $message;
+    }
+    
+    /**
+     * @param string $templateName
+     * @param array  $context
+     * @param string $fromEmail
+     * @param string $toEmail
+     */
+    public function sendMessage($templateName, $context, $fromEmail, $toEmail)
+    {
+        $message = $this->renderMessage($templateName, $context, $fromEmail, $toEmail);
+        return $this->mailer->send($message);
     }
 }

@@ -34,8 +34,8 @@ class TestController extends Controller
             'user' => $user,
             'gerencia' => 'Planificacion'
         );
-        
-        return $this->render('PequivenSEIPBundle:PrePlanning:Email/sendToRevision.html.twig',$parameters);
+        $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToRevision.html.twig';
+        return $this->getTestResponseEmail($template,$parameters,$request);
     }
     /**
      * @Route("/sendPrePlanningEmailToDraft")
@@ -48,7 +48,43 @@ class TestController extends Controller
             'user' => $user,
             'gerencia' => 'Planificacion'
         );
-        
-        return $this->render('PequivenSEIPBundle:PrePlanning:Email/sendToDraft.html.twig',$parameters);
+        $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToDraft.html.twig';
+        return $this->getTestResponseEmail($template, $parameters, $request);
+    }
+    
+    private function getTestResponseEmail($template,array $context,\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $send = (boolean)$request->get('send',false);
+        $recipientEmail = $request->get('recipient','inhack20@gmail.com');
+        $recipient = array(
+             $recipientEmail => 'Carlos Mendoza'
+        );
+        $debug = $request->get('debug',true);
+        $from = 'seip@pequiven.com';
+        $messageSend = 0;
+        if($send){
+            $content = $this->get('pequiven_seip.mailer.twig_swift')->renderMessage(
+                $template,
+                $context,
+                $from,
+                $recipient
+            )->getBody();
+            $messageSend = $this->get('pequiven_seip.mailer.twig_swift')->sendMessage(
+                $template,
+                $context,
+                $from,
+                $recipient
+            );
+        }else{
+            $content = $this->get('pequiven_seip.mailer.twig_swift')->renderMessage(
+                $template,
+                $context,
+                $from,
+                $recipient
+            )->getBody();
+        }
+        $content .=  sprintf('<br><b>Debug: send=%s, recipient=%s, messageSend=%s, debug=%s<b/>',($send ? '1':'0'),$recipientEmail,$messageSend,$debug);
+        $response = new \Symfony\Component\HttpFoundation\Response($content);
+        return $response;
     }
 }
