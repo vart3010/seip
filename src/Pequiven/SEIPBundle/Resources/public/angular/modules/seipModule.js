@@ -1912,9 +1912,6 @@ angular.module('seipModule.controllers', [])
                     });
                     revenueChart.setTransparent(true);
                     revenueChart.render();
-                    console.log(revenueChart);
-                    console.log(revenueChart.v.core().getSVGString());
-                    console.log(revenueChart.v.core().getDataAsCSV());
                 })
             };
         })
