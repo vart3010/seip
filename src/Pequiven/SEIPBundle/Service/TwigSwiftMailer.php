@@ -3,7 +3,7 @@
 namespace Pequiven\SEIPBundle\Service;
 
 /**
- * Enviar correo desde una plantilla twig
+ * Enviar correo desde una plantilla twig (pequiven_seip.mailer.twig_swift)
  *
  * @author Carlos Mendoza <inhak20@tecnocreaciones.com>
  */

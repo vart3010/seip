@@ -44,7 +44,7 @@ class PrePlanningService extends ContainerAware
      * 
      * @param Period $period
      * @param User $user
-     * @return type
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
      */
     public function findRootTreePrePlannig(Period $period,  User $user,$level) {
         $em = $this->getDoctrine()->getManager();

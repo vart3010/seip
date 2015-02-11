@@ -319,6 +319,9 @@ class PrePlanningController extends ResourceController
                 );
                 $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
                 $em->persist($rootTreePrePlannig);
+                
+                $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
+                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
             $em->flush();
         }
@@ -360,7 +363,6 @@ class PrePlanningController extends ResourceController
             $success = true;
             $em->persist($resource);
             if($lastItem === true){
-                //enviar correo
                 $periodActive = $this->getPeriodService()->getPeriodActive();
                 $prePlanningService = $this->getPrePlanningService();
                 $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
@@ -369,6 +371,9 @@ class PrePlanningController extends ResourceController
                 );
                 $rootTreePrePlannig->setStatus(PrePlanning::STATUS_DRAFT);
                 $em->persist($rootTreePrePlannig);
+                
+                $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
+                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
             }
             $em->flush();
         }

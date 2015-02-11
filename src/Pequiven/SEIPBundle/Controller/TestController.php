@@ -52,6 +52,17 @@ class TestController extends Controller
         return $this->getTestResponseEmail($template, $parameters, $request);
     }
     
+    /**
+     * @Route("/testFunction")
+     */
+    public function testFunctionAction()
+    {
+        $v = $this->getSeipConfiguration()->getEmailNotifyToRevision();
+        var_dump($v);
+        die;
+    }
+
+
     private function getTestResponseEmail($template,array $context,\Symfony\Component\HttpFoundation\Request $request) 
     {
         $send = (boolean)$request->get('send',false);
@@ -86,5 +97,14 @@ class TestController extends Controller
         $content .=  sprintf('<br><b>Debug: send=%s, recipient=%s, messageSend=%s, debug=%s<b/>',($send ? '1':'0'),$recipientEmail,$messageSend,$debug);
         $response = new \Symfony\Component\HttpFoundation\Response($content);
         return $response;
+    }
+    
+    /**
+     * Configuracion global del SEIP
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    protected function getSeipConfiguration() {
+        return $this->container->get('seip.configuration');
     }
 }

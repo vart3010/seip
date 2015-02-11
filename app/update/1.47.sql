@@ -42,3 +42,6 @@ ALTER TABLE seip_indicator_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
 ALTER TABLE seip_user ADD status_worker INT NOT NULL;
 ALTER TABLE seip_user_audit ADD status_worker INT DEFAULT NULL;
 UPDATE seip_user SET status_worker = 1;
+
+-- Configuracion de lista de correos
+INSERT INTO `Configuration` (`id`, `group_id`, `keyIndex`, `value`, `description`, `active`, `createdAt`, `updatedAt`) VALUES (NULL, '1', 'PRE_PLANNING_EMAIL_NOTIFY_TO_REVISION', '["rarias@pequiven.com","vescalona@pequiven.com"]', 'Lista de correos que recibiran las notificaciones cuando se envie una pre-planificacion a revision', '1', '2015-02-11 00:00:00', NULL);
