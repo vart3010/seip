@@ -672,7 +672,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     {
         
         if(!$this->indicators->contains($indicators)){
-            $indicators->addObjetive($this);
             $this->indicators->add($indicators);
         }
 

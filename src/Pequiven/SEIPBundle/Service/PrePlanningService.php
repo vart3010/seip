@@ -264,13 +264,6 @@ class PrePlanningService extends ContainerAware
             '_statusLabel' => '',
             '_hasPermissionRevision' => false,
         );
-        $classStatus = 'red';
-        if($item->getStatus() == PrePlanning::STATUS_APPROVED){
-            $classStatus = 'green';
-        }elseif($item->getStatus() == PrePlanning::STATUS_IN_REVIEW){
-            $classStatus = 'blue';
-        }
-        $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($item->getLabelStatus()));
         
         if($item->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
             &&  $item->getParent() 
@@ -285,6 +278,19 @@ class PrePlanningService extends ContainerAware
             }
         }
         
+        if($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned){
+            $item->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            $this->persist($item,true);
+        }
+        
+        $classStatus = 'red';
+        if($item->getStatus() == PrePlanning::STATUS_APPROVED){
+            $classStatus = 'green';
+        }elseif($item->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+            $classStatus = 'blue';
+        }
+        $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($item->getLabelStatus()));
+        
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;
             //Las metas no tienen link por lo tanto genero el link del programa
@@ -295,7 +301,7 @@ class PrePlanningService extends ContainerAware
             }
             $child['_statusLabel'] = sprintf('<a href="%s" target="_blank"><span class="green">Importado</span></a>',$configEntity['url']);
         }else{
-            $_hasPermissionRevision = $validTypeObject = false;
+            $_hasPermissionRevision = false;
             if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR')){
                 $_hasPermissionRevision = true;
             }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_OBJETIVE && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE')){
@@ -326,6 +332,7 @@ class PrePlanningService extends ContainerAware
             }
             $child['leaf'] = false;
         }
+        $child['status'] = $item->getStatus();
         return $child;
     }
     
