@@ -20,26 +20,35 @@
                 <span class="icon-forward"></span>
             {% endif %}
         {% endfor %}
-        <div class="absolute-right">{{ period }}</div>
-        {#{% set referer = app.request.headers.get('referer') %}
+{#        <div class="absolute-right">{{ period }}</div>#}
+        {% set referer = app.request.getUri %}
         <div class="absolute-right">
-            
-                <span ng-if="!showPeriodCombo">{{ period }}&nbsp;</span>
-                <select ng-if="showPeriodCombo" id="selectPeriod" name="selectPeriod" class="select" ng-click="showPeriodCombo = !showPeriodCombo">
-                    <option value="{{ path('seip_change_period',{period:'2014',referer:referer}) }}">Período-2014</option>
-                    <option value="{{ path('seip_change_period',{period:'2015',referer:referer}) }}">Período-2015</option>
+                <span id="labelPeriod">{{ period }}&nbsp;</span>
+                <select id="selectPeriod" name="selectPeriod" class="hide">
+                {% for listArrayPeriod in listArrayPeriods %}
+                    <option value="{{ path('seip_change_period',{period:listArrayPeriod['id'],referer:referer}) }}" {% if listArrayPeriod['id'] == period.id %}selected="selected"{% endif %} >{{ listArrayPeriod['description'] }}</option>
+                {% endfor %}
                 </select>
-                &nbsp;
-                <i ng-click="showPeriodCombo = !showPeriodCombo" class="fa fa-angle-double-down"></i>
+{#                &nbsp;#}
+                <i id="showCombo" class="fa fa-angle-double-down" style="cursor: pointer; cursor: hand;"></i>
         </div>
         <script type="text/javascript">
             $(document).ready(function(){
-                var selectPeriod = angular.element('#selectPeriod');
+                var showCombo = $('#showCombo');
+                var selectPeriod = $('#selectPeriod');
+                var labelPeriod = $('#labelPeriod');
                 selectPeriod.on('change',function(){
-                    console.log(selectPeriod.val());
+                    console.log(selectPeriod.val())
+                    window.location.assign(selectPeriod.val());
+                });
+                var showPeriodCombo = false;
+                showCombo.on('click',function(){
+                    showPeriodCombo = !showPeriodCombo; 
+                    labelPeriod.toggle();
+                    selectPeriod.toggle();
                 });
             });
-        </script>#}
+        </script>
     </h1>
     {#<h2>
         <strong>{{ period }}</strong>

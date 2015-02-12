@@ -29,7 +29,7 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
             return;
         }
         $limitItems = $this->container->get('seip.configuration')->getGeneralLimitItems();
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $period = $this->getPeriodService()->getPeriodActive();
         
         //Repositorios
         $goalRepository = $this->container->get('pequiven_seip.repository.arrangementprogram_goal');
@@ -122,5 +122,14 @@ class MaximumGoalResponsibleValidator extends ConstraintValidator implements Con
     
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

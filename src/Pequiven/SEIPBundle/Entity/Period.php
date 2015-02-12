@@ -249,10 +249,6 @@ class Period extends Base
         return $this;
     }
 
-    public function __toString() {
-        return $this->getDescription()?:'-';
-    }
-
     /**
      * Set dateStartNotificationArrangementProgram
      *
@@ -458,5 +454,9 @@ class Period extends Base
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+    
+    public function __toString() {
+        return $this->getDescription()?:'-';
     }
 }

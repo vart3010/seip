@@ -19,7 +19,7 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
         $orderBy = array();
         $repository = $this->container->get('pequiven_seip.repository.arrangementprogram');
         
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $period = $this->getPeriodService()->getPeriodActive();
         $criteria['ap.period'] = $period;
         $criteria['ap.user'] = $this->getUser();
         
@@ -47,5 +47,14 @@ class MyArrangementProgramsBox extends \Tecnocreaciones\Bundle\BoxBundle\Model\G
     
     public function getDescription() {
         return 'Muestra un resumen de los programas de gestión donde el usuario sea responsable de las metas o del programa.';
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

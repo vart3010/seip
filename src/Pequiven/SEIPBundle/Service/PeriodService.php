@@ -36,7 +36,10 @@ class PeriodService extends ContainerAware
         }
         return $result;
     }
-    
+    /**
+     * Puede notificar en periodo de holgura
+     * @return boolean
+     */
     function isAllowNotifyArrangementProgramInClearance()
     {
         $result = false;
@@ -69,10 +72,32 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    function getPeriodActive()
+    public function getPeriodActive()
     {
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $periodActiveSerialize = $session->get('periodActiveSerialize');
+        $periodRepository = $this->getRepository();
+        $period = null;
+        if($periodActiveSerialize !== null){
+            $period = unserialize($periodActiveSerialize);
+        }
+        if(!$period){
+            $period = $periodRepository->findOneActive();
+        }
         return $period;
+    }
+    
+    /**
+     * Guardar el perido activo que selecciono el usuario
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     */
+    function setPeriodActive(\Pequiven\SEIPBundle\Entity\Period $period)
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $periodSerialize = serialize($period);
+        $session->set('periodActiveSerialize', $periodSerialize);
     }
     
     /**
@@ -89,11 +114,57 @@ class PeriodService extends ContainerAware
         return $nextPeriod;
     }
     
+    /**
+     * Retorna la lista de periodos disponibles para consultar
+     * @return type
+     */
+    public function getPeriodsAvailableConsultation() 
+    {
+        return $this->getRepository()->findAll();
+    }
+    
+    public function getListArrayPeriodsAvailableConsultation()
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $listArrayPeriods = $session->get('listPeriods');
+        if($listArrayPeriods !== null){
+            return $listArrayPeriods;
+        }
+        $periods = $this->getPeriodsAvailableConsultation();
+        foreach ($periods as $period) {
+            $listArrayPeriods[] = array(
+                'id' => $period->getId(),
+                'description' => (string)$period
+            );
+        }
+        $session->set('listPeriods',$listArrayPeriods);
+        return $listArrayPeriods;
+    }
+    
     private function isGranted($roles) {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
         }
 
         return $this->container->get('security.context')->isGranted($roles);
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+    
+    /**
+     * Repositorio del periodo
+     * @return \Pequiven\SEIPBundle\Repository\PeriodRepository
+     */
+    private function getRepository()
+    {
+        return $this->container->get('pequiven.repository.period');
     }
 }
