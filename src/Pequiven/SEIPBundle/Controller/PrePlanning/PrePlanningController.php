@@ -225,7 +225,12 @@ class PrePlanningController extends ResourceController
      */
     public function updatePrePlanningAction(Request $request) 
     {
-        $this->checkSecurity($request);
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
+            'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+        ));
+        
         $dataRequest = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $repository = $this->getRepository();

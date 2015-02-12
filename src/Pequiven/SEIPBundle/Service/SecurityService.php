@@ -59,7 +59,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
             }elseif($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
@@ -70,7 +70,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
                 }
             }
@@ -107,7 +107,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
             }elseif(is_a($entity, 'Pequiven\MasterBundle\Entity\GerenciaSecond')){
@@ -117,7 +117,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
                 }
             }
@@ -158,7 +158,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
                 }
                 
@@ -187,7 +187,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
                 
@@ -216,7 +216,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 $valid = true;
             }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                 $valid = true;
-            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+            }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                 $valid = true;
             }
         }
@@ -240,7 +240,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 $valid = true;
             }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                 $valid = true;
-            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+            }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                 $valid = true;
             }
         }

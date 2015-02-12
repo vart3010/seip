@@ -65,7 +65,7 @@
                     api: {
                         create: 'createPersons',
                         read: '{{ urlRead }}',
-                        update: 'update-pre-planning',
+                        update: '{{ path('pequiven_pre_planning_update') }}',
                         destroy: '{{ path('pequiven_pre_planning_delete_pre_planning',{level:app.request.get('level')}) }}'
                     }
                 },
@@ -252,41 +252,6 @@
                     store.load();
                 }
             };
-            var importBtn = Ext.create("Ext.Button", {
-                handler: function () {
-                    var items = store.data.items;
-                    itemsToImport = [];
-                    itemsToImportCurrent = 0;
-                    var i;
-                    for(i=0;i < items.length; i++){
-                        if(items[i].get('status') == 0 && items[i].get('toImport') == true){
-                            itemsToImport.push(items[i]);
-                        }
-                    }
-                    if(itemsToImport.length > 0){
-                        Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ app.request.get('period') }}.', function(btn){
-                           if(btn === 'yes'){
-                               tree.body.mask("Guardando los cambios...");
-                                store.sync({
-                                    callback: function(r,options,success){
-                                        tree.body.unmask();
-                                        itemsToImportLength = itemsToImport.length;
-                                        tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
-                                        functionActionItem = functionImportarItem;
-                                        callAjaxItemToImport();
-                                    }
-                                });
-                            }
-                        });
-                    }else{
-                        Ext.Msg.alert("", "No hay items selecionados para importar.");
-                    }
-                },
-                glyph :'xf0c5@FontAwesome',
-                text: 'Importar',
-                itemId: 'importBtn',
-                disabled: true
-            });
             var sendToReviewBtn = Ext.create("Ext.Button", {
                 handler: function () {
                     var items = store.data.items;
@@ -463,7 +428,6 @@
                     returnChangesBtn.setDisabled(!hasChilren);
                     btnDelete.setDisabled(!hasChilren);
                     saveChangeBtn.setDisabled(!hasChilren);
-                    importBtn.setDisabled(!hasChilren);
                     sendToReviewBtn.setDisabled(!hasChilren);
                     return hasChilren;
             };
