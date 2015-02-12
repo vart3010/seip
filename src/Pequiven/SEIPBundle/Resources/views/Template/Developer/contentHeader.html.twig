@@ -21,6 +21,26 @@
             {% endif %}
         {% endfor %}
         <div class="absolute-right">{{ period }}</div>
+        {#{% set referer = app.request.headers.get('referer') %}
+        <div class="absolute-right">
+            <span ng-click="showPeriodCombo = !showPeriodCombo">
+                <span ng-if="!showPeriodCombo">{{ period }}&nbsp;<i class="fa fa-angle-double-down"></i></span>
+                <span ng-if="showPeriodCombo">
+                    <select id="selectPeriod" name="selectPeriod" class="select">
+                        <option value="{{ path('seip_change_period',{period:'2014',referer:referer}) }}">Período-2014</option>
+                        <option value="{{ path('seip_change_period',{period:'2015',referer:referer}) }}">Período-2015</option>
+                    </select>&nbsp;<i class="fa fa-angle-double-down"></i>
+                </span>
+            </span>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var selectPeriod = angular.element('#selectPeriod');
+                selectPeriod.on('change',function(){
+                    console.log(selectPeriod.val());
+                });
+            });
+        </script>#}
     </h1>
     {#<h2>
         <strong>{{ period }}</strong>

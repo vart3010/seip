@@ -30,6 +30,7 @@ class GoalAdmin extends Admin
             ->add('startDate')
             ->add('endDate')
             ->add('weight')
+            ->add('goalDetails')
             ->add('observations')
             ->add('responsibles')
             ;

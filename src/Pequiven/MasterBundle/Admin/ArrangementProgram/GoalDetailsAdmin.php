@@ -92,6 +92,12 @@ class GoalDetailsAdmin extends Admin
             ;
     }
     
+    protected function configureDatagridFilters(DatagridMapper $filter) {
+        $filter
+            ->add('goal')
+            ;
+    }
+    
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
         $collection->remove('create');
     }

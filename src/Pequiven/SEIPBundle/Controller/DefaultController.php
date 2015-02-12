@@ -18,4 +18,18 @@ class DefaultController extends Controller {
         return array(
         );
     }
+    
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @Route("/change-period/{period}",name="seip_change_period")
+     */
+    public function changePeriodAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $referer = $request->get('referer',null);
+        $period = $request->get('period',null);
+        
+        return $this->redirect($referer);
+    }
 }
