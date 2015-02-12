@@ -17,16 +17,20 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
- * Se usa para construir el menu aplicando herencia en estrucutra de rol SEIP.
+ * Evalua herencia de roles por prefijo
+ * Ejemplo (ROLE_APP_EXAMPLE Coincide con el prefijo ROLE_APP_)
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class SeipRoleHierarchyVoter extends RoleVoter {
+class RolePatternVoter extends RoleVoter {
 
+    private $rolePrefix;
+    
     private $roleHierarchy;
 
-    public function __construct(RoleHierarchyInterface $roleHierarchy, $prefix = 'ROLE_SEIP_') {
+    public function __construct(RoleHierarchyInterface $roleHierarchy, $prefix = 'ROLE_APP_') {
         $this->roleHierarchy = $roleHierarchy;
+        $this->rolePrefix = $prefix;
 
         parent::__construct($prefix);
     }
@@ -41,12 +45,13 @@ class SeipRoleHierarchyVoter extends RoleVoter {
     public function vote(TokenInterface $token, $object, array $attributes) {
         $result = VoterInterface::ACCESS_ABSTAIN;
         $roles = $this->extractRoles($token);
+        $pattern = sprintf('/^%s([A-Z])\w+\*/',$this->rolePrefix);
         
         foreach ($attributes as $attribute) {
             if (!$this->supportsAttribute($attribute)) {
                 continue;
             }
-            if(preg_match('/^ROLE_SEIP_([A-Z])\w+\*/', $attribute)){
+            if(preg_match($pattern, $attribute)){
                 $result = VoterInterface::ACCESS_DENIED;
                 foreach ($roles as $role) {
                     $attribute = str_replace('*', '', $attribute);
