@@ -113,6 +113,17 @@
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}
                 </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.resultReal'|trans }}</label>
+                    {% set resultReal = indicator.resultReal %}
+                    {% if resultReal != null %}
+                        {{ resultReal|myNumberFormat }}
+                    {% else %}
+                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                    {% endif %}
+                </p>
              </div>
              
             <div class="inline-label">

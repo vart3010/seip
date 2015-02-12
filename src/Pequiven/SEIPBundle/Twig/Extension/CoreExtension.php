@@ -91,7 +91,7 @@ class CoreExtension extends \Twig_Extension
      * @return type
      */
     function myNumberFormat($value,$decimals = 2) {
-        return number_format($value,$decimals,'.',',');
+        return number_format($value,$decimals,',','.');
     }
     
     /**

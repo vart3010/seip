@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Administrador del admin
+ * Administrador del Indicador
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
@@ -30,6 +30,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('goal')
             ->add('formula')
             ->add('tendency')
+            ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens')
@@ -66,6 +67,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('goal')
             ->add('formula')
             ->add('tendency')
+            ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
@@ -96,6 +98,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('formula')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('tendency')
+            ->add('arrangementRange')
             ->add('enabled')
             ;
     }

@@ -253,4 +253,8 @@ class ArrangementRangeType extends modelArrangementRangeType {
     {
         return $this->enabled;
     }
+    
+    public function __toString() {
+        return $this->description;
+    }
 }
