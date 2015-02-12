@@ -50,7 +50,7 @@ class PrePlanningController extends ResourceController
         if($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_PLANNING){
             $formTemplate = 'formImportPlanning.html'; 
         } elseif ($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_STATISTICS){
-            $formTemplate = 'formImportStatistics.html';
+            $formTemplate = 'formImportPlanning.html';
         }
         $this->checkSecurity($request);
         $view = $this
