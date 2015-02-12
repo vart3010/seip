@@ -76,9 +76,11 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             }
             
             if($valid === false){
+                //Evaluo si soy responsable del programa de gestion
                 if($arrangementProgram->getResponsibles()->contains($user) === true){
                     $valid = true;
                 }
+                //Evaluo sino estoy en algunas de las metas
                 if($valid === false){
                     $goals = $arrangementProgram->getTimeline()->getGoals();
                     foreach ($goals as $goal) {
@@ -86,6 +88,21 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                             $valid = true;
                             break;
                         }
+                    }
+                }
+                //Evaluo si tengo permisos para notificar el programa
+                if($valid === false){
+                    $period = $this->getPeriodService()->getPeriodActive();
+                    $em = $this->getDoctrine()->getManager();
+                    $criteria = array(
+                        'ap.user' => $user,
+                        'ap.period' => $period,
+                        'ap.id' => $arrangementProgram,
+                    );
+                    $arrangementProgramRepository = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram');
+                    $paginator = $arrangementProgramRepository->createPaginatorByNotified($criteria);
+                    if($paginator->getNbResults() > 0){
+                        $valid = true;
                     }
                 }
             }
@@ -410,5 +427,30 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+    
+    /**
+     * 
+     * @return PeriodService
+     */
+    public function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

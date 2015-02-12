@@ -31,6 +31,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
             ->addSelect('ap_t_g_r_g')
+            ->addSelect('ap_t_g_gd')
             ->addSelect('ap_to')
             ->addSelect('ap_oo')
             ->innerJoin('ap.tacticalObjective', 'ap_to')
@@ -40,6 +41,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->leftJoin('ap.timeline','ap_t')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
+            ->leftJoin('ap_t_g.goalDetails','ap_t_g_gd')
             ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')
             ->andWhere('ap.id = :id')
             ->setParameter('id', $id)
@@ -297,9 +299,8 @@ class ArrangementProgramRepository extends EntityRepository
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $user = $criteria->remove('ap.user');
         
-        $user->getId();
         $period = $criteria->remove('ap.period');
-        
+        $arrangementProgram = $criteria->remove('ap.id');
         
         $queryBuilder = $this->getCollectionQueryBuilder();
         $this->applyCriteria($queryBuilder, $criteria->toArray());
@@ -320,6 +321,12 @@ class ArrangementProgramRepository extends EntityRepository
             ->andWhere('ap.period = :period')
             ->setParameter('period', $period)
             ;
+        if($arrangementProgram != null){
+            $queryBuilder
+                ->andWhere('ap.id = :arrangementProgram')
+                ->setParameter('arrangementProgram', $arrangementProgram)
+            ;
+        }
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
