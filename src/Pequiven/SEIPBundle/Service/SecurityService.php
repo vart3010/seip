@@ -74,6 +74,21 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }
             }
+            
+            if($valid === false){
+                if($arrangementProgram->getResponsibles()->contains($user) === true){
+                    $valid = true;
+                }
+                if($valid === false){
+                    $goals = $arrangementProgram->getTimeline()->getGoals();
+                    foreach ($goals as $goal) {
+                        if($goal->getResponsibles()->contains($user) === true){
+                            $valid = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if(!$valid){
             $this->checkSecurity();
