@@ -397,11 +397,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if(!$arrangementRange){
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.',$indicator->getRef(),$indicator->getId()));
         }
+        
+        $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
             
-            if($arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty) == null){
+            if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -411,6 +413,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
             $indicator->setProgressToDate($result);
@@ -418,7 +422,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $result = 100 - $indicator->getResult();
             $indicator->setResultReal($result);
             
-            if($arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty) == null){
+            if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -428,6 +432,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
             $indicator->setProgressToDate($result);
@@ -435,7 +441,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
             
-            if($arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty) == null){
+            if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -445,6 +451,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" esta mal configurado: "%s"',$indicator->getRef(),$indicator->getId(),$error));
             }
             
             $indicator->setProgressToDate($result);

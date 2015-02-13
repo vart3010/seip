@@ -135,7 +135,7 @@
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>
                     {% set resultReal = indicator.resultReal %}
-                    {% if resultReal != null and errorArrangementRange != null %}
+                    {% if resultReal != null and errorArrangementRange == null %}
                         {{ resultReal|myNumberFormat }}
                         <span id="chartContainerResult"></span>
                     {% else %}
