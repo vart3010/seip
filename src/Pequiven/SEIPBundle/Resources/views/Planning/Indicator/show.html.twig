@@ -114,11 +114,29 @@
                     {% endif %}
                 </p>
             </div>
-            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange != null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult','{{ indicator.resultReal|myNumberFormat }}')" {% endif %}>
+            {#<div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange != null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult','{{ indicator.resultReal|myNumberFormat }}')" {% endif %}>
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>
                     {% set resultReal = indicator.resultReal %}
                     {% if resultReal != null and errorArrangementRange != null %}
+                        <span id="chartContainerResult"></span>
+                    {% else %}
+                        {% if indicator.arrangementRange == null %}
+                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
+                        {% elseif errorArrangementRange != null %}
+                            <span class="tag red-bg">{{ errorArrangementRange }}</span>
+                        {% else %}
+                            <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>#}
+            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" >
+                <p class="inline-label">
+                    <label class="label">{{ 'form.resultReal'|trans }}</label>
+                    {% set resultReal = indicator.resultReal %}
+                    {% if resultReal != null and errorArrangementRange != null %}
+                        {{ resultReal|myNumberFormat }}
                         <span id="chartContainerResult"></span>
                     {% else %}
                         {% if indicator.arrangementRange == null %}
