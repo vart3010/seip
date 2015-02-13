@@ -57,10 +57,10 @@ class ArrangementRangeType {
             self::RANGE_TYPE_MIDDLE_TOP_BASIC => 'Rango Medio Alto Básico',
             self::RANGE_TYPE_MIDDLE_BOTTOM_BASIC => 'Rango Medio Bajo Básico',
             self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Bajo Básico',
-            self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Alto Mixto',
-            self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Medio Alto Mixto',
-            self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Medio Bajo Mixto',
-            self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Bajo Mixto',
+            self::RANGE_TYPE_TOP_MIXED => 'Rango Alto Mixto',
+            self::RANGE_TYPE_MIDDLE_TOP_MIXED => 'Rango Medio Alto Mixto',
+            self::RANGE_TYPE_MIDDLE_BOTTOM_MIXED => 'Rango Medio Bajo Mixto',
+            self::RANGE_TYPE_BOTTOM_MIXED => 'Rango Bajo Mixto',
         );
         return $refStatus;
     }
