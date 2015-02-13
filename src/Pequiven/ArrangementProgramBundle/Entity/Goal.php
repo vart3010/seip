@@ -125,6 +125,12 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      */
     private $deletedAt;
     
+    /**
+     * Avance de la meta
+     * @ORM\Column(name="advance",type="float")
+     */
+    private $advance = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -436,7 +442,17 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
         
         return $this;
     }
-    
+
+    function getAdvance() 
+    {
+        return $this->advance;
+    }
+
+    function setAdvance($advance) 
+    {
+        $this->advance = $advance;
+    }
+
     public function __clone() {
         if($this->id > 0){
            $this->id = null;

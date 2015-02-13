@@ -211,6 +211,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
         }
+        $periodService = $this->getPeriodService();
         $result->setTotal($total);
     }
     
@@ -328,13 +329,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
     {
         $summary = $arrangementProgram->getSummary(array(
-            'limitMonthToNow' => true
+            'limitMonthToNow' => true,
+            'refresh' => true,
         ));
-        $arrangementProgram->setProgressToDate($summary['advances']);
-        $summary = $arrangementProgram->getSummary();
-        $arrangementProgram->setTotalAdvance($summary['advances']);
+        
+        $amountPenalty = 0;
+        
+        $arrangementProgram->setProgressToDate($summary['advances'] - $amountPenalty);
+        $summary = $arrangementProgram->getSummary(array('refresh' => true));
+        $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
+        
         $em = $this->getDoctrine()->getManager();
         
+        foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
+           $advance = ($goal->getAdvance() - $amountPenalty);
+           $goal->setAdvance($advance);
+           $em->persist($goal) ;
+        }
+       
         $arrangementProgram->updateLastDateCalculateResult();
         
         $em->persist($arrangementProgram);
@@ -1012,5 +1024,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * 
+     * @return PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

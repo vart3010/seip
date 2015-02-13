@@ -287,6 +287,12 @@ abstract class ArrangementProgram
             'dateEndPlanned' => null,
             'dateEndReal' => null,
         );
+        
+        $refresh = false;
+        if(isset($options['refresh']) && $options['refresh'] === true){
+            $refresh = true;
+        }
+        
         $limitMonthToNow = false;
         $month = null;
         if(isset($options['limitMonthToNow'])){
@@ -307,6 +313,7 @@ abstract class ArrangementProgram
         if($timeline){
             $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
             foreach ($timeline->getGoals() as $goal) {
+                $advanceRealGoal = $advanceRealGoalWeight = 0.0;
                 //Buscar la fecha de inicio planificada
                 if($dateStartPlanned === null || $dateStartPlanned > $goal->getStartDate()){
                     $dateStartPlanned = $goal->getStartDate();
@@ -320,7 +327,6 @@ abstract class ArrangementProgram
                 $weight = 0;
                 if($goalDetails !== null && $goalDetails->getGoal() !== null){
                     $weight = $goalDetails->getGoal()->getWeight();
-                    
                 }
                 $totalWeight += $weight;
                 $reflection = new \ReflectionClass($goalDetails);
@@ -341,6 +347,8 @@ abstract class ArrangementProgram
                         }
                         $advancesGoalDetailsReal[$nameProperty] += $advanceReal;
                         $advancesReal +=  $advanceReal;
+                        $advanceRealGoal += $real;
+                        $advanceRealGoalWeight += $advanceReal;
                         
                         $month = GoalDetails::getMonthOfReal($nameProperty);
                         if($real > 0 && $realMonthDateStart > $month ){
@@ -373,6 +381,9 @@ abstract class ArrangementProgram
                         $advancesPlanned +=  $advancePlanned;
                     }
                 }
+                if($refresh === true){
+                    $goal->setAdvance($advanceRealGoal);
+                }
                 
             }
         }
@@ -388,7 +399,7 @@ abstract class ArrangementProgram
         if($realMonthDateEnd != -1){
             $dateEndReal->setDate($dateEndReal->format('Y'), $realMonthDateEnd, \Pequiven\SEIPBundle\Service\ToolService::getLastDayMonth($dateEndReal->format('Y'), $realMonthDateEnd));
         }
-        
+//        die;
         $summary['advances'] = $advancesReal;
         $summary['weight'] = $totalWeight;
         $summary['advancesPlanned'] = $advancesPlanned;

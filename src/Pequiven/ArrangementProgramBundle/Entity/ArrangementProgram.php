@@ -151,7 +151,7 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     
      /**
      * Avance total del programa
-     * @var integer
+     * @var float
      * @ORM\Column(name="totalAdvance",type="float")
      */
     protected $totalAdvance = 0;
