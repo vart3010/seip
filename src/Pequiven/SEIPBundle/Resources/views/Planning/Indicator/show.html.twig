@@ -33,28 +33,28 @@
     {% endif  %}
     <fieldset class="fieldset">
         <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read'])) }}">{{ indicator }}&nbsp;</legend>
-        <p class="inline-label">
-            <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
-            
-            {% set advances = indicator.progressToDate|myNumberFormat %}
-            {% set advancesClass = 'red-gradient' %}
-            {% if advances >= 50 %}
-                {% set advancesClass = 'orange-gradient' %}
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
 
-            {% elseif advances == 100 %}
-                {% set advancesClass = 'green-gradient' %}
-            {% endif %}
-            <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
-        </p>
+                    {% set advances = indicator.progressToDate|myNumberFormat %}
+                    {% set advancesClass = 'red-gradient' %}
+                    {% if advances >= 50 %}
+                        {% set advancesClass = 'orange-gradient' %}
+
+                    {% elseif advances == 100 %}
+                        {% set advancesClass = 'green-gradient' %}
+                    {% endif %}
+                    <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
+                </p>
         <br/>
          <div class="columns">
-             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
                     {{ generateLink(indicator) }}
                 </p>
-             </div>
-             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.formula'|trans }}</label>
                     {% set formula = indicator.formula %}
@@ -64,40 +64,14 @@
                         <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
                     {% endif %}
                 </p>
-             </div>
-             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.total_plan'|trans }}</label>
-                    {% if indicator.totalPlan > 0 %}
-                        {{ indicator.totalPlan|myNumberFormat }}
-                    {% else %}
-                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                    {% endif %}
-                </p>
-             </div>
-             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'form.tendency'|trans }}</label>
-                    {% if indicator.tendency != null %}
-                        {{ indicator.tendency }}
-                    {% else %}
-                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                    {% endif %}
-                </p>
-             </div>
-             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.weight'|trans }}</label>
                     <span class="tag">{{ indicator.weight?indicator.weight ~ '%':(('form.no_appy'|trans)) }}</span>
                 </p>
-             </div>
-             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
-                    {$ indicator.valueFinal|myNumberFormat:3 $}
-                </p>
-             </div>
-             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
                     {{ indicator.typeOfCalculationLabel|trans }}
@@ -105,7 +79,7 @@
                         <span class="tag red-bg">{{ ('pequiven_indicator.errors.not_support_formula'|trans) }}</span>
                     {% endif %}
                 </p>
-             </div>
+            </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.frequencyNotificationIndicator'|trans }}</label>
@@ -119,16 +93,65 @@
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% set resultReal = indicator.resultReal %}
-                    {% if resultReal != null %}
-                        {{ resultReal|myNumberFormat }}
+                    <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
+                    {$ indicator.valueFinal|myNumberFormat:3 $}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.total_plan'|trans }}</label>
+                    {% if indicator.totalPlan > 0 %}
+                        {{ indicator.totalPlan|myNumberFormat }}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}
                 </p>
-             </div>
-             
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.tendency'|trans }}</label>
+                    {% if indicator.tendency != null %}
+                        {{ indicator.tendency }}
+                    {% else %}
+                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            {#<div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange != null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult','{{ indicator.resultReal|myNumberFormat }}')" {% endif %}>
+                <p class="inline-label">
+                    <label class="label">{{ 'form.resultReal'|trans }}</label>
+                    {% set resultReal = indicator.resultReal %}
+                    {% if resultReal != null and errorArrangementRange != null %}
+                        <span id="chartContainerResult"></span>
+                    {% else %}
+                        {% if indicator.arrangementRange == null %}
+                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
+                        {% elseif errorArrangementRange != null %}
+                            <span class="tag red-bg">{{ errorArrangementRange }}</span>
+                        {% else %}
+                            <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>#}
+            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" >
+                <p class="inline-label">
+                    <label class="label">{{ 'form.resultReal'|trans }}</label>
+                    {% set resultReal = indicator.resultReal %}
+                    {% if resultReal != null and errorArrangementRange == null %}
+                        {{ resultReal|myNumberFormat }}
+                        <span id="chartContainerResult"></span>
+                    {% else %}
+                        {% if indicator.arrangementRange == null %}
+                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
+                        {% elseif errorArrangementRange != null %}
+                            <span class="tag red-bg">{{ errorArrangementRange }}</span>
+                        {% else %}
+                            <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>
             <div class="inline-label">
                 <label class="label">{{ 'form.objetives'|trans }}</label>
                 <ul class="fa-ul">
@@ -179,6 +202,12 @@
     %}
 </p>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
 {% endblock %}
 
 {% block javascript %}

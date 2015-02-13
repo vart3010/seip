@@ -34,10 +34,10 @@
             </tr>
             <tr ng-repeat="goal in goals">
                 <td>{$ $index + 1 $} - 
-                        <span ng-class="getClassForMeter(goal._data.advance,1)"></span>
-                        <span ng-class="getClassForMeter(goal._data.advance,2)"></span>
-                        <span ng-class="getClassForMeter(goal._data.advance,3)"></span>
-                        {$ goal._data.advance $}%
+                        <span ng-class="getClassForMeter(goal.advance,1)"></span>
+                        <span ng-class="getClassForMeter(goal.advance,2)"></span>
+                        <span ng-class="getClassForMeter(goal.advance,3)"></span>
+                        {$ goal.advance $}%
                 </td>
                 <th scope="row">
                     {$ goal.name $}<br>

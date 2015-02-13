@@ -571,11 +571,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     
     public function onPostSerializeGoal(ObjectEvent $event)
     {
-        $goal = $event->getObject();
         
-        $event->getVisitor()->addData('_data',array(
-            'advance' => $goal->getGoalDetails()->getAdvance()
-        ));
     }
     
     public function setContainer(ContainerInterface $container = null) {

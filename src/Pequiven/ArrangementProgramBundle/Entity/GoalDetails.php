@@ -252,7 +252,7 @@ class GoalDetails extends Base
      * @Extjs\Model\Field(type="date",mapping="goal.endDate")
      */
     private $goalDateEnd;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */

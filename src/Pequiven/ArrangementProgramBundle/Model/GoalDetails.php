@@ -9,7 +9,8 @@ use Exception;
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
-class GoalDetails {
+abstract class GoalDetails implements GoalDetailsInterface
+{
     const JANUARY_PLANNED = 'januaryPlanned';
     const JANUARY_REAL = 'januaryReal';
     
@@ -230,30 +231,5 @@ class GoalDetails {
         $summary['realMonthDateEnd'] = $realMonthDateEnd;
         
         return $summary;
-    }
-    
-    /**
-     * Retorna el avance de la meta
-     * @return type
-     */
-    function getAdvance()
-    {
-        $nameMatchReal = '^get\w+Real$';
-        $reflection = new \ReflectionClass($this);
-        $advancesReal = 0;
-        $quantity = 0;
-        foreach ($reflection->getMethods() as $method) {
-            $methodName = $method->getName();
-            $class = $method->getDeclaringClass();
-            if(!strpos($class, 'Pequiven\ArrangementProgramBundle\Entity\GoalDetails')){
-                continue;
-            }
-            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
-                $real = $this->$methodName();
-                $advancesReal +=  $real;
-                $quantity++;
-            }
-        }
-        return ($advancesReal);
     }
 }
