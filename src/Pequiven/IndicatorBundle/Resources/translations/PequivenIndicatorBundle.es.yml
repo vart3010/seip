@@ -61,6 +61,7 @@ pequiven_indicator:
         formula_unassigned: Fórmula no asignada.
         not_support_formula: Fórmula no compatible.
         trends_should_be_equal: Las tendencias deben ser iguales.
+        arrangementRange_not_assigned: Rango de Gestión no Asignado
         
 form:
     ref: Nro. de Referencia

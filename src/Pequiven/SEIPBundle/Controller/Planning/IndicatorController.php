@@ -45,12 +45,28 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $errorArrangementRange = null;
+        if($resource->getArrangementRange() !== null){
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
+        }
+
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+            ),
+        );
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'errorFormula' => $errorFormula,
+                'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
             ))
         ;
@@ -261,5 +277,14 @@ class IndicatorController extends ResourceController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
     }
 }
