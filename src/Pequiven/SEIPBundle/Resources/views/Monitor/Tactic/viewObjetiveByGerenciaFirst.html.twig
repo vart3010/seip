@@ -8,13 +8,15 @@
     {% set allow_create = false %}
 {% endif %}
 
-{% block body %}
-    
+{% block before_body %}
     {{ contentHeader(
         {(route_index):("pequiven_objetive.objetive_tactic"|trans)},
         (gerencia.getDescription),
         ('pequiven_objetive.list'|trans)
     ) }}
+{% endblock %}
+
+{% block body %}
     <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
 
     <div ng-controller="TableGroupingFormatController">

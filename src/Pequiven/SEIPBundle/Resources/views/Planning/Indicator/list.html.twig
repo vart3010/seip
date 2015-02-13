@@ -10,18 +10,21 @@
 {% set levelStrategic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_ESTRATEGICO') %}
 {% set levelTactic = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_TACTICO') %}
 {% set levelOperative = constant('Pequiven\\IndicatorBundle\\Entity\\IndicatorLevel::LEVEL_OPERATIVO') %}
-{% block body %}
-    {% set labelHeader = {
+
+{% set labelHeader = {
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
     } %}
-    
+
+{% block before_body %}
     {{ contentHeader(
         ((labelHeader[level])|trans),
         ('pequiven_indicator.list'|trans)
     ) }}
+{% endblock %}
 
+{% block body %}
     <input type="hidden" id="level" value="{{ level }}">
     <div ng-controller="TableFormatController">
         <div ng-controller="TableIndicatorController">

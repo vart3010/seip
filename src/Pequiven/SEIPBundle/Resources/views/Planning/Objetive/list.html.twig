@@ -10,13 +10,14 @@
 
 {% block title %}- {{ (labelHeader[level])|trans }}{% endblock %}
 
-{% block body %}
-    
+{% block before_body %}
     {{ contentHeader(
         ((labelHeader[level])|trans),
         ('pequiven_objetive.list'|trans)
     ) }}
+{% endblock %}
 
+{% block body %}
     <input type="hidden" id="level" value="{{ level }}">
     <div ng-controller="TableFormatController">
         <div ng-controller="TableObjetiveController">
