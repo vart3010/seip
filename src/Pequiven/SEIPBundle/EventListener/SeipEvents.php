@@ -54,5 +54,29 @@ final class SeipEvents
      *
      * @var string
      */
-    const RESULT_ARRANGEMENT_PROGRAM_UPDATE = 'pequiven.result_arrangement_program.update';
+    const RESULT_ARRANGEMENT_PROGRAM_UPDATE = 'pre_planning.post.send_to_draft';
+    
+    /**
+     * El pre_planning.post.send_to_draft este evento ocurre cuando se envia un item de la pre-planificacion a borrador
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRE_PLANNING_POST_SEND_TO_DRAFT = 'pre_planning.post.send_to_draft';
+    
+    /**
+     * El pre_planning.post.send_to_review este evento ocurre cuando se envia un item de la pre-planificacion a revision
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRE_PLANNING_POST_SEND_TO_REVIEW = 'pre_planning.post.send_to_review';
 }

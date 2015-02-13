@@ -876,6 +876,11 @@ class GoalDetails extends Base
         return $this;
     }
     
+    public function __toString() {
+        $toString = $this->getId() ?''.$this->getId():'-';
+        return $toString;
+    }
+    
     public function __clone() {
         if($this->id > 0){
             $this->id = null;

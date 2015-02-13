@@ -30,12 +30,23 @@ class PeriodService extends ContainerAware
         $now = new \DateTime();
         
         if(
-            ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram()) ||
-            ($now >= $period->getDateStartClearanceNotificationArrangementProgram() && $now <= $period->getDateEndClearanceNotificationArrangementProgram() && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_OPERATION_NOTIFY_CLEARANCE'))
+            ($now >= $period->getDateStartNotificationArrangementProgram() && $now <= $period->getDateEndNotificationArrangementProgram())
           ){
             $result = true;
         }
         return $result;
+    }
+    
+    function isAllowNotifyArrangementProgramInClearance()
+    {
+        $result = false;
+        $period = $this->getPeriodActive();
+        $now = new \DateTime();
+        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_OPERATION_NOTIFY_CLEARANCE') && ($now >= $period->getDateStartClearanceNotificationArrangementProgram() && $now <= $period->getDateEndClearanceNotificationArrangementProgram())){
+            $result = true;
+        }
+        return $result;
+        
     }
     
     /**

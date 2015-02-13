@@ -53,6 +53,9 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
      */
     protected function mailerSendMessage($templateName, $context, $fromEmail, $toEmail) 
     {
+        if($fromEmail === null){
+            $fromEmail = $this->getSeipConfiguration()->getEmailFromDefault();
+        }
         $this->container->get('pequiven_seip.mailer.twig_swift')->sendMessage($templateName, $context, $fromEmail, $toEmail);
     }
     

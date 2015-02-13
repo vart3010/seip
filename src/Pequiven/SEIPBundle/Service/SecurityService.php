@@ -59,7 +59,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
             }elseif($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
@@ -70,8 +70,40 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
+                }
+            }
+            
+            if($valid === false){
+                //Evaluo si soy responsable del programa de gestion
+                if($arrangementProgram->getResponsibles()->contains($user) === true){
+                    $valid = true;
+                }
+                //Evaluo sino estoy en algunas de las metas
+                if($valid === false){
+                    $goals = $arrangementProgram->getTimeline()->getGoals();
+                    foreach ($goals as $goal) {
+                        if($goal->getResponsibles()->contains($user) === true){
+                            $valid = true;
+                            break;
+                        }
+                    }
+                }
+                //Evaluo si tengo permisos para notificar el programa
+                if($valid === false){
+                    $period = $this->getPeriodService()->getPeriodActive();
+                    $em = $this->getDoctrine()->getManager();
+                    $criteria = array(
+                        'ap.user' => $user,
+                        'ap.period' => $period,
+                        'ap.id' => $arrangementProgram,
+                    );
+                    $arrangementProgramRepository = $em->getRepository('Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram');
+                    $paginator = $arrangementProgramRepository->createPaginatorByNotified($criteria);
+                    if($paginator->getNbResults() > 0){
+                        $valid = true;
+                    }
                 }
             }
         }
@@ -107,7 +139,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
             }elseif(is_a($entity, 'Pequiven\MasterBundle\Entity\GerenciaSecond')){
@@ -117,7 +149,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
                 }
             }
@@ -158,7 +190,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                     $valid = true;
                 }
                 
@@ -187,7 +219,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                     $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
                 
@@ -216,7 +248,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 $valid = true;
             }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                 $valid = true;
-            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+            }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                 $valid = true;
             }
         }
@@ -240,7 +272,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 $valid = true;
             }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
                 $valid = true;
-            }elseif($rol == Rol::ROLE_MANAGER_SECOND && $gerenciaSecond === $user->getGerenciaSecond()){
+            }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerenciaSecond === $user->getGerenciaSecond()){
                 $valid = true;
             }
         }
@@ -395,5 +427,30 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+    
+    /**
+     * 
+     * @return PeriodService
+     */
+    public function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }
