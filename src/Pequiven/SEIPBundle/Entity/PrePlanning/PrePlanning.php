@@ -542,7 +542,9 @@ class PrePlanning extends Model
     public function setRequiredToImport($requiredToImport)
     {
         $this->requiredToImport = $requiredToImport;
-
+        if($requiredToImport == true){
+            $this->status = self::STATUS_REQUIRED;
+        }
         return $this;
     }
 
