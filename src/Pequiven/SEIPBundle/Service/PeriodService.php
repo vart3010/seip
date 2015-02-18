@@ -112,6 +112,16 @@ class PeriodService extends ContainerAware
     }
     
     /**
+     * Limpia de la cache el periodo selecionado
+     */
+    public function clearCachePeriodActive() 
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $session->remove('periodActiveSerialize');
+    }
+    
+    /**
      * Retorna el periodo siguiente
      * @return \Pequiven\SEIPBundle\Entity\Period
      */

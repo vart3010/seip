@@ -147,8 +147,12 @@ class PeriodAdmin extends Admin
             ;
     }
     
-    public function preUpdate() {
-//        $this->periodService->getPeriodActive();
+    public function prePersist($object) {
+        $this->periodService->clearCachePeriodActive();
+    }
+    
+    public function preUpdate($object) {
+        $this->periodService->clearCachePeriodActive();
     }
     
     function setPeriodService(\Pequiven\SEIPBundle\Service\PeriodService $periodService) {
