@@ -259,6 +259,14 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $forcePenalize = false;
     
     /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1041,5 +1049,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->forcePenalize = $forcePenalize;
         
         return $this;
+    }
+    
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
     }
 }
