@@ -36,7 +36,10 @@ class PeriodService extends ContainerAware
         }
         return $result;
     }
-    
+    /**
+     * Se habilitada la notificacion en periodo de holgura
+     * @return boolean
+     */
     function isAllowNotifyArrangementProgramInClearance()
     {
         $result = false;
@@ -47,6 +50,17 @@ class PeriodService extends ContainerAware
         }
         return $result;
         
+    }
+    
+    /**
+     * Evalua si se debe aplicar la penalizacion al resultado
+     * @return boolean
+     */
+    function isPenaltyInResult(\DateTime $dateToEvaluate)
+    {
+        $period = $this->getPeriodActive();
+        $r = ($dateToEvaluate >= $period->getDateStartPenalty() && $dateToEvaluate <= $period->getDateEndPenalty());
+        return $r;
     }
     
     /**

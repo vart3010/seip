@@ -245,6 +245,20 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $deletedAt;
     
     /**
+     * ¿Se puede penalizar el resultado?
+     * @var boolean
+     * @ORM\Column(name="couldBePenalized",type="boolean")
+     */
+    private $couldBePenalized = true;
+    
+    /**
+     * ¿Forzar la penalizacion del resultado?
+     * @var boolean
+     * @ORM\Column(name="forcePenalize",type="boolean")
+     */
+    private $forcePenalize = false;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -998,5 +1012,29 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultReal()
     {
         return $this->resultReal;
+    }
+    
+    function isCouldBePenalized() 
+    {
+        return $this->couldBePenalized;
+    }
+
+    function isForcePenalize() 
+    {
+        return $this->forcePenalize;
+    }
+
+    function setCouldBePenalized($couldBePenalized) 
+    {
+        $this->couldBePenalized = $couldBePenalized;
+        
+        return $this;
+    }
+
+    function setForcePenalize($forcePenalize) 
+    {
+        $this->forcePenalize = $forcePenalize;
+        
+        return $this;
     }
 }

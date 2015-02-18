@@ -1122,6 +1122,16 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->results = $results;
     }
     
+    function isCouldBePenalized() 
+    {
+        return false;
+    }
+
+    function isForcePenalize() 
+    {
+        return false;
+    }
+    
     public function __clone() {
         if($this->id){
             $this->id = null;

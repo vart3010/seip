@@ -456,4 +456,14 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
         
         return $this;
     }
+    
+    function isCouldBePenalized() 
+    {
+        return false;
+    }
+
+    function isForcePenalize() 
+    {
+        return false;
+    }
 }
