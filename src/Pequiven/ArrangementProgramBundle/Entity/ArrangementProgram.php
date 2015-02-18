@@ -178,6 +178,20 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     private $isAvailableInResult = true;
     
     /**
+     * ¿Se puede penalizar el resultado?
+     * @var boolean
+     * @ORM\Column(name="couldBePenalized",type="boolean")
+     */
+    private $couldBePenalized = true;
+    
+    /**
+     * ¿Forzar la penalizacion del resultado?
+     * @var boolean
+     * @ORM\Column(name="forcePenalize",type="boolean")
+     */
+    private $forcePenalize = false;
+    
+    /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
@@ -671,4 +685,30 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
             $this->lastDateCalculateResult = null;
         }
     }
+    
+    function isCouldBePenalized() 
+    {
+        return $this->couldBePenalized;
+    }
+
+    function isForcePenalize() 
+    {
+        return $this->forcePenalize;
+    }
+
+    function setCouldBePenalized($couldBePenalized) 
+    {
+        $this->couldBePenalized = $couldBePenalized;
+        
+        return $this;
+    }
+
+    function setForcePenalize($forcePenalize) 
+    {
+        $this->forcePenalize = $forcePenalize;
+        
+        return $this;
+    }
+
+
 }

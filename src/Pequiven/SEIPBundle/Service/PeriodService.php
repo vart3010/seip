@@ -53,6 +53,17 @@ class PeriodService extends ContainerAware
     }
     
     /**
+     * Evalua si se debe aplicar la penalizacion al resultado
+     * @return boolean
+     */
+    function isPenaltyInResult(\DateTime $dateToEvaluate)
+    {
+        $period = $this->getPeriodActive();
+        $r = ($dateToEvaluate >= $period->getDateStartPenalty() && $dateToEvaluate <= $period->getDateEndPenalty());
+        return $r;
+    }
+    
+    /**
      * Retorna si se encuetra habilitada la carga de programa de gestion para el periodo activo.
      * @return boolean
      */

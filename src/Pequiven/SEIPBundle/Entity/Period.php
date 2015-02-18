@@ -105,6 +105,30 @@ class Period extends Base
     private $dateStartClearanceNotificationArrangementProgram;
 
     /**
+     * Fecha inicio de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartPenalty", type="date", nullable=true)
+     */
+    private $dateStartPenalty;
+    
+    /**
+     * Fecha fin de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndPenalty", type="date", nullable=true)
+     */
+    private $dateEndPenalty;
+    
+    /**
+     * Porcentaje de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="percentagePenalty", type="float", nullable=false)
+     */
+    private $percentagePenalty;
+
+    /**
      * Fecha fin de holgura de notificación de programas de gestion
      * @var \DateTime
      *
@@ -454,6 +478,75 @@ class Period extends Base
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+    
+    /**
+     * Set dateStartPenalty
+     *
+     * @param \DateTime $dateStartPenalty
+     * @return Period
+     */
+    public function setDateStartPenalty($dateStartPenalty)
+    {
+        $this->dateStartPenalty = $dateStartPenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartPenalty
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartPenalty()
+    {
+        return $this->dateStartPenalty;
+    }
+
+    /**
+     * Set dateEndPenalty
+     *
+     * @param \DateTime $dateEndPenalty
+     * @return Period
+     */
+    public function setDateEndPenalty($dateEndPenalty)
+    {
+        $this->dateEndPenalty = $dateEndPenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndPenalty
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndPenalty()
+    {
+        return $this->dateEndPenalty;
+    }
+
+    /**
+     * Set percentagePenalty
+     *
+     * @param float $percentagePenalty
+     * @return Period
+     */
+    public function setPercentagePenalty($percentagePenalty)
+    {
+        $this->percentagePenalty = $percentagePenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get percentagePenalty
+     *
+     * @return float 
+     */
+    public function getPercentagePenalty()
+    {
+        return $this->percentagePenalty;
     }
     
     public function __toString() {

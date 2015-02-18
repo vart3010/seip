@@ -50,3 +50,21 @@ CREATE TABLE seip_arrangement_range_audit (id INT NOT NULL, rev INT NOT NULL, fk
 
 ALTER TABLE Goal ADD advance DOUBLE PRECISION NOT NULL;
 ALTER TABLE Goal_audit ADD advance DOUBLE PRECISION DEFAULT NULL;
+
+ALTER TABLE Period ADD dateStartPenalty DATE DEFAULT NULL, ADD dateEndPenalty DATE DEFAULT NULL;
+ALTER TABLE Period_audit ADD dateStartPenalty DATE DEFAULT NULL, ADD dateEndPenalty DATE DEFAULT NULL;
+
+ALTER TABLE seip_indicator ADD couldBePenalized TINYINT(1) NOT NULL, ADD forcePenalize TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD couldBePenalized TINYINT(1) DEFAULT NULL, ADD forcePenalize TINYINT(1) DEFAULT NULL;
+ALTER TABLE ArrangementProgram ADD couldBePenalized TINYINT(1) NOT NULL, ADD forcePenalize TINYINT(1) NOT NULL;
+ALTER TABLE ArrangementProgram_audit ADD couldBePenalized TINYINT(1) DEFAULT NULL, ADD forcePenalize TINYINT(1) DEFAULT NULL;
+
+UPDATE seip_indicator SET couldBePenalized = 1;
+UPDATE ArrangementProgram SET couldBePenalized = 1;
+
+ALTER TABLE Period ADD amountPenalty DOUBLE PRECISION NOT NULL;
+ALTER TABLE Period_audit ADD amountPenalty DOUBLE PRECISION DEFAULT NULL;
+UPDATE Period SET amountPenalty = 15;
+
+ALTER TABLE Period CHANGE amountpenalty percentagePenalty DOUBLE PRECISION NOT NULL;
+ALTER TABLE Period_audit CHANGE amountpenalty percentagePenalty DOUBLE PRECISION DEFAULT NULL;
