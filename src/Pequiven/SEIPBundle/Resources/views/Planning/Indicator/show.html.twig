@@ -38,11 +38,12 @@
 
                     {% set advances = indicator.progressToDate|myNumberFormat %}
                     {% set advancesClass = 'red-gradient' %}
-                    {% if advances >= 50 %}
-                        {% set advancesClass = 'orange-gradient' %}
-
-                    {% elseif advances == 100 %}
+                    
+                    {% if indicatorRange|length > 0 and indicatorRange.good == true  %}
                         {% set advancesClass = 'green-gradient' %}
+
+                    {% elseif indicatorRange|length > 0 and indicatorRange.middle == true %}
+                        {% set advancesClass = 'orange-gradient' %}
                     {% endif %}
                     <span style="max-width: 400px" class="progress" data-progress-options='{"size":false,"barClasses":["{{ advancesClass }}","glossy"],"innerMarks":25,"topMarks":25,"topLabel":"[value]%","bottomMarks":[{"value":0,"label":"{{ 'pequiven.advances.nope'|trans({},'messages') }}"},{"value":50,"label":"{{ 'pequiven.advances.better'|trans({},'messages') }}"},{"value":100,"label":"{{ 'pequiven.advances.complete'|trans({},'messages') }}"}],"insetExtremes":true}'>{{ advances }}%</span>
                 </p>
@@ -94,7 +95,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
-                    {$ indicator.valueFinal|myNumberFormat:3 $}
+                    {$ indicator.valueFinal|myNumberFormat:2 $}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -117,23 +118,6 @@
                     {% endif %}
                 </p>
             </div>
-            {#<div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange != null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult','{{ indicator.resultReal|myNumberFormat }}')" {% endif %}>
-                <p class="inline-label">
-                    <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% set resultReal = indicator.resultReal %}
-                    {% if resultReal != null and errorArrangementRange != null %}
-                        <span id="chartContainerResult"></span>
-                    {% else %}
-                        {% if indicator.arrangementRange == null %}
-                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
-                        {% elseif errorArrangementRange != null %}
-                            <span class="tag red-bg">{{ errorArrangementRange }}</span>
-                        {% else %}
-                            <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
-                        {% endif %}
-                    {% endif %}
-                </p>
-            </div>#}
             <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange == null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>

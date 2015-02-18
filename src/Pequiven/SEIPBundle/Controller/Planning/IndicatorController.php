@@ -45,13 +45,19 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
+        $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
+        $indicatorRange = array();
         $errorArrangementRange = null;
         if($resource->getArrangementRange() !== null){
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
+            if($errorArrangementRange == null){
+                $tendency = $resource->getTendency();
+                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency);
+                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency);
+                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency);
+            }
         }
-        
-        $resultService = $this->getResultService();
 
         $data = array(
             'dataSource' => array(
@@ -65,8 +71,6 @@ class IndicatorController extends ResourceController
         $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
         $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
         $data['dataSource']['colorRange']['color'] = $color;
-//        var_dump($color);
-//        die();
         
         $view = $this
             ->view()
@@ -77,6 +81,7 @@ class IndicatorController extends ResourceController
                 'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
                 'data' => $data,
+                'indicatorRange' => $indicatorRange,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
