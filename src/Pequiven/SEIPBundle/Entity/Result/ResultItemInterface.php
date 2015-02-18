@@ -47,4 +47,14 @@ interface ResultItemInterface
      * ¿Forzar penalizacion?
      */
     function isForcePenalize();
+    
+    /**
+     * Resultado original (Sin ningun tipo de modificacion)
+     */
+    function setResultReal($resultReal);
+    
+    /**
+     * Resultado del item
+     */
+    function setResult($result);
 }

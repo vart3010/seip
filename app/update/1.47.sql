@@ -68,3 +68,8 @@ UPDATE Period SET amountPenalty = 15;
 
 ALTER TABLE Period CHANGE amountpenalty percentagePenalty DOUBLE PRECISION NOT NULL;
 ALTER TABLE Period_audit CHANGE amountpenalty percentagePenalty DOUBLE PRECISION DEFAULT NULL;
+
+ALTER TABLE ArrangementProgram ADD resultReal DOUBLE PRECISION NOT NULL;
+ALTER TABLE ArrangementProgram_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
+ALTER TABLE Goal ADD resultReal DOUBLE PRECISION NOT NULL;
+ALTER TABLE Goal_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;

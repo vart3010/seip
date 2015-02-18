@@ -1131,6 +1131,8 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     {
         return false;
     }
+    public function setResultReal($resultReal) {}
+    public function setResult($result) {}
     
     public function __clone() {
         if($this->id){

@@ -336,25 +336,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-//        var_dump($amountPenalty);
-//        var_dump($arrangementProgram->isCouldBePenalized());
-//        var_dump($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true);
-//        var_dump($arrangementProgram->isForcePenalize() === true);
-//        die;
         
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
             'refresh' => true,
         ));
-        $arrangementProgram->setProgressToDate($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResultReal($summary['advances']);
         $summary = $arrangementProgram->getSummary(array('refresh' => true));
         $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
         
         $em = $this->getDoctrine()->getManager();
         
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-           $advance = ($goal->getAdvance() - $amountPenalty);
-           $goal->setAdvance($advance);
+           $advance = $goal->getResult();
+           $goal->setResult(($advance - $amountPenalty));
+           $goal->setResultReal($advance);
            $em->persist($goal) ;
         }
        
@@ -482,7 +479,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-        $indicator->setProgressToDate($result - $amountPenalty);
+        $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
         

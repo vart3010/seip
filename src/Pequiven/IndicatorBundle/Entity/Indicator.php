@@ -991,6 +991,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         }
     }
     
+    public function setResult($result) 
+    {
+        $this->progressToDate = $result;
+    }
+    
     /**
      * Set resultReal
      *indicators

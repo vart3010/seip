@@ -196,6 +196,14 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
      */
     private $deletedAt;
     
+    /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -608,6 +616,24 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
     public function getResult() {
         return $this->progressToDate;
     }
+    
+    public function setResult($result) 
+    {
+        $this->progressToDate = $result;
+    }
+    
+    /**
+     * Set resultReal
+     *indicators
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
+
+        return $this;
+    }
 
     public function getWeight() {
         return null;
@@ -663,29 +689,6 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         return $this;
     }
     
-    public function __clone() 
-    {
-        if($this->id){
-            $this->id = null;
-            $this->ref = null;
-            $this->period = null;
-            $this->description = null;
-            $this->status = self::STATUS_DRAFT;
-            
-            $this->timeline = new Timeline();
-            $this->createdBy = null;
-            $this->createdAt = null;
-            $this->updatedAt = null;
-            
-            $this->details = new ArrangementProgram\Details();
-            $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
-            $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
-            $this->totalAdvance = 0;
-            $this->progressToDate = 0;
-            $this->lastDateCalculateResult = null;
-        }
-    }
-    
     function isCouldBePenalized() 
     {
         return $this->couldBePenalized;
@@ -710,5 +713,27 @@ class ArrangementProgram extends Model implements \Pequiven\SEIPBundle\Entity\Re
         return $this;
     }
 
-
+    public function __clone() 
+    {
+        if($this->id){
+            $this->id = null;
+            $this->ref = null;
+            $this->period = null;
+            $this->description = null;
+            $this->status = self::STATUS_DRAFT;
+            
+            $this->timeline = new Timeline();
+            $this->createdBy = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            
+            $this->details = new ArrangementProgram\Details();
+            $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->observations = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->totalAdvance = 0;
+            $this->progressToDate = 0;
+            $this->lastDateCalculateResult = null;
+        }
+    }
+    
 }
