@@ -2,6 +2,9 @@
 
 namespace Pequiven\SEIPBundle\Model\Admin;
 
+use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use PDOException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager as BaseManager;
@@ -34,10 +37,9 @@ class ArrangementRangeManager extends BaseManager
     {       
         try {
             $entityManager = $this->getEntityManager($object);
-            
+            $this->persistAssociations($object);
             $entityManager->persist($object);
             $entityManager->flush();
-            $this->persistAssociations($object);
         } catch (PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
@@ -57,17 +59,20 @@ class ArrangementRangeManager extends BaseManager
 
             foreach ($associations as $field => $mapping) {
                 if ($mapping['isOwningSide'] == false) {
-                    if($mapping['fieldName'] != 'indicator' || $mapping['fieldName'] != 'objetive'){
+                    if($mapping['fieldName'] != 'indicator' && $mapping['fieldName'] != 'objetive'){
                         continue;
                     }
                     
-                    if ($owningObjects = $object->{'get' . ucfirst($mapping['fieldName'])}()) {
-                        foreach ($owningObjects as $owningObject) {
-                            $owningObject->{'set' . ucfirst($mapping['mappedBy']) }($object);
-                            $entityManager->persist($owningObject);
-                        }
-                        $entityManager->flush();
+                    if(($indicator = $object->getIndicator()) != null){
+                        $indicator->setArrangementRange($object);
+                        $entityManager->persist($indicator);
                     }
+                    
+                    if(($objetive = $object->getObjetive()) != null){
+                        $objetive->setArrangementRange($object);
+                        $entityManager->persist($objetive);
+                    }
+                    $entityManager->flush();
                 }
             }
         }

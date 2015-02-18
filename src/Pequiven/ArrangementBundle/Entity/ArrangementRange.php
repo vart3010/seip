@@ -1170,6 +1170,8 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
         }
     }
     
+    
+    
     public function __toString() {
         return (string)$this->id;
     }
