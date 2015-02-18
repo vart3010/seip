@@ -184,7 +184,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
+                    'result' => $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
