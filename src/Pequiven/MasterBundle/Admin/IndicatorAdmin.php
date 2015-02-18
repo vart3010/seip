@@ -69,7 +69,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('goal')
             ->add('formula')
             ->add('tendency')
-            ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)

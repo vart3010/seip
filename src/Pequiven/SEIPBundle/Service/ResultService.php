@@ -333,10 +333,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $amountPenalty = 0;
         
         $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
-        
         if($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
+//        var_dump($amountPenalty);
+//        var_dump($arrangementProgram->isCouldBePenalized());
+//        var_dump($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true);
+//        var_dump($arrangementProgram->isForcePenalize() === true);
+//        die;
         
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,

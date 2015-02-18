@@ -23,6 +23,12 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class PeriodAdmin extends Admin
 {
+    /**
+     *
+     * @var \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private $periodService;
+
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
          $show
             ->add('name')
@@ -38,6 +44,9 @@ class PeriodAdmin extends Admin
             ->add('dateEndLoadArrangementProgram')
             ->add('dateStartClearanceNotificationArrangementProgram')
             ->add('dateEndClearanceNotificationArrangementProgram')
+            ->add('percentagePenalty')
+            ->add('dateStartPenalty')
+            ->add('dateEndPenalty')
             ->add('parent')
             ;
     }
@@ -111,8 +120,10 @@ class PeriodAdmin extends Admin
             ))
             ->add('dateStartClearanceNotificationArrangementProgram','sonata_type_date_picker',array(
             ))
-            ->add('dateEndClearanceNotificationArrangementProgram','sonata_type_date_picker',array(
-            ))
+            ->add('dateEndClearanceNotificationArrangementProgram','sonata_type_date_picker',array())
+            ->add('percentagePenalty')
+            ->add('dateStartPenalty','sonata_type_date_picker',array())
+            ->add('dateEndPenalty','sonata_type_date_picker',array())
             ->add('parent','entity',$childrensParameters)
             ;
     }
@@ -135,4 +146,13 @@ class PeriodAdmin extends Admin
             ->add('status')
             ;
     }
+    
+    public function preUpdate() {
+//        $this->periodService->getPeriodActive();
+    }
+    
+    function setPeriodService(\Pequiven\SEIPBundle\Service\PeriodService $periodService) {
+        $this->periodService = $periodService;
+    }
+
 }
