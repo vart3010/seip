@@ -56,8 +56,11 @@ class PeriodService extends ContainerAware
      * Evalua si se debe aplicar la penalizacion al resultado
      * @return boolean
      */
-    function isPenaltyInResult(\DateTime $dateToEvaluate)
+    function isPenaltyInResult(\DateTime $dateToEvaluate = null)
     {
+        if($dateToEvaluate === null){
+            return false;
+        }
         $period = $this->getPeriodActive();
         $r = ($dateToEvaluate >= $period->getDateStartPenalty() && $dateToEvaluate <= $period->getDateEndPenalty());
         return $r;
