@@ -1010,17 +1010,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         return $this->period;
     }
     
-    public function __toString() {
-        $description = $this->getDescription();
-        $limit = 80;
-        if(strlen($description) > $limit)
-    {
-            $description = substr($this->getDescription(), 0,$limit).'...';
-        }
-        $toString = $this->getRef().' '.$description;
-        return $toString?:'-';
-    }
-    
     public function getDescriptionWithGerenciaSecond()
     {
         return $this->getDescriptionSelect() .' - ' . $this->getGerenciaSecond();
@@ -1133,6 +1122,19 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
     public function setResultReal($resultReal) {}
     public function setResult($result) {}
+    
+    public function __toString() 
+    {
+        $description = $this->getDescription();
+        $limit = 80;
+        if(strlen($description) > $limit)
+        {
+            $description = mb_substr($this->getDescription(), 0,$limit,'UTF-8').'...';
+
+        }
+        $toString = $this->getRef().' '.$description;
+        return $toString?:'-';
+    }
     
     public function __clone() {
         if($this->id){

@@ -230,7 +230,7 @@ class PrePlanningService extends ContainerAware
         $limitName = 130;
         $nameSumary = $name;
         if(strlen($nameSumary) > $limitName){
-            $nameSumary = substr($nameSumary, 0, $limitName).'...';
+            $nameSumary = mb_substr($nameSumary, 0, $limitName,'UTF-8').'...';
         }
         
         if($url != ''){
