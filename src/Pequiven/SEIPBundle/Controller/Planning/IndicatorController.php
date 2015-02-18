@@ -45,6 +45,15 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+            ),
+        );
+        
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
         $indicatorRange = array();
@@ -56,21 +65,11 @@ class IndicatorController extends ResourceController
                 $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency);
                 $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency);
                 $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency);
+                $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
+                $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
+                $data['dataSource']['colorRange']['color'] = $color;
             }
         }
-
-        $data = array(
-            'dataSource' => array(
-                'chart' => array(),
-                'colorRange' => array(
-                    'color' => array(),
-                ),
-            ),
-        );
-        
-        $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
-        $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
-        $data['dataSource']['colorRange']['color'] = $color;
         
         $view = $this
             ->view()
