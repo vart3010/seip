@@ -51,15 +51,21 @@ class ArrangementRangeService implements ContainerAwareInterface
                 $error = $this->trans('pequiven_arrangementRange.rangeBottomBottomHigherThanStable', array(), 'PequivenArrangementBundle');
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MAX || $tendency->getRef() == Tendency::TENDENCY_MIN){
+            $tendencyRef = '';
+            if($tendency->getRef() == Tendency::TENDENCY_MAX){
+                $tendencyRef = Tendency::TENDENCY_MAX;
+            } else{
+                $tendencyRef = Tendency::TENDENCY_MIN;
+            }
             $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
             if(($arrangementRange->getTypeRangeTop()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC] && !($arrangementRange->getRankTopBasic())) || ($arrangementRange->getTypeRangeTop()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED] && (!($arrangementRange->getRankTopMixedTop()) || !($arrangementRange->getRankTopMixedBottom())))){//El rango alto esta mal definido
-                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[Tendency::TENDENCY_MAX], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeTopIsBadDefined', array(), 'PequivenArrangementBundle');
+                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[$tendencyRef], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeTopIsBadDefined', array(), 'PequivenArrangementBundle');
             } elseif(($arrangementRange->getTypeRangeMiddleTop()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC] && !($arrangementRange->getRankMiddleTopBasic())) || ($arrangementRange->getTypeRangeMiddleTop()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED] && (!($arrangementRange->getRankMiddleTopMixedTop()) || !($arrangementRange->getRankMiddleTopMixedBottom())))){//El rango medio alto está mal definido
-                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[Tendency::TENDENCY_MAX], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeMiddleTopIsBadDefined', array(), 'PequivenArrangementBundle');
+                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[$tendencyRef], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeMiddleTopIsBadDefined', array(), 'PequivenArrangementBundle');
             } elseif(($arrangementRange->getTypeRangeMiddleBottom()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC] && !($arrangementRange->getRankMiddleBottomBasic())) || ($arrangementRange->getTypeRangeMiddleBottom()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED] && (!($arrangementRange->getRankMiddleBottomMixedTop()) || !($arrangementRange->getRankMiddleBottomMixedBottom())))){//El rango medio bajo está mal definido
-                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[Tendency::TENDENCY_MAX], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeMiddleBottomIsBadDefined', array(), 'PequivenArrangementBundle');
+                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[$tendencyRef], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeMiddleBottomIsBadDefined', array(), 'PequivenArrangementBundle');
             } elseif(($arrangementRange->getTypeRangeBottom()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC] && !($arrangementRange->getRankBottomBasic())) || ($arrangementRange->getTypeRangeBottom()->getRef() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED] && (!($arrangementRange->getRankBottomMixedTop()) || !($arrangementRange->getRankBottomMixedBottom())))){//El rango bajo está mal definido
-                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[Tendency::TENDENCY_MAX], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeBottomIsBadDefined', array(), 'PequivenArrangementBundle');
+                $error = $this->trans('pequiven_arrangementRange.rangeIsBadDefined', array('%tendencia%' => $this->trans($tendencyArray[$tendencyRef], array(), 'PequivenArrangementBundle')), 'PequivenArrangementBundle').'. '.$this->trans('pequiven_arrangementRange.rangeBottomIsBadDefined', array(), 'PequivenArrangementBundle');
             } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){//Si el rango alto es menor que los otros rangos
                 if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC]){
                     if($arrangementRange->getRankTopBasic() < $arrangementRange->getRankMiddleTopBasic()){
@@ -172,6 +178,175 @@ class ArrangementRangeService implements ContainerAwareInterface
         }
         
         return $error;
+    }
+    
+    /**
+     * Retorna el arreglo de colores para el widget del rango de gestión
+     * @param ArrangementRange $arrangementRange
+     * @return array
+     */
+    public function getDataColorRangeWidget(ArrangementRange $arrangementRange, Tendency $tendency){
+        $color = array();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        // VERDE: #1aaf5d
+        // AMARILLO: #f2c500
+        // ROJO: #c02d00
+        
+//        "minValue": "69",
+//        "maxValue": "79",
+//        "label": "<= 79%",
+//        "code": "#c02d00"
+        
+        if($tendency->getRef() == Tendency::TENDENCY_MAX){
+            //Rango Rojo
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
+                $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomBasic(), "10",2),2,',','.');
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomBasic();
+                $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                $colorLevel['code'] = "#c02d00";
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
+                $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
+                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                $colorLevel['code'] = "#c02d00";
+            }
+            $color[] = $colorLevel;
+            
+            //Rango Amarillo
+            $label = '';
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomBasic();
+                $label.= $arrangementRange->getOprankMiddleBottomBasic().' '.$arrangementRange->getRankMiddleBottomBasic().'% y ';
+            } elseif($arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomMixedTop();
+                $label.= $arrangementRange->getOpRankMiddleBottomMixedTop().' '.$arrangementRange->getRankMiddleBottomMixedTop().'% y ';
+            }
+            
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC]){
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopBasic();
+                $label.= $arrangementRange->getOprankMiddleTopBasic().' '.$arrangementRange->getRankMiddleTopBasic().'%';
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED]){
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
+                $label.= $arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
+            }
+            $colorLevel['label'] = $label;
+            $colorLevel['code'] = "#f2c500";
+            $color[] = $colorLevel;
+            
+            //Rango Verde
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankTopBasic();
+                $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankTopBasic(), "10",2),2,',','.');
+                $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                $colorLevel['code'] = "#1aaf5d";
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
+                $colorLevel['maxValue'] = number_format(bcsub($arrangementRange->getRankTopMixedBottom(), "10",2),2,',','.');
+                $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                $colorLevel['code'] = "#1aaf5d";
+            }
+            $color[] = $colorLevel;
+            
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
+            //Rango Verde
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
+                $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomBasic(), "10",2),2,',','.');
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomBasic();
+                $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                $colorLevel['code'] = "#1aaf5d";
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
+                $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
+                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                $colorLevel['code'] = "#1aaf5d";
+            }
+            $color[] = $colorLevel;
+            
+            //Rango Amarillo
+            $label = '';
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomBasic();
+                $label.= $arrangementRange->getOprankMiddleBottomBasic().' '.$arrangementRange->getRankMiddleBottomBasic().'% y ';
+            } elseif($arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomMixedTop();
+                $label.= $arrangementRange->getOpRankMiddleBottomMixedTop().' '.$arrangementRange->getRankMiddleBottomMixedTop().'% y ';
+            }
+            
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC]){
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopBasic();
+                $label.= $arrangementRange->getOprankMiddleTopBasic().' '.$arrangementRange->getRankMiddleTopBasic().'%';
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED]){
+                $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
+                $label.= $arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
+            }
+            $colorLevel['label'] = $label;
+            $colorLevel['code'] = "#f2c500";
+            $color[] = $colorLevel;
+            
+            //Rango Rojo
+            $colorLevel = array();
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankTopBasic();
+                $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankTopBasic(), "10",2),2,',','.');
+                $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                $colorLevel['code'] = "#c02d00";
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
+                $colorLevel['maxValue'] = number_format(bcsub($arrangementRange->getRankTopMixedBottom(), "10",2),2,',','.');
+                $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                $colorLevel['code'] = "#c02d00";
+            }
+            $color[] = $colorLevel;
+//            var_dump($color);
+//            die();
+        } elseif($tendency->getRef() == Tendency::TENDENCY_EST){
+            //Rango Rojo
+            $colorLevel = array();
+            $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedBottom(), "10",2),2,',','.');
+            $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
+            $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+            $colorLevel['code'] = "#c02d00";
+            $color[] = $colorLevel;
+            
+            //Rango Amarillo
+            $colorLevel = array();
+            $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomMixedTop();
+            $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleBottomMixedBottom();
+            $colorLevel['label'] = $arrangementRange->getOpRankMiddleBottomMixedTop().' '.$arrangementRange->getRankMiddleBottomMixedTop().'% y '.$arrangementRange->getOpRankMiddleBottomMixedBottom().' '.$arrangementRange->getRankMiddleBottomMixedBottom().'%';
+            $colorLevel['code'] = "#f2c500";
+            $color[] = $colorLevel;
+            
+            //Rango Verde
+            $colorLevel = array();
+            $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
+            $colorLevel['maxValue'] = (string)$arrangementRange->getRankTopMixedBottom();
+            $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+            $colorLevel['code'] = "#1aaf5d";
+            $color[] = $colorLevel;
+            
+            //Rango Amarillo
+            $colorLevel = array();
+            $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleTopMixedTop();
+            $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
+            $colorLevel['label'] = $arrangementRange->getOpRankMiddleTopMixedTop().' '.$arrangementRange->getRankMiddleTopMixedTop().'% y '.$arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
+            $colorLevel['code'] = "#f2c500";
+            $color[] = $colorLevel;
+            
+            //Rango Rojo
+            $colorLevel = array();
+            $colorLevel['minValue'] = (string)$arrangementRange->getRankBottomMixedTop();
+            $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
+            $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'%';
+            $colorLevel['code'] = "#c02d00";
+            $color[] = $colorLevel;
+        }
+        
+        return $color;
     }
     
     /**

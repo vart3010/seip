@@ -50,6 +50,8 @@ class IndicatorController extends ResourceController
         if($resource->getArrangementRange() !== null){
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
         }
+        
+        $resultService = $this->getResultService();
 
         $data = array(
             'dataSource' => array(
@@ -60,6 +62,12 @@ class IndicatorController extends ResourceController
             ),
         );
         
+        $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
+        $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
+        $data['dataSource']['colorRange']['color'] = $color;
+//        var_dump($color);
+//        die();
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
@@ -68,6 +76,7 @@ class IndicatorController extends ResourceController
                 'errorFormula' => $errorFormula,
                 'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
+                'data' => $data,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
@@ -286,5 +295,14 @@ class IndicatorController extends ResourceController
     protected function getArrangementRangeService()
     {
         return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }

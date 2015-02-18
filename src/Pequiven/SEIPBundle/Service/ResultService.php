@@ -504,10 +504,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @return boolean
      */
     private function calculateRangeGood(Indicator &$indicator, Tendency &$tendency){
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
         $isGood = false;
-        
         if($tendency->getRef() == Tendency::TENDENCY_EST){
             if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                 if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
@@ -527,7 +527,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
-            if($arrangementRange->getTypeRangeTop() == ArrangementRangeType::RANGE_TYPE_TOP_BASIC){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
                 if(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankTopBasic()){
                         $isGood = true;
@@ -541,7 +541,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isGood = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeTop() == ArrangementRangeType::RANGE_TYPE_TOP_MIXED){
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
                 if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
                         $isGood = true;
@@ -561,12 +561,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
-            if($arrangementRange->getTypeRangeBottom() == ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC){
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
                 if(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankBottomBasic()){
                         $isGood = true;
                     }
-                } elseif(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                } elseif(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_THAN) == 0){                    
                     if($result < $arrangementRange->getRankBottomBasic()){
                         $isGood = true;
                     }
@@ -575,7 +575,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isGood = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeBottom() == ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED){
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
                 if(strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
                         $isGood = true;
@@ -645,7 +645,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
-            if($arrangementRange->getTypeRangeMiddleTop() == ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC || $arrangementRange->getTypeRangeMiddleBottom() == ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC){
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
                 if(strcmp($arrangementRange->getOpRankMiddleTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
@@ -667,7 +667,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isMiddle = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeMiddleTop() == ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED || $arrangementRange->getTypeRangeMiddleBottom() == ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED){
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
                 if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
                         $isMiddle = true;
@@ -704,7 +704,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
-            if($arrangementRange->getTypeRangeMiddleTop() == ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC || $arrangementRange->getTypeRangeMiddleBottom() == ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC){
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
                 if(strcmp($arrangementRange->getOpRankMiddleTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
@@ -726,7 +726,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isMiddle = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeMiddleTop() == ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED || $arrangementRange->getTypeRangeMiddleBottom() == ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED){
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
                 if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
                         $isMiddle = true;
@@ -797,7 +797,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
-            if($arrangementRange->getTypeRangeBottom() == ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC){
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
                 if(strcmp($arrangementRange->getOprankBottomBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankBottomBasic()){
                         $isBad = true;
@@ -811,7 +811,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isBad = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeBottom() == ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED){
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
                 if(strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
                         $isBad = true;
@@ -831,7 +831,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
-            if($arrangementRange->getTypeRangeTop() == ArrangementRangeType::RANGE_TYPE_TOP_BASIC){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
                 if(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
                     if($result == $arrangementRange->getRankTopBasic()){
                         $isBad = true;
@@ -845,7 +845,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $isBad = true;
                     }
                 }
-            } elseif($arrangementRange->getTypeRangeTop() == ArrangementRangeType::RANGE_TYPE_TOP_MIXED){
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
                 if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
                     if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
                         $isBad = true;
@@ -1210,6 +1210,52 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         return $valid;
+    }
+    
+    /**
+     * Retorna los valores por defecto del widget para el rango de gestión
+     * @param Indicator $indicator
+     * @return string
+     */
+    public function getDataChartWidget(Indicator $indicator){
+        $data = array();
+        $data["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $data["captionOnTop"] = "1";
+        $data["bgcolor"] = "FFFFFF";
+        $data["bordercolor"] = "DCCEA1";
+        $data["charttopmargin"] = "0";
+        $data["chartbottommargin"] =  "0";
+//        $data["upperlimit"] = "131";
+//        $data["lowerlimit"] = "69";
+        $data["tickmarkdistance"] = "3";
+        $data["valuepadding"] = "-2";
+        $data["pointerradius"] = "0";
+        $data["majortmcolor"] = "000000";
+        $data["majortmnumber"] = "3";
+        $data["minortmnumber"] = "4";
+        $data["minortmheight"] = "4";
+        $data["majortmheight"] = "8";
+        $data["showshadow"] = "0";
+        $data["pointerbgcolor"] = "FFFFFF";
+        $data["pointerbordercolor"] = "000000";
+        $data["showValue"] = "0";
+        $data["showTickValues"] = "0";
+        $data["showTickMarks"] = "0";
+        $data["gaugeborderthickness"] = "3";
+        $data["basefontcolor"] = "000000";
+        $data["gaugefillmix"] = "{color},{FFFFFF}";
+        $data["gaugefillratio"] = "50,50";
+        $data["showborder"] = "0";
+        
+        $tendency = $indicator->getTendency();
+        if($this->calculateRangeGood($indicator, $tendency)){
+            $data["captionFontColor"] = "#1aaf5d";
+        } elseif($this->calculateRangeMiddle($indicator, $tendency)){
+            $data["captionFontColor"] = "#f2c500";
+        } elseif($this->calculateRangeBad($indicator, $tendency)){
+            $data["captionFontColor"] = "#c02d00";
+        }
+        return $data;
     }
     
     private function addErrorTrans($error,array $parameters = array()) {

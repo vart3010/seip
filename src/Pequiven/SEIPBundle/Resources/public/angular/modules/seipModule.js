@@ -1915,7 +1915,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderWidgetRange = function(id,caption) {
+            $scope.renderWidgetRange = function(id,data) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "HLinearGauge",
@@ -1924,69 +1924,9 @@ angular.module('seipModule.controllers', [])
                         "height": "4%",
                         "dataFormat": "json",
                         "dataSource": {
-                            "chart": {
-                                "caption": caption,
-                                "captionOnTop": "1",
-                                "captionFontColor": "#c02d00",
-                                "bgcolor": "FFFFFF",
-                                "bordercolor": "DCCEA1",
-                                "charttopmargin": "0",
-                                "chartbottommargin": "0",
-                                "upperlimit": "131",
-                                "lowerlimit": "69",
-                                "tickmarkdistance": "3",
-                                "valuepadding": "-2",
-                                "pointerradius": "0",
-                                "majortmcolor": "000000",
-                                "majortmnumber": "3",
-                                "minortmnumber": "4",
-                                "minortmheight": "4",
-                                "majortmheight": "8",
-                                "showshadow": "0",
-                                "pointerbgcolor": "FFFFFF",
-                                "pointerbordercolor": "000000",
-                                "showValue": "0",
-                                "showTickValues": "0",
-                                "showTickMarks": "0",
-                                "gaugeborderthickness": "3",
-                                "basefontcolor": "000000",
-                                "gaugefillmix": "{color},{FFFFFF}",
-                                "gaugefillratio": "50,50",
-                                "showborder": "0"
-                            },
+                            "chart": data.dataSource.chart,
                             "colorRange": {
-                                "color": [
-                                   {
-                                      "minValue": "69",
-                                      "maxValue": "79",
-                                      "label": "<= 79%",
-                                      "code": "#c02d00"
-                                   },
-                                   {
-                                      "minValue": "80",
-                                      "maxValue": "89",
-                                      "label": ">= 80% y <= 89%",
-                                      "code": "#f2c500"
-                                   },
-                                   {
-                                      "minValue": "90",
-                                      "maxValue": "110",
-                                      "label": ">= 90% y <= 110%",
-                                      "code": "#1aaf5d"
-                                   },
-                                   {
-                                      "minValue": "111",
-                                      "maxValue": "120",
-                                      "label": ">= 111% y <= 120%",
-                                      "code": "#f2c500"
-                                   },
-                                   {
-                                      "minValue": "121",
-                                      "maxValue": "131",
-                                      "label": ">= 121%",
-                                      "code": "#c02d00"
-                                   }
-                                ]
+                                "color": data.dataSource.colorRange.color
                              }
                         }
                     });
