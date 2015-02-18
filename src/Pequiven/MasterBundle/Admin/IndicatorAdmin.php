@@ -35,6 +35,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('valueFinal')
             ->add('childrens')
             ->add('valuesIndicator')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
             ;
     }
     
@@ -71,6 +73,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
+            ->add('couldBePenalized',null,array(
+                'required' => false,
+            ))
+            ->add('forcePenalize',null,array(
+                'required' => false,
+            ))
             ->add('enabled')
             ;
     }
@@ -87,6 +95,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
             ->add('enabled')
             ;
     }
@@ -104,15 +114,17 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ;
     }
     
-    public function prePersist($object)
-    {
+    public function prePersist($object) {
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
     }
     
-    public function postUpdate($object) 
-    {
-//        $objetives = $object->getObjetives();
-//        $this->getResultService()->updateResultOfObjects($objetives);
+    public function preUpdate($object) {
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
     }
     
     /**
