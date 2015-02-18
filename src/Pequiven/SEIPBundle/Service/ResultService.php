@@ -503,7 +503,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeGood(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeGood(Indicator &$indicator, Tendency &$tendency){
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
@@ -604,8 +604,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency){
         $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
         $isMiddle = false;
         
@@ -772,8 +773,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeBad(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeBad(Indicator &$indicator, Tendency &$tendency){
         $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
         
         $isBad = false;
