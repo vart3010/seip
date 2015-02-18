@@ -4,13 +4,15 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
-{% block body %}
-    
+{% block before_body %}
     {{ contentHeader(
         {(path('pequiven_seip_user_show',{'id':user.id})):("pequiven_seip.user.user"|trans)},
         ('pequiven_seip.user.localization.localization'|trans),
         ('pequiven_seip.actions.add'|trans)
     ) }}
+{% endblock %}
+
+{% block body %}
     {{ form_errors(form) }}
     <form action="{{ path('pequiven_localization_create',{'userId':user.id}) }}" method="POST">
         <fieldset class="fieldset fields-list">

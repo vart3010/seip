@@ -8,6 +8,9 @@
 {% set labelGerencia = '' %}
 {% set levelLabel = '' %}
 
+{% block before_body %}
+{% endblock %}
+
 {% block body %}
     {% if pre_planning_user.gerenciaFirst %}
         {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':pre_planning_user.gerenciaFirst }) %}

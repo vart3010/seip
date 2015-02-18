@@ -131,6 +131,14 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      */
     private $advance = 0;
     
+    /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -452,7 +460,30 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     {
         $this->advance = $advance;
     }
+    
+    public function setResult($result) 
+    {
+        $this->advance = $result;
+    }
+    
+    public function getResult() 
+    {
+        return $this->advance;
+    }
+    
+    /**
+     * Set resultReal
+     *indicators
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
 
+        return $this;
+    }
+    
     public function __clone() {
         if($this->id > 0){
            $this->id = null;

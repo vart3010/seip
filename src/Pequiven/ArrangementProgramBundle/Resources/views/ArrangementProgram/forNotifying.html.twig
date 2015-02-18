@@ -2,15 +2,14 @@
 
 {% trans_default_domain 'PequivenArrangementProgramBundle' %}
 
+{% block before_body %}
+    {{ contentHeader(
+        { ( path('pequiven_seip_arrangementprogram_assigned') ): ( 'pequiven.arrangement_program.arrangement_program'|trans ) },
+         ( 'pequiven.arrangement_program.for_notifying'|trans({},'PequivenArrangementProgramBundle') )
+    ) }}
+{% endblock %}
+
 {% block body -%}
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ path(route) }}">{{ 'pequiven.arrangement_program.arrangement_program'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven.arrangement_program.for_notifying'|trans({},'PequivenArrangementProgramBundle') }}</span>
-        </h1>
-    </hgroup>
-    
    {% include 'PequivenArrangementProgramBundle:ArrangementProgram:_index.html.twig' %}
 {% endblock %}
 

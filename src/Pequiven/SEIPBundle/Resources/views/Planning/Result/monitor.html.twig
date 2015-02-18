@@ -1,11 +1,13 @@
 {% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
-{% block body %}
-        
+
+{% block before_body %}
     {{ contentHeader(
         ("monitor.objetiveOperative"|trans)
     ) }}
-    
+{% endblock %}
+
+{% block body %}
     <div ng-controller="DashboardController" ng-init="renderChartOperative('chartContainerOperative',{{ categories|json_encode() }},{{ dataPlanOperative|json_encode() }},{{ dataRealOperative|json_encode() }},{{ dataPorcOperative|json_encode() }},'{{ gerenciaGroup.description }}','{{ optionsChart.typeLabel }}')" class="dashboard" style="background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.25)), -webkit-linear-gradient(top, #5e6165, #33373a);">
         <p class="button-height">
             <a href="{{ path('monitorObjetiveTacticByGroup',{'typeGroup':gerenciaGroup.groupName}) }}" class="button red-gradient">{{ "principal.button.objTactic"|trans }}</a>

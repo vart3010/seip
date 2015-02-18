@@ -20,7 +20,7 @@ class UpdateController extends Controller
     function updateResultArrangementProgramAction()
     {
         ini_set('max_execution_time', 300); //300 seconds = 5 minutes
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
+        $period = $this->getPeriodService()->getPeriodActive();
         $arrangementprograms = $this->get('pequiven_seip.repository.arrangementprogram')->findAllWithData(array(
             'period' => $period,
         ));
@@ -139,5 +139,14 @@ class UpdateController extends Controller
     public function getResultService()
     {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

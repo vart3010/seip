@@ -15,14 +15,17 @@
         (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
     } %}
 
-{% block body -%}
-    {% set level = indicator.indicatorLevel.level %}
+{% set level = indicator.indicatorLevel.level %}
+
+{% block before_body %}
     {{ contentHeader(
         {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
         { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
         ('pequiven.show'|trans({},'messages'))
     ) }}
-    
+{% endblock %}
+
+{% block body -%}
     <div ng-controller="IndicatorResultController">
         
     {% if errorFormula != null %}

@@ -329,22 +329,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
     {
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+        
+        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
+        if($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)){
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
+        
         $summary = $arrangementProgram->getSummary(array(
             'limitMonthToNow' => true,
             'refresh' => true,
         ));
-        
-        $amountPenalty = 0;
-        
-        $arrangementProgram->setProgressToDate($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResultReal($summary['advances']);
         $summary = $arrangementProgram->getSummary(array('refresh' => true));
         $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
         
         $em = $this->getDoctrine()->getManager();
         
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
-           $advance = ($goal->getAdvance() - $amountPenalty);
-           $goal->setAdvance($advance);
+           $advance = $goal->getResult();
+           $goal->setResult(($advance - $amountPenalty));
+           $goal->setResultReal($advance);
            $em->persist($goal) ;
         }
        
@@ -411,6 +418,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
+        $result = 0;
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
@@ -429,7 +437,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
-            $indicator->setProgressToDate($result);
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = 100 - $indicator->getResult();
             $indicator->setResultReal($result);
@@ -448,7 +455,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
-            $indicator->setProgressToDate($result);
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
@@ -466,9 +472,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             } else{
                 throw new \LogicException(sprintf('El indicador "%s(%s)" esta mal configurado: "%s"',$indicator->getRef(),$indicator->getId(),$error));
             }
-            
-            $indicator->setProgressToDate($result);
         }
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+        $lastNotificationAt = $indicator->getDetails()->getLastNotificationAt();
+        if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
+        $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
         

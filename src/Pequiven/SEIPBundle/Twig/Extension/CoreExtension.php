@@ -60,16 +60,15 @@ class CoreExtension extends \Twig_Extension
             }
             $parameters[] = $item;
         }
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
-        $periodDescription = '';
-        if($period){
-            $periodDescription = $period->getDescription();
-        }
+        $periodService = $this->getPeriodService();
+        $period = $this->getPeriodService()->getPeriodActive();
         
+        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation();
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
-                'period' => $periodDescription
+                'period' => $period,
+                'listArrayPeriods' => $listArrayPeriods,
             )
         );
     }
@@ -146,5 +145,14 @@ class CoreExtension extends \Twig_Extension
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

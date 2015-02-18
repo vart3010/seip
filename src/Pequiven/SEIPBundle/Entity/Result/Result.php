@@ -431,6 +431,30 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
     function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $this->period = $period;
     }
+
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+    
+    function isCouldBePenalized() 
+    {
+        return false;
+    }
+
+    function isForcePenalize() 
+    {
+        return false;
+    }
+    
+    public function setResultReal($resultReal) {}
+    public function setResult($result) {}
     
     public function __clone() {
         if($this->id > 0){
@@ -444,16 +468,5 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
             
             $this->period = null;
         }
-    }
-
-    function getDeletedAt() {
-        return $this->deletedAt;
-    }
-
-    function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
-        
-        return $this;
     }
 }

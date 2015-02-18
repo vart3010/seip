@@ -5,12 +5,15 @@
 {% set level = app.request.get('level') %}
 {% set period = app.request.get('period') %}
 
-{% block body %}
+{% block before_body %}
     {{ contentHeader(
             ("pequiven_seip.pre_planning.pre_planning"|trans({'%period%':period})),
             ( ("pequiven_seip.pre_planning.list") |trans())
         )
     }}
+{% endblock %}
+
+{% block body %}
     <div ng-controller="TableFormatController">
         <div loading-container="tableParams.settings().$loading">
             <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" template-header="custom/header" api-data-url="{{ path('pequiven_pre_planning_user_index',{_format:'json',period: period,type:app.request.get('type')}) }}" export-csv="csv" class="table table-responsive">

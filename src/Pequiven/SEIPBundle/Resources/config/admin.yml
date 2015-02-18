@@ -82,6 +82,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setPeriodService, ['@pequiven_arrangement_program.service.period']]
             
     sonata.admin.arrangement_program.arrangement_program:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin

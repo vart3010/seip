@@ -8,16 +8,14 @@
     {% set allow_create = false %}
 {% endif %}
 
+{% block before_body %}
+    {{ contentHeader(
+        { ( path(route_index) ): ('pequiven_objetive.objetive_operative'|trans ) },
+         ('pequiven_objetive.list'|trans)
+    ) }}
+{% endblock %}
+
 {% block body %}
-    
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_operative'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
-        </h1>
-    </hgroup>
-        
     <input type="hidden" id="rolUser" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
     
     <div ng-controller="TableGroupingFormatController">

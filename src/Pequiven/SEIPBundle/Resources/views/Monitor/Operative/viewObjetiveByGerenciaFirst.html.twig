@@ -8,19 +8,20 @@
     {% set allow_create = false %}
 {% endif %}
 
+{% block before_body %}
+    {{ contentHeader(
+        {(route_index):("pequiven_objetive.objetive_operative"|trans)},
+        (gerencia.getDescription),
+        ('pequiven_objetive.list'|trans)
+    ) }}
+{% endblock %}
+
 {% block body %}
     {% if (gerenciaGroup.groupName == 'COMP') %}
         <p class="button-height">
             <a href="{{ urlVinculant }}" class="button red-gradient">{{ "principal.button.vinculant"|trans ({},'PequivenSEIPBundle') }}</a>
         </p>
     {% endif %}
-        
-    {{ contentHeader(
-        {(route_index):("pequiven_objetive.objetive_operative"|trans)},
-        (gerencia.getDescription),
-        ('pequiven_objetive.list'|trans)
-    ) }}
-        
     <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
 
     <div ng-controller="TableGroupingFormatController">

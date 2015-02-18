@@ -8,17 +8,18 @@
     {% set allow_create = false %}
 {% endif %}
 
-{% block body %}
-    <p class="button-height">
-        <a href="{{ urlMedular }}" class="button red-gradient">{{ "principal.button.medular"|trans ({},'PequivenSEIPBundle') }}</a>
-    </p>
-        
+{% block before_body %}
     {{ contentHeader(
         {(route_index):("pequiven_objetive.objetive_operative"|trans)},
         (gerencia.getDescription),
         ('pequiven_objetive.list'|trans)
     ) }}
-        
+{% endblock %}
+
+{% block body %}
+    <p class="button-height">
+        <a href="{{ urlMedular }}" class="button red-gradient">{{ "principal.button.medular"|trans ({},'PequivenSEIPBundle') }}</a>
+    </p>
     <input type="hidden" id="rolUser" value="{{ app.user.getRoles[0] }}">
 
     <div ng-controller="TableGroupingFormatController">

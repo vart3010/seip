@@ -10,14 +10,15 @@
     {% set allow_create = false %}
 {% endif %}
 
-{% block body %}
-        
+{% block before_body %}
     {{ contentHeader(
         {(route_index):("pequiven.arrangement_program.arrangement_programs"|trans)},
         (gerencia.getDescription),
         ('pequiven.arrangement_program.list'|trans)
     ) }}
-        
+{% endblock %}
+
+{% block body %}        
     <input type="hidden" id="idComplejo" value="{{ gerencia.complejo.id }}">
     <input type="hidden" id="idGerencia" value="{{ gerencia.id }}">
 
