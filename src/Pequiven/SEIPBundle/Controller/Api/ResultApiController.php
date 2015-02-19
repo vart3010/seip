@@ -118,6 +118,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
+                }else{
+                    $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
+                        '%user%' => $user,
+                    ));
                 }
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 $gerenciaSecond = $user->getGerenciaSecond();
@@ -125,6 +129,10 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
+                }else{
+                    $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
+                        '%user%' => $user,
+                    ));
                 }
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
