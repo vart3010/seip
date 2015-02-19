@@ -39,7 +39,7 @@ class PlanningDashboardBox extends GenericBox
         $categories = array();
         
         //Resultados Tácticos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesTacticByGerenciaGroup();
+        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesTacticByGerenciaGroup();
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);

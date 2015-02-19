@@ -283,7 +283,7 @@ class MonitorController extends baseController {
         $categories = array();
         
         //Resultados Tácticos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesTacticByGerenciaGroup();
+        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesTacticByGerenciaGroup();
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
@@ -320,7 +320,7 @@ class MonitorController extends baseController {
         $categories = array();
         
         //Resultados Operativos
-        $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesOperativeByGerenciaGroup();
+        $resultsOperatives = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesOperativeByGerenciaGroup();
         
         foreach($resultsOperatives as $resultOperative){
             $linkGrupo = $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $resultOperative['Grupo']));
@@ -357,7 +357,7 @@ class MonitorController extends baseController {
         $categories = array();
         
         //Resultados
-        $results = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalArrangementProgramByGerenciaGroup();
+        $results = $this->container->get('pequiven.repository.monitor')->getTotalArrangementProgramByGerenciaGroup();
         
         foreach($results as $result){
             $linkGrupo = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $result['Grupo']));
@@ -395,7 +395,7 @@ class MonitorController extends baseController {
         $optionsChart = array();
         
         //Resultados Tácticos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesTacticByGerenciaGroup(array('typeGroup' => $typeGroup));
+        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesTacticByGerenciaGroup(array('typeGroup' => $typeGroup));
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
@@ -437,7 +437,7 @@ class MonitorController extends baseController {
         $optionsChart = array();
         
         //Resultados Operativos
-        $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalObjetivesOperativeByGerenciaGroup(array('typeGroup' => $typeGroup));
+        $resultsOperatives = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesOperativeByGerenciaGroup(array('typeGroup' => $typeGroup));
         
         foreach($resultsOperatives as $resultOperative){
             $resOperative = $resultOperative['PlanObjOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealObjOperative'] / (float)$resultOperative['PlanObjOperative']) * 100,'0',2);
@@ -479,7 +479,7 @@ class MonitorController extends baseController {
         $optionsChart = array();
         
         //Resultados
-        $results = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalArrangementProgramByGerenciaGroup(array('typeGroup' => $typeGroup));
+        $results = $this->container->get('pequiven.repository.monitor')->getTotalArrangementProgramByGerenciaGroup(array('typeGroup' => $typeGroup));
         
         foreach($results as $result){
             $res = $result['PlanArrPro'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$result['RealArrPro'] / (float)$result['PlanArrPro']) * 100,'0',2);
@@ -539,7 +539,7 @@ class MonitorController extends baseController {
         $idGerencia = $request->get("idGerencia");
         $typeGroup = $request->get("typeGroup");
         $em = $this->getDoctrine()->getManager();
-        $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
+        $monitor = $this->container->get('pequiven.repository.monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
         $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
@@ -568,7 +568,7 @@ class MonitorController extends baseController {
         $typeGroup = $request->get("typeGroup");
         $em = $this->getDoctrine()->getManager();
         
-        $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
+        $monitor = $this->container->get('pequiven.repository.monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
         $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
