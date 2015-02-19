@@ -2,10 +2,10 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Repositorio de programa de gestion
@@ -192,7 +192,7 @@ class ArrangementProgramRepository extends EntityRepository
      */
     public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
         $this->getUser();
-        return parent::createPaginator($criteria, $orderBy);
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -204,22 +204,6 @@ class ArrangementProgramRepository extends EntityRepository
     public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
         $this->getUser();
         return parent::createPaginator($criteria, $orderBy);
-//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-//        
-//        $queryBuilder = $this->getCollectionQueryBuilder();
-//        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
-//        if(($gerencia = $criteria->remove('gerencia')) != null){
-//            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
-//        }
-//        
-//        if(isset($criteria['status'])){
-//            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
-//        }
-//        
-////        $this->applyCriteria($queryBuilder, $criteria);
-////        $this->applySorting($queryBuilder, $orderBy);
-//
-//        return $this->getPaginator($queryBuilder);
     }
     
     /**
@@ -261,6 +245,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -330,6 +315,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -544,6 +530,7 @@ class ArrangementProgramRepository extends EntityRepository
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        $this->applyPeriodCriteria($queryBuilder);
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
         parent::applySorting($queryBuilder, $sorting);

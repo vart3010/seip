@@ -26,6 +26,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerenciaSecond')
             ->add('parents')
             ->add('indicators')
+             ->add('objetiveLevel')
             ->add('period')
             ->add('evalObjetive')
             ->add('evalIndicator')
@@ -48,6 +49,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerenciaSecond')
             ->add('parents')
             ->add('indicators')
+            ->add('objetiveLevel')
             ->add('period')
             ->add('evalObjetive',null,array(
                 'required' => false,

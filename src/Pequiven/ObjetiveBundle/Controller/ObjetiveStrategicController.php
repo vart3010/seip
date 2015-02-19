@@ -72,26 +72,19 @@ class ObjetiveStrategicController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        $resources = $this->resourceResolver->getResource(
+            $repository, 'createPaginatorStrategic', array($criteria, $sorting)
+        );
 
-        if ($this->config->isPaginated()) {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorStrategic', array($criteria, $sorting)
-            );
-
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if (($limit = $request->query->get('limit')) && $limit > 0) {
-                if ($limit > 100) {
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
+        $maxPerPage = $this->config->getPaginationMaxPerPage();
+        if (($limit = $request->query->get('limit')) && $limit > 0) {
+            if ($limit > 100) {
+                $limit = 100;
             }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
-            );
+            $maxPerPage = $limit;
         }
+        $resources->setCurrentPage($request->get('page', 1), true, true);
+        $resources->setMaxPerPage($maxPerPage);
 
         $view = $this
                 ->view()

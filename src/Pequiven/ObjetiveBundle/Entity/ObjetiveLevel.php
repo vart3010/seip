@@ -324,4 +324,8 @@ class ObjetiveLevel extends modelObjetiveLevel implements \Pequiven\SEIPBundle\E
             $this->period = null;
         }
     }
+    
+    public function __toString() {
+        return $this->getDescription()?:'-';
+    }
 }
