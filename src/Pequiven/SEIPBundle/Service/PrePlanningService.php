@@ -70,7 +70,7 @@ class PrePlanningService extends ContainerAware
         
         $linkGeneratorService = $this->getLinkGeneratorService();
         $user = $this->getUser();
-        $period = $this->getPeriodService()->getPeriodActive(true);
+        $period = $this->getPeriodService()->getPeriodActive();
         $prePlanningUser = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser();
         $this->setCurrentBuildPrePlanning($prePlanningUser);
         
