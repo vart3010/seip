@@ -229,7 +229,7 @@ class IndicatorController extends ResourceController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
         if (is_array($results) && $totalResults > 0) {

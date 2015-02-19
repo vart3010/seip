@@ -11,6 +11,8 @@
 
 namespace Pequiven\SEIPBundle\Doctrine\ORM;
 
+use Doctrine\ORM\QueryBuilder;
+use Pequiven\SEIPBundle\Service\PeriodService;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
@@ -20,19 +22,25 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class SeipEntityRepository extends EntityRepository
 {
-    protected function applyPeriodCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, $alias = null) 
+    protected function applyPeriodCriteria(QueryBuilder &$queryBuilder, $alias = null) 
     {
         if($alias === null){
             $alias = $this->getAlias();
         }
+        
+        $queryBuilder->andWhere($alias.'.period = :period');
+        $this->setParameterPeriod($queryBuilder);
+    }
+    
+    protected function setParameterPeriod(QueryBuilder &$queryBuilder)
+    {
         $periodService = $this->getPeriodService();
         $queryBuilder
-                ->andWhere($alias.'.period = :period')
                 ->setParameter('period', $periodService->getPeriodActive())
                 ;
     }
     /**
-     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     * @return PeriodService
      */
     protected function getPeriodService()
     {

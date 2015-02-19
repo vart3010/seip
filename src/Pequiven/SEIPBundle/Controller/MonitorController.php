@@ -520,7 +520,7 @@ class MonitorController extends baseController {
         
         $url = $this->generateUrl('objetiveTacticList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
         $urlReturn = $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $typeGroup));
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
+        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
         return array(
             'url' => $url,
@@ -541,7 +541,7 @@ class MonitorController extends baseController {
         $em = $this->getDoctrine()->getManager();
         $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
+        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
         $url = $this->generateUrl('objetiveOperativeList', array('_format' => 'json','filter' => array('gerenciaFirst' => $idGerencia)));
         $urlReturn = $this->generateUrl('monitorObjetiveOperativeByGroup', array('typeGroup' => $typeGroup));
@@ -570,7 +570,7 @@ class MonitorController extends baseController {
         
         $monitor = $em->getRepository('PequivenSEIPBundle:Monitor')->findOneBy(array('gerencia' => $idGerencia));
         $objectGerenciaGroup = $em->getRepository('PequivenMasterBundle:GerenciaGroup')->findOneBy(array('id' => $monitor->getTypeGroup()->getId()));
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
+        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
         $url = $this->generateUrl('objetiveVinculantOperativeList', array('_format' => 'json','filter' => array('gerencia' => $idGerencia,'complejo' => $idComplejo)));
         $urlMedular = $this->generateUrl('listObjetiveOperativeByGroup', array('typeGroup' => $typeGroup,'idGerencia' => $idGerencia));
@@ -599,7 +599,7 @@ class MonitorController extends baseController {
         
         $url = $this->generateUrl('pequiven_seip_arrangementprogram_by_gerencia', array('_format' => 'json','filter' => array('gerencia' => $idGerencia)));
         $urlReturn = $this->generateUrl('monitorArrangementProgramByGroup', array('typeGroup' => $typeGroup));
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $idGerencia));
+        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $idGerencia));
         
         $labelsStatus = array();
             foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {

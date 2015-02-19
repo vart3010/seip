@@ -127,16 +127,18 @@ class ResultController extends ResourceController
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
             
             $gerencia = $this->get('pequiven.repository.gerenciafirst')->findWithObjetives($id);
-            $objetives = $gerencia->getTacticalObjectives();
-            foreach ($objetives as $objetive) {
-                foreach ($objetive->getParents() as $parent) {
-                    if(!isset($tree[(string)$parent])){
-                        $tree[(string)$parent] = array(
-                            'parent' => $parent,
-                            'child' => array(),
-                        );
+            if($gerencia){
+                $objetives = $gerencia->getTacticalObjectives();
+                foreach ($objetives as $objetive) {
+                    foreach ($objetive->getParents() as $parent) {
+                        if(!isset($tree[(string)$parent])){
+                            $tree[(string)$parent] = array(
+                                'parent' => $parent,
+                                'child' => array(),
+                            );
+                        }
+                        $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                     }
-                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                 }
             }
             $entity = $gerencia;
@@ -390,7 +392,7 @@ class ResultController extends ResourceController
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
-            $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
+            $gerencia = $this->get('pequiven.repository.gerenciafirst')->findWithObjetives($id);
             $objetives = $gerencia->getTacticalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {

@@ -21,7 +21,7 @@ class ComplejoRepository extends EntityRepository
         $em = $this->getEntityManager();
         
         
-        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('ref' => $user->getGerencia()->getRef()));
+        $gerencias = $this->get('pequiven.repository.gerenciafirst')->findBy(array('ref' => $user->getGerencia()->getRef()));
         $complejosList = '';
         $i = 1;
         $total = count($gerencias);
