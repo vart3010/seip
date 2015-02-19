@@ -214,12 +214,12 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     continue;
                 }
                 //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-                        '%arrangementProgram%' => $link,
-                    ));
-                    $canBeEvaluated = false;
-                }
+//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+//                        '%arrangementProgram%' => $link,
+//                    ));
+//                    $canBeEvaluated = false;
+//                }
             }
             foreach ($allIndicators as $indicator) {
                 if($indicator->hasNotification() === false){

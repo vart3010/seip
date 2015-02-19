@@ -1180,12 +1180,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
                 //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-                        '%arrangementProgram%' => $link,
-                    ));
-                    $valid = false;
-                }
+//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+//                        '%arrangementProgram%' => $link,
+//                    ));
+//                    $valid = false;
+//                }
             }
             
             $indicators = $objetive->getIndicators();
