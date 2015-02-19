@@ -424,6 +424,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
+                var_dump($this->calculateRangeGood($indicator,$tendenty));
+                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
+                var_dump($this->calculateRangeBad($indicator,$tendenty));
+                die();
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -651,20 +655,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
                     }
-                } elseif(strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
                 }
