@@ -245,6 +245,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -314,6 +315,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
