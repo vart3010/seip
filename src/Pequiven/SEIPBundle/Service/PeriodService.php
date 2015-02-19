@@ -86,7 +86,7 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive()
+    public function getPeriodActive($noCache = false)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -96,7 +96,7 @@ class PeriodService extends ContainerAware
         if($periodActiveSerialize !== null){
             $period = unserialize($periodActiveSerialize);
         }
-        if(!$period){
+        if(!$period || $noCache === true){
             $period = $periodRepository->findOneActive();
         }
         return $period;
