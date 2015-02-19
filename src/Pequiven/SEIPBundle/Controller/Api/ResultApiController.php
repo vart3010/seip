@@ -184,7 +184,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
+                    'result' => $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -259,10 +259,17 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             }
         }//endif if count errors
         
+        $totalItems = count($goals) + count($arrangementPrograms) + count($objetivesOO) + count($objetivesOT) + count($objetivesOE);
+        
+        if($totalItems == 0){
+            $canBeEvaluated = false;
+            $this->addErrorTrans('pequiven_seip.errors.user_not_quantity_items',array(
+                '%user%' => $user,
+            ));
+        }
         if(!$canBeEvaluated || count($this->errors) > 0){
             $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         }
-        
         $data = array(
             'data' => array(
                 'user' => $user,
@@ -279,6 +286,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                         ),
                     ),
                 ),
+                'quantityItems' => $totalItems,
             ),
             'errors' => $this->errors,
             'success' => true,

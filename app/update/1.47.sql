@@ -73,3 +73,13 @@ ALTER TABLE ArrangementProgram ADD resultReal DOUBLE PRECISION NOT NULL;
 ALTER TABLE ArrangementProgram_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
 ALTER TABLE Goal ADD resultReal DOUBLE PRECISION NOT NULL;
 ALTER TABLE Goal_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
+
+-- Agregando campo para evaluar si es requerido importar un item en la pre planificacion
+ALTER TABLE PrePlanning ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_objetive ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_objetive_audit ADD requiredToImport TINYINT(1) DEFAULT NULL;
+ALTER TABLE seip_indicator ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD requiredToImport TINYINT(1) DEFAULT NULL;
+
+UPDATE `seip_objetive` o,`seip_objetive_level` ol SET o.`requiredToImport`= 1 WHERE o.fk_objetive_level = ol.id AND ol.level = 1;
+UPDATE `seip_indicator` i,`seip_indicator_level` il SET i.`requiredToImport`=1 WHERE i.fk_indicator_level=il.id AND il.level = 1;

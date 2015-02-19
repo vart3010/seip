@@ -138,6 +138,7 @@ class PrePlanningService extends ContainerAware
         if($class == 'Pequiven\ObjetiveBundle\Entity\Objetive'){
             $typeObject = PrePlanning::TYPE_OBJECT_OBJETIVE;
             $levelObject = $object->getObjetiveLevel()->getLevel();
+            $prePlanning->setRequiredToImport($object->getRequiredToImport());
             $prePlanning->setRequiresApproval($requiresApproval);
             $this->getCurrentBuildPrePlanning()->setContentObjetive(true);
             
@@ -160,6 +161,7 @@ class PrePlanningService extends ContainerAware
             }else if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
                 $levelObject = PrePlanning::LEVEL_OPERATIVO;
             }
+            $prePlanning->setRequiredToImport($object->getRequiredToImport());
             $this->getCurrentBuildPrePlanning()->setContentIndicator(true);
             
         }else if($class == 'Pequiven\ArrangementProgramBundle\Entity\Goal'){
@@ -279,8 +281,8 @@ class PrePlanningService extends ContainerAware
         }
         
         if(($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned) || (!$itemInstanceCloned && $item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR'))){
-            $item->setStatus(PrePlanning::STATUS_IN_REVIEW);
-            $this->persist($item,true);
+//            $item->setStatus(PrePlanning::STATUS_IN_REVIEW);
+//            $this->persist($item,true);
         }
         if($itemInstanceCloned && $item->getStatus() != PrePlanning::STATUS_IMPORTED){
             $item->setStatus(PrePlanning::STATUS_IMPORTED);
