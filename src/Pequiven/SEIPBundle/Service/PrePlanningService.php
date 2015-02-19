@@ -357,7 +357,7 @@ class PrePlanningService extends ContainerAware
         }
         $this->getSecurityService()->checkSecurity($perm);
         
-        if($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW)
+        if($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED)
         {
             $em = $this->getDoctrine()->getManager();
                 $cloneService = $this->getCloneService();
