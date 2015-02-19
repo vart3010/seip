@@ -7,6 +7,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -507,10 +508,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    public function calculateRangeGood(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeGood(Indicator &$indicator, Tendency &$tendency,$typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isGood = false;
         if($tendency->getRef() == Tendency::TENDENCY_EST){
             if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
@@ -608,10 +612,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    public function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRange = $indicator->getArrangementRange();
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isMiddle = false;
         
         if($tendency->getRef() == Tendency::TENDENCY_EST){
@@ -777,11 +784,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    public function calculateRangeBad(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeBad(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRange = $indicator->getArrangementRange();
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
-        
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isBad = false;
 
         if($tendency->getRef() == Tendency::TENDENCY_EST){
@@ -1254,11 +1263,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["showborder"] = "0";
         
         $tendency = $indicator->getTendency();
-        if($this->calculateRangeGood($indicator, $tendency)){
+        if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#1aaf5d";
-        } elseif($this->calculateRangeMiddle($indicator, $tendency)){
+        } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#f2c500";
-        } elseif($this->calculateRangeBad($indicator, $tendency)){
+        } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#c02d00";
         }
         return $data;
