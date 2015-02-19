@@ -190,7 +190,7 @@ class ObjetiveController extends ResourceController
             
         $gerencia = $request->request->get('gerencia');
 
-        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+        $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();

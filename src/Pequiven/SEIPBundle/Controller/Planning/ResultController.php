@@ -36,7 +36,7 @@ class ResultController extends ResourceController
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
-        $repository = $em->getRepository('PequivenMasterBundle:GerenciaSecond');
+        $repository = $this->get('pequiven.repository.gerenciasecond');
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_ALL')){
             $user = $this->getUser();
@@ -147,7 +147,7 @@ class ResultController extends ResourceController
             $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
             
-            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
+            $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
@@ -409,7 +409,7 @@ class ResultController extends ResourceController
             $entity = $gerencia;
         }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
-            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
+            $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {

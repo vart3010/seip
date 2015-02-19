@@ -221,7 +221,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
                         $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $data['gerencia']));
-                        $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
+                        $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         $complejo = $gerencia->getComplejo();
                         ${$nameObject . $i}->setGerencia($gerencia);
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
@@ -244,7 +244,7 @@ class ObjetiveOperativeController extends baseController
                     $gerencias = $this->get('pequiven.repository.gerenciafirst')->findBy(array('id' => $data['gerencia']));
 
                     foreach ($gerencias as $gerencia) {
-                        $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $gerencia->getId()));
+                        $gerenciasSecond = $this->get('pequiven.repository.gerenciasecond')->findBy(array('gerencia' => $gerencia->getId()));
                         $complejo = $gerencia->getComplejo();
                         $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
                         if($totalRef[0] != $data['ref']){
@@ -289,7 +289,7 @@ class ObjetiveOperativeController extends baseController
                     for ($i = 0; $i < count($data['gerenciaSecond']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
-                        $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
+                        $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         $complejo = $gerencia->getComplejo();
                         ${$nameObject . $i}->setGerencia($gerencia);
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
@@ -308,7 +308,7 @@ class ObjetiveOperativeController extends baseController
                     }
                 } else {//En caso de que las gerencias de 2da línea a impactar, sean todas la de las gerencias de 1ra línea seleccionadas
                     $j = 0;
-                    $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('complejo' => $user->getComplejo()->getId(), 'modular' => true));
+                    $gerenciasSecond = $this->get('pequiven.repository.gerenciasecond')->findBy(array('complejo' => $user->getComplejo()->getId(), 'modular' => true));
                     $gerencia = $this->get('pequiven.repository.gerenciafirst')->findBy(array('id' => $user->getGerencia()->getId()));
                     $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
                     if($totalRef[0] != $data['ref']){
@@ -353,7 +353,7 @@ class ObjetiveOperativeController extends baseController
                     for ($i = 0; $i < count($data['gerenciaSecond']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
-                        $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
+                        $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findOneBy(array('id' => $data['gerenciaSecond'][$i]));
                         ${$nameObject . $i}->setGerencia($gerencia);
                         ${$nameObject . $i}->setGerenciaSecond($gerenciaSecond);
                         ${$nameObject . $i}->setComplejo($complejo);
@@ -371,7 +371,7 @@ class ObjetiveOperativeController extends baseController
                     }
                 } else {//En caso de que las gerencias de 2da línea a impactar, sean todas la de las gerencias de 1ra línea seleccionadas
                     $j = 0;
-                    $gerenciasSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('gerencia' => $user->getGerencia()->getId()));
+                    $gerenciasSecond = $this->get('pequiven.repository.gerenciasecond')->findBy(array('gerencia' => $user->getGerencia()->getId()));
                     $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $user->getGerencia()->getId()));
                     $totalRef = $this->setRef(array('objetiveTactics' => $data['parents'], 'totalGerencias' => count($gerenciasSecond)));
                     if($totalRef[0] != $data['ref']){
@@ -971,9 +971,9 @@ class ObjetiveOperativeController extends baseController
             $complejos = $request->request->get('complejos');
             $gerencias = $request->request->get('gerencias');
             $gerenciasArray = explode(',', $gerencias);
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencias));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencias));
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $user->getGerencia()->getId()));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $user->getGerencia()->getId()));
         }
         
         foreach ($results as $result) {
@@ -1011,12 +1011,12 @@ class ObjetiveOperativeController extends baseController
             $gerencias = $request->request->get('gerencias');
             $gerenciasArray = explode(',', $gerencias);
             $complejosArray = explode(',', $complejos);
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true));
             $gerenciasObjectArray = $gerenciasArray;
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true, 'complejo' => $user->getComplejo()->getId(), 'modular' => true));
         } elseif ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $user->getGerencia()->getId()));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true, 'gerencia' => $user->getGerencia()->getId()));
         }
 
 //        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
@@ -1070,12 +1070,12 @@ class ObjetiveOperativeController extends baseController
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
             $gerencia = $request->request->get('gerencia');
             if((int)$gerencia == 0){
-                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+                $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true));
             } else{
-                $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+                $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
             }
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $user->getGerencia()->getId()));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $user->getGerencia()->getId()));
         }
 
         foreach ($results as $result) {
