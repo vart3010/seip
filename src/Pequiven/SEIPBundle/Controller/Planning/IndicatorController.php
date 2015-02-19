@@ -8,6 +8,7 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -45,14 +46,6 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
-        $arrangementRangeService = $this->getArrangementRangeService();
-        $errorArrangementRange = null;
-        if($resource->getArrangementRange() !== null){
-            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
-        }
-        
-        $resultService = $this->getResultService();
-
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -62,11 +55,22 @@ class IndicatorController extends ResourceController
             ),
         );
         
-        $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
-        $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
-        $data['dataSource']['colorRange']['color'] = $color;
-//        var_dump($color);
-//        die();
+        $resultService = $this->getResultService();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $indicatorRange = array();
+        $errorArrangementRange = null;
+        if($resource->getArrangementRange() !== null){
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
+            if($errorArrangementRange == null){
+                $tendency = $resource->getTendency();
+                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
+                $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
+                $data['dataSource']['colorRange']['color'] = $color;
+            }
+        }
         
         $view = $this
             ->view()
@@ -77,6 +81,7 @@ class IndicatorController extends ResourceController
                 'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
                 'data' => $data,
+                'indicatorRange' => $indicatorRange,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));

@@ -431,6 +431,7 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
     {
         $this->objetive = $objetive;
+        $this->objetive->setArrangementRange($this);
 
         return $this;
     }
@@ -454,6 +455,7 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
     {
         $this->indicator = $indicator;
+        $this->indicator->setArrangementRange($this);
 
         return $this;
     }
@@ -1169,6 +1171,8 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
             $this->period = null;
         }
     }
+    
+    
     
     public function __toString() {
         return (string)$this->id;

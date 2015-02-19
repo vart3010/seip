@@ -32,7 +32,9 @@ class ObjetiveAdmin extends Admin
             ->add('evalArrangementProgram')
             ->add('evalSimpleAverage')
             ->add('evalWeightedAverage')
-            ->add('enabled');
+            ->add('requiredToImport')
+            ->add('enabled')
+             ;
     }
     
     protected function configureFormFields(FormMapper $form) {
@@ -62,6 +64,9 @@ class ObjetiveAdmin extends Admin
             ->add('evalWeightedAverage',null,array(
                 'required' => false,
             ))
+            ->add('requiredToImport',null,array(
+                'required' => false,
+            ))
             ->add('enabled',null,array(
                 'required' => false,
             ))
@@ -73,6 +78,7 @@ class ObjetiveAdmin extends Admin
             ->add('ref')
             ->add('description')
             ->add('weight')
+            ->add('requiredToImport')
             ->add('enabled')
             ;
     }

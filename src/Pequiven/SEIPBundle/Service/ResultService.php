@@ -7,6 +7,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
 use Pequiven\MasterBundle\Entity\Operator;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -424,6 +425,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
+//                var_dump($this->calculateRangeGood($indicator,$tendenty));
+//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
+//                var_dump($this->calculateRangeBad($indicator,$tendenty));
+//                die();
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -503,10 +508,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeGood(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeGood(Indicator &$indicator, Tendency &$tendency,$typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $arrangementRange = $indicator->getArrangementRange();
         $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isGood = false;
         if($tendency->getRef() == Tendency::TENDENCY_EST){
             if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
@@ -604,9 +612,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isMiddle = false;
         
         if($tendency->getRef() == Tendency::TENDENCY_EST){
@@ -650,20 +662,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
                     }
-                } elseif(strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
                 }
@@ -709,20 +721,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
                     }
-                } elseif(strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
                 }
@@ -772,10 +784,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * @param type $result
      * @return boolean
      */
-    private function calculateRangeBad(Indicator &$indicator, Tendency &$tendency){
+    public function calculateRangeBad(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
         $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
-        
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
         $isBad = false;
 
         if($tendency->getRef() == Tendency::TENDENCY_EST){
@@ -1178,12 +1193,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
                 //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-                        '%arrangementProgram%' => $link,
-                    ));
-                    $valid = false;
-                }
+//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+//                        '%arrangementProgram%' => $link,
+//                    ));
+//                    $valid = false;
+//                }
             }
             
             $indicators = $objetive->getIndicators();
@@ -1248,11 +1263,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["showborder"] = "0";
         
         $tendency = $indicator->getTendency();
-        if($this->calculateRangeGood($indicator, $tendency)){
+        if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#1aaf5d";
-        } elseif($this->calculateRangeMiddle($indicator, $tendency)){
+        } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#f2c500";
-        } elseif($this->calculateRangeBad($indicator, $tendency)){
+        } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
             $data["captionFontColor"] = "#c02d00";
         }
         return $data;

@@ -182,6 +182,9 @@ pequiven_seip:
         the_user_has_no_defined_configuration_planning: El usuario "%user%" no tiene la configuración requerida para realizar la pre planificacion.
         the_user_not_configured_pre_plan_the_tactical_level: El usuario "%user%" no esta configurado para pre planificar el nivel táctico.
         the_user_not_configured_pre_plan_the_operative_level: El usuario "%user%" no esta configurado para pre planificar el nivel operativo.
+        user_not_quantity_items: El usuario "%user%" no tiene ningún item asociado para su evaluación.
+        the_user_is_not_assigned_second_line_management: El usuario "%user%" no tiene asignada la gerencia de segunda línea.
+        the_user_is_not_assigned_first_line_management: El usuario "%user%" no tiene asignada la gerencia de primera línea.
     pre_planning:
         pre_planning: Planificación %period%
         list: Lista
@@ -193,6 +196,7 @@ pequiven_seip:
             imported: Importado
             in_review: En revisión
             approved: Aprobado
+            required: Requerido
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%

@@ -326,9 +326,9 @@ class PrePlanningController extends ResourceController
                 $em->persist($rootTreePrePlannig);
                 
                 $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
-                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
-            $em->flush();
+//            $em->flush();
         }
         
         $data["success"] = $success;
@@ -378,7 +378,7 @@ class PrePlanningController extends ResourceController
                 $em->persist($rootTreePrePlannig);
                 
                 $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
-                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
             }
             $em->flush();
         }
@@ -502,5 +502,14 @@ class PrePlanningController extends ResourceController
             }
         }
         $this->getSecurityService()->checkSecurity($rol);
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $this->container->get('event_dispatcher');
     }
 }

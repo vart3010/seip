@@ -2,6 +2,9 @@ services:
     seip.model.manager:
         class: Pequiven\SEIPBundle\Model\Admin\ModelManager
         arguments: [@doctrine]
+    seip.arrangementRange.manager:
+        class: Pequiven\SEIPBundle\Model\Admin\ArrangementRangeManager
+        arguments: [@doctrine]
         
     sonata.admin.formula:
         class: Pequiven\MasterBundle\Admin\FormulaAdmin
@@ -138,6 +141,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [PequivenMasterBundle]]
+            - [ setModelManager, [@seip.arrangementRange.manager]]
             - [ setContainer, [@service_container]]
             
     sonata.admin.user.complejo:
