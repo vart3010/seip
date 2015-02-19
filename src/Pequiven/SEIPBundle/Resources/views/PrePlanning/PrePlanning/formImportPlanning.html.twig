@@ -235,7 +235,7 @@
                 if((itemsToImportCurrent + 1) == itemsToImportLength){
                     lastItem = 1;
                 }
-                var urlImport = Routing.generate('pequiven_pre_planning_send_to_draft',{id:item.get('id'),lastItem: lastItem,level: level});
+                var urlImport = Routing.generate('pequiven_pre_planning_send_to_draft',{id:item.get('id'),lastItem: lastItem,level: level, root: '{{ app.request.get('root') }}' });
                 Ext.Ajax.request({
                 url: urlImport,
                     success: function(response, opts) {

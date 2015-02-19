@@ -353,7 +353,7 @@ class PrePlanningController extends ResourceController
             'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
             'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
         ));
-        
+        $rootId = $request->get('root');
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
@@ -368,9 +368,8 @@ class PrePlanningController extends ResourceController
             $success = true;
             $em->persist($resource);
             if($lastItem === true){
-                $periodActive = $this->getPeriodService()->getPeriodActive();
                 $prePlanningService = $this->getPrePlanningService();
-                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannigById($rootId);
                 $data['messages'] = array(
                     'email_send'
                 );

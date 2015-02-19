@@ -54,6 +54,21 @@ class PrePlanningService extends ContainerAware
     }
     
     /**
+     * Busca el arbol creado para la exportacion de items al siguiente periodo
+     * 
+     * @param Period $period
+     * @param User $user
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    public function findRootTreePrePlannigById($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser');
+        $rootPrePlanning = $repository->find($id);
+        return $rootPrePlanning;
+    }
+    
+    /**
      * Construye un arbol con los elementos en el periodo anterior
      * @param type $objetivesArray
      * @return type
