@@ -424,10 +424,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                var_dump($this->calculateRangeGood($indicator,$tendenty));
-                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
-                var_dump($this->calculateRangeBad($indicator,$tendenty));
-                die();
+//                var_dump($this->calculateRangeGood($indicator,$tendenty));
+//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
+//                var_dump($this->calculateRangeBad($indicator,$tendenty));
+//                die();
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
