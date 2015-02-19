@@ -11,14 +11,14 @@ namespace Pequiven\IndicatorBundle\Repository;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\MasterBundle\Entity\Gerencia;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Description of IndicatorRepository
  *
  * @author matias
  */
-class IndicatorRepository extends baseEntityRepository {
+class IndicatorRepository extends EntityRepository {
     
     public function getByOptionRef($options = array()){
     
@@ -99,7 +99,7 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
-        return parent::createPaginator($criteria, $orderBy);
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -397,6 +397,8 @@ class IndicatorRepository extends baseEntityRepository {
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $this->applyPeriodCriteria($queryBuilder);
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

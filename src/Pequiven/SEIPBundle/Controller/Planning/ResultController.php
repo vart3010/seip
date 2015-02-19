@@ -125,7 +125,8 @@ class ResultController extends ResourceController
             $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $id));
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
-            $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
+            
+            $gerencia = $this->get('pequiven.repository.gerenciafirst')->findWithObjetives($id);
             $objetives = $gerencia->getTacticalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {

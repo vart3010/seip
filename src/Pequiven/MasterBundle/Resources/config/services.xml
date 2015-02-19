@@ -42,6 +42,27 @@
         <service id="pequiven.form.gerencia_type" class="Pequiven\MasterBundle\Form\GerenciaType">
             <tag name="form.type" alias="pequiven_masterbundle_gerencia" />
         </service>
+        
+         <!-- Repositorio de Objetivo Estratégico -->
+        <service id="pequiven.repository.objetivestrategic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        <service id="pequiven.repository.objetive" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        <service id="pequiven.repository.indicator" class="Pequiven\IndicatorBundle\Repository\IndicatorRepository">
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
+        </service>
+        
+        <!-- Repositorio de Objetivo Táctico -->
+        <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
+        
+        <!-- Repositorio de Objetivo Operativo -->
+        <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
+        </service>
     </services>
     
 </container>
