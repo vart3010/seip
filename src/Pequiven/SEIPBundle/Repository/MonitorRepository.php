@@ -8,13 +8,15 @@
 
 namespace Pequiven\SEIPBundle\Repository;
 
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
+
 /**
- * Description of MonitorRepository
+ * Description of MonitorRepository (pequiven.repository.monitor)
  *
  * @author matias
  */
-class MonitorRepository extends EntityRepository {
+class MonitorRepository extends EntityRepository 
+{
     
     /**
      * Crea un paginador para los objetivos tácticos

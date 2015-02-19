@@ -60,6 +60,9 @@
         <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
+        <service id="pequiven.repository.monitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
+        </service>
     </services>
     
 </container>
