@@ -8,6 +8,7 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -62,9 +63,9 @@ class IndicatorController extends ResourceController
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
             if($errorArrangementRange == null){
                 $tendency = $resource->getTendency();
-                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency);
-                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency);
-                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency);
+                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
                 $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
                 $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
                 $data['dataSource']['colorRange']['color'] = $color;
