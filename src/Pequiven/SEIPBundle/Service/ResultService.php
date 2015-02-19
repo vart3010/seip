@@ -714,20 +714,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
                         $isMiddle = true;
                     }
-                } elseif(strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result > $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result < $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
-                } elseif($arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
-                    if($result >= $arrangementRange->getRankMiddleTopBasic() && $result <= $arrangementRange->getRankMiddleBottomBasic()){
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
                         $isMiddle = true;
                     }
                 }
