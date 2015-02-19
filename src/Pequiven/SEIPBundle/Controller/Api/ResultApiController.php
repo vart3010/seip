@@ -18,6 +18,11 @@ namespace Pequiven\SEIPBundle\Controller\Api;
  */
 class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
 {
+    const RESULT_OK = 1;
+    const RESULT_NO_ITEMS = 2;
+    const RESULT_NUM_PERSONAL_NOT_EXIST = 3;
+    const RESULT_INVALID_CONFIGURATION = 4;
+    
     private $errors;
     
     private function addErrorTrans($error,array $parameters = array()) {
@@ -33,6 +38,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         $this->errors= array();
         $numPersonal = $request->get('numPersonal');
         $periodName = $request->get('period');
+        $status = self::RESULT_OK;
 
         $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         
@@ -53,6 +59,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             $this->addErrorTrans('pequiven_seip.errors.the_number_staff_does_not_exist',array(
                 '%numPersonal%' => $numPersonal,
             ));
+            $status = self::RESULT_NUM_PERSONAL_NOT_EXIST;
         }
         
         if($periodName != '' && !$period){
@@ -122,6 +129,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
                         '%user%' => $user,
                     ));
+                    $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 $gerenciaSecond = $user->getGerenciaSecond();
@@ -133,6 +141,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
                         '%user%' => $user,
                     ));
+                    $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
@@ -264,6 +273,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $this->addErrorTrans('pequiven_seip.errors.user_has_no_associated_items_evaluation',array(
                     '%user%' => $user,
                 ));
+                $status = self::RESULT_NO_ITEMS;
             }
         }//endif if count errors
         
@@ -278,6 +288,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         if(!$canBeEvaluated || count($this->errors) > 0){
             $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         }
+        
         $data = array(
             'data' => array(
                 'user' => $user,
@@ -296,6 +307,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 ),
                 'quantityItems' => $totalItems,
             ),
+            'status' => $status,
             'errors' => $this->errors,
             'success' => true,
         );
