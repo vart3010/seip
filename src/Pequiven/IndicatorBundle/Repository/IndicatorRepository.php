@@ -179,7 +179,7 @@ class IndicatorRepository extends EntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applyPeriodCriteria($queryBuilder);
 //        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
@@ -261,8 +261,7 @@ class IndicatorRepository extends EntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         return $this->getPaginator($queryBuilder);
     }

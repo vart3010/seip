@@ -136,7 +136,6 @@ class ObjetiveRepository extends EntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
         
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -164,6 +163,7 @@ class ObjetiveRepository extends EntityRepository {
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
+        $this->applyPeriodCriteria($queryBuilder);
 
         return $this->getPaginator($queryBuilder);
     }
