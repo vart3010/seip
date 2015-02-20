@@ -21,7 +21,8 @@ use Pequiven\SEIPBundle\Model\Monitor as baseMonitor;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\MonitorRepository")
  * @author matias
  */
-class Monitor extends baseMonitor {
+class Monitor extends baseMonitor implements PeriodItemInterface
+{
     
     /**
      * @var integer
@@ -202,7 +203,14 @@ class Monitor extends baseMonitor {
      */
     private $typeGroup;
 
-
+    /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
+    
     /**
      * Get id
      *
@@ -764,5 +772,28 @@ class Monitor extends baseMonitor {
     public function getTypeGroup()
     {
         return $this->typeGroup;
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return Monitor
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
     }
 }

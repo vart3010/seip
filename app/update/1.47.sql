@@ -83,3 +83,14 @@ ALTER TABLE seip_indicator_audit ADD requiredToImport TINYINT(1) DEFAULT NULL;
 
 UPDATE `seip_objetive` o,`seip_objetive_level` ol SET o.`requiredToImport`= 1 WHERE o.fk_objetive_level = ol.id AND ol.level = 1;
 UPDATE `seip_indicator` i,`seip_indicator_level` il SET i.`requiredToImport`=1 WHERE i.fk_indicator_level=il.id AND il.level = 1;
+
+ALTER TABLE seip_monitor ADD period_id INT NOT NULL;
+UPDATE `seip_monitor` SET period_id=1 WHERE 1;
+ALTER TABLE seip_monitor ADD CONSTRAINT FK_24ACE4EFEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_24ACE4EFEC8B7ADE ON seip_monitor (period_id);
+
+-- Periodo para el usuario
+ALTER TABLE seip_user ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_user ADD CONSTRAINT FK_B4B410D9EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_B4B410D9EC8B7ADE ON seip_user (period_id);
+ALTER TABLE seip_user_audit ADD period_id INT DEFAULT NULL;

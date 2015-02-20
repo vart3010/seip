@@ -44,7 +44,7 @@ class SummaryBoxIndicatorChargedByGroup extends GenericBox {
         $dataLinkTactic = array();
         
         //Resultados Tácticos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorTacticByGerenciaGroup(array('typeGroup' => $typeGroup));
+        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalIndicatorTacticByGerenciaGroup(array('typeGroup' => $typeGroup));
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanIndTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealIndTactic'] / (float)$resultTactic['PlanIndTactic']) * 100,'0',2);

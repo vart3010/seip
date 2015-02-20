@@ -93,10 +93,12 @@ class MailerEventListerner extends BaseEventListerner
         $users = array($userTree);
         $usersEmail = $this->getEmailsInString($users);
         
+        $configuration = $userTree->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         if($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_TACTICO){
-            $gerencia = $object->getGerenciaFirst();
+            $gerencia = $prePlanningConfiguration->getGerencia();
         }elseif($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_OPERATIVO){
-            $gerencia = $object->getGerencia();
+            $gerencia = $prePlanningConfiguration->getGerenciaSecond();
         }
         $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToDraft.html.twig';
         $toEmail = $usersEmail;
@@ -115,11 +117,12 @@ class MailerEventListerner extends BaseEventListerner
         
         $usersEmail = $this->getSeipConfiguration()->getEmailNotifyToRevision();
         $userTree = $object->getUser();
-        
+        $configuration = $userTree->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         if($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_TACTICO){
-            $gerencia = $object->getGerenciaFirst();
+            $gerencia = $prePlanningConfiguration->getGerencia();
         }elseif($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_OPERATIVO){
-            $gerencia = $object->getGerencia();
+            $gerencia = $prePlanningConfiguration->getGerenciaSecond();
         }
         $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToRevision.html.twig';
         $toEmail = $usersEmail;

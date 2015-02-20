@@ -387,7 +387,7 @@ class IndicatorTacticController extends baseController
         $gerenciaFirst = array();
         $complejoId = $request->request->get('complejoId');
         $em = $this->getDoctrine()->getManager();
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $complejoId));
+        $results = $this->get('pequiven.repository.gerenciafirst')->findBy(array('complejo' => $complejoId));
         foreach ($results as $result) {
             $gerenciaFirst[] = array("id" => $result->getId(), "description" => $result->getDescription());
         }

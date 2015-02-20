@@ -17,11 +17,9 @@ use InvalidArgumentException;
 use LogicException;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\IndicatorBundle\Model\IndicatorLevel;
-use Pequiven\MasterBundle\Model\Rol;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
-use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItem;
 use Pequiven\SEIPBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -54,6 +52,21 @@ class PrePlanningService extends ContainerAware
     }
     
     /**
+     * Busca el arbol creado para la exportacion de items al siguiente periodo
+     * 
+     * @param Period $period
+     * @param User $user
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+     */
+    public function findRootTreePrePlannigById($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser');
+        $rootPrePlanning = $repository->find($id);
+        return $rootPrePlanning;
+    }
+    
+    /**
      * Construye un arbol con los elementos en el periodo anterior
      * @param type $objetivesArray
      * @return type
@@ -70,7 +83,7 @@ class PrePlanningService extends ContainerAware
         
         $linkGeneratorService = $this->getLinkGeneratorService();
         $user = $this->getUser();
-        $period = $this->getPeriodService()->getPeriodActive();
+        $period = $this->getPeriodService()->getEntityPeriodActive();
         $prePlanningUser = new \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser();
         $this->setCurrentBuildPrePlanning($prePlanningUser);
         
@@ -95,7 +108,6 @@ class PrePlanningService extends ContainerAware
         
         $configuration = $user->getConfiguration();
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
-        
         
         $prePlanningUser
                 ->setUser($user)
@@ -357,18 +369,11 @@ class PrePlanningService extends ContainerAware
         }
         $this->getSecurityService()->checkSecurity($perm);
         
-        if($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW)
+        if($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED)
         {
             $em = $this->getDoctrine()->getManager();
                 $cloneService = $this->getCloneService();
                 $sequenceGenerator = $this->getSequenceGenerator();
-                $levelObject = $prePlanning->getLevelObject();
-    //            $prePlanning->getTypeObject()
-    //            if($levelObject == PrePlanning::LEVEL_TACTICO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC')){
-    //                throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel tactico.');
-    //            }elseif ($levelObject == PrePlanning::LEVEL_OPERATIVO && !$this->isGranted('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE')) {
-    //                throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException('Usted no tiene permiso para pre planificar el nivel operativo.');
-    //            }
                 $typeObject = $prePlanning->getTypeObject();
                 $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
                 if($itemInstance){

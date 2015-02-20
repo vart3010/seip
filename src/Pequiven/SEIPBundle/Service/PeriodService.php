@@ -97,9 +97,25 @@ class PeriodService extends ContainerAware
             $period = unserialize($periodActiveSerialize);
         }
         if(!$period){
+            $period = $this->getUser()->getPeriod();
+        }
+        if(!$period){
             $period = $periodRepository->findOneActive();
         }
+        
         return $period;
+    }
+    
+    /**
+     * Retorna la entidad del periodo activo para persistir en la base de datos la relacion
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getEntityPeriodActive($forPersist = false)
+    {
+        $period = $this->getPeriodActive();
+        $periodRepository = $this->getRepository();
+        
+        return $periodRepository->find($period->getId());
     }
     
     /**
@@ -112,6 +128,9 @@ class PeriodService extends ContainerAware
         $session = $request->getSession();
         $periodSerialize = serialize($period);
         $session->set('periodActiveSerialize', $periodSerialize);
+        $user = $this->getUser();
+        $user->setPeriod($period);
+        $this->getUserManager()->updateUser($user);
     }
     
     /**
@@ -131,7 +150,7 @@ class PeriodService extends ContainerAware
     public function getNextPeriod()
     {
         $nextPeriod = null;
-        $periodActive = $this->getPeriodActive();
+        $periodActive = $this->getEntityPeriodActive();
         if($periodActive){
             $nextPeriod = $periodActive->getChild();
         }
@@ -166,6 +185,32 @@ class PeriodService extends ContainerAware
         return $listArrayPeriods;
     }
     
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
     private function isGranted($roles) {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
@@ -190,5 +235,12 @@ class PeriodService extends ContainerAware
     private function getRepository()
     {
         return $this->container->get('pequiven.repository.period');
+    }
+    /**
+     * @return \FOS\UserBundle\Model\UserManager
+     */
+    private function getUserManager()
+    {
+        return $this->container->get('fos_user.user_manager');
     }
 }

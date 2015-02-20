@@ -172,7 +172,7 @@ class ObjetiveTacticController extends baseController {
                     for ($i = 0; $i < count($data['gerencia']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
-                        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
+                        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject . $i}->setGerencia($gerencia);
                         ${$nameObject . $i}->setPeriod($period);
                         ${$nameObject . $i}->setRef($totalRef[$i]);
@@ -190,7 +190,7 @@ class ObjetiveTacticController extends baseController {
                     $j = 0;
                     for ($i = 0; $i < count($data['complejo']); $i++) {//Recorremos todas las localidades seleccionadas
                         //Obtenemos todas las gerencias de 1ra línea de las localidades seleccionadas
-                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
+                        $gerencias = $this->get('pequiven.repository.gerenciafirst')->findBy(array('complejo' => $data['complejo'][$i]));
                         $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($gerencias)));
                         if($totalRef[0] != $data['ref']){
                             $this->updateIndicatorRef($data, $totalRef);
@@ -624,7 +624,7 @@ class ObjetiveTacticController extends baseController {
         $dataGerencia = array();
         $complejos = $request->request->get('complejos');
         $em = $this->getDoctrine()->getManager();
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions(array('complejos' => $complejos));
 
         foreach ($results as $result) {
             foreach ($result as $gerencia) {
@@ -656,9 +656,9 @@ class ObjetiveTacticController extends baseController {
         $user = $securityContext->getToken()->getUser();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+            $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
         } else {
-            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
+            $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
         }
 
         $totalResults = count($results);

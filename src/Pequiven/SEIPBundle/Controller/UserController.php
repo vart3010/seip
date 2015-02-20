@@ -185,9 +185,9 @@ class UserController extends baseController {
         $gerencia = $request->request->get('gerencia');
 
         if((int)$gerencia == 0){
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true));
         } else{
-            $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
+            $results = $this->get('pequiven.repository.gerenciasecond')->findBy(array('enabled' => true, 'gerencia' => $gerencia));
         }
 
         foreach ($results as $result) {

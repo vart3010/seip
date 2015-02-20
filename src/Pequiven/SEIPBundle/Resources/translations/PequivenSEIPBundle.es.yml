@@ -173,7 +173,7 @@ pequiven_seip:
     errors:
         you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
         you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
-        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe
+        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe en el Sistema Estadístico de Información Petroquímica.
         the_period_does_not_exist.: El período "%period%" no existe.
         user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.
         user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
@@ -183,6 +183,8 @@ pequiven_seip:
         the_user_not_configured_pre_plan_the_tactical_level: El usuario "%user%" no esta configurado para pre planificar el nivel táctico.
         the_user_not_configured_pre_plan_the_operative_level: El usuario "%user%" no esta configurado para pre planificar el nivel operativo.
         user_not_quantity_items: El usuario "%user%" no tiene ningún item asociado para su evaluación.
+        the_user_is_not_assigned_second_line_management: El usuario "%user%" no tiene asignada la gerencia de segunda línea.
+        the_user_is_not_assigned_first_line_management: El usuario "%user%" no tiene asignada la gerencia de primera línea.
     pre_planning:
         pre_planning: Planificación %period%
         list: Lista

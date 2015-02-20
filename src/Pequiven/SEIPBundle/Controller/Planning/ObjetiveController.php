@@ -153,7 +153,7 @@ class ObjetiveController extends ResourceController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
         if (is_array($results) && $totalResults > 0) {
@@ -190,7 +190,7 @@ class ObjetiveController extends ResourceController
             
         $gerencia = $request->request->get('gerencia');
 
-        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+        $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();
