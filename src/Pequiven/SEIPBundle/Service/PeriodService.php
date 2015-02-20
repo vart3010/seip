@@ -95,6 +95,7 @@ class PeriodService extends ContainerAware
         $period = null;
         if($periodActiveSerialize !== null){
             $period = unserialize($periodActiveSerialize);
+            $period = $this->getDoctrine()->getManager()->merge($period);
         }
         if(!$period){
             $period = $this->getUser()->getPeriod();
@@ -113,9 +114,9 @@ class PeriodService extends ContainerAware
     public function getEntityPeriodActive($forPersist = false)
     {
         $period = $this->getPeriodActive();
-        $periodRepository = $this->getRepository();
-        
-        return $periodRepository->find($period->getId());
+//        $periodRepository = $this->getRepository();
+//        return $periodRepository->find($period->getId());
+        return $period;
     }
     
     /**
@@ -242,5 +243,21 @@ class PeriodService extends ContainerAware
     private function getUserManager()
     {
         return $this->container->get('fos_user.user_manager');
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    private function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 }

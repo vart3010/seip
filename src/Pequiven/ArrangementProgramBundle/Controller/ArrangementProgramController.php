@@ -442,7 +442,7 @@ class ArrangementProgramController extends SEIPController
             throw $this->createAccessDeniedHttpException($message);
         }
         
-        $period = $periodService->getPeriodActive();
+        $period = $periodService->getEntityPeriodActive();
         
         $entity
                 ->setType($type)

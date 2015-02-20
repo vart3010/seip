@@ -548,6 +548,57 @@ class Period extends Base
     {
         return $this->percentagePenalty;
     }
+
+    public function serialize() {
+        return serialize(array(
+            $this->name,
+            $this->description,
+            $this->dateStart,
+            $this->dateEnd,
+            $this->status,
+            $this->dateStartNotificationArrangementProgram,
+            $this->dateEndNotificationArrangementProgram,
+            $this->dateStartLoadArrangementProgram,
+            $this->dateEndLoadArrangementProgram,
+            $this->dateStartClearanceNotificationArrangementProgram,
+            $this->dateStartPenalty,
+            $this->dateEndPenalty,
+            $this->percentagePenalty,
+            $this->dateEndClearanceNotificationArrangementProgram,
+            serialize($this->parent),
+            serialize($this->child),
+            $this->id,
+        ));
+    }
+    
+    public function unserialize($serialized) {
+        $data = unserialize($serialized);
+        // add a few extra elements in the array to ensure that we have enough keys when unserializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 2, null));
+
+        list(
+            $this->name,
+            $this->description,
+            $this->dateStart,
+            $this->dateEnd,
+            $this->status,
+            $this->dateStartNotificationArrangementProgram,
+            $this->dateEndNotificationArrangementProgram,
+            $this->dateStartLoadArrangementProgram,
+            $this->dateEndLoadArrangementProgram,
+            $this->dateStartClearanceNotificationArrangementProgram,
+            $this->dateStartPenalty,
+            $this->dateEndPenalty,
+            $this->percentagePenalty,
+            $this->dateEndClearanceNotificationArrangementProgram,
+            $this->parent,
+            $this->child,
+            $this->id,
+        ) = $data;
+        $this->parent = unserialize($this->parent);
+        $this->child = unserialize($this->child);
+    }
     
     public function __toString() {
         return $this->getDescription()?:'-';
