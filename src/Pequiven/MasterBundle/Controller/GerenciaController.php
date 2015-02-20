@@ -212,7 +212,7 @@ class GerenciaController extends baseController {
         $idGerencia = $request->get('id');
         $gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
         //Objetivos Tácticos de la Gerencia
-        $objetivesTactics = $this->get('pequiven.repository.objetive')->findBy(array('gerencia' => $gerencia->getId(),'objetiveLevel' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO));
+        $objetivesTactics = $this->get('pequiven.repository.objetive')->findBy(array('gerencia' => $gerencia->getId(),'objetiveLevel' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO,'period' => $this->getPeriodService()->getPeriodActive()));
         
         $resource = $this->findOr404($request);
         
@@ -474,6 +474,14 @@ class GerenciaController extends baseController {
 //                    ->setPassword('531P-P1A-2014')
 //                ;
         
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
     
     /**
