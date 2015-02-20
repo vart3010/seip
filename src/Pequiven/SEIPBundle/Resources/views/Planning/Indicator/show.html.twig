@@ -60,7 +60,7 @@
                     <label class="label">{{ 'form.formula'|trans }}</label>
                     {% set formula = indicator.formula %}
                     {% if formula %}
-                        {{ indicator.formula }}
+                        <span title="{{ formula.getTypeOfCalculationLabel|trans }}" class="with-tooltip">{{ indicator.formula }}</span>
                     {% else %}
                         <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
                     {% endif %}
@@ -144,6 +144,12 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% if indicator.parent %}
+                <div class="inline-label">
+                    <label class="label">{{ 'form.parent_indicator'|trans }}</label>
+                    <span>{{ generateLink(indicator.parent) }}</span>
+                </div>
+            {% endif %}
             {% if (indicator.childrens | length) > 0 %}
                 <div class="inline-label">
                     <label class="label">{{ 'form.associated_indicators'|trans }}</label>

@@ -100,6 +100,7 @@ form:
     period: Período
     objetives: Objetivos
     associated_indicators: Indicadores asociados
+    parent_indicator: Indicador padre
     total_plan: Plan anual
     
     arrangementRangeType: Tipo de Rango
