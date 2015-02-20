@@ -192,6 +192,7 @@ class PrePlanningController extends ResourceController
         ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = false;
+        $id  = 0;
         if($level){
             $user = $this->getUser();
             $prePlanningService = $this->getPrePlanningService();
@@ -204,7 +205,8 @@ class PrePlanningController extends ResourceController
             }
 
             $objetivesArray = $this->getObjetivesArray($level);
-            $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $rootTreePrePlannig = $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $id = $rootTreePrePlannig->getId();
             $success = true;
         }else{
             $success = false;
@@ -212,6 +214,7 @@ class PrePlanningController extends ResourceController
         
         $data = array(
             "success" => $success,
+            "id" => $id,
         );
         $view = $this->view($data);
         return $this->handleView($view);
@@ -328,7 +331,7 @@ class PrePlanningController extends ResourceController
                 $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
                 $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
-//            $em->flush();
+            $em->flush();
         }
         
         $data["success"] = $success;
@@ -400,7 +403,7 @@ class PrePlanningController extends ResourceController
 
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $objetivesArray = array();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $periodActive = $this->getPeriodService()->getEntityPeriodActive();
         
         if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO && $prePlanningConfiguration->getGerenciaSecond() !== null){
             $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();

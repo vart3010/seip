@@ -430,7 +430,7 @@ class CloneService extends ContainerAware
         }
         $prePlanningItemClone->setIdCloneObject($idCloneObject);
         $prePlanningItemClone->setIdSourceObject($idSourceObject);
-        $prePlanningItemClone->setPeriod($this->getPeriodService()->getPeriodActive());
+        $prePlanningItemClone->setPeriod($this->getPeriodService()->getEntityPeriodActive());
         $prePlanningItemClone->setTypeObject($typeObject);
         $prePlanningItemClone->setUser($this->getUser());
         

@@ -62,19 +62,40 @@ class SequenceGenerator
         return $this->sequenceGenerator->generateNextTemp($qb,'ref');
     }
     
+    /**
+     * Genera la referencia del objetivo
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return string
+     * @throws \Exception
+     */
     public function getNextRefChildObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
     {
-        $parents = $objetive->getParents();
-        $quantityParents = count($parents);
-        if($quantityParents == 0){
-            throw new \Exception(sprintf('The objetive "%s (%s)" is not defined parent',(string)$objetive,$objetive->getId()));
+        $quantityParents = 0;
+        $parents = $childrens = array();
+        if($objetive->getObjetiveLevel()->getLevel() == \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO){
+            foreach ($objetive->getLineStrategics() as $lastParent) {
+                $quantityParents++;
+            }
+            foreach ($lastParent->getObjetives() as $objetiveOfLine) {
+                if($objetiveOfLine->getPeriod() !== $objetive->getPeriod()){
+                    continue;
+                }
+                $childrens[] = $objetiveOfLine;
+            }
+        }else{
+            $parents = $objetive->getParents();
+            $quantityParents = count($parents);
+            if($quantityParents == 0){
+                throw new \Exception(sprintf('The objetive "%s (%s)" is not defined parent',(string)$objetive,$objetive->getId()));
+            }
+            $lastParent = $parents[count($parents) - 1]; 
+            $childrens = $lastParent->getChildrens();
         }
-        $lastParent = $parents[count($parents) - 1]; 
         $refParent = $lastParent->getRef();
         $lengthRefPartent = (count(explode('.', $refParent)) - 1);
         
         $refChildDefined = array();
-        foreach ($lastParent->getChildrens() as $child) {
+        foreach ($childrens as $child) {
             $refChildDefined[] = $child->getRef();
         }
         $lastDigit = $lastDigitTemp = 0;
@@ -106,13 +127,13 @@ class SequenceGenerator
 //        var_dump('ID Parent '.$lastParent->getId());
 //        var_dump('ID child '.$objetive->getId());
 //        var_dump('count Parent '.count($parents));
-//        var_dump('Count childrens '.count($lastParent->getChildrens()));
+//        var_dump('Count childrens '.count($childrens));
 //        var_dump('Ref parent '.$refParent);
 //        var_dump('Ref length Parent '.$lengthRefPartent);
 //        var_dump('Ref length child '.$lengthRefPartent);
 //        var_dump('Next Ref '.$nextRef);
 //        var_dump($refChildDefined);
-        
+//        die;
         return $nextRef;
     }
     

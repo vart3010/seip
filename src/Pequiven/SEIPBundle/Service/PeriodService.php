@@ -86,7 +86,7 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive($cache = true)
+    public function getPeriodActive()
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -103,14 +103,19 @@ class PeriodService extends ContainerAware
             $period = $periodRepository->findOneActive();
         }
         
-        if($cache === false){
-            if($period){
-                $period = $periodRepository->find($period->getId());
-            }else{
-                $period = $periodRepository->findOneActive();
-            }
-        }
         return $period;
+    }
+    
+    /**
+     * Retorna la entidad del periodo activo para persistir en la base de datos la relacion
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getEntityPeriodActive($forPersist = false)
+    {
+        $period = $this->getPeriodActive();
+        $periodRepository = $this->getRepository();
+        
+        return $periodRepository->find($period->getId());
     }
     
     /**
@@ -145,7 +150,7 @@ class PeriodService extends ContainerAware
     public function getNextPeriod()
     {
         $nextPeriod = null;
-        $periodActive = $this->getPeriodActive();
+        $periodActive = $this->getEntityPeriodActive();
         if($periodActive){
             $nextPeriod = $periodActive->getChild();
         }
