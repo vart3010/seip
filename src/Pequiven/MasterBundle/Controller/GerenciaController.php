@@ -210,14 +210,10 @@ class GerenciaController extends baseController {
         
         $em = $this->getDoctrine();
         $idGerencia = $request->get('id');
-        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->find($idGerencia);//Obtenemos la gerencia
+        $gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
         //Objetivos Tácticos de la Gerencia
-        $objetivesTactics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('gerencia' => $gerencia->getId(),'objetiveLevel' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO));
+        $objetivesTactics = $this->get('pequiven.repository.objetive')->findBy(array('gerencia' => $gerencia->getId(),'objetiveLevel' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO));
         
-        //Obtenemos la sección operativa de la matriz de objetivos
-//        $sectionOperative = $em->getRepository('PequivenObjetiveBundle:Objetive')->getSectionOperativeByGerencia($gerencia);
-//        var_dump($sectionOperative);
-//        die();
         $resource = $this->findOr404($request);
         
         //Formato para todo el documento
