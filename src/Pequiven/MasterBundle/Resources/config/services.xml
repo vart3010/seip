@@ -27,6 +27,13 @@
             <tag name="app.repository" class="Pequiven\MasterBundle\Entity\Gerencia" />
         </service>
         
+        <service id="pequiven.repository.linestrategic" class="Pequiven\MasterBundle\Repository\LineStrategicRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\MasterBundle\Entity\LineStrategic" />
+        </service>
+        
         <!-- Servicio de la gerencia de 2da línea -->
         <service id="pequiven.repository.gerenciasecond" class="Pequiven\MasterBundle\Repository\GerenciaSecondRepository">
             <tag name="app.repository" class="Pequiven\MasterBundle\Entity\GerenciaSecond" />

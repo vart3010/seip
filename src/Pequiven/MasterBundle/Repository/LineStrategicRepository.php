@@ -8,7 +8,7 @@
 
 namespace Pequiven\MasterBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 /**
  * Description of LineStrategicRepository
  *
