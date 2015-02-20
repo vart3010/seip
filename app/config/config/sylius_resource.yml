@@ -6,6 +6,12 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Monitor
                 controller: Pequiven\SEIPBundle\Controller\MonitorController
                 repository: Pequiven\SEIPBundle\Repository\MonitorRepository
+        pequiven.linestrategic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\MasterBundle\Controller\LineStrategicController
+                model: Pequiven\MasterBundle\Entity\LineStrategic
+                repository: Pequiven\MasterBundle\Repository\LineStrategicRepository
         pequiven.objetive:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Objetive

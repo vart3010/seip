@@ -349,3 +349,7 @@ pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
 pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
 pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
 pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.
+
+miscellaneous:
+    noCharged: No Cargado
+    noApply: No Aplica
