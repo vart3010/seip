@@ -96,8 +96,19 @@ class PeriodService extends ContainerAware
         if($periodActiveSerialize !== null){
             $period = unserialize($periodActiveSerialize);
         }
-        if(!$period || $cache === false){
+        if(!$period){
+            $period = $this->getUser()->getPeriod();
+        }
+        if(!$period){
             $period = $periodRepository->findOneActive();
+        }
+        
+        if($cache === false){
+            if($period){
+                $period = $periodRepository->find($period->getId());
+            }else{
+                $period = $periodRepository->findOneActive();
+            }
         }
         return $period;
     }
@@ -112,6 +123,9 @@ class PeriodService extends ContainerAware
         $session = $request->getSession();
         $periodSerialize = serialize($period);
         $session->set('periodActiveSerialize', $periodSerialize);
+        $user = $this->getUser();
+        $user->setPeriod($period);
+        $this->getUserManager()->updateUser($user);
     }
     
     /**
@@ -166,6 +180,32 @@ class PeriodService extends ContainerAware
         return $listArrayPeriods;
     }
     
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
     private function isGranted($roles) {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
@@ -190,5 +230,12 @@ class PeriodService extends ContainerAware
     private function getRepository()
     {
         return $this->container->get('pequiven.repository.period');
+    }
+    /**
+     * @return \FOS\UserBundle\Model\UserManager
+     */
+    private function getUserManager()
+    {
+        return $this->container->get('fos_user.user_manager');
     }
 }
