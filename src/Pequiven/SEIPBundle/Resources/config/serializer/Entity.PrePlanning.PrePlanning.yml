@@ -1,0 +1,21 @@
+Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        status:
+            expose: true
+            groups: [api_list]
+        levelPlanning:
+            expose: true
+            groups: [api_list]
+        user:
+            expose: true
+            groups: [api_list]

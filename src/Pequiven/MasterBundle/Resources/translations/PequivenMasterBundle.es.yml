@@ -61,3 +61,7 @@ action:
     registerGerenciaFirstSuccessfull: Gerencia de 1ra Línea registrada exitosamente
     registerGerenciaSecondSuccessfull: Gerencia de 2da Línea registrada exitosamente
     registerCargoSuccessfull: Cargo registrado exitosamente
+    
+Objetive: Objetivo
+Indicator: Indicador
+TypeRangeTop: Rango Alto

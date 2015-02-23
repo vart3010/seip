@@ -12,18 +12,15 @@
     <script src="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/setup.js') }}"></script>
 {% endblock javascripts_base %}
 
-{% block body %}
+{% block before_body %}
+    {{ contentHeader(
+        ('pequiven_objetive.objetives'|trans),
+        ('pequiven_objetive.add'|trans),
+        ('pequiven_objetive.operative'|trans)
+    ) }}
+{% endblock %}
 
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="#">{{ 'pequiven_objetive.objetives'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.add'|trans }}</span>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.operative'|trans }}</span>
-        </h1>
-    </hgroup>
-    
+{% block body %}    
     <form id="registerObjetiveOperativeForm" action="{{ path('pequiven_objetive_menu_add_operative') }}" {{ form_enctype(form) }} method="POST">
         <fieldset class="fieldset fields-list">
             <legend class="legend">{{ 'pequiven_objetive.objetives'|trans }}</legend>

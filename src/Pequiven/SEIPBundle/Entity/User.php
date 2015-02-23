@@ -8,6 +8,7 @@ use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Pequiven\MasterBundle\Entity\Rol;
 use Tecnocreaciones\Vzla\GovernmentBundle\Model\UserInterface;
 use Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * User model
@@ -22,7 +23,7 @@ use Tecnocreaciones\Bundle\BoxBundle\Model\UserBoxInterface;
  * })
  * @ORM\HasLifecycleCallbacks
  */
-class User extends BaseUser implements UserInterface,UserBoxInterface
+class User extends BaseUser implements UserInterface,UserBoxInterface,  PeriodItemInterface
 {
     
     /**
@@ -157,7 +158,23 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\Box\ModelBox",mappedBy="user")
      */
     private $boxes;
+    
+    /**
+     * Estatus del trabajador
+     * @var integer
+     *
+     * @ORM\Column(name="status_worker", type="integer")
+     */
+    protected $statusWorker = 1;
 
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     */
+    private $period;
+    
     /**
      * Constructor
      */
@@ -495,10 +512,14 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
      */
     public function isAllowSuperAdmin(){
         $isSuperAdmin = false;
-        $level = Rol::ROLE_SUPER_ADMIN;
+        $groupsLevelAdmin = array(
+            Rol::ROLE_ADMIN,
+            Rol::ROLE_SUPER_ADMIN
+        );
+//        $level = Rol::ROLE_SUPER_ADMIN;
         $groups = $this->getGroups();
         foreach ($groups as $group) {
-            if($group->getLevel() == $level)
+            if(in_array($group->getLevel(), $groupsLevelAdmin))
             {
                 $isSuperAdmin = true;
             }
@@ -723,5 +744,40 @@ class User extends BaseUser implements UserInterface,UserBoxInterface
     public function getModelBoxes()
     {
         return $this->boxes;
+    }
+    
+    /**
+     * Set status worker
+     *
+     * @param integer $statusWorker
+     * @return ArrangementProgram
+     */
+    public function setStatusWorker($statusWorker)
+    {
+        $this->statusWorker = $statusWorker;
+
+        return $this;
+    }
+
+    /**
+     * Get status worker
+     *
+     * @return integer 
+     */
+    public function getStatusWorker()
+    {
+        return $this->statusWorker;
+    }
+    
+    function getPeriod() 
+    {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) 
+    {
+        $this->period = $period;
+        
+        return $this;
     }
 }

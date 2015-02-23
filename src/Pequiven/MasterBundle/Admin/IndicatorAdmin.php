@@ -8,13 +8,38 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Administrador del admin
+ * Administrador del Indicador
  *
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
 class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
 {   
     private $container;
+    
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) {
+        $show
+            ->add('ref')
+            ->add('description')
+            ->add('typeOfCalculation','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('refParent')
+            ->add('totalPlan')
+            ->add('weight')
+            ->add('goal')
+            ->add('formula')
+            ->add('tendency')
+            ->add('arrangementRange')
+            ->add('frequencyNotificationIndicator')
+            ->add('valueFinal')
+            ->add('childrens')
+            ->add('valuesIndicator')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
+            ->add('requiredToImport')
+            ;
+    }
     
     protected function configureFormFields(FormMapper $form) {
         $object = $this->getSubject();
@@ -48,7 +73,18 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
-            ->add('enabled')
+            ->add('couldBePenalized',null,array(
+                'required' => false,
+            ))
+            ->add('forcePenalize',null,array(
+                'required' => false,
+            ))
+            ->add('requiredToImport',null,array(
+                'required' => false,
+            ))
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
             ;
     }
     
@@ -64,6 +100,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
+            ->add('requiredToImport')
             ->add('enabled')
             ;
     }
@@ -75,14 +114,23 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('formula')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('tendency')
+            ->add('arrangementRange')
             ->add('enabled')
             ;
     }
     
-    public function postUpdate($object) 
-    {
-//        $objetives = $object->getObjetives();
-//        $this->getResultService()->updateResultOfObjects($objetives);
+    public function prePersist($object) {
+        $object->setPeriod($this->getPeriodService()->getPeriodActive());
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
+    }
+    
+    public function preUpdate($object) {
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
     }
     
     /**
@@ -94,7 +142,20 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         return $this->container->get('seip.service.result');
     }
     
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
+    }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
     }
 }

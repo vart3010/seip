@@ -104,6 +104,9 @@
         <service id="pequiven.repository.pre_planning" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning" />
         </service>
+        <service id="pequiven.repository.pre_planning_user" class="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningUserRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser" />
+        </service>
         <service id="twig.extension.seip.core" class="Pequiven\SEIPBundle\Twig\Extension\CoreExtension" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="twig.loader" />
@@ -191,7 +194,15 @@
         <service id="pequiven_arrangement_program.form.localization" class="Pequiven\SEIPBundle\Form\User\LocalizationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_localization" />
         </service>
+        <service id="pequiven_arrangement_program.form.preplanningconfiguration" class="Pequiven\SEIPBundle\Form\User\PrePlanningConfigurationType">
+            <tag name="form.type" alias="pequiven_seipbundle_user_pre_planning_configuration" />
+        </service>
         <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="pequiven_seip.service.fusion_chart" class="Pequiven\SEIPBundle\Service\FusionChartExportService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
@@ -200,6 +211,21 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
+        </service>
+        <service id="seip.service.clone" class="Pequiven\SEIPBundle\Service\CloneService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.service.security" class="Pequiven\SEIPBundle\Service\SecurityService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        <service id="seip.security.access.role_hierarchy_voter" class="Pequiven\SEIPBundle\Security\Authorization\Voter\RolePatternVoter" public="false">
+            <argument type="service" id="security.role_hierarchy" />
+            <argument>ROLE_SEIP_</argument>
+            <tag name="security.voter" priority="245" />
         </service>
     </services>
 </container>

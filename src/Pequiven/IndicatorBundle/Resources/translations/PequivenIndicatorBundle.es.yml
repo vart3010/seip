@@ -61,6 +61,7 @@ pequiven_indicator:
         formula_unassigned: Fórmula no asignada.
         not_support_formula: Fórmula no compatible.
         trends_should_be_equal: Las tendencias deben ser iguales.
+        arrangementRange_not_assigned: Rango de Gestión no Asignado
         
 form:
     ref: Nro. de Referencia
@@ -74,6 +75,7 @@ form:
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
     frequencyNotificationIndicator: Frecuencia de notificación
+    resultReal: Resultado Gestión
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
@@ -98,6 +100,7 @@ form:
     period: Período
     objetives: Objetivos
     associated_indicators: Indicadores asociados
+    parent_indicator: Indicador padre
     total_plan: Plan anual
     
     arrangementRangeType: Tipo de Rango

@@ -2,11 +2,14 @@ services:
     seip.model.manager:
         class: Pequiven\SEIPBundle\Model\Admin\ModelManager
         arguments: [@doctrine]
+    seip.arrangementRange.manager:
+        class: Pequiven\SEIPBundle\Model\Admin\ArrangementRangeManager
+        arguments: [@doctrine]
         
     sonata.admin.formula:
         class: Pequiven\MasterBundle\Admin\FormulaAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Formula" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Formula" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Formula
@@ -18,17 +21,18 @@ services:
     sonata.admin.formula.variable:
         class: Pequiven\MasterBundle\Admin\Formula\VariableAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Variable de Formula" }
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Variable de Formula" }
         arguments:
             - ~
             - Pequiven\MasterBundle\Entity\Formula\Variable
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Objetivo" }
+            - { name: sonata.admin, manager_type: orm, group: "Objetivo", label: "Objetivo" }
         arguments:
             - ~
             - Pequiven\ObjetiveBundle\Entity\Objetive
@@ -38,13 +42,14 @@ services:
     sonata.admin.result:
         class: Pequiven\MasterBundle\Admin\Result\ResultAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Core", label: "Resultado" }
+            - { name: sonata.admin, manager_type: orm, group: "Objetivo", label: "Resultado" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\Result\Result
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
             
     sonata.admin.indicator.frequency_notification:
         class: Pequiven\MasterBundle\Admin\Indicator\FrequencyNotificationIndicatorAdmin
@@ -56,6 +61,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.indicator.indicator:
         class: Pequiven\MasterBundle\Admin\IndicatorAdmin
         tags:
@@ -79,3 +85,138 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setPeriodService, ['@pequiven_arrangement_program.service.period']]
+            
+    sonata.admin.arrangement_program.arrangement_program:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Programa de gestion" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.goal:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Metas" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\Goal
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.goal_details:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\GoalDetailsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Detalles de metas" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\GoalDetails
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_program.timeline:
+        class: Pequiven\MasterBundle\Admin\ArrangementProgram\TimelineAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Programa de gestion", label: "Linea de tiempo" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementProgramBundle\Entity\Timeline
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.arrangement_range.arrangement_range:
+        class: Pequiven\MasterBundle\Admin\ArrangementRangeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Rango de gestion", label: "Rango de gestión" }
+        arguments:
+            - ~
+            - Pequiven\ArrangementBundle\Entity\ArrangementRange
+            - ~
+        calls:
+            - [ setTranslationDomain, [PequivenMasterBundle]]
+            - [ setModelManager, [@seip.arrangementRange.manager]]
+            - [ setContainer, [@service_container]]
+            
+    sonata.admin.user.complejo:
+        class: Pequiven\MasterBundle\Admin\User\ComplejoAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Complejo" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Complejo
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.user.gerencia:
+        class: Pequiven\MasterBundle\Admin\User\GerenciaAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de primera" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Gerencia
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.user.gerencia_second:
+        class: Pequiven\MasterBundle\Admin\User\GerenciaSecondAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Gerencia de segunda" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\GerenciaSecond
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.user.gerencia_group:
+        class: Pequiven\MasterBundle\Admin\User\GerenciaGroupAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "%sonata.user.admin.groupname%" ,label_catalogue: "SonataUserBundle", label: "Grupo de Gerencia" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\GerenciaGroup
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.indicator.value_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\ValueIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.configuration:
+        class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core",label_catalogue: "admin", label: "admin.configuration" }
+        arguments:
+            - ~
+            - "%tecnocreaciones_tools.configuration_class.class%"
+            - ~
+        calls:
+            - [ setTranslationDomain, [admin]]
+            - [ setContainer, [@service_container]]
+    sonata.admin.configuration_group:
+        class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\GroupAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Core",label_catalogue: "admin", label: "admin.configuration_group" }
+        arguments:
+            - ~
+            - "%tecnocreaciones_tools.configuration_group_class.class%"
+            - ~
+        calls:
+            - [ setTranslationDomain, [admin]]

@@ -1,0 +1,19 @@
+pequiven_arrangementRange:
+    main: Rango de Gestión
+    rangeIsBadDefined: El rango definido no es %tendencia%
+    rangeTopIsBadDefined: El rango alto esta mal definido
+    rangeTopLessThan: El rango alto es menor que otro rango inferior definido
+    rangeMiddleIsBadDefined: El rango medio esta mal definido
+    rangeMiddleTopIsBadDefined: El rango medio alto esta mal definido
+    rangeMiddleTopLessThan: El rango medio alto es menor que otro rango inferior definido
+    rangeMiddleBottomIsBadDefined: El rango medio bajo esta mal definido
+    rangeMiddleBottomLessThan: El rango medio bajo es menor que otro rango inferior definido
+    rangeBottomIsBadDefined: El rango bajo esta mal definido
+    rangeMiddleTopLessThanTopStable: El rango medio alto es menor que el rango alto
+    rangeMiddleBottomHigherThanStable: El rango medio bajo es mayor que el rango alto
+    rangeBottomTopLessThanStable: El rango bajo alto esta mal definido
+    rangeBottomBottomHigherThanStable: El rango bajo bajo esta mal definido
+    tendency:
+        stable: Estable
+        increasing: Creciente
+        decreasing: Decreciente

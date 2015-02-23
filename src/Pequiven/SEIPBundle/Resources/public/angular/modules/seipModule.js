@@ -1864,7 +1864,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartResult = function(id,data) {
+            $scope.renderChartResult = function(id,data,gerencia,url) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "stackedbar3d",
@@ -1876,20 +1876,31 @@ angular.module('seipModule.controllers', [])
                             "chart": {
                                 "caption": data.dataSource.chart.caption,
                                 "subCaption": data.dataSource.chart.subCaption,
+                                "exportenabled": "1",
+                                "exportatclient": "0",
+                                "exportFormats": "PNG= Exportar como PNG|PDF= Exportar como PDF",
+                                "exportFileName": "Grafico Resultados "+gerencia,
+                                "exporthandler": "http://107.21.74.91/",
+                                "html5exporthandler": "http://107.21.74.91/",
                                 "xAxisname": Translator.trans('chart.result.objetiveOperative.xAxisName'),
                                 "yAxisName": Translator.trans('chart.result.objetiveOperative.yAxisName'),
                                 "showSum": "1",
                                 "numberSuffix": "%",
                                 "bgAlpha" : "0,0",
-                                "baseFontColor" : "#ffffff",
-                                "outCnvBaseFontColor" : "#ffffff",
+                                "baseFontColor" : "#000000",
+                                "bgColor": "#DDDDDD",
+                                "outCnvBaseFontColor" : "#000000",
                                 "valueFontColor": "#000000",
                                 "visible" : "0",
                                 "theme": "fint",
                                 "formatNumberScale": "0",
+                                "xAxisLineColor": "#ffffff",
                                 "yAxisMaxValue": "100",
                                 "yAxisMinValue": "0",
                                 "stack100Percent": "0",
+                                "plotgradientcolor": "",
+                                "showalternatehgridcolor": "0",
+                                "showplotborder": "0",
                             },
                             "categories": [
                                 {
@@ -1897,6 +1908,108 @@ angular.module('seipModule.controllers', [])
                                 }
                             ],
                             "dataset": data.dataSource.dataset
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            
+            $scope.renderWidgetRange = function(id,data) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "HLinearGauge",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "4%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "colorRange": {
+                                "color": data.dataSource.colorRange.color
+                             }
+                        }
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            
+            $scope.renderWidgetAngularRange = function(id) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "angulargauge",
+                        "renderAt": id,
+                        "width": "70%",
+                        "height": "60%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "manageResize": "1",
+                                "lowerlimit": "0",
+                                "upperlimit": "100",
+                                "lowerlimitdisplay": "Bad",
+                                "upperlimitdisplay": "Good",
+                                "palette": "1",
+                                "numbersuffix": "%",
+                                "tickvaluedistance": "10",
+                                "showvalue": "0",
+                                "gaugeinnerradius": "0",
+                                "bgcolor": "FFFFFF",
+                                "pivotfillcolor": "333333",
+                                "pivotradius": "8",
+                                "pivotfillmix": "333333, 333333",
+                                "pivotfilltype": "radial",
+                                "pivotfillratio": "0,100",
+                                "showtickvalues": "1",
+                                "showborder": "0"
+                            },
+                            "colorRange": {
+                                "color": [
+                                   {
+                                      "minValue": "0",
+                                      "maxValue": "35",
+                                      "label": "a",
+                                      "code": "#c02d00"
+                                   },
+                                   {
+                                      "minValue": "35",
+                                      "maxValue": "70",
+                                      "label": "b",
+                                      "code": "#f2c500"
+                                   },
+                                   {
+                                      "minValue": "70",
+                                      "maxValue": "90",
+                                      "label": "c",
+                                      "code": "#1aaf5d"
+                                   },
+                                   {
+                                      "minValue": "90",
+                                      "maxValue": "95",
+                                      "label": "d",
+                                      "code": "#f2c500"
+                                   },
+                                   {
+                                      "minValue": "95",
+                                      "maxValue": "100",
+                                      "label": "a",
+                                      "code": "#c02d00"
+                                   }
+                                ]
+                             },
+                             "dials": {
+                                "dial": [
+                                    {
+                                        "value": "92",
+                                        "rearextension": "15",
+                                        "radius": "100",
+                                        "bgcolor": "333333",
+                                        "bordercolor": "333333",
+                                        "basewidth": "8"
+                                    }
+                                ]
+                            }
                         }
                     });
                     revenueChart.setTransparent(true);

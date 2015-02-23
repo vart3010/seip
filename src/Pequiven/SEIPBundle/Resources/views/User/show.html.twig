@@ -7,60 +7,13 @@
 {% block body %}
 Usuario: <b>{{ user }}</b>
 <br/>
-{% if user.configuration != null %}
+{% set configuration = user.configuration %}
+{% if configuration != null %}
     <br/>
-    <div class="block">
-        <div class="block-title">
-            <h3>Localizaciones</h3>
-            <div class="button-group absolute-right compact">
-                <a href="{{ path('pequiven_localization_create',{'userId':user.id}) }}" class="button icon-list-add">Añadir</a>
-            </div>
-        </div>
-
-        <div class="with-padding">
-            <table class="simple-table responsive-table" id="sorting-example2">
-                <thead>
-                    <tr>
-                        <th scope="col" width="4%">{{ 'Nro' }}</th>
-                        <th scope="col" width="20%" class="hide-on-mobile">{{ 'pequiven_seip.headers.location'|trans }}</th>
-                        <th scope="col" width="24%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.headers.gerencia'|trans }}</th>
-                        <th scope="col" width="24%" class="hide-on-tablet">{{ 'pequiven_seip.headers.gerenciaSecond'|trans }}</th>
-                        <th scope="col" width="12%" class="align-right">{{ 'pequiven_seip.headers.rol'|trans }}</th>
-                        <th scope="col" width="16%" class="align-right">{{ 'pequiven_seip.headers.actions'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                   {% for localization in user.configuration.localizations %}
-                       {% set idLocalization = 'localization-' ~ localization.id %}
-                        <tr id="{{ idLocalization }}">
-                            <th scope="row">
-                                {{ loop.index }}
-                            </th>
-                            <td>{{ localization.location }}</td>
-                            <td>{{ localization.gerencia }}</td>
-                            <td>{{ localization.gerenciaSecond }}</td>
-                            <td>{{ localization.rol }}</td>
-                            <td class="align-right vertical-center">
-                                <span class="button-group compact">
-                                    <a href="{{ path('pequiven_localization_update',{id:localization.id}) }}" class="button icon-pencil">{{ 'pequiven_seip.actions.update'|trans }}</a>
-                                    {{ buttons.delete_mini(path('pequiven_localization_delete',{id:localization.id}),null,idLocalization) }}
-                                </span>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="6">
-                                <p>No hay localizaciones agregadas.</p>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            
-        </div>
-
-    </div>
-
+    {% include 'PequivenSEIPBundle:User:show/localization.html.twig' %}
+    <br/>
+    {% include 'PequivenSEIPBundle:User:show/pre_planning_configuration.html.twig' %}
+    
 {% else %}
     <br/>
     <span class="tag red-bg">No hay configuracion para el usuario.</span>
@@ -68,5 +21,5 @@ Usuario: <b>{{ user }}</b>
     <a href="{{ path('pequiven_seip_user_add_configuration',{'id':user.id}) }}">Haga click aqui para crear la configuración</a>
 {% endif %}
 <br/>
-<a href="{{ path('pequiven_user_update',{id: user.id }) }}" class="btn">Editar</a>
+<a href="{{ path('pequiven_user_update',{id: user.id }) }}" class="btn button">Editar</a>
 {% endblock body %}

@@ -200,9 +200,16 @@ class ArrangementProgramManager implements ContainerAwareInterface
         }
         $user = $this->getUser();
 
-        if ($configuration->getArrangementProgramUsersToNotify()->contains($user) === true && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED) {
-            $periodService = $this->getPeriodService();
-            if($periodService->isAllowNotifyArrangementProgram() === true || ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0) ){
+        $periodService = $this->getPeriodService();
+        if (
+            $configuration->getArrangementProgramUsersToNotify()->contains($user) === true 
+                && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
+                && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+            ) {
+            
+            if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+                $valid = true;
+            }elseif($periodService->isAllowNotifyArrangementProgram() === true){
                 $valid = true;
             }
         }
@@ -313,5 +320,13 @@ class ArrangementProgramManager implements ContainerAwareInterface
     private function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    private function isGranted($roles) {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context')->isGranted($roles);
     }
 }

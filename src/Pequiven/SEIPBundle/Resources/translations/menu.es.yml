@@ -95,6 +95,10 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            recalculate: Recalcular resultados
+                        operations:
+                            main: Operaciones
+                            recalculate_results: Recalcular resultados
                     objetives:
                         main: Objetivos
                         visualize:
@@ -124,3 +128,5 @@ app:
                         main: Planificación %period%
                         tactic: Táctico
                         operative: Operativo
+                        planning: Planificación
+                        statistics: Estadística

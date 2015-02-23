@@ -11,12 +11,14 @@
 
 namespace Pequiven\SEIPBundle\Model\PrePlanning;
 
+use Pequiven\ObjetiveBundle\Model\ObjetiveLevel;
+
 /**
  * Modelo de pre-planificacion
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-abstract class PrePlanning  implements PrePlanningInterface
+abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningInterface
 {
     /**
      * Nombre para el nodo root.
@@ -39,6 +41,21 @@ abstract class PrePlanning  implements PrePlanningInterface
     const STATUS_IMPORTED = 1;
     
     /**
+     * Estatus en revision
+     */
+    const STATUS_IN_REVIEW = 2;
+    
+    /**
+     * Estatus aprobado
+     */
+    const STATUS_APPROVED = 3;
+    
+    /**
+     * Estatus requerido
+     */
+    const STATUS_REQUIRED = 4;
+    
+    /**
      * No se ha seleccionado nada (Vacio)
      */
     const TO_IMPORT_DEFAULT = 0;
@@ -52,7 +69,7 @@ abstract class PrePlanning  implements PrePlanningInterface
      * No desea importar
      */
     const TO_IMPORT_NO = 2;
-    
+
     /**
      * Parametros de la pre planificacion
      * @var type 
@@ -72,25 +89,20 @@ abstract class PrePlanning  implements PrePlanningInterface
         $this->parameters[$key] = $value;
     }
     
-    public static function getTypeObjectRepository($typeObject) {
-        $typeObjectsRepository = self::getTypeObjectsRepository();
-        if(!isset($typeObjectsRepository[$typeObject])){
-            throw new \InvalidArgumentException(sprintf('The type object "%s", is not defined for prePlanning',$typeObject));
-        }
+    function getLabelStatus()
+    {
+        $status = $this->getStatus();
+        $labelOfStatus = $this->getLabelOfStatus();
+        return $labelOfStatus[$status];
     }
-    
-    /**
-     * Devuelve los repositorios de los tipos de objetos que se pueden importar
-     * 
-     * @return array
-     */
-    public static function getTypeObjectsRepository()
+    public function getLabelOfStatus()
     {
         return array(
-            self::TYPE_OBJECT_OBJETIVE => 'Pequiven\ObjetiveBundle\Repository\ObjetiveRepository',
-            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM => 'Pequiven\ArrangementProgramBundle\Repository\ArrangementProgramRepository',
-            self::TYPE_OBJECT_INDICATOR => 'Pequiven\IndicatorBundle\Repository\IndicatorRepository',
-            self::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL => 'Pequiven\ArrangementProgramBundle\Repository\GoalRepository',
+            self::STATUS_DRAFT => 'pequiven_seip.pre_planning.status.draft',
+            self::STATUS_IMPORTED => 'pequiven_seip.pre_planning.status.imported',
+            self::STATUS_IN_REVIEW => 'pequiven_seip.pre_planning.status.in_review',
+            self::STATUS_APPROVED => 'pequiven_seip.pre_planning.status.approved',
+            self::STATUS_REQUIRED => 'pequiven_seip.pre_planning.status.required',
         );
     }
 }

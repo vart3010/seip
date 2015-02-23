@@ -5,6 +5,7 @@ namespace Pequiven\ArrangementProgramBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
 use Pequiven\ArrangementProgramBundle\Model\GoalDetails as Base;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Detalles de la meta
@@ -13,6 +14,7 @@ use Pequiven\ArrangementProgramBundle\Model\GoalDetails as Base;
  * @Extjs\ModelProxy("/api/goals/details")
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalDetailsRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class GoalDetails extends Base
 {
@@ -251,6 +253,11 @@ class GoalDetails extends Base
      */
     private $goalDateEnd;
 
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
     /**
      * Get id
      *
@@ -857,6 +864,21 @@ class GoalDetails extends Base
     public function getGoal()
     {
         return $this->goal;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+    
+    public function __toString() {
+        $toString = $this->getId() ?''.$this->getId():'-';
+        return $toString;
     }
     
     public function __clone() {

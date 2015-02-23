@@ -1,0 +1,49 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block body %}
+    <div class="inline-label">
+        <ul style="padding-left: 0;margin-left: 2.14285714em;list-style-type: none;">
+            {% set limitTruncate = 100 %}
+            {% for t in tree %}
+                <li>
+                        {% set p = t['parent'] %}
+                        {% set avancedUsed = p.getResult %}
+                        {% set images = images %}
+                        {% set avancedUsedText = avancedUsed %}
+                            {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
+                        
+                        {% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
+                        ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - 
+                        
+                        {% if level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA') %} OE {% elseif level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA_SECOND') %} OT {% endif %} {{ generateLink(p,null)|striptags|raw }}
+                    <ul style="padding-left: 0;margin-left: 2.14285714em;list-style-type: none;">
+                    {% for chlid in t['child'] %}
+                        <li>
+                            {% set avancedUsed = chlid.getResult %}
+                            {% set avancedUsedText = avancedUsed %}
+                                {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
+                                {% if level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA') %} OT {% elseif level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA_SECOND') %} OO {% endif %} {{ generateLink(chlid,null)|striptags|raw }}
+                                {% if level == constant('Pequiven\\SEIPBundle\\Model\\Common\\CommonObject::LEVEL_GERENCIA') %}
+                                <ul style="padding-left: 0;
+                                margin-left: 2.14285714em;
+                                list-style-type: none;">
+                                {% for ch in chlid.childrens %}
+{#                                    {% if ch.getDeletedAt is null %}#}
+                                        <li>
+                                            {% set avancedUsed = ch.getResult %}
+                                            {% set avancedUsedText = avancedUsed %}
+                                                {% include 'PequivenSEIPBundle:Result:percentajeResult.html.twig' %}
+                                            OO {{ generateLink(ch,null)|striptags|raw }}
+                                        </li>
+{#                                    {% endif %}#}
+                                {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock body %}

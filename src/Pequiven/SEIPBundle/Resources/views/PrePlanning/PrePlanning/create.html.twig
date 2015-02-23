@@ -1,0 +1,65 @@
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% set level = app.request.get('level') %}
+{% set period = app.request.get('period') %}
+{% set valid = true %}
+{% set labelGerencia = '' %}
+
+{% block before_body %}
+{% endblock %}
+
+{% block body %}
+    {% set levelLabel = '' %}
+    
+    {% set configuration = app.user.configuration %}
+    {% if  configuration and configuration.prePlanningConfiguration != null %}
+    {% else %}
+        {% set valid = false %}
+        {{ print_error('pequiven_seip.errors.the_user_has_no_defined_configuration_planning',{'%user%':app.user},'PequivenSEIPBundle') }}
+    {% endif %}
+    {% if level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+        {% set levelLabel = 'operative' %}
+    {% elseif level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
+        {% set levelLabel = 'tactic' %}
+    {% endif %}
+    {% if valid %}
+        {% if level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_OPERATIVO') %}
+
+            {% if configuration.prePlanningConfiguration.gerenciaSecond == null %}
+                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_operative_level',{'%user%':app.user},'PequivenSEIPBundle') }}
+                {% set valid = false %}
+            {% else %}
+                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerenciaSecond }) %}
+            {% endif %}
+        {% elseif level == constant('Pequiven\\ObjetiveBundle\\Entity\\ObjetiveLevel::LEVEL_TACTICO') %}
+
+            {% if configuration.prePlanningConfiguration.gerencia == null %}
+                {{ print_error('pequiven_seip.errors.the_user_not_configured_pre_plan_the_tactical_level',{'%user%':app.user},'PequivenSEIPBundle') }}
+                {% set valid = false %}
+            {% else %}
+                {% set labelGerencia = 'pequiven_seip.pre_planning.pre_pre_planning_management_x'|trans({'%gerencia%':configuration.prePlanningConfiguration.gerencia }) %}
+            {% endif %}
+        {% endif %}
+    {% endif %}    
+    
+    {{ contentHeader(
+            ("pequiven_seip.pre_planning.pre_planning"|trans({'%period%':period})),
+            ( ("pequiven_seip.pre_planning." ~ levelLabel) |trans())
+        )
+    }}
+    {% if valid %}
+        <b>{{ labelGerencia }}</b><br/>
+        <div id="form-pre-plannig" style="width: 100%;min-height: 600px"></div>
+    {% endif %}
+{% endblock body %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#form-pre-plannig').html('<iframe id="site" src="{{ path('pequiven_pre_planning_form',{'level':level,'period':period}) }}" style="padding:0;width:100%;height:600px"/>');
+        });
+    </script>
+{% endblock javascript %}

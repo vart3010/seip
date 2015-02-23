@@ -1,23 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Pequiven\IndicatorBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
-use Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 
@@ -33,7 +22,8 @@ class IndicatorStrategicController extends baseController {
      * @return type
      */
     public function listAction() {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_STRATEGIC');
+        
         return array(
         );
     }
@@ -44,10 +34,8 @@ class IndicatorStrategicController extends baseController {
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function indicatorListAction(Request $request) {
-
-        $securityContext = $this->container->get('security.context');
-        $user = $securityContext->getToken()->getUser();
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_STRATEGIC');
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -159,7 +147,8 @@ class IndicatorStrategicController extends baseController {
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
     public function createAction(Request $request) {
-
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_STRATEGIC');
+        
         $form = $this->createForm($this->get('pequiven_indicator.strategic.registration.form.type'));
         $lastId = '';
 
@@ -175,6 +164,7 @@ class IndicatorStrategicController extends baseController {
 
             $data['tendency'] = (int)$data['tendency'];            
             $object->setUserCreatedAt($user);
+            $object->setPeriod($this->getPeriodService()->getPeriodActive());
 
             //Obtenemos y seteamos el nivel del indicador
             $indicatorLevel = $em->getRepository('PequivenIndicatorBundle:IndicatorLevel')->findOneBy(array('level' => IndicatorLevel::LEVEL_ESTRATEGICO));
@@ -263,6 +253,7 @@ class IndicatorStrategicController extends baseController {
         $em->getConnection()->beginTransaction();
 
         $arrangementRange->setIndicator($indicator);
+        $arrangementRange->setPeriod($this->getPeriodService()->getPeriodActive());
 
         //Seteamos los valores de rango alto
         $arrangementRange->setTypeRangeTop($em->getRepository('PequivenMasterBundle:ArrangementRangeType')->findOneBy(array('id' => $data['arrangementRangeTypeTop'])));
@@ -425,4 +416,20 @@ class IndicatorStrategicController extends baseController {
         return $ref;
     }
 
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
 }

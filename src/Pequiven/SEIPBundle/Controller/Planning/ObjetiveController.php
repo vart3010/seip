@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\ObjetiveBundle\Model\ObjetiveLevel;
 
 /**
  * Controlador de los objetivos (Planificacion)
@@ -14,7 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class ObjetiveController extends ResourceController
 {
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
@@ -28,6 +30,20 @@ class ObjetiveController extends ResourceController
     function listAction(Request $request)
     {
         $level = $request->get('level');
+        
+        $rol = null;
+        $roleByLevel = array(
+            ObjetiveLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_STRATEGIC',
+            ObjetiveLevel::LEVEL_TACTICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_TACTIC',
+            ObjetiveLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_OPERATIVE',
+        );
+        
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
@@ -137,7 +153,7 @@ class ObjetiveController extends ResourceController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
         if (is_array($results) && $totalResults > 0) {
@@ -174,7 +190,7 @@ class ObjetiveController extends ResourceController
             
         $gerencia = $request->request->get('gerencia');
 
-        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+        $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();
@@ -190,5 +206,14 @@ class ObjetiveController extends ResourceController
         $response->setData($gerenciaSecondChildren);
 
         return $response;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }

@@ -12,6 +12,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator as Model;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table(name="seip_indicator_value")
  * @ORM\Entity()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class ValueIndicator extends Model
 {
@@ -79,6 +80,11 @@ class ValueIndicator extends Model
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id",nullable=false)
      */
     private $formula;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
     
     /**
      * Get id
@@ -272,5 +278,31 @@ class ValueIndicator extends Model
     public function getFormula()
     {
         return $this->formula;
+    }
+    
+    function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) 
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+    
+    public function __toString() {
+        $toString = '';
+        if($this->id){
+            $toString .= $this->id.')   ';
+        }
+        $toString.= ' '.$this->valueOfIndicator.' ';
+        if(count($this->formulaParameters) > 0){
+            $toString.= '   ';
+            foreach ($this->formulaParameters as $key => $value) {
+                $toString.= sprintf('[%s => %s]',$key,$value);
+            }
+        }
+        return $toString ?:'-';
     }
 }

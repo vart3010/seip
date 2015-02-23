@@ -27,6 +27,9 @@ Pequiven\ArrangementProgramBundle\Entity\Goal:
         status:
             expose: true
             groups: [api_list]
+        advance:
+            expose: true
+            groups: [api_list]
         timeline:
             expose: true
             groups: [details]

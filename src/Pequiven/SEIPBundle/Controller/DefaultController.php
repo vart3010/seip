@@ -18,4 +18,32 @@ class DefaultController extends Controller {
         return array(
         );
     }
+    
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return type
+     * @Route("/{period}/change-period",name="seip_change_period")
+     */
+    public function changePeriodAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $referer = $request->get('referer',null);
+        $periodId = $request->get('period',null);
+        
+        $periodRepository = $this->get('pequiven.repository.period');
+        $period = $periodRepository->find($periodId);
+        $periodService = $this->getPeriodService();
+        if($period){
+            $periodService->setPeriodActive($period);
+        }
+        return $this->redirect($referer);
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    public function getPeriodService()
+    {
+        return $this->get('pequiven_arrangement_program.service.period');
+    }
 }

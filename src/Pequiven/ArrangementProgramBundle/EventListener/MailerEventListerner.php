@@ -6,6 +6,7 @@ use Pequiven\ArrangementProgramBundle\ArrangementProgramEvents;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\EventListener\BaseEventListerner;
 use Sylius\Bundle\ResourceBundle\Event\ResourceEvent;
+use Pequiven\SEIPBundle\EventListener\SeipEvents;
 
 /**
  * Captura los eventos del programa de gestion y envia los correos
@@ -21,6 +22,8 @@ class MailerEventListerner extends BaseEventListerner
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_APPROVED => 'onArrangementProgramPostApproved',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_RETURN_TO_REVIEW => 'onArrangementProgramPostReturnToReview',
             ArrangementProgramEvents::ARRANGEMENT_PROGRAM_POST_RETURN_TO_DRAFT => 'onArrangementProgramPostReturnToDraft',
+            SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT => 'onPrePlanningSentToDraft',
+            SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW => 'onPrePlanningSendToReview',
         );
     }
     
@@ -79,6 +82,59 @@ class MailerEventListerner extends BaseEventListerner
     }
     
     /**
+     * Envia un correo al dueno de se le devolvio el arbol a borrador de pre-planificacion
+     * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+     */
+    public function onPrePlanningSentToDraft(\Symfony\Component\EventDispatcher\GenericEvent $event) 
+    {
+        $object = $event->getSubject();
+        $gerencia = null;
+        $userTree = $object->getUser();
+        $users = array($userTree);
+        $usersEmail = $this->getEmailsInString($users);
+        
+        $configuration = $userTree->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
+        if($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_TACTICO){
+            $gerencia = $prePlanningConfiguration->getGerencia();
+        }elseif($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_OPERATIVO){
+            $gerencia = $prePlanningConfiguration->getGerenciaSecond();
+        }
+        $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToDraft.html.twig';
+        $toEmail = $usersEmail;
+        
+        $context = array(
+            'user' => $userTree,
+            'gerencia' => $gerencia
+        );
+        $this->mailerSendMessage($template, $context, null, $toEmail);
+    }
+    
+    public function onPrePlanningSendToReview(\Symfony\Component\EventDispatcher\GenericEvent $event) 
+    {
+        $object = $event->getSubject();
+        $gerencia = null;
+        
+        $usersEmail = $this->getSeipConfiguration()->getEmailNotifyToRevision();
+        $userTree = $object->getUser();
+        $configuration = $userTree->getConfiguration();
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
+        if($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_TACTICO){
+            $gerencia = $prePlanningConfiguration->getGerencia();
+        }elseif($object->getLevelPlanning() == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning::LEVEL_OPERATIVO){
+            $gerencia = $prePlanningConfiguration->getGerenciaSecond();
+        }
+        $template = 'PequivenSEIPBundle:PrePlanning:Email/sendToRevision.html.twig';
+        $toEmail = $usersEmail;
+        
+        $context = array(
+            'user' => $userTree,
+            'gerencia' => $gerencia
+        );
+        $this->mailerSendMessage($template, $context, null, $toEmail);
+    }
+    
+    /**
      * Envia el correo de notificacion correspondiente
      * @param ResourceEvent $event
      * @param type $templateName
@@ -95,10 +151,8 @@ class MailerEventListerner extends BaseEventListerner
             'arrangementProgram' => $object
         );
         $toEmail = $this->$methodEmailList($object);
-        
         $this->mailerSendMessage($template, $context, null, $toEmail);
     }
-
 
     private function getConfiguration(ArrangementProgram $entity)
     {

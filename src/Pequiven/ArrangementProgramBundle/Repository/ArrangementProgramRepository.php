@@ -2,10 +2,10 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Repositorio de programa de gestion
@@ -31,11 +31,17 @@ class ArrangementProgramRepository extends EntityRepository
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
             ->addSelect('ap_t_g_r_g')
+            ->addSelect('ap_t_g_gd')
+            ->addSelect('ap_to')
+            ->addSelect('ap_oo')
+            ->innerJoin('ap.tacticalObjective', 'ap_to')
+            ->leftJoin('ap.operationalObjective','ap_oo')
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
+            ->leftJoin('ap_t_g.goalDetails','ap_t_g_gd')
             ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')
             ->andWhere('ap.id = :id')
             ->setParameter('id', $id)
@@ -84,8 +90,11 @@ class ArrangementProgramRepository extends EntityRepository
         $qb->innerJoin('ap.responsibles', 'ap_r')
            ->andWhere('ap_r.id = :responsible')
            ->andWhere('ap.period = :period')
+           ->andWhere('ap.status != :status')
            ->setParameter('responsible', $user)
-           ->setParameter('period', $period);
+           ->setParameter('period', $period)
+           ->setParameter('status', ArrangementProgram::STATUS_REJECTED);
+        
         if(isset($criteria['notArrangementProgram'])){
             $qb->andWhere('ap.id != :arrangementProgram');
             $qb->setParameter('arrangementProgram', $criteria['notArrangementProgram']);
@@ -163,7 +172,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ;
         if(isset($criteria['type'])){
             if($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED){
-                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL','ap.totalAdvance > 0'));
+                $qb->andWhere($qb->expr()->orX('d.lastNotificationInProgressByUser IS NOT NULL AND ap.totalAdvance > 0','ap.totalAdvance > 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOT_NOTIFIED){
                 $qb->andWhere($qb->expr()->orX('d.notificationInProgressByUser IS NOT NULL AND ap.totalAdvance = 0','ap.totalAdvance = 0'));
             } elseif($criteria['type'] == ArrangementProgram::SUMMARY_TYPE_NOTIFIED_BUT_STILL_IN_PROGRESS){
@@ -183,7 +192,7 @@ class ArrangementProgramRepository extends EntityRepository
      */
     public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
         $this->getUser();
-        return parent::createPaginator($criteria, $orderBy);
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -195,22 +204,6 @@ class ArrangementProgramRepository extends EntityRepository
     public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
         $this->getUser();
         return parent::createPaginator($criteria, $orderBy);
-//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-//        
-//        $queryBuilder = $this->getCollectionQueryBuilder();
-//        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
-//        if(($gerencia = $criteria->remove('gerencia')) != null){
-//            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
-//        }
-//        
-//        if(isset($criteria['status'])){
-//            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
-//        }
-//        
-////        $this->applyCriteria($queryBuilder, $criteria);
-////        $this->applySorting($queryBuilder, $orderBy);
-//
-//        return $this->getPaginator($queryBuilder);
     }
     
     /**
@@ -252,6 +245,7 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -290,9 +284,8 @@ class ArrangementProgramRepository extends EntityRepository
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $user = $criteria->remove('ap.user');
         
-        $user->getId();
         $period = $criteria->remove('ap.period');
-        
+        $arrangementProgram = $criteria->remove('ap.id');
         
         $queryBuilder = $this->getCollectionQueryBuilder();
         $this->applyCriteria($queryBuilder, $criteria->toArray());
@@ -313,9 +306,16 @@ class ArrangementProgramRepository extends EntityRepository
             ->andWhere('ap.period = :period')
             ->setParameter('period', $period)
             ;
+        if($arrangementProgram != null){
+            $queryBuilder
+                ->andWhere('ap.id = :arrangementProgram')
+                ->setParameter('arrangementProgram', $arrangementProgram)
+            ;
+        }
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -379,6 +379,21 @@ class ArrangementProgramRepository extends EntityRepository
         $this->applySorting($qb, $orderBy);
         
         return $this->getPaginator($qb);
+    }
+    
+    public function findQueryWithResultNull(Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('ap_to')
+            ->addSelect('ap_oo')
+            ->innerJoin('ap.tacticalObjective', 'ap_to')
+            ->leftJoin('ap.operationalObjective','ap_oo')
+            ->andWhere('ap.period = :period')
+            ->andWhere($qb->expr()->isNull('ap.lastDateCalculateResult'))
+            ->setParameter('period', $period)
+            ;
+        return $qb;
     }
     
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
@@ -515,6 +530,7 @@ class ArrangementProgramRepository extends EntityRepository
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        $this->applyPeriodCriteria($queryBuilder);
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
         parent::applySorting($queryBuilder, $sorting);

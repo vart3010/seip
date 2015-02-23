@@ -1,23 +1,26 @@
-pequiven_pre_planning_index:
-    path: /
+pequiven_pre_planning_create:
+    path: /{level}/{period}/create
     defaults:
-        _controller: pequiven.controller.pre_planning:indexAction
+        _controller: pequiven.controller.pre_planning:createAction
+        _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_form:
-    path: /get-form
+    path: /{level}/{period}/get-form
     defaults:
         _controller: pequiven.controller.pre_planning:getFormAction
         _format: html
     requirements:
         _format: html
+        period: "\d+"
     methods: [GET]
     
 pequiven_pre_planning_get_pre_planning:
     path: /get-pre-planning.{_format}
     defaults:
         _controller: pequiven.controller.pre_planning:getPrePlanningAction
-        _format: html
+        _format: json
     requirements:
         _format: html|json
     methods: [GET]
@@ -56,5 +59,27 @@ pequiven_pre_planning_import:
         _controller: pequiven.controller.pre_planning:importAction
         _format: json
     methods: [GET]
+    options:
+        expose: true
+        
+pequiven_pre_planning_send_to_review:
+    path: /{id}/send-to-review.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:sendToReviewAction
+        _format: json
+    methods: [GET]
+    requirements:
+        _format: html|json
+    options:
+        expose: true
+        
+pequiven_pre_planning_send_to_draft:
+    path: /{id}/send-to-draft.{_format}
+    defaults:
+        _controller: pequiven.controller.pre_planning:sendToDraftAction
+        _format: json
+    methods: [GET]
+    requirements:
+        _format: html|json
     options:
         expose: true

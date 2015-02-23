@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
+use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
  * Indicator
@@ -16,7 +17,7 @@ use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
-class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface
+class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -146,6 +147,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $period;
     
@@ -223,6 +225,14 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $progressToDate = 0;
     
     /**
+     * Resultado arrojado por la fórmula de evaluación del indicador
+     * 
+     * @var integer
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
+    
+    /**
      *
      * @var \Pequiven\ArrangementBundle\Entity\ArrangementRange
      * @ORM\OneToOne(targetEntity="Pequiven\ArrangementBundle\Entity\ArrangementRange",inversedBy="indicator",cascade={"remove"})
@@ -233,6 +243,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * ¿Se puede penalizar el resultado?
+     * @var boolean
+     * @ORM\Column(name="couldBePenalized",type="boolean")
+     */
+    private $couldBePenalized = true;
+    
+    /**
+     * ¿Forzar la penalizacion del resultado?
+     * @var boolean
+     * @ORM\Column(name="forcePenalize",type="boolean")
+     */
+    private $forcePenalize = false;
+    
+    /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
     
     /**
      * Constructor
@@ -528,6 +560,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
+        $objetives->addIndicator($this);
         $this->objetives->add($objetives);
 
         return $this;
@@ -578,13 +611,6 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
-     * Reseteo del objeto "objetivo"
-     */
-    public function resetObjetives(){
-        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Set refParent
      *
      * @param string $refParent
@@ -613,7 +639,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @param \Pequiven\SEIPBundle\Entity\Period $period
      * @return Indicator
      */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $this->period = $period;
 
@@ -706,6 +732,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     public function setValueFinal($valueFinal)
     {
+        $this->progressToDate = 0;
         if($valueFinal > 0 && $this->totalPlan > 0){
             $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
         }
@@ -921,6 +948,16 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->lastDateCalculateResult = new \DateTime();
     }
     
+    public function clearLastDateCalculateResult() 
+    {
+        $this->lastDateCalculateResult = null;
+    }
+    
+    public function isAvailableInResult() 
+    {
+        return true;
+    }
+    
     function getDeletedAt() {
         return $this->deletedAt;
     }
@@ -933,5 +970,107 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     function setProgressToDate($progressToDate) {
         $this->progressToDate = $progressToDate;
+    }
+    
+    public function __clone() {
+        if($this->id > 0){
+            $this->id = null;
+            
+            $this->createdAt = null;
+            $this->lastDateCalculateResult = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->period = null;
+            
+            $this->valuesIndicator = new ArrayCollection();
+            
+            $this->valueFinal = 0;
+            
+            $this->histories = new ArrayCollection();
+            $this->observations = new ArrayCollection();
+            $this->details = new Indicator\IndicatorDetails();
+            
+            $this->objetives = new ArrayCollection();
+            
+            $this->childrens = new ArrayCollection();
+            $this->progressToDate = 0;
+        }
+    }
+    
+    public function setResult($result) 
+    {
+        $this->progressToDate = $result;
+    }
+    
+    /**
+     * Set resultReal
+     *indicators
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
+
+        return $this;
+    }
+
+    /**
+     * Get resultReal
+     *
+     * @return float 
+     */
+    public function getResultReal()
+    {
+        return $this->resultReal;
+    }
+    
+    function isCouldBePenalized() 
+    {
+        return $this->couldBePenalized;
+    }
+
+    function isForcePenalize() 
+    {
+        return $this->forcePenalize;
+    }
+
+    function setCouldBePenalized($couldBePenalized) 
+    {
+        $this->couldBePenalized = $couldBePenalized;
+        
+        return $this;
+    }
+
+    function setForcePenalize($forcePenalize) 
+    {
+        $this->forcePenalize = $forcePenalize;
+        
+        return $this;
+    }
+    
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
     }
 }

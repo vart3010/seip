@@ -3,14 +3,16 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 {% block title %}- {{ 'pequiven_master.gerencia_second'|trans({},'PequivenMasterBundle') }}{% endblock %}
 
-{% block body %}
+{% block before_body %}
     {{ contentHeader(
         ("result.list.titleObjetiveOperative"|trans)
     ) }}
-    
+{% endblock %}
+
+{% block body %}
     <div ng-controller="TableFormatController">
             <div loading-container="tableParams.settings().$loading">
-                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaSecondList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_result_visualize_by_gerencia',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
                         <td data-title="'{{ 'result.list.columnLocation'|trans }}'" filter="{ 'complejo': 'text' }" >
                             {$result.gerencia.complejo.description$}

@@ -44,4 +44,24 @@ class ArrangementRangeType {
     public function getRangeTypeNameArray() {
         return $this->rangeTypeName;
     }
+    
+    /**
+     * Retorna las referencias definidas para los tipos de rango
+     * @staticvar array $refStatus
+     * @return string
+     */
+    static function getRefsSummary()
+    {
+        static $refStatus = array(
+            self::RANGE_TYPE_TOP_BASIC => 'Rango Alto Básico',
+            self::RANGE_TYPE_MIDDLE_TOP_BASIC => 'Rango Medio Alto Básico',
+            self::RANGE_TYPE_MIDDLE_BOTTOM_BASIC => 'Rango Medio Bajo Básico',
+            self::RANGE_TYPE_BOTTOM_BASIC => 'Rango Bajo Básico',
+            self::RANGE_TYPE_TOP_MIXED => 'Rango Alto Mixto',
+            self::RANGE_TYPE_MIDDLE_TOP_MIXED => 'Rango Medio Alto Mixto',
+            self::RANGE_TYPE_MIDDLE_BOTTOM_MIXED => 'Rango Medio Bajo Mixto',
+            self::RANGE_TYPE_BOTTOM_MIXED => 'Rango Bajo Mixto',
+        );
+        return $refStatus;
+    }
 }

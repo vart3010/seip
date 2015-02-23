@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -15,8 +17,27 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class IndicatorController extends ResourceController
 {
-    public function showAction(Request $request) {
+    public function showAction(Request $request) 
+    {
         $resource = $this->findOr404($request);
+        
+        $level = $resource->getIndicatorLevel()->getLevel();
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity($rol);
+        
+        if(!$securityService->isGranted($rol[1])){
+            $securityService->checkSecurity($rol[0],$resource);
+        }
         
         $errorFormula = null;
         if($resource->getFormula() !== null){
@@ -25,13 +46,42 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+            ),
+        );
+        
+        $resultService = $this->getResultService();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $indicatorRange = array();
+        $errorArrangementRange = null;
+        if($resource->getArrangementRange() !== null){
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
+            if($errorArrangementRange == null){
+                $tendency = $resource->getTendency();
+                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
+                $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
+                $data['dataSource']['colorRange']['color'] = $color;
+            }
+        }
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'errorFormula' => $errorFormula,
+                'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
+                'data' => $data,
+                'indicatorRange' => $indicatorRange,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
@@ -40,16 +90,31 @@ class IndicatorController extends ResourceController
     
     /**
      * Lista de Indicadores por nivel(Estratégico, Táctico u Operativo)
+     * 
      * @param Request $request
      * @return type
      */
     function listAction(Request $request)
     {
         $level = $request->get('level');
+        
+        
+        $rol = null;
+        $roleByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_VIEW_STRATEGIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_STRATEGIC'),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_LIST_INDICATOR_TACTIC'),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_LIST_INDICATOR_OPERATIVE')
+        );
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $this->getSecurityService()->checkSecurity($rol);
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();
-
+        
         $criteria['indicatorLevel'] = $level;
 
         if ($this->config->isPaginated()) {
@@ -164,7 +229,7 @@ class IndicatorController extends ResourceController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
         if (is_array($results) && $totalResults > 0) {
@@ -201,7 +266,7 @@ class IndicatorController extends ResourceController
             
         $gerencia = $request->request->get('gerencia');
 
-        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+        $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();
@@ -217,5 +282,32 @@ class IndicatorController extends ResourceController
         $response->setData($gerenciaSecondChildren);
 
         return $response;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }

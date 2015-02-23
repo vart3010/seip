@@ -41,7 +41,7 @@ class PrePlanning extends Model
      * Nombre de la planificacion
      * 
      * @var string
-     * @ORM\Column(name="name",type="text")
+     * @ORM\Column(name="name",type="string",length=255)
      */
     private $name;
 
@@ -96,9 +96,9 @@ class PrePlanning extends Model
      * Identificador del objeto que se va a planificar
      * 
      * @var integer
-     * @ORM\Column(name="idObject",type="integer",nullable=true)
+     * @ORM\Column(name="idSourceObject",type="integer",nullable=true)
      */
-    private $idObject;
+    private $idSourceObject;
 
     /**
      * Estatus de la plafinicacion
@@ -107,22 +107,6 @@ class PrePlanning extends Model
      * @ORM\Column(name="status",type="integer")
      */
     private $status = self::STATUS_DRAFT;
-    
-    /**
-     * Usuario dueño del arbol
-     * @var \Pequiven\SEIPBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\User")
-     */
-    private $user;
-    
-    /**
-     * Periodo.
-     * @var \Pequiven\SEIPBundle\Entity\Period
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
-     */
-    private $period;
     
     /**
      * Parametros de la preplanificacion
@@ -141,6 +125,14 @@ class PrePlanning extends Model
     protected $requiresApproval = false;
     
     /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
+    
+    /**
      * ¿para importar?
      * @var boolean
      * @ORM\Column(name="toImport",type="integer")
@@ -153,6 +145,21 @@ class PrePlanning extends Model
      * @ORM\Column(name="editable",type="boolean")
      */
     private $editable = false;
+    
+    /**
+     * Nivel de la planificacion de la plafinicacion
+     * 
+     * @var integer
+     * @ORM\Column(name="levelPlanning",type="integer",nullable=false)
+     */
+    private $levelPlanning = self::LEVEL_DEFAULT;
+    
+    /**
+     * Usuario dueño de la PrePlanificacion 
+     * @var PrePlanningUser
+     * @ORM\OneToOne(targetEntity="Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser",mappedBy="prePlanningRoot")
+     */
+    private $prePlanningUser;
 
     /**
      * Constructor
@@ -266,26 +273,26 @@ class PrePlanning extends Model
     }
 
     /**
-     * Set idObject
+     * Set idSourceObject
      *
-     * @param integer $idObject
+     * @param integer $idSourceObject
      * @return PrePlanning
      */
-    public function setIdObject($idObject)
+    public function setIdSourceObject($idSourceObject)
     {
-        $this->idObject = $idObject;
+        $this->idSourceObject = $idSourceObject;
 
         return $this;
     }
 
     /**
-     * Get idObject
+     * Get idSourceObject
      *
      * @return integer 
      */
-    public function getIdObject()
+    public function getIdSourceObject()
     {
-        return $this->idObject;
+        return $this->idSourceObject;
     }
 
     /**
@@ -332,52 +339,6 @@ class PrePlanning extends Model
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Pequiven\SEIPBundle\Entity\User $user
-     * @return PrePlanning
-     */
-    public function setUser(\Pequiven\SEIPBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Pequiven\SEIPBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set period
-     *
-     * @param \Pequiven\SEIPBundle\Entity\Period $period
-     * @return PrePlanning
-     */
-    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
-    {
-        $this->period = $period;
-
-        return $this;
-    }
-
-    /**
-     * Get period
-     *
-     * @return \Pequiven\SEIPBundle\Entity\Period 
-     */
-    public function getPeriod()
-    {
-        return $this->period;
     }
 
     /**
@@ -525,5 +486,75 @@ class PrePlanning extends Model
         
         return $this;
     }
+    
+    function getLevelPlanning() 
+    {
+        return $this->levelPlanning;
+    }
 
+    function setLevelPlanning($levelPlanning) 
+    {
+        $this->levelPlanning = $levelPlanning;
+        
+        return $this;
+    }
+
+
+    /**
+     * Get editable
+     *
+     * @return boolean 
+     */
+    public function getEditable()
+    {
+        return $this->editable;
+    }
+
+    /**
+     * Set prePlanningUser
+     *
+     * @param \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser $prePlanningUser
+     * @return PrePlanning
+     */
+    public function setPrePlanningUser(\Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser $prePlanningUser = null)
+    {
+        $this->prePlanningUser = $prePlanningUser;
+
+        return $this;
+    }
+
+    /**
+     * Get prePlanningUser
+     *
+     * @return \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser 
+     */
+    public function getPrePlanningUser()
+    {
+        return $this->prePlanningUser;
+    }
+    
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+        if($requiredToImport == true){
+            $this->status = self::STATUS_REQUIRED;
+        }
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
+    }
 }

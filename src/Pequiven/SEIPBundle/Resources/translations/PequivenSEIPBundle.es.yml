@@ -39,6 +39,7 @@ pequiven_seip:
     firstname: Nombre
     lastname: Apellido
     numPersonal: Número de Personal
+    status_worker: Status del Trabajador
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
@@ -46,6 +47,8 @@ pequiven_seip:
         user: Usuario
         localization:
             localization: Localización
+        pre_planning_configuration:
+            main: Pre-Planificación
     actions:
         create: Crear
         add: Añadir
@@ -53,6 +56,9 @@ pequiven_seip:
         delete: Eliminar
         update: Editar
     headers:
+        ref: Referencia
+        status: Estatus
+        username: Usuario
         location: Localidad
         gerencia: Gerencia
         gerenciaSecond:  Gerencia de 2da linea
@@ -60,6 +66,7 @@ pequiven_seip:
         actions: Acciones
     results:
         results: Resultados
+        resultsByGerencia: Resultados %gerencia%
         result: Resultado
         weight: Peso
         no_results: No hay resultados asociados al objetivo.
@@ -105,6 +112,7 @@ pequiven_seip:
     #Buttons
     buttons:
         export_xls: Exportar
+        export_result: Exportar Resultados
         refresh: Refrescar
     edit: Editar
     save: Guardar
@@ -113,7 +121,7 @@ pequiven_seip:
     #Roles
     role:
         super_administrator: Super Administrador
-        administrator: Administporrador
+        administrator: Administrador
         directive: Ejecutivo
         directive_aux: Ejecutivo (Usuario Temporal)
         general_complejo: Gerente General Complejo %complejo%
@@ -165,16 +173,105 @@ pequiven_seip:
     errors:
         you_must_specify_the_period_inquiry: Debe especificar el período de su consulta.
         you_must_specify_number_staff_consult: Debe especificar el numero del personal a consultar.
-        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe
+        the_number_staff_does_not_exist: El numero de personal "%numPersonal%" no existe en el Sistema Estadístico de Información Petroquímica.
         the_period_does_not_exist.: El período "%period%" no existe.
         user_has_no_associated_items_evaluation: El usuario "%user%" no tiene items asociados para su evaluación.
         user_must_complete_notification_process_management_program: El usuario "%user%" debe finalizar el proceso de notificación en el programa de gestión "%arrangementProgram%".
         the_management_program_does_not_progress_loaded: El programa de gestión "%arrangementProgram%" no tiene avances cargados.
         the_indicator_has_not_loaded_values: El indicador "%indicator%" no tiene valores cargados.
+        the_user_has_no_defined_configuration_planning: El usuario "%user%" no tiene la configuración requerida para realizar la pre planificacion.
+        the_user_not_configured_pre_plan_the_tactical_level: El usuario "%user%" no esta configurado para pre planificar el nivel táctico.
+        the_user_not_configured_pre_plan_the_operative_level: El usuario "%user%" no esta configurado para pre planificar el nivel operativo.
+        user_not_quantity_items: El usuario "%user%" no tiene ningún item asociado para su evaluación.
+        the_user_is_not_assigned_second_line_management: El usuario "%user%" no tiene asignada la gerencia de segunda línea.
+        the_user_is_not_assigned_first_line_management: El usuario "%user%" no tiene asignada la gerencia de primera línea.
     pre_planning:
         pre_planning: Planificación %period%
+        list: Lista
         tactic: Táctico
         operative: Operativo
+        revision: Revisión
+        status:
+            draft: Borrador
+            imported: Importado
+            in_review: En revisión
+            approved: Aprobado
+            required: Requerido
+        pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
+    pdf:
+        pageFooter: Página %page%/%totalPage%
+    security:
+        permission_denied: Permiso denegado!
+        403:
+            role_seip_pre_planning_create_tactic: Usted no tiene permiso para crear pre-planificación a nivel tactico.
+            role_seip_pre_planning_create_operative: Usted no tiene permiso para crear pre-planificación a nivel operativo.
+            role_seip_pre_planning_create_review: Usted no tiene permiso para revisar la pre-planificación.
+            role_seip_pre_planning_list_review: Usted no tiene permiso para listar la pre-planificación.
+            role_seip_pre_planning_view_tactic: Usted no tiene permiso para visualizar la pre-planificación a nivel tactico.
+            role_seip_pre_planning_view_operative: Usted no tiene permiso para visualizar la pre-planificación a nivel operativo.
+            role_seip_pre_planning_operation_import_objetive: Usted no tiene permiso para imporar objetivos de la pre-planificación.
+            role_seip_pre_planning_operation_import_indicator: Usted no tiene permiso para imporar indicadores de la pre-planificación.
+            role_seip_pre_planning_operation_import_arrangement_program: Usted no tiene permiso para imporar programas de gestión de la pre-planificación.
+            role_seip_pre_planning_operation_import_arrangement_program_goal: Usted no tiene permiso para imporar metas de programas de gestión de la pre-planificación.
+            
+            role_seip_objective_list_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
+            role_seip_objective_list_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
+            role_seip_objective_list_operative: Usted no tiene permiso para ver la lista de los objetivos operativos.
+            role_seip_objective_list_matrix_objectives: Usted no tiene permiso para ver la lista de la matriz de objetivos.
+            role_seip_objective_view_strategic: Usted no tiene permiso para ver los objetivos estrategicos.
+            role_seip_objective_view_tactic: Usted no tiene permiso para ver los objetivos tacticos.
+            role_seip_objective_view_operative: Usted no tiene permiso para ver los objetivos operativos.
+            role_seip_objective_create_strategic: Usted no tiene permiso para crear objetivos estrategicos.
+            role_seip_objective_create_tactic: Usted no tiene permiso para crear objetivos tacticos.
+            role_seip_objective_create_operative: Usted no tiene permiso para crear objetivos operativos.
+            
+            role_seip_arrangement_program_list_all: Usted no tiene permiso para ver la lista de los programas de gestión.
+            role_seip_arrangement_program_list_assigned: Usted no tiene permiso para ver la lista de los programas de gestión asignados.
+            role_seip_arrangement_program_list_reviewing_or_approving: Usted no tiene permiso para ver la lista de los programas de gestión por revisar o aprobar.
+            role_seip_arrangement_program_list_for_notifying: Usted no tiene permiso para ver la lista de los programas de gestión por notificar.
+            role_seip_arrangement_program_view_tactic: Usted no tiene permiso para ver los programas de gestión a nivel tactico.
+            role_seip_arrangement_program_view_operative: Usted no tiene permiso para ver los programas de gestión a nivel operativo.
+            role_seip_arrangement_program_create_tactic: Usted no tiene permiso para crear programa de gestión a nivel tactico.
+            role_seip_arrangement_program_create_operative: Usted no tiene permiso para crear programa de gestión a nivel operativo.
+            role_seip_arrangement_program_create_from_template: Usted no tiene permiso para crear programa de gestión a partir de plantillas.
+            
+            role_seip_indicator_list_strategic: Usted no tiene permiso para ver la lista de los indicadores estrategicos.
+            role_seip_indicator_list_tactic: Usted no tiene permiso para ver la lista de los indicadores tacticos.
+            role_seip_indicator_list_operative: Usted no tiene permiso para ver la lista de los indicadores operativos.
+            role_seip_indicator_view_strategic: Usted no tiene permiso para ver los indicadores estrategicos.
+            role_seip_indicator_view_tactic: Usted no tiene permiso para ver los indicadores tacticos.
+            role_seip_indicator_view_operative: Usted no tiene permiso para ver los indicadores operativos.
+            role_seip_indicator_create_strategic: Usted no tiene permiso para crear indicadores estrategicos.
+            role_seip_indicator_create_tactic: Usted no tiene permiso para crear indicadores tacticos.
+            role_seip_indicator_create_operative: Usted no tiene permiso para crear indicadores operativos.
+            
+            role_seip_result_list_by_management: Usted no tiene permiso para ver la lista de los resultados por gerencia.
+            role_seip_result_list_period: Usted no tiene permiso para ver la lista de los resultados por periodo.
+            role_seip_result_view_tactic: Usted no tiene permiso para ver resultados a nivel tactico.
+            role_seip_result_view_operative: Usted no tiene permiso para ver resultados a nivel operativo.
+            
+            role_seip_planning_list_objective_strategic: Usted no tiene permiso para ver la lista de los objetivos estrategicos.
+            role_seip_planning_list_objective_tactic: Usted no tiene permiso para ver la lista de los objetivos tacticos.
+            role_seip_planning_list_objective_operative: Usted no tiene permiso para ver la lista de los objetivos operativos.
+            role_seip_planning_list_objective_matrix_objectives: Usted no tiene permiso para ver la lista de la matriz de objetivos.
+            role_seip_planning_list_indicator_strategic: Usted no tiene permiso para ver la lista de los indicadores estrategicos.
+            role_seip_planning_list_indicator_tactic: Usted no tiene permiso para ver la lista de los indicadores tacticos.
+            role_seip_planning_list_indicator_operative: Usted no tiene permiso para ver la lista de los indicadores operativos.
+            role_seip_planning_list_result_all: Usted no tiene permiso para ver la lista de los resultados.
+            role_seip_planning_list_arrangement_program: Usted no tiene permiso para ver la lista de los programas de gestión.
+            role_seip_planning_view_objective_strategic: Usted no tiene permiso para ver objetivos estrategicos.
+            role_seip_planning_view_objective_tactic: Usted no tiene permiso para ver objetivos tacticos.
+            role_seip_planning_view_objective_operative: Usted no tiene permiso para ver objetivos operativos.
+            role_seip_planning_view_indicator_strategic: Usted no tiene permiso para ver indicadores estrategicos.
+            role_seip_planning_view_indicator_tactic: Usted no tiene permiso para ver indicadores tacticos.
+            role_seip_planning_view_indicator_operative: Usted no tiene permiso para ver indicadores operativos.
+            role_seip_planning_view_arrangement_program_tactic: Usted no tiene permiso para ver programas de gestión tacticos.
+            role_seip_planning_view_arrangement_program_operative: Usted no tiene permiso para ver programas de gestión operativos.
+            role_seip_planning_view_result_tactic: Usted no tiene permiso para ver los resultados a nivel tactico.
+            role_seip_planning_view_result_operative: Usted no tiene permiso para ver los resultados a nivel operativo.
+            role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
+        error:
+            the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
         
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -254,3 +351,7 @@ pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
 pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
 pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
 pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.
+
+miscellaneous:
+    noCharged: No Cargado
+    noApply: No Aplica

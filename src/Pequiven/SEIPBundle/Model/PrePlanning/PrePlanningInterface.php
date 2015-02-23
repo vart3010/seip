@@ -15,7 +15,7 @@ namespace Pequiven\SEIPBundle\Model\PrePlanning;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningInterface extends TypePrePlanningInterface
+interface PrePlanningInterface
 {
     public function setLevelObject($levelObject);
     
@@ -24,4 +24,6 @@ interface PrePlanningInterface extends TypePrePlanningInterface
     public function getParameters();
     
     public function setRequiresApproval($requiresApproval);
+    
+    public function getStatus();
 }

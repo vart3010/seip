@@ -6,11 +6,11 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Pequiven\MasterBundle\Entity\Rol;
 use Pequiven\ObjetiveBundle\Entity\Objetive;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
- * Repositorio del objetivo
- *
+ * Repositorio del objetivo (pequiven.repository.objetive)
+ * 
  * @author matias
  */
 class ObjetiveRepository extends EntityRepository {
@@ -136,7 +136,6 @@ class ObjetiveRepository extends EntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
         
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -164,6 +163,7 @@ class ObjetiveRepository extends EntityRepository {
         
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
+        $this->applyPeriodCriteria($queryBuilder);
 
         return $this->getPaginator($queryBuilder);
     }
@@ -177,7 +177,6 @@ class ObjetiveRepository extends EntityRepository {
      */
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
-        $queryBuilder->andWhere('o.enabled = 1');
         //Filtro Objetivo Estratégico
         if(isset($criteria['description'])){
             $description = $criteria['description'];
@@ -197,8 +196,9 @@ class ObjetiveRepository extends EntityRepository {
         }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-
+        
         $this->applyCriteria($queryBuilder, $criteria);
+        $this->applyPeriodCriteria($queryBuilder);
         $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
@@ -248,7 +248,9 @@ class ObjetiveRepository extends EntityRepository {
         
         $queryBuilder->orderBy('o.ref');
         $this->applyCriteria($queryBuilder, $criteria);
+        $this->applyPeriodCriteria($queryBuilder);
         $this->applySorting($queryBuilder, $orderBy);
+        
         
         return $this->getPaginator($queryBuilder);
     }
@@ -316,10 +318,8 @@ class ObjetiveRepository extends EntityRepository {
         }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-//        print_r($queryBuilder->getQuery()->getSQL());
-//        die();
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
+        
+        $this->applyPeriodCriteria($queryBuilder);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -553,20 +553,23 @@ class ObjetiveRepository extends EntityRepository {
         $qb->leftJoin('o.indicators', 'i');
         $qb->leftJoin('i.formula', 'f');
         $qb->innerJoin('o.gerenciaSecond', 'gs');
-        $qb->leftJoin('o.parents', 'o1');
-        $qb->leftJoin('o1.indicators', 'i1');
-        $qb->leftJoin('i1.formula', 'f1');
+        $qb->innerJoin('o.parents', 'o1');
+//        $qb->leftJoin('o1.indicators', 'i1');
+//        $qb->leftJoin('i1.formula', 'f1');
         
         $qb->andWhere('o.objetiveLevel = :objetiveLevel');
-        $qb->andWhere('o.enabled = :enabled');
+        $qb->andWhere('o.deletedAt IS NULL');
+        $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('o.gerencia = :gerencia');
-        $qb->andWhere('o1.enabled = :enabled');
+        $qb->andWhere('o1.deletedAt IS NULL');
         
         $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_OPERATIVO);
-        $qb->setParameter('enabled', true);
         $qb->setParameter('gerencia', $gerencia->getId());
         
+        $this->applyPeriodCriteria($qb);
+                
         $qb->orderBy('o.ref');
+        $qb->groupBy('o1.ref,o.ref,i.ref');
         
         return $qb->getQuery()->getResult();
     }

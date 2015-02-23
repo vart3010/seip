@@ -4,16 +4,14 @@
 
 {% set route_index = 'pequiven_objetive_menu_list_strategic' %}
 
+{% block before_body %}
+    {{ contentHeader(
+        { ( path(route_index) ): ('pequiven_objetive.objetive_strategic'|trans ) },
+         ('pequiven_objetive.list'|trans)
+    ) }}
+{% endblock %}
+
 {% block body %}
-    
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ path(route_index) }}">{{ 'pequiven_objetive.objetive_strategic'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_objetive.list'|trans }}</span>
-        </h1>
-    </hgroup>
-    
     <div ng-controller="TableGroupingFormatController">
         <div ng-controller="TableObjetiveStrategicController">
                 {% set filterYesNo = [

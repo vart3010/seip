@@ -1,0 +1,10 @@
+{% if avancedUsedText is not defined %}
+    {% set avancedUsedText = avancedUsed %}
+{% endif %}
+<span style=" {% if avancedUsed >= 0 and avancedUsed <= 30 %}color:red;{% endif %}{% if avancedUsed > 30 and avancedUsed < 70 %}color:orange;{% endif%}{% if avancedUsed >= 70 %}color:green;{% endif %}">
+    {{ ((avancedUsedText ? avancedUsedText : '0')|number_format(2)) | str_pad(5,'0') }}% -
+</span>
+
+{# Limpiar variables #}
+{% set avancedUsedText = null %}
+{% set avancedUsed = null %}

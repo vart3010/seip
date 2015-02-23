@@ -4,6 +4,10 @@ namespace Pequiven\SEIPBundle\Service;
 
 use Pequiven\MasterBundle\Entity\Formula;
 use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\MasterBundle\Entity\Tendency;
+use Pequiven\MasterBundle\Entity\ArrangementRangeType;
+use Pequiven\MasterBundle\Entity\Operator;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Servicio que se encarga de actualizar los resultados
@@ -178,7 +182,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
             if($countArrangementPrograms > 0){
                 foreach ($arrangementPrograms as $arrangementProgram){
-                    if($arrangementProgram->getStatus() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::STATUS_REJECTED){
+                    if(!$arrangementProgram->isAvailableInResult()){
                         continue;
                     }
                     $countResult++;
@@ -186,14 +190,30 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
+            //Fix error al configurar mal la regla del resultado en el PG
+            $em = $this->getDoctrine()->getManager();
+            $indicators = $objetive->getIndicators();
+            foreach ($arrangementPrograms as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            foreach ($indicators as $value) {
+                $value->clearLastDateCalculateResult();
+                $em->persist($value);
+            }
+            $em->flush();
             throw new \LogicException(sprintf('Los programas de gestion no se calculan con promedio ponderado, revise el resultado con id "%s"',$result->getId()));
         }
         
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            if($countResult == 0){//Fix division por cero
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
         }
+        $periodService = $this->getPeriodService();
         $result->setTotal($total);
     }
     
@@ -248,7 +268,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         continue;
                     }
                 }
-                
+                if(!$item->isAvailableInResult()){
+                    continue;
+                }
                 $countResult++;
                 $total += $item->getResult();
             }
@@ -259,12 +281,19 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         continue;
                     }
                 }
+                if(!$item->isAvailableInResult()){
+                    continue;
+                }
                 
                 $countResult++;
                 $total += $item->getResultWithWeight();
             }
         }
         if($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            //Fix division por cero
+            if($countResult == 0){
+                $countResult = 1;
+            }
             $total = ($total / $countResult);
         }elseif($result->getTypeCalculation() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_CALCULATION_WEIGHTED_AVERAGE){
             //Nada que hacer
@@ -279,12 +308,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function updateResultOfObjects($objects,$andFlush = true) 
     {
+        if($objects === null){
+            return;
+        }
         if(!is_array($objects) && !is_a($objects, 'Doctrine\ORM\PersistentCollection'))
         {
             $objects = array($objects);
         }
         foreach ($objects as $object) {
-            foreach ($object->getResults() as $result) 
+            foreach ($object->getResults() as $result)
             {
                 $this->calculateResult($result,$andFlush);
             }
@@ -298,14 +330,32 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueArrangementProgram(\Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram,$andFlush = true)
     {
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+        
+        $lastNotificationInProgressDate = $arrangementProgram->getDetails()->getLastNotificationInProgressDate();
+        if($arrangementProgram->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationInProgressDate) === true || $arrangementProgram->isForcePenalize() === true)){
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
+        
         $summary = $arrangementProgram->getSummary(array(
-            'limitMonthToNow' => true
+            'limitMonthToNow' => true,
+            'refresh' => true,
         ));
-        $arrangementProgram->setProgressToDate($summary['advances']);
-        $summary = $arrangementProgram->getSummary();
-        $arrangementProgram->setTotalAdvance($summary['advances']);
+        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResultReal($summary['advances']);
+        $summary = $arrangementProgram->getSummary(array('refresh' => true));
+        $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
+        
         $em = $this->getDoctrine()->getManager();
         
+        foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
+           $advance = $goal->getResult();
+           $goal->setResult(($advance - $amountPenalty));
+           $goal->setResultReal($advance);
+           $em->persist($goal) ;
+        }
+       
         $arrangementProgram->updateLastDateCalculateResult();
         
         $em->persist($arrangementProgram);
@@ -324,6 +374,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
+        
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -335,7 +386,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ;
         
         $indicatorService = $this->getIndicatorService();
-        
+        $arrangementRangeService = $this->getArrangementRangeService();
+
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
             $typeOfCalculation = $formula->getTypeOfCalculation();
@@ -355,17 +407,86 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
             }
         }
+        
         $indicator->updateLastDateCalculateResult();
         $tendenty = $indicator->getTendency();
+        if(!$tendenty){
+            throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
+        }
+        $arrangementRange = $indicator->getArrangementRange();
+        if(!$arrangementRange){
+            throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene un rango de gestión definido.',$indicator->getRef(),$indicator->getId()));
+        }
+        
+        $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
+        $result = 0;
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
+            $result = $indicator->getResult();
+            $indicator->setResultReal($result);
+            
+            if($error == null){
+//                var_dump($this->calculateRangeGood($indicator,$tendenty));
+//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
+//                var_dump($this->calculateRangeBad($indicator,$tendenty));
+//                die();
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                    if($result > 100){
+                        $result = 100;
+                    }
+                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                    $result = $result/2;
+                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                    $result = 0;
+                }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
+            }
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = 100 - $indicator->getResult();
-            $indicator->setProgressToDate($result);
+            $indicator->setResultReal($result);
+            
+            if($error == null){
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                    if($result > 100){
+                        $result = 100;
+                    }
+                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                    $result = $result/2;
+                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                    $result = 0;
+                }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
+            }
+            
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+            $result = $indicator->getResult();
+            $indicator->setResultReal($result);
+            
+            if($error == null){
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                    if($result > 100){
+                        $result = 100;
+                    }
+                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                    $result = $result/2;
+                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                    $result = 0;
+                }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" esta mal configurado: "%s"',$indicator->getRef(),$indicator->getId(),$error));
+            }
         }
+        $periodService = $this->getPeriodService();
+        $amountPenalty = 0;
+        $lastNotificationAt = $indicator->getDetails()->getLastNotificationAt();
+        if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
+            $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
+        }
+        $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
-        
         
         $em->persist($indicator);
         $em->persist($details);
@@ -380,6 +501,387 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
+    }
+    
+    /**
+     * Cálculo de Rango Verde para los Indicadores con tendencia Estable
+     * @param type $result
+     * @return boolean
+     */
+    public function calculateRangeGood(Indicator &$indicator, Tendency &$tendency,$typeResult = CommonObject::TYPE_RESULT_EVALUATION){
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        $arrangementRange = $indicator->getArrangementRange();
+        $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
+        $isGood = false;
+        if($tendency->getRef() == Tendency::TENDENCY_EST){
+            if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                    $isGood = true;
+                }
+            } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                if($result > $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                    $isGood = true;
+                }
+            } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                if($result >= $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                    $isGood = true;
+                }
+            } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                    $isGood = true;
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                if(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankTopBasic()){
+                        $isGood = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+                    if($result > $arrangementRange->getRankTopBasic()){
+                        $isGood = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankTopBasic()){
+                        $isGood = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                        $isGood = true;
+                    }
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
+                if(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankBottomBasic()){
+                        $isGood = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_THAN) == 0){                    
+                    if($result < $arrangementRange->getRankBottomBasic()){
+                        $isGood = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result <= $arrangementRange->getRankBottomBasic()){
+                        $isGood = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
+                if(strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankBottomMixedTop() && $result <= $arrangementRange->getRankBottomMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
+                        $isGood = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankBottomMixedTop() && $result <= $arrangementRange->getRankBottomMixedBottom()){
+                        $isGood = true;
+                    }
+                }
+            }
+        }
+
+        return $isGood;
+    }
+    
+    /**
+     * Cálculo de Rango Amarillo para los Indicadores con tendencia Estable
+     * @param type $result
+     * @return boolean
+     */
+    public function calculateRangeMiddle(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
+        $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
+        $isMiddle = false;
+        
+        if($tendency->getRef() == Tendency::TENDENCY_EST){
+            if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                    $isMiddle = true;
+                }
+            }
+            if(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                    $isMiddle = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                    $isMiddle = true;
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
+                if(strcmp($arrangementRange->getOpRankMiddleTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
+                if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                }
+                if(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
+            if($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_BASIC] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_BASIC]){
+                if(strcmp($arrangementRange->getOpRankMiddleTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankMiddleTopBasic() || $result == $arrangementRange->getRankMiddleBottomBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankMiddleBottomBasic()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOprankMiddleTopBasic()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result < $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                } elseif($arrangementRange->getOprankMiddleBottomBasic()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOprankMiddleTopBasic()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankMiddleBottomBasic() && $result <= $arrangementRange->getRankMiddleTopBasic()){
+                        $isMiddle = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeMiddleTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_TOP_MIXED] || $arrangementRange->getTypeRangeMiddleBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_MIDDLE_BOTTOM_MIXED]){
+                if(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result < $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleBottomMixedTop() && $result <= $arrangementRange->getRankMiddleBottomMixedBottom()){
+                        $isMiddle = true;
+                    }
+                }
+                if(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result > $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result < $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOpRankMiddleTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankMiddleTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankMiddleTopMixedTop() && $result <= $arrangementRange->getRankMiddleTopMixedBottom()){
+                        $isMiddle = true;
+                    }
+                }
+            }
+        }
+
+        return $isMiddle;
+    }
+    
+    /**
+     * Cálculo de Rango Rojo para los Indicadores con tendencia Estable
+     * @param type $result
+     * @return boolean
+     */
+    public function calculateRangeBad(Indicator &$indicator, Tendency &$tendency, $typeResult = CommonObject::TYPE_RESULT_EVALUATION){
+        $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        $result = $indicator->getResult();
+        if($typeResult == CommonObject::TYPE_RESULT_ARRANGEMENT){
+            $result = $indicator->getResultReal();
+        }
+        $isBad = false;
+
+        if($tendency->getRef() == Tendency::TENDENCY_EST){
+            if(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+                if($result < $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
+                    $isBad = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+                if($result <= $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
+                    $isBad = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+                if($result < $arrangementRange->getRankBottomMixedBottom() || $result > $arrangementRange->getRankBottomMixedTop()){
+                    $isBad = true;
+                }
+            } elseif(strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+                if($result <= $arrangementRange->getRankBottomMixedBottom() || $result >= $arrangementRange->getRankBottomMixedTop()){
+                    $isBad = true;
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MAX){
+            if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
+                if(strcmp($arrangementRange->getOprankBottomBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankBottomBasic()){
+                        $isBad = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result < $arrangementRange->getRankBottomBasic()){
+                        $isBad = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankBottomBasic()->getRef(), Operator::REF_OPERATOR_SMALLER_EQUAL_THAN) == 0){
+                    if($result <= $arrangementRange->getRankBottomBasic()){
+                        $isBad = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
+                if(strcmp($arrangementRange->getOpRankBottomMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankBottomMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankBottomMixedTop() && $result <= $arrangementRange->getRankBottomMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankBottomMixedTop() && $result < $arrangementRange->getRankBottomMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankBottomMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankBottomMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankBottomMixedTop() && $result <= $arrangementRange->getRankBottomMixedBottom()){
+                        $isBad = true;
+                    }
+                }
+            }
+        } elseif($tendency->getRef() == Tendency::TENDENCY_MIN){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                if(strcmp($arrangementRange->getOpRankTopBasic()->getRef(), Operator::REF_OPERATOR_EQUAL) == 0){
+                    if($result == $arrangementRange->getRankTopBasic()){
+                        $isBad = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankTopBasic()->getRef(), Operator::REF_OPERATOR_HIGHER_THAN) == 0){
+                    if($result > $arrangementRange->getRankTopBasic()){
+                        $isBad = true;
+                    }
+                } elseif(strcmp($arrangementRange->getOprankTopBasic()->getRef(), Operator::REF_OPERATOR_HIGHER_EQUAL_THAN) == 0){
+                    if($result >= $arrangementRange->getRankTopBasic()){
+                        $isBad = true;
+                    }
+                }
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                if(strcmp($arrangementRange->getOpRankTopMixedTop()->getRef(),Operator::REF_OPERATOR_HIGHER_THAN) == 0 && strcmp($arrangementRange->getOpRankTopMixedBottom()->getRef(),Operator::REF_OPERATOR_SMALLER_THAN) == 0){
+                    if($result > $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result > $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_THAN){
+                    if($result >= $arrangementRange->getRankTopMixedTop() && $result < $arrangementRange->getRankTopMixedBottom()){
+                        $isBad = true;
+                    }
+                } elseif($arrangementRange->getOpRankTopMixedTop()->getRef() == Operator::REF_OPERATOR_HIGHER_EQUAL_THAN && $arrangementRange->getOpRankTopMixedBottom()->getRef() == Operator::REF_OPERATOR_SMALLER_EQUAL_THAN){
+                    if($result >= $arrangementRange->getRankTopMixedTop() && $result <= $arrangementRange->getRankTopMixedBottom()){
+                        $isBad = true;
+                    }
+                }
+            }
+        }
+        
+        return $isBad;
     }
     
      /**
@@ -427,9 +929,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator
                 ->setTotalPlan($totalPlan)
                 ->setValueFinal($value);
-        if($indicator->getParent() !== null){
-            $this->refreshValueIndicator($indicator->getParent());
-        }
+//        if($indicator->getParent() !== null){
+//            $this->refreshValueIndicator($indicator->getParent());
+//        }
     }
     
     /**
@@ -454,16 +956,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $plan = $real = 0.0;
                 $formulaParameters = $valueIndicator->getFormulaParameters();
                 
-                if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                    $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-                    $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                    $plan = $formulaParameters[$variableToPlanValueName];
-                    $real = $formulaParameters[$variableToRealValueName];
-                }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                    $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                    $plan = $result['plan'];
-                    $real = $result['real'];
-                }
+                    if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+                        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+                        $plan = $formulaParameters[$variableToPlanValueName];
+                        $real = $formulaParameters[$variableToRealValueName];
+                    }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                        $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+                        $plan = $result['plan'];
+                        $real = $result['real'];
+                    }
                 
                 $resultsItems[$i]['plan'] = $resultsItems[$i]['plan'] + $plan;
                 $resultsItems[$i]['real'] = $resultsItems[$i]['real'] + $real;
@@ -486,9 +988,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
         
         $valuesIndicator = $indicator->getValuesIndicator();
-        if(count($valuesIndicator) < $frequencyNotificationIndicator->getNumberResultsFrequency()){
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
             $user = $this->getUser();
-            for($i= count($valuesIndicator);$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
                 $valueIndicator = new Indicator\ValueIndicator();
                 $valueIndicator
                     ->setFormula($formula)
@@ -512,6 +1021,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $valueIndicator->setValueOfIndicator($value);
             $i++;
         }
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
+//        die;
         $indicator
             ->setTotalPlan($totalPlan)
             ->setValueFinal($totalReal);
@@ -557,7 +1069,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $$name = $value;
                 }
             }
-
+            
         eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
         
@@ -681,12 +1193,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
                 //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-                        '%arrangementProgram%' => $link,
-                    ));
-                    $valid = false;
-                }
+//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+//                        '%arrangementProgram%' => $link,
+//                    ));
+//                    $valid = false;
+//                }
             }
             
             $indicators = $objetive->getIndicators();
@@ -713,6 +1225,52 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         return $valid;
+    }
+    
+    /**
+     * Retorna los valores por defecto del widget para el rango de gestión
+     * @param Indicator $indicator
+     * @return string
+     */
+    public function getDataChartWidget(Indicator $indicator){
+        $data = array();
+        $data["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $data["captionOnTop"] = "1";
+        $data["bgcolor"] = "FFFFFF";
+        $data["bordercolor"] = "DCCEA1";
+        $data["charttopmargin"] = "0";
+        $data["chartbottommargin"] =  "0";
+//        $data["upperlimit"] = "131";
+//        $data["lowerlimit"] = "69";
+        $data["tickmarkdistance"] = "3";
+        $data["valuepadding"] = "-2";
+        $data["pointerradius"] = "0";
+        $data["majortmcolor"] = "000000";
+        $data["majortmnumber"] = "3";
+        $data["minortmnumber"] = "4";
+        $data["minortmheight"] = "4";
+        $data["majortmheight"] = "8";
+        $data["showshadow"] = "0";
+        $data["pointerbgcolor"] = "FFFFFF";
+        $data["pointerbordercolor"] = "000000";
+        $data["showValue"] = "0";
+        $data["showTickValues"] = "0";
+        $data["showTickMarks"] = "0";
+        $data["gaugeborderthickness"] = "3";
+        $data["basefontcolor"] = "000000";
+        $data["gaugefillmix"] = "{color},{FFFFFF}";
+        $data["gaugefillratio"] = "50,50";
+        $data["showborder"] = "0";
+        
+        $tendency = $indicator->getTendency();
+        if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+            $data["captionFontColor"] = "#1aaf5d";
+        } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+            $data["captionFontColor"] = "#f2c500";
+        } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+            $data["captionFontColor"] = "#c02d00";
+        }
+        return $data;
     }
     
     private function addErrorTrans($error,array $parameters = array()) {
@@ -779,6 +1337,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $this->container->get('pequiven_indicator.service.inidicator');
     }
     
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
@@ -799,8 +1366,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
     
+    function generateAsset($path,$packageName = null){
+        return $this->container->get('templating.helper.assets')
+               ->getUrl($path, $packageName);
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * 
+     * @return PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
     }
 }

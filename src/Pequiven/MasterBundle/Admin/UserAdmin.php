@@ -13,9 +13,10 @@ namespace Pequiven\MasterBundle\Admin;
 
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\UserBundle\Admin\Entity\UserAdmin as Base;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
- * Description of UserAdmin
+ * Administrador de usuario
  *
  * @author Carlos Mendoza <inhack20@tecnocreaciones.com>
  */
@@ -28,6 +29,11 @@ class UserAdmin extends Base
                 ->add('email')
                 ->add('plainPassword', 'text', array(
                     'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
+                ))
+                ->add('statusWorker','choice',array(
+                    'choices' => CommonObject::getLabelsStatusWorker(),
+                    'label' => 'pequiven_seip.status_worker',
+                    'translation_domain' => 'PequivenSEIPBundle',
                 ))
             ->end()
             ->with('Groups')
@@ -59,8 +65,22 @@ class UserAdmin extends Base
                 ->add('gplusUid', null, array('required' => false))
                 ->add('gplusName', null, array('required' => false))
             ->end()
+            ->with('Localization')
+                ->add('complejo', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+                ->add('gerencia', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+                ->add('gerenciaSecond', 'sonata_type_model_autocomplete', array(
+                    'required' => false,
+                    'property' => array('description')
+                ))
+            ->end()
         ;
-
+        
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
                 ->with('Management')
@@ -68,7 +88,8 @@ class UserAdmin extends Base
                         'label'    => 'form.label_roles',
                         'expanded' => true,
                         'multiple' => true,
-                        'required' => false
+                        'required' => false,
+                        'translation_domain' => $this->getTranslationDomain()
                     ))
                     ->add('locked', null, array('required' => false))
                     ->add('expired', null, array('required' => false))
@@ -107,6 +128,23 @@ class UserAdmin extends Base
                 ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
             ;
         }
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureDatagridFilters(\Sonata\AdminBundle\Datagrid\DatagridMapper $filterMapper)
+    {
+        $filterMapper
+            ->add('id')
+            ->add('username')
+            ->add('firstname')
+            ->add('lastname')
+            ->add('numPersonal')
+            ->add('locked')
+            ->add('email')
+            ->add('groups')
+        ;
     }
     
     public function preUpdate($user) {

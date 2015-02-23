@@ -11,14 +11,14 @@ namespace Pequiven\IndicatorBundle\Repository;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\MasterBundle\Entity\Gerencia;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Description of IndicatorRepository
  *
  * @author matias
  */
-class IndicatorRepository extends baseEntityRepository {
+class IndicatorRepository extends EntityRepository {
     
     public function getByOptionRef($options = array()){
     
@@ -99,7 +99,7 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
-        return parent::createPaginator($criteria, $orderBy);
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -163,7 +163,7 @@ class IndicatorRepository extends baseEntityRepository {
             $queryBuilder->andWhere("i.indicatorLevel = " . $criteria['indicatorLevel']);
         }
         
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
+        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT')) && !isset($criteria['gerencia'])){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
@@ -179,7 +179,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applyPeriodCriteria($queryBuilder);
 //        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
@@ -239,6 +239,8 @@ class IndicatorRepository extends baseEntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
+        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT'))){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
         if(isset($criteria['gerenciaFirst'])){
@@ -259,8 +261,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -278,10 +279,9 @@ class IndicatorRepository extends baseEntityRepository {
         $qb->leftJoin('i.objetives', 'obj');
         $qb->leftJoin('i.formula', 'f');
         
-        $qb->andWhere('i.enabled = :enabled');
+        $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('obj.id = :idObjetive');
         
-        $qb->setParameter('enabled', true);
         $qb->setParameter('idObjetive', $objetive->getId());
         
         $qb->orderBy('i.ref');
@@ -289,19 +289,34 @@ class IndicatorRepository extends baseEntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->addSelect('i_o')
+            ->leftJoin('i.objetives', 'i_o')
+            ->innerJoin('i.indicatorLevel', 'i_il')
+            ->andWhere('i.period = :period')
+            ->andWhere($qb->expr()->isNull('i.lastDateCalculateResult'))
+            ->orderBy('i_il.level','DESC')
+            ->setParameter('period', $period)
+            ;
+        return $qb;
+    }
+    
     protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
         //Vinculación con el objetivo al que esta vinculado el indicador
         $queryBuilder
-                ->andWhere('i.enabled = 1')
                 ->andWhere('i.tmp = 0')
                 ;
         
         if(($forView = $criteria->remove('for_view')) !== null){
             $queryBuilder
                     ->innerJoin('i.objetives', 'o')
-                    ->andWhere('o.enabled = 1')
+                    ->andWhere('o.deletedAt IS NULL')
+                    ->andWhere('i.deletedAt IS NULL')
                     ;
         }
         
@@ -338,9 +353,10 @@ class IndicatorRepository extends baseEntityRepository {
             if($miscellaneous == Indicator::INDICATOR_WITHOUT_FORMULA){
                 $queryBuilder->andWhere('i.formula IS NULL');
             } elseif ($miscellaneous == Indicator::INDICATOR_WITH_RESULT){
-                $queryBuilder->andWhere('i.progressToDate > 0');
+                $queryBuilder->andWhere($queryBuilder->expr()->orX('i.progressToDate > 0','i.lastDateCalculateResult IS NOT NULL'));
             } elseif($miscellaneous == Indicator::INDICATOR_WITHOUT_RESULT){
                 $queryBuilder->andWhere('i.progressToDate = 0');
+                $queryBuilder->andWhere('i.lastDateCalculateResult IS NULL');
             }
             
         }
@@ -380,6 +396,8 @@ class IndicatorRepository extends baseEntityRepository {
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $this->applyPeriodCriteria($queryBuilder);
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

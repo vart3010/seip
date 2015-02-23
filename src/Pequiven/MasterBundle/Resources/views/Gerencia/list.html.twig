@@ -10,16 +10,14 @@
 {% endif %}
 {% set index = 0 %}
 
+{% block before_body %}
+    {{ contentHeader(
+        { ( path(route_index) ): ('pequiven_master.gerencia_first'|trans ) },
+         ('pequiven_master.list'|trans)
+    ) }}
+{% endblock %}
+
 {% block body %}
-    
-    <hgroup id="main-title" class="thin breadcrumb">
-        <h1>
-            <a href="{{ path(route_index) }}">{{ 'pequiven_master.gerencia_first'|trans }}</a>
-            <span class="icon-forward"></span>
-            <span class="thin">{{ 'pequiven_master.list'|trans }}</span>
-        </h1>
-    </hgroup>
-            
     <div ng-controller="TableFormatController">
         <!--<div ng-controller="ObjetiveTacticController">-->
             <div loading-container="tableParams.settings().$loading">

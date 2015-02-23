@@ -42,3 +42,17 @@ pequiven_seip_result_visualize_gerencia:
         id: \d+
         level: 2|3
     methods: [GET]
+    
+pequiven_seip_result_export:
+    path: /{level}/{id}/export
+    defaults: { _controller: pequiven.controller.result:exportAction }
+    requirements:
+        id: "\d+"
+    methods: [GET|POST]
+    
+pequiven_seip_result_export_from_chart:
+    path: /{level}/{id}/export-from-chart
+    defaults: { _controller: pequiven.controller.result:exportFromChartAction }
+    requirements:
+        id: "\d+"
+    methods: [GET|POST]

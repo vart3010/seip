@@ -7,6 +7,7 @@ const GOAL_TYPE_TEMPLATE = 'template';
 
 use Doctrine\ORM\Mapping as ORM;
 use Tpg\ExtjsBundle\Annotation as Extjs;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Meta
@@ -15,8 +16,9 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Pequiven\ArrangementProgramBundle\Repository\GoalRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Goal
+class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
      * @var integer
@@ -104,10 +106,38 @@ class Goal
      * Detalles de la meta
      * 
      * @var \Pequiven\ArrangementProgramBundle\Entity\GoalDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="goal",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Pequiven\ArrangementProgramBundle\Entity\GoalDetails",inversedBy="goal",cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $goalDetails;
+    
+    /**
+     * Periodo.
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
+    /**
+     * Avance de la meta
+     * @ORM\Column(name="advance",type="float")
+     */
+    private $advance = 0;
+    
+    /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
     
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -336,6 +366,9 @@ class Goal
      */
     public function prePersist()
     {
+        if($this->getTimeline()->getArrangementProgram()){
+            $this->setPeriod($this->getTimeline()->getArrangementProgram()->getPeriod()) ;
+        }
         if($this->goalDetails == null){
             $this->goalDetails = new GoalDetails();
         }
@@ -375,13 +408,86 @@ class Goal
         return $this->responsibles;
     }
     
-    public function __toString() {
-        return $this->name;
+    public function __toString() 
+    {
+        $limit = 80;
+        $toString = $this->getName();
+        if(strlen($toString) > $limit){
+            $toString = mb_substr($toString, 0,$limit,'UTF-8').'...';
+        }
+        return $toString?:'-';
+    }
+    
+    /**
+     * Set period
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Period $period
+     * @return ArrangementProgram
+     */
+    public function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period = null)
+    {
+        $this->period = $period;
+
+        return $this;
+    }
+
+    /**
+     * Get period
+     *
+     * @return \Pequiven\SEIPBundle\Entity\Period 
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+    
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+
+    function getAdvance() 
+    {
+        return $this->advance;
+    }
+
+    function setAdvance($advance) 
+    {
+        $this->advance = $advance;
+    }
+    
+    public function setResult($result) 
+    {
+        $this->advance = $result;
+    }
+    
+    public function getResult() 
+    {
+        return $this->advance;
+    }
+    
+    /**
+     * Set resultReal
+     *indicators
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
+
+        return $this;
     }
     
     public function __clone() {
         if($this->id > 0){
-           $this->id = null; 
+           $this->id = null;
+           
            $this->goalDetails = clone($this->goalDetails);
            $this->goalDetails->setGoal($this);
         }

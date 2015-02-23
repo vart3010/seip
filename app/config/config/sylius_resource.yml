@@ -6,6 +6,12 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Monitor
                 controller: Pequiven\SEIPBundle\Controller\MonitorController
                 repository: Pequiven\SEIPBundle\Repository\MonitorRepository
+        pequiven.linestrategic:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\MasterBundle\Controller\LineStrategicController
+                model: Pequiven\MasterBundle\Entity\LineStrategic
+                repository: Pequiven\MasterBundle\Repository\LineStrategicRepository
         pequiven.objetive:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Objetive
@@ -95,6 +101,12 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserPermissionController
                 model: Pequiven\SEIPBundle\Entity\UserPermission
                 repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository
+        pequiven_seip.arrangementrange:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementBundle\Controller\ArrangementRangeController
+                model: Pequiven\ArrangementBundle\Entity\ArrangementRange
+                repository: Pequiven\ArrangementBundle\Repository\ArrangementRangeRepository
         pequiven_seip.arrangementprogram:
             driver: doctrine/orm
             templates: PequivenArrangementProgramBundle:ArrangementProgram
@@ -153,9 +165,21 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\User\LocalizationController
                 model: Pequiven\SEIPBundle\Entity\User\Localization
+        pequiven.pre_planning_configuration:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:User/PrePlanningConfiguration
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\User\PrePlanningConfigurationController
+                model: Pequiven\SEIPBundle\Entity\User\PrePlanningConfiguration
         pequiven.pre_planning:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:PrePlanning/PrePlanning
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning
+        pequiven.pre_planning_user:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:PrePlanning/PrePlanningUser
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
+                model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser

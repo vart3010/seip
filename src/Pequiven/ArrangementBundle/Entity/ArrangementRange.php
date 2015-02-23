@@ -22,7 +22,8 @@ use Pequiven\ArrangementBundle\Model\ArrangementRange as modelArrangementRange;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @author matias
  */
-class ArrangementRange extends modelArrangementRange {
+class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
+{
     
     /**
      * @var integer
@@ -311,6 +312,15 @@ class ArrangementRange extends modelArrangementRange {
     private $deletedAt;
     
     /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -421,6 +431,7 @@ class ArrangementRange extends modelArrangementRange {
     public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
     {
         $this->objetive = $objetive;
+        $this->objetive->setArrangementRange($this);
 
         return $this;
     }
@@ -444,6 +455,7 @@ class ArrangementRange extends modelArrangementRange {
     public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
     {
         $this->indicator = $indicator;
+        $this->indicator->setArrangementRange($this);
 
         return $this;
     }
@@ -1133,5 +1145,36 @@ class ArrangementRange extends modelArrangementRange {
         $this->deletedAt = $deletedAt;
         
         return $this;
+    }
+    
+    function getPeriod() {
+        return $this->period;
+    }
+
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() {
+        if($this->id){
+            $this->id = null;
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            $this->userCreatedAt = null;
+            $this->userUpdatedAt = null;
+            
+            $this->objetive = null;
+            $this->indicator = null;
+            
+            $this->period = null;
+        }
+    }
+    
+    
+    
+    public function __toString() {
+        return (string)$this->id;
     }
 }

@@ -1,0 +1,25 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% set user = pre_planning_configuration.configuration.user %}
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_seip_user_show',{'id':user.id})):("pequiven_seip.user.user"|trans)},
+        ('pequiven_seip.user.pre_planning_configuration.main'|trans),
+        ('pequiven_seip.actions.update'|trans)
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {{ form_errors(form) }}
+    <form action="{{ path('pequiven_pre_planning_configuration_update',{'id':pre_planning_configuration.id}) }}" method="POST">
+        <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'pequiven_seip.user.pre_planning_configuration.main'|trans }} ({{ user }})</legend>
+            {% include 'PequivenSEIPBundle:User:PrePlanningConfiguration/_form.html.twig' %}
+        </fieldset>
+        {{ actions.update() }}
+    </form>
+{% endblock body %}

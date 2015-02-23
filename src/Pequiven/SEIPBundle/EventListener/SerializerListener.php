@@ -539,7 +539,8 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $links = array();
         $object = $event->getObject();
         $group = $object->getRealGroup();
-        $links['self']['href'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
+        $links['self']['href'] = $this->generateUrl('pequiven_seip_user_show', array('id' => $object->getId()));
+        $links['self']['edit'] = $this->generateUrl('pequiven_user_update', array('id' => $object->getId()));
         $event->getVisitor()->addData('_links',$links);
         $rol = 'SIN ASIGNAR';
         if($group){
@@ -555,6 +556,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $object->getId()))
         );
         $event->getVisitor()->addData('linkToExportMatriz', $this->generateUrl('pequiven_gerenciafirst_export', array('id' => $object->getId())));
+//        $event->getVisitor()->addData('linkToExportResult', $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $object->getId())));
         $event->getVisitor()->addData('_links',$links);
     }
     
@@ -563,16 +565,13 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         $links = array(
             'show_result' => $this->generateUrl('pequiven_seip_result_visualize_gerencia', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId()))
         );
+//        $event->getVisitor()->addData('linkToExportResult', $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $object->getId())));
         $event->getVisitor()->addData('_links',$links);
     }
     
     public function onPostSerializeGoal(ObjectEvent $event)
     {
-        $goal = $event->getObject();
         
-        $event->getVisitor()->addData('_data',array(
-            'advance' => $goal->getGoalDetails()->getAdvance()
-        ));
     }
     
     public function setContainer(ContainerInterface $container = null) {

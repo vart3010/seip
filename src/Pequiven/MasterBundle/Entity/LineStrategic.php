@@ -350,7 +350,7 @@ class LineStrategic extends modelLineStrategic
      * 
      * @return string
      */
-    public function getDescriptionSelect (){
+    public function getDescriptionSelect(){
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
         return $this->descriptionSelect;
     }

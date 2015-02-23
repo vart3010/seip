@@ -60,25 +60,25 @@ class CoreExtension extends \Twig_Extension
             }
             $parameters[] = $item;
         }
-        $period = $this->container->get('pequiven.repository.period')->findOneActive();
-        $periodDescription = '';
-        if($period){
-            $periodDescription = $period->getDescription();
-        }
+        $periodService = $this->getPeriodService();
+        $period = $this->getPeriodService()->getPeriodActive();
         
+        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation();
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
-                'period' => $periodDescription
+                'period' => $period,
+                'listArrayPeriods' => $listArrayPeriods,
             )
         );
     }
     
-    function printError($error) {
+    function printError($error,array $parameters = array(),$translationDomain = 'messages') {
         $path = $this->generateAsset('bundles/tecnocreacionesvzlagovernment/template/developer/img/icons/icon-error.png');
+        $errorTrans = $this->trans($error,$parameters,$translationDomain);
         $base = "<div class='alert alert-danger-seip margin-bottom wrapped anthracite-bg with-mid-padding align-center' style='min-height:20px;font-size: 19px'>
         <img src='$path' style='width:21px;height:21px;padding-right: 6px'>
-            <span>$error</span>
+            <span>$errorTrans</span>
         </div>";
         return $base;
     }
@@ -90,7 +90,7 @@ class CoreExtension extends \Twig_Extension
      * @return type
      */
     function myNumberFormat($value,$decimals = 2) {
-        return number_format($value,$decimals,'.',',');
+        return number_format($value,$decimals,',','.');
     }
     
     /**
@@ -141,4 +141,18 @@ class CoreExtension extends \Twig_Extension
      * @var ContainerInterface
      */
     private $container;
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    private function getPeriodService()
+    {
+        return $this->container->get('pequiven_arrangement_program.service.period');
+    }
 }

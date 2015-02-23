@@ -16,6 +16,10 @@ use Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
+const PHP_TIME_LIMIT = 120;
+//const PHP_MEMORY_LIMIT = '256M';
+const PHP_MEMORY_LIMIT = '320M';
+
 /**
  * Controlador de pre-planificacion
  *
@@ -23,18 +27,35 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
  */
 class PrePlanningController extends ResourceController
 {
-    public function indexAction(Request $request) {
-        $seipConfiguration = $this->getSeipConfiguration();
-        if($seipConfiguration->isEnablePrePlanning() == false){
-            throw $this->createAccessDeniedHttpException('La pre-planificacion no se encuentra habilitada.');
-        }
-        return parent::indexAction($request);
-    }
+    private static $levels = array(
+        PrePlanning::LEVEL_TACTICO => array('ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC','ROLE_SEIP_PRE_PLANNING_VIEW_TACTIC'),
+        PrePlanning::LEVEL_OPERATIVO => array('ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE','ROLE_SEIP_PRE_PLANNING_VIEW_OPERATIVE'),
+    );
     
-    public function getFormAction() {
+    public function createAction(Request $request) 
+    {
+        $this->checkSecurity($request);
         $view = $this
             ->view()
-            ->setTemplate($this->config->getTemplate('form.html'))
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        return $this->handleView($view);
+    }
+    
+    public function getFormAction(Request $request) 
+    {
+        $type = $request->get('type');
+        $formTemplate = 'form.html';
+        if($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_PLANNING){
+            $formTemplate = 'formImportPlanning.html'; 
+        } elseif ($type == \Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser::FORM_STATISTICS){
+            $formTemplate = 'formImportPlanning.html';
+        }
+        $this->checkSecurity($request);
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate($formTemplate))
             ->setTemplateVar($this->config->getPluralResourceName())
         ;
         return $this->handleView($view);
@@ -47,20 +68,40 @@ class PrePlanningController extends ResourceController
      */
     public function getPrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
+        
+        $level = $request->get('level');
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
-        
+        $node = (int)$request->get('node',null);
+        $nodeRoot = (int)$request->get('nodeRoot',null);
+        if($node == 0 && $nodeRoot > 0){
+            $node = $nodeRoot;
+        }
         $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
+        
         $structureTree = array();
+        if(is_int($node) && $node > 0)
+        {
+            $em = $this->getDoctrine()->getManager();
+            $rootTreePrePlannig =  $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanning')->find($node);
+        } else {
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+            if($rootTreePrePlannig){
+                $rootTreePrePlannig = $rootTreePrePlannig->getPrePlanningRoot();
+            }
+        }
+     
         if($rootTreePrePlannig){
             $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
         }
-
+        
         $data = array(
             "success" => true,
             "text" =>  "Root",
-            "children"=> $structureTree
+            "children"=> $structureTree,
         );
         $view = $this->view($data);
         return $this->handleView($view);
@@ -74,6 +115,8 @@ class PrePlanningController extends ResourceController
      */
     public function deletePrePlanningAction(Request $request)
     {
+        $this->checkSecurity($request);
+        
         $dataRequest = $request->request->all();
         $ids = array();
         foreach ($dataRequest as $value) {
@@ -107,21 +150,29 @@ class PrePlanningController extends ResourceController
      * Reconstruyendo el arbol nuevamente.
      * @return type
      */
-    public function returnChangesAction() 
+    public function returnChangesAction(Request $request) 
     {
-        $user = $this->getUser();
-        $prePlanningService = $this->getPrePlanningService();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
-        if($rootTreePrePlannig){
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rootTreePrePlannig);
-            $em->flush();
-            
-            $objetivesArray = $this->getObjetivesArray();
-            $prePlanningService->buildTreePrePlannig($objetivesArray);
-        }
+        $this->checkSecurity($request);
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
+        $level = $request->get('level',null);
         $success = true;
+        if($level){
+            $user = $this->getUser();
+            $prePlanningService = $this->getPrePlanningService();
+            $periodActive = $this->getPeriodService()->getPeriodActive();
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+            if($rootTreePrePlannig){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($rootTreePrePlannig);
+                $em->flush();
+
+                $objetivesArray = $this->getObjetivesArray($level);
+                $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            }
+        }else{
+            $success = false;
+        }
         $data = array(
             "success" => $success,
         );
@@ -131,26 +182,39 @@ class PrePlanningController extends ResourceController
     
     /**
      * Iniciando el proceso de planificacion
+     * 
      * @return type
      */
-    public function startPrePlanningAction() 
+    public function startPrePlanningAction(Request $request) 
     {
-        $user = $this->getUser();
-        $prePlanningService = $this->getPrePlanningService();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user);
-        if($rootTreePrePlannig){
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($rootTreePrePlannig);
-            $em->flush();
+        $this->checkSecurity($request);
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
+        $level = $request->get('level',null);
+        $success = false;
+        $id  = 0;
+        if($level){
+            $user = $this->getUser();
+            $prePlanningService = $this->getPrePlanningService();
+            $periodActive = $this->getPeriodService()->getPeriodActive();
+            $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+            if($rootTreePrePlannig){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($rootTreePrePlannig);
+                $em->flush();
+            }
+
+            $objetivesArray = $this->getObjetivesArray($level);
+            $rootTreePrePlannig = $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $id = $rootTreePrePlannig->getId();
+            $success = true;
+        }else{
+            $success = false;
         }
-            
-        $objetivesArray = $this->getObjetivesArray();
-        $prePlanningService->buildTreePrePlannig($objetivesArray);
         
-        $success = true;
         $data = array(
             "success" => $success,
+            "id" => $id,
         );
         $view = $this->view($data);
         return $this->handleView($view);
@@ -158,11 +222,18 @@ class PrePlanningController extends ResourceController
     
     /**
      * Actualiza los items de preplanificacion
+     * 
      * @param Request $request
      * @return type
      */
     public function updatePrePlanningAction(Request $request) 
     {
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_CREATE_TACTIC',
+            'ROLE_SEIP_PRE_PLANNING_CREATE_OPERATIVE',
+        ));
+        
         $dataRequest = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $repository = $this->getRepository();
@@ -190,17 +261,134 @@ class PrePlanningController extends ResourceController
         return $this->handleView($view);
     }
     
+    /**
+     * Accion para importar los items
+     * 
+     * @param Request $request
+     * @return type
+     */
     public function importAction(Request $request)
     {
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        
+        set_time_limit(PHP_TIME_LIMIT);
+        ini_set("memory_limit",PHP_MEMORY_LIMIT);
+        
         $prePlanning = $this->findOr404($request);
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
         $prePlanningService = $this->getPrePlanningService();
-        $prePlanningService->importItem($prePlanning, $user);
+        $success = $prePlanningService->importItem($prePlanning, $user);
         $data = array(
-            "success" => true,
+            "success" => $success,
         );
         $view = $this->view($data);
+        if($success == false){
+            $view->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE);
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Envia la planificacion a revision
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function sendToReviewAction(Request $request)
+    {
+        $this->checkSecurity($request);
+        
+        $resource = $this->findOr404($request);
+        $success = false;
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_IN_REVIEW);
+            $success = true;
+            $em->persist($resource);
+            if($lastItem === true){
+                //enviar correo
+                $periodActive = $this->getPeriodService()->getPeriodActive();
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_IN_REVIEW);
+                $em->persist($rootTreePrePlannig);
+                
+                $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
+            }
+            $em->flush();
+        }
+        
+        $data["success"] = $success;
+        
+        $view = $this->view($data);
+        
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Envia la planificacion a borrador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function sendToDraftAction(Request $request)
+    {
+        $securityService = $this->getSecurityService();
+        $securityService->checkSecurity(array(
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
+            'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
+        ));
+        $rootId = $request->get('root');
+        $resource = $this->findOr404($request);
+        $success = false;
+        $data = array();
+        $em = $this->getDoctrine()->getManager();
+        
+        if($resource->getStatus() == PrePlanning::STATUS_IN_REVIEW){
+            $lastItem = (boolean)$request->get('lastItem',false);
+            $level = $request->get('level',null);
+            
+            $user = $this->getUser();
+            $resource->setStatus(PrePlanning::STATUS_DRAFT);
+            $success = true;
+            $em->persist($resource);
+            if($lastItem === true){
+                $prePlanningService = $this->getPrePlanningService();
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannigById($rootId);
+                $data['messages'] = array(
+                    'email_send'
+                );
+                $rootTreePrePlannig->setStatus(PrePlanning::STATUS_DRAFT);
+                $em->persist($rootTreePrePlannig);
+                
+                $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
+            }
+            $em->flush();
+        }
+        
+        $data["success"] = $success;
+        
+        $view = $this->view($data);
+        
         return $this->handleView($view);
     }
     
@@ -208,18 +396,35 @@ class PrePlanningController extends ResourceController
      * Obtener los objetivos para construir el arbol
      * @return type
      */
-    private function getObjetivesArray() {
+    private function getObjetivesArray($level)
+    {
         $user = $this->getUser();
-        $rol = $user->getLevelRealByGroup();
+        $configuration = $user->getConfiguration();
+
+        $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $objetivesArray = array();
+        $periodActive = $this->getPeriodService()->getEntityPeriodActive();
         
-        if($rol == Rol::ROLE_MANAGER_SECOND){
-            $gerenciaSecond = $user->getGerenciaSecond();
-            $objetivesOperational = $gerenciaSecond->getOperationalObjectives();
+        if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO && $prePlanningConfiguration->getGerenciaSecond() !== null){
+            $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
+            $objetivesOperational = array();
+            foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
+                if($objetive->getPeriod() !== $periodActive){
+                    continue;
+                }
+                $objetivesOperational []= $objetive;
+            }
+            
             $objetivesArray = $this->getDataFromObjetives($objetivesOperational);
-        }else if($rol == Rol::ROLE_MANAGER_FIRST){
-            $gerencia = $user->getGerencia();
-            $tacticalObjectives = $gerencia->getObjetives();
+        }else if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO && $prePlanningConfiguration->getGerencia() !== null){
+            $gerencia = $prePlanningConfiguration->getGerencia();
+            $tacticalObjectives = array();
+            foreach ($gerencia->getObjetives() as $objetive) {
+                if($objetive->getPeriod() !== $periodActive){
+                    continue;
+                }
+                $tacticalObjectives []= $objetive;
+            }
             $objetivesArray = $this->getDataFromObjetives($tacticalObjectives);
         }
         return $objetivesArray;
@@ -229,7 +434,6 @@ class PrePlanningController extends ResourceController
     {
         $objetivesArray = array();
         foreach ($objetives as $objetive){
-//                var_dump('object user '.$objetive->getRef());
                 $parents = $objetive->getParents();
                 foreach ($parents as $parent) {
                     if(isset($objetivesArray[$parent->getId()])){
@@ -276,5 +480,38 @@ class PrePlanningController extends ResourceController
     private function getSeipConfiguration()
     {
         return $this->container->get('seip.configuration');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Evalua la seguridad de la seccion
+     * @param Request $request
+     */
+    private function checkSecurity(Request $request,$rol = null)
+    {
+        if($rol === null){
+            $level = $request->get('level');
+            if(isset(self::$levels[$level])){
+                $rol = self::$levels[$level];
+            }
+        }
+        $this->getSecurityService()->checkSecurity($rol);
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $this->container->get('event_dispatcher');
     }
 }

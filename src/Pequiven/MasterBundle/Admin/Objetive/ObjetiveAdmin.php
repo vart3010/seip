@@ -14,6 +14,30 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class ObjetiveAdmin extends Admin
 {
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show)
+    {
+         $show
+            ->add('description')
+            ->add('ref')
+            ->add('weight')
+            ->add('goal')
+            ->add('complejo')
+            ->add('gerencia')
+            ->add('gerenciaSecond')
+            ->add('parents')
+            ->add('indicators')
+             ->add('objetiveLevel')
+            ->add('period')
+            ->add('evalObjetive')
+            ->add('evalIndicator')
+            ->add('evalArrangementProgram')
+            ->add('evalSimpleAverage')
+            ->add('evalWeightedAverage')
+            ->add('requiredToImport')
+            ->add('enabled')
+             ;
+    }
+    
     protected function configureFormFields(FormMapper $form) {
         $form
             ->add('description')
@@ -25,6 +49,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerenciaSecond')
             ->add('parents')
             ->add('indicators')
+            ->add('objetiveLevel')
             ->add('period')
             ->add('evalObjetive',null,array(
                 'required' => false,
@@ -41,6 +66,9 @@ class ObjetiveAdmin extends Admin
             ->add('evalWeightedAverage',null,array(
                 'required' => false,
             ))
+            ->add('requiredToImport',null,array(
+                'required' => false,
+            ))
             ->add('enabled',null,array(
                 'required' => false,
             ))
@@ -52,6 +80,7 @@ class ObjetiveAdmin extends Admin
             ->add('ref')
             ->add('description')
             ->add('weight')
+            ->add('requiredToImport')
             ->add('enabled')
             ;
     }
@@ -63,5 +92,10 @@ class ObjetiveAdmin extends Admin
             ->add('weight')
             ->add('enabled')
             ;
+    }
+    
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
+    {
+        $collection->remove('create');
     }
 }

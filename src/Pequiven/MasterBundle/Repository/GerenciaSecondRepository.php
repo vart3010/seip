@@ -8,15 +8,16 @@
 
 namespace Pequiven\MasterBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Pequiven\MasterBundle\Entity\Gerencia;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
+
 /**
  * Description of GerenciaSecondRepository
  *
  * @author matias
  */
-class GerenciaSecondRepository extends baseEntityRepository {
+class GerenciaSecondRepository extends EntityRepository 
+{
     
     public function getGerenciaSecondOptions($options = array()){
         $data = array();
@@ -67,13 +68,31 @@ class GerenciaSecondRepository extends baseEntityRepository {
         if(isset($criteria['gerenciaSecond'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('gs.description', "'%".$criteria['gerenciaSecond']."%'"));
         }
+        if(isset($criteria['gerenciaSecondId'])){
+            $queryBuilder
+                ->andWhere('gs.id = :gerenciaSecondId')
+                ->setParameter('gerenciaSecondId', $criteria['gerenciaSecondId'])
+                ;
+        }
         //Filtro gerencia 1ra Línea
         if(isset($criteria['gerenciaFirst'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('g.description', "'%".$criteria['gerenciaFirst']."%'"));
         }
+        if(isset($criteria['gerenciaFirstId'])){
+            $queryBuilder
+                ->andWhere('g.id = :gerenciaFirstId')
+                ->setParameter('gerenciaFirstId', $criteria['gerenciaFirstId'])
+                ;
+        }
         //Filtro localidad
         if(isset($criteria['complejo'])){
             $queryBuilder->andWhere($queryBuilder->expr()->like('c.description', "'%".$criteria['complejo']."%'"));
+        }
+        if(isset($criteria['complejoId'])){
+            $queryBuilder
+                ->andWhere('c.id = :complejoId')
+                ->setParameter('complejoId', $criteria['complejoId'])
+                ;
         }
 
 //        $this->applyCriteria($queryBuilder, $criteria);
@@ -181,7 +200,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
             ->addSelect('gs_ob')
             ->addSelect('gs_ob_c')
             ->addSelect('gs_ob_p')
-            ->leftJoin('gs.operationalObjectives', 'gs_ob')
+            ->leftJoin('gs.operationalObjectives', 'gs_ob',\Doctrine\ORM\Query\Expr\Join::WITH,'gs_ob.period = :period')
             ->leftJoin('gs_ob.childrens', 'gs_ob_c')
             ->leftJoin('gs_ob.parents', 'gs_ob_p')
             ->andWhere('gs.id = :gerencia')
@@ -189,6 +208,7 @@ class GerenciaSecondRepository extends baseEntityRepository {
             ->setParameter('gerencia', $id)
             ->setParameter('enabled', true)
                 ;
+        $this->setParameterPeriod($qb);
         return $qb->getQuery()->getOneOrNullResult();
     }
     

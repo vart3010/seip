@@ -29,6 +29,33 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const LEVEL_GERENCIA_SECOND = 3;
     
+    /**
+     * 
+     */
+    const STATUS_WORKER_ACTIVE = 1;
+    /**
+     * 
+     */
+    const STATUS_WORKER_ASSIGNED = 2;
+    /**
+     * 
+     */
+    const STATUS_WORKER_SUPERNUMERARY = 3;
+    /**
+     * 
+     */
+    const STATUS_WORKER_OUTSIDE_COMPANY = 4;
+    
+    /**
+     * Resultado para la evaluación
+     */
+    const TYPE_RESULT_EVALUATION = 'EVALUATION';
+    
+    /**
+     * Resultado para la Gestión
+     */
+    const TYPE_RESULT_ARRANGEMENT = 'ARRANGEMENT';
+    
     protected $em;
     protected $class;
     protected $repository;
@@ -45,5 +72,22 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
     
     public function CommonObject(){
         $this->em = $this->container->get('doctrine')->getManager();
+    }
+    
+    /**
+     * Retorna las etiquetas definidas para los tipos de resumen
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsStatusWorker()
+    {
+        static $labelsStatusWorker = array(
+            self::STATUS_WORKER_ACTIVE => 'Trabajador Activo',
+            self::STATUS_WORKER_ASSIGNED => 'Asignado',
+            self::STATUS_WORKER_SUPERNUMERARY => 'Supernumerario',
+            self::STATUS_WORKER_OUTSIDE_COMPANY => 'Fuera de la Compañía',
+        );
+        return $labelsStatusWorker;
     }
 }

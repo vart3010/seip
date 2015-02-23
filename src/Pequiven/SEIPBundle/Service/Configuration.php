@@ -52,6 +52,16 @@ class Configuration extends ConfigurationManager
     const PRE_PLANNING_ENABLE_PRE_PLANNING = 'PRE_PLANNING_ENABLE_PRE_PLANNING';
     
     /**
+     * Lista de correos que se debe notificar cuando se envie una pre-planificacion a revision.
+     */
+    const PRE_PLANNING_EMAIL_NOTIFY_TO_REVISION = 'PRE_PLANNING_EMAIL_NOTIFY_TO_REVISION';
+    
+    /**
+     * Correo electronico origen por defecto
+     */
+    const EMAIL_FROM_DEFAULT = 'EMAIL_FROM_DEFAULT';
+  
+    /**
      * Obtiene el tiempo de que se tomara en cuenta para mostrar los indicadores
      * 
      * @param string $default
@@ -59,6 +69,28 @@ class Configuration extends ConfigurationManager
     function getGeneralDateFormat($default = 'Y-m-d h:i a')
     {
         return $this->get(self::GENERAL_DATE_FORMAT, $default);
+    }
+    
+    /**
+     * Obtiene el correo de origen por defecto
+     * 
+     * @param string $default
+     */
+    function getEmailFromDefault($default = 'seip@pequiven.com')
+    {
+        return $this->get(self::EMAIL_FROM_DEFAULT, $default);
+    }
+    
+    /**
+     * Obtiene el correo de origen por defecto
+     * 
+     * @param string $default
+     */
+    function getEmailNotifyToRevision($default = '[]')
+    {
+        $v = $this->get(self::PRE_PLANNING_EMAIL_NOTIFY_TO_REVISION, $default);
+        $v = json_decode($v);
+        return $v;
     }
     
     /**

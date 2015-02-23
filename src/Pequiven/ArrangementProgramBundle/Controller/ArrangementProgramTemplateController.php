@@ -12,7 +12,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class ArrangementProgramTemplateController extends SEIPController
 {
-    public function indexAction(\Symfony\Component\HttpFoundation\Request $request) {
+    public function indexAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE');
+        
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
         $repository = $this->getRepository();
@@ -187,5 +190,14 @@ class ArrangementProgramTemplateController extends SEIPController
         ));
 
         return $form;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SecurityService
+     */
+    protected function getSecurityService()
+    {
+        return $this->container->get('seip.service.security');
     }
 }
