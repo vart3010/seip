@@ -95,7 +95,13 @@ class PeriodService extends ContainerAware
         $period = null;
         if($periodActiveSerialize !== null){
             $period = unserialize($periodActiveSerialize);
-            $period = $this->getDoctrine()->getManager()->merge($period);
+            if($period){
+                $class = get_class($period);
+                if (false === $pos = strrpos($class, '\\'.\Doctrine\Common\Persistence\Proxy::MARKER.'\\')) {
+                    $period = $this->getDoctrine()->getManager()->merge($period);
+                }
+            }
+            
         }
         if(!$period){
             $period = $this->getUser()->getPeriod();
