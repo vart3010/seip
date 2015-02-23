@@ -98,7 +98,7 @@ class PeriodService extends ContainerAware
             if($period){
                 $class = get_class($period);
                 if (false === $pos = strrpos($class, '\\'.\Doctrine\Common\Persistence\Proxy::MARKER.'\\')) {
-                    $period = $this->getDoctrine()->getManager()->merge($period);
+//                    $period = $this->getDoctrine()->getManager()->merge($period);
                 }
             }
             
