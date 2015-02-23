@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
 const PHP_TIME_LIMIT = 120;
-//const PHP_MEMORY_LIMIT = '256M';
-const PHP_MEMORY_LIMIT = '320M';
+const PHP_MEMORY_LIMIT = '256M';
+//const PHP_MEMORY_LIMIT = '320M';
 
 /**
  * Controlador de pre-planificacion
