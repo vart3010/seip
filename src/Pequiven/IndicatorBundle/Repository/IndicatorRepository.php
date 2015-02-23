@@ -14,7 +14,7 @@ use Pequiven\MasterBundle\Entity\Gerencia;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
- * Description of IndicatorRepository
+ * Description of IndicatorRepository (pequiven.repository.indicator)
  *
  * @author matias
  */
