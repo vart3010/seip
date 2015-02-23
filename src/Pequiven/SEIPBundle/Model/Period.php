@@ -16,7 +16,7 @@ namespace Pequiven\SEIPBundle\Model;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-abstract class Period implements PeriodInterface, \Serializable
+abstract class Period implements PeriodInterface
 {
     function getYear()
     {

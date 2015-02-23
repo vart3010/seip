@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Period extends Base
+class Period extends Base implements \Serializable
 {
     /**
      * @var integer
@@ -550,7 +550,7 @@ class Period extends Base
     }
 
     public function serialize() {
-        return serialize(array(
+        $data = serialize(array(
             $this->name,
             $this->description,
             $this->dateStart,
@@ -565,14 +565,22 @@ class Period extends Base
             $this->dateEndPenalty,
             $this->percentagePenalty,
             $this->dateEndClearanceNotificationArrangementProgram,
-            serialize($this->parent),
-            serialize($this->child),
+            utf8_encode(serialize($this->parent)),
+            utf8_encode(serialize($this->child)),
             $this->id,
         ));
+//        echo $data;
+//        var_dump(unserialize(utf8_encode(utf8_decode($data))));
+////        echo utf8_decode(var_export(unserialize(utf8_encode($data)),true));
+//        die;
+        return utf8_encode($data);
     }
     
     public function unserialize($serialized) {
-        $data = unserialize($serialized);
+        $data = unserialize(utf8_decode($serialized));
+//        var_dump($data);
+//        die;
+        
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));
@@ -596,8 +604,8 @@ class Period extends Base
             $this->child,
             $this->id,
         ) = $data;
-        $this->parent = unserialize($this->parent);
-        $this->child = unserialize($this->child);
+        $this->parent = unserialize(utf8_decode($this->parent));
+        $this->child = unserialize(utf8_decode($this->child));
     }
     
     public function __toString() {
