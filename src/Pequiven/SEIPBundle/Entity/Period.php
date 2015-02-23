@@ -548,7 +548,7 @@ class Period extends Base implements \Serializable
     {
         return $this->percentagePenalty;
     }
-
+    //TODO Objeto falla al ser serializado
     public function serialize() {
         $data = serialize(array(
             $this->name,
@@ -565,26 +565,28 @@ class Period extends Base implements \Serializable
             $this->dateEndPenalty,
             $this->percentagePenalty,
             $this->dateEndClearanceNotificationArrangementProgram,
-            utf8_encode(serialize($this->parent)),
-            utf8_encode(serialize($this->child)),
+            base64_encode(serialize($this->parent)),
+            base64_encode(serialize($this->child)),
             $this->id,
         ));
 //        echo $data;
 //        var_dump(unserialize(utf8_encode(utf8_decode($data))));
 ////        echo utf8_decode(var_export(unserialize(utf8_encode($data)),true));
 //        die;
-        return utf8_encode($data);
+        return base64_encode($data);
     }
-    
+    //TODO Objeto falla al ser desserializado
     public function unserialize($serialized) {
-        $data = unserialize(utf8_decode($serialized));
+        $data = unserialize(base64_decode($serialized));
 //        var_dump($data);
 //        die;
         
         // add a few extra elements in the array to ensure that we have enough keys when unserializing
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 2, null));
-
+//        var_dump($data);
+        $data[14] = base64_decode($data[14]);
+        $data[15] = base64_decode($data[15]);
         list(
             $this->name,
             $this->description,
@@ -604,8 +606,8 @@ class Period extends Base implements \Serializable
             $this->child,
             $this->id,
         ) = $data;
-        $this->parent = unserialize(utf8_decode($this->parent));
-        $this->child = unserialize(utf8_decode($this->child));
+        $this->parent = unserialize($this->parent);
+        $this->child = unserialize($this->child);
     }
     
     public function __toString() {
