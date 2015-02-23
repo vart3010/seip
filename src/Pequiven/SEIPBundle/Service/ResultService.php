@@ -443,16 +443,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
+            $resultValue = $indicator->getResult();
             $result = 100 - $indicator->getResult();
+            $indicator->setResult($result);
             $indicator->setResultReal($result);
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
+                    if($resultValue > 100){
+                        $result = $resultValue;
                     }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
+                    $result = $resultValue/2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
@@ -484,6 +486,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
+//        var_dump($result);
+//        var_dump($amountPenalty);
+//        var_dump($indicator->getId());
+//        die();
         $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
