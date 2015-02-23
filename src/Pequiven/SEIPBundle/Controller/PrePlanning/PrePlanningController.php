@@ -94,11 +94,9 @@ class PrePlanningController extends ResourceController
             }
         }
      
-//        var_dump('a');
         if($rootTreePrePlannig){
             $structureTree = $prePlanningService->buildStructureTree($rootTreePrePlannig);
         }
-//        var_dump('b');
         
         $data = array(
             "success" => true,
