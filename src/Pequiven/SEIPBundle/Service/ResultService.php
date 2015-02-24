@@ -1207,21 +1207,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                }
             }
             
-            $indicators = $objetive->getIndicators();
-            foreach ($indicators as $indicator) {
-                if($indicator->hasNotification() === false){
-                    $url = $this->generateUrl('pequiven_indicator_show',
-                        array(
-                            'id' => $indicator->getId()
-                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                    );
-                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
-                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
-                        '%indicator%' => $link,
-                    ));
-                    $valid = false;
-                }
-            }
+//            Se comento para no evaluar los indicadores en cero
+//            $indicators = $objetive->getIndicators();
+//            foreach ($indicators as $indicator) {
+//                if($indicator->hasNotification() === false){
+//                    $url = $this->generateUrl('pequiven_indicator_show',
+//                        array(
+//                            'id' => $indicator->getId()
+//                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+//                    );
+//                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+//                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+//                        '%indicator%' => $link,
+//                    ));
+//                    $valid = false;
+//                }
+//            }
             
             if(count($childrens) > 0){
                 $valid =  $this->validateAdvanceOfObjetives($childrens,$valid);

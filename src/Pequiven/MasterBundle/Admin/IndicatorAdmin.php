@@ -48,13 +48,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             'multiple' => true,
             'required' => false,
         );
+        $id = null;
         if($object != null && $object->getId() !== null){
             $indicatorLevel = $object->getIndicatorLevel();
             $level = $indicatorLevel->getLevel();
             $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
                 return $repository->getQueryChildrenLevel($level);
             };
-           
+            $id = $object->getId();
         }
         
         $form
@@ -80,7 +81,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 array(
 //                    'edit'   => 'inline',
 //                    'inline' => 'table',
-//                    'link_parameters' => array('indicator_id' => '10')
+                    'link_parameters' => array('indicator_id' => $id)
                 ),
                 array(
                 )
