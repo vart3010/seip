@@ -181,6 +181,7 @@ tecnocreaciones_tools:
         enable: true
     role_pattern_voter:
         enable: true
+        role_pattern_voter_prefix: ROLE_SEIP_
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel
