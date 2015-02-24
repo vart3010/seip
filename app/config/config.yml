@@ -163,17 +163,25 @@ tecnocreaciones_install:
         username: superAdmin
         
 tecnocreaciones_tools:
-    configuration:
+    configuration_manager:
         enable: true
         debug: false
         configuration_manager_class: Pequiven\SEIPBundle\Service\Configuration
         configuration_name_service: seip.configuration
     sequence_generator:
+        enable: true
         options:
             additional_masks:
                 - gerencia
                 - type
                 - year
+    unit_converter:
+        enable: true
+    repository_as_service:
+        enable: true
+    role_pattern_voter:
+        enable: true
+        role_pattern_voter_prefix: ROLE_SEIP_
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel
