@@ -42,6 +42,7 @@ app:
                         main: Programas de Gestión
                         list: Lista
                         assigned: Asignados
+                        pending: Pendientes
                         for_reviewing: Por revisar
                         for_approving: Por aprobar
                         for_notifying: Por notificar

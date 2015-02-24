@@ -644,6 +644,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_*'))
             {
+                $pending = $this->factory->createItem('arrangement_programs.list.pending',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => '',),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.pending', $section)));
+                
                 //Menú Nivel 2: Visualizar
                  $visualize = $this->factory->createItem('arrangement_programs.visualize',
                         $this->getSubLevelOptions(array(
@@ -666,27 +673,28 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                  }
 
                  if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING')){
-                    $visualize
+                    $pending
                         ->addChild('arrangement_programs.for_reviewing', array(
                             'route' => 'pequiven_seip_arrangementprogram_for_reviewing',
                         ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing', $section)));
                  }
                  if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING')){
-                    $visualize
+                    $pending
                         ->addChild('arrangement_programs.for_approving', array(
                             'route' => 'pequiven_seip_arrangementprogram_for_approving',
                         ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_approving', $section)));
                  }
                  if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING')){
-                    $visualize
+                    $pending
                         ->addChild('arrangement_programs.for_notifying', array(
                             'route' => 'pequiven_seip_arrangementprogram_for_notifying',
                         ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_notifying', $section)));
                  }
                 
+                $visualize->addChild($pending);
                 $child->addChild($visualize);
             }
             
