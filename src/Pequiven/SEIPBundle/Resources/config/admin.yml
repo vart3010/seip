@@ -29,6 +29,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
+            
+    sonata.admin.formula.formula_detail:
+        class: Pequiven\MasterBundle\Admin\Formula\FormulaDetailAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Detalle de formula del indicador" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+            - 'PequivenMasterBundle:Admin/CRUDFormulaDetail'
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:
