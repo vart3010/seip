@@ -230,7 +230,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $i}->setPeriod($period);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $i}->addIndicator($indicator);
@@ -263,7 +263,7 @@ class ObjetiveOperativeController extends baseController
                             ${$nameObject . $j}->setPeriod($period);
                             if (isset($data['indicators'])) {
                                 foreach ($data['indicators'] as $value) {
-                                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                     $indicator->setTmp(false);
                                     $em->persist(false);
                                     ${$nameObject . $j}->addIndicator($indicator);
@@ -298,7 +298,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $i}->setPeriod($period);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $i}->addIndicator($indicator);
@@ -328,7 +328,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $j}->setPeriod($period);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $j}->addIndicator($indicator);
@@ -361,7 +361,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $i}->setPeriod($period);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $i}->addIndicator($indicator);
@@ -391,7 +391,7 @@ class ObjetiveOperativeController extends baseController
                         ${$nameObject . $j}->setPeriod($period);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $j}->addIndicator($indicator);
@@ -413,7 +413,7 @@ class ObjetiveOperativeController extends baseController
                 $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                         $indicator->setTmp(false);
                         $em->persist($indicator);
                         $object->addIndicator($indicator);
@@ -429,7 +429,7 @@ class ObjetiveOperativeController extends baseController
                 $object->setPeriod($period);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                         $indicator->setTmp(false);
                         $em->persist($indicator);
                         $object->addIndicator($indicator);
@@ -486,8 +486,8 @@ class ObjetiveOperativeController extends baseController
         $em->getConnection()->beginTransaction();
             
         //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => '1.3.10.'));
-        //$indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => '1.3.9.'));
-        $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        //$indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => '1.3.9.'));
+        $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $totalRef[0]));
         $j = 1;
         foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
             if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
@@ -523,7 +523,7 @@ class ObjetiveOperativeController extends baseController
         $j = 1;
         foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
             if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
-                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refObjetive));
                 $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
                 foreach($indicators as $indicator){
                     $objetive->addIndicator($indicator);
@@ -556,7 +556,7 @@ class ObjetiveOperativeController extends baseController
         $em->getConnection()->beginTransaction();
         
         //Obtenemos los Indicatores Operativos creados originalmente desde el formulario de Objetivos Operativos
-        $indicatorsOriginals = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $indicatorsOriginals = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $totalRef[0]));
         $arrangementRangeOriginals = array();
         $k = 0;
         foreach($indicatorsOriginals as $indicatorOriginal){//Recorremos los Indicadores Operativos creados originalmente desde el formulario de Objetivos Operativos
@@ -571,7 +571,7 @@ class ObjetiveOperativeController extends baseController
         
         foreach($totalRef as $refObjetive){//Recorremos todas las referencias de los objetivos creados
             if($j>1){//En caso de que sea la referencia de los objetivos creados menos el primero
-                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refObjetive));
                 $p = 0;
                 foreach($indicators as $indicator){
                     ${$nameObject . $i} = new ArrangementRange();
@@ -647,7 +647,7 @@ class ObjetiveOperativeController extends baseController
             if($i >= 1){//Consultamos en caso de que exista más de una Gerencia de 1ra Línea
                 $k = 1;//Contador de Indicadores seleccionados en el Select del Formulario
                 foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Operativos ya creados asociados al Objetivo Operativo a crear
-                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                     ${$nameObject . $j} = new Indicator();
                     ${$nameObject . $j}->setRef('IO-'.$totalRef[$i].$k);
                     ${$nameObject . $j}->setRefParent($totalRef[$i]);
@@ -1248,7 +1248,7 @@ class ObjetiveOperativeController extends baseController
         
         $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
         foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
-            $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+            $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
             $indicator->setRef('IT-' . $totalRef[0] . $k);
             $indicator->setRefParent($totalRef[0]);
             $em->persist($indicator);
