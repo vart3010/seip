@@ -25,10 +25,19 @@ pequiven_seip_arrangementprogram_assigned:
         _format: html|json|xml
     methods: [GET]
     
-pequiven_seip_arrangementprogram_for_reviewing_or_approving:
-    path: /for-reviewing-or-approving.{_format}
+pequiven_seip_arrangementprogram_for_reviewing:
+    path: /for-reviewing.{_format}
     defaults:
-        _controller: pequiven_seip.controller.arrangementprogram:forReviewingApprovingAction
+        _controller: pequiven_seip.controller.arrangementprogram:forReviewingAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+    
+pequiven_seip_arrangementprogram_for_approving:
+    path: /for-approving.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:forApprovingAction
         _format: html
     requirements:
         _format: html|json|xml

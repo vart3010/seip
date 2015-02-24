@@ -665,12 +665,19 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.assigned', $section)));
                  }
 
-                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_REVIEWING_OR_APPROVING')){
+                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING')){
                     $visualize
-                        ->addChild('arrangement_programs.for_reviewing_or_approving', array(
-                            'route' => 'pequiven_seip_arrangementprogram_for_reviewing_or_approving',
+                        ->addChild('arrangement_programs.for_reviewing', array(
+                            'route' => 'pequiven_seip_arrangementprogram_for_reviewing',
                         ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing', $section)));
+                 }
+                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING')){
+                    $visualize
+                        ->addChild('arrangement_programs.for_approving', array(
+                            'route' => 'pequiven_seip_arrangementprogram_for_approving',
+                        ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_approving', $section)));
                  }
                  if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING')){
                     $visualize

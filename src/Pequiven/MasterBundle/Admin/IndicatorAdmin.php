@@ -80,9 +80,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 array(
 //                    'edit'   => 'inline',
 //                    'inline' => 'table',
+                    'link_parameters' => array('indicator_id' => '10')
                 ),
                 array(
-                    'indicator_id' => '10'
                 )
             )    
             ->add('couldBePenalized',null,array(

@@ -285,12 +285,27 @@ class ArrangementProgramController extends SEIPController
      * @param Request $request
      * @return type
      */
-    function forReviewingApprovingAction(Request $request)
+    function forReviewingAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_REVIEWING_OR_APPROVING');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING');
         
-        $method = 'createPaginatorByAssigned';
-        $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
+        $method = 'createPaginatorByAssignedForReviewing';
+        $route = 'pequiven_seip_arrangementprogram_for_reviewing';
+        $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
+     * Retorna los programas de gestion por aprobar o revisar.
+     * @param Request $request
+     * @return type
+     */
+    function forApprovingAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING');
+        
+        $method = 'createPaginatorByAssignedForApproving';
+        $route = 'pequiven_seip_arrangementprogram_for_approving';
         $template = 'forReviewingApproving.html';
         return $this->getSummaryResponse($request,$method,$route,$template);
     }
@@ -340,10 +355,11 @@ class ArrangementProgramController extends SEIPController
         $period = $this->getPeriodService()->getPeriodActive();
         $criteria['ap.period'] = $period;
         $criteria['ap.user'] = $this->getUser();
-        
-        $repository = $this->getRepository();
-
-        if ($this->config->isPaginated()) {
+        $resources = array();
+//        var_dump($method);
+//        die;
+        if($this->config->isApiRequest()){
+            $repository = $this->getRepository();
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 $method,
@@ -358,12 +374,6 @@ class ArrangementProgramController extends SEIPController
             }
             $resources->setCurrentPage($request->get('page', 1), true, true);
             $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'findBy',
-                array($criteria, $sorting, $this->config->getLimit())
-            );
         }
 
         $view = $this
