@@ -179,9 +179,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $formulaDetail = $indicator->getFormulaDetailByVariable($variable);
                 $unit = '';
                 if($formulaDetail){
-                    $unitConverter = $this->getUnitConverter();
-                    $unitType = $unitConverter->getUnitType($formulaDetail->getUnitType());
-                    $unit = $unitType->getUnitByName($formulaDetail->getUnit());
                     $unit = '('.$formulaDetail->getUnit().')';
                 }
                 

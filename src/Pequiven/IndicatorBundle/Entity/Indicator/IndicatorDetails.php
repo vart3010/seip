@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table()
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class IndicatorDetails
 {
@@ -473,6 +474,35 @@ class IndicatorDetails
     public function getIndicator()
     {
         return $this->indicator;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->updateValues();
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updateValues();
+    }
+    private function updateValues()
+    {
+        $unitGroup = json_decode($this->resultManagementUnitGroup);
+        $this->resultManagementUnitType = $unitGroup->unitType;
+        $this->resultManagementUnit = $unitGroup->unit;
+        
+        $unitGroup = json_decode($this->resultPlanUnitGroup);
+        $this->resultPlanUnitType = $unitGroup->unitType;
+        $this->resultPlanUnit = $unitGroup->unit;
+        
+        $unitGroup = json_decode($this->resultRealUnitGroup);
+        $this->resultRealUnitType = $unitGroup->unitType;
+        $this->resultRealUnit = $unitGroup->unit;
     }
     
     public function __toString() 
