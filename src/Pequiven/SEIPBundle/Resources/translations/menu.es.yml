@@ -42,7 +42,9 @@ app:
                         main: Programas de Gestión
                         list: Lista
                         assigned: Asignados
-                        for_reviewing_or_approving: Por revisar o aprobar
+                        pending: Pendientes
+                        for_reviewing: Por revisar
+                        for_approving: Por aprobar
                         for_notifying: Por notificar
                         temaplate: Desde plantilla
                         add:

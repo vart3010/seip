@@ -228,7 +228,8 @@ pequiven_seip:
             
             role_seip_arrangement_program_list_all: Usted no tiene permiso para ver la lista de los programas de gestión.
             role_seip_arrangement_program_list_assigned: Usted no tiene permiso para ver la lista de los programas de gestión asignados.
-            role_seip_arrangement_program_list_reviewing_or_approving: Usted no tiene permiso para ver la lista de los programas de gestión por revisar o aprobar.
+            role_seip_arrangement_program_list_for_reviewing: Usted no tiene permiso para ver la lista de los programas de gestión por revisar.
+            role_seip_arrangement_program_list_for_approving: Usted no tiene permiso para ver la lista de los programas de gestión por aprobar.
             role_seip_arrangement_program_list_for_notifying: Usted no tiene permiso para ver la lista de los programas de gestión por notificar.
             role_seip_arrangement_program_view_tactic: Usted no tiene permiso para ver los programas de gestión a nivel tactico.
             role_seip_arrangement_program_view_operative: Usted no tiene permiso para ver los programas de gestión a nivel operativo.

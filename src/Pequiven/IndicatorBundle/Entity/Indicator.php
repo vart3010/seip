@@ -276,6 +276,13 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $requiredToImport = false;
     
     /**
+     * Detalles de la formula del indicador
+     * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator")
+     */
+    protected $formulaDetails;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -284,6 +291,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1115,5 +1123,39 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getLineStrategics()
     {
         return $this->lineStrategics;
+    }
+    
+    /**
+     * Add formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     * @return Indicator
+     */
+    public function addFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $formulaDetails->setIndicator($this);
+        $this->formulaDetails->add($formulaDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     */
+    public function removeFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $this->formulaDetails->removeElement($formulaDetails);
+    }
+
+    /**
+     * Get formulaDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormulaDetails()
+    {
+        return $this->formulaDetails;
     }
 }

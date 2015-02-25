@@ -81,6 +81,18 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
+            ->add('formulaDetails','sonata_type_collection',
+                array(
+                     'cascade_validation' => true,
+                ),
+                array(
+//                    'edit'   => 'inline',
+//                    'inline' => 'table',
+//                    'link_parameters' => array('indicator_id' => '10')
+                ),
+                array(
+                )
+            )    
             ->add('couldBePenalized',null,array(
                 'required' => false,
             ))

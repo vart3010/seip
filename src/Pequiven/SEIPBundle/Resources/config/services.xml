@@ -228,10 +228,5 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="seip.security.access.role_hierarchy_voter" class="Pequiven\SEIPBundle\Security\Authorization\Voter\RolePatternVoter" public="false">
-            <argument type="service" id="security.role_hierarchy" />
-            <argument>ROLE_SEIP_</argument>
-            <tag name="security.voter" priority="245" />
-        </service>
     </services>
 </container>
