@@ -65,63 +65,63 @@ class IndicatorDetails
     /**
      * Tipo de unidad (Resultado de gestion)
      * @var string
-     * @ORM\Column(name="resultManagementUnitType",type="string",length=50)
+     * @ORM\Column(name="resultManagementUnitType",type="string",length=50, nullable=true)
      */
     private $resultManagementUnitType;
     
     /**
      * Unidad (Resultado de gestion)
      * @var string
-     * @ORM\Column(name="resultManagementUnit",type="string",length=90)
+     * @ORM\Column(name="resultManagementUnit",type="string",length=90, nullable=true)
      */
     private $resultManagementUnit;
     
     /**
      * Unidad concatenada (Resultado de gestion)
      * @var string
-     * @ORM\Column(name="resultManagementUnitGroup",type="string",length=90)
+     * @ORM\Column(name="resultManagementUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultManagementUnitGroup;
     
     /**
      * Tipo de unidad (Resultado del plan)
      * @var string
-     * @ORM\Column(name="resultPlanUnitType",type="string",length=50)
+     * @ORM\Column(name="resultPlanUnitType",type="string",length=50, nullable=true)
      */
     private $resultPlanUnitType;
     
     /**
      * Unidad (Resultado del plan)
      * @var string
-     * @ORM\Column(name="resultPlanUnit",type="string",length=90)
+     * @ORM\Column(name="resultPlanUnit",type="string",length=90, nullable=true)
      */
     private $resultPlanUnit;
     
     /**
      * Unidad concatenada (Resultado del plan)
      * @var string
-     * @ORM\Column(name="resultPlanUnitGroup",type="string",length=90)
+     * @ORM\Column(name="resultPlanUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultPlanUnitGroup;
     
     /**
      * Tipo de unidad (Resultado del real)
      * @var string
-     * @ORM\Column(name="resultRealUnitType",type="string",length=50)
+     * @ORM\Column(name="resultRealUnitType",type="string",length=50, nullable=true)
      */
     private $resultRealUnitType;
     
     /**
      * Unidad (Resultado del real)
      * @var string
-     * @ORM\Column(name="resultRealUnit",type="string",length=90)
+     * @ORM\Column(name="resultRealUnit",type="string",length=90, nullable=true)
      */
     private $resultRealUnit;
     
     /**
      * Unidad concatenada (Resultado del real)
      * @var string
-     * @ORM\Column(name="resultRealUnitGroup",type="string",length=90)
+     * @ORM\Column(name="resultRealUnitGroup",type="string",length=90, nullable=true)
      */
     private $resultRealUnitGroup;
     
@@ -492,17 +492,23 @@ class IndicatorDetails
     }
     private function updateValues()
     {
-        $unitGroup = json_decode($this->resultManagementUnitGroup);
-        $this->resultManagementUnitType = $unitGroup->unitType;
-        $this->resultManagementUnit = $unitGroup->unit;
+        if($this->resultManagementUnitGroup){
+            $unitGroup = json_decode($this->resultManagementUnitGroup);
+            $this->resultManagementUnitType = $unitGroup->unitType;
+            $this->resultManagementUnit = $unitGroup->unit;
+        }
         
-        $unitGroup = json_decode($this->resultPlanUnitGroup);
-        $this->resultPlanUnitType = $unitGroup->unitType;
-        $this->resultPlanUnit = $unitGroup->unit;
+        if($this->resultPlanUnitGroup){
+            $unitGroup = json_decode($this->resultPlanUnitGroup);
+            $this->resultPlanUnitType = $unitGroup->unitType;
+            $this->resultPlanUnit = $unitGroup->unit;
+        }
         
-        $unitGroup = json_decode($this->resultRealUnitGroup);
-        $this->resultRealUnitType = $unitGroup->unitType;
-        $this->resultRealUnit = $unitGroup->unit;
+        if($this->resultRealUnitGroup){
+            $unitGroup = json_decode($this->resultRealUnitGroup);
+            $this->resultRealUnitType = $unitGroup->unitType;
+            $this->resultRealUnit = $unitGroup->unit;
+        }
     }
     
     public function __toString() 
