@@ -84,6 +84,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuResults($menu, $section);
         }
         
+        //Menú Estadística e Información
         if($this->isGranted('ROLE_SEIP_PLANNING_*')){
             $this->addPlanningMenu($menu, $section);
         }
@@ -541,10 +542,17 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.main', $section)));
                 
                     if($this->isGranted('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT')){
-                        $itemOperativeVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
+                        $itemByGerenciaVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
                             'route' => 'pequiven_seip_result_visualize_by_gerencia',
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_gerencia', $section)));
-                        $visualize->addChild($itemOperativeVisualize);
+                        $visualize->addChild($itemByGerenciaVisualize);
+                    }
+                    
+                    if($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')){
+                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.strategics', array(
+                            'route' => 'pequiven_line_strategic_view_dashboard',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.strategics', $section)));
+                        $visualize->addChild($itemStrategicsVisualize);
                     }
                     
                      $itemPeriod = $this->factory->createItem('results.period',$this->getSubLevelOptions())

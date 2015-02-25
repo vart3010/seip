@@ -114,7 +114,7 @@ app:
                         main: Resultados
                         visualize:
                             main: Visualizar
-                            strategic: Estratégico
+                            strategics: Estratégicos
                             tactic: Táctico
                             operative: Operativo
                             by_gerencia: Por gerencia

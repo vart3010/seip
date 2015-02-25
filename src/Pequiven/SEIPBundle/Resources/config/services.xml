@@ -159,6 +159,7 @@
         <service id="operative.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->
         <service id="pequiven_seip.area_definition" class="Pequiven\SEIPBundle\Model\Box\AreaDefinition">
             <tag name="tecnocreaciones_box.area" />
         </service>
@@ -168,8 +169,13 @@
         <service id="pequiven_seip.area.adapter.user" class="Tecnocreaciones\Bundle\BoxBundle\Model\Adapter\UserSessionDoctrineORMAdapter">
             <tag name="tecnocreaciones_box.area.adapter" />
         </service>
+        <!-- Box donde se definen los boxes por defecto en las diferentes áreas definidas en el sistema -->
         <service id="pequiven_seip.area.adapter.box_default" class="Pequiven\SEIPBundle\Model\Box\BoxDefaultAdapter">
             <tag name="tecnocreaciones_box.area.adapter" />
+        </service>
+        <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico -->
+        <service id="pequiven_seip.box.linestrategic.icons_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBox">
+            <tag name="tecnocreaciones_box.box" />
         </service>
         
         <!-- Servicio de USER -->

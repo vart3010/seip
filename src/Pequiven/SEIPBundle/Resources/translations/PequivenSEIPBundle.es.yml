@@ -66,6 +66,7 @@ pequiven_seip:
         actions: Acciones
     results:
         results: Resultados
+        resultsStrategics: Resultados Estratégicos
         resultsByGerencia: Resultados %gerencia%
         result: Resultado
         weight: Peso

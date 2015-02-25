@@ -143,6 +143,15 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $objetives;
     
     /**
+     * LineStrategic
+     * 
+     * @var \Pequiven\MasterBundle\Entity\LineStrategic
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_linestrategics")
+     */
+    private $lineStrategics;
+    
+    /**
      * Periodo.
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -272,6 +281,13 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator")
      */
     protected $formulaDetails;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="backward", type="boolean")
+     */
+    private $backward = false;
 
     /**
      * Constructor
@@ -279,6 +295,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1083,6 +1100,39 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
+     * Add lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     * @return Indicator
+     */
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics[] = $lineStrategics;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     */
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics->removeElement($lineStrategics);
+    }
+
+    /**
+     * Get lineStrategics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineStrategics()
+    {
+        return $this->lineStrategics;
+    }
+    
+    /**
      * Add formulaDetails
      *
      * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
@@ -1114,5 +1164,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getFormulaDetails()
     {
         return $this->formulaDetails;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $backward
+     * @return Indicator
+     */
+    public function setBackward($backward)
+    {
+        $this->backward = $backward;
+
+        return $this;
+    }
+
+    /**
+     * Get backward
+     *
+     * @return boolean 
+     */
+    public function getBackward()
+    {
+        return $this->backward;
     }
 }
