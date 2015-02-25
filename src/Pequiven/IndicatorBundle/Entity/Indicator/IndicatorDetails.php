@@ -492,17 +492,23 @@ class IndicatorDetails
     }
     private function updateValues()
     {
-        $unitGroup = json_decode($this->resultManagementUnitGroup);
-        $this->resultManagementUnitType = $unitGroup->unitType;
-        $this->resultManagementUnit = $unitGroup->unit;
+        if($this->resultManagementUnitGroup){
+            $unitGroup = json_decode($this->resultManagementUnitGroup);
+            $this->resultManagementUnitType = $unitGroup->unitType;
+            $this->resultManagementUnit = $unitGroup->unit;
+        }
         
-        $unitGroup = json_decode($this->resultPlanUnitGroup);
-        $this->resultPlanUnitType = $unitGroup->unitType;
-        $this->resultPlanUnit = $unitGroup->unit;
+        if($this->resultPlanUnitGroup){
+            $unitGroup = json_decode($this->resultPlanUnitGroup);
+            $this->resultPlanUnitType = $unitGroup->unitType;
+            $this->resultPlanUnit = $unitGroup->unit;
+        }
         
-        $unitGroup = json_decode($this->resultRealUnitGroup);
-        $this->resultRealUnitType = $unitGroup->unitType;
-        $this->resultRealUnit = $unitGroup->unit;
+        if($this->resultRealUnitGroup){
+            $unitGroup = json_decode($this->resultRealUnitGroup);
+            $this->resultRealUnitType = $unitGroup->unitType;
+            $this->resultRealUnit = $unitGroup->unit;
+        }
     }
     
     public function __toString() 
