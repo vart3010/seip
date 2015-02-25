@@ -4,7 +4,7 @@ namespace Pequiven\SEIPBundle\Model\Box\Indicator\Operative;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 /**
- * Resumen de los indicadores cargados a nivel operativo por tipo de gerencia.
+ * Resumen de los indicadores cargados a nivel operativo por tipo de gerencia en donde se muestra el plan y el total a cargar durante el período seleccionado.
  *
  * @author matias
  */

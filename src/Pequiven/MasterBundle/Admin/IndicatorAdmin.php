@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
 /**
  * Administrador del Indicador
@@ -57,9 +58,16 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
            
         }
         
+        if($object != null && $object->getId() !== null){
+            if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+                $form->add('lineStrategics');
+            }
+        }
+        
         $form
             ->add('ref')
             ->add('description')
+            ->add('lineStrategics')
             ->add('typeOfCalculation','choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'

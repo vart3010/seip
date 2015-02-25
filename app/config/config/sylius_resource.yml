@@ -8,6 +8,7 @@ sylius_resource:
                 repository: Pequiven\SEIPBundle\Repository\MonitorRepository
         pequiven.linestrategic:
             driver: doctrine/orm
+            templates: PequivenSEIPBundle:LineStrategic
             classes:
                 controller: Pequiven\MasterBundle\Controller\LineStrategicController
                 model: Pequiven\MasterBundle\Entity\LineStrategic

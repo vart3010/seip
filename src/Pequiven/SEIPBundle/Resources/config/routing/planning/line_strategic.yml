@@ -1,0 +1,9 @@
+pequiven_line_strategic_view_dashboard:
+    path: /dashboard/{_format}
+    defaults:
+        _controller: pequiven.controller.linestrategic:viewDashboardAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET]

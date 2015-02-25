@@ -35,7 +35,6 @@ class LineStrategic {
         $this->line_name[self::LINE_SHA] = 'LINE_SHA';
         $this->line_name[self::LINE_GESTION_TALENTO] = 'LINE_GESTION_TALENTO_HUMANO';
         $this->line_name[self::LINE_RESP_SOCIAL] = 'LINE_RESPONSABILIDAD_SOCIAL';
-
     }
     
     /**
@@ -44,5 +43,25 @@ class LineStrategic {
      */
     public function getLineNameArray() {
         return $this->line_name;
+    }
+    
+    /**
+     * Retorna los íconos de cada Línea Estratégica
+     * 
+     * @staticvar array $icons
+     * @return string
+     */
+    static function getIcons()
+    {
+        static $icons = array(
+            self::LINE_EFICIENCIA_CALIDAD => 'fa fa-joomla',
+            self::LINE_SOST_FINANCIERA => 'flaticon-coin16',
+            self::LINE_COMERCIALIZACION => 'fa fa-tags',
+            self::LINE_CRECIMIENTO => 'fa fa-child',
+            self::LINE_SHA => 'fa fa-tree',
+            self::LINE_GESTION_TALENTO => 'fa fa-users',
+            self::LINE_RESP_SOCIAL => 'fa fa-user-plus',
+        );
+        return $icons;
     }
 }

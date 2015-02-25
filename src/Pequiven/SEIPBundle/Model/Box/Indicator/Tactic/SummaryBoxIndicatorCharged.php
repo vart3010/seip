@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Model\Box\Indicator\Tactic;
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
- * Resumen de los indicadores cargados a nivel tactico.
+ * Resumen de los indicadores cargados a nivel tactico en donde se muestra el plan y el total a cargar durante el período seleccionado.
  *
  * @author matias
  */

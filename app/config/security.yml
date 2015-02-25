@@ -69,6 +69,7 @@ security:
 #            Menu de resultados
             - ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT
             - ROLE_SEIP_RESULT_LIST_PERIOD
+            - ROLE_SEIP_RESULT_LIST_STRATEGICS
             
             - ROLE_SEIP_RESULT_VIEW_TACTIC
             - ROLE_SEIP_RESULT_VIEW_OPERATIVE
