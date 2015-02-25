@@ -40,6 +40,7 @@ services:
             - 'PequivenMasterBundle:Admin/CRUDFormulaDetail'
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:

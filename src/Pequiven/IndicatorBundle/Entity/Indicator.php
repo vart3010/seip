@@ -269,7 +269,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Detalles de la formula del indicador
      * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
-     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator")
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
      */
     protected $formulaDetails;
 
