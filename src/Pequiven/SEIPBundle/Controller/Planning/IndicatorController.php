@@ -71,7 +71,6 @@ class IndicatorController extends ResourceController
                 $data['dataSource']['colorRange']['color'] = $color;
             }
         }
-        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))

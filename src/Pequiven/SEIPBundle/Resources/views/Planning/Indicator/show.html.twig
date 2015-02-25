@@ -31,6 +31,8 @@
     {% if errorFormula != null %}
         {{ print_error(errorFormula) }}
     {% endif  %}
+    {% set indicatorDetails = indicator.details %}
+    
     <fieldset class="fieldset">
         <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read'])) }}">{{ indicator }}&nbsp;</legend>
                 <p class="inline-label">
@@ -95,14 +97,14 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.value'|trans }}</label>
-                    {$ indicator.valueFinal|myNumberFormat:2 $}
+                    {$ indicator.valueFinal|myNumberFormat:2 $}&nbsp;{% if indicatorDetails.resultRealUnit != '' %}({{ indicatorDetails.resultRealUnit }}){% endif %}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.total_plan'|trans }}</label>
                     {% if indicator.totalPlan > 0 %}
-                        {{ indicator.totalPlan|myNumberFormat }}
+                        {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}

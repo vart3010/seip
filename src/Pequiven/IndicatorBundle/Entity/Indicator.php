@@ -205,7 +205,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * Detalles del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",inversedBy="indicator",cascade={"persist","remove"})
      */
     protected $details;
     
@@ -278,7 +278,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Detalles de la formula del indicador
      * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
-     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator")
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
      */
     protected $formulaDetails;
     

@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Carlos Mendoza<inhack20@gmail.com>
  * @ORM\Table()
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class IndicatorDetails
 {
@@ -60,6 +61,76 @@ class IndicatorDetails
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
      */
     private $lastFormulaUsed;
+    
+    /**
+     * Tipo de unidad (Resultado de gestion)
+     * @var string
+     * @ORM\Column(name="resultManagementUnitType",type="string",length=50)
+     */
+    private $resultManagementUnitType;
+    
+    /**
+     * Unidad (Resultado de gestion)
+     * @var string
+     * @ORM\Column(name="resultManagementUnit",type="string",length=90)
+     */
+    private $resultManagementUnit;
+    
+    /**
+     * Unidad concatenada (Resultado de gestion)
+     * @var string
+     * @ORM\Column(name="resultManagementUnitGroup",type="string",length=90)
+     */
+    private $resultManagementUnitGroup;
+    
+    /**
+     * Tipo de unidad (Resultado del plan)
+     * @var string
+     * @ORM\Column(name="resultPlanUnitType",type="string",length=50)
+     */
+    private $resultPlanUnitType;
+    
+    /**
+     * Unidad (Resultado del plan)
+     * @var string
+     * @ORM\Column(name="resultPlanUnit",type="string",length=90)
+     */
+    private $resultPlanUnit;
+    
+    /**
+     * Unidad concatenada (Resultado del plan)
+     * @var string
+     * @ORM\Column(name="resultPlanUnitGroup",type="string",length=90)
+     */
+    private $resultPlanUnitGroup;
+    
+    /**
+     * Tipo de unidad (Resultado del real)
+     * @var string
+     * @ORM\Column(name="resultRealUnitType",type="string",length=50)
+     */
+    private $resultRealUnitType;
+    
+    /**
+     * Unidad (Resultado del real)
+     * @var string
+     * @ORM\Column(name="resultRealUnit",type="string",length=90)
+     */
+    private $resultRealUnit;
+    
+    /**
+     * Unidad concatenada (Resultado del real)
+     * @var string
+     * @ORM\Column(name="resultRealUnitGroup",type="string",length=90)
+     */
+    private $resultRealUnitGroup;
+    
+    /**
+     *
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="details",cascade={"persist","remove"})
+     */
+    private $indicator;
     
     /**
      * Get id
@@ -173,5 +244,273 @@ class IndicatorDetails
         $this->lastFormulaUsed = $lastFormulaUsed;
         
         return $this;
+    }
+
+    /**
+     * Set resultManagementUnitType
+     *
+     * @param string $resultManagementUnitType
+     * @return IndicatorDetails
+     */
+    public function setResultManagementUnitType($resultManagementUnitType)
+    {
+        $this->resultManagementUnitType = $resultManagementUnitType;
+
+        return $this;
+    }
+
+    /**
+     * Get resultManagementUnitType
+     *
+     * @return string 
+     */
+    public function getResultManagementUnitType()
+    {
+        return $this->resultManagementUnitType;
+    }
+
+    /**
+     * Set resultManagementUnit
+     *
+     * @param string $resultManagementUnit
+     * @return IndicatorDetails
+     */
+    public function setResultManagementUnit($resultManagementUnit)
+    {
+        $this->resultManagementUnit = $resultManagementUnit;
+
+        return $this;
+    }
+
+    /**
+     * Get resultManagementUnit
+     *
+     * @return string 
+     */
+    public function getResultManagementUnit()
+    {
+        return $this->resultManagementUnit;
+    }
+
+    /**
+     * Set resultManagementUnitGroup
+     *
+     * @param string $resultManagementUnitGroup
+     * @return IndicatorDetails
+     */
+    public function setResultManagementUnitGroup($resultManagementUnitGroup)
+    {
+        $this->resultManagementUnitGroup = $resultManagementUnitGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get resultManagementUnitGroup
+     *
+     * @return string 
+     */
+    public function getResultManagementUnitGroup()
+    {
+        return $this->resultManagementUnitGroup;
+    }
+
+    /**
+     * Set resultPlanUnitType
+     *
+     * @param string $resultPlanUnitType
+     * @return IndicatorDetails
+     */
+    public function setResultPlanUnitType($resultPlanUnitType)
+    {
+        $this->resultPlanUnitType = $resultPlanUnitType;
+
+        return $this;
+    }
+
+    /**
+     * Get resultPlanUnitType
+     *
+     * @return string 
+     */
+    public function getResultPlanUnitType()
+    {
+        return $this->resultPlanUnitType;
+    }
+
+    /**
+     * Set resultPlanUnit
+     *
+     * @param string $resultPlanUnit
+     * @return IndicatorDetails
+     */
+    public function setResultPlanUnit($resultPlanUnit)
+    {
+        $this->resultPlanUnit = $resultPlanUnit;
+
+        return $this;
+    }
+
+    /**
+     * Get resultPlanUnit
+     *
+     * @return string 
+     */
+    public function getResultPlanUnit()
+    {
+        return $this->resultPlanUnit;
+    }
+
+    /**
+     * Set resultPlanUnitGroup
+     *
+     * @param string $resultPlanUnitGroup
+     * @return IndicatorDetails
+     */
+    public function setResultPlanUnitGroup($resultPlanUnitGroup)
+    {
+        $this->resultPlanUnitGroup = $resultPlanUnitGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get resultPlanUnitGroup
+     *
+     * @return string 
+     */
+    public function getResultPlanUnitGroup()
+    {
+        return $this->resultPlanUnitGroup;
+    }
+
+    /**
+     * Set resultRealUnitType
+     *
+     * @param string $resultRealUnitType
+     * @return IndicatorDetails
+     */
+    public function setResultRealUnitType($resultRealUnitType)
+    {
+        $this->resultRealUnitType = $resultRealUnitType;
+
+        return $this;
+    }
+
+    /**
+     * Get resultRealUnitType
+     *
+     * @return string 
+     */
+    public function getResultRealUnitType()
+    {
+        return $this->resultRealUnitType;
+    }
+
+    /**
+     * Set resultRealUnit
+     *
+     * @param string $resultRealUnit
+     * @return IndicatorDetails
+     */
+    public function setResultRealUnit($resultRealUnit)
+    {
+        $this->resultRealUnit = $resultRealUnit;
+
+        return $this;
+    }
+
+    /**
+     * Get resultRealUnit
+     *
+     * @return string 
+     */
+    public function getResultRealUnit()
+    {
+        return $this->resultRealUnit;
+    }
+
+    /**
+     * Set resultRealUnitGroup
+     *
+     * @param string $resultRealUnitGroup
+     * @return IndicatorDetails
+     */
+    public function setResultRealUnitGroup($resultRealUnitGroup)
+    {
+        $this->resultRealUnitGroup = $resultRealUnitGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get resultRealUnitGroup
+     *
+     * @return string 
+     */
+    public function getResultRealUnitGroup()
+    {
+        return $this->resultRealUnitGroup;
+    }
+
+    /**
+     * Set indicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return IndicatorDetails
+     */
+    public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
+    {
+        $this->indicator = $indicator;
+
+        return $this;
+    }
+
+    /**
+     * Get indicator
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator 
+     */
+    public function getIndicator()
+    {
+        return $this->indicator;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->updateValues();
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updateValues();
+    }
+    private function updateValues()
+    {
+        $unitGroup = json_decode($this->resultManagementUnitGroup);
+        $this->resultManagementUnitType = $unitGroup->unitType;
+        $this->resultManagementUnit = $unitGroup->unit;
+        
+        $unitGroup = json_decode($this->resultPlanUnitGroup);
+        $this->resultPlanUnitType = $unitGroup->unitType;
+        $this->resultPlanUnit = $unitGroup->unit;
+        
+        $unitGroup = json_decode($this->resultRealUnitGroup);
+        $this->resultRealUnitType = $unitGroup->unitType;
+        $this->resultRealUnit = $unitGroup->unit;
+    }
+    
+    public function __toString() 
+    {
+        $toString = '-';
+        if($this->id > 0){
+            $toString = $this->id .'';
+        }
+        return $toString;
     }
 }
