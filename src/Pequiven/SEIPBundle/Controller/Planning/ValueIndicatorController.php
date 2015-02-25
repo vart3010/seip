@@ -16,7 +16,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $indicator = $this->findIndicatorOr404($request);
                 
         $formula = $indicator->getFormula();
-        $form = $this->buildFormulaForm($formula);
+        $form = $this->buildFormulaForm($indicator);
         $value = 0;
         if($form->submit($request)->isValid()){
             $data = $form->getData();
@@ -114,8 +114,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             'findOneBy',
             array(array('id' => $request->get('id',0))));
         
-        $formula = $indicator->getFormula();
-        $form = $this->buildFormulaForm($formula,$valueIndicator);
+        $form = $this->buildFormulaForm($indicator,$valueIndicator);
         
         $view = $this
             ->view()
@@ -140,7 +139,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $indicator = $this->findIndicatorOr404($request);
         
         $formula = $indicator->getFormula();
-        $form = $this->buildFormulaForm($formula);
+        $form = $this->buildFormulaForm($indicator);
         $value = 0;
         if($form->submit($request)->isValid()){
             $data = $form->getData();
@@ -161,8 +160,10 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
      * @param \Pequiven\MasterBundle\Entity\Formula $formula
      * @return type
      */
-    private function buildFormulaForm(\Pequiven\MasterBundle\Entity\Formula $formula,\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valueIndicator = null) 
+    private function buildFormulaForm(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valueIndicator = null) 
     {
+        $formula = $indicator->getFormula();
+        
         $data = array();
         if($valueIndicator){
             $data = $valueIndicator->getFormulaParameters();
@@ -174,9 +175,19 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             $variables = $formula->getVariables();
             foreach ($variables as $variable) {
                 $name = $variable->getName();
+                
+                $formulaDetail = $indicator->getFormulaDetailByVariable($variable);
+                $unit = '';
+                if($formulaDetail){
+                    $unitConverter = $this->getUnitConverter();
+                    $unitType = $unitConverter->getUnitType($formulaDetail->getUnitType());
+                    $unit = $unitType->getUnitByName($formulaDetail->getUnit());
+                    $unit = '('.$formulaDetail->getUnit().')';
+                }
+                
                 $type = 'text';
                 $parameters = array(
-                    'label' => $variable->getDescription(),
+                    'label' => $variable->getDescription() .' '.$unit,
                     'label_attr' => array(
                         'class' => 'label'
                     ),
@@ -214,5 +225,14 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     function getIndicatorService()
     {
         return $this->get('pequiven_indicator.service.inidicator');
+    }
+    
+    /**
+     * 
+     * @return \Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter
+     */
+    private function getUnitConverter()
+    {
+        return $this->container->get('tecnocreaciones_tools.unit_converter');
     }
 }
