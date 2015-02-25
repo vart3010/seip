@@ -1,6 +1,12 @@
 {% extends "PequivenSEIPBundle:Template:Developer/layout.html.twig" %}
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/humanitarian/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/shops/flaticon.css') }}">
+{% endblock %}
+
 {% block before_body %}
     {{ contentHeader(
         ("pequiven_seip.results.resultsStrategics"|trans)
@@ -24,7 +30,6 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/agenda3860.css?v=1') }}">
     <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/dashboard3860.css?v=1') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/shops/flaticon.css') }}">
 {% endblock stylesheets %}
 {% block javascripts %}
     {{ parent() }}
