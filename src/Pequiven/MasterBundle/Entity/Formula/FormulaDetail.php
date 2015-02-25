@@ -20,6 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="formula_detail",uniqueConstraints={@ORM\UniqueConstraint(name="f_detail_idx", columns={"indicator_id", "variable_id"})})
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class FormulaDetail 
 {
@@ -36,7 +37,7 @@ class FormulaDetail
      * Indicador
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="formulaDetails")
-     * @ORM\Joincolumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $indicator;
     
@@ -44,14 +45,14 @@ class FormulaDetail
      * Variable
      * @var \Pequiven\MasterBundle\Entity\Formula\Variable
      * @ORM\ManyToOne(targetEntity="Pequiven\MasterBundle\Entity\Formula\Variable")
-     * @ORM\Joincolumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $variable;
     
     /**
      * Descripcion de variable
      * @var string|null
-     * @ORM\Column(name="variableDescription",type="string",length=50)
+     * @ORM\Column(name="variableDescription",type="string",length=50,nullable=true)
      */
     private $variableDescription;
     
@@ -69,6 +70,12 @@ class FormulaDetail
      */
     private $unit;
     
+    /**
+     * Unidad concatenada
+     * @var string
+     * @ORM\Column(name="unitGroup",type="string",length=90)
+     */
+    private $unitGroup;
     
     /**
      * @var \DateTime
@@ -253,5 +260,57 @@ class FormulaDetail
     public function getVariable()
     {
         return $this->variable;
+    }
+    
+    public function __toString() {
+        $toString = '';
+        $toString .= $this->getId() > 0 ? ($this->getIndicator().' - '.$this->getVariable()) : '-';
+        
+        return $toString;
+    }
+
+    /**
+     * Set unitGroup
+     *
+     * @param string $unitGroup
+     * @return FormulaDetail
+     */
+    public function setUnitGroup($unitGroup)
+    {
+        $this->unitGroup = $unitGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get unitGroup
+     *
+     * @return string 
+     */
+    public function getUnitGroup()
+    {
+        return $this->unitGroup;
+    }
+    
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->updateValues();
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updateValues();
+    }
+    private function updateValues()
+    {
+        $unitGroup = json_decode($this->unitGroup);
+        $this->unitType = $unitGroup->unitType;
+        $this->unit = $unitGroup->unit;
     }
 }

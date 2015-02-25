@@ -40,6 +40,7 @@ services:
             - 'PequivenMasterBundle:Admin/CRUDFormulaDetail'
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:
@@ -84,6 +85,18 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setModelManager, [@seip.model.manager]]
+            - [ setContainer, [@service_container]]
+            
+    sonata.admin.indicator.indicator_details_admin:
+        class: Pequiven\MasterBundle\Admin\Indicator\IndicatorDetailsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Detalle de Indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
             
     sonata.admin.core.period:

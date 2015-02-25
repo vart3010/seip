@@ -18,4 +18,8 @@ namespace Pequiven\IndicatorBundle\Model;
 interface IndicatorInterface 
 {    
     function getValuesIndicator();
+    /**
+     * @return \Pequiven\MasterBundle\Entity\Formula\FormulaDetail Description
+     */
+    function getFormulaDetails();
 }

@@ -38,10 +38,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('couldBePenalized')
             ->add('forcePenalize')
             ->add('requiredToImport')
+            ->add('details')
             ;
     }
     
-    protected function configureFormFields(FormMapper $form) {
+    protected function configureFormFields(FormMapper $form) 
+    {
         $object = $this->getSubject();
         $childrensParameters = array(
             'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
@@ -77,10 +79,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('formulaDetails','sonata_type_collection',
                 array(
                      'cascade_validation' => true,
+                     'by_reference' => false,
+//                    'type_options' => array(
+//                        'delete' => true,
+//                    ),
                 ),
                 array(
-//                    'edit'   => 'inline',
-//                    'inline' => 'table',
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+//                    'sortable' => 'position',
                     'link_parameters' => array('indicator_id' => $id)
                 ),
                 array(
@@ -97,7 +104,19 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ))
             ->add('enabled',null,array(
                 'required' => false,
-            ))
+            ))->end();
+        $form
+            ->with('Details')
+                ->add('details','sonata_type_admin',array(
+                     'cascade_validation' => true,
+                     'delete' => false,
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+                )
+                )
+            ->end()
             ;
     }
     
@@ -133,14 +152,25 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ;
     }
     
-    public function prePersist($object) {
+    public function prePersist($object) 
+    {
+        
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
         if($object->isCouldBePenalized() === false){
             $object->setForcePenalize(false);
         }
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
     }
     
-    public function preUpdate($object) {
+    public function preUpdate($object) 
+    {
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
         if($object->isCouldBePenalized() === false){
             $object->setForcePenalize(false);
         }
