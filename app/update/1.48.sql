@@ -12,3 +12,9 @@ ALTER TABLE seip_c_line_strategic ADD deletedAt DATETIME DEFAULT NULL;
 -- Adición del campo para indicar que el indicador es medido "al revés"
 ALTER TABLE seip_indicator ADD backward TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD backward TINYINT(1) DEFAULT NULL;
+
+-- Unidades de las variables en los indicadores
+CREATE TABLE IndicatorDetails_audit (id INT NOT NULL, rev INT NOT NULL, previusValue DOUBLE PRECISION DEFAULT NULL, lastNotificationAt DATETIME DEFAULT NULL, lastNotificationParameters LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)', resultManagementUnitType VARCHAR(50) DEFAULT NULL, resultManagementUnit VARCHAR(90) DEFAULT NULL, resultManagementUnitGroup VARCHAR(90) DEFAULT NULL, resultPlanUnitType VARCHAR(50) DEFAULT NULL, resultPlanUnit VARCHAR(90) DEFAULT NULL, resultPlanUnitGroup VARCHAR(90) DEFAULT NULL, resultRealUnitType VARCHAR(50) DEFAULT NULL, resultRealUnit VARCHAR(90) DEFAULT NULL, resultRealUnitGroup VARCHAR(90) DEFAULT NULL, lastNotificationBy_id INT DEFAULT NULL, lastFormulaUsed_id INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE formula_detail ADD unitGroup VARCHAR(90) NOT NULL, CHANGE variableDescription variableDescription VARCHAR(50) DEFAULT NULL;
+ALTER TABLE formula_detail_audit ADD unitGroup VARCHAR(90) DEFAULT NULL;
+ALTER TABLE IndicatorDetails ADD resultManagementUnitType VARCHAR(50) NOT NULL, ADD resultManagementUnit VARCHAR(90) NOT NULL, ADD resultManagementUnitGroup VARCHAR(90) NOT NULL, ADD resultPlanUnitType VARCHAR(50) NOT NULL, ADD resultPlanUnit VARCHAR(90) NOT NULL, ADD resultPlanUnitGroup VARCHAR(90) NOT NULL, ADD resultRealUnitType VARCHAR(50) NOT NULL, ADD resultRealUnit VARCHAR(90) NOT NULL, ADD resultRealUnitGroup VARCHAR(90) NOT NULL;

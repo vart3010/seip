@@ -165,4 +165,23 @@ abstract class Indicator implements IndicatorInterface
             return $labels[$this->labelSummary];
         }
     }
+    
+    /**
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variable
+     * @return \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+     */
+    function getFormulaDetailByVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variable)
+    {
+        $result = null;
+        foreach ($this->getFormulaDetails() as $formulaDetail)
+        {
+            if($formulaDetail->getVariable() === $variable)
+            {
+                $result = $formulaDetail;
+                break;
+            }
+        }
+        return $result;
+    }
 }

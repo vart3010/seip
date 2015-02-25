@@ -20,5 +20,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
  */
 class CRUDFormulaDetailController extends CRUDController
 {
-    
+//    public function createAction() {
+//        parent::createAction();
+//    }
 }
