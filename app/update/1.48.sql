@@ -8,3 +8,7 @@ CREATE TABLE seip_indicators_linestrategics (indicator_id INT NOT NULL, linestra
 ALTER TABLE seip_indicators_linestrategics ADD CONSTRAINT FK_2B8E3F474402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id) ON DELETE CASCADE;
 ALTER TABLE seip_indicators_linestrategics ADD CONSTRAINT FK_2B8E3F477651D47C FOREIGN KEY (linestrategic_id) REFERENCES seip_c_line_strategic (id) ON DELETE CASCADE;
 ALTER TABLE seip_c_line_strategic ADD deletedAt DATETIME DEFAULT NULL;
+
+-- Adición del campo para indicar que el indicador es medido "al revés"
+ALTER TABLE seip_indicator ADD backward TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD backward TINYINT(1) DEFAULT NULL;

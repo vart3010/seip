@@ -443,18 +443,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
             
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
+            $result = $indicator->getResult();
             $resultValue = $indicator->getResult();
-            $result = 100 - $indicator->getResult();
+            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
+                $result = 100 - $indicator->getResult();
+            }
             $indicator->setResult($result);
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($resultValue > 100){
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)        
+                    if($result > 100){
+                        $result = 100;
+                    }
+                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
                         $result = $resultValue;
                     }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $resultValue/2;
+                    $result = $result/2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }

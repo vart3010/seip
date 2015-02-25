@@ -281,6 +281,13 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator")
      */
     protected $formulaDetails;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="backward", type="boolean")
+     */
+    private $backward = false;
 
     /**
      * Constructor
@@ -1157,5 +1164,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getFormulaDetails()
     {
         return $this->formulaDetails;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $backward
+     * @return Indicator
+     */
+    public function setBackward($backward)
+    {
+        $this->backward = $backward;
+
+        return $this;
+    }
+
+    /**
+     * Get backward
+     *
+     * @return boolean 
+     */
+    public function getBackward()
+    {
+        return $this->backward;
     }
 }

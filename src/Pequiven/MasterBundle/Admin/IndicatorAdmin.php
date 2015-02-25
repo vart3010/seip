@@ -105,6 +105,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('enabled',null,array(
                 'required' => false,
             ))
+            ->add('backward',null,array(
+                'required' => false,
+            ))
             ;
     }
     
