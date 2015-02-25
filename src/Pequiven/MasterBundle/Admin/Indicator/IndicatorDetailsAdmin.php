@@ -60,6 +60,7 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
             );
         }
         $selectUnitParameters['choices'] = $selectUnits;
+        $selectUnitParameters['empty_value'] = '';
         $form
             ->add('resultPlanUnitGroup','choice',$selectUnitParameters)
             ->add('resultRealUnitGroup','choice',$selectUnitParameters)

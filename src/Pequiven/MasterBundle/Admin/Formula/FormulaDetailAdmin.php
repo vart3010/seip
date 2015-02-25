@@ -109,17 +109,13 @@ class FormulaDetailAdmin extends Admin implements ContainerAwareInterface
         }
 //        DIE;
         $form
-//            ->add('indicator',null,array(
-//                'data' => $indicator,
-//                'disabled' => $diableIndicator,
-//            ))
             ->add('variable','entity',$variableParameters)
             ->add('variableDescription',null,array(
                 'required' => false,
             ))
-//            ->add('unitType')
             ->add('unitGroup','choice',array(
                 'choices' => $selectUnits,
+                'empty_value' => '',
             ))
             ;
     }
