@@ -38,6 +38,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('couldBePenalized')
             ->add('forcePenalize')
             ->add('requiredToImport')
+            ->add('details')
             ;
     }
     
@@ -77,7 +78,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('childrens','entity',$childrensParameters)
             ->add('formulaDetails','sonata_type_collection',
                 array(
-//                    'allow_delete' => true,
                      'cascade_validation' => true,
                      'by_reference' => false,
 //                    'type_options' => array(
@@ -104,7 +104,19 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ))
             ->add('enabled',null,array(
                 'required' => false,
-            ))
+            ))->end();
+        $form
+            ->with('Details')
+                ->add('details','sonata_type_admin',array(
+                     'cascade_validation' => true,
+                     'delete' => false,
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+                )
+                )
+            ->end()
             ;
     }
     
