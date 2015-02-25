@@ -8,8 +8,8 @@
 	font-weight: normal;
 	font-style: normal;
 }
-[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+[class^="shop-"]:before, [class*=" shop-"]:before,
+[class^="shop-"]:after, [class*=" shop-"]:after {   
     font: normal normal normal 14px/1 Flaticon;
     font-size: inherit;
     font-style: normal;
@@ -43,7 +43,7 @@
 .flaticon-closed66:before {
 	content: "\e007";
 }
-.flaticon-coin16:before {
+.shop-coin16:before {
 	content: "\e008";
 }
 .flaticon-coins30:before {

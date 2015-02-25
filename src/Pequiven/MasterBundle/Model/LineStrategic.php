@@ -54,9 +54,9 @@ class LineStrategic {
     static function getIcons()
     {
         static $icons = array(
-            self::LINE_EFICIENCIA_CALIDAD => 'fa fa-joomla',
-            self::LINE_SOST_FINANCIERA => 'flaticon-coin16',
-            self::LINE_COMERCIALIZACION => 'fa fa-tags',
+            self::LINE_EFICIENCIA_CALIDAD => 'flaticon-mind',
+            self::LINE_SOST_FINANCIERA => 'shop-coin16',
+            self::LINE_COMERCIALIZACION => 'fa fa-external-link',
             self::LINE_CRECIMIENTO => 'fa fa-child',
             self::LINE_SHA => 'fa fa-tree',
             self::LINE_GESTION_TALENTO => 'fa fa-users',
