@@ -15,7 +15,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Table(name="seip_indicator")
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @author matias
+ * @ORM\HasLifecycleCallbacks()
  */
 class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
@@ -1187,5 +1187,13 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getBackward()
     {
         return $this->backward;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    function prePersist()
+    {
+        $this->details = new Indicator\IndicatorDetails;
     }
 }
