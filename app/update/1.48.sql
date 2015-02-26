@@ -21,3 +21,7 @@ ALTER TABLE IndicatorDetails ADD resultManagementUnitType VARCHAR(50) NOT NULL, 
 
 -- Nullable para campos nuevo
 ALTER TABLE IndicatorDetails CHANGE resultManagementUnitType resultManagementUnitType VARCHAR(50) DEFAULT NULL, CHANGE resultManagementUnit resultManagementUnit VARCHAR(90) DEFAULT NULL, CHANGE resultManagementUnitGroup resultManagementUnitGroup VARCHAR(90) DEFAULT NULL, CHANGE resultPlanUnitType resultPlanUnitType VARCHAR(50) DEFAULT NULL, CHANGE resultPlanUnit resultPlanUnit VARCHAR(90) DEFAULT NULL, CHANGE resultPlanUnitGroup resultPlanUnitGroup VARCHAR(90) DEFAULT NULL, CHANGE resultRealUnitType resultRealUnitType VARCHAR(50) DEFAULT NULL, CHANGE resultRealUnit resultRealUnit VARCHAR(90) DEFAULT NULL, CHANGE resultRealUnitGroup resultRealUnitGroup VARCHAR(90) DEFAULT NULL;
+
+-- Agregando bandera para marcar a los objetivos cuando impactan al SIG
+ALTER TABLE seip_objetive ADD impactToSIG TINYINT(1) NOT NULL;
+ALTER TABLE seip_objetive_audit ADD impactToSIG TINYINT(1) DEFAULT NULL;

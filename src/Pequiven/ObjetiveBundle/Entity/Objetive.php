@@ -9,7 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
 use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 use Pequiven\SEIPBundle\Entity\Result\ResultItemInterface;
-use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningObjectInterface;
 
 /**
  * Objetive
@@ -280,6 +279,14 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\Column(name="requiredToImport",type="boolean")
      */
     protected $requiredToImport = false;
+    
+    /**
+     * ¿Impacta a SIG?
+     * 
+     * @var boolean
+     * @ORM\Column(name="impactToSIG",type="boolean")
+     */
+    protected $impactToSIG = false;
 
     /**
      * Constructor
@@ -1190,5 +1197,28 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getRequiredToImport()
     {
         return $this->requiredToImport;
+    }
+
+    /**
+     * Set impactToSIG
+     *
+     * @param boolean $impactToSIG
+     * @return Objetive
+     */
+    public function setImpactToSIG($impactToSIG)
+    {
+        $this->impactToSIG = $impactToSIG;
+
+        return $this;
+    }
+
+    /**
+     * Get impactToSIG
+     *
+     * @return boolean 
+     */
+    public function getImpactToSIG()
+    {
+        return $this->impactToSIG;
     }
 }

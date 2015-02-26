@@ -34,6 +34,7 @@ class ObjetiveAdmin extends Admin
             ->add('evalSimpleAverage')
             ->add('evalWeightedAverage')
             ->add('requiredToImport')
+            ->add('impactToSIG')
             ->add('enabled')
              ;
     }
@@ -69,6 +70,9 @@ class ObjetiveAdmin extends Admin
             ->add('requiredToImport',null,array(
                 'required' => false,
             ))
+            ->add('impactToSIG',null,array(
+                'required' => false,
+            ))
             ->add('enabled',null,array(
                 'required' => false,
             ))
@@ -81,6 +85,7 @@ class ObjetiveAdmin extends Admin
             ->add('description')
             ->add('weight')
             ->add('requiredToImport')
+            ->add('impactToSIG')
             ->add('enabled')
             ;
     }
