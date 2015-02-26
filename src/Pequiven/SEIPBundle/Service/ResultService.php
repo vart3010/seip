@@ -445,23 +445,34 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
             $result = $indicator->getResult();
             $resultValue = $indicator->getResult();
-            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-                $result = 100 - $indicator->getResult();
-            }
-            $indicator->setResult($result);
+//            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
+//                $result = 100 - $indicator->getResult();
+//            }
+//            var_dump($indicator->getResult());
+//            var_dump($result);
+//            var_dump($resultValue);
+//            $indicator->setResult($result);
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)        
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
                     }
-                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-                        $result = $resultValue;
-                    }
+                    $result = 100 - $result;
+//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
+//                        $result = $resultValue;
+//                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
+//                        $result = $resultValue;
+//                    }
+                    $result = 100 - $result;
                     $result = $result/2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
+//                        $result = $resultValue;
+//                    }
                     $result = 0;
                 }
             } else{
@@ -474,11 +485,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
+//                    if($result > 100){
                         $result = 100;
-                    }
+//                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
+//                    $result = $result/2;
+                    $result = 50;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
@@ -496,6 +508,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //        var_dump($amountPenalty);
 //        var_dump($indicator->getId());
 //        die();
+        
         $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
@@ -915,6 +928,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $value = ($value / $quantity);
 
         $indicator->setValueFinal($value);
+        $indicator->setResult($value);
     }
     
     /**

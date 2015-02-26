@@ -56,11 +56,11 @@ class LineStrategic {
         static $icons = array(
             self::LINE_EFICIENCIA_CALIDAD => 'fa fa-joomla',
             self::LINE_SOST_FINANCIERA => 'flaticon-coin16',
-            self::LINE_COMERCIALIZACION => 'fa fa-tags',
+            self::LINE_COMERCIALIZACION => 'fa fa-external-link',
             self::LINE_CRECIMIENTO => 'fa fa-child',
             self::LINE_SHA => 'fa fa-tree',
             self::LINE_GESTION_TALENTO => 'fa fa-users',
-            self::LINE_RESP_SOCIAL => 'fa fa-user-plus',
+            self::LINE_RESP_SOCIAL => 'flaticon-family5',
         );
         return $icons;
     }

@@ -8,8 +8,8 @@
 	font-weight: normal;
 	font-style: normal;
 }
-[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+[class^="shop-"]:before, [class*=" shop-"]:before,
+[class^="shop-"]:after, [class*=" shop-"]:after {   
     font: normal normal normal 14px/1 Flaticon;
     font-size: inherit;
     font-style: normal;

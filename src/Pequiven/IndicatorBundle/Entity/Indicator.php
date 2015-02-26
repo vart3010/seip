@@ -210,7 +210,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $details;
     
     /**
-     * Indicador al que impacta este indicador
+     * Indicador al que suma este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
@@ -218,7 +218,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $parent;
     
     /**
-     * Indicadores que impactan a este indicador
+     * Indicadores que suman a este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator 
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
@@ -288,7 +288,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="backward", type="boolean")
      */
     private $backward = false;
-
+    
     /**
      * Constructor
      */
