@@ -120,12 +120,11 @@
                     {% endif %}
                 </p>
             </div>
-            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if indicator.resultReal != null and errorArrangementRange == null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
+            {% set resultReal = indicator.resultReal %}
+            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange == null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% set resultReal = indicator.resultReal %}
-                    {% if resultReal != null and errorArrangementRange == null %}
-{#                        {{ resultReal|myNumberFormat }}#}
+                    {% if resultReal is not null and errorArrangementRange == null %}
                         <span id="chartContainerResult"></span>
                     {% else %}
                         {% if indicator.arrangementRange == null %}
