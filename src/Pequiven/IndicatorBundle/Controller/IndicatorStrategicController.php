@@ -193,10 +193,10 @@ class IndicatorStrategicController extends baseController {
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
             $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            $this->createArrangementRange($object, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
-            $this->createObjetiveIndicator($lastObjectInsert);
+            $this->createObjetiveIndicator($object);
 
             $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.registerIndicatorStrategicSuccessfull', array(), 'PequivenIndicatorBundle'));
 
