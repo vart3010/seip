@@ -915,6 +915,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $value = ($value / $quantity);
 
         $indicator->setValueFinal($value);
+        $indicator->setResult($value);
     }
     
     /**
