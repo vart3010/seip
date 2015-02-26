@@ -474,11 +474,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
+//                    if($result > 100){
                         $result = 100;
-                    }
+//                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
+//                    $result = $result/2;
+                    $result = 50;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
