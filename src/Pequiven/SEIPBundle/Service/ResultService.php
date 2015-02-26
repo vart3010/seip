@@ -425,10 +425,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-//                var_dump($this->calculateRangeGood($indicator,$tendenty));
-//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
-//                var_dump($this->calculateRangeBad($indicator,$tendenty));
-//                die();
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -448,9 +444,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
 //                $result = 100 - $indicator->getResult();
 //            }
-//            var_dump($indicator->getResult());
-//            var_dump($result);
-//            var_dump($resultValue);
 //            $indicator->setResult($result);
             $indicator->setResultReal($result);
             
@@ -485,6 +478,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                      
 //                    if($result > 100){
                         $result = 100;
 //                    }
@@ -526,6 +520,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
+    }
+    
+    
+    /**
+     * Función que recalcula el resultado para el rango verde
+     * @param Indicator $indicator
+     * @param type $result
+     * @return type
+     */
+    public function recalculateRangeStable(Indicator &$indicator,$result,$type=  CommonObject::TYPE_RANGE_GOOD){
+        
+        return $result;
     }
     
     /**
