@@ -61,7 +61,9 @@ pequiven_indicator:
         formula_unassigned: Fórmula no asignada.
         not_support_formula: Fórmula no compatible.
         trends_should_be_equal: Las tendencias deben ser iguales.
-        arrangementRange_not_assigned: Rango de Gestión no Asignado
+        arrangementRange_not_assigned: Rango de Gestión no Asignado.
+        the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
+        the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
         
 form:
     ref: Nro. de Referencia

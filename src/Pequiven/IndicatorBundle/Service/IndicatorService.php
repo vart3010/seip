@@ -166,6 +166,41 @@ class IndicatorService implements ContainerAwareInterface
         return $error;
     }
     
+    function validateIndicatorParent(Indicator $indicator)
+    {
+        $formula = $indicator->getFormula();
+        $error = null;
+        if($formula != null){
+            if($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC && 
+                $formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC 
+                    && $formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ
+                ){
+                $error = $this->trans('pequiven_indicator.errors.not_support_formula_parent',array(),'PequivenIndicatorBundle');
+            }
+            if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $variables = $formula->getVariables();
+                if(count($variables) != 2){
+                    $error = $this->trans('pequiven_indicator.errors.the_formula_should_only_have_two_defined_variables',array(),'PequivenIndicatorBundle');
+                }else{
+                    $findVariables = 0;
+                    foreach ($variables as $variable) {
+                        if($variable->getName() == Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN){
+                            $findVariables++;
+                        }else if($variable->getName() == Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL){
+                            $findVariables++;
+                        }
+                    }
+                }
+                if($findVariables != 2){
+                    $error = $this->trans('pequiven_indicator.errors.the_formula_must_have_the_variables_defined_plan_and_real',array(),'PequivenIndicatorBundle');
+                }
+            }
+        }else{
+            $error = $this->trans('pequiven_indicator.errors.formula_unassigned',array(),'PequivenIndicatorBundle');
+        }
+        return $error;
+    }
+    
     /**
      * Valida que el indicator hijo sea compatible para calcular resultados de formula automatico.
      * @param Indicator $indicator
@@ -179,7 +214,9 @@ class IndicatorService implements ContainerAwareInterface
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         if($formula != null){
-            if($formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            if($formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC 
+                    && $formula->getTypeOfCalculation() !== Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ
+                ){
                 $error = $this->trans('pequiven_indicator.errors.not_support_formula_parent',array(),'PequivenIndicatorBundle');
             }
         }else{

@@ -14,6 +14,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Variable implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
+     * Nombre de la variable que se usara para calculos de equacion plan
+     */
+    const VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN = 'plan';
+    /**
+     * Nombre de la variable que se usara para calculos de equacion real
+     */
+    const VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL = 'real';
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")

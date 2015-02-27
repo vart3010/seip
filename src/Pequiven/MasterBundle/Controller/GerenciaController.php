@@ -8,17 +8,10 @@
 
 namespace Pequiven\MasterBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\MasterBundle\Entity\Gerencia;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\MasterBundle\Form\Type\Gerencia\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
  * Controlador de gerencia de primera linea
@@ -85,10 +78,6 @@ class GerenciaController extends baseController {
                     ));
         }
         
-        
-        /*return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                ));*/
         return array(
             'form' => $form->createView(),
             );
@@ -97,7 +86,6 @@ class GerenciaController extends baseController {
      /**
      * Función que devuelve el paginador con las gerencias de 2da Línea
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function gerenciaFirstListAction(Request $request){
         
