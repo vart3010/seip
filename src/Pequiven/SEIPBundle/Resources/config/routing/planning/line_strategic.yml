@@ -7,3 +7,13 @@ pequiven_line_strategic_view_dashboard:
         _format: html|json|xml
         id: \d+
     methods: [GET]
+    
+pequiven_line_strategic_show:
+    path: /{id}.{_format}
+    defaults:
+        _controller: pequiven.controller.linestrategic:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET]
