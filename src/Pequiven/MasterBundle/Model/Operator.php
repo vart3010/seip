@@ -13,8 +13,8 @@ namespace Pequiven\MasterBundle\Model;
  *
  * @author matias
  */
-class Operator {
-    //put your code here
+class Operator 
+{
     const OPERATOR_HIGHER_THAN = 1;
     const OPERATOR_SMALLER_THAN = 2;
     const OPERATOR_HIGHER_EQUAL_THAN = 3;

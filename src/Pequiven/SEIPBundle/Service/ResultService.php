@@ -421,18 +421,18 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
-        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
+        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX)
+        {
             $result = $indicator->getResult();
             
             $indicator->setResultReal($result);
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
-                    }
+                    $result = 100;
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
+                    $result = $this->recalculateResultByRange($indicator,$tendenty);
+                    $result = $result / 2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
@@ -515,11 +515,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function recalculateResultByRange(Indicator &$indicator,  Tendency &$tendency){
         $arrangementRange = $indicator->getArrangementRange();
-        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         $result = $indicator->getResult();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
         
         if($tendency->getRef() == Tendency::TENDENCY_EST){
-            
             $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2)/2;
             if($result > $varToCatch){
                 $varSum = bcadd($varToCatch, $varToCatch, 2);
@@ -533,6 +532,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $varMulti = $varMinus*100;
                 $varDiv = bcdiv($varMulti, $varToCatch, 2);
                 $result = bcsub(100, $varDiv, 2);
+            }
+        }else if($tendency->getRef() == Tendency::TENDENCY_MAX){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                $varToCatch = $arrangementRange->getRankTopBasic();
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti,$varToCatch, 2);
+                
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                $varToCatch = $arrangementRange->getRankTopMixedTop();
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti,$varToCatch, 2);
             }
         }
         
@@ -645,6 +655,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     
     /**
      * Cálculo de Rango Amarillo para los Indicadores con tendencia Estable
+     * 
      * @param type $result
      * @return boolean
      */
