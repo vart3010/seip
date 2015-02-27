@@ -979,12 +979,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
-            if($details){
-                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-//                    var_dump($i);
-//                    var_dump($valuesIndicatorQuantity);
-                }
-            }
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $totalPlan += $formulaParameters[$variableToPlanValueName];
             $totalReal += $formulaParameters[$variableToRealValueName];
@@ -1047,16 +1041,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0) && $i !== $valuesIndicatorQuantity){
-                        continue;
+                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
+                        $totalPlan = $resultItem['plan'];
+                        $totalReal = $resultItem['real'];
                     }
-                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST){
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
                     continue;
                 }
             }
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
