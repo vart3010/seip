@@ -971,6 +971,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         
         $resultsItems = array();
+        //Obtener los valores de los hijos
         foreach ($childrens as $child) {
             $i = 0;
             $formula = $child->getFormula();
@@ -1010,8 +1011,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         //Actualizar valores de los resultados del indicador padre.
         $formula = $indicator->getFormula();
-        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+            $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+            $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
+            $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
+        }
         
         $valuesIndicator = $indicator->getValuesIndicator();
         if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
@@ -1081,6 +1087,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setValueFinal($value);
     }
     
+    /**
+     * Evalua una formula y evalua el resultado cuando el tipo de calculo es a partir de ecuarcion
+     * @param Formula $formula
+     * @param type $formulaParameters
+     * @return type
+     */
     private function getFormulaResultFromEQ(Formula $formula,$formulaParameters)
     {
         $equation_real = $equation_plan = 0.0;
