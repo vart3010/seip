@@ -120,7 +120,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Calcula los resultados
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    public function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) {
+    public function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) 
+    {
         $em = $this->getDoctrine()->getManager();
         
         if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
@@ -422,6 +423,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $result = 0;
         if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
             $result = $indicator->getResult();
+            
             $indicator->setResultReal($result);
             
             if($error == null){
@@ -438,13 +440,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
-        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN)//Decreciente
+        {
             $result = $indicator->getResult();
             $resultValue = $indicator->getResult();
-//            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-//                $result = 100 - $indicator->getResult();
-//            }
-//            $indicator->setResult($result);
             $indicator->setResultReal($result);
             
             if($error == null){
@@ -453,37 +452,25 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $result = 100;
                     }
                     $result = 100 - $result;
-//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-//                        $result = $resultValue;
-//                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-//                        $result = $resultValue;
-//                    }
                     $result = 100 - $result;
                     $result = $result/2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
-//                    if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
-//                        $result = $resultValue;
-//                    }
                     $result = 0;
                 }
             } else{
                 throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
-        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST)
+        {
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                       $result = $this->recalculateResultByRange($indicator,$tendenty);
-//                    if($result > 100){
-//                        $result = 100;
-//                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-//                    $result = $result/2;
                     $result = $this->recalculateResultByRange($indicator,$tendenty);
                     $result = $result / 2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
@@ -499,10 +486,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-//        var_dump($result);
-//        var_dump($amountPenalty);
-//        var_dump($indicator->getId());
-//        die();
         
         $indicator->setResult($result - $amountPenalty);
         
@@ -1102,9 +1085,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $valueIndicator->setValueOfIndicator($value);
             $i++;
         }
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
-//        die;
         $indicator
             ->setTotalPlan($totalPlan)
             ->setValueFinal($totalReal);
