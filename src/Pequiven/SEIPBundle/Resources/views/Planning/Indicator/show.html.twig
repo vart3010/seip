@@ -121,15 +121,15 @@
                 </p>
             </div>
             {% set resultReal = indicator.resultReal %}
-            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange == null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
+            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% if resultReal is not null and errorArrangementRange == null %}
+                    {% if resultReal is not null and errorArrangementRange is null %}
                         <span id="chartContainerResult"></span>
                     {% else %}
-                        {% if indicator.arrangementRange == null %}
-                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
-                        {% elseif errorArrangementRange != null %}
+                        {#{% if indicator.arrangementRange == null %}
+                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>#}
+                        {% if errorArrangementRange != null %}
                             <span class="tag red-bg">{{ errorArrangementRange }}</span>
                         {% else %}
                             <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>

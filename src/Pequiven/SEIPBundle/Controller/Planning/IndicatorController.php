@@ -59,7 +59,7 @@ class IndicatorController extends ResourceController
         $arrangementRangeService = $this->getArrangementRangeService();
         $indicatorRange = array();
         $errorArrangementRange = null;
-        if($resource->getArrangementRange() !== null){
+        if($resource->getArrangementRange() !== null){//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
             if($errorArrangementRange == null){
                 $tendency = $resource->getTendency();
@@ -70,6 +70,8 @@ class IndicatorController extends ResourceController
                 $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
                 $data['dataSource']['colorRange']['color'] = $color;
             }
+        } else{//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
+            $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
         }
         $view = $this
             ->view()
