@@ -2,18 +2,15 @@
 {% for lineStrategic in linesStrategics %}
 <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
     <a href="#">
-        <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
+        <span class="centrar_imagen">
+            <img class="icon-strategic" id="iconMoney" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+        </span>
+        <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
+        {#<i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
         <br>
-        <p>{{ lineStrategic.description }}</p>
+        <p>{{ lineStrategic.description }}</p>#}
         {#{{ data.typeGroup }}<br>#}
         {#<b style="font-size:25px">{{ data.porcCarga }}%</b>#}
     </a>
 </div>
 {% endfor %}
-{#<div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
-    <a href="#">
-        <img type="image/png" id="iconMoney" src="{{ asset('bundles/pequivenseip/icons/shops/coin16.png') }}">
-        <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
-        <br>
-    </a>
-</div>#}

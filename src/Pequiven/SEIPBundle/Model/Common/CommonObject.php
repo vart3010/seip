@@ -56,6 +56,21 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const TYPE_RESULT_ARRANGEMENT = 'ARRANGEMENT';
     
+    /**
+     * Rango Bueno (Verde)
+     */
+    const TYPE_RANGE_GOOD = 'GOOD';
+    
+    /**
+     * Rango Medio (Amarillo)
+     */
+    const TYPE_RANGE_MIDDLE = 'MIDDLE';
+    
+    /**
+     * Rango Malo (Rojo)
+     */
+    const TYPE_RANGE_BAD = 'BAD';
+    
     protected $em;
     protected $class;
     protected $repository;

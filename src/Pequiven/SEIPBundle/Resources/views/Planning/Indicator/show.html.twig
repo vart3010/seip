@@ -78,8 +78,9 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_indicator.type_calculation.main'|trans }}</label>
                     {{ indicator.typeOfCalculationLabel|trans }}
-                    {%  if indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC') and formula != null and formula.getTypeOfCalculation != constant('Pequiven\\MasterBundle\\Entity\\Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC') %}
-                        <span class="tag red-bg">{{ ('pequiven_indicator.errors.not_support_formula'|trans) }}</span>
+                    {% set validChild = indicatorService.validateIndicatorParent(indicator) %}
+                    {% if  validChild != null %}
+                        <span class="tag red-bg">{{ validChild }}</span>
                     {% endif %}
                 </p>
             </div>
@@ -121,15 +122,15 @@
                 </p>
             </div>
             {% set resultReal = indicator.resultReal %}
-            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange == null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
+            <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
                 <p class="inline-label">
                     <label class="label">{{ 'form.resultReal'|trans }}</label>
-                    {% if resultReal is not null and errorArrangementRange == null %}
+                    {% if resultReal is not null and errorArrangementRange is null %}
                         <span id="chartContainerResult"></span>
                     {% else %}
-                        {% if indicator.arrangementRange == null %}
-                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>
-                        {% elseif errorArrangementRange != null %}
+                        {#{% if indicator.arrangementRange == null %}
+                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>#}
+                        {% if errorArrangementRange != null %}
                             <span class="tag red-bg">{{ errorArrangementRange }}</span>
                         {% else %}
                             <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>

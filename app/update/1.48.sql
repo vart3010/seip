@@ -25,3 +25,7 @@ ALTER TABLE IndicatorDetails CHANGE resultManagementUnitType resultManagementUni
 -- Agregando bandera para marcar a los objetivos cuando impactan al SIG
 ALTER TABLE seip_objetive ADD impactToSIG TINYINT(1) NOT NULL;
 ALTER TABLE seip_objetive_audit ADD impactToSIG TINYINT(1) DEFAULT NULL;
+
+-- Origen del calculo
+ALTER TABLE IndicatorDetails ADD sourceResult INT NOT NULL;
+ALTER TABLE IndicatorDetails_audit ADD sourceResult INT DEFAULT NULL;
