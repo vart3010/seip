@@ -3,6 +3,7 @@
 namespace Pequiven\IndicatorBundle\Entity\Indicator;
 
 use Doctrine\ORM\Mapping as ORM;
+use Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails as Model;
 
 /**
  * Detalles del indicador
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
-class IndicatorDetails
+class IndicatorDetails extends Model
 {
     /**
      * @var integer
@@ -132,6 +133,13 @@ class IndicatorDetails
      */
     private $indicator;
     
+    /**
+     * Origen de resultado
+     * @var integer
+     * @ORM\Column(name="sourceResult",type="integer")
+     */
+    private $sourceResult = self::SOURCE_RESULT_ALL;
+
     /**
      * Get id
      *
@@ -518,5 +526,28 @@ class IndicatorDetails
             $toString = $this->id .'';
         }
         return $toString;
+    }
+
+    /**
+     * Set sourceResult
+     *
+     * @param integer $sourceResult
+     * @return IndicatorDetails
+     */
+    public function setSourceResult($sourceResult)
+    {
+        $this->sourceResult = $sourceResult;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceResult
+     *
+     * @return integer 
+     */
+    public function getSourceResult()
+    {
+        return $this->sourceResult;
     }
 }

@@ -966,26 +966,35 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     private function calculateFormulaRealPlanAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
+        
         $formula = $indicator->getFormula();
         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
         
         $valuesIndicator = $indicator->getValuesIndicator();
         
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($valuesIndicator);
+        $i = 0;
+        
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+//                    var_dump($i);
+//                    var_dump($valuesIndicatorQuantity);
+                }
+            }
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $totalPlan += $formulaParameters[$variableToPlanValueName];
             $totalReal += $formulaParameters[$variableToRealValueName];
+            $i++;
         }
-        
+//        die;
         $value = $totalReal;
         $indicator
                 ->setTotalPlan($totalPlan)
                 ->setValueFinal($value);
-//        if($indicator->getParent() !== null){
-//            $this->refreshValueIndicator($indicator->getParent());
-//        }
     }
     
     /**
@@ -1029,9 +1038,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }//fin for each
         }//fin for each childrens
         
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($resultsItems);
+        $i = 0;
         $totalPlan = $totalReal = 0.0;
         //Calcular el total plan y real.
         foreach ($resultsItems as $resultItem) {
+            $i++;
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0) && $i !== $valuesIndicatorQuantity){
+                        continue;
+                    }
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST){
+                    continue;
+                }
+            }
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
@@ -1047,6 +1069,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         }
         
+        //Completar la cantidad de resultados de acuerdo a la frecuencia
         $valuesIndicator = $indicator->getValuesIndicator();
         if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
             $user = $this->getUser();

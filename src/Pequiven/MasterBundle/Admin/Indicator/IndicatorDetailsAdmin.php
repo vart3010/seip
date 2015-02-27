@@ -35,9 +35,12 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
             ->add('previusValue')
             ->add('lastNotificationBy')
             ->add('lastNotificationAt')
-//            ->add('lastNotificationParameters')
             ->add('lastFormulaUsed')
             ->add('resultPlanUnitGroup')
+            ->add('sourceResult','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
+                'translation_domain' => 'PequivenIndicatorBundle',
+            ))
             ;
     }
     
@@ -66,6 +69,10 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
             ->add('resultPlanUnitGroup','choice',$selectUnitParameters)
             ->add('resultRealUnitGroup','choice',$selectUnitParameters)
             ->add('resultManagementUnitGroup','choice',$selectUnitParameters)
+            ->add('sourceResult','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::getSourceResultLabels(),
+                'translation_domain' => 'PequivenIndicatorBundle',
+            ))
             ;
     }
     
