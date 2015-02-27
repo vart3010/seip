@@ -425,10 +425,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-//                var_dump($this->calculateRangeGood($indicator,$tendenty));
-//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
-//                var_dump($this->calculateRangeBad($indicator,$tendenty));
-//                die();
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
@@ -448,9 +444,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //            if($indicator->getBackward()){//En caso de que el indicador sea calculado al revés
 //                $result = 100 - $indicator->getResult();
 //            }
-//            var_dump($indicator->getResult());
-//            var_dump($result);
-//            var_dump($resultValue);
 //            $indicator->setResult($result);
             $indicator->setResultReal($result);
             
@@ -485,12 +478,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                      $result = $this->recalculateResultByRange($indicator,$tendenty);
 //                    if($result > 100){
-                        $result = 100;
+//                        $result = 100;
 //                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
 //                    $result = $result/2;
-                    $result = 50;
+                    $result = $this->recalculateResultByRange($indicator,$tendenty);
+                    $result = $result / 2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
@@ -526,6 +521,39 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
+    }
+    
+    
+    /**
+     * Función que recalcula el resultado para el rango verde
+     * @param Indicator $indicator
+     * @param type $result
+     * @return type
+     */
+    public function recalculateResultByRange(Indicator &$indicator,  Tendency &$tendency){
+        $arrangementRange = $indicator->getArrangementRange();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        $result = $indicator->getResult();
+        
+        if($tendency->getRef() == Tendency::TENDENCY_EST){
+            
+            $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2)/2;
+            if($result > $varToCatch){
+                $varSum = bcadd($varToCatch, $varToCatch, 2);
+                $varResult = bcadd($result, 0,2);
+                $varMinus = bcsub($varSum,$varResult,2);
+                $varMulti = $varMinus*100;
+                $result = bcdiv($varMulti, $varToCatch, 2);
+            } else{
+                $varResult = bcadd($result, 0,2);
+                $varMinus = bcsub($varToCatch,$varResult,2);
+                $varMulti = $varMinus*100;
+                $varDiv = bcdiv($varMulti, $varToCatch, 2);
+                $result = bcsub(100, $varDiv, 2);
+            }
+        }
+        
+        return $result;
     }
     
     /**
