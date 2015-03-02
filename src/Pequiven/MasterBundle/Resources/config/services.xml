@@ -70,6 +70,9 @@
         <service id="pequiven.repository.monitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
         </service>
+        <service id="pequiven.repository.quality_system" class="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem" />
+        </service>
     </services>
     
 </container>

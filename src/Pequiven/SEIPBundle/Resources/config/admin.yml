@@ -222,7 +222,6 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-            - [ setTranslationDomain, [SonataAdminBundle]]
             
     sonata.admin.quality_system.quality_system:
         class: Pequiven\MasterBundle\Admin\QualitySystem\QualitySystemAdmin

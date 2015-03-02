@@ -2068,4 +2068,21 @@ angular.module('seipModule.controllers', [])
                 });
             });
         })
+        .controller('TableGerenciaController',function($scope){
+            $scope.model = {
+                qualitySystem: []
+            };
+            
+            $scope.exportToXLS = function(id)
+            {
+                var parameters = {
+                    id: id
+                };
+                if ($scope.model.qualitySystem != null && $scope.model.qualitySystem.id != undefined) {
+                    parameters.qualitySystem = $scope.model.qualitySystem.id;
+                }
+                var url = 'pequiven_gerenciafirst_export';
+                $scope.urlExport = Routing.generate(url,parameters);
+            };
+        })
         ;

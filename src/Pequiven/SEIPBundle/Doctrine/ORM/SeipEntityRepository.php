@@ -22,6 +22,23 @@ use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
  */
 class SeipEntityRepository extends EntityRepository
 {
+    public function getQueryAllEnabled()
+    {
+        $qb = $this->getQueryBuilder();
+        $qb
+            ->andWhere($this->getAlias().'.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ;
+        return $qb;
+    }
+    
+    public function getAllEnabled()
+    {
+        $qb = $this->getQueryAllEnabled();
+        return $qb->getQuery()->getResult();
+    }
+
+
     protected function applyPeriodCriteria(QueryBuilder &$queryBuilder, $alias = null) 
     {
         if($alias === null){

@@ -19,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table()
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class QualitySystem 
