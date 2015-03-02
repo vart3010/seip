@@ -45,7 +45,7 @@ class ResultController extends ResourceController
                 $criteria['gerenciaSecondId'] = $user->getGerenciaSecond();
             }elseif ($rol == Rol::ROLE_MANAGER_FIRST) {
                 $criteria['gerenciaFirstId'] = $user->getGerencia();
-            }elseif ($rol == Rol::ROLE_GENERAL_COMPLEJO || $rol == Rol::ROLE_DIRECTIVE) {
+            }elseif ($rol == Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['complejoId'] = $user->getComplejo();
             }
         }

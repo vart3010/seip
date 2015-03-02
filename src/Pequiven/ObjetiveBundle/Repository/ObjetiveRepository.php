@@ -251,7 +251,6 @@ class ObjetiveRepository extends EntityRepository {
         $this->applyPeriodCriteria($queryBuilder);
         $this->applySorting($queryBuilder, $orderBy);
         
-        
         return $this->getPaginator($queryBuilder);
     }
     

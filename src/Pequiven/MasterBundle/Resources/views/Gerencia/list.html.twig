@@ -1,6 +1,8 @@
 {#% extends "::base.html.twig" %#}
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
 {% trans_default_domain 'PequivenMasterBundle' %}
+
 {% block title %}- {{ 'pequiven_master.gerencia_first'|trans }}{% endblock %}
 
 
@@ -20,6 +22,26 @@
 {% block body %}
     <div ng-controller="TableFormatController">
         <!--<div ng-controller="ObjetiveTacticController">-->
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_master.filters.impactToSIG'|trans }}</label>
+                            <br/>
+                            <div class="with-mid-padding" ng-init="" >
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.complejo" >
+                                    <option value=''></option>
+                                    <option value='1'>Si</option>
+                                    <option value='0'>No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </details>
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaFirstList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
@@ -58,6 +80,11 @@
                 
                 return response;
             }
+            $(document).ready(function(){
+                $('.select2').select2({
+                    allowClear: true
+                });
+            });
     </script>
     
 {% endblock %}

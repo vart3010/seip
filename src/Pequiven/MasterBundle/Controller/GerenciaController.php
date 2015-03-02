@@ -401,12 +401,9 @@ class GerenciaController extends baseController {
                 foreach($arrangementProgramsTactics as $arrangementProgram){
                     $textArrangementProgramsTactic.= $arrangementProgram->getRef() . "\n";
                 }
-            } else{
+            } else {
                 $textArrangementProgramsTactic = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
             }
-//            var_dump($objetiveTactic->getRef());
-//            var_dump($rowIniTac.' - '.$rowFinTac);
-//            var_dump($row);
             $activeSheet->setCellValue('M'.$rowIniTac, $textArrangementProgramsTactic);//Seteamos los Programas de Gestión del Objetivo Táctico
             
             if($rowFinTac < $rowIniTac){
@@ -464,8 +461,6 @@ class GerenciaController extends baseController {
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
             $activeSheet->getStyle(sprintf('A%s:V%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
-        
-//        die();
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
         

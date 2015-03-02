@@ -364,14 +364,12 @@ class IndicatorStrategicController extends baseController {
         $response = new JsonResponse();
 
         $data = array();
-        $options = array();
-        $em = $this->getDoctrine()->getManager();
-
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId))->getRef();
-        $options['type'] = 'STRATEGIC';
-        $ref = $this->setNewRef($options);
-
+       
+        $sequenceGenerator = $this->getSequenceGenerator();
+        $indicator = $this->get('pequiven.repository.objetive')->find($objetiveStrategicId);
+        $ref = $sequenceGenerator->getNextRefChildIndicatorByObjetive($indicator);
+        
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
@@ -431,5 +429,14 @@ class IndicatorStrategicController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
+     */
+    private function getSequenceGenerator() 
+    {
+        return $this->get('seip.sequence_generator');
     }
 }
