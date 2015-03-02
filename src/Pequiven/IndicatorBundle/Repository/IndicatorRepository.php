@@ -99,6 +99,7 @@ class IndicatorRepository extends EntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
+        $orderBy['i.ref'] = 'ASC';
         return $this->createPaginator($criteria, $orderBy);
     }
     
