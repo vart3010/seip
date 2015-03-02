@@ -14,7 +14,7 @@
 
 {% block body %}
     
-{#    {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}
+{#    {{ boxRender.renderBox('pequiven_indicator_box_iconssummary')|raw }}#}
     
     <div ng-controller="DashboardController" class="dashboard" ng-init="renderChartResult('chartContainerResult',{{ data|json_encode() }},'{{ linestrategic.description }}','')" style="height: {{ heightChart }}px;">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
