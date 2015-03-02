@@ -340,6 +340,7 @@ result:
         columnGerenciaSecond: Gerencia 2da Línea
     results: Resultados
     objetiveOperative: Objetivos Operativos
+    objetiveStrategics: Objetivos Estratégicos
     not_objetives_in_level: No existen objetivos asociados en este nivel
     captionObjetiveOperative: Resultados Objetivos Operativos
     captionObjetiveTactical: Resultados Objetivos Tacticos

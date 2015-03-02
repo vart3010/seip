@@ -8,12 +8,15 @@
 
 namespace Pequiven\MasterBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+
+
 /**
  * Description of LineStrategic
  *
  * @author matias
  */
-class LineStrategic {
+abstract class LineStrategic {
     //put your code here
     const LINE_DEFAULT = 0;
     const LINE_EFICIENCIA_CALIDAD = 1;

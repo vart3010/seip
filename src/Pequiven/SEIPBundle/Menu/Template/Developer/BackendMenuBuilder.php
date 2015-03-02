@@ -553,6 +553,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                             'route' => 'pequiven_line_strategic_view_dashboard',
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.strategics', $section)));
                         $visualize->addChild($itemStrategicsVisualize);
+                        
+                        $itemStrategicsObjetives = $this->factory->createItem('results.visualize.objetive.strategics', array(
+                            'route' => 'pequiven_line_strategic_view_objetives_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
+                        $visualize->addChild($itemStrategicsObjetives);
                     }
                     
                      $itemPeriod = $this->factory->createItem('results.period',$this->getSubLevelOptions())
