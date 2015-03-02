@@ -41,10 +41,11 @@ class QualitySystem
     private $description;
     
     /**
-     *
+     * Habilitado para consultas
      * @var boolean
+     * @ORM\Column(name="enabled",type="boolean")
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * Date created
@@ -167,5 +168,32 @@ class QualitySystem
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * Set enabled
+     *
+     * @param boolean $enabled
+     * @return QualitySystem
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+    
+    public function __toString() {
+        return $this->getDescription()?:'-';
     }
 }

@@ -222,6 +222,18 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.quality_system.quality_system:
+        class: Pequiven\MasterBundle\Admin\QualitySystem\QualitySystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Sistemas de calidad" ,label: "Sistema de calidad" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
             
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
