@@ -237,7 +237,6 @@ class GerenciaController extends baseController {
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_objetivos.xls');
         $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
-//        $objPHPExcel = new \PHPExcel();
         $objPHPExcel
                 ->getProperties()
                 ->setCreator("SEIP")
@@ -272,7 +271,6 @@ class GerenciaController extends baseController {
             $objetivesOperatives = $objetiveTactic->getChildrens();
             $totalObjetiveOperatives = count($objetivesOperatives);
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
-//                var_dump($objetiveTactic->getRef().' - '.count($objetivesOperatives));
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
                     if($qualitySystem !== null && $qualitySystem !== $objetiveOperative->getQualitySystem()){
                         continue;
@@ -474,6 +472,10 @@ class GerenciaController extends baseController {
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
             $activeSheet->getStyle(sprintf('A%s:V%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
+        $row = $rowFinTac + 1;
+        $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
+        $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
+        $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
         

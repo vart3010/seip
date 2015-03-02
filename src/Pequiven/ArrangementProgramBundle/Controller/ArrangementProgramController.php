@@ -1067,6 +1067,7 @@ class ArrangementProgramController extends SEIPController
         }
         
         $management = (string)$resource->getTacticalObjective()->getGerencia();
+        $description = $resource->getDescription() ?:($this->trans('pequiven.arrangement_program.description_none'));
         
         $responsibles = '';
         
@@ -1104,6 +1105,7 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('B7',  $location)
                 ->setCellValue('F7',  $management)
                 ->setCellValue('J7',  $responsibles)
+                ->setCellValue('AA7',  $description)
             ;
         
         $timeline = $resource->getTimeline();
@@ -1302,6 +1304,10 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('L'.$rowDetails,$approvedBy)
                 ->setCellValue('AI'.$rowDetails,$approvalDate)
                 ;
+        $row = $rowDetails + 3;
+        $activeSheet->setCellValue(sprintf('B%s',$row),'NIVEL DE REVISION: 1');
+        $activeSheet->setCellValue(sprintf('AI%s',$row),'C-PG-DM-OI-R-002');
+        $activeSheet->getStyle(sprintf('B%s:AI%s',$row,$row))->getFont()->setSize(8);
         
         $activeSheet->calculateColumnWidths();
         $activeSheet->getRowDimension('1');
