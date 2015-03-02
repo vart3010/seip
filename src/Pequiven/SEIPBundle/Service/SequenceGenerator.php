@@ -64,6 +64,7 @@ class SequenceGenerator
     
     /**
      * Genera la referencia del objetivo
+     * 
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
      * @return string
      * @throws \Exception
@@ -134,6 +135,122 @@ class SequenceGenerator
 //        var_dump('Next Ref '.$nextRef);
 //        var_dump($refChildDefined);
 //        die;
+        return $nextRef;
+    }
+    
+    /**
+     * Genera la referencia del indicador siguiente
+     * 
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $objetive
+     * @return string
+     * @throws \Exception
+     */
+    public function getNextRefChildIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        $parents = $indicator->getObjetives();
+        $quantityParents = count($parents);
+        if($quantityParents == 0){
+            throw new \Exception(sprintf('The indicator "%s (%s)" is not defined parent objetive',(string)$indicator,$indicator->getId()));
+        }
+        
+        $lastParent = $parents[count($parents) - 1]; 
+        $childrens = $lastParent->getIndicators();
+        
+        $refParent = $lastParent->getRef();
+        $lengthRefPartent = (count(explode('.', $refParent)) - 1);
+        
+        $refChildDefined = array();
+        foreach ($childrens as $child) {
+            $refChildDefined[] = $child->getRef();
+        }
+        $lastDigit = $lastDigitTemp = 0;
+        foreach ($refChildDefined as $value) {
+            if($value == null){
+                continue;
+            }
+            $valueExplode = explode('.', $value);
+            for($i = ($lengthRefPartent + 1); $i > 0; $i--){
+                if($valueExplode[$i] == ''){
+                    continue;
+                }
+                $lastDigitTemp = $valueExplode[$i];
+                break;
+            }
+            $lastDigitTemp = (int)str_replace('m', '', $lastDigitTemp);
+            if($lastDigitTemp > $lastDigit){
+                $lastDigit = $lastDigitTemp;
+            }
+        }
+        $lastDigit++;
+        
+        $prefix = $indicator->getIndicatorLevel()->getPrefixRef($indicator->getIndicatorLevel()->getLevel());
+        $nextRef = $prefix .'-'.$refParent . $lastDigit.'.';
+        
+//        var_dump('Ref Parent Objetive '.$refParent);
+//        var_dump('ID Parent '.$lastParent->getId());
+//        var_dump('ID child '.$indicator->getId());
+//        var_dump('count Parent '.count($parents));
+//        var_dump('Count childrens '.count($childrens));
+//        var_dump('Ref parent '.$refParent);
+//        var_dump('Ref length Parent '.$lengthRefPartent);
+//        var_dump('Ref length child '.$lengthRefPartent);
+//        var_dump('Next Ref '.$nextRef);
+//        var_dump($refChildDefined);
+        return $nextRef;
+    }
+    
+    /**
+     * Genera la referencia del indicador siguiente a partir del objetivo
+     * 
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
+     * @return string
+     * @throws \Exception
+     */
+    public function getNextRefChildIndicatorByObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    {
+        $lastParent = $objetive; 
+        $childrens = $lastParent->getIndicators();
+        
+        $refParent = $lastParent->getRef();
+        $lengthRefPartent = (count(explode('.', $refParent)) - 1);
+        
+        $refChildDefined = array();
+        foreach ($childrens as $child) {
+            $refChildDefined[] = $child->getRef();
+        }
+        $lastDigit = $lastDigitTemp = 0;
+        foreach ($refChildDefined as $value) {
+            if($value == null){
+                continue;
+            }
+            $valueExplode = explode('.', $value);
+            for($i = ($lengthRefPartent + 1); $i > 0; $i--){
+                if($valueExplode[$i] == ''){
+                    continue;
+                }
+                $lastDigitTemp = $valueExplode[$i];
+                break;
+            }
+            $lastDigitTemp = (int)str_replace('m', '', $lastDigitTemp);
+            if($lastDigitTemp > $lastDigit){
+                $lastDigit = $lastDigitTemp;
+            }
+        }
+        $lastDigit++;
+        $level = $objetive->getObjetiveLevel()->getLevel();
+        $prefix = \Pequiven\IndicatorBundle\Model\IndicatorLevel::getPrefixRef($level);
+        $nextRef = $prefix .'-'.$refParent . $lastDigit.'.';
+        
+//        var_dump('Ref Parent Objetive '.$refParent);
+//        var_dump('ID Parent '.$lastParent->getId());
+//        var_dump('ID child '.$indicator->getId());
+//        var_dump('count Parent '.count($parents));
+//        var_dump('Count childrens '.count($childrens));
+//        var_dump('Ref parent '.$refParent);
+//        var_dump('Ref length Parent '.$lengthRefPartent);
+//        var_dump('Ref length child '.$lengthRefPartent);
+//        var_dump('Next Ref '.$nextRef);
+//        var_dump($refChildDefined);
         return $nextRef;
     }
     

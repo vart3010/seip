@@ -381,7 +381,8 @@ class PrePlanningService extends ContainerAware
                     
                     try {
                         $itemInstanceCloned = null;
-                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE){
+                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE)
+                        {
                             $level = $itemInstance->getObjetiveLevel()->getLevel();
                             $parents = $itemInstance->getParents();
 
@@ -415,6 +416,9 @@ class PrePlanningService extends ContainerAware
                             $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
                             if(!$itemInstanceCloned){
                                 $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                                $ref = $sequenceGenerator->getNextRefChildIndicator($itemInstanceCloned);
+                                $itemInstanceCloned->setRef($ref);
+                                $this->persist($itemInstanceCloned);
                             }
                         }
                         if($itemInstanceCloned){

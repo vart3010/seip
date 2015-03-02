@@ -52,21 +52,6 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
     }
     
     protected function configureFormFields(FormMapper $form) {
-//        $object = $this->getSubject();
-//        $childrensParameters = array(
-//            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
-//            'multiple' => true,
-//            'required' => false,
-//        );
-//        if($object != null && $object->getId() !== null){
-//            $indicatorLevel = $object->getIndicatorLevel();
-//            $level = $indicatorLevel->getLevel();
-//            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
-//                return $repository->getQueryChildrenLevel($level);
-//            };
-//           
-//        }
-//        
         $form
             ->add('objetive')
             ->add('indicator')
@@ -103,19 +88,10 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) {
-//        $filter
-//            ->add('ref')
-//            ->add('description')
-//            ->add('formula')
-//            ->add('typeOfCalculation',null,array(),'choice',array(
-//                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
-//                'translation_domain' => 'PequivenIndicatorBundle'
-//            ))
-//            ->add('tendency')
-//            ->add('frequencyNotificationIndicator')
-//            ->add('valueFinal')
-//            ->add('enabled')
-//            ;
+        $filter
+            ->add('objetive')
+            ->add('indicator')
+            ;
     }
     
     protected function configureListFields(ListMapper $list) {

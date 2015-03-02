@@ -40,10 +40,48 @@ class DefaultController extends Controller {
     }
     
     /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/test",name="seip_change_period_test")
+     */
+    public function testAction(\Symfony\Component\HttpFoundation\Request $request )
+    {
+        $sequenceGenerator = $this->getSequenceGenerator();
+//        $indicator = $this->get('pequiven.repository.indicator')->find('14');
+        $indicator = $this->get('pequiven.repository.indicator')->find('65');
+        $next = $sequenceGenerator->getNextRefChildIndicator($indicator);
+        var_dump($next);
+    }
+    
+    /**
+     * 
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/testObjetive",name="seip_objetive_test")
+     */
+    public function testObjetiveAction(\Symfony\Component\HttpFoundation\Request $request )
+    {
+        $sequenceGenerator = $this->getSequenceGenerator();
+//        $indicator = $this->get('pequiven.repository.objetive')->find('37');
+        $indicator = $this->get('pequiven.repository.objetive')->find('20');
+        $ref = $sequenceGenerator->getNextRefChildObjetive($indicator);
+        var_dump($ref);
+        
+    }
+    
+    /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
     public function getPeriodService()
     {
         return $this->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
+     */
+    private function getSequenceGenerator() 
+    {
+        return $this->get('seip.sequence_generator');
     }
 }

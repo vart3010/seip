@@ -99,4 +99,22 @@ abstract class IndicatorLevel extends \Pequiven\SEIPBundle\Model\Common\CommonOb
     function getLabelForLevel() {
         return $this->getLabelLevel($this->level);
     }
+    
+    public static function getPrefixRef($level)
+    {
+        $prefixIndicators = self::getPrefixIndicators();
+        if(!isset($prefixIndicators[$level])){
+            throw new \RuntimeException('Nivel del indicador invalido');
+        }
+        return $prefixIndicators[$level];
+    }
+    
+    public static function getPrefixIndicators()
+    {
+        return array(
+            self::LEVEL_ESTRATEGICO => 'IE',
+            self::LEVEL_TACTICO => 'IT',
+            self::LEVEL_OPERATIVO => 'IO',
+        );
+    }
 }
