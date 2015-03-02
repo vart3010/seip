@@ -128,7 +128,7 @@ class IndicatorStrategicController extends baseController {
                 throw $e;
             }
 
-            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $lastId));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             return $this->redirect($this->generateUrl('pequiven_indicator_register_redirect'));
@@ -192,11 +192,11 @@ class IndicatorStrategicController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $lastId));
-            $this->createArrangementRange($lastObjectInsert, $data);
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $lastId));
+            $this->createArrangementRange($object, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
-            $this->createObjetiveIndicator($lastObjectInsert);
+            $this->createObjetiveIndicator($object);
 
             $this->get('session')->getFlashBag()->add('success', $this->trans('action.messages.registerIndicatorStrategicSuccessfull', array(), 'PequivenIndicatorBundle'));
 
@@ -339,7 +339,7 @@ class IndicatorStrategicController extends baseController {
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_ESTRATEGICO;
 
-        $results = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
+        $results = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true));
         $totalResults = count($results);
 
         if (is_array($results) && $totalResults > 0) {
@@ -364,14 +364,12 @@ class IndicatorStrategicController extends baseController {
         $response = new JsonResponse();
 
         $data = array();
-        $options = array();
-        $em = $this->getDoctrine()->getManager();
-
         $objetiveStrategicId = $request->request->get('objetiveStrategicId');
-        $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveStrategicId))->getRef();
-        $options['type'] = 'STRATEGIC';
-        $ref = $this->setNewRef($options);
-
+       
+        $sequenceGenerator = $this->getSequenceGenerator();
+        $indicator = $this->get('pequiven.repository.objetive')->find($objetiveStrategicId);
+        $ref = $sequenceGenerator->getNextRefChildIndicatorByObjetive($indicator);
+        
         $data[] = array('ref' => $ref);
         $response->setData($data);
         return $response;
@@ -431,5 +429,14 @@ class IndicatorStrategicController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
+     */
+    private function getSequenceGenerator() 
+    {
+        return $this->get('seip.sequence_generator');
     }
 }

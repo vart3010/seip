@@ -185,8 +185,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 }
             }
 
-            foreach ($goals as $key => $goal) {
-//                var_dump($goal->getTimeLine()->getArrangementProgram()->getId());
+            foreach ($goals as $key => $goal)
+            {
                 $goalDetails = $goal->getGoalDetails();
                 $summary = $goalDetails->getSummary();
                 
@@ -238,31 +238,26 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
 //                    $canBeEvaluated = false;
 //                }
             }
-            foreach ($allIndicators as $indicator) {
-                if($indicator->hasNotification() === false){
-                    $url = $this->generateUrl('pequiven_indicator_show',
-                        array(
-                            'id' => $indicator->getId()
-                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                    );
-                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
-                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
-                        '%indicator%' => $link,
-                    ));
-                    $canBeEvaluated = false;
-                }
-            }
             
-//            var_dump($this->errors);
-//            die;
-//            var_dump(count($objetives));
-//            die;
+//            Se comento para no evaluar los indicadores en cero
+//            foreach ($allIndicators as $indicator) {
+//                if($indicator->hasNotification() === false){
+//                    $url = $this->generateUrl('pequiven_indicator_show',
+//                        array(
+//                            'id' => $indicator->getId()
+//                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+//                    );
+//                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+//                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+//                        '%indicator%' => $link,
+//                    ));
+//                    $canBeEvaluated = false;
+//                }
+//            }
+
             $resultService = $this->getResultService();
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
-//            var_dump($isValidAdvance);
             if(!$isValidAdvance){
-//                var_dump($resultService->getErrors());
-//                die;
                 $canBeEvaluated = $isValidAdvance;
                 $this->addErrorTrans($resultService->getErrors());
             }

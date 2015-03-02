@@ -4,6 +4,7 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block body %}
+    <br/>
     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
         <div class="alert alert-info text-align-right">
             <a href="{{ path('pequiven_seip_default_index', {'_switch_user': '_exit'}) }}" class="button red-gradient glossy">Terminar de suplantacion del usuario</a>

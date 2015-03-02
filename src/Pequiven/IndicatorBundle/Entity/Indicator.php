@@ -15,7 +15,7 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Table(name="seip_indicator")
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @author matias
+ * @ORM\HasLifecycleCallbacks()
  */
 class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
@@ -143,6 +143,15 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $objetives;
     
     /**
+     * LineStrategic
+     * 
+     * @var \Pequiven\MasterBundle\Entity\LineStrategic
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_linestrategics")
+     */
+    private $lineStrategics;
+    
+    /**
      * Periodo.
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -196,12 +205,12 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * Detalles del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",inversedBy="indicator",cascade={"persist","remove"})
      */
     protected $details;
     
     /**
-     * Indicador al que impacta este indicador
+     * Indicador al que suma este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
@@ -209,7 +218,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $parent;
     
     /**
-     * Indicadores que impactan a este indicador
+     * Indicadores que suman a este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator 
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
@@ -267,13 +276,29 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $requiredToImport = false;
     
     /**
+     * Detalles de la formula del indicador
+     * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    protected $formulaDetails;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="backward", type="boolean")
+     */
+    private $backward = false;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -733,7 +758,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function setValueFinal($valueFinal)
     {
         $this->progressToDate = 0;
-        if($valueFinal > 0 && $this->totalPlan > 0){
+        if($this->totalPlan > 0){
             $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
         }
         $this->valueFinal = $valueFinal;
@@ -976,6 +1001,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         if($this->id > 0){
             $this->id = null;
             
+            $this->ref = null;
             $this->createdAt = null;
             $this->lastDateCalculateResult = null;
             $this->updatedAt = null;
@@ -1072,5 +1098,103 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getRequiredToImport()
     {
         return $this->requiredToImport;
+    }
+    
+    /**
+     * Add lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     * @return Indicator
+     */
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics[] = $lineStrategics;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     */
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics->removeElement($lineStrategics);
+    }
+
+    /**
+     * Get lineStrategics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineStrategics()
+    {
+        return $this->lineStrategics;
+    }
+    
+    /**
+     * Add formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     * @return Indicator
+     */
+    public function addFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $formulaDetails->setIndicator($this);
+        $this->formulaDetails->add($formulaDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     */
+    public function removeFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $this->formulaDetails->removeElement($formulaDetails);
+    }
+
+    /**
+     * Get formulaDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormulaDetails()
+    {
+        return $this->formulaDetails;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $backward
+     * @return Indicator
+     */
+    public function setBackward($backward)
+    {
+        $this->backward = $backward;
+
+        return $this;
+    }
+
+    /**
+     * Get backward
+     *
+     * @return boolean 
+     */
+    public function getBackward()
+    {
+        return $this->backward;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    function prePersist()
+    {
+        $this->details = new Indicator\IndicatorDetails;
     }
 }

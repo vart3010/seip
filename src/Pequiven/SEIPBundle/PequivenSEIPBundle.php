@@ -7,7 +7,6 @@ use Pequiven\CoreBundle\PequivenCoreBundle;
 
 class PequivenSEIPBundle extends Bundle
 {
-//    public function getParent() {
-//        return 'TecnocreacionesVzlaGovernmentBundle';
-//    }
+    const VERSION = 'v1.48';
+    const VERSION_DATE = '26-02-2015 1:58pm';
 }

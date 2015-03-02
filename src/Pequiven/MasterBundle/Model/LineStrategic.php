@@ -35,7 +35,6 @@ class LineStrategic {
         $this->line_name[self::LINE_SHA] = 'LINE_SHA';
         $this->line_name[self::LINE_GESTION_TALENTO] = 'LINE_GESTION_TALENTO_HUMANO';
         $this->line_name[self::LINE_RESP_SOCIAL] = 'LINE_RESPONSABILIDAD_SOCIAL';
-
     }
     
     /**
@@ -44,5 +43,25 @@ class LineStrategic {
      */
     public function getLineNameArray() {
         return $this->line_name;
+    }
+    
+    /**
+     * Retorna los íconos de cada Línea Estratégica
+     * 
+     * @staticvar array $icons
+     * @return string
+     */
+    static function getIcons()
+    {
+        static $icons = array(
+            self::LINE_EFICIENCIA_CALIDAD => 'bundles/pequivenseip/icons/icon_mind.png',
+            self::LINE_SOST_FINANCIERA => 'bundles/pequivenseip/icons/icon_coin.png',
+            self::LINE_COMERCIALIZACION => 'bundles/pequivenseip/icons/icon_businessmen.png',
+            self::LINE_CRECIMIENTO => 'bundles/pequivenseip/icons/icon_graphic.png',
+            self::LINE_SHA => 'bundles/pequivenseip/icons/icon_worker.png',
+            self::LINE_GESTION_TALENTO => 'bundles/pequivenseip/icons/icon_connected.png',
+            self::LINE_RESP_SOCIAL => 'bundles/pequivenseip/icons/icon_family.png',
+        );
+        return $icons;
     }
 }

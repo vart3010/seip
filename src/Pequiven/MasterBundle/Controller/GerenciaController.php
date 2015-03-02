@@ -8,17 +8,10 @@
 
 namespace Pequiven\MasterBundle\Controller;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Pequiven\MasterBundle\Entity\Gerencia;
 use Pequiven\MasterBundle\Entity\Complejo;
 use Pequiven\MasterBundle\Form\Type\Gerencia\RegistrationFormType as BaseFormType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseController;
 /**
  * Controlador de gerencia de primera linea
@@ -85,10 +78,6 @@ class GerenciaController extends baseController {
                     ));
         }
         
-        
-        /*return $this->container->get('templating')->renderResponse('PequivenMasterBundle:Gerencia:register.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView(),
-                ));*/
         return array(
             'form' => $form->createView(),
             );
@@ -97,7 +86,6 @@ class GerenciaController extends baseController {
      /**
      * Función que devuelve el paginador con las gerencias de 2da Línea
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function gerenciaFirstListAction(Request $request){
         
@@ -266,6 +254,8 @@ class GerenciaController extends baseController {
         
         $rowIniTac = $row;//Fila Inicial del Objetivo Táctico
         $rowFinTac = $row;//Fila Final del Objetivo Táctico
+        
+        $lastRowOpe = 8;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
@@ -274,6 +264,7 @@ class GerenciaController extends baseController {
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
 //                var_dump($objetiveTactic->getRef().' - '.count($objetivesOperatives));
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
+                    $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                     $indicatorsOperatives = $objetiveOperative->getIndicators();
                     $totalIndicatorOperatives = count($indicatorsOperatives);
@@ -320,12 +311,17 @@ class GerenciaController extends baseController {
                     $activeSheet->mergeCells(sprintf('P%s:P%s',($rowIniOpe),($rowFinOpe)));
                     $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinOpe)));
                     $activeSheet->mergeCells(sprintf('V%s:V%s',($rowIniOpe),($rowFinOpe)));
+                    $contTotalObjOperatives++;
+                    if($totalObjetiveOperatives = $contTotalObjOperatives){
+                        $lastRowOpe = $rowIniOpe;
+                    }
                 }
                 
                 if($totalIndicatorTactics > 0){//Si el Objetivo Táctico tiene Indicadores Táctico
                     $rowsSectionOperative = $row - $rowIniTac;
                     $rowIndTac = $rowIniTac;
                     $contIndTac = 0;
+
                     foreach($indicatorsTactics as $indicatorTactic){
                         $activeSheet->setCellValue('I'.$rowIndTac, $indicatorTactic->getRef().' '.$indicatorTactic->getDescription());//Seteamos el Indicador Táctico
                         $activeSheet->setCellValue('J'.$rowIndTac, $indicatorTactic->getFormula()->getEquation());//Seteamos la Fórmula del Indicador Táctico
@@ -335,9 +331,22 @@ class GerenciaController extends baseController {
                             $activeSheet->mergeCells(sprintf('I%s:I%s',($rowIndTac),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('J%s:J%s',($rowIndTac),($rowFinTac)));
                             $activeSheet->mergeCells(sprintf('L%s:L%s',($rowIndTac),($rowFinTac)));
-                        }    
+                        }
                         $rowIndTac++;
                     }
+                    
+                    if($totalIndicatorTactics > $rowsSectionOperative){
+                        $rowFinTac = $rowIndTac - 1;
+                        $activeSheet->mergeCells(sprintf('N%s:N%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('O%s:O%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('P%s:P%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('Q%s:Q%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('R%s:R%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('S%s:S%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('U%s:U%s',($rowIniOpe),($rowFinTac)));
+                        $activeSheet->mergeCells(sprintf('V%s:V%s',($rowIniOpe),($rowFinTac)));
+                    }
+                    
                 } else{//En caso de que el Objetivo Táctico no tenga Indicadores Tácticos
                     $activeSheet->setCellValue('I'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
                     $activeSheet->setCellValue('J'.$rowIniTac, $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle'));//Seteamos el texto de que no hay cargado
@@ -395,9 +404,14 @@ class GerenciaController extends baseController {
             } else{
                 $textArrangementProgramsTactic = $this->trans('miscellaneous.noCharged', array(), 'PequivenSEIPBundle');
             }
-            
+//            var_dump($objetiveTactic->getRef());
+//            var_dump($rowIniTac.' - '.$rowFinTac);
+//            var_dump($row);
             $activeSheet->setCellValue('M'.$rowIniTac, $textArrangementProgramsTactic);//Seteamos los Programas de Gestión del Objetivo Táctico
             
+            if($rowFinTac < $rowIniTac){
+                $rowFinTac = $row - 1;
+            }
             $activeSheet->mergeCells(sprintf('G%s:G%s',($rowIniTac),($rowFinTac)));
             $activeSheet->mergeCells(sprintf('H%s:H%s',($rowIniTac),($rowFinTac)));
             $activeSheet->mergeCells(sprintf('M%s:M%s',($rowIniTac),($rowFinTac)));
@@ -446,10 +460,12 @@ class GerenciaController extends baseController {
         }
 
         $row = 8;//Fila Inicial del skeleton
-        for($i=$row;$i<($row+$contResult);$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
+        for($i=$row;$i<=$rowFinTac;$i++){//Recorremos toda la matriz para setear el alto y los bordes en cada celda
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
             $activeSheet->getStyle(sprintf('A%s:V%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
+        
+//        die();
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
         

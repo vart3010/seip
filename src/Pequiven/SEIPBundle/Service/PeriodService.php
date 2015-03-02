@@ -86,36 +86,36 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive()
+    public function getPeriodActive($originalEntity = false)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
         $periodActiveSerialize = $session->get('periodActiveSerialize');
         $periodRepository = $this->getRepository();
         $period = null;
-        if($periodActiveSerialize !== null){
-            $period = unserialize($periodActiveSerialize);
-            $period = $this->getDoctrine()->getManager()->merge($period);
-        }
+//        if($periodActiveSerialize !== null){
+//            $period = unserialize($periodActiveSerialize);
+//            if($period){
+//                $class = get_class($period);
+//                if (true === $pos = strrpos($class, '\\'.\Doctrine\Common\Persistence\Proxy::MARKER.'\\')) {
+////                    $period = $this->getDoctrine()->getManager()->merge($period);
+//                    $period = $periodRepository->find($period->getId());
+//                }
+//            }
+//        }
         if(!$period){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
             $period = $periodRepository->findOneActive();
         }
+//        $period = $periodRepository->find($period->getId());
+//        var_dump($periodActiveSerialize);
+//        var_dump($period);
+//        var_dump($period->getName());
+//        var_dump($period);
+//        die;
         
-        return $period;
-    }
-    
-    /**
-     * Retorna la entidad del periodo activo para persistir en la base de datos la relacion
-     * @return \Pequiven\SEIPBundle\Entity\Period
-     */
-    public function getEntityPeriodActive($forPersist = false)
-    {
-        $period = $this->getPeriodActive();
-//        $periodRepository = $this->getRepository();
-//        return $periodRepository->find($period->getId());
         return $period;
     }
     
@@ -132,6 +132,18 @@ class PeriodService extends ContainerAware
         $user = $this->getUser();
         $user->setPeriod($period);
         $this->getUserManager()->updateUser($user);
+    }
+    
+    /**
+     * Retorna la entidad del periodo activo para persistir en la base de datos la relacion
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getEntityPeriodActive($forPersist = false)
+    {
+        $period = $this->getPeriodActive();
+//        $periodRepository = $this->getRepository();
+//        return $periodRepository->find($period->getId());
+        return $period;
     }
     
     /**

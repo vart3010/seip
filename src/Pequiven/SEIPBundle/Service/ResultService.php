@@ -120,7 +120,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * Calcula los resultados
      * @param \Pequiven\SEIPBundle\Entity\Result\Result $result
      */
-    public function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) {
+    public function calculateResult(\Pequiven\SEIPBundle\Entity\Result\Result &$result,$andFlush = true) 
+    {
         $em = $this->getDoctrine()->getManager();
         
         if($result->getTypeResult() == \Pequiven\SEIPBundle\Entity\Result\Result::TYPE_RESULT_ARRANGEMENT_PROGRAM){
@@ -420,20 +421,39 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $error = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendenty);
         $result = 0;
-        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX){
+        if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MAX)
+        {
             $result = $indicator->getResult();
+            
             $indicator->setResultReal($result);
             
             if($error == null){
-//                var_dump($this->calculateRangeGood($indicator,$tendenty));
-//                var_dump($this->calculateRangeMiddle($indicator,$tendenty));
-//                var_dump($this->calculateRangeBad($indicator,$tendenty));
-//                die();
+                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                    $result = 100;
+                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                    $result = $this->recalculateResultByRange($indicator,$tendenty);
+                    $result = $result / 2;
+                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                    $result = 0;
+                }
+            } else{
+                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
+            }
+            
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN)//Decreciente
+        {
+            $result = $indicator->getResult();
+            $resultValue = $indicator->getResult();
+            $indicator->setResultReal($result);
+            
+            if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                     if($result > 100){
                         $result = 100;
                     }
+                    $result = 100 - $result;
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                    $result = 100 - $result;
                     $result = $result/2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
@@ -442,35 +462,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
             }
             
-        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_MIN){//Decreciente
-            $result = 100 - $indicator->getResult();
-            $indicator->setResultReal($result);
-            
-            if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
-                    }
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
-                    $result = 0;
-                }
-            } else{
-                throw new \LogicException(sprintf('El indicador "%s(%s)" %s',$indicator->getRef(),$indicator->getId(),$error));
-            }
-            
-        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST){
+        }else if($tendenty->getRef() == \Pequiven\MasterBundle\Model\Tendency::TENDENCY_EST)
+        {
             $result = $indicator->getResult();
             $indicator->setResultReal($result);
             
             if($error == null){
                 if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
-                    }
+                      $result = $this->recalculateResultByRange($indicator,$tendenty);
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $result/2;
+                    $result = $this->recalculateResultByRange($indicator,$tendenty);
+                    $result = $result / 2;
                 } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                     $result = 0;
                 }
@@ -484,6 +486,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
+        
         $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
@@ -501,6 +504,49 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
+    }
+    
+    
+    /**
+     * Función que recalcula el resultado para el rango verde
+     * @param Indicator $indicator
+     * @param type $result
+     * @return type
+     */
+    public function recalculateResultByRange(Indicator &$indicator,  Tendency &$tendency){
+        $arrangementRange = $indicator->getArrangementRange();
+        $result = $indicator->getResult();
+        $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        
+        if($tendency->getRef() == Tendency::TENDENCY_EST){
+            $varToCatch = bcadd($arrangementRange->getRankTopMixedBottom(), $arrangementRange->getRankTopMixedTop(), 2)/2;
+            if($result > $varToCatch){
+                $varSum = bcadd($varToCatch, $varToCatch, 2);
+                $varResult = bcadd($result, 0,2);
+                $varMinus = bcsub($varSum,$varResult,2);
+                $varMulti = $varMinus*100;
+                $result = bcdiv($varMulti, $varToCatch, 2);
+            } else{
+                $varResult = bcadd($result, 0,2);
+                $varMinus = bcsub($varToCatch,$varResult,2);
+                $varMulti = $varMinus*100;
+                $varDiv = bcdiv($varMulti, $varToCatch, 2);
+                $result = bcsub(100, $varDiv, 2);
+            }
+        }else if($tendency->getRef() == Tendency::TENDENCY_MAX){
+            if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
+                $varToCatch = $arrangementRange->getRankTopBasic();
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti,$varToCatch, 2);
+                
+            } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
+                $varToCatch = $arrangementRange->getRankTopMixedTop();
+                $varMulti = $result * 100;
+                $result = bcdiv($varMulti,$varToCatch, 2);
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -609,6 +655,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     
     /**
      * Cálculo de Rango Amarillo para los Indicadores con tendencia Estable
+     * 
      * @param type $result
      * @return boolean
      */
@@ -903,6 +950,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $value = ($value / $quantity);
 
         $indicator->setValueFinal($value);
+        $indicator->setResult($value);
     }
     
     /**
@@ -912,26 +960,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     private function calculateFormulaRealPlanAutomatic(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
+        
         $formula = $indicator->getFormula();
         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
         
         $valuesIndicator = $indicator->getValuesIndicator();
         
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($valuesIndicator);
+        $i = 0;
+        
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $totalPlan += $formulaParameters[$variableToPlanValueName];
             $totalReal += $formulaParameters[$variableToRealValueName];
+            $i++;
         }
-        
+//        die;
         $value = $totalReal;
         $indicator
                 ->setTotalPlan($totalPlan)
                 ->setValueFinal($value);
-//        if($indicator->getParent() !== null){
-//            $this->refreshValueIndicator($indicator->getParent());
-//        }
     }
     
     /**
@@ -945,6 +996,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         
         $resultsItems = array();
+        //Obtener los valores de los hijos
         foreach ($childrens as $child) {
             $i = 0;
             $formula = $child->getFormula();
@@ -974,19 +1026,42 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }//fin for each
         }//fin for each childrens
         
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($resultsItems);
+        $i = 0;
         $totalPlan = $totalReal = 0.0;
         //Calcular el total plan y real.
         foreach ($resultsItems as $resultItem) {
+            $i++;
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
+                        $totalPlan = $resultItem['plan'];
+                        $totalReal = $resultItem['real'];
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    continue;
+                }
+            }
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
         $formula = $indicator->getFormula();
-        $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
-        $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
+            $variableToRealValueName = $formula->getVariableToRealValue()->getName();
+        }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+            $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
+            $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
+        }
         
+        //Completar la cantidad de resultados de acuerdo a la frecuencia
         $valuesIndicator = $indicator->getValuesIndicator();
         if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
             $user = $this->getUser();
@@ -1021,9 +1096,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $valueIndicator->setValueOfIndicator($value);
             $i++;
         }
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
-//        die;
         $indicator
             ->setTotalPlan($totalPlan)
             ->setValueFinal($totalReal);
@@ -1055,6 +1127,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setValueFinal($value);
     }
     
+    /**
+     * Evalua una formula y evalua el resultado cuando el tipo de calculo es a partir de ecuarcion
+     * @param Formula $formula
+     * @param type $formulaParameters
+     * @return type
+     */
     private function getFormulaResultFromEQ(Formula $formula,$formulaParameters)
     {
         $equation_real = $equation_plan = 0.0;
@@ -1201,21 +1279,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                }
             }
             
-            $indicators = $objetive->getIndicators();
-            foreach ($indicators as $indicator) {
-                if($indicator->hasNotification() === false){
-                    $url = $this->generateUrl('pequiven_indicator_show',
-                        array(
-                            'id' => $indicator->getId()
-                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                    );
-                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
-                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
-                        '%indicator%' => $link,
-                    ));
-                    $valid = false;
-                }
-            }
+//            Se comento para no evaluar los indicadores en cero
+//            $indicators = $objetive->getIndicators();
+//            foreach ($indicators as $indicator) {
+//                if($indicator->hasNotification() === false){
+//                    $url = $this->generateUrl('pequiven_indicator_show',
+//                        array(
+//                            'id' => $indicator->getId()
+//                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+//                    );
+//                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+//                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+//                        '%indicator%' => $link,
+//                    ));
+//                    $valid = false;
+//                }
+//            }
             
             if(count($childrens) > 0){
                 $valid =  $this->validateAdvanceOfObjetives($childrens,$valid);

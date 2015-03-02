@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\PrePlanning;
+namespace Pequiven\MasterBundle\Controller\Admin;
+
+use Sonata\AdminBundle\Controller\CRUDController;
 
 /**
- * Item que se puede importar entre periodos
- * 
+ * Controlado admin de formula de detales
+ *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface PrePlanningObjectInterface 
+class CRUDFormulaDetailController extends CRUDController
 {
-    function setSourceImported($object);
-    
-    function getSourceImported($object);
+//    public function createAction() {
+//        parent::createAction();
+//    }
 }

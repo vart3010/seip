@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
 /**
  * Administrador del Indicador
@@ -38,28 +39,38 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('couldBePenalized')
             ->add('forcePenalize')
             ->add('requiredToImport')
+            ->add('details')
             ;
     }
     
-    protected function configureFormFields(FormMapper $form) {
+    protected function configureFormFields(FormMapper $form) 
+    {
         $object = $this->getSubject();
         $childrensParameters = array(
             'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
             'multiple' => true,
             'required' => false,
         );
+        $id = null;
         if($object != null && $object->getId() !== null){
             $indicatorLevel = $object->getIndicatorLevel();
             $level = $indicatorLevel->getLevel();
             $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
                 return $repository->getQueryChildrenLevel($level);
             };
-           
+            $id = $object->getId();
+        }
+        
+        if($object != null && $object->getId() !== null){
+            if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+                $form->add('lineStrategics');
+            }
         }
         
         $form
             ->add('ref')
             ->add('description')
+            ->add('lineStrategics')
             ->add('typeOfCalculation','choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
@@ -73,6 +84,23 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
+            ->add('formulaDetails','sonata_type_collection',
+                array(
+                     'cascade_validation' => true,
+                     'by_reference' => false,
+//                    'type_options' => array(
+//                        'delete' => true,
+//                    ),
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+//                    'sortable' => 'position',
+                    'link_parameters' => array('indicator_id' => $id)
+                ),
+                array(
+                )
+            )    
             ->add('couldBePenalized',null,array(
                 'required' => false,
             ))
@@ -85,6 +113,22 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('enabled',null,array(
                 'required' => false,
             ))
+            ->add('backward',null,array(
+                'required' => false,
+            ))->end();
+        
+        $form
+            ->with('Details')
+                ->add('details','sonata_type_admin',array(
+                     'cascade_validation' => true,
+                     'delete' => false,
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+                )
+                )
+            ->end()
             ;
     }
     
@@ -120,14 +164,25 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ;
     }
     
-    public function prePersist($object) {
+    public function prePersist($object) 
+    {
+        
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
         if($object->isCouldBePenalized() === false){
             $object->setForcePenalize(false);
         }
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
     }
     
-    public function preUpdate($object) {
+    public function preUpdate($object) 
+    {
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
         if($object->isCouldBePenalized() === false){
             $object->setForcePenalize(false);
         }
