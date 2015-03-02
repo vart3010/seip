@@ -1001,6 +1001,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         if($this->id > 0){
             $this->id = null;
             
+            $this->ref = null;
             $this->createdAt = null;
             $this->lastDateCalculateResult = null;
             $this->updatedAt = null;
