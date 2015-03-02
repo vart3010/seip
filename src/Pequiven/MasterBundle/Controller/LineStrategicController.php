@@ -44,7 +44,7 @@ class LineStrategicController extends SEIPController {
         
         $resultIndicator = $resultArrangementProgram = $resultObjetives = array();
         $objetives = $resource->getObjetives();
-        $showResultObjetives = false;
+        $tree = array();
         
         $caption = $this->trans('result.captionObjetiveStrategic',array(),'PequivenSEIPBundle');
         $subCaption = $this->getPeriodService()->getPeriodActive()->getDescription();
@@ -66,6 +66,20 @@ class LineStrategicController extends SEIPController {
         
         //Data del gráfico
         foreach($objetives as $objetive){
+            $objetivesTactics = $objetive->getChildrens();
+            foreach ($objetivesTactics as $objetiveTactic) {
+//                foreach ($objetive->getParents() as $parent) {
+                if(!isset($tree[(string)$objetive])){
+                    $tree[(string)$objetive] = array(
+                        'parent' => $objetive,
+                        'child' => array(),
+                    );
+                }
+                $tree[(string)$objetive]['child'][(string)$objetiveTactic] = $objetiveTactic;
+//                }
+            }
+            
+            
             $refObjetive = $objetive->getRef();
             $flagResultIndicator = $flagResultObjetives = false;
             $categories[] = array('label' => $refObjetive);
@@ -134,6 +148,7 @@ class LineStrategicController extends SEIPController {
         $dataArray =  array(
             $this->config->getResourceName() => $resource,
             'object' => $objetives,
+            'tree' => $tree,
             'heightChart' => $heightChart,
             'data' => $data,
             'resultService' => $resultService,

@@ -177,6 +177,10 @@
         <service id="pequiven_seip.box.linestrategic.icons_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+         <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
+        <service id="pequiven_seip.box.linestrategic.icons_nav_bar" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IconsNavBarBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
         
         <!-- Servicio de USER -->
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">

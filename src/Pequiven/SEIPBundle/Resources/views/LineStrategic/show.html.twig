@@ -8,15 +8,65 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.results.resultsStrategics"|trans)
+        (linestrategic.description)
     ) }}
 {% endblock %}
 
 {% block body %}
+    
+{#    {{ boxRender.renderBox('pequiven_seip_box_linestrategic_iconsnavbar')|raw }}#}
+    
     <div ng-controller="DashboardController" class="dashboard" ng-init="renderChartResult('chartContainerResult',{{ data|json_encode() }},'{{ linestrategic.description }}','')" style="height: {{ heightChart }}px;">
         <div class="nine-columns twelve-columns-mobile" id="chartContainerResult">
             <!-- This div will hold the chart generated in the footer -->
         </div>
+    </div>
+    <br>
+    <div class="inline-label">
+        {#<a href="{{ linkToExportResult }}" class="button">
+            <span class="button-icon"><span class="icon-download"></span></span>
+            {{ 'pequiven_seip.buttons.export_result'|trans({},'PequivenSEIPBundle') }}
+        </a>#}
+{#        <br><br>#}
+        <ul class="fa-ul">
+            {% set limitTruncate = 110 %}
+            {% for t in tree %}
+                <li>
+                        {% set p = t['parent'] %}
+                        {% set avancedUsed = p.getResult %}
+                        {% set avancedUsedText = avancedUsed %}
+                        {% set href = generateLinkUrlOnly(p,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
+                        {% if href != '' %}
+                            <a href="{{ href }}">
+                        {% endif %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                        {% if href != '' %}
+                            </a>
+                        {% endif %}
+                        {#{% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
+                        ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - #}
+                        
+                        {{ generateLink(p,null,{truncate:limitTruncate}) }}
+                    <ul class="fa-ul">
+                    {% for chlid in t['child'] %}
+                        <li>
+                            {% set avancedUsed = chlid.getResult %}
+                            {% set avancedUsedText = avancedUsed %}
+                            {% set href = generateLinkUrlOnly(chlid,constant('Pequiven\\SEIPBundle\\Service\\LinkGeneratorService::TYPE_LINK_OBJETIVE_RESULT'),{level:app.request.get('level')}) %}
+                            {% if href != '' %}
+                                <a href="{{ href }}">
+                            {% endif %}
+                                {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
+                            {% if href != '' %}
+                                </a>
+                            {% endif %}
+                            {{ generateLink(chlid,null,{truncate:limitTruncate}) }} 
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock body %}
 
