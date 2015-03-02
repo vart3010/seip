@@ -115,6 +115,8 @@ app:
                         visualize:
                             main: Visualizar
                             strategics: Estratégicos
+                            objetive:
+                                strategics: Objetivos Estratégicos
                             tactic: Táctico
                             operative: Operativo
                             by_gerencia: Por gerencia

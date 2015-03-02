@@ -9,14 +9,14 @@ use Pequiven\MasterBundle\Entity\LineStrategic;
  * Description of IconsBox
  *
  */
-class IconsBox extends GenericBox 
+class IconsNavBarBox extends GenericBox 
 {
     public function getDescription() {
-        return 'Contiene una lista de las líneas estratégicas en formato de íconos';
+        return 'Contiene una lista de las líneas estratégicas en formato de barra de navegación';
     }
 
     public function getName() {
-        return 'pequiven_seip_box_linestrategic_viewdashboard';
+        return 'pequiven_seip_box_linestrategic_iconsnavbar';
     }
 
     public function getParameters() {
@@ -69,7 +69,7 @@ class IconsBox extends GenericBox
     }
     
     public function getTemplateName() {
-        return 'PequivenSEIPBundle:LineStrategic:Dashboard/viewGroup.html.twig';
+        return 'PequivenSEIPBundle:LineStrategic:viewIconsNavBar.html.twig';
     }
     
     public function getTranslationDomain() {

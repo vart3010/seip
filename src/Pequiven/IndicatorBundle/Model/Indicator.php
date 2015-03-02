@@ -41,6 +41,8 @@ abstract class Indicator implements IndicatorInterface
      */
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
     
+    const TYPE_OBJECT = 'indicator';
+    
     /**
      * @var integer
      * 

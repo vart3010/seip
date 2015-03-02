@@ -102,5 +102,10 @@
             </call>
             <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator" />
         </service>
+        
+        <!-- Box donde se renderizan las líneas estratégicas en formato de barra de navegación --> 
+        <service id="pequiven_indicator.box.icons_summary" class="Pequiven\IndicatorBundle\Model\Box\IconsSummaryBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
     </services>
 </container>

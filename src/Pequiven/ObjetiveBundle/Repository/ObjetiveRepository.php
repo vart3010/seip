@@ -14,119 +14,119 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  * @author matias
  */
 class ObjetiveRepository extends EntityRepository {
-    
+
     /**
      * Devuelve un grupo de resultados de acuerdo al campo pasado en $options y agrupado por la referencia
      * @param type $options
      * @return type
      */
-    public function getByOptionGroupRef($options = array()){
-        
+    public function getByOptionGroupRef($options = array()) {
+
         $em = $this->getEntityManager();
         $query = $em->createQueryBuilder()
-                    ->select('o')
-                    ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
-                    ->andWhere('o.enabled = 1')
-                    ->groupBy('o.ref');
-        if(isset($options['type'])){//Para los select
-            if($options['type'] === 'TACTIC_ZIV' || $options['type'] === 'OPERATIVE_ZIV'){
+                ->select('o')
+                ->from('\Pequiven\ObjetiveBundle\Entity\Objetive', 'o')
+                ->andWhere('o.enabled = 1')
+                ->groupBy('o.ref');
+        if (isset($options['type'])) {//Para los select
+            if ($options['type'] === 'TACTIC_ZIV' || $options['type'] === 'OPERATIVE_ZIV') {
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId'])
-                      ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId']);
-            } elseif($options['type'] === 'TACTIC' || $options['type'] === 'OPERATIVE'){
+                        ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId']);
+            } elseif ($options['type'] === 'TACTIC' || $options['type'] === 'OPERATIVE') {
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId'])
-                      ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId'])
-                      ->andWhere('o.complejo = ' . $options['complejoId']);
+                        ->andWhere('o.objetiveLevel = ' . $options['objetiveLevelId'])
+                        ->andWhere('o.complejo = ' . $options['complejoId']);
             }
-        } else{//Para el campo referencia
-            if(isset($options['lineStrategicId'])){
+        } else {//Para el campo referencia
+            if (isset($options['lineStrategicId'])) {
                 $query->andWhere('o.lineStrategic = ' . $options['lineStrategicId']);
                 $query->andWhere('o.objetiveLevel = ' . ObjetiveLevel::LEVEL_ESTRATEGICO);
-            } elseif($options['type_ref'] === 'TACTIC_REF'){
-                if(isset($options['type_directive'])){
+            } elseif ($options['type_ref'] === 'TACTIC_REF') {
+                if (isset($options['type_directive'])) {
                     $query->andWhere("o.parent IN (" . $options['array_parent'] . ")");
-                } else{
+                } else {
                     $query->andWhere('o.parent = ' . $options['objetiveStrategicId']);
                 }
-            } elseif($options['type_ref'] === 'OPERATIVE_REF'){
+            } elseif ($options['type_ref'] === 'OPERATIVE_REF') {
                 $query->andWhere('o.parent = ' . $options['objetiveTacticId']);
             }
         }
-        
+
         $q = $query->getQuery();
 //        var_dump($q->getSQL());
 //        die();
         return $q->getResult();
     }
-    
+
     /**
      * Función que devuelve los objetivos estratégicos de acuerdo a las líneas estratégicas
      * @param type $lineStrategicsArray
      * @return type
      */
-    public function getByLineStrategic($lineStrategicsArray){
+    public function getByLineStrategic($lineStrategicsArray) {
         //$em = $this->getEntityManager();
         $query = $this->createQueryBuilder('o');
         $query
-            ->select('o')
-            ->innerJoin('o.lineStrategics', 'ls')
-            ->andWhere($query->expr()->in('ls.id', $lineStrategicsArray))
-                ;
+                ->select('o')
+                ->innerJoin('o.lineStrategics', 'ls')
+                ->andWhere($query->expr()->in('ls.id', $lineStrategicsArray))
+        ;
         return $query->getQuery()->getResult();
     }
-    
+
     /**
      * Función que devuelve los objetivos hijos de un objetivo
      * @param type $objetiveParentsArray
      * @return type
      */
-    public function getByParent($objetiveParentsArray,$options = array()){
+    public function getByParent($objetiveParentsArray, $options = array()) {
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
-        
+
         $query = $this->createQueryBuilder('o');
         $query
                 ->select('o')
                 ->innerJoin('o.parents', 'p')
                 ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
-                ;
-        if(isset($options['enabled'])){
+        ;
+        if (isset($options['enabled'])) {
             $query->andWhere('o.enabled = 1');
         }
-        if(isset($options['fromIndicator'])){
-            if(isset($options['gerenciaFirstId'])){
+        if (isset($options['fromIndicator'])) {
+            if (isset($options['gerenciaFirstId'])) {
                 $query->andWhere("o.gerencia = " . $options['gerenciaFirstId']);
-            } elseif(isset($options['gerenciaSecondId'])){
+            } elseif (isset($options['gerenciaSecondId'])) {
                 $query->andWhere("o.gerenciaSecond = " . $options['gerenciaSecondId']);
             }
-        } else{
-            if(!isset($options['searchByRef'])){
-                if($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-                    if(!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))){
+        } else {
+            if (!isset($options['searchByRef'])) {
+                if ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX', 'ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
+                    if (!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))) {
                         $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
                     }
                 }
             }
         }
-        
+
         return $query->getQuery()->getResult();
     }
-    
+
     /**
      * Función que devuelve los objetivos padres de un objetivo
      * @param type $objetiveChildrensArray
      * @return type
      */
-    public function getByChildren($objetiveChildrensArray){
+    public function getByChildren($objetiveChildrensArray) {
         $query = $this->createQueryBuilder('o');
         $query
                 ->select('o')
                 ->innerJoin('o.childrens', 'c')
                 ->andWhere($query->expr()->in('c.id', $objetiveChildrensArray))
-                ;
+        ;
 
         return $query->getQuery()->getResult();
     }
-    
+
     /**
      * Crea un paginador para los objetivos de acuerdo al nivel del mismo
      * 
@@ -136,38 +136,38 @@ class ObjetiveRepository extends EntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
-        
-        if(isset($criteria['description'])){
+
+        if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
-        if(isset($criteria['objetiveLevel'])){
+        if (isset($criteria['objetiveLevel'])) {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
-        if(isset($criteria['gerenciaFirst'])){
-            if((int)$criteria['gerenciaFirst'] == 0){
-
-            } else{
-                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+        if (isset($criteria['gerenciaFirst'])) {
+            if ((int) $criteria['gerenciaFirst'] == 0) {
+                
+            } else {
+                $queryBuilder->andWhere('o.gerencia = ' . (int) $criteria['gerenciaFirst']);
             }
         }
-        
-        if(isset($criteria['gerenciaSecond'])){
-            if((int)$criteria['gerenciaSecond'] > 0){
-                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
-            } else{
+
+        if (isset($criteria['gerenciaSecond'])) {
+            if ((int) $criteria['gerenciaSecond'] > 0) {
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int) $criteria['gerenciaSecond']);
+            } else {
                 unset($criteria['gerenciaSecond']);
             }
         }
-        
+
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
         $this->applyPeriodCriteria($queryBuilder);
 
         return $this->getPaginator($queryBuilder);
     }
-    
+
     /**
      * Crea un paginador para los objetivos estratégicos
      * 
@@ -178,32 +178,32 @@ class ObjetiveRepository extends EntityRepository {
     function createPaginatorStrategic(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getCollectionQueryBuilder();
         //Filtro Objetivo Estratégico
-        if(isset($criteria['description'])){
+        if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
         //Filtro Línea Estratégica
-        if(isset($criteria['lineStrategicDescription'])){
+        if (isset($criteria['lineStrategicDescription'])) {
             $lineStrategicDescription = $criteria['lineStrategicDescription'];
             unset($criteria['lineStrategicDescription']);
             $queryBuilder->leftJoin('o.lineStrategics', 'ls');
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%".$lineStrategicDescription."%'"),$queryBuilder->expr()->like('ls.ref', "'%".$lineStrategicDescription."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('ls.description', "'%" . $lineStrategicDescription . "%'"), $queryBuilder->expr()->like('ls.ref', "'%" . $lineStrategicDescription . "%'")));
         }
 
-        if(isset($criteria['objetiveLevel'])){
+        if (isset($criteria['objetiveLevel'])) {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        
+
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applyPeriodCriteria($queryBuilder);
         $this->applySorting($queryBuilder, $orderBy);
-        
+
         return $this->getPaginator($queryBuilder);
     }
-    
+
     /**
      * Crea un paginador para los objetivos tácticos
      * 
@@ -212,8 +212,8 @@ class ObjetiveRepository extends EntityRepository {
      * @return QueryBuilder
      */
     function createPaginatorTactic(array $criteria = null, array $orderBy = null) {
-        
-        
+
+
         $values = $criteria;
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
@@ -222,38 +222,38 @@ class ObjetiveRepository extends EntityRepository {
         $queryBuilder->innerJoin('o.parents', 'p');
 
         //Filtro Objetivo Táctico
-        if(isset($criteria['description'])){
+        if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
-        
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])){
-            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+
+        if ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX', 'ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])) {
+            $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
         }
-        
+
         //Si esta seteado el parámetro de nivel del objetivo, lo anexamos al query
-        if(isset($criteria['objetiveLevel'])){
+        if (isset($criteria['objetiveLevel'])) {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
-        
+
         //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
-        if(isset($criteria['gerencia'])){
-            if((int)$criteria['gerencia'] > 0){
-                $queryBuilder->andWhere("o.gerencia = " . (int)$criteria['gerencia']);
-            } else{
+        if (isset($criteria['gerencia'])) {
+            if ((int) $criteria['gerencia'] > 0) {
+                $queryBuilder->andWhere("o.gerencia = " . (int) $criteria['gerencia']);
+            } else {
                 unset($criteria['gerencia']);
             }
         }
-        
+
         $queryBuilder->orderBy('o.ref');
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applyPeriodCriteria($queryBuilder);
         $this->applySorting($queryBuilder, $orderBy);
-        
+
         return $this->getPaginator($queryBuilder);
     }
-    
+
     /**
      * Crea un paginador para los objetivos operativos
      * 
@@ -262,7 +262,7 @@ class ObjetiveRepository extends EntityRepository {
      * @return QueryBuilder
      */
     function createPaginatorOperative(array $criteria = null, array $orderBy = null) {
-        
+
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
         $queryBuilder = $this->getCollectionQueryBuilder();
@@ -271,58 +271,59 @@ class ObjetiveRepository extends EntityRepository {
 //        var_dump($criteria);
 //        die();
         //Filtro Objetivo Operativo
-        if(isset($criteria['description'])){
+        if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
-        
-        if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
-            if(isset($criteria['gerenciaSecond'])){
-                if((int)$criteria['gerenciaSecond'] == 0){//En el caso que seleccione todas las Gerencias de 2da Línea
-                    $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());;
+
+        if ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
+            if (isset($criteria['gerenciaSecond'])) {
+                if ((int) $criteria['gerenciaSecond'] == 0) {//En el caso que seleccione todas las Gerencias de 2da Línea
+                    $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
+                    ;
                 }
-            } else{
-                if($user->getGerencia()){
-                    $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+            } else {
+                if ($user->getGerencia()) {
+                    $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
                 }
             }
-        } elseif($securityContext->isGranted(array('ROLE_MANAGER_SECOND','ROLE_MANAGER_SECOND_AUX'))){
-            $queryBuilder->andWhere('o.gerenciaSecond = '. $user->getGerenciaSecond()->getId());
-        } elseif($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX'))){
+        } elseif ($securityContext->isGranted(array('ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
+            $queryBuilder->andWhere('o.gerenciaSecond = ' . $user->getGerenciaSecond()->getId());
+        } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX'))) {
             $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
-            $queryBuilder->andWhere('o.gerencia = '.$user->getGerencia()->getId());
+            $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
             $queryBuilder->andWhere('gs.modular =:modular');
             $queryBuilder->setParameter('modular', true);
         }
-        
-        if(isset($criteria['gerenciaFirst'])){
-            if((int)$criteria['gerenciaFirst'] == 0){
 
-            } else{
-                $queryBuilder->andWhere('o.gerencia = ' . (int)$criteria['gerenciaFirst']);
+        if (isset($criteria['gerenciaFirst'])) {
+            if ((int) $criteria['gerenciaFirst'] == 0) {
+                
+            } else {
+                $queryBuilder->andWhere('o.gerencia = ' . (int) $criteria['gerenciaFirst']);
             }
         }
-        
-        if(isset($criteria['gerenciaSecond'])){
-            if((int)$criteria['gerenciaSecond'] > 0){
-                $queryBuilder->andWhere("o.gerenciaSecond = " . (int)$criteria['gerenciaSecond']);
-            } else{
+
+        if (isset($criteria['gerenciaSecond'])) {
+            if ((int) $criteria['gerenciaSecond'] > 0) {
+                $queryBuilder->andWhere("o.gerenciaSecond = " . (int) $criteria['gerenciaSecond']);
+            } else {
                 unset($criteria['gerenciaSecond']);
             }
         }
-        
-        if(isset($criteria['objetiveLevel'])){
+
+        if (isset($criteria['objetiveLevel'])) {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        
+
         $this->applyPeriodCriteria($queryBuilder);
-        
+
         return $this->getPaginator($queryBuilder);
     }
-    
+
     /**
      * Crea un paginador para los objetivos operativos vinculantes a un complejo
      * 
@@ -333,88 +334,87 @@ class ObjetiveRepository extends EntityRepository {
     function createPaginatorOperativeVinculant(array $criteria = null, array $orderBy = null) {
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
-        
+
         $queryBuilder = $this->getCollectionQueryBuilder();
         $queryBuilder->andWhere('o.enabled = 1');
         $queryBuilder->innerJoin('o.parents', 'p');
         $queryBuilder->innerJoin('o.gerenciaSecond', 'gs');
         $queryBuilder->andWhere('gs.vinculante = 1 ');
         $queryBuilder->andWhere('gs.modular = 0');
-        
-        if(isset($criteria['complejo'])){
+
+        if (isset($criteria['complejo'])) {
             $queryBuilder->andWhere('gs.complejo = ' . $criteria['complejo']);
         }
         //Filtro Objetivo Operativo
-        if(isset($criteria['description'])){
+        if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
-            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%".$description."%'"),$queryBuilder->expr()->like('o.ref', "'%".$description."%'")));
+            $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
-        
-        if(isset($criteria['objetiveLevel'])){
+
+        if (isset($criteria['objetiveLevel'])) {
             $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
         }
-        
+
 //        $this->applyCriteria($queryBuilder, $criteria);
 //        $this->applySorting($queryBuilder, $orderBy);
 //        
         $queryBuilder->groupBy('o.ref');
         $queryBuilder->orderBy('o.ref');
-        
+
         return $this->getPaginator($queryBuilder);
     }
-    
+
     /**
      * Retorna un query builder de los objetivos tacticos asociados a la gerencia
      * @return type
      */
-    function findQueryObjetivesTactic()
-    {
+    function findQueryObjetivesTactic() {
         $user = $this->getUser();
         $qb = $this->getQueryAllEnabled();
         $qb
-                ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerencia","g")
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerencia", "g")
                 ->andWhere("ol.level = :level")
                 ->andWhere('o.enabled = :enabled')
                 ->setParameter('enabled', true)
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
-            ;
+        ;
         $level = $user->getLevelRealByGroup();
-        
-        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST){
-            if($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+
+        if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST) {
+            if ($this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
                 $qb
-                    ->andWhere("g.id = :gerencia")
-                    ->setParameter("gerencia", $user->getGerencia())
-                    ;
+                        ->andWhere("g.id = :gerencia")
+                        ->setParameter("gerencia", $user->getGerencia())
+                ;
             }
         }
         $localidad = $user->getComplejo();
         $gerenciasTypeComplejo = $gerenciasTypeComplejoId = array();
-        if($localidad){
+        if ($localidad) {
             foreach ($localidad->getGerencias() as $gerencia) {
                 $gerenciaGroup = $gerencia->getGerenciaGroup();
 
-                if($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS){
+                if ($gerenciaGroup !== null && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS) {
                     $gerenciasTypeComplejo [] = $gerencia;
                     $gerenciasTypeComplejoId[] = $gerencia->getId();
                 }
             }
         }
-        if(count($gerenciasTypeComplejo) > 0){
+        if (count($gerenciasTypeComplejo) > 0) {
             $qbMedular = $this->getQueryAllEnabled();
             $qbMedular
-                ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerencia","g")
-                ->innerJoin("o.childrens","o_c")
-                ->innerJoin("o_c.gerenciaSecond","o_c_gs")
-                ->andWhere("ol.level = :level")
-                ->andWhere("o_c_gs.modular = 1")
-                ->andWhere('o.enabled = :enabled')
-                ->andWhere($qbMedular->expr()->in('g.id', $gerenciasTypeComplejoId))
-                ->setParameter('enabled', true)
-                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
+                    ->innerJoin("o.objetiveLevel", "ol")
+                    ->innerJoin("o.gerencia", "g")
+                    ->innerJoin("o.childrens", "o_c")
+                    ->innerJoin("o_c.gerenciaSecond", "o_c_gs")
+                    ->andWhere("ol.level = :level")
+                    ->andWhere("o_c_gs.modular = 1")
+                    ->andWhere('o.enabled = :enabled')
+                    ->andWhere($qbMedular->expr()->in('g.id', $gerenciasTypeComplejoId))
+                    ->setParameter('enabled', true)
+                    ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
             ;
             $objetivesMedular = array();
             foreach ($qbMedular->getQuery()->getResult() as $result) {
@@ -422,106 +422,103 @@ class ObjetiveRepository extends EntityRepository {
             }
             $qb->orWhere($qb->expr()->in('o.id', $objetivesMedular));
         }
-        
+
         return $qb;
     }
-    
-    function findTacticalObjetives($user,array $criteria = array())
-    {
+
+    function findTacticalObjetives($user, array $criteria = array()) {
         $qb = $this->getQueryAllEnabled();
         $qb
-                ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerencia","g")
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerencia", "g")
                 ->andWhere("ol.level = :level")
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
-            ;
+        ;
         $level = $user->getLevelRealByGroup();
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
+        if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
             $qb
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("gerencia", $user->getGerencia())
-                ;
-        } elseif($criteria['view_planning']){
-            if($gerencia = $criteria->remove('gerencia') != null){
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $user->getGerencia())
+            ;
+        } elseif ($criteria['view_planning']) {
+            if ($gerencia = $criteria->remove('gerencia') != null) {
                 
             }
             $qb
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("gerencia", $gerencia)
-                ;
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $gerencia)
+            ;
             $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Busca los objetivos tácticos del usuario logueado
      * @return type
      */
-    function findOperativeObjetives($user,array $criteria = array())
-    {
+    function findOperativeObjetives($user, array $criteria = array()) {
         $qb = $this->getQueryAllEnabled();
         $qb
-            ->innerJoin("o.objetiveLevel","ol")
-            ->innerJoin("o.gerencia","g")
-            ->andWhere("ol.level = :level")
-            ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
-            ;
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerencia", "g")
+                ->andWhere("ol.level = :level")
+                ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
+        ;
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if(($objetiveTactical = $criteria->remove('objetiveTactical')) != null){
+        if (($objetiveTactical = $criteria->remove('objetiveTactical')) != null) {
             $qb
-                ->innerJoin('o.parents', 'p')
-                ->andWhere('p.id = :objetiveTactical')
-                ->setParameter('objetiveTactical', $objetiveTactical)
-                ;
+                    ->innerJoin('o.parents', 'p')
+                    ->andWhere('p.id = :objetiveTactical')
+                    ->setParameter('objetiveTactical', $objetiveTactical)
+            ;
         }
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']){
+        if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
             $qb
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("gerencia", $user->getGerencia())
-                ;
-        } elseif($criteria['view_planning']){
-            if($gerencia = $criteria->remove('gerencia') != null){
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $user->getGerencia())
+            ;
+        } elseif ($criteria['view_planning']) {
+            if ($gerencia = $criteria->remove('gerencia') != null) {
                 
             }
             $qb
-                ->andWhere("g.id = :gerencia")
-                ->setParameter("gerencia", $gerencia)
-                ;
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $gerencia)
+            ;
             $criteria->remove('view_planning');
         }
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type
      */
-    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic)
-    {
+    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic) {
         return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
     }
-    
+
     function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic) {
         $user = $this->getUser();
         $qb = $this->getQueryAllEnabled();
         $qb
-                ->innerJoin("o.parents","p")
-                ->innerJoin("o.objetiveLevel","ol")
-                ->innerJoin("o.gerenciaSecond","gs")
+                ->innerJoin("o.parents", "p")
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerenciaSecond", "gs")
                 ->andWhere('p.id = :parent')
                 ->andWhere("ol.level = :level")
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
-            ;
+        ;
         $level = $user->getLevelRealByGroup();
-        if($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false){
+        if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
             $qb
-                ->andWhere("gs.id = :gerenciaSecond")
-                ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
-                ;
+                    ->andWhere("gs.id = :gerenciaSecond")
+                    ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+            ;
         }
         return $qb;
     }
@@ -529,90 +526,89 @@ class ObjetiveRepository extends EntityRepository {
     public function getQueryAllEnabled(){
         $qb = $this->getQueryBuilder();
         $qb
-            ->andWhere('o.enabled = :enabled')
-            ->setParameter('enabled', true);
+                ->andWhere('o.enabled = :enabled')
+                ->setParameter('enabled', true);
         return $qb;
     }
-    
-    
+
     /**
      * Función que devuelve el nivel operativo para la matriz de objetivos
      * @param \Pequiven\MasterBundle\Entity\Gerencia $gerencia
      * @return type
      */
-    public function getSectionOperativeByGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia){
+    public function getSectionOperativeByGerencia(\Pequiven\MasterBundle\Entity\Gerencia $gerencia) {
         $qb = $this->getQueryBuilder();
-        
+
         $qb->select('o.ref AS ObjOpeRef,o.description AS ObjOpe,o.goal AS ObjOpeGoal,o.weight AS ObjOpePeso');
         $qb->addSelect('i.ref AS IndOpeRef, i.description AS IndOpe, i.goal AS IndOpeGoal,i.weight AS IndOpePeso');
         $qb->addSelect('f.equation AS IndOpeFormula');
         $qb->addSelect('gs.description AS ObjOpeGerencia');
         $qb->addSelect('o1.ref AS ObjTacRef, o1.description AS ObjTac, o1.goal AS ObjTacGoal');
-        
+
         $qb->leftJoin('o.indicators', 'i');
         $qb->leftJoin('i.formula', 'f');
         $qb->innerJoin('o.gerenciaSecond', 'gs');
         $qb->innerJoin('o.parents', 'o1');
 //        $qb->leftJoin('o1.indicators', 'i1');
 //        $qb->leftJoin('i1.formula', 'f1');
-        
+
         $qb->andWhere('o.objetiveLevel = :objetiveLevel');
         $qb->andWhere('o.deletedAt IS NULL');
         $qb->andWhere('i.deletedAt IS NULL');
         $qb->andWhere('o.gerencia = :gerencia');
         $qb->andWhere('o1.deletedAt IS NULL');
-        
+
         $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_OPERATIVO);
         $qb->setParameter('gerencia', $gerencia->getId());
-        
+
         $this->applyPeriodCriteria($qb);
-                
+
         $qb->orderBy('o.ref');
         $qb->groupBy('o1.ref,o.ref,i.ref');
-        
+
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Función que devuelve el nivel estratégico para la matriz de objetivos
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetive
      * @return type
      */
-    public function getSectionStrategic(Objetive $objetive){
+    public function getSectionStrategic(Objetive $objetive) {
         $qb = $this->getQueryBuilder();
-        
+
         $qb->select('o.ref AS ObjStraRef, o.description AS ObjStra');
         $qb->addSelect('l.ref AS LineStraRef, l.description AS LineStra');
-        
+
         $qb->innerJoin('o.childrens', 'o1');
         $qb->innerjoin('o.lineStrategics', 'l');
-        
+
         $qb->andWhere('o.objetiveLevel = :objetiveLevel');
         $qb->andWhere('o.enabled = :enabled');
         $qb->andWhere('o1.enabled = :enabled');
         $qb->andWhere('o1.id = :idChildren');
-        
+
         $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO);
         $qb->setParameter('enabled', true);
         $qb->setParameter('idChildren', $objetive->getId());
-        
+
         return $qb->getQuery()->getResult();
     }
-    
-    public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond){
+
+    public function getObjetivesByGerenciaSecond(\Pequiven\MasterBundle\Entity\GerenciaSecond $gerenciaSecond) {
         $qb = $this->getQueryBuilder();
-        
+
         $qb->andWhere('o.objetiveLevel = :objetiveLevel');
         $qb->andWhere('o.enabled = :enabled');
         $qb->andWhere('o.gerenciaSecond = :idGerenciaSecond');
-        
+
         $qb->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_OPERATIVO);
         $qb->setParameter('enabled', true);
         $qb->setParameter('idGerenciaSecond', $gerenciaSecond->getId());
-        
+
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Retorna los objetivos estrategicos del periodo.
      * 
@@ -622,13 +618,14 @@ class ObjetiveRepository extends EntityRepository {
     public function findAllStrategicByPeriod(\Pequiven\SEIPBundle\Entity\Period $period) {
         $qb = $this->getQueryBuilder();
         $qb
-            ->andWhere('o.objetiveLevel = :objetiveLevel')
-            ->andWhere('o.period = :period')
-            ;
+                ->andWhere('o.objetiveLevel = :objetiveLevel')
+                ->andWhere('o.period = :period')
+        ;
         $qb
-            ->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO)
-            ->setParameter('period', $period)
-            ;
+                ->setParameter('objetiveLevel', ObjetiveLevel::LEVEL_ESTRATEGICO)
+                ->setParameter('period', $period)
+        ;
         return $qb->getQuery()->getResult();
     }
+
 }

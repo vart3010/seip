@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+<div class="with-padding">
+    <div class="columns">
+        <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+            <div class="span12 snapHeaderCont">
+                <p class="snapShotHeader"><i class="fa fa-line-chart"></i>IE-1.1.2<img class="snapshot-box-icon" src="{{ asset('bundles/pequivenseip/icons/icon_mind.png') }}"></p>
+            </div>
+        </div>
+    {#{% for lineStrategic in linesStrategics %}
+    <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+        <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}">
+            <span class="centrar_imagen">
+                <img class="icon-strategic" id="iconMoney" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+            </span>
+            <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
+            <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
+            <br>
+            <p>{{ lineStrategic.description }}</p>
+            {{ data.typeGroup }}<br>
+            <b style="font-size:25px">{{ data.porcCarga }}%</b>
+        </a>
+    </div>
+    {% endfor %}#}
+    </div>
+</div>
