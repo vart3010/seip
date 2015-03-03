@@ -522,8 +522,8 @@ class ObjetiveRepository extends EntityRepository {
         }
         return $qb;
     }
-
-    protected function getQueryAllEnabled() {
+    
+    public function getQueryAllEnabled(){
         $qb = $this->getQueryBuilder();
         $qb
                 ->andWhere('o.enabled = :enabled')

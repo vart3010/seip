@@ -281,12 +281,11 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * ¿Impacta a SIG?
-     * 
-     * @var boolean
-     * @ORM\Column(name="impactToSIG",type="boolean")
+     * Sistema de calidad
+     * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
      */
-    protected $impactToSIG = false;
+    protected $qualitySystem;
 
     /**
      * Constructor
@@ -1200,25 +1199,25 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
 
     /**
-     * Set impactToSIG
+     * Set qualitySystem
      *
-     * @param boolean $impactToSIG
+     * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
      * @return Objetive
      */
-    public function setImpactToSIG($impactToSIG)
+    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
     {
-        $this->impactToSIG = $impactToSIG;
+        $this->qualitySystem = $qualitySystem;
 
         return $this;
     }
 
     /**
-     * Get impactToSIG
+     * Get qualitySystem
      *
-     * @return boolean 
+     * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
      */
-    public function getImpactToSIG()
+    public function getQualitySystem()
     {
-        return $this->impactToSIG;
+        return $this->qualitySystem;
     }
 }

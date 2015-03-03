@@ -26,8 +26,10 @@ class GerenciaController extends baseController {
      */
     public function listAction(){
         $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
+        
+        $qualitySystems = $this->get('pequiven.repository.quality_system')->getAllEnabled();
         return array(
-            
+            'qualitySystems' => $qualitySystems,
         );
     }
     
@@ -196,7 +198,12 @@ class GerenciaController extends baseController {
     {
         $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         
-        $em = $this->getDoctrine();
+        $qualitySystemId = $request->get('qualitySystem');
+        $qualitySystem = null;
+        if($qualitySystemId !== null){
+            $qualitySystem = $this->get('pequiven.repository.quality_system')->find($qualitySystemId);
+        }
+        
         $idGerencia = $request->get('id');
         $gerencia = $this->get('pequiven.repository.gerenciafirst')->find($idGerencia);//Obtenemos la gerencia
         //Objetivos Tácticos de la Gerencia
@@ -230,7 +237,6 @@ class GerenciaController extends baseController {
         $path = $this->get('kernel')->locateResource('@PequivenObjetiveBundle/Resources/skeleton/matriz_de_objetivos.xls');
         $now = new \DateTime();
         $objPHPExcel = \PHPExcel_IOFactory::load($path);
-//        $objPHPExcel = new \PHPExcel();
         $objPHPExcel
                 ->getProperties()
                 ->setCreator("SEIP")
@@ -257,13 +263,18 @@ class GerenciaController extends baseController {
         
         $lastRowOpe = 8;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
+            if($qualitySystem !== null && $qualitySystem !== $objetiveTactic->getQualitySystem()){
+                continue;
+            }
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
             $totalObjetiveOperatives = count($objetivesOperatives);
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
-//                var_dump($objetiveTactic->getRef().' - '.count($objetivesOperatives));
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
+                    if($qualitySystem !== null && $qualitySystem !== $objetiveOperative->getQualitySystem()){
+                        continue;
+                    }
                     $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                     $indicatorsOperatives = $objetiveOperative->getIndicators();
@@ -461,6 +472,10 @@ class GerenciaController extends baseController {
             $activeSheet->getRowDimension($i)->setRowHeight($rowHeight);
             $activeSheet->getStyle(sprintf('A%s:V%s',$i,$i))->applyFromArray($styleArrayBordersContent);
         }
+        $row = $rowFinTac + 1;
+        $activeSheet->setCellValue(sprintf('A%s',$row),'NIVEL DE REVISION: 1');
+        $activeSheet->setCellValue(sprintf('V%s',$row),'C-CP-DM-OI-R-001');
+        $activeSheet->getStyle(sprintf('A%s:V%s',$row,$row))->getFont()->setSize(8);
         
         $fileName = sprintf('SEIP-Matriz de Objetivos-%s-%s.xls',$gerencia->getDescription(),$now->format('Ymd-His'));
         

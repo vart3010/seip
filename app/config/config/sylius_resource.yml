@@ -184,3 +184,7 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+        pequiven.quality_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem

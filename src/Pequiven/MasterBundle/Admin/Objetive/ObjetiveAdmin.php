@@ -26,7 +26,7 @@ class ObjetiveAdmin extends Admin
             ->add('gerenciaSecond')
             ->add('parents')
             ->add('indicators')
-             ->add('objetiveLevel')
+            ->add('objetiveLevel')
             ->add('period')
             ->add('evalObjetive')
             ->add('evalIndicator')
@@ -34,48 +34,56 @@ class ObjetiveAdmin extends Admin
             ->add('evalSimpleAverage')
             ->add('evalWeightedAverage')
             ->add('requiredToImport')
-            ->add('impactToSIG')
             ->add('enabled')
              ;
     }
     
     protected function configureFormFields(FormMapper $form) {
         $form
-            ->add('description')
-            ->add('ref')
-            ->add('weight')
-            ->add('goal')
-            ->add('complejo')
-            ->add('gerencia')
-            ->add('gerenciaSecond')
-            ->add('parents')
-            ->add('indicators')
-            ->add('objetiveLevel')
-            ->add('period')
-            ->add('evalObjetive',null,array(
-                'required' => false,
-            ))
-            ->add('evalIndicator',null,array(
-                'required' => false,
-            ))
-            ->add('evalArrangementProgram',null,array(
-                'required' => false,
-            ))
-            ->add('evalSimpleAverage',null,array(
-                'required' => false,
-            ))
-            ->add('evalWeightedAverage',null,array(
-                'required' => false,
-            ))
-            ->add('requiredToImport',null,array(
-                'required' => false,
-            ))
-            ->add('impactToSIG',null,array(
-                'required' => false,
-            ))
-            ->add('enabled',null,array(
-                'required' => false,
-            ))
+            ->tab('General')
+                    ->add('description')
+                    ->add('ref')
+                    ->add('weight')
+                    ->add('goal')
+                    ->add('complejo')
+                    ->add('gerencia')
+                    ->add('gerenciaSecond')
+                    ->add('parents')
+                    ->add('indicators')
+                    ->add('objetiveLevel')
+                    ->add('period')
+                ->end()
+            ->end()
+            ->tab('Details')
+                    ->add('qualitySystem',null,array(
+                        'query_builder' => function(\Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository $repository)
+                        {
+                            return $repository->getQueryAllEnabled();
+                        }
+                    ))
+                    ->add('evalObjetive',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalIndicator',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalArrangementProgram',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalSimpleAverage',null,array(
+                        'required' => false,
+                    ))
+                    ->add('evalWeightedAverage',null,array(
+                        'required' => false,
+                    ))
+                    ->add('requiredToImport',null,array(
+                        'required' => false,
+                    ))
+                    ->add('enabled',null,array(
+                        'required' => false,
+                    ))
+                ->end()
+            ->end()
         ;
     }
     
@@ -85,7 +93,6 @@ class ObjetiveAdmin extends Admin
             ->add('description')
             ->add('weight')
             ->add('requiredToImport')
-            ->add('impactToSIG')
             ->add('enabled')
             ;
     }

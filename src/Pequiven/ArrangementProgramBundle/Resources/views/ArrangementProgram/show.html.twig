@@ -82,6 +82,8 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven.arrangement_program.tactical_objective'|trans }}</label>
+                    {% set avancedUsed = entity.tacticalObjective.result %}
+                    {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
                     {{ generateLink(entity.tacticalObjective) }}
                 </p>        
             </div>
@@ -89,6 +91,8 @@
                 <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
                         <p class="inline-label">
                             <label class="label">{{ 'pequiven.arrangement_program.operational_objective'|trans }}</label>
+                            {% set avancedUsed = entity.operationalObjective.result %}
+                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
                             {{ generateLink(entity.operationalObjective) }}
                         </p>
                 </div>
@@ -211,6 +215,7 @@
         {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
     </a>
     {% if isAllowToNotity == true %}
+        &nbsp;
         {% if entity.details.notificationInProgressByUser == null %}
             {{ buttons.generic_confirm(path('arrangementprogram_start_the_notification_process',{ id: entity.id }),('pequiven.arrangement_program.buttons.start_notification_process'|trans({},'PequivenArrangementProgramBundle')),{'icon':'icon-unlock','gradient':'green-gradient','content':('pequiven.arrangement_program.questions.want_to_start_the_notification_process'|trans)}) }}
         {% else %}
@@ -219,31 +224,41 @@
     {% endif %}
     
     {% if isAllowToSendToReview == true %}
+        &nbsp;
         {{ buttons.generic_confirm(path('arrangementprogram_send_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.send_to_review'|trans),{'icon':'icon-outbox','content':('pequiven.arrangement_program.questions.send_to_review'|trans)}) }}
     {% endif %}
     {% if isAllowSuperAdmin == true and (entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_APPROVED') or entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') or  entity.status != constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW')) %}
+        &nbsp;
         {{ buttons.generic_modal(path('arrangementprogram_return_to_draft', { 'id': entity.id }),('pequiven.arrangement_program.buttons.return_to_draft'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.return_to_draft'|trans) ~ filedObservation}) }}
     {% endif %}
      {% if isAllowToReview == true %}
         {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_IN_REVIEW') 
         %}
+            &nbsp;
             {{ buttons.generic_confirm(path('arrangementprogram_revised', { 'id': entity.id }),('pequiven.arrangement_program.buttons.revised'|trans),{'gradient':'green-gradient','icon':'icon-like','content':('pequiven.arrangement_program.questions.revised'|trans)}) }}
+            &nbsp;
             {{ buttons.generic_modal(path('arrangementprogram_return_to_draft', { 'id': entity.id }),('pequiven.arrangement_program.buttons.return_to_draft'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.return_to_draft'|trans) ~ filedObservation}) }}
         {% endif %}
     {% endif %}
     {% if isAllowToApprove == true %}
         {% if entity.status == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::STATUS_REVISED') %}
+            &nbsp;
             {{ buttons.generic_modal(path('arrangementprogram_return_to_review', { 'id': entity.id }),('pequiven.arrangement_program.buttons.return_to_review'|trans),{'icon':'icon-undo','content':('pequiven.arrangement_program.questions.return_to_review'|trans) ~ filedObservation}) }}
         {% endif %}
+        &nbsp;
         {{ buttons.generic_confirm(path('arrangementprogram_approved', { 'id': entity.id }),('pequiven.arrangement_program.buttons.approved'|trans),{'gradient':'green-gradient','icon':'icon-tick','content':('pequiven.arrangement_program.questions.approved'|trans)}) }}
+        &nbsp;
         {{ buttons.generic_modal(path('arrangementprogram_reject', { 'id': entity.id }),('pequiven.arrangement_program.buttons.rejected'|trans),{'gradient':'red-gradient','icon':'icon-cross','content':('pequiven.arrangement_program.questions.rejected'|trans) ~ filedObservation}) }}
     {% endif %}
     {% if  hasPermissionToUpdate == true %}
+        &nbsp;
         {{ buttons.generic(path('arrangementprogram_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
     {% endif %}
     {% if isAllowToDelete == true %}
+        &nbsp;
         {{ buttons.delete(path('arrangementprogram_delete', { 'id': entity.id })) }}
     {% endif %}
+    &nbsp;
     {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
             {
                 routeUpdateResult: 'pequiven_planning_update_result_arrangement_program',
