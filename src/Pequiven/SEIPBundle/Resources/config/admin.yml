@@ -234,6 +234,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.company:
+        class: Pequiven\MasterBundle\Admin\CEI\CompanyAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Empresa" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Company
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:
