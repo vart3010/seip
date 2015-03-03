@@ -14,6 +14,7 @@ use Pequiven\MasterBundle\Model\LineStrategic as modelLineStrategic;
  * @ORM\Table(name="seip_c_line_strategic")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\LineStrategicRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class LineStrategic extends modelLineStrategic
 {

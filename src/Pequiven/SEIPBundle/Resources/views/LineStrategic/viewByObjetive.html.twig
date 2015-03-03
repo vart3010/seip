@@ -21,35 +21,17 @@
     </div>
     <br>
     <div class="inline-label">
-        {#<a href="{{ linkToExportResult }}" class="button">
-            <span class="button-icon"><span class="icon-download"></span></span>
-            {{ 'pequiven_seip.buttons.export_result'|trans({},'PequivenSEIPBundle') }}
-        </a>#}
-{#        <br><br>#}
         <ul class="fa-ul">
             {% set limitTruncate = 110 %}
             {% for t in tree %}
                 <li>
-                        {% set p = t['parent'] %}
-                        {#{% set avancedUsed = p.getResult %}
-                        {% set avancedUsedText = avancedUsed %}
-                        {% set href =  %}
-                        {% if href != '' %}
-                            <a href="{{ href }}">
-                        {% endif %}
-                            {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-                        {% if href != '' %}
-                            </a>
-                        {% endif %}#}
-                        {#{% set parentSummary = resultService.getResultChildresObjetives(p,t['child']) %}
-                        ({{ ((parentSummary['myContributionWithWeight'] ? parentSummary['myContributionWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}% / {{ ((parentSummary['myDutyWithWeight'] ? parentSummary['myDutyWithWeight'] : '0')|number_format(2)) | str_pad(5,'0') }}%) - 
-                        #}
-                        <a href="{{ path('pequiven_line_strategic_show',{id:p.id}) }}">
-                            <span>
-                                <img class="snapshot-box-icon-left" src="{{ asset(iconsLineStrategic[p.level]) }}">
-                            </span>
-                            {{ p.ref }} {{p.description|truncate(100) }}
-                        </a>
+                    {% set p = t['parent'] %}
+                    <a href="{{ path('pequiven_line_strategic_show',{id:p.id}) }}">
+                        <span>
+                            <img class="snapshot-box-icon-left" src="{{ asset(iconsLineStrategic[p.level]) }}">
+                        </span>
+                        {{ p.ref }} {{p.description|truncate(100) }}
+                    </a>
                     <ul class="fa-ul">
                     {% for chlid in t['child'] %}
                         <li>
