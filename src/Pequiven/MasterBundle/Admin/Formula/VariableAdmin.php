@@ -19,6 +19,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $show
             ->add('name')
             ->add('description')
+            ->add('equation')
             ;
     }
     
@@ -26,6 +27,11 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $form
             ->add('name')
             ->add('description')
+            ->add('equation',null,array(
+                'attr' => array(
+                    'rows' => 10
+                )
+            ))
             ;
     }
     

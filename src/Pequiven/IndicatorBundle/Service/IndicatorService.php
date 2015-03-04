@@ -45,9 +45,9 @@ class IndicatorService implements ContainerAwareInterface
         $equationParse = $this->parseFormulaVars($formula,$formula->getEquationReal());
         $result = $equation_real = $equation_plan = 0.0;
         try {
-            eval(sprintf('$equation_real = %s;',$sourceEquationReal));
-            eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-            eval(sprintf('$result = @%s;',$equationParse));
+            @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+            @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+            @eval(sprintf('$result = @%s;',$equationParse));
         } catch( ErrorException $exc){
 //            echo 'Excepción capturada 1 : ',  $e->getMessage(), "\n";
         } catch (Exception $exc) {

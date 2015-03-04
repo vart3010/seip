@@ -37,7 +37,6 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                     ->setLastFormulaUsed($formula)
                     ;
             
-            
             $valueIndicator = $this->resourceResolver->getResource(
                 $this->getRepository(),
                 'findOneBy',
@@ -173,6 +172,11 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         if($formula){
             $variables = $formula->getVariables();
             foreach ($variables as $variable) {
+                $editable = true;
+                if($variable->isFromEQ() === true){
+//                    continue;
+                    $editable = false;
+                }
                 $name = $variable->getName();
                 
                 $formulaDetail = $indicator->getFormulaDetailByVariable($variable);
@@ -189,7 +193,8 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                     ),
                     'attr' => array(
                         'class' => 'input'
-                    )
+                    ),
+                    'disabled' => !$editable,
                 );
                 $form->add($name,$type,$parameters);
             }

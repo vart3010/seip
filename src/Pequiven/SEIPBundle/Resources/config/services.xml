@@ -232,5 +232,10 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        <service id="app.twig_string_loader" class="Twig_Loader_String"></service>
+        <service id="app.twig_string" class="%twig.class%">
+            <argument type="service" id="app.twig_string_loader" />
+            <argument>%twig.options%</argument>
+        </service>
     </services>
 </container>

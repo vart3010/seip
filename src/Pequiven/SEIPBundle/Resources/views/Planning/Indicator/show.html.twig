@@ -62,7 +62,7 @@
                     <label class="label">{{ 'form.formula'|trans }}</label>
                     {% set formula = indicator.formula %}
                     {% if formula %}
-                        <span title="{{ formula.getTypeOfCalculationLabel|trans }}" class="with-tooltip">{{ indicator.formula }}</span>
+                        <span title="{{ formula.getTypeOfCalculationLabel|trans }}" class="with-tooltip">{{ indicator.formula.equation }}</span>
                     {% else %}
                         <span class="tag red-bg">{{ 'pequiven_indicator.errors.formula_unassigned'|trans }}</span>
                     {% endif %}
@@ -182,6 +182,8 @@
         {% set filedObservation = '<br/><br/><textarea name="observation" class="input" placeholder="' ~ ('pequiven.arrangement_program.write_observation'|trans({},'PequivenArrangementProgramBundle')) ~ '" required="required" cols="28" rows="10" ></textarea>' %}
 
         {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
+        &nbsp;
+        {{ buttons.generic_modal(path('pequiven_indicator_remove_values', { 'id': indicator.id }),('pequiven_indicator.indicator.buttons.remove_values'|trans({},'PequivenIndicatorBundle')), {'icon':'icon-trash','content':('pequiven_indicator.indicator.remove_values'|trans({},'PequivenIndicatorBundle')), 'gradient':'red-gradient'} ) }}
     {% endif %}
     &nbsp;
     {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (

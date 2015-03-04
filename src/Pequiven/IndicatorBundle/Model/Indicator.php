@@ -22,6 +22,11 @@ abstract class Indicator implements IndicatorInterface
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
     
     /**
+     * Tipo de calculo por formula y valores de las variables automaticos desde ecuacion con las variables de lo hijos
+     */
+    const TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ = 2;
+    
+    /**
      * Indicador con fórmula asociada
      */
     const INDICATOR_WITH_FORMULA = 'INDICATOR_WITH_FORMULA';
@@ -119,6 +124,7 @@ abstract class Indicator implements IndicatorInterface
         static $typesOfCalculation = array(
             self::TYPE_CALCULATION_FORMULA_MANUALLY => 'pequiven_indicator.type_calculation.formula_manually',
             self::TYPE_CALCULATION_FORMULA_AUTOMATIC => 'pequiven_indicator.type_calculation.formula_automatic',
+            self::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ => 'pequiven_indicator.type_calculation.formula_automatic_from_eq',
         );
         return $typesOfCalculation;
     }

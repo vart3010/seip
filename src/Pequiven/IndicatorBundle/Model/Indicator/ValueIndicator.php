@@ -31,4 +31,12 @@ abstract class ValueIndicator
     {
         $this->formulaParameters[$key] = $value;
     }
+    
+    function getParameter($key,$default = null)
+    {
+        if(isset($this->formulaParameters[$key])){
+            $default = $this->formulaParameters[$key];
+        }
+        return $default;
+    }
 }
