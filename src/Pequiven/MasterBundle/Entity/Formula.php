@@ -489,8 +489,10 @@ class Formula extends modelFormula implements \Pequiven\SEIPBundle\Entity\Period
         return $this;
     }
 
-    public function __toString() {
-        return $this->getEquation() ?: '-';
+    public function __toString() 
+    {
+        $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getEquation());
+        return $toString != '' ? $toString : '-';
     }
     
     function setVariables($variables) {
