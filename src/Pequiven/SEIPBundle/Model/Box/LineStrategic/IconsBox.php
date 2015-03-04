@@ -25,42 +25,28 @@ class IconsBox extends GenericBox
         
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
+        $tree = $data = array();
+        $indicatorService = $this->getIndicatorService();
         
-//        var_dump(count($linesStrategics));
-//        die();
-                           
-//        $datas = array();
-//        $dataRealTactic = array();
-//        $dataPlanTactic = array();
-//        $dataPorcTactic = array();
-//        $dataLinkTactic = array();
-//        $categories = array();
-//        
-//        //Resultados Tácticos
-//        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesTacticByGerenciaGroup();
-//        
-//        foreach($resultsTactics as $resultTactic){
-//            $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-//            $urlTypeGroup =  $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo']));
-//            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $urlTypeGroup);
-//            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic'], 'link' => $urlTypeGroup);
-//            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic'], 'link' => $urlTypeGroup);
-//            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic, 'linkTypeGroup' => $urlTypeGroup);
-//            $categories[] = array('label' => $resultTactic['Descripcion']);
-//        }
-//        $optionsChart = array('typeLabel' => 'auto');
-//        
-//        $datas['dataPorcTactic'] = $dataPorcTactic;
-//        $datas['dataPlanTactic'] = $dataPlanTactic;
-//        $datas['dataRealTactic'] = $dataRealTactic;
-//        $datas['dataLinkTactic'] = $dataLinkTactic;
-//        $datas['categories'] = $categories;
-//        $datas['optionsChart'] = $optionsChart;
-//        
+        foreach($linesStrategics as $lineStrategic){
+            $indicators = $lineStrategic->getIndicators();
+            foreach ($indicators as $indicator) {
+                if(!isset($tree[(string)$lineStrategic])){
+                    $tree[(string)$lineStrategic] = array(
+                        'parent' => $lineStrategic,
+                        'child' => array(),
+                    );
+                }
+                $tree[(string)$lineStrategic]['child'][(string)$indicator] = $indicator;
+                $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
+            }
+        }
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
+            'tree' => $tree,
+            'data' => $data,
         );
     }
     
@@ -81,5 +67,14 @@ class IconsBox extends GenericBox
             \Pequiven\SEIPBundle\Model\Box\AreasBox::DASHBOARD,
             \Pequiven\SEIPBundle\Model\Box\AreasBox::PRINCIPAL
         );
+    }
+    
+    /**
+     * Servicio de los Indicadores
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    public function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

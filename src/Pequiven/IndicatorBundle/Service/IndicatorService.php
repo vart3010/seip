@@ -7,6 +7,7 @@ use ErrorException;
 use Exception;
 use LogicException;
 use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\MasterBundle\Entity\Formula;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -252,12 +253,94 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
+     * Función que devuelve la data para el widget de tipo bulbo en el dashboard de los resultados estratégicos
+     * @param Indicator $indicator
+     * @return string
+     * @author Matias Jimenez
+     */
+    public function getDataDashboardWidgetBulb(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart['caption'] = $indicator->getDescription();
+        $chart["captionPadding"] = "0";
+        $chart["showshadow"] = "0";
+        $chart["showvalue"] = "1";
+        $chart["useColorNameAsValue"] = "1";
+        $chart["placeValuesInside"] = "1";
+        $chart["valueFontSize"] = "10";
+        $chart["baseFontColor"] = "#333333";
+        $chart["baseFont"] = "Helvetica Neue,Arial";
+        $chart["captionFontSize"] = "10";
+        $chart["showborder"] = "0";
+        $chart["bgcolor"] = "#FFFFFF";
+        $chart["toolTipColor"] = "#ffffff";
+        $chart["toolTipBorderThickness"] = "0";
+        $chart["toolTipBgColor"] = "#000000";
+        $chart["toolTipBgAlpha"] = "80";
+        $chart["toolTipBorderRadius"] = "2";
+        $chart["toolTipPadding"] = "5";
+        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
+        
+        $color = $colorData = array();
+        $colorData["minvalue"] = "0";
+        $colorData["maxvalue"] = "100";
+        
+        $resultService = $this->getResultService();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $arrangementRange = $indicator->getArrangementRange();
+        $tendency = $indicator->getTendency();
+        $errorArrangementRange = null;
+        if($arrangementRange !== null){
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
+            if($errorArrangementRange == null){
+                $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.').'%';
+                if($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $colorData["code"] = "#1aaf5d";
+                } elseif($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $colorData["code"] = "#f2c500";
+                } elseif($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $colorData["code"] = "#c02d00";
+                }
+            } else{
+                $colorData["code"] = "#000000";
+                $colorData["label"] = $errorArrangementRange;
+            }
+        } else{
+            $colorData["code"] = "#000000";
+            $colorData["label"] = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
+        }
+        
+        $color[] = $colorData;
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['colorRange']['color'] = $color;
+        
+        return $data;
+    }
+    
+    /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */
     public function getResultService()
     {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
     }
     
     public function setContainer(ContainerInterface $container = null) {
@@ -267,6 +350,22 @@ class IndicatorService implements ContainerAwareInterface
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string         $route         The name of the route
+     * @param mixed          $parameters    An array of parameters
+     * @param bool|string    $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    protected function generateUrl($route, $parameters = array(), $referenceType = \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
     
     /**

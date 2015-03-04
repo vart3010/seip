@@ -46,3 +46,12 @@ and open the template in the editor.
     display: block;
     margin: -4px 10px 0 0;
 }
+.range-good-bg {//Fondo para el rango bueno
+    background: red; //rgba(64,245,14,0.25);
+}
+.range-middle-bg {//Fondo para el rango medio
+    background: rgba(245,245,14,0.25);
+}
+.range-bad-bg {//Fondo para el rango malo
+    background: rgba(245,64,14,0.25);
+}
