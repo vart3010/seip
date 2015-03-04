@@ -68,7 +68,7 @@ pequiven_seip:
         results: Resultados
         resultsStrategics: Resultados Estratégicos
         resultsByGerencia: Resultados %gerencia%
-        result: Resultado
+        result: Aporte al objetivo
         weight: Peso
         no_results: No hay resultados asociados al objetivo.
         type_result: 
