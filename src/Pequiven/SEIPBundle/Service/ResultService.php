@@ -404,8 +404,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                     $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
                 }
-            }else{
+            } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC){
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
+            } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ){
+                $this->calculateFormulaAutomaticFromEQFromChild($indicator);
             }
         }
         
@@ -990,7 +992,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      * 
      * @param Indicator $indicator
      */
-    private function calculateFormulaRealPlanAutomaticFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
+    private function calculateFormulaRealPlanAutomaticFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator)
     {
         $childrens = $indicator->getChildrens();
         $indicatorService = $this->getIndicatorService();
@@ -1047,8 +1049,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
@@ -1089,6 +1089,108 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             if(isset($resultsItems[$i])){
                 $plan = $resultsItems[$i]['plan'];
                 $real = $resultsItems[$i]['real'];
+            }
+            $valueIndicator->setParameter($variableToPlanValueName, $plan);
+            $valueIndicator->setParameter($variableToRealValueName, $real);
+            $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
+            $valueIndicator->setValueOfIndicator($value);
+            $i++;
+        }
+        $indicator
+            ->setTotalPlan($totalPlan)
+            ->setValueFinal($totalReal);
+    }
+    
+    /**
+     * Calcula la formula con plan y real a partir de la formula
+     * 
+     * @param Indicator $indicator
+     */
+    private function calculateFormulaAutomaticFromEQFromChild(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator)
+    {
+        $childrens = $indicator->getChildrens();
+        $indicatorService = $this->getIndicatorService();
+        
+        $resultsItems = array();
+        //Obtener los valores de los hijos
+        foreach ($childrens as $child) {
+            $formula = $child->getFormula();
+            $numberResult = 0;
+            foreach ($child->getValuesIndicator() as $valueIndicator) 
+            {
+                if(!isset($resultsItems[$numberResult])){
+                    $resultsItems[$numberResult] = array();
+                }
+                $resultsItems[$numberResult][] = $valueIndicator;
+                $numberResult++;
+                
+            }//fin for each
+        }//fin for each childrens
+        
+        $details = $indicator->getDetails();
+        $valuesIndicatorQuantity = count($resultsItems);
+        
+        $i = 0;
+        $totalPlan = $totalReal = 0.0;
+        $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
+        
+        //Completar la cantidad de resultados de acuerdo a la frecuencia
+        $valuesIndicator = $indicator->getValuesIndicator();
+        if(count($valuesIndicator) != $frequencyNotificationIndicator->getNumberResultsFrequency()){
+            $user = $this->getUser();
+            $em = $this->getDoctrine()->getManager();
+            foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+                $indicator->removeValuesIndicator($valueIndicator);
+                $em->remove($valueIndicator);
+            }
+            $em->flush();
+            
+            for($i= 0;$i < $frequencyNotificationIndicator->getNumberResultsFrequency();$i++){
+                $valueIndicator = new Indicator\ValueIndicator();
+                $valueIndicator
+                    ->setFormula($formula)
+                    ->setCreatedBy($user)
+                ;
+                $indicator->addValuesIndicator($valueIndicator);
+            }
+        }
+        $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
+        $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
+        $i = 0;
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) 
+        {
+            $plan = $real = 0.0;
+            $formulaUsed = $valueIndicator->getFormula();
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            foreach ($formulaUsed->getVariables() as $variable) 
+            {   
+                if(isset($resultsItems[$i]) == false){
+                    continue;
+                }
+                $nameParameter = $variable->getName();
+                $valueParameter = $valueIndicator->getParameter($nameParameter,0);
+                $results = $resultsItems[$i];
+                if($variable->isFromEQ()){
+                    $now = new \DateTime();
+                    $tool_service = new ToolService();
+                    $parametersForTemplate = array(
+                        'indicator' => $indicator,
+                        'result_number' => ($i + 1),
+                        'date_now' => new \DateTime(),
+                        'tool_service' => $tool_service,
+                    );
+                    $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
+                }else{
+                    foreach ($results as $resultItem)
+                    {
+                        $childValueParameter = $resultItem->getParameter($nameParameter,0);
+                        if($childValueParameter !== null)
+                        {
+                            $valueParameter += $childValueParameter;
+                        }
+                    }
+                }
+                $valueIndicator->setParameter($nameParameter,$valueParameter);
             }
             $valueIndicator->setParameter($variableToPlanValueName, $plan);
             $valueIndicator->setParameter($variableToRealValueName, $real);
@@ -1247,10 +1349,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     public function validateAdvanceOfObjetives($objetives,$valid = true) {
         
         $limitErrors = 10;
-//        var_dump('Pasados - '.count($objetives));
         foreach ($objetives as $objetive) {
             $childrens = $objetive->getChildrens();
-//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
             $arrangementPrograms = $objetive->getArrangementPrograms();
             //Se evalua que los programas de gestion tengan notificacion.
             foreach ($arrangementPrograms as $arrangementProgram) {
@@ -1462,5 +1562,19 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     protected function getPeriodService()
     {
         return $this->container->get('pequiven_arrangement_program.service.period');
+    }
+    
+    /**
+     * Renders a string view.
+     *
+     * @param string   $view       The view name
+     * @param array    $parameters An array of parameters to pass to the view
+     * @param Response $response   A response instance
+     *
+     * @return String twig
+     */
+    private function renderString($string, array $parameters = array())
+    {
+        return $this->container->get('app.twig_string')->render($string, $parameters);
     }
 }

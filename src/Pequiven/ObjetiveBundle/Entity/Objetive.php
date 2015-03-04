@@ -1139,13 +1139,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     
     public function __toString() 
     {
-        $description = $this->getDescription();
-        $limit = 80;
-        if(strlen($description) > $limit)
-        {
-            $description = mb_substr($this->getDescription(), 0,$limit,'UTF-8').'...';
-
-        }
+        $description = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getDescription());
         $toString = $this->getRef().' '.$description;
         return $toString?:'-';
     }

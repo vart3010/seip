@@ -241,11 +241,9 @@ class PrePlanningService extends ContainerAware
         $url = $item->getParameter('url');
         $expanded = $item->getParameter('expanded',true);
         $name = $this->normalize_str($item->getName());
-        $limitName = 130;
-        $nameSumary = $name;
-        if(strlen($nameSumary) > $limitName){
-            $nameSumary = mb_substr($nameSumary, 0, $limitName,'UTF-8').'...';
-        }
+        $nameSumary = ToolService::truncate($name, array(
+            'limit' => 130
+        ));
         
         if($url != ''){
             $name = sprintf('<a href="%s" target="_blank" title="%s">%s</a>',$url,$name,$nameSumary);

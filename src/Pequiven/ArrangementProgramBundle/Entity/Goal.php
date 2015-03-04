@@ -410,11 +410,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     
     public function __toString() 
     {
-        $limit = 80;
-        $toString = $this->getName();
-        if(strlen($toString) > $limit){
-            $toString = mb_substr($toString, 0,$limit,'UTF-8').'...';
-        }
+        $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getName());
         return $toString?:'-';
     }
     
