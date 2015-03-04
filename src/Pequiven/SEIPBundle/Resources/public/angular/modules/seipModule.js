@@ -1951,7 +1951,7 @@ angular.module('seipModule.controllers', [])
                         },
                         "value": "0"
                     });
-//                    revenueChart.setTransparent(true);
+                    revenueChart.setTransparent(true);
                     revenueChart.render();
                 })
             };

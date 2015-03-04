@@ -2,7 +2,7 @@
 {% set classColor = 'red-gradient' %}
 {% for t in tree %}
     {% set lineStrategic = t['parent'] %}
-<div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile" style="border-bottom: solid;">
+<div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile borderLineStrategicBottom" style="{{ style[lineStrategic.ref] }}">
     <!-- Línea Estratégica -->
     <div class="with-padding">
         <div class="columns">

@@ -7,6 +7,7 @@ use ErrorException;
 use Exception;
 use LogicException;
 use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\MasterBundle\Entity\LineStrategic;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\MasterBundle\Entity\Formula;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -281,6 +282,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["captionFontSize"] = "10";
         $chart["showborder"] = "0";
         $chart["bgcolor"] = "#FFFFFF";
+        $chart["bgalpha"] = "0";
         $chart["toolTipColor"] = "#ffffff";
         $chart["toolTipBorderThickness"] = "0";
         $chart["toolTipBgColor"] = "#000000";
@@ -323,6 +325,26 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['colorRange']['color'] = $color;
         
         return $data;
+    }
+    
+    /**
+     * Calcula el promedio simple de los Indicadores
+     * @param LineStrategic $lineStrategic
+     * @return type
+     */
+     public function calculateSimpleAverage(LineStrategic &$lineStrategic) {
+        $indicators = $lineStrategic->getIndicators();
+        $quantity = count($indicators);
+        $value = 0.0;
+        foreach ($indicators as $indicator) {
+            $value += $indicator->getResultReal();
+        }
+//        if($quantity == 0){//Fix error de division por cero.
+//            $quantity = 1;
+//        }
+        $value = ($value / $quantity);
+        
+        return $value;
     }
     
     /**

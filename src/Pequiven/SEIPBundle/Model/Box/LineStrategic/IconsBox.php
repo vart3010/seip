@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Model\Box\LineStrategic;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 use Pequiven\MasterBundle\Entity\LineStrategic;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Description of IconsBox
@@ -25,11 +26,24 @@ class IconsBox extends GenericBox
         
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
-        $tree = $data = array();
+        $tree = $data = $style = array();
         $indicatorService = $this->getIndicatorService();
+        $resultService = $this->getResultService();
         
         foreach($linesStrategics as $lineStrategic){
             $indicators = $lineStrategic->getIndicators();
+            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic);
+            $type = $resultService->evaluateRangeStandar($valueIndicators);
+//            var_dump($lineStrategic->getRef().' '.$valueIndicators.' '.$type);
+            
+            if($type == CommonObject::TYPE_RANGE_GOOD){
+                $style[(string)$lineStrategic->getRef()] = 'background: rgba(88,181,63,0.25);';
+            } elseif($type == CommonObject::TYPE_RANGE_MIDDLE){
+                $style[(string)$lineStrategic->getRef()] = 'background: rgba(202,202,73,0.25);';
+            } elseif($type == CommonObject::TYPE_RANGE_BAD){
+                $style[(string)$lineStrategic->getRef()] = 'background: rgba(210,148,129,0.25);';
+            }
+            
             foreach ($indicators as $indicator) {
                 if(!isset($tree[(string)$lineStrategic])){
                     $tree[(string)$lineStrategic] = array(
@@ -41,12 +55,14 @@ class IconsBox extends GenericBox
                 $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
             }
         }
-        
+//        var_dump($style);
+//        die();
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
             'tree' => $tree,
             'data' => $data,
+            'style' => $style,
         );
     }
     
@@ -76,5 +92,14 @@ class IconsBox extends GenericBox
     public function getIndicatorService()
     {
         return $this->container->get('pequiven_indicator.service.inidicator');
+    }
+    
+    /**
+     * Servicio que calcula los resultados
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    public function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }
