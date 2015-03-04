@@ -1049,8 +1049,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
-//        var_dump($totalPlan);
-//        var_dump($totalReal);
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
@@ -1351,10 +1349,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     public function validateAdvanceOfObjetives($objetives,$valid = true) {
         
         $limitErrors = 10;
-//        var_dump('Pasados - '.count($objetives));
         foreach ($objetives as $objetive) {
             $childrens = $objetive->getChildrens();
-//            var_dump('Padre - '.$objetive->getRef().' - Hijos - '.count($childrens));
             $arrangementPrograms = $objetive->getArrangementPrograms();
             //Se evalua que los programas de gestion tengan notificacion.
             foreach ($arrangementPrograms as $arrangementProgram) {
