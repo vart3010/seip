@@ -1419,8 +1419,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["bordercolor"] = "DCCEA1";
         $data["charttopmargin"] = "0";
         $data["chartbottommargin"] =  "0";
-//        $data["upperlimit"] = "131";
-//        $data["lowerlimit"] = "69";
         $data["tickmarkdistance"] = "3";
         $data["valuepadding"] = "-2";
         $data["pointerradius"] = "0";
@@ -1450,6 +1448,25 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $data["captionFontColor"] = "#c02d00";
         }
         return $data;
+    }
+    
+    /**
+     * Evalua un valor en el rango estándar
+     * @param type $value
+     * @return type
+     */
+    public function evaluateRangeStandar($value){
+        $type = CommonObject::TYPE_RANGE_GOOD;
+        $rangeTop = (float)70;
+        $rangeMiddle = (float)40;
+        
+        if($value < $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_BAD;
+        } elseif($value >= $rangeMiddle && $value < $rangeTop){
+            $type = CommonObject::TYPE_RANGE_MIDDLE;
+        }
+        
+        return $type;
     }
     
     private function addErrorTrans($error,array $parameters = array()) {

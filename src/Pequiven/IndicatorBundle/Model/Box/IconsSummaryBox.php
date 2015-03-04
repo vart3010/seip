@@ -21,22 +21,17 @@ class IconsSummaryBox extends GenericBox
     }
 
     public function getParameters() {
-        
+
         $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $idLineStrategic = $request->get('id');
         
-        $lineStrategic = $this->container->get('pequiven.repository.linestrategic')->find($idLineStrategic);
-        $indicators = $this->container->get('pequiven.repository.indicator')->findBy(array('lineStrategics' => $lineStrategic));
-        
-        var_dump(count($indicators));
-        die();
+        $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategic($idLineStrategic);
         
         $iconsLineStrategic = LineStrategic::getIcons();
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
-            'linesStrategics' => $linesStrategics,
         );
     }
     
