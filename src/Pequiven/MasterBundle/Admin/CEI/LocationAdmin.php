@@ -11,54 +11,56 @@
 
 namespace Pequiven\MasterBundle\Admin\CEI;
 
-use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
- * Administrador de compañia (Control estadistico e informacion)
+ * Administrador de sede
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class LocationAdmin extends BaseAdmin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
         $show
             ->add('id')
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('company')
+            ->add('name')
+            ->add('typeLocation')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('company')
+            ->add('name')
+            ->add('typeLocation')
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
     {
         $filter
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('company')
+            ->add('name')
+            ->add('typeLocation')
             ;
+        parent::configureDatagridFilters($filter);
     }
     
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->addIdentifier('rif')
-            ->add('description')
-            ->add('enabled')
+            ->addIdentifier('name')
+            ->add('company')
+            ->add('typeLocation')
             ;
+        parent::configureListFields($list);
     }
 }

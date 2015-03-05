@@ -12,16 +12,16 @@
 namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SEIPBundle\Model\BaseModel;
 
 /**
- * Compañia (Control estadistico de informacion)
+ * Empresa (Control estadistico de informacion)
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table()
+ * @ORM\Table(name="seip_cei_Company")
  * @ORM\Entity()
  */
-class Company extends \Pequiven\SEIPBundle\Model\BaseEntity
+class Company extends BaseModel
 {
     /**
      * @var integer
@@ -100,5 +100,9 @@ class Company extends \Pequiven\SEIPBundle\Model\BaseEntity
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    public function __toString() {
+        return $this->getDescription()?:'-';
     }
 }

@@ -11,54 +11,58 @@
 
 namespace Pequiven\MasterBundle\Admin\CEI;
 
-use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
- * Administrador de compañia (Control estadistico e informacion)
+ * Administrador de pais
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class CountryAdmin extends BaseAdmin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
         $show
             ->add('id')
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('name')
+            ->add('nameISO')
+            ->add('alphaCode')
+            ->add('numericalCode')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('name')
+            ->add('nameISO')
+            ->add('alphaCode')
+            ->add('numericalCode')
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
     {
         $filter
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('name')
+            ->add('nameISO')
+            ->add('alphaCode')
+            ->add('numericalCode')
             ;
+        parent::configureDatagridFilters($filter);
     }
     
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->addIdentifier('rif')
-            ->add('description')
-            ->add('enabled')
+            ->addIdentifier('name')
+            ->add('alphaCode')
+            ->add('numericalCode')
             ;
     }
 }

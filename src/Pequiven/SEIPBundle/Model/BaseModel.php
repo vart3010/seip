@@ -21,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\MappedSuperclass()
  */
-class BaseEntity implements BaseEntityInterface
+class BaseModel implements BaseModelInterface
 {
     
     /**

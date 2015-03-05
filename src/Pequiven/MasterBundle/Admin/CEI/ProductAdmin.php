@@ -11,54 +11,49 @@
 
 namespace Pequiven\MasterBundle\Admin\CEI;
 
-use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
- * Administrador de compañia (Control estadistico e informacion)
+ * Administrador de producto
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class ProductAdmin extends BaseAdmin
 {
-    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
+    protected function configureShowFields(ShowMapper $show) 
     {
         $show
             ->add('id')
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('name')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('name')
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
     {
         $filter
-            ->add('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('name')
             ;
+        parent::configureDatagridFilters($filter);
     }
     
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->addIdentifier('rif')
-            ->add('description')
-            ->add('enabled')
+            ->add('name')
             ;
+        parent::configureListFields($list);
     }
 }

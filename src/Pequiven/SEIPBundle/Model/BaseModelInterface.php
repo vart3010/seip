@@ -15,7 +15,7 @@ namespace Pequiven\SEIPBundle\Model;
  * Intefaz de la entidad base
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface BaseEntityInterface 
+interface BaseModelInterface 
 {
     function isEnabled();
     

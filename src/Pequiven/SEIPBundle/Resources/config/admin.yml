@@ -233,6 +233,17 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
+         
+    sonata.admin.cei.cause_stop:
+        class: Pequiven\MasterBundle\Admin\CEI\CauseStopAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Causa de parada" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\CauseStop
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
             
     sonata.admin.cei.company:
         class: Pequiven\MasterBundle\Admin\CEI\CompanyAdmin
@@ -241,6 +252,127 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Company
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.country:
+        class: Pequiven\MasterBundle\Admin\CEI\CountryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Pais" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Country
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.currency:
+        class: Pequiven\MasterBundle\Admin\CEI\CurrencyAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Moneda" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Currency
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.location:
+        class: Pequiven\MasterBundle\Admin\CEI\LocationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sede" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Location
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.plant:
+        class: Pequiven\MasterBundle\Admin\CEI\PlantAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Planta" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Plant
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.product:
+        class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Producto" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Product
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.production_line:
+        class: Pequiven\MasterBundle\Admin\CEI\ProductionLineAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Linea de producto" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\ProductionLine
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.record_type:
+        class: Pequiven\MasterBundle\Admin\CEI\RecordTypeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de registro" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\RecordType
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.sector:
+        class: Pequiven\MasterBundle\Admin\CEI\SectorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sector" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\SectorAdmin
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.sub_sector:
+        class: Pequiven\MasterBundle\Admin\CEI\SubSectorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sub sector" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\SubSector
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.type_incidence:
+        class: Pequiven\MasterBundle\Admin\CEI\TypeIncidenceAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de incidencia" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\TypeIncidence
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.type_location:
+        class: Pequiven\MasterBundle\Admin\CEI\TypeLocationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Tipo de sede" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\TypeLocation
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
