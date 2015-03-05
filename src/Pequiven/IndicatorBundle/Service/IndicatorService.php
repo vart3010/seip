@@ -271,7 +271,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart = array();
         
         $chart['caption'] = $indicator->getDescription();
-        $chart["captionPadding"] = "0";
+        $chart["captionPadding"] = "10";
         $chart["showshadow"] = "0";
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
