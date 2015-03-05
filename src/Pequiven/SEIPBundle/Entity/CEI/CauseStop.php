@@ -72,4 +72,8 @@ class CauseStop extends BaseModel
     {
         return $this->name;
     }
+    
+    public function __toString() {
+        return $this->getName()?:'-';
+    }
 }

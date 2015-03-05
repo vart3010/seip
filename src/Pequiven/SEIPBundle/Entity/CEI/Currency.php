@@ -36,7 +36,7 @@ class Currency extends BaseModel
      * Nombre
      * 
      * @var String 
-     * @ORM\Column(name="name",type="text",nullable=false)
+     * @ORM\Column(name="name",type="string",nullable=false)
      */
     private $name;
     
@@ -101,5 +101,9 @@ class Currency extends BaseModel
     public function getCode()
     {
         return $this->code;
+    }
+    
+    public function __toString() {
+        return $this->getName()?:'-';
     }
 }

@@ -73,4 +73,9 @@ class RecordType extends BaseModel
     {
         return $this->description;
     }
+    
+    public function __toString() 
+    {
+        return $this->getDescription()?:'-';
+    }
 }

@@ -165,4 +165,8 @@ class Country extends BaseModel
     {
         return $this->numericalCode;
     }
+    
+    public function __toString() {
+        return $this->getName()?:'-';
+    }
 }

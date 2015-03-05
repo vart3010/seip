@@ -72,4 +72,9 @@ class Product extends BaseModel
     {
         return $this->name;
     }
+    
+    public function __toString() 
+    {
+        return $this->getName()?:'-';
+    }
 }

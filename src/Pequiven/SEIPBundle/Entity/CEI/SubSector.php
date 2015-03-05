@@ -135,4 +135,9 @@ class SubSector extends BaseModel
     {
         return $this->sector;
     }
+    
+    public function __toString() 
+    {
+        return $this->getName()?:'-';
+    }
 }

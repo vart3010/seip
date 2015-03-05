@@ -102,4 +102,9 @@ class TypeLocation extends BaseModel
     {
         return $this->code;
     }
+    
+    public function __toString() 
+    {
+        return $this->getDescription()?:'-';
+    }
 }
