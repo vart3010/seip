@@ -51,7 +51,7 @@ class PlantAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->add('name')
+            ->addIdentifier('name')
             ;
         parent::configureListFields($list);
     }

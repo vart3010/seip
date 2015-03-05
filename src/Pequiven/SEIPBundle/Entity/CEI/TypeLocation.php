@@ -43,7 +43,7 @@ class TypeLocation extends BaseModel
     /**
      * Codigo unico
      * @var string
-     * @ORM\Column(name="code",type="string",length=20)
+     * @ORM\Column(name="code",type="string",length=50)
      */
     private $code;
 
