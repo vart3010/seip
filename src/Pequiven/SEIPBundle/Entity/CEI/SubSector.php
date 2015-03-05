@@ -56,4 +56,83 @@ class SubSector extends BaseModel
      * @ORM\Column(name="description",type="text")
      */
     private $description;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return SubSector
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return SubSector
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set sector
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Sector $sector
+     * @return SubSector
+     */
+    public function setSector(\Pequiven\SEIPBundle\Entity\CEI\Sector $sector)
+    {
+        $this->sector = $sector;
+
+        return $this;
+    }
+
+    /**
+     * Get sector
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Sector 
+     */
+    public function getSector()
+    {
+        return $this->sector;
+    }
 }

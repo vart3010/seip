@@ -63,4 +63,106 @@ class Country extends BaseModel
      * @ORM\Column(name="numericalCode",type="integer")
      */
     private $numericalCode;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Country
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set nameISO
+     *
+     * @param string $nameISO
+     * @return Country
+     */
+    public function setNameISO($nameISO)
+    {
+        $this->nameISO = $nameISO;
+
+        return $this;
+    }
+
+    /**
+     * Get nameISO
+     *
+     * @return string 
+     */
+    public function getNameISO()
+    {
+        return $this->nameISO;
+    }
+
+    /**
+     * Set alphaCode
+     *
+     * @param string $alphaCode
+     * @return Country
+     */
+    public function setAlphaCode($alphaCode)
+    {
+        $this->alphaCode = $alphaCode;
+
+        return $this;
+    }
+
+    /**
+     * Get alphaCode
+     *
+     * @return string 
+     */
+    public function getAlphaCode()
+    {
+        return $this->alphaCode;
+    }
+
+    /**
+     * Set numericalCode
+     *
+     * @param integer $numericalCode
+     * @return Country
+     */
+    public function setNumericalCode($numericalCode)
+    {
+        $this->numericalCode = $numericalCode;
+
+        return $this;
+    }
+
+    /**
+     * Get numericalCode
+     *
+     * @return integer 
+     */
+    public function getNumericalCode()
+    {
+        return $this->numericalCode;
+    }
 }

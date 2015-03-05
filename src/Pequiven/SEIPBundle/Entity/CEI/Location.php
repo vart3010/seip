@@ -54,4 +54,83 @@ class Location extends Model
      * @ORM\Joincolumn(nullable=false)
      */
     private $typeLocation;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Location
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
+     * @return Location
+     */
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set typeLocation
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\TypeLocation $typeLocation
+     * @return Location
+     */
+    public function setTypeLocation(\Pequiven\SEIPBundle\Entity\CEI\TypeLocation $typeLocation)
+    {
+        $this->typeLocation = $typeLocation;
+
+        return $this;
+    }
+
+    /**
+     * Get typeLocation
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\TypeLocation 
+     */
+    public function getTypeLocation()
+    {
+        return $this->typeLocation;
+    }
 }
