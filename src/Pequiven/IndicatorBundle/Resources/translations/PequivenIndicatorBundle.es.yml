@@ -15,6 +15,9 @@ pequiven_indicator:
     indicator_operative: Indicador Operativo
     indicator:
         add_observation: Agrege una observación al indicador
+        remove_values: Si elimina todos los resultados perdera los valores cargados ¿Desea continuar?
+        buttons:
+            remove_values: Eliminar resultados
     indicator_details:
         source_result_all: Todos los resultados
         source_result_last_valid: Ultimo resultado valido (Con valor)
@@ -35,6 +38,7 @@ pequiven_indicator:
         main: Tipo de calculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
+        formula_automatic_from_eq: Fórmula automatica (Ecuación)
         simple_average: Promedio simple
         real_and_plan_automatic: Plan y Real automático
         real_automatic: Real automático
@@ -81,7 +85,7 @@ form:
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
     frequencyNotificationIndicator: Frecuencia de notificación
-    resultReal: Resultado Gestión
+    resultReal: Resultado de la medición
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia

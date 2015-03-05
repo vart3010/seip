@@ -286,6 +286,25 @@ class IndicatorController extends ResourceController
     }
     
     /**
+     * Elimina todos los valores cargados en un indicador
+     * @param Request $request
+     * @return type
+     */
+    public function removeValuesAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $em = $this->getDoctrine()->getManager();
+        foreach ($resource->getValuesIndicator() as $valueIndicator)
+        {
+            $em->remove($valueIndicator); 
+        }
+        $em->flush();
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */

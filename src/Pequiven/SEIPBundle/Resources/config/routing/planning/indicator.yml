@@ -28,6 +28,16 @@ pequiven_indicator_add_observation:
         id: \d+
     methods: [POST]
     
+pequiven_indicator_remove_values:
+    path: /{id}/remove-values
+    defaults:
+        _controller: pequiven.controller.indicator:removeValuesAction
+        _format: html
+    requirements:
+        _format: html
+        id: \d+
+    methods: [POST]
+    
 #Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
 indicatorGerenciaFirstTactic:
     path: /indicator/indicatorGerenciaFirstTactic

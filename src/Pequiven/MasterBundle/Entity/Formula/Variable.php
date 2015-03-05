@@ -4,24 +4,15 @@ namespace Pequiven\MasterBundle\Entity\Formula;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-
+use Pequiven\MasterBundle\Model\Formula\Variable as  Model;
 /**
  * Variable
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Variable implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
-{
-    /**
-     * Nombre de la variable que se usara para calculos de equacion plan
-     */
-    const VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN = 'plan';
-    /**
-     * Nombre de la variable que se usara para calculos de equacion real
-     */
-    const VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL = 'real';
-    
+class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
+{   
     /**
      * @var integer
      *
@@ -44,6 +35,14 @@ class Variable implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      * @ORM\Column(name="name", type="string", length=100)
      */
     private $name;
+
+    /**
+     * Ecuacion para calcular el valor de la variable
+     * 
+     * @var string
+     * @ORM\Column(name="equation", type="text", nullable=true)
+     */
+    private $equation;
 
     /**
      * @var \DateTime
@@ -213,7 +212,11 @@ class Variable implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     
     public function __toString()
     {
-        return $this->getName()?: '-';
+        $toString = $this->getName();
+        if($this->equation != ''){
+            $toString .= ' (EQ)';
+        }
+        return $toString != '' ? $toString : '-';
     }
     
     function getPeriod() {
@@ -233,5 +236,35 @@ class Variable implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
             $this->updatedAt = null;
             $this->period = null;
         }
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->formulas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set equation
+     *
+     * @param string $equation
+     * @return Variable
+     */
+    public function setEquation($equation)
+    {
+        $this->equation = $equation;
+
+        return $this;
+    }
+
+    /**
+     * Get equation
+     *
+     * @return string 
+     */
+    public function getEquation()
+    {
+        return $this->equation;
     }
 }

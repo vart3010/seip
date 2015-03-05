@@ -71,4 +71,30 @@ class ToolService
     {
         return '' === $name || null === $name || preg_match('/^[a-zA-Z0-9_]*$/D', $name);
     }
+    
+    /**
+     * Trunca un texto
+     * @param string $description
+     * @param array $parameters
+     * limit: 80<br/>
+     * sufix: ...<br/>
+     * @return string
+     */
+    public static function truncate($description,array $parameters = array()) 
+    {
+        $limit = 80;
+        $sufix = '...';
+        if(isset($parameters['limit'])){
+            $limit = (int)$parameters['limit'];
+        }
+        if(isset($parameters['sufix'])){
+            $sufix = $parameters['sufix'];
+        }
+        
+        if(strlen($description) > $limit)
+        {
+            $description = mb_substr($description, 0,$limit,'UTF-8').$sufix;
+        }
+        return $description;
+    }
 }

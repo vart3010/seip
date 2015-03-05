@@ -26,38 +26,6 @@ class IconsNavBarBox extends GenericBox
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
         
-//        var_dump(count($linesStrategics));
-//        die();
-                           
-//        $datas = array();
-//        $dataRealTactic = array();
-//        $dataPlanTactic = array();
-//        $dataPorcTactic = array();
-//        $dataLinkTactic = array();
-//        $categories = array();
-//        
-//        //Resultados Tácticos
-//        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalObjetivesTacticByGerenciaGroup();
-//        
-//        foreach($resultsTactics as $resultTactic){
-//            $resTactic = $resultTactic['PlanObjTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealObjTactic'] / (float)$resultTactic['PlanObjTactic']) * 100,'0',2);
-//            $urlTypeGroup =  $this->generateUrl('monitorObjetiveTacticByGroup', array('typeGroup' => $resultTactic['Grupo']));
-//            $dataPorcTactic[] = array('value' => $resTactic, 'link' => $urlTypeGroup);
-//            $dataPlanTactic[] = array('value' => $resultTactic['PlanObjTactic'], 'link' => $urlTypeGroup);
-//            $dataRealTactic[] = array('value' => $resultTactic['RealObjTactic'], 'link' => $urlTypeGroup);
-//            $dataLinkTactic[] = array('typeGroup' => $resultTactic['Descripcion'],'porcCarga' => $resTactic, 'linkTypeGroup' => $urlTypeGroup);
-//            $categories[] = array('label' => $resultTactic['Descripcion']);
-//        }
-//        $optionsChart = array('typeLabel' => 'auto');
-//        
-//        $datas['dataPorcTactic'] = $dataPorcTactic;
-//        $datas['dataPlanTactic'] = $dataPlanTactic;
-//        $datas['dataRealTactic'] = $dataRealTactic;
-//        $datas['dataLinkTactic'] = $dataLinkTactic;
-//        $datas['categories'] = $categories;
-//        $datas['optionsChart'] = $optionsChart;
-//        
-        
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,

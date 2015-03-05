@@ -1935,6 +1935,27 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            $scope.renderWidgetIndicatorStrategic = function(id,data) {
+                FusionCharts.ready(function() {
+                    var revenueChart = new FusionCharts({
+                        "type": "bulb",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "5%",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "colorrange": {
+                                "color": data.dataSource.colorRange.color
+                             }
+                        },
+                        "value": "0"
+                    });
+                    revenueChart.setTransparent(true);
+                    revenueChart.render();
+                })
+            };
+            
             $scope.renderWidgetAngularRange = function(id) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({

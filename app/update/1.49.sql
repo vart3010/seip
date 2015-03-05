@@ -7,3 +7,6 @@ ALTER TABLE seip_objetive ADD qualitySystem_id INT DEFAULT NULL;
 ALTER TABLE seip_objetive ADD CONSTRAINT FK_C239594B68C46012 FOREIGN KEY (qualitySystem_id) REFERENCES QualitySystem (id);
 CREATE INDEX IDX_C239594B68C46012 ON seip_objetive (qualitySystem_id);
 ALTER TABLE seip_objetive_audit ADD qualitySystem_id INT DEFAULT NULL;
+
+ALTER TABLE Variable ADD equation LONGTEXT DEFAULT NULL;
+ALTER TABLE Variable_audit ADD equation LONGTEXT DEFAULT NULL;
