@@ -290,6 +290,22 @@ class IndicatorRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
     
+    /**
+     * 
+     * @return type
+     */
+    public function findByLineStrategic($idLineStrategic){
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('i.lineStrategics','ls')
+                ->andWhere("ls.id = :idLineStrategic")
+                ->andWhere("i.deletedAt IS NULL")
+                ->setParameter('idLineStrategic', $idLineStrategic)
+        ;
+        
+        return $qb->getQuery()->getResult();
+    }
+    
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
         $qb = $this->getQueryBuilder();
