@@ -184,7 +184,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }else{
             foreach ($indicator->getObjetives() as $objetive) {
                 $gerenciaSecond = $objetive->getGerenciaSecond();
-                $gerencia = $gerenciaSecond->getGerencia();
+                $gerencia = $objetive->getGerencia();
 
                 if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
                     $valid = true;
@@ -266,7 +266,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             $valid = true;
         }else{
             $gerenciaSecond = $objetive->getGerenciaSecond();
-            $gerencia = $gerenciaSecond->getGerencia();
+            $gerencia = $objetive->getGerencia();
             
             if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
                 $valid = true;
