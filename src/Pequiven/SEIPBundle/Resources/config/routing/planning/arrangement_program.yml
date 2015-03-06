@@ -8,3 +8,12 @@ pequiven_seip_arrangementprogram_by_gerencia:
     requirements:
         _format: html|json|xml
     methods: [GET]
+
+pequiven_seip_arrangementprogram_all:
+    path: /all/.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:listAllAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]

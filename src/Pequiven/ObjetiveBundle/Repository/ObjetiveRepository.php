@@ -490,6 +490,11 @@ class ObjetiveRepository extends EntityRepository {
             ;
             $criteria->remove('view_planning');
         }
+
+        if (($objetiveTactical = $criteria->remove('objetiveTactical')) != null) {
+            
+        }
+        
         return $qb->getQuery()->getResult();
     }
 
@@ -526,8 +531,7 @@ class ObjetiveRepository extends EntityRepository {
     public function getQueryAllEnabled(){
         $qb = $this->getQueryBuilder();
         $qb
-                ->andWhere('o.enabled = :enabled')
-                ->setParameter('enabled', true);
+                ->andWhere('o.deletedAt IS NULL');
         return $qb;
     }
 

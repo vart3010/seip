@@ -207,6 +207,17 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAll(array $criteria = null, array $orderBy = null) {
+        $this->getUser();
+        return parent::createPaginator($criteria, $orderBy);
+    }
+    
+    /**
      * Retorna los programas de gestion los cuales tengo asignados para revision
      * 
      * @param array $criteria

@@ -201,6 +201,82 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    
+    public function listAllAction(Request $request){
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ALL');
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_all', array('_format' => 'json'));
+
+        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByAll',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'findBy',
+                array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSEIPBundle:Planning:ArrangementProgram/list.html.twig')
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user,
+                'url' => $url,
+                'boxRender' => $boxRender,
+            ));
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
     /**
      * 
      * @param Request $request

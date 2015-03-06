@@ -1,7 +1,3 @@
-pequiven_planning_arrangement_program:
-    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/arrangement_program.yml"
-    prefix:   /arrangementprogram
-    
 pequiven_update:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/update.yml"
     prefix:   /updater

@@ -454,6 +454,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $result = 100;
                     }
                     $result = 100 - $result;
+                    if($result > 100){
+                        $result = 100;
+                    }
                 } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
                     $result = 100 - $result;
                     $result = $result/2;

@@ -958,6 +958,263 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        .controller('ReportArrangementProgramAllController', function($scope, $http) {
+            $scope.data = {
+                tacticals: null,
+                operatives: null,
+                first_line_managements: null,
+                second_line_managements: null,
+                complejos: null,
+                responsibles: null,
+                arrangementProgramStatusLabels: null,
+                typesManagement: null
+            };
+            $scope.model = {
+                complejo: null,
+                arrangementProgramStatus: null,
+                responsiblesGoals: null,
+                responsibles: null,
+                tacticalObjective: null,
+                operationalObjective: null,
+                firstLineManagement: null,
+                secondLineManagement: null,
+                typeManagement: null
+            };
+            var selectsDisable = [];
+            $scope.disableSelect = function(id){
+                selectsDisable.push(id);
+                angular.element('#'+id).select('enable',false);
+            };
+            
+            var setEnableSelect = function (id,enabled){
+                var i;
+                var isEnable = true;
+                for(i=0; i < selectsDisable.length; i++){
+                    if(selectsDisable[i] == id){
+                        isEnable = false;
+                    }
+                }
+                if(isEnable == true){
+                    angular.element('#selectComplejos').select2("enable",enabled)
+                }else{
+                    angular.element('#selectComplejos').select2("enable",false)
+                }
+            };
+            
+            //Carga de Filtro Localidad
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_complejos'))
+                .success(function(data) {
+                    $scope.data.complejos = data;
+                    if($scope.model.complejo != null){
+                        $scope.setValueSelect2("selectComplejos", $scope.model.complejo, $scope.data.complejos, function(selected) {
+                            $scope.model.complejo = selected;
+                            $scope.getFirstLineManagement($scope.model.complejo);
+//                            if($scope.model.firstLineManagement != undefined){
+//                                $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.model.complejo.gerencias, function(selected) {
+//                                    $scope.model.firstLineManagement = selected;
+//                                });
+//                            }
+                        });
+                    }
+                });            
+            
+            // Filtro Gerencia 1ra Línea
+            $scope.getFirstLineManagement = function(complejo){
+                var parameters = {
+                    filter: {}
+                };
+                if(complejo != undefined){
+                    parameters.filter['complejo'] = complejo;
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_first_line_management',parameters))
+                    .success(function(data) {
+                        $scope.data.first_line_managements = data;
+                        if($scope.model.firstLineManagement != null){
+                            $scope.setValueSelect2("firstLineManagement", $scope.model.firstLineManagement, $scope.data.first_line_managements, function(selected) {
+                                $scope.model.firstLineManagement = selected;
+                            });
+//                            var selectFirstLineManagement = angular.element('#firstLineManagement');
+                        }
+                    });
+            };
+            $scope.getFirstLineManagement();
+//            
+            //Filtro Gerencia 2da Línea
+            $scope.getSecondLineManagement = function(gerencia,complejo){
+                var parameters = {
+                    filter: {}
+                };
+                
+                if(gerencia != undefined){
+                    parameters.filter['gerencia'] = gerencia;
+                    console.log(gerencia);
+                } else{
+                    if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
+                        parameters.filter['complejo'] = $scope.model.complejo.id;
+                    }
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_second_line_management',parameters))
+                    .success(function(data) {
+                        $scope.data.second_line_managements = data;
+                        if($scope.model.secondLineManagement != null){
+                            $scope.setValueSelect2("secondLineManagement", $scope.model.secondLineManagement, $scope.data.second_line_managements, function(selected) {
+                                $scope.model.secondLineManagement = selected;
+                            });
+                        }
+                    });
+            };
+            $scope.getSecondLineManagement();
+            
+            //Objetivo Táctico
+            $scope.getTactics = function(gerencia){
+                var parameters = {
+                    filter: {}
+                };
+                parameters.filter['view_planning'] = false;
+                if(gerencia != undefined){
+                    parameters.filter['view_planning'] = true;
+                    parameters.filter['gerencia'] = gerencia;
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_tactical_objectives',parameters))
+                        .success(function(data) {
+                            $scope.data.tacticals = data;
+                        });
+            };
+            $scope.getTactics();
+            
+            // Objetivo Operativo
+            $scope.getOperatives = function(objetiveTactical){
+                var parameters = {
+                    filter: {}
+                };
+                parameters.filter['view_planning'] = false;
+                if(objetiveTactical != undefined){
+                    parameters.filter['objetiveTactical'] = objetiveTactical;
+                }
+                if($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined){
+                    parameters.filter['gerencia'] = $scope.model.firstLineManagement.id;
+                }
+                $http.get(Routing.generate('pequiven_arrangementprogram_data_operatives_objectives',parameters))
+                .success(function(data) {
+                    $scope.data.operatives = data;
+                });
+            };
+            $scope.getOperatives();
+            
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
+                    .success(function(data) {
+                        $scope.data.responsibles = data;
+                    });
+
+            //Ver el resumen de programas de gestión por status
+            $scope.viewByStatus = function(status){
+                $scope.tableParams.$params.filter['status'] = status;
+                var selectStatus = angular.element('#selectStatus');
+                selectStatus.select2("val",status);
+//                $scope.resetViewNotified();
+            }
+
+            $scope.$watch("model.complejo", function(newParams, oldParams) {
+                if ($scope.model.complejo != null && $scope.model.complejo.id != undefined) {
+                    $scope.tableParams.$params.filter['complejo'] = $scope.model.complejo.id;
+//                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['complejo'] = null;
+                }
+            });
+            $scope.$watch("model.arrangementProgramStatus", function(newParams, oldParams) {
+                if ($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined) {
+                    $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['status'] = null;
+                }
+            });
+            $scope.$watch("model.responsibles", function(newParams, oldParams) {
+                if ($scope.model.responsibles != null) {
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsibles").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
+                    } else {
+                        $scope.tableParams.$params.filter['responsibles'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsibles'] = null;
+                }
+            });
+            $scope.$watch("model.responsiblesGoals", function(newParams, oldParams) {
+                if ($scope.model.responsiblesGoals != null) {
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsiblesGoals").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
+                    } else {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                }
+            });
+            $scope.$watch("model.tacticalObjective", function(newParams, oldParams) {
+                if ($scope.model.tacticalObjective != null && $scope.model.tacticalObjective.id != undefined) {
+                    $scope.tableParams.$params.filter['tacticalObjective'] = $scope.model.tacticalObjective.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['tacticalObjective'] = null;
+                }
+            });
+            $scope.$watch("model.operationalObjective", function(newParams, oldParams) {
+                if ($scope.model.operationalObjective != null && $scope.model.operationalObjective.id != undefined) {
+                    $scope.tableParams.$params.filter['operationalObjective'] = $scope.model.operationalObjective.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['operationalObjective'] = null;
+                }
+            });
+            $scope.$watch("model.firstLineManagement", function(newParams, oldParams) {
+                if ($scope.model.firstLineManagement != null && $scope.model.firstLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = $scope.model.firstLineManagement.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['firstLineManagement'] = null;
+                }
+            });
+            $scope.$watch("model.secondLineManagement", function(newParams, oldParams) {
+                if ($scope.model.secondLineManagement != null && $scope.model.secondLineManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = $scope.model.secondLineManagement.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['secondLineManagement'] = null;
+                }
+            });
+            //Filtro de modular y vinculante
+            $scope.$watch("model.typeManagement", function(newParams, oldParams) {
+                var firstLineManagement = angular.element('#firstLineManagement');
+                if ($scope.model.typeManagement != null && $scope.model.typeManagement.id != undefined) {
+                    $scope.tableParams.$params.filter['typeManagement'] = $scope.model.typeManagement.id;
+                    $scope.resetViewNotified();
+                    if($scope.model.typeManagement.id == 0){//Si el filtro es modular
+                        setEnableSelect('selectComplejos',false);
+                        setEnableSelect('firstLineManagement',false);
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['typeManagement'] = null;
+                    setEnableSelect('selectComplejos',true);
+                    setEnableSelect('firstLineManagement',true);
+                }
+            });
+        })
         .controller('IndicatorResultController',function($scope,notificationBarService,$http,notifyService,$filter){
     
             $scope.urlValueIndicatorForm = null;

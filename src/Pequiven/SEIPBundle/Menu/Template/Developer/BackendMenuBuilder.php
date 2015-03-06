@@ -170,11 +170,17 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     function addPlanningMenu(ItemInterface $menu, $section) 
     {
+        $title = $this->trans('statisticsAndInformation', array(), 'PequivenSEIPBundle');
+        $gerenciasRef = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsRef();
+        if($this->getUser()->getGerencia()->getRef() == $gerenciasRef[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
+            $title = $this->trans('internalAudit', array(), 'PequivenSEIPBundle');
+        }
+        
         $child = $this->factory->createItem('planning',
             $this->getSubLevelOptions(array(
                 'uri' => null,
                 'labelAttributes' => array('icon' => 'fa fa-bar-chart',),
-            )))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
+            )))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section),array('%titulo%' => $title)));
         
         if($this->isGranted('ROLE_SEIP_PLANNING_LIST_*')){
             
@@ -188,7 +194,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $subchild = $this->factory->createItem('planning.visualize.objetives',
                             $this->getSubLevelOptions(array(
                             'uri' => null,
-                            'labelAttributes' => array('icon' => 'icon-book',),
+                            'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))
                         )
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.main', $section)));
@@ -230,7 +236,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $subchild = $this->factory->createItem('planning.visualize.indicators',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
-                        'labelAttributes' => array('icon' => 'icon-book',),
+                        'labelAttributes' => array('icon' => 'fa fa-line-chart',),
                         ))
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.main', $section)));
@@ -256,6 +262,23 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $visualize->addChild($subchild);
             }//Fin menu Ver - Indicadores
+            
+            if($this->isGranted('ROLE_SEIP_PLANNING_LIST_ARRANGEMENT_PROGRAM')){
+                $subchild = $this->factory->createItem('planning.visualize.arrangement_programs',
+                    $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-tasks',),
+                    ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.arrangement_programs.main', $section)));
+                
+                $subchild->addChild('planning.visualize.arrangement_programs.list', array(
+                    'route' => 'pequiven_seip_arrangementprogram_all'
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.arrangement_programs.list', $section)));
+                
+                $visualize->addChild($subchild);
+            }
             
             if($this->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_*')){
                 
@@ -822,6 +845,37 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //		
 //        return null;
 //    }
+    
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
     
     /**
      * 
