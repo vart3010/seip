@@ -2,7 +2,7 @@ Pequiven\SEIPBundle\Entity\CEI\Company:
     properties:
         description:
             - NotBlank: ~
-        rif:
-            - Regex:
-                pattern: '/^([JPG]{1})-([0-9]{8})-([0-9]{1}$)/'
-                message: seip.validators.must_enter_a_valid_rif
+#        rif:
+#            - Regex:
+#                pattern: '/^([JPG]{1})-([0-9]{8})-([0-9]{1}$)/'
+#                message: seip.validators.must_enter_a_valid_rif
