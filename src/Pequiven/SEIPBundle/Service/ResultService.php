@@ -979,6 +979,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
+            
             $totalPlan += $formulaParameters[$variableToPlanValueName];
             $totalReal += $formulaParameters[$variableToRealValueName];
             $i++;
@@ -1214,16 +1215,30 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function calculateFormulaRealPlanAutomaticFromEQ(\Pequiven\IndicatorBundle\Entity\Indicator &$indicator) 
     {
         $formula = $indicator->getFormula();
-        
+        $details = $indicator->getDetails();
         $valuesIndicator = $indicator->getValuesIndicator();
         $totalPlan = $totalReal = $value = $equation_real = $equation_plan = 0.0;
         
+        $valuesIndicatorQuantity = count($valuesIndicator);
+        $i = 0;
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
+            $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+            $i++;
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
+                        $totalPlan = $resultItem['plan'];
+                        $totalReal = $resultItem['real'];
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    continue;
+                }
+            }
             
-            $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-            $totalPlan += $result['plan'];
-            $totalReal += $result['real'];
+            $totalPlan += $resultItem['plan'];
+            $totalReal += $resultItem['real'];
         }
         
         $value = $totalReal;

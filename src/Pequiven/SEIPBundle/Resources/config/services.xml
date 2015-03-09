@@ -237,5 +237,8 @@
             <argument type="service" id="app.twig_string_loader" />
             <argument>%twig.options%</argument>
         </service>
+        <service id="tecnocreaciones_tools.unit_converter.currency" class="Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter\Type\CurrencyUnitType">
+            <tag name="tecnocreaciones_tools.unit_converter.unit" />
+        </service>
     </services>
 </container>
