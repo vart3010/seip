@@ -121,6 +121,16 @@
                     {% endif %}
                 </p>
             </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
+                    {% if indicator.getLabelTypeDetailValue != null %}
+                        {{ indicator.getLabelTypeDetailValue|trans }}
+                    {% else %}
+                        <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
+                    {% endif %}
+                </p>
+            </div>
             {% set resultReal = indicator.resultReal %}
             <div class="new-row-mobile twelve-columns six-columns-tablet twelve-columns-mobile" {% if resultReal is not null and errorArrangementRange is null %} ng-controller="DashboardController" ng-init="renderWidgetRange('chartContainerResult',{{ data|json_encode() }})" {% endif %}>
                 <p class="inline-label">

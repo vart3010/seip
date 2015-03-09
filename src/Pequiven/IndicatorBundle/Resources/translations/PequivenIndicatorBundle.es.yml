@@ -44,6 +44,9 @@ pequiven_indicator:
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_detail:
+        none: Ninguno
+        daily_load_production: Producción diaria
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
@@ -102,6 +105,7 @@ form:
     formulaIndicatorTactic: Fórmula del Indicador Táctico
     formulaIndicatorOperative: Fórmula del Indicador Operativo
     tendency: Tendencia
+    typeDetailValue: Detalle de valores
     conduct: Comportamiento
     indicatorStrategic: Indicador Estratégico
     indicatorTactic: Indicador Táctico

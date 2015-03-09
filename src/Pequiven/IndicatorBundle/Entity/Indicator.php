@@ -780,7 +780,8 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
     }
 
