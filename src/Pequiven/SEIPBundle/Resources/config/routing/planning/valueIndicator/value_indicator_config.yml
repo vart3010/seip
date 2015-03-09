@@ -1,0 +1,11 @@
+pequiven_value_indicator_config_create:
+    path: /{indicator_id}/create
+    defaults:
+        _controller: pequiven.controller.value_indicator_config:createAction
+        _format: html
+        
+pequiven_value_indicator_config_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.value_indicator_config:showAction
+        _format: html

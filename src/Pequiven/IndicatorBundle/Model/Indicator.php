@@ -86,7 +86,7 @@ abstract class Indicator implements IndicatorInterface
      * @ORM\Column(name="typeDetailValue",type="integer")
      */
     protected $typeDetailValue = self::TYPE_DETAIL_NONE;
-    
+
     /**
      * Set indicatorLevel
      *

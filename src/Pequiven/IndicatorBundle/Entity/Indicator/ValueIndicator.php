@@ -86,6 +86,8 @@ class ValueIndicator extends Model
      */
     private $deletedAt;
     
+    
+    
     /**
      * Get id
      *

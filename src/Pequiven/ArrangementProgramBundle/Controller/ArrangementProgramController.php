@@ -214,7 +214,6 @@ class ArrangementProgramController extends SEIPController
         
         $url = $this->generateUrl('pequiven_seip_arrangementprogram_all', array('_format' => 'json'));
 
-        if ($this->config->isApiRequest() && $this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 'createPaginatorByAll',
@@ -229,13 +228,6 @@ class ArrangementProgramController extends SEIPController
             }
             $resources->setCurrentPage($request->get('page', 1), true, true);
             $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'findBy',
-                array($criteria, $sorting, $this->config->getLimit())
-            );
-        }
 
         $view = $this
             ->view()

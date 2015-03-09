@@ -290,6 +290,13 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $backward = false;
     
     /**
+     * Configuracion de origen de datos de los detalles de los valores de indicadores
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",mappedBy="indicator")
+     */
+    private $valueIndicatorConfig;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1197,5 +1204,28 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     function prePersist()
     {
         $this->details = new Indicator\IndicatorDetails;
+    }
+
+    /**
+     * Set valueIndicatorConfig
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig
+     * @return Indicator
+     */
+    public function setValueIndicatorConfig(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig = null)
+    {
+        $this->valueIndicatorConfig = $valueIndicatorConfig;
+
+        return $this;
+    }
+
+    /**
+     * Get valueIndicatorConfig
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig 
+     */
+    public function getValueIndicatorConfig()
+    {
+        return $this->valueIndicatorConfig;
     }
 }

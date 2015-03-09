@@ -26,11 +26,18 @@
 {% endblock %}
 
 {% block body -%}
+    {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     <div ng-controller="IndicatorResultController">
-        
+    {% if indicator.typeDetailValue is not null and indicator.valueIndicatorConfig is null %}
+        {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
+    {% endif %}
+    {% if indicator.valueIndicatorConfig is not null and indicator.typeDetailValue == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION') %}
+        {% set errorFormula = 'indicator.typeDetailValue' %}
+    {% endif %}
     {% if errorFormula != null %}
         {{ print_error(errorFormula) }}
     {% endif  %}
+    
     {% set indicatorDetails = indicator.details %}
     
     <fieldset class="fieldset">
@@ -124,8 +131,8 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.typeDetailValue'|trans }}</label>
-                    {% if indicator.getLabelTypeDetailValue != null %}
-                        {{ indicator.getLabelTypeDetailValue|trans }}
+                    {% if labelTypeDetailValue != null %}
+                        {{ labelTypeDetailValue }}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>
                     {% endif %}
@@ -194,6 +201,13 @@
         {{ buttons.generic_modal(path('pequiven_indicator_add_observation', { 'id': indicator.id }),('pequiven.add_observation'|trans({},'messages')),{'icon':'icon-speech','content':('pequiven_indicator.indicator.add_observation'|trans({},'PequivenIndicatorBundle')) ~ filedObservation}) }}
         &nbsp;
         {{ buttons.generic_modal(path('pequiven_indicator_remove_values', { 'id': indicator.id }),('pequiven_indicator.indicator.buttons.remove_values'|trans({},'PequivenIndicatorBundle')), {'icon':'icon-trash','content':('pequiven_indicator.indicator.remove_values'|trans({},'PequivenIndicatorBundle')), 'gradient':'red-gradient'} ) }}
+        &nbsp;
+        {{ buttons.generic(
+                (path('pequiven_value_indicator_config_create', { 'indicator_id': indicator.id } )),
+                ('pequiven_indicator.indicator.buttons.configure_details_results'|trans({},'PequivenIndicatorBundle')),
+                'fa fa-wrench'
+             ) 
+        }}
     {% endif %}
     &nbsp;
     {% include 'PequivenSEIPBundle:Planning:Update/buttons.html.twig' with (
