@@ -25,7 +25,7 @@ class IconsBox extends GenericBox
         $em = $this->getDoctrine()->getManager();
         
         $iconsLineStrategic = LineStrategic::getIcons();
-        $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null),array('order' => 'ASC'));
+        $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null),array('orderShow' => 'ASC'));
         $tree = $data = $style = array();
         $indicatorService = $this->getIndicatorService();
         $resultService = $this->getResultService();
