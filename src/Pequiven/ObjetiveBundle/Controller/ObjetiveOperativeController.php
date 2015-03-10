@@ -633,7 +633,7 @@ class ObjetiveOperativeController extends baseController
      */
     public function createIndicator($data = array(),$options = array(), $totalRef = array()){
         
-        $periodService = $this->get('pequiven_arrangement_program.service.period');
+        $periodService = $this->get('pequiven_seip.service.period');
         $period = $periodService->getPeriodActive();
         $nameObject = 'object';
         $totalGerencias = $options['totalGerencia'];//Total de Gerencias de 1ra Línea que abarca el Objetivo Operativo a crear
@@ -1271,7 +1271,7 @@ class ObjetiveOperativeController extends baseController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

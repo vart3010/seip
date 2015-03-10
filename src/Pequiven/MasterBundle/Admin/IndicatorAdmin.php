@@ -202,7 +202,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

@@ -207,7 +207,7 @@
         <service id="pequiven_arrangement_program.form.preplanningconfiguration" class="Pequiven\SEIPBundle\Form\User\PrePlanningConfigurationType">
             <tag name="form.type" alias="pequiven_seipbundle_user_pre_planning_configuration" />
         </service>
-        <service id="pequiven_arrangement_program.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
+        <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

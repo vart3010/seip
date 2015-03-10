@@ -73,7 +73,7 @@ class DefaultController extends Controller {
      */
     public function getPeriodService()
     {
-        return $this->get('pequiven_arrangement_program.service.period');
+        return $this->get('pequiven_seip.service.period');
     }
     
     /**

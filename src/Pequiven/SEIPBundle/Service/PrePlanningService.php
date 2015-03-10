@@ -501,7 +501,7 @@ class PrePlanningService extends ContainerAware
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

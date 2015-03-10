@@ -40,3 +40,5 @@ CREATE TABLE seip_cei_TypeLocation_audit (id INT NOT NULL, rev INT NOT NULL, des
 ALTER TABLE seip_cei_Location ADD CONSTRAINT FK_719C263D979B1AD6 FOREIGN KEY (company_id) REFERENCES seip_cei_Company (id);
 ALTER TABLE seip_cei_Location ADD CONSTRAINT FK_719C263DFE998804 FOREIGN KEY (typeLocation_id) REFERENCES seip_cei_TypeLocation (id);
 ALTER TABLE seip_cei_SubSector ADD CONSTRAINT FK_7E82017DDE95C867 FOREIGN KEY (sector_id) REFERENCES seip_cei_Sector (id);
+
+ALTER TABLE seip_c_line_strategic ADD `order` INT DEFAULT NULL;

@@ -1596,7 +1596,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
