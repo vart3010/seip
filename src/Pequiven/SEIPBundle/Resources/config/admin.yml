@@ -178,8 +178,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [PequivenMasterBundle]]
-#            - [ setModelManager, [@seip.lineStrategic.manager]]
-#            - [ setContainer, [@service_container]]
+            - [ setContainer, [@service_container]]
             
     sonata.admin.user.complejo:
         class: Pequiven\MasterBundle\Admin\User\ComplejoAdmin

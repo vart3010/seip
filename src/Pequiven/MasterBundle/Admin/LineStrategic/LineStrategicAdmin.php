@@ -20,7 +20,7 @@ class LineStrategicAdmin extends Admin implements \Symfony\Component\DependencyI
         $show
             ->add('ref')
             ->add('description')
-            ->add('order')
+            ->add('orderShow')
             ->add('objetives')
             ->add('indicators')
             ;
@@ -32,7 +32,7 @@ class LineStrategicAdmin extends Admin implements \Symfony\Component\DependencyI
             ->add('ref')
             ->add('description')
             ->add('politics')
-            ->add('order')
+            ->add('orderShow')
             ;
     }
     
@@ -50,7 +50,7 @@ class LineStrategicAdmin extends Admin implements \Symfony\Component\DependencyI
             ->add('ref')
             ->add('description')
             ->add('politics')
-            ->add('order')
+            ->add('orderShow')
             ;
     }
     

@@ -119,9 +119,9 @@ class LineStrategic extends modelLineStrategic
     /**
      * @var integer
      *
-     * @ORM\Column(name="order", type="integer", nullable=true)
+     * @ORM\Column(name="orderShow", type="integer")
      */
-    private $order;
+    private $orderShow;
 
 
     /**
@@ -459,29 +459,15 @@ class LineStrategic extends modelLineStrategic
         return $this->indicators;
     }
     
-    /**
-     * Set order
-     *
-     * @param integer $order
-     * @return LineStrategic
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-
-        return $this;
+    public function getOrderShow() {
+        return $this->orderShow;
     }
 
-    /**
-     * Get order
-     *
-     * @return integer 
-     */
-    public function getOrder()
-    {
-        return $this->order;
+    public function setOrderShow($orderShow) {
+        $this->orderShow = $orderShow;
     }
-    
+
+        
     /**
      * 
      * @return string
