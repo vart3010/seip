@@ -33,20 +33,36 @@ class ValueIndicatorConfigController extends ResourceController
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
 
-            if (null === $resource) {
-                return $this->redirectHandler->redirectToIndex();
-            }
-
-            return $this->redirectHandler->redirectTo($resource);
-        }
-
-        if ($this->config->isApiRequest()) {
-            return $this->handleView($this->view($form));
+            return $this->redirect($this->generateUrl('pequiven_indicator_show',array('id' => $indicator->getId())));
         }
 
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('create.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
+    public function updateAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+            $indicator = $resource->getIndicator();
+            $this->domainManager->update($resource);
+
+            return $this->redirect($this->generateUrl('pequiven_indicator_show',array('id' => $indicator->getId())));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'form'                           => $form->createView()

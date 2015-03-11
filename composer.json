@@ -55,7 +55,8 @@
         
         "tecnick.com/tcpdf": "6.0.097",
         
-        "simplethings/entity-audit-bundle": "0.*@dev"
+        "simplethings/entity-audit-bundle": "0.*@dev",
+        "genemu/form-bundle": "2.2.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

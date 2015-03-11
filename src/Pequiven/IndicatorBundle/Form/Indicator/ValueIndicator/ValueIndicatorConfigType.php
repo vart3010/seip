@@ -20,9 +20,11 @@ class ValueIndicatorConfigType extends AbstractType
         if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
             $builder
                 ->add('products',null,array(
+                    'class' => 'Pequiven\SEIPBundle\Entity\CEI\Product',
+                    'label_attr' => array('class' => 'label'),
                     'attr' => array(
-                        'class' => 'select'
-                    )
+                        'class' => "input input-xlarge validate[required]"
+                    ),
                 ))
             ;
         }

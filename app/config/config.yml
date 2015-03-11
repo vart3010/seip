@@ -198,3 +198,6 @@ simple_things_entity_audit:
             - updated_at
             - deletedAt
             - createdAt
+
+genemu_form:
+    select2: ~
