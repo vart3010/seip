@@ -430,7 +430,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if(count($indicator->getValuesIndicator()) > 0){
+                if($indicator->hasNotification()){
                     if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                         $result = 100;
                     } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
@@ -453,7 +453,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if(count($indicator->getValuesIndicator()) > 0){
+                if($indicator->hasNotification()){
                     if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                         if($result > 100){
                             $result = 100;
@@ -481,7 +481,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if(count($indicator->getValuesIndicator()) > 0){
+                if($indicator->hasNotification()){
                     if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                           $result = $this->recalculateResultByRange($indicator,$tendenty);
                     } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
@@ -1451,7 +1451,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function getDataChartWidget(Indicator $indicator){
         $data = array();
-        $data["caption"] = count($indicator->getValuesIndicator()) > 0 ? number_format($indicator->getResultReal(), 2, ',', '.') : $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
+        $data["caption"] = $indicator->hasNotification() == true ? number_format($indicator->getResultReal(), 2, ',', '.') : $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
         $data["captionOnTop"] = "1";
         $data["bgcolor"] = "FFFFFF";
         $data["bordercolor"] = "DCCEA1";
@@ -1478,7 +1478,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["showborder"] = "0";
         
         $tendency = $indicator->getTendency();
-        if(count($indicator->getValuesIndicator()) > 0){
+        if($indicator->hasNotification()){
             if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
                 $data["captionFontColor"] = "#1aaf5d";
             } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
