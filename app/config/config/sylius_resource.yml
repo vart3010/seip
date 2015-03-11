@@ -190,5 +190,7 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
         pequiven.value_indicator_config:
             driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator/ValueIndicator/ValueIndicatorConfig
             classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicator\ValueIndicatorConfigController
                 model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig

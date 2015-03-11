@@ -22,6 +22,37 @@ class ValueIndicatorConfigController extends ResourceController
 {
     public function createAction(\Symfony\Component\HttpFoundation\Request $request) 
     {
-        parent::createAction($request);
+        $indicatorId = $request->get('indicator_id');
+        $indicator = $this->get('pequiven.repository.indicator')->find($indicatorId);
+        
+        $resource = $this->createNew();
+        $resource->setIndicator($indicator);
+        
+        $form = $this->getForm($resource);
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $resource = $this->domainManager->create($resource);
+
+            if (null === $resource) {
+                return $this->redirectHandler->redirectToIndex();
+            }
+
+            return $this->redirectHandler->redirectTo($resource);
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
     }
 }

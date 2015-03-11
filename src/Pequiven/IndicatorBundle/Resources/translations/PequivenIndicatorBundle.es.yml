@@ -16,6 +16,7 @@ pequiven_indicator:
     indicator:
         add_observation: Agrege una observación al indicador
         remove_values: Si elimina todos los resultados perdera los valores cargados ¿Desea continuar?
+        details_results: Detalles
         buttons:
             remove_values: Eliminar resultados
             configure_details_results: Configurar detalles
