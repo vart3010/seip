@@ -430,12 +430,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    $result = 100;
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $this->recalculateResultByRange($indicator,$tendenty);
-                    $result = $result / 2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                        $result = 100;
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $result = $result / 2;
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = 0;
+                    }
+                } else{
                     $result = 0;
                 }
             } else{
@@ -449,18 +453,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                    if($result > 100){
-                        $result = 100;
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                        if($result > 100){
+                            $result = 100;
+                        }
+                        $result = 100 - $result;
+                        if($result > 100){
+                            $result = 100;
+                        }
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = 100 - $result;
+                        $result = $result/2;
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = 0;
                     }
-                    $result = 100 - $result;
-                    if($result > 100){
-                        $result = 100;
-                    }
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = 100 - $result;
-                    $result = $result/2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                } else{
                     $result = 0;
                 }
             } else{
@@ -473,12 +481,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $indicator->setResultReal($result);
             
             if($error == null){
-                if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
-                      $result = $this->recalculateResultByRange($indicator,$tendenty);
-                } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
-                    $result = $this->recalculateResultByRange($indicator,$tendenty);
-                    $result = $result / 2;
-                } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                if($indicator->hasNotification()){
+                    if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
+                          $result = $this->recalculateResultByRange($indicator,$tendenty);
+                    } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
+                        $result = $this->recalculateResultByRange($indicator,$tendenty);
+                        $result = $result / 2;
+                    } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
+                        $result = 0;
+                    }
+                } else{
                     $result = 0;
                 }
             } else{
@@ -1117,8 +1129,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $resultsItems = array();
         //Obtener los valores de los hijos
+        $formula = $indicator->getFormula();
         foreach ($childrens as $child) {
-            $formula = $child->getFormula();
             $numberResult = 0;
             foreach ($child->getValuesIndicator() as $valueIndicator) 
             {
@@ -1158,15 +1170,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $indicator->addValuesIndicator($valueIndicator);
             }
         }
+        
         $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
         $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         $i = 0;
+        
         foreach ($indicator->getValuesIndicator() as $valueIndicator) 
         {
-            $formulaUsed = $valueIndicator->getFormula();
+            $formulaUsed = $indicator->getFormula();
             $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
             foreach ($formulaUsed->getVariables() as $variable) 
-            {   
+            {       
                 if(isset($resultsItems[$i]) == false){
                     continue;
                 }
@@ -1275,9 +1289,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $$name = $value;
                 }
             }
-        eval(sprintf('$equation_real = %s;',$sourceEquationReal));
-        eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-        
+        @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+        @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+      
 //        var_dump($formulaParameters);
 //        var_dump($sourceEquationReal);
 //        var_dump($equation_real);
@@ -1441,7 +1455,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function getDataChartWidget(Indicator $indicator){
         $data = array();
-        $data["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $data["caption"] = $indicator->hasNotification() == true ? number_format($indicator->getResultReal(), 2, ',', '.') : $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
         $data["captionOnTop"] = "1";
         $data["bgcolor"] = "FFFFFF";
         $data["bordercolor"] = "DCCEA1";
@@ -1468,12 +1482,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $data["showborder"] = "0";
         
         $tendency = $indicator->getTendency();
-        if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#1aaf5d";
-        } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#f2c500";
-        } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-            $data["captionFontColor"] = "#c02d00";
+        if($indicator->hasNotification()){
+            if($this->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#1aaf5d";
+            } elseif($this->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#f2c500";
+            } elseif($this->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $data["captionFontColor"] = "#c02d00";
+            }
+        } else{
+            $data["captionFontColor"] = "#000000";
         }
         return $data;
     }
@@ -1493,6 +1511,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         } elseif($value >= $rangeMiddle && $value < $rangeTop){
             $type = CommonObject::TYPE_RANGE_MIDDLE;
         }
+        
+        return $type;
+    }
+    
+    /**
+     * Evalua un valor de acuerdo a los rangos de gestión de un total de items en especifico en especifico 
+     * @param type $value
+     * @return type
+     */
+    public function evaluateRangeByTotal($value,$total = 1){
+        $type = CommonObject::TYPE_RANGE_GOOD;
+        $rangeTop = (float)1;
+        $rangeMiddle = (float)2.5;
+        
+        $div = $value/$total;
+        
+        if($div > $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_BAD;
+        } elseif($div > $rangeTop && $div < $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_MIDDLE;
+        }
+        
+//        var_dump($type.' '.$div.' '.$total.' '.$value);
         
         return $type;
     }
