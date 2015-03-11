@@ -392,7 +392,7 @@ abstract class GerenciaSecond {
     }
     
     public function __toString() {
-        return $this->description;
+        return $this->description ?:'-';
     }
     
     static function getTypesManagement() 
