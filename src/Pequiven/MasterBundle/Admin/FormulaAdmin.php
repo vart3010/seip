@@ -69,6 +69,7 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ->add('equation')
             ->add('equationReal')
             ->add('enabled')
+            ->add('variables')
             ;
     }
     
