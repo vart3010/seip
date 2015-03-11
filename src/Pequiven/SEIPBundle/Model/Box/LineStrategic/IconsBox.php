@@ -32,8 +32,8 @@ class IconsBox extends GenericBox
         
         foreach($linesStrategics as $lineStrategic){
             $indicators = $lineStrategic->getIndicators();
-            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic);
-            $type = $resultService->evaluateRangeStandar($valueIndicators);
+            $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2);
+            $type = $resultService->evaluateRangeByTotal($valueIndicators,count($indicators));
             
             if($type == CommonObject::TYPE_RANGE_GOOD){
                 $style[(string)$lineStrategic->getRef()] = 'background: rgba(88,181,63,0.25);';
@@ -54,8 +54,8 @@ class IconsBox extends GenericBox
                 $data[(string)$lineStrategic->getRef()][(string)$indicator->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicator);
             }
         }
-//        var_dump($style);
 //        die();
+        
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
@@ -66,7 +66,7 @@ class IconsBox extends GenericBox
     }
     
     public function hasPermission() {
-        return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'));
+        return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_WORKER_PLANNING'));
     }
     
     public function getTemplateName() {
