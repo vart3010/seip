@@ -1487,6 +1487,29 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         return $type;
     }
     
+    /**
+     * Evalua un valor de acuerdo a los rangos de gestión de un total de items en especifico en especifico 
+     * @param type $value
+     * @return type
+     */
+    public function evaluateRangeByTotal($value,$total = 1){
+        $type = CommonObject::TYPE_RANGE_GOOD;
+        $rangeTop = (float)1;
+        $rangeMiddle = (float)2.5;
+        
+        $div = $value/$total;
+        
+        if($div > $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_BAD;
+        } elseif($div > $rangeTop && $div < $rangeMiddle){
+            $type = CommonObject::TYPE_RANGE_MIDDLE;
+        }
+        
+//        var_dump($type.' '.$div.' '.$total.' '.$value);
+        
+        return $type;
+    }
+    
     private function addErrorTrans($error,array $parameters = array()) {
         if(is_array($error)){
             $this->errors = array_merge($this->errors,$error);
