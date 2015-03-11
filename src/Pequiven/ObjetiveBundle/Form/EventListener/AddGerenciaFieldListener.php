@@ -90,8 +90,6 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
             $formOptions['query_builder'] = function (EntityRepository $er) use ($complejoId){
                 $qb = $er->createQueryBuilder('gerencia')
                          ->andWhere('gerencia.complejo = :complejoId')
-                         ->andWhere('gerencia.modular = :modular')
-                         ->setParameter('modular', true)
                          ->setParameter('complejoId', $complejoId)
                             ;
                 return $qb;
