@@ -28,7 +28,7 @@
 {% block body -%}
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     <div ng-controller="IndicatorResultController">
-    {% if indicator.typeDetailValue is not null and indicator.valueIndicatorConfig is null %}
+        {% if indicator.typeDetailValue != constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_NONE') and indicator.valueIndicatorConfig is null %}
         {% set errorFormula = 'pequiven_indicator.errors.the_indicator_xrequires_configuration_details_results'|trans({'%typeDetailValue%': (labelTypeDetailValue|lower) }) %}
     {% endif %}
     {% if indicator.valueIndicatorConfig is not null and indicator.typeDetailValue == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION') %}
