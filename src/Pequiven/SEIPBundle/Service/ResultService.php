@@ -1431,7 +1431,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function getDataChartWidget(Indicator $indicator){
         $data = array();
-        $data["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $data["caption"] = count($indicator->getValuesIndicator()) > 0 ? number_format($indicator->getResultReal(), 2, ',', '.') : $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
         $data["captionOnTop"] = "1";
         $data["bgcolor"] = "FFFFFF";
         $data["bordercolor"] = "DCCEA1";

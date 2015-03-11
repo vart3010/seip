@@ -128,8 +128,6 @@
                     {% if resultReal is not null and errorArrangementRange is null %}
                         <span id="chartContainerResult"></span>
                     {% else %}
-                        {#{% if indicator.arrangementRange == null %}
-                            <span class="tag red-bg">{{ ('pequiven_indicator.errors.arrangementRange_not_assigned'|trans) }}</span>#}
                         {% if errorArrangementRange != null %}
                             <span class="tag red-bg">{{ errorArrangementRange }}</span>
                         {% else %}
