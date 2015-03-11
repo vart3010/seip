@@ -154,8 +154,10 @@ seip:
             updated_by: Actualizado por
             value: Valor
             parameters: Parametros
+            products: Productos
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.
             events: No Hay Eventos Registrados.
             results: No Hay Resultados Cargados.
+            products: No Hay Productos Configurados.

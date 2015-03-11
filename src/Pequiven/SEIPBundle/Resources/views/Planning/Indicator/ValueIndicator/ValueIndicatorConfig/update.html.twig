@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block body %}
-    {{ dump(_context|keys) }}
+{#    {{ dump(_context|keys) }}#}
     {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
     <form method="POST" action="{{ path('pequiven_value_indicator_config_update',{'id':value_indicator_config.id }) }}">
         {% include 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/ValueIndicatorConfig/_form.html.twig' %}

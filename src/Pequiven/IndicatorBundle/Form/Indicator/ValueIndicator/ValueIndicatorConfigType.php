@@ -20,6 +20,7 @@ class ValueIndicatorConfigType extends AbstractType
         if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
             $builder
                 ->add('products',null,array(
+                    'label' => 'form.products',
                     'class' => 'Pequiven\SEIPBundle\Entity\CEI\Product',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
@@ -36,7 +37,8 @@ class ValueIndicatorConfigType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig'
+            'data_class' => 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig',
+            'translation_domain' => 'PequivenIndicatorBundle',
         ));
     }
 

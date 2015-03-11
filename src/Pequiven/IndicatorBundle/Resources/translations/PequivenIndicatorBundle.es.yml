@@ -13,6 +13,7 @@ pequiven_indicator:
     indicator_strategic: Indicador Estratégico
     indicator_tactic: Indicador Táctico
     indicator_operative: Indicador Operativo
+    details_value_config: Detalles de valores
     indicator:
         add_observation: Agrege una observación al indicador
         remove_values: Si elimina todos los resultados perdera los valores cargados ¿Desea continuar?
@@ -277,6 +278,7 @@ form:
         addIndicatorStrategic: Registro Indicador Estratégico
         addIndicatorTactic: Registro Indicador Táctico
         addIndicatorOperative: Registro Indicador Operativo
+    products: Productos
 
 action:
     messages:    
