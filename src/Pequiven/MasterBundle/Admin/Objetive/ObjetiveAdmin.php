@@ -48,7 +48,7 @@ class ObjetiveAdmin extends Admin
                     ->add('complejo')
                     ->add('gerencia')
                     ->add('gerenciaSecond')
-                    ->add('parents')
+                    ->add('childrens')
                     ->add('indicators')
                     ->add('objetiveLevel')
                     ->add('period')
