@@ -76,6 +76,29 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $period;
     
     /**
+     * ¿La Variable es estática y no se acumula?
+     * @var boolean
+     * @ORM\Column(name="staticValue",type="boolean")
+     */
+    private $staticValue = false;
+    
+    /**
+     * 
+     * @return type
+     */
+    public function getStaticValue() {
+        return $this->staticValue;
+    }
+
+    /**
+     * 
+     * @param type $staticValue
+     */
+    public function setStaticValue($staticValue) {
+        $this->staticValue = $staticValue;
+    }
+
+        /**
      * Get id
      *
      * @return integer 

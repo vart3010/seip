@@ -27,6 +27,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $form
             ->add('name')
             ->add('description')
+            ->add('staticValue')
             ->add('equation',null,array(
                 'attr' => array(
                     'rows' => 10
@@ -39,6 +40,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $filter
             ->add('name')
             ->add('description')
+            ->add('staticValue')
             ;
     }
     
@@ -46,6 +48,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $list
             ->addIdentifier('name')
             ->addIdentifier('description')
+            ->addIdentifier('staticValue')
             ;
     }
     

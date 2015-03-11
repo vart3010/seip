@@ -1198,7 +1198,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     );
                     $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
                 }else{
-                    $valueParameter = 0;
+                    if(!$variable->getStaticValue()){
+                        $valueParameter = 0;
+                    }
                     foreach ($results as $resultItem)
                     {
                         $childValueParameter = $resultItem->getParameter($nameParameter,0);
