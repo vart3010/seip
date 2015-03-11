@@ -14,7 +14,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
- * Servicio para obtener datos del periodo (pequiven_arrangement_program.service.period)
+ * Servicio para obtener datos del periodo (pequiven_seip.service.period)
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class PeriodService extends ContainerAware 

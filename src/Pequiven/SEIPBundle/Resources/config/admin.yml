@@ -109,7 +109,7 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-            - [ setPeriodService, ['@pequiven_arrangement_program.service.period']]
+            - [ setPeriodService, ['@pequiven_seip.service.period']]
             
     sonata.admin.arrangement_program.arrangement_program:
         class: Pequiven\MasterBundle\Admin\ArrangementProgram\ArrangementProgramAdmin
@@ -166,6 +166,18 @@ services:
         calls:
             - [ setTranslationDomain, [PequivenMasterBundle]]
             - [ setModelManager, [@seip.arrangementRange.manager]]
+            - [ setContainer, [@service_container]]
+            
+    sonata.admin.line_strategic.line_strategic:
+        class: Pequiven\MasterBundle\Admin\LineStrategic\LineStrategicAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Línea Estratégica", label: "Línea Estratégica" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\LineStrategic
+            - ~
+        calls:
+            - [ setTranslationDomain, [PequivenMasterBundle]]
             - [ setContainer, [@service_container]]
             
     sonata.admin.user.complejo:

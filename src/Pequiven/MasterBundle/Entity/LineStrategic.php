@@ -115,6 +115,13 @@ class LineStrategic extends modelLineStrategic
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShow", type="integer")
+     */
+    private $orderShow;
 
 
     /**
@@ -452,6 +459,15 @@ class LineStrategic extends modelLineStrategic
         return $this->indicators;
     }
     
+    public function getOrderShow() {
+        return $this->orderShow;
+    }
+
+    public function setOrderShow($orderShow) {
+        $this->orderShow = $orderShow;
+    }
+
+        
     /**
      * 
      * @return string

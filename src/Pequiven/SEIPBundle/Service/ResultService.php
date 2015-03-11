@@ -1163,9 +1163,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $i = 0;
         foreach ($indicator->getValuesIndicator() as $valueIndicator) 
         {
-            $plan = $real = 0.0;
             $formulaUsed = $valueIndicator->getFormula();
-            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
             foreach ($formulaUsed->getVariables() as $variable) 
             {   
                 if(isset($resultsItems[$i]) == false){
@@ -1185,6 +1184,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     );
                     $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
                 }else{
+                    $valueParameter = 0;
                     foreach ($results as $resultItem)
                     {
                         $childValueParameter = $resultItem->getParameter($nameParameter,0);
@@ -1196,8 +1196,16 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
                 $valueIndicator->setParameter($nameParameter,$valueParameter);
             }
-            $valueIndicator->setParameter($variableToPlanValueName, $plan);
-            $valueIndicator->setParameter($variableToRealValueName, $real);
+            if($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $resultItem = $this->getFormulaResultFromEQ($formulaUsed, $valueIndicator->getFormulaParameters());
+                $totalPlan += $resultItem['plan'];
+                $totalReal += $resultItem['real'];
+            }else{
+                $totalPlan += $valueIndicator->getParameter($variableToPlanValueName);
+                $totalReal += $valueIndicator->getParameter($variableToRealValueName);
+            }
+            
+            
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
             $i++;
@@ -1205,6 +1213,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicator
             ->setTotalPlan($totalPlan)
             ->setValueFinal($totalReal);
+//        die;
     }
     
     /**
@@ -1256,7 +1265,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     private function getFormulaResultFromEQ(Formula $formula,$formulaParameters)
     {
         $equation_real = $equation_plan = 0.0;
-        
         $indicatorService = $this->getIndicatorService();
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
@@ -1596,7 +1604,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     protected function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

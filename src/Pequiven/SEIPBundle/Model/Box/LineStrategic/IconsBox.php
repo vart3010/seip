@@ -25,7 +25,7 @@ class IconsBox extends GenericBox
         $em = $this->getDoctrine()->getManager();
         
         $iconsLineStrategic = LineStrategic::getIcons();
-        $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
+        $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null),array('orderShow' => 'ASC'));
         $tree = $data = $style = array();
         $indicatorService = $this->getIndicatorService();
         $resultService = $this->getResultService();
@@ -34,7 +34,6 @@ class IconsBox extends GenericBox
             $indicators = $lineStrategic->getIndicators();
             $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic);
             $type = $resultService->evaluateRangeStandar($valueIndicators);
-//            var_dump($lineStrategic->getRef().' '.$valueIndicators.' '.$type);
             
             if($type == CommonObject::TYPE_RANGE_GOOD){
                 $style[(string)$lineStrategic->getRef()] = 'background: rgba(88,181,63,0.25);';

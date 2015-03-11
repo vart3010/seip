@@ -115,7 +115,7 @@ class IndicatorTacticController extends baseController
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_tactic_registration");
 
-            $periodService = $this->get('pequiven_arrangement_program.service.period');
+            $periodService = $this->get('pequiven_seip.service.period');
             $period = $periodService->getPeriodActive();
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
@@ -504,7 +504,7 @@ class IndicatorTacticController extends baseController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
