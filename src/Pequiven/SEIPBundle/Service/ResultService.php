@@ -1275,10 +1275,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $$name = $value;
                 }
             }
-            
         eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
         
+//        var_dump($formulaParameters);
+//        var_dump($sourceEquationReal);
+//        var_dump($equation_real);
         return array(
             'real' => $equation_real,
             'plan' => $equation_plan,
