@@ -1129,8 +1129,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $resultsItems = array();
         //Obtener los valores de los hijos
+        $formula = $indicator->getFormula();
         foreach ($childrens as $child) {
-            $formula = $child->getFormula();
             $numberResult = 0;
             foreach ($child->getValuesIndicator() as $valueIndicator) 
             {
@@ -1170,15 +1170,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $indicator->addValuesIndicator($valueIndicator);
             }
         }
+        
         $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
         $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         $i = 0;
+        
         foreach ($indicator->getValuesIndicator() as $valueIndicator) 
         {
-            $formulaUsed = $valueIndicator->getFormula();
+            $formulaUsed = $indicator->getFormula();
             $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
             foreach ($formulaUsed->getVariables() as $variable) 
-            {   
+            {       
                 if(isset($resultsItems[$i]) == false){
                     continue;
                 }
@@ -1287,9 +1289,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $$name = $value;
                 }
             }
-        eval(sprintf('$equation_real = %s;',$sourceEquationReal));
-        eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
-        
+        @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
+        @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
+      
 //        var_dump($formulaParameters);
 //        var_dump($sourceEquationReal);
 //        var_dump($equation_real);
