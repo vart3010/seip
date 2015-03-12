@@ -1118,7 +1118,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     }
     
     /**
-     * Calcula la formula con plan y real a partir de la formula
+     * Calcula el resultado del indicador automáticamente a partir de la ecuación definida en la fórmula y el valor de las variables a partir de la formula de los indicadores 
      * 
      * @param Indicator $indicator
      */
@@ -1181,7 +1181,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
             foreach ($formulaUsed->getVariables() as $variable) 
             {
-//                var_dump($variable->getDescription());
 
                 if(isset($resultsItems[$i]) == false){
                     continue;
@@ -1215,7 +1214,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $valueIndicator->setParameter($nameParameter,$valueParameter);
             }
             if($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+                $i++;
                 $resultItem = $this->getFormulaResultFromEQ($formulaUsed, $valueIndicator->getFormulaParameters());
+                if($details){
+                    if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                        continue;
+                    }
+                }
                 $totalPlan += $resultItem['plan'];
                 $totalReal += $resultItem['real'];
             }else{
@@ -1226,7 +1231,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
-            $i++;
         }
         $indicator
             ->setTotalPlan($totalPlan)
