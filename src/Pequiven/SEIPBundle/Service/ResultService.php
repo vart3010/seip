@@ -1126,7 +1126,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
     {
         $childrens = $indicator->getChildrens();
         $indicatorService = $this->getIndicatorService();
-        
+
         $resultsItems = array();
         //Obtener los valores de los hijos
         $formula = $indicator->getFormula();
@@ -1174,13 +1174,15 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
         $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         $i = 0;
-        
+
         foreach ($indicator->getValuesIndicator() as $valueIndicator) 
         {
             $formulaUsed = $indicator->getFormula();
             $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
             foreach ($formulaUsed->getVariables() as $variable) 
-            {       
+            {
+//                var_dump($variable->getDescription());
+
                 if(isset($resultsItems[$i]) == false){
                     continue;
                 }
@@ -1220,7 +1222,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $totalPlan += $valueIndicator->getParameter($variableToPlanValueName);
                 $totalReal += $valueIndicator->getParameter($variableToRealValueName);
             }
-            
+//            die();
             
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);

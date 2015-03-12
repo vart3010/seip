@@ -27,7 +27,9 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $form
             ->add('name')
             ->add('description')
-            ->add('staticValue')
+            ->add('staticValue',null,array(
+                'required' => false,
+            ))
             ->add('equation',null,array(
                 'attr' => array(
                     'rows' => 10
