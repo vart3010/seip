@@ -49,3 +49,13 @@ indicatorGerenciaSecondOperative:
     path: /indicator/indicatorGerenciaSecondOperative
     defaults:
         _controller: pequiven.controller.indicator:selectGerenciaSecondListAction
+        
+pequiven_indicator_list_error:
+    path: /listError.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:listErrorAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        level: 1|2|3
+    methods: [GET]

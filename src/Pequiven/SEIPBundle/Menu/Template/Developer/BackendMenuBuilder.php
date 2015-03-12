@@ -259,6 +259,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
                     ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
                 }
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_INDICATOR_ERROR')){
+                    $subchild->addChild('planning.visualize.indicators.error', array(
+                        'route' => 'pequiven_indicator_list_error',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.withError', $section)));
+                }
 
                 $visualize->addChild($subchild);
             }//Fin menu Ver - Indicadores

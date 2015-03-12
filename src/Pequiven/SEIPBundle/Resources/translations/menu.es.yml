@@ -91,6 +91,7 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            withError: Con errores
                         arrangement_programs:
                             main: Programas de Gestión
                             list: Lista

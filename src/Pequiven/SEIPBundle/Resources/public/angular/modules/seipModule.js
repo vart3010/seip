@@ -1861,6 +1861,9 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        .controller('TableIndicatorWithErrorController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
+
+        })
         .controller('TableIndicatorStrategicController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
         })

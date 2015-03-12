@@ -2,6 +2,10 @@ pequiven_indicator:
     value: Valor
     #Registrar
     indicators: Indicadores
+    indicatorsWithError: Indicadores con errores
+    indicatorsWithoutError: Indicadores sin errores
+    indicatorsWithoutErrorText: Nada que reseñar
+    error: Error
     add: Añadir
     list: Lista
     strategic: Estratégico
