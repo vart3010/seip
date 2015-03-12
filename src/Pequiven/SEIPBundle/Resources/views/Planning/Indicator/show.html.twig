@@ -118,7 +118,7 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'form.total_plan'|trans }}</label>
-                    {% if indicator.totalPlan > 0 %}
+                    {% if indicator.totalPlan != 0 %}
                         {{ indicator.totalPlan|myNumberFormat }}&nbsp;{% if indicatorDetails.resultPlanUnit != '' %}({{ indicatorDetails.resultPlanUnit }}){% endif %}
                     {% else %}
                         <span class="tag red-bg">{{ ('pequiven.no_assigned'|trans({},'messages')) }}</span>

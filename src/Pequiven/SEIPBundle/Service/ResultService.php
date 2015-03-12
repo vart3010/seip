@@ -412,6 +412,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         
         $indicator->updateLastDateCalculateResult();
+        
         $tendenty = $indicator->getTendency();
         if(!$tendenty){
             throw new \LogicException(sprintf('El indicador "%s(%s)" no tiene una tendencia definida.',$indicator->getRef(),$indicator->getId()));
@@ -1264,6 +1265,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     }
                     continue;
                 }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    
                     continue;
                 }
             }
@@ -1271,7 +1273,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $totalPlan += $resultItem['plan'];
             $totalReal += $resultItem['real'];
         }
-        
+
         $value = $totalReal;
         $indicator
                 ->setTotalPlan($totalPlan)
