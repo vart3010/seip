@@ -30,3 +30,11 @@ pequiven_value_indicator_add:
     methods: [POST]
     options:
         expose: true
+        
+pequiven_value_indicator_show_detail:
+    path: /{id}/show-detail
+    defaults:
+        _controller: pequiven.controller.value_indicator:showDetailAction
+        _format: html
+    options:
+        expose: true

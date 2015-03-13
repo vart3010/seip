@@ -9,3 +9,7 @@ pequiven_seip_user_routes:
 pequiven_value_indicator_config_routes:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/valueIndicator/value_indicator_config.yml"
     prefix:   /value-indicator-config
+    
+pequiven_value_indicator_detail_routes:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/valueIndicator/value_indicator_detail.yml"
+    prefix:   /value-indicator-detail

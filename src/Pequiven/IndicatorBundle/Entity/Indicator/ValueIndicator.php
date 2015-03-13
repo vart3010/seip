@@ -86,8 +86,13 @@ class ValueIndicator extends Model
      */
     private $deletedAt;
     
-    
-    
+    /**
+     * Detalles de valores de los indicadores
+     * @var ValueIndicator\ValueIndicatorDetail
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail",mappedBy="valueIndicator")
+     */
+    private $valueIndicatorDetail;
+
     /**
      * Get id
      *
@@ -306,5 +311,28 @@ class ValueIndicator extends Model
             }
         }
         return $toString ?:'-';
+    }
+
+    /**
+     * Set valueIndicatorDetail
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail
+     * @return ValueIndicator
+     */
+    public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail = null)
+    {
+        $this->valueIndicatorDetail = $valueIndicatorDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get valueIndicatorDetail
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail 
+     */
+    public function getValueIndicatorDetail()
+    {
+        return $this->valueIndicatorDetail;
     }
 }

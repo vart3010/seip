@@ -153,6 +153,11 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         return $view;
     }
     
+    public function showDetailAction(Request $request)
+    {
+        
+    }
+    
     /**
      * Construye el formulario de la formula
      * @param \Pequiven\MasterBundle\Entity\Formula $formula

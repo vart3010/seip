@@ -30,7 +30,7 @@
                     <td>{$ ($index + 1) $}</td>
                     <th scope="row">
                         {% if isValueIndicatorConfig == true %}
-                            <a href="#">
+                            <a href="#" ng-click="openPopUp(getUrlForValueIndicator(valueIndicator))" class="showPopup">
                         {% endif %}
                             {$ valueIndicator.valueOfIndicator | myNumberFormat:3 $}
                         {% if isValueIndicatorConfig == true %}
