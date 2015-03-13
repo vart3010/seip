@@ -89,7 +89,7 @@ class ValueIndicator extends Model
     /**
      * Detalles de valores de los indicadores
      * @var ValueIndicator\ValueIndicatorDetail
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail",mappedBy="valueIndicator")
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail",inversedBy="valueIndicator")
      */
     private $valueIndicatorDetail;
 
@@ -322,7 +322,6 @@ class ValueIndicator extends Model
     public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail = null)
     {
         $this->valueIndicatorDetail = $valueIndicatorDetail;
-        $valueIndicatorDetail->setValueIndicator($this);
 
         return $this;
     }

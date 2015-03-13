@@ -35,8 +35,7 @@ class ValueIndicatorConfig
     /**
      * Indicador
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="valueIndicatorConfig")
-     * @ORM\Joincolumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="valueIndicatorConfig")
      */
     private $indicator;
     

@@ -36,8 +36,7 @@ class ValueIndicatorDetail
     /**
      * Valor de indicador
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",inversedBy="valueIndicatorDetail")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator",mappedBy="valueIndicatorDetail")
      */
     private $valueIndicator;
 
@@ -126,6 +125,7 @@ class ValueIndicatorDetail
      */
     public function setValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator $valueIndicator)
     {
+        $valueIndicator->setValueIndicatorDetail($this);
         $this->valueIndicator = $valueIndicator;
 
         return $this;
