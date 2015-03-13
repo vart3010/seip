@@ -160,6 +160,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
      */
     public function showDetailAction(Request $request)
     {
+        $numResult = $request->get('numResult');
         $valueIndicator = $this->findOr404($request);
         $valueIndicatorDetail = $valueIndicator->getValueIndicatorDetail();
         $indicator = $valueIndicator->getIndicator();
@@ -175,11 +176,12 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $valueIndicatorDetail->setValueIndicator($valueIndicator);
                 $valueIndicator->setValueIndicatorDetail($valueIndicatorDetail);
                 foreach ($products as $product) {
-                    $valueIndicatorDetail->addProduct($product);
-                    
+                    $productDetailDailyMonth = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
+                    $productDetailDailyMonth->setProduct($product);
+                    $productDetailDailyMonth->setMonth($numResult);
+                    $valueIndicatorDetail->addProductsDetailDailyMonth($product);
                 }
                 $em->persist($valueIndicatorDetail);
-                
                 $em->flush();
             }
         }

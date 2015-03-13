@@ -51,7 +51,7 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Mes
      * @var integer
-     * @ORM\Column(name="month",type="integer")
+     * @ORM\Column(name="month",type="integer",nullable=false)
      */
     private $month;
     

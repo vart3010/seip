@@ -57,7 +57,7 @@ class ValueIndicatorDetail
     /**
      * Produccion diara detallada en el mes
      * @var Detail\ProductDetailDailyMonth
-     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",mappedBy="valueIndicatorDetail")
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",mappedBy="valueIndicatorDetail",cascade={"persist","remove"})
      */
     private $productsDetailDailyMonth;
     
@@ -157,6 +157,7 @@ class ValueIndicatorDetail
      */
     public function addProductsDetailDailyMonth(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $productsDetailDailyMonth)
     {
+        $productsDetailDailyMonth->setValueIndicatorDetail($this);
         $this->productsDetailDailyMonth->add($productsDetailDailyMonth);
 
         return $this;
