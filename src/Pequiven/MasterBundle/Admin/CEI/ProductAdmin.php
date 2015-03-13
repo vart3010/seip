@@ -11,11 +11,12 @@
 
 namespace Pequiven\MasterBundle\Admin\CEI;
 
-use Sonata\AdminBundle\Datagrid\ListMapper;
+use Pequiven\MasterBundle\Admin\BaseAdmin;
+use Pequiven\SEIPBundle\Entity\CEI\Product;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
  * Administrador de producto
@@ -29,6 +30,10 @@ class ProductAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('typeOf','choices',array(
+                'choices' => Product::getTypesLabel(),
+                'translation_domain' => 'PequivenSEIPBundle'
+            ))
             ;
         parent::configureShowFields($show);
     }
@@ -37,6 +42,10 @@ class ProductAdmin extends BaseAdmin
     {
         $form
             ->add('name')
+            ->add('typeOf','choice',array(
+                'choices' => Product::getTypesLabel(),
+                'translation_domain' => 'PequivenSEIPBundle'
+            ))
             ;
         parent::configureFormFields($form);
     }
@@ -45,6 +54,10 @@ class ProductAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
+            ->add('typeOf',null,array(),'choice',array(
+                'choices' => Product::getTypesLabel(),
+                'translation_domain' => 'PequivenSEIPBundle'
+            ))
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -53,6 +66,7 @@ class ProductAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
+            ->add('typeOf')
             ;
         parent::configureListFields($list);
     }

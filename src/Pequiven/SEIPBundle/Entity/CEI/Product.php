@@ -12,17 +12,17 @@
 namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\BaseModel;
+use Pequiven\SEIPBundle\Model\CEI\Product as BaseModel;
 
 /**
  * Producto
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
-  * @ORM\Table(name="seip_cei_Product")
+ * @ORM\Table(name="seip_cei_Product")
  * @ORM\Entity()
  */
 class Product extends BaseModel
-{
+{    
     /**
      * @var integer
      *
@@ -39,6 +39,13 @@ class Product extends BaseModel
      * @ORM\Column(name="name",type="text",nullable=false)
      */
     private $name;
+    
+    /**
+     * Tipo (Producto o servicio)
+     * @var integer
+     * @ORM\Column(name="typeOf",type="integer")
+     */
+    private $typeOf = self::TYPE_PRODUCT;
 
     /**
      * Get id
@@ -71,6 +78,29 @@ class Product extends BaseModel
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Set typeOf
+     *
+     * @param integer $typeOf
+     * @return Product
+     */
+    public function setTypeOf($typeOf)
+    {
+        $this->typeOf = $typeOf;
+
+        return $this;
+    }
+
+    /**
+     * Get typeOf
+     *
+     * @return integer 
+     */
+    public function getTypeOf()
+    {
+        return $this->typeOf;
     }
     
     public function __toString() 

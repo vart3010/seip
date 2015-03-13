@@ -147,6 +147,10 @@ pequiven_seip:
     selected: Seleccionado(s)
     all: Todos
     search: Buscar
+    product:
+        type:
+            product: Producto
+            service: Servicio
     notify:
         one_similar_notification: Una notificación similar
         n_similar_notifications: %d notificaciones similares
