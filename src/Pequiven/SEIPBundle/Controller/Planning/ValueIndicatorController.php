@@ -153,9 +153,27 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         return $view;
     }
     
+    /**
+     * Muestra los detalles de un valor de indicador, ya sea el formulario o solo el show
+     * @param Request $request
+     * @return type
+     */
     public function showDetailAction(Request $request)
     {
+        $valueIndicator = $this->findOr404($request);
+        $valueIndicator->getValueIndicatorDetail();
+        $indicator = $valueIndicator->getIndicator();
         
+        if($indicator->TypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
+        {
+            
+        }
+        $view = $this
+            ->view()
+            ->setData(array(
+            ))
+        ;
+        return $view;
     }
     
     /**
