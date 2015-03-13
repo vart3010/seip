@@ -54,11 +54,15 @@ class ObjetiveOperativeController extends baseController
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE')){
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
         }
+        $indicatorService = $this->getIndicatorService();
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
             ->setTemplateVar('entity')
-            ->setData($resource)
+            ->setData(array(
+                'entity' => $resource,
+                'indicatorService' => $indicatorService,
+            ))
         ;
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
         $view->getSerializationContext()->setGroups($groups);
@@ -1281,5 +1285,14 @@ class ObjetiveOperativeController extends baseController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

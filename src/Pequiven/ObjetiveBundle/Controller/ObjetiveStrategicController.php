@@ -53,8 +53,11 @@ class ObjetiveStrategicController extends baseController {
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC',$entity);
         }
         
+        $indicatorService = $this->getIndicatorService();
+        
         return array(
-            'entity'      => $entity
+            'entity'      => $entity,
+            'indicatorService' => $indicatorService,
         );
     }
 
@@ -317,5 +320,14 @@ class ObjetiveStrategicController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }
