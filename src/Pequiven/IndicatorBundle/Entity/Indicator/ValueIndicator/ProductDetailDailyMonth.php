@@ -33,6 +33,14 @@ class ProductDetailDailyMonth extends BaseModel
     private $id;
     
     /**
+     * Producto
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product;
+
+    /**
      * Mes
      * @var integer
      * @ORM\Column(name="month",type="integer")
@@ -2020,5 +2028,28 @@ class ProductDetailDailyMonth extends BaseModel
     public function getDay31Real()
     {
         return $this->day31Real;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $product
+     * @return ProductDetailDailyMonth
+     */
+    public function setProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $product)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Product 
+     */
+    public function getProduct()
+    {
+        return $this->product;
     }
 }
