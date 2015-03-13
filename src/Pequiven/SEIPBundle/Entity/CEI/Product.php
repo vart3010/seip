@@ -13,6 +13,7 @@ namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\CEI\Product as BaseModel;
+use Tpg\ExtjsBundle\Annotation as Extjs;
 
 /**
  * Producto
@@ -20,6 +21,7 @@ use Pequiven\SEIPBundle\Model\CEI\Product as BaseModel;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_Product")
  * @ORM\Entity()
+ * @Extjs\Model()
  */
 class Product extends BaseModel
 {    

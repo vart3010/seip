@@ -13,6 +13,7 @@ namespace Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\BaseModel;
+use Tpg\ExtjsBundle\Annotation as Extjs;
 
 /**
  * Detalles del producto en cada dia del mes
@@ -20,6 +21,8 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table()
  * @ORM\Entity()
+ * @Extjs\Model()
+ * @Extjs\ModelProxy("/api/indicator-value/product-detail-daily-month")
  */
 class ProductDetailDailyMonth extends BaseModel
 {
@@ -509,6 +512,20 @@ class ProductDetailDailyMonth extends BaseModel
      * @ORM\Column(name="day31Real",type="float")
      */
     private $day31Real = 0;
+    
+    /**
+     * Nombre del producto
+     * @var type 
+     * @Extjs\Model\Field(type="string",mapping="product.name")
+     */
+    private $productName;
+
+    /**
+     * Tipo de producto
+     * @var type 
+     * @Extjs\Model\Field(type="int",mapping="product.typeOf")
+     */
+    private $productTypeOf;
 
     /**
      * Get id
