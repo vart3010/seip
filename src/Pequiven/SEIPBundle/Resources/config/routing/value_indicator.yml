@@ -32,9 +32,11 @@ pequiven_value_indicator_add:
         expose: true
         
 pequiven_value_indicator_show_detail:
-    path: /{id}/show-detail
+    path: /{id}/show-detail.{_format}
     defaults:
         _controller: pequiven.controller.value_indicator:showDetailAction
         _format: html
+    requirements:
+        _format: html|json
     options:
         expose: true

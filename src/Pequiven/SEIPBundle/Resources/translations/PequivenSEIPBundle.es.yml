@@ -205,6 +205,9 @@ pequiven_seip:
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%
+    cumulative: Acumulado
+    form:
+        dayX: Día %x%
     security:
         permission_denied: Permiso denegado!
         403:

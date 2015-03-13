@@ -173,6 +173,8 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             'valueIndicator' => $valueIndicator,
             'valueIndicatorDetail' => $valueIndicatorDetail,
         );
+        $dataApi = array();
+        $groupSerialization = array('id','api_list');
         
         if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
         {
@@ -192,13 +194,20 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $em->persist($valueIndicatorDetail);
                 $em->flush();
             }
+            $dataApi = $valueIndicatorDetail->getProductsDetailDailyMonth();
+            $groupSerialization[] = 'product';
+            
             $template = 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/Detail/productDetailDailyMonth.html.twig';
+        }
+        if ($this->config->isApiRequest()) {
+            $data = $dataApi;
         }
         $view = $this
             ->view()
             ->setTemplate($template)
             ->setData($data)
         ;
+        $view->getSerializationContext()->setGroups($groupSerialization);
         return $view;
     }
     
