@@ -161,12 +161,26 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     public function showDetailAction(Request $request)
     {
         $valueIndicator = $this->findOr404($request);
-        $valueIndicator->getValueIndicatorDetail();
+        $valueIndicatorDetail = $valueIndicator->getValueIndicatorDetail();
         $indicator = $valueIndicator->getIndicator();
+        $valueIndicatorConfig = $indicator->getValueIndicatorConfig();
         
-        if($indicator->TypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
+        if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
         {
-            
+            if(!$valueIndicatorDetail){
+                $em = $this->getDoctrine()->getManager();
+                $products = $valueIndicatorConfig->getProducts();
+                
+                $valueIndicatorDetail = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail();
+                $valueIndicatorDetail->setValueIndicator($valueIndicator);
+                $valueIndicator->setValueIndicatorDetail($valueIndicatorDetail);
+                foreach ($products as $product) {
+                    $valueIndicatorDetail->addProduct($product);
+                }
+                $em->persist($valueIndicatorDetail);
+                
+                $em->flush();
+            }
         }
         $view = $this
             ->view()

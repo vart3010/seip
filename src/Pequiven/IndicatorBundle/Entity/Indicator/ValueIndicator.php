@@ -322,6 +322,7 @@ class ValueIndicator extends Model
     public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail = null)
     {
         $this->valueIndicatorDetail = $valueIndicatorDetail;
+        $valueIndicatorDetail->setValueIndicator($this);
 
         return $this;
     }
