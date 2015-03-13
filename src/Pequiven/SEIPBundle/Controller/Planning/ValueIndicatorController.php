@@ -166,6 +166,14 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         $indicator = $valueIndicator->getIndicator();
         $valueIndicatorConfig = $indicator->getValueIndicatorConfig();
         
+        $template = '';
+        $data = array(
+            'numResult' => $numResult,
+            'indicator' => $indicator,
+            'valueIndicator' => $valueIndicator,
+            'valueIndicatorDetail' => $valueIndicatorDetail,
+        );
+        
         if($indicator->getTypeDetailValue() == \Pequiven\IndicatorBundle\Entity\Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION)
         {
             if(!$valueIndicatorDetail){
@@ -184,11 +192,12 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $em->persist($valueIndicatorDetail);
                 $em->flush();
             }
+            $template = 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/Detail/productDetailDailyMonth.html.twig';
         }
         $view = $this
             ->view()
-            ->setData(array(
-            ))
+            ->setTemplate($template)
+            ->setData($data)
         ;
         return $view;
     }

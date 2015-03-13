@@ -1,0 +1,61 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    
+    <style type="text/css" media="screen">
+        .x-grid-row-summary .x-grid-cell-inner {
+            font-weight: bold;
+        }
+        .icon-grid {
+            background: url(../shared/icons/fam/grid.png) no-repeat 0 -1px;
+        }
+        .x-group-hd-container {
+            display:none;
+        }
+        /* Tags */
+        .tag {
+            padding: 0 4px 2px;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+	}
+	.ie9 .tag {
+		padding: 1px 4px;
+	}
+	small.tag {
+		font-size: 10px;
+		line-height: 14px;
+		text-transform: uppercase;
+		padding: 0 2px;
+		vertical-align: 1px;
+		border-width: 1px;
+		border-style: solid;
+		-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	}
+        
+    </style>
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        var formatPhp = "Y-m-d H:i:s";
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.form.field.Number',
+            'Ext.form.field.Date',
+            'Ext.layout.container.Fit'
+        ]);
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="table-summary"></div>
+    ss
+{% endblock content %}
