@@ -179,7 +179,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                     $productDetailDailyMonth = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
                     $productDetailDailyMonth->setProduct($product);
                     $productDetailDailyMonth->setMonth($numResult);
-                    $valueIndicatorDetail->addProductsDetailDailyMonth($product);
+                    $valueIndicatorDetail->addProductsDetailDailyMonth($productDetailDailyMonth);
                 }
                 $em->persist($valueIndicatorDetail);
                 $em->flush();

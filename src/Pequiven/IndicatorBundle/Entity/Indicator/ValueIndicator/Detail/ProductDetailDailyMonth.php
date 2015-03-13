@@ -81,434 +81,434 @@ class ProductDetailDailyMonth extends BaseModel
      * @var float
      * @ORM\Column(name="day1Plan",type="float")
      */
-    private $day1Plan;
+    private $day1Plan = 0;
     
     /**
      * Dia 1 (Real)
      * @var float
      * @ORM\Column(name="day1Real",type="float")
      */
-    private $day1Real;
+    private $day1Real = 0;
     
     /**
      * Dia 2 (Plan)
      * @var float
      * @ORM\Column(name="day2Plan",type="float")
      */
-    private $day2Plan;
+    private $day2Plan = 0;
     
     /**
      * Dia 2 (Real)
      * @var float
      * @ORM\Column(name="day2Real",type="float")
      */
-    private $day2Real;
+    private $day2Real = 0;
     
     /**
      * Dia 3 (Plan)
      * @var float
      * @ORM\Column(name="day3Plan",type="float")
      */
-    private $day3Plan;
+    private $day3Plan = 0;
     
     /**
      * Dia 3 (Real)
      * @var float
      * @ORM\Column(name="day3Real",type="float")
      */
-    private $day3Real;
+    private $day3Real = 0;
     
     /**
      * Dia 4 (Plan)
      * @var float
      * @ORM\Column(name="day4Plan",type="float")
      */
-    private $day4Plan;
+    private $day4Plan = 0;
     
     /**
      * Dia 4 (Real)
      * @var float
      * @ORM\Column(name="day4Real",type="float")
      */
-    private $day4Real;
+    private $day4Real = 0;
     
     /**
      * Dia 5 (Plan)
      * @var float
      * @ORM\Column(name="day5Plan",type="float")
      */
-    private $day5Plan;
+    private $day5Plan = 0;
     
     /**
      * Dia 5 (Real)
      * @var float
      * @ORM\Column(name="day5Real",type="float")
      */
-    private $day5Real;
+    private $day5Real = 0;
     
     /**
      * Dia 6 (Plan)
      * @var float
      * @ORM\Column(name="day6Plan",type="float")
      */
-    private $day6Plan;
+    private $day6Plan = 0;
     
     /**
      * Dia 6 (Real)
      * @var float
      * @ORM\Column(name="day6Real",type="float")
      */
-    private $day6Real;
+    private $day6Real = 0;
     
     /**
      * Dia 7 (Plan)
      * @var float
      * @ORM\Column(name="day7Plan",type="float")
      */
-    private $day7Plan;
+    private $day7Plan = 0;
     
     /**
      * Dia 7 (Real)
      * @var float
      * @ORM\Column(name="day7Real",type="float")
      */
-    private $day7Real;
+    private $day7Real = 0;
     
     /**
      * Dia 8 (Plan)
      * @var float
      * @ORM\Column(name="day8Plan",type="float")
      */
-    private $day8Plan;
+    private $day8Plan = 0;
     
     /**
      * Dia 8 (Real)
      * @var float
      * @ORM\Column(name="day8Real",type="float")
      */
-    private $day8Real;
+    private $day8Real = 0;
     
     /**
      * Dia 9 (Plan)
      * @var float
      * @ORM\Column(name="day9Plan",type="float")
      */
-    private $day9Plan;
+    private $day9Plan = 0;
     
     /**
      * Dia 9 (Real)
      * @var float
      * @ORM\Column(name="day9Real",type="float")
      */
-    private $day9Real;
+    private $day9Real = 0;
     
     /**
      * Dia 10 (Plan)
      * @var float
      * @ORM\Column(name="day10Plan",type="float")
      */
-    private $day10Plan;
+    private $day10Plan = 0;
     
     /**
      * Dia 10 (Real)
      * @var float
      * @ORM\Column(name="day10Real",type="float")
      */
-    private $day10Real;
+    private $day10Real = 0;
     
     /**
      * Dia 11 (Plan)
      * @var float
      * @ORM\Column(name="day11Plan",type="float")
      */
-    private $day11Plan;
+    private $day11Plan = 0;
     
     /**
      * Dia 11 (Real)
      * @var float
      * @ORM\Column(name="day11Real",type="float")
      */
-    private $day11Real;
+    private $day11Real = 0;
     
     /**
      * Dia 12 (Plan)
      * @var float
      * @ORM\Column(name="day12Plan",type="float")
      */
-    private $day12Plan;
+    private $day12Plan = 0;
     
     /**
      * Dia 12 (Real)
      * @var float
      * @ORM\Column(name="day12Real",type="float")
      */
-    private $day12Real;
+    private $day12Real = 0;
     
     /**
      * Dia 13 (Plan)
      * @var float
      * @ORM\Column(name="day13Plan",type="float")
      */
-    private $day13Plan;
+    private $day13Plan = 0;
     
     /**
      * Dia 13 (Real)
      * @var float
      * @ORM\Column(name="day13Real",type="float")
      */
-    private $day13Real;
+    private $day13Real = 0;
     
     /**
      * Dia 14 (Plan)
      * @var float
      * @ORM\Column(name="day14Plan",type="float")
      */
-    private $day14Plan;
+    private $day14Plan = 0;
     
     /**
      * Dia 14 (Real)
      * @var float
      * @ORM\Column(name="day14Real",type="float")
      */
-    private $day14Real;
+    private $day14Real = 0;
     
     /**
      * Dia 15 (Plan)
      * @var float
      * @ORM\Column(name="day15Plan",type="float")
      */
-    private $day15Plan;
+    private $day15Plan = 0;
     
     /**
      * Dia 15 (Real)
      * @var float
      * @ORM\Column(name="day15Real",type="float")
      */
-    private $day15Real;
+    private $day15Real = 0;
     
     /**
      * Dia 16 (Plan)
      * @var float
      * @ORM\Column(name="day16Plan",type="float")
      */
-    private $day16Plan;
+    private $day16Plan = 0;
     
     /**
      * Dia 16 (Real)
      * @var float
      * @ORM\Column(name="day16Real",type="float")
      */
-    private $day16Real;
+    private $day16Real = 0;
     
     /**
      * Dia 17 (Plan)
      * @var float
      * @ORM\Column(name="day17Plan",type="float")
      */
-    private $day17Plan;
+    private $day17Plan = 0;
     
     /**
      * Dia 17 (Real)
      * @var float
      * @ORM\Column(name="day17Real",type="float")
      */
-    private $day17Real;
+    private $day17Real = 0;
     
     /**
      * Dia 18 (Plan)
      * @var float
      * @ORM\Column(name="day18Plan",type="float")
      */
-    private $day18Plan;
+    private $day18Plan = 0;
     
     /**
      * Dia 18 (Real)
      * @var float
      * @ORM\Column(name="day18Real",type="float")
      */
-    private $day18Real;
+    private $day18Real = 0;
     
     /**
      * Dia 19 (Plan)
      * @var float
      * @ORM\Column(name="day19Plan",type="float")
      */
-    private $day19Plan;
+    private $day19Plan = 0;
     
     /**
      * Dia 19 (Real)
      * @var float
      * @ORM\Column(name="day19Real",type="float")
      */
-    private $day19Real;
+    private $day19Real = 0;
     
     /**
      * Dia 20 (Plan)
      * @var float
      * @ORM\Column(name="day20Plan",type="float")
      */
-    private $day20Plan;
+    private $day20Plan = 0;
     
     /**
      * Dia 20 (Real)
      * @var float
      * @ORM\Column(name="day20Real",type="float")
      */
-    private $day20Real;
+    private $day20Real = 0;
     
     /**
      * Dia 21 (Plan)
      * @var float
      * @ORM\Column(name="day21Plan",type="float")
      */
-    private $day21Plan;
+    private $day21Plan = 0;
     
     /**
      * Dia 21 (Real)
      * @var float
      * @ORM\Column(name="day21Real",type="float")
      */
-    private $day21Real;
+    private $day21Real = 0;
     
     /**
      * Dia 22 (Plan)
      * @var float
      * @ORM\Column(name="day22Plan",type="float")
      */
-    private $day22Plan;
+    private $day22Plan = 0;
     
     /**
      * Dia 22 (Real)
      * @var float
      * @ORM\Column(name="day22Real",type="float")
      */
-    private $day22Real;
+    private $day22Real = 0;
     
     /**
      * Dia 23 (Plan)
      * @var float
      * @ORM\Column(name="day23Plan",type="float")
      */
-    private $day23Plan;
+    private $day23Plan = 0;
     
     /**
      * Dia 23 (Real)
      * @var float
      * @ORM\Column(name="day23Real",type="float")
      */
-    private $day23Real;
+    private $day23Real = 0;
     
     /**
      * Dia 24 (Plan)
      * @var float
      * @ORM\Column(name="day24Plan",type="float")
      */
-    private $day24Plan;
+    private $day24Plan = 0;
     
     /**
      * Dia 24 (Real)
      * @var float
      * @ORM\Column(name="day24Real",type="float")
      */
-    private $day24Real;
+    private $day24Real = 0;
     
     /**
      * Dia 25 (Plan)
      * @var float
      * @ORM\Column(name="day25Plan",type="float")
      */
-    private $day25Plan;
+    private $day25Plan = 0;
     
     /**
      * Dia 25 (Real)
      * @var float
      * @ORM\Column(name="day25Real",type="float")
      */
-    private $day25Real;
+    private $day25Real = 0;
     
     /**
      * Dia 26 (Plan)
      * @var float
      * @ORM\Column(name="day26Plan",type="float")
      */
-    private $day26Plan;
+    private $day26Plan = 0;
     
     /**
      * Dia 26 (Real)
      * @var float
      * @ORM\Column(name="day26Real",type="float")
      */
-    private $day26Real;
+    private $day26Real = 0;
     
     /**
      * Dia 27 (Plan)
      * @var float
      * @ORM\Column(name="day27Plan",type="float")
      */
-    private $day27Plan;
+    private $day27Plan = 0;
     
     /**
      * Dia 27 (Real)
      * @var float
      * @ORM\Column(name="day27Real",type="float")
      */
-    private $day27Real;
+    private $day27Real = 0;
     
     /**
      * Dia 28 (Plan)
      * @var float
      * @ORM\Column(name="day28Plan",type="float")
      */
-    private $day28Plan;
+    private $day28Plan = 0;
     
     /**
      * Dia 28 (Real)
      * @var float
      * @ORM\Column(name="day28Real",type="float")
      */
-    private $day28Real;
+    private $day28Real = 0;
     
     /**
      * Dia 29 (Plan)
      * @var float
      * @ORM\Column(name="day29Plan",type="float")
      */
-    private $day29Plan;
+    private $day29Plan = 0;
     
     /**
      * Dia 29 (Real)
      * @var float
      * @ORM\Column(name="day29Real",type="float")
      */
-    private $day29Real;
+    private $day29Real = 0;
     
     /**
      * Dia 30 (Plan)
      * @var float
      * @ORM\Column(name="day30Plan",type="float")
      */
-    private $day30Plan;
+    private $day30Plan = 0;
     
     /**
      * Dia 30 (Real)
      * @var float
      * @ORM\Column(name="day30Real",type="float")
      */
-    private $day30Real;
+    private $day30Real = 0;
     
     /**
      * Dia 31 (Plan)
      * @var float
      * @ORM\Column(name="day31Plan",type="float")
      */
-    private $day31Plan;
+    private $day31Plan = 0;
     
     /**
      * Dia 31 (Real)
      * @var float
      * @ORM\Column(name="day31Real",type="float")
      */
-    private $day31Real;
+    private $day31Real = 0;
 
     /**
      * Get id
