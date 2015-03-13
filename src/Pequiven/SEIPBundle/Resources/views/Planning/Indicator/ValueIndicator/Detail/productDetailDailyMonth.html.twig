@@ -95,15 +95,39 @@
                     }
                 });
                 
-            var widthDays = 50;
+            var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1,
+                listeners: {
+                    cancelEdit: function (rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    },
+                }
+            });
+                
+            var widthColumnDays = 50;
+            var fieldTypeDayProperties = {
+                xtype: 'numberfield',
+                minValue: 0
+            };
             var grid = Ext.create('Ext.grid.Panel', {
                 selType: 'cellmodel',
                 renderTo: 'grid-summary',
                 height: 580,
+                plugins: [cellEditing],
                 frame: true,
                 title: '{{ indicator }}',
                 store: store,
                 iconCls: 'icon-user',
+                features: [{
+                    id: 'group',
+                    ftype: 'groupingsummary',
+                    groupHeaderTpl: '{name}',
+                    hideGroupedHeader: false,
+                    enableGroupingMenu: false
+                }],
                 columns: [{
                         text: 'Nro',
                         width: 30,
@@ -145,12 +169,14 @@
                             {
                                 text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
                                 dataIndex: 'day1Plan',
-                                width: widthDays,
+                                width: widthColumnDays,
+                                field: fieldTypeDayProperties
                             },
                             {
                                 text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
                                 dataIndex: 'day1Real',
-                                width: widthDays,
+                                width: widthColumnDays,
+                                field: fieldTypeDayProperties
                             }
                         ]
                     }
