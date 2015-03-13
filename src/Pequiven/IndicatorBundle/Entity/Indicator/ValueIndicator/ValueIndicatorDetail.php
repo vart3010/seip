@@ -56,8 +56,8 @@ class ValueIndicatorDetail
     
     /**
      * Produccion diara detallada en el mes
-     * @var ProductDetailDailyMonth
-     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth")
+     * @var Detail\ProductDetailDailyMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",mappedBy="valueIndicatorDetail")
      */
     private $productsDetailDailyMonth;
     
@@ -150,22 +150,32 @@ class ValueIndicatorDetail
     }
 
     /**
-     * Set productsDetailDailyMonth
+     * Add productsDetailDailyMonth
      *
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth $productsDetailDailyMonth
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $productsDetailDailyMonth
      * @return ValueIndicatorDetail
      */
-    public function setProductsDetailDailyMonth(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth $productsDetailDailyMonth = null)
+    public function addProductsDetailDailyMonth(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $productsDetailDailyMonth)
     {
-        $this->productsDetailDailyMonth = $productsDetailDailyMonth;
+        $this->productsDetailDailyMonth->add($productsDetailDailyMonth);
 
         return $this;
     }
 
     /**
+     * Remove productsDetailDailyMonth
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $productsDetailDailyMonth
+     */
+    public function removeProductsDetailDailyMonth(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $productsDetailDailyMonth)
+    {
+        $this->productsDetailDailyMonth->removeElement($productsDetailDailyMonth);
+    }
+
+    /**
      * Get productsDetailDailyMonth
      *
-     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getProductsDetailDailyMonth()
     {

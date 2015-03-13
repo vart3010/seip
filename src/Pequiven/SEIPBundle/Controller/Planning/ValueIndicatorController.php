@@ -176,6 +176,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 $valueIndicator->setValueIndicatorDetail($valueIndicatorDetail);
                 foreach ($products as $product) {
                     $valueIndicatorDetail->addProduct($product);
+                    
                 }
                 $em->persist($valueIndicatorDetail);
                 

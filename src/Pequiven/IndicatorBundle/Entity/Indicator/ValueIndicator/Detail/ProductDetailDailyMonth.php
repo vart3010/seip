@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator;
+namespace Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\BaseModel;
@@ -32,6 +32,14 @@ class ProductDetailDailyMonth extends BaseModel
      */
     private $id;
     
+    /**
+     * Detalle de valor del indicador
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail",inversedBy="productsDetailDailyMonth")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $valueIndicatorDetail;
+
     /**
      * Producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
@@ -2051,5 +2059,28 @@ class ProductDetailDailyMonth extends BaseModel
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set valueIndicatorDetail
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail
+     * @return ProductDetailDailyMonth
+     */
+    public function setValueIndicatorDetail(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail $valueIndicatorDetail)
+    {
+        $this->valueIndicatorDetail = $valueIndicatorDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get valueIndicatorDetail
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail 
+     */
+    public function getValueIndicatorDetail()
+    {
+        return $this->valueIndicatorDetail;
     }
 }
