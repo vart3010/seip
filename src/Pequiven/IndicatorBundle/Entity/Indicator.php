@@ -1228,4 +1228,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->valueIndicatorConfig;
     }
+    
+    public function getDescriptionWithStrPad($pad_length){
+        return str_pad($this->description, $pad_length, ' ',STR_PAD_RIGHT);
+    }
 }

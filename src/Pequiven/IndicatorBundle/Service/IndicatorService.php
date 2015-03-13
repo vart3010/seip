@@ -270,8 +270,8 @@ class IndicatorService implements ContainerAwareInterface
         );
         $chart = array();
         
-        $chart['caption'] = $indicator->getDescription();
-        $chart["captionPadding"] = "10";
+//        $chart['caption'] = $indicator->getDescription();
+//        $chart["captionPadding"] = "10";
         $chart["showshadow"] = "0";
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
@@ -280,6 +280,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["baseFontColor"] = "#333333";
         $chart["baseFont"] = "Helvetica Neue,Arial";
         $chart["captionFontSize"] = "10";
+//        $chart["captionFontBold"] = "1";
         $chart["showborder"] = "0";
         $chart["bgcolor"] = "#FFFFFF";
         $chart["bgalpha"] = "0";

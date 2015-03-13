@@ -38,6 +38,25 @@ class LineStrategicController extends SEIPController {
         return $this->handleView($view);
     }
     
+    /**
+     * Retorna el Tablero con los indicadores estratégicos definidos en el SEIP
+     * @param Request $request
+     * @return type
+     */
+    public function viewOnlyIndicatorAction(Request $request){
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('viewByIndicator.html'))
+                ->setData(array(
+                    'boxRender' => $boxRender
+                ))
+                ;
+        
+        return $this->handleView($view);
+    }
+    
     public function showAction(Request $request) {
         
         $resource = $this->findOr404($request);
@@ -170,7 +189,7 @@ class LineStrategicController extends SEIPController {
      * @param Request $request
      * @return type
      */
-    public function viewOnlyObjectAction(Request $request){
+    public function viewOnlyObjetiveAction(Request $request){
         $typeObject = $request->get('object');
         $iconsLineStrategic = LineStrategic::getIcons();
         $resultIndicator = $resultArrangementProgram = $resultObjetives = array();

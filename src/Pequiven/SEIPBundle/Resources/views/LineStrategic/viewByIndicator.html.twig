@@ -8,14 +8,14 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.results.resultsStrategics"|trans)
+        ("pequiven_seip.results.resultsIndicatorsStrategics"|trans)
     ) }}
 {% endblock %}
 
 {% block body %}
     <div class="with-padding">
         <div class="columns">
-            {{ boxRender.renderBox('pequiven_seip.box.linestrategic.icons_dashboard')|raw }}
+            {{ boxRender.renderBox('pequiven_seip.box.linestrategic.icons_indicator_dashboard')|raw }}
         </div>
     </div>
 {% endblock body %}
