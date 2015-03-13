@@ -73,6 +73,7 @@ class ValueIndicatorConfig
      */
     public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator)
     {
+        $indicator->setValueIndicatorConfig($this);
         $this->indicator = $indicator;
 
         return $this;
