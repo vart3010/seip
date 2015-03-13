@@ -55,12 +55,20 @@ class ValueIndicatorDetail
     private $updatedAt;
     
     /**
-     * Productos (Para añadirle los detalles)
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * Produccion diara detallada en el mes
+     * @var ProductDetailDailyMonth
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth")
      */
-    private $products;
-
+    private $productsDetailDailyMonth;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->productsDetailDailyMonth = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -140,44 +148,27 @@ class ValueIndicatorDetail
     {
         return $this->valueIndicator;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add products
+     * Set productsDetailDailyMonth
      *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth $productsDetailDailyMonth
      * @return ValueIndicatorDetail
      */
-    public function addProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    public function setProductsDetailDailyMonth(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth $productsDetailDailyMonth = null)
     {
-        $this->products[] = $products;
+        $this->productsDetailDailyMonth = $productsDetailDailyMonth;
 
         return $this;
     }
 
     /**
-     * Remove products
+     * Get productsDetailDailyMonth
      *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ProductDetailDailyMonth 
      */
-    public function removeProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    public function getProductsDetailDailyMonth()
     {
-        $this->products->removeElement($products);
-    }
-
-    /**
-     * Get products
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProducts()
-    {
-        return $this->products;
+        return $this->productsDetailDailyMonth;
     }
 }
