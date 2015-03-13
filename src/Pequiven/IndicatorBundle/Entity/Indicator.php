@@ -1197,7 +1197,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->backward;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
