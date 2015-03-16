@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 
 /**
  * Administrador del Indicador
@@ -24,41 +25,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
-            ->add('refParent')
-            ->add('totalPlan')
-            ->add('weight')
-            ->add('goal')
-            ->add('formula')
-            ->add('tendency')
-            ->add('arrangementRange')
-            ->add('frequencyNotificationIndicator')
-            ->add('valueFinal')
-            ->add('childrens')
-            ->add('valuesIndicator')
-            ;
-    }
-    
-    protected function configureFormFields(FormMapper $form) {
-        $object = $this->getSubject();
-        $childrensParameters = array(
-            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
-            'multiple' => true,
-            'required' => false,
-        );
-        if($object != null && $object->getId() !== null){
-            $indicatorLevel = $object->getIndicatorLevel();
-            $level = $indicatorLevel->getLevel();
-            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
-                return $repository->getQueryChildrenLevel($level);
-            };
-           
-        }
-        
-        $form
-            ->add('ref')
-            ->add('description')
-            ->add('typeOfCalculation','choice',array(
-                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+            ->add('typeDetailValue','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
             ->add('refParent')
@@ -70,8 +38,105 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('childrens')
+            ->add('valuesIndicator')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
+            ->add('requiredToImport')
+            ->add('details')
+            ;
+    }
+    
+    protected function configureFormFields(FormMapper $form) 
+    {
+        $object = $this->getSubject();
+        $childrensParameters = array(
+            'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
+            'multiple' => true,
+            'required' => false,
+        );
+        $id = null;
+        if($object != null && $object->getId() !== null){
+            $indicatorLevel = $object->getIndicatorLevel();
+            $level = $indicatorLevel->getLevel();
+            $childrensParameters['query_builder'] = function(\Pequiven\IndicatorBundle\Repository\IndicatorRepository $repository) use ($level){
+                return $repository->getQueryChildrenLevel($level);
+            };
+            $id = $object->getId();
+        }
+        
+        if($object != null && $object->getId() !== null){
+            if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+                $form->add('lineStrategics');
+            }
+        }
+        
+        $form
+            ->add('ref')
+            ->add('description')
+            ->add('lineStrategics')
+            ->add('typeOfCalculation','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('typeDetailValue','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('refParent')
+            ->add('totalPlan')
+            ->add('weight')
+            ->add('goal')
+            ->add('formula')
+            ->add('tendency')
+            ->add('frequencyNotificationIndicator')
+            ->add('valueFinal')
             ->add('childrens','entity',$childrensParameters)
-            ->add('enabled')
+            ->add('formulaDetails','sonata_type_collection',
+                array(
+                     'cascade_validation' => true,
+                     'by_reference' => false,
+//                    'type_options' => array(
+//                        'delete' => true,
+//                    ),
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+//                    'sortable' => 'position',
+                    'link_parameters' => array('indicator_id' => $id)
+                ),
+                array(
+                )
+            )    
+            ->add('couldBePenalized',null,array(
+                'required' => false,
+            ))
+            ->add('forcePenalize',null,array(
+                'required' => false,
+            ))
+            ->add('requiredToImport',null,array(
+                'required' => false,
+            ))
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
+            ->add('backward',null,array(
+                'required' => false,
+            ))->end();
+        
+        $form
+            ->with('Details')
+                ->add('details','sonata_type_admin',array(
+                     'cascade_validation' => true,
+                     'delete' => false,
+                ),
+                array(
+                    'edit'   => 'inline',
+                    'inline' => 'table',
+                )
+                )
+            ->end()
             ;
     }
     
@@ -87,6 +152,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('tendency')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
+            ->add('requiredToImport')
             ->add('enabled')
             ;
     }
@@ -104,15 +172,28 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ;
     }
     
-    public function prePersist($object)
+    public function prePersist($object) 
     {
+        
         $object->setPeriod($this->getPeriodService()->getPeriodActive());
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
     }
     
-    public function postUpdate($object) 
+    public function preUpdate($object) 
     {
-//        $objetives = $object->getObjetives();
-//        $this->getResultService()->updateResultOfObjects($objetives);
+        foreach ($object->getFormulaDetails() as $formulaDetails)
+        {
+            $formulaDetails->setIndicator($object);
+        }
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
     }
     
     /**
@@ -129,7 +210,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {

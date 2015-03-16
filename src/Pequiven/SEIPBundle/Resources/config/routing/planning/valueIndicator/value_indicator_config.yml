@@ -1,0 +1,15 @@
+pequiven_value_indicator_config_create:
+    path: /{indicator_id}/create
+    defaults:
+        _controller: pequiven.controller.value_indicator_config:createAction
+        _format: html
+        _sylius:
+            form: pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig
+        
+pequiven_value_indicator_config_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.value_indicator_config:updateAction
+        _format: html
+        _sylius:
+            form: pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig

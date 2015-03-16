@@ -47,3 +47,50 @@ UPDATE seip_user SET status_worker = 1;
 INSERT INTO `Configuration` (`id`, `group_id`, `keyIndex`, `value`, `description`, `active`, `createdAt`, `updatedAt`) VALUES (NULL, '1', 'PRE_PLANNING_EMAIL_NOTIFY_TO_REVISION', '["rarias@pequiven.com","vescalona@pequiven.com"]', 'Lista de correos que recibiran las notificaciones cuando se envie una pre-planificacion a revision', '1', '2015-02-11 00:00:00', NULL);
 -- Tabla audit de Rango de Gestión
 CREATE TABLE seip_arrangement_range_audit (id INT NOT NULL, rev INT NOT NULL, fk_user_created_at INT DEFAULT NULL, fk_user_updated_at INT DEFAULT NULL, period_id INT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, rankTopBasic DOUBLE PRECISION DEFAULT NULL, rankTopMixedTop DOUBLE PRECISION DEFAULT NULL, rankTopMixedBottom DOUBLE PRECISION DEFAULT NULL, rankMiddleTopBasic DOUBLE PRECISION DEFAULT NULL, rankMiddleTopMixedTop DOUBLE PRECISION DEFAULT NULL, rankMiddleTopMixedBottom DOUBLE PRECISION DEFAULT NULL, rankMiddleBottomBasic DOUBLE PRECISION DEFAULT NULL, rankMiddleBottomMixedTop DOUBLE PRECISION DEFAULT NULL, rankMiddleBottomMixedBottom DOUBLE PRECISION DEFAULT NULL, rankBottomBasic DOUBLE PRECISION DEFAULT NULL, rankBottomMixedTop DOUBLE PRECISION DEFAULT NULL, rankBottomMixedBottom DOUBLE PRECISION DEFAULT NULL, enabled TINYINT(1) DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, typeRangeTop INT DEFAULT NULL, typeRangeMiddleTop INT DEFAULT NULL, typeRangeMiddleBottom INT DEFAULT NULL, typeRangeBottom INT DEFAULT NULL, op_rankTopBasic INT DEFAULT NULL, op_rankTopMixed_top INT DEFAULT NULL, op_rankTopMixed_bottom INT DEFAULT NULL, op_rankMiddleTopBasic INT DEFAULT NULL, op_rankMiddleTopMixed_top INT DEFAULT NULL, op_rankMiddleTopMixed_bottom INT DEFAULT NULL, op_rankMiddleBottomBasic INT DEFAULT NULL, op_rankMiddleBottomMixed_top INT DEFAULT NULL, op_rankMiddleBottomMixed_bottom INT DEFAULT NULL, op_rankBottomBasic INT DEFAULT NULL, op_rankBottomMixed_top INT DEFAULT NULL, op_rankBottomMixed_bottom INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+ALTER TABLE Goal ADD advance DOUBLE PRECISION NOT NULL;
+ALTER TABLE Goal_audit ADD advance DOUBLE PRECISION DEFAULT NULL;
+
+ALTER TABLE Period ADD dateStartPenalty DATE DEFAULT NULL, ADD dateEndPenalty DATE DEFAULT NULL;
+ALTER TABLE Period_audit ADD dateStartPenalty DATE DEFAULT NULL, ADD dateEndPenalty DATE DEFAULT NULL;
+
+ALTER TABLE seip_indicator ADD couldBePenalized TINYINT(1) NOT NULL, ADD forcePenalize TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD couldBePenalized TINYINT(1) DEFAULT NULL, ADD forcePenalize TINYINT(1) DEFAULT NULL;
+ALTER TABLE ArrangementProgram ADD couldBePenalized TINYINT(1) NOT NULL, ADD forcePenalize TINYINT(1) NOT NULL;
+ALTER TABLE ArrangementProgram_audit ADD couldBePenalized TINYINT(1) DEFAULT NULL, ADD forcePenalize TINYINT(1) DEFAULT NULL;
+
+UPDATE seip_indicator SET couldBePenalized = 1;
+UPDATE ArrangementProgram SET couldBePenalized = 1;
+
+ALTER TABLE Period ADD amountPenalty DOUBLE PRECISION NOT NULL;
+ALTER TABLE Period_audit ADD amountPenalty DOUBLE PRECISION DEFAULT NULL;
+UPDATE Period SET amountPenalty = 15;
+
+ALTER TABLE Period CHANGE amountpenalty percentagePenalty DOUBLE PRECISION NOT NULL;
+ALTER TABLE Period_audit CHANGE amountpenalty percentagePenalty DOUBLE PRECISION DEFAULT NULL;
+
+ALTER TABLE ArrangementProgram ADD resultReal DOUBLE PRECISION NOT NULL;
+ALTER TABLE ArrangementProgram_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
+ALTER TABLE Goal ADD resultReal DOUBLE PRECISION NOT NULL;
+ALTER TABLE Goal_audit ADD resultReal DOUBLE PRECISION DEFAULT NULL;
+
+-- Agregando campo para evaluar si es requerido importar un item en la pre planificacion
+ALTER TABLE PrePlanning ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_objetive ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_objetive_audit ADD requiredToImport TINYINT(1) DEFAULT NULL;
+ALTER TABLE seip_indicator ADD requiredToImport TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD requiredToImport TINYINT(1) DEFAULT NULL;
+
+UPDATE `seip_objetive` o,`seip_objetive_level` ol SET o.`requiredToImport`= 1 WHERE o.fk_objetive_level = ol.id AND ol.level = 1;
+UPDATE `seip_indicator` i,`seip_indicator_level` il SET i.`requiredToImport`=1 WHERE i.fk_indicator_level=il.id AND il.level = 1;
+
+ALTER TABLE seip_monitor ADD period_id INT NOT NULL;
+UPDATE `seip_monitor` SET period_id=1 WHERE 1;
+ALTER TABLE seip_monitor ADD CONSTRAINT FK_24ACE4EFEC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_24ACE4EFEC8B7ADE ON seip_monitor (period_id);
+
+-- Periodo para el usuario
+ALTER TABLE seip_user ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_user ADD CONSTRAINT FK_B4B410D9EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_B4B410D9EC8B7ADE ON seip_user (period_id);
+ALTER TABLE seip_user_audit ADD period_id INT DEFAULT NULL;

@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Model\Box\Indicator\Operative;
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
- * Resumen de los indicadores cargados a nivel operativo.
+ * Resumen de los indicadores cargados a nivel operativo en donde se muestra el plan y el total a cargar durante el período seleccionado.
  *
  * @author matias
  */
@@ -39,7 +39,7 @@ class SummaryBoxIndicatorCharged extends GenericBox
         $dataLinkOperative = array();
         
         //Resultados Operativos
-        $resultsOperatives = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorOperativeByGerenciaGroup();
+        $resultsOperatives = $this->container->get('pequiven.repository.monitor')->getTotalIndicatorOperativeByGerenciaGroup();
         
         foreach($resultsOperatives as $resultOperative){
             $resOperative = $resultOperative['PlanIndOperative'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultOperative['RealIndOperative'] / (float)$resultOperative['PlanIndOperative']) * 100,'0',2);

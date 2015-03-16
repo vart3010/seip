@@ -33,6 +33,8 @@ class ArrangementProgramAdmin extends Admin
             ->add('description')
             ->add('timeline')
             ->add('isAvailableInResult')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
             ;
     }
     
@@ -52,6 +54,12 @@ class ArrangementProgramAdmin extends Admin
             ->add('isAvailableInResult',null,array(
                 'required' => false,
             ))
+            ->add('couldBePenalized',null,array(
+                'required' => false,
+            ))
+            ->add('forcePenalize',null,array(
+                'required' => false,
+            ))
             ;
     }
     
@@ -63,6 +71,8 @@ class ArrangementProgramAdmin extends Admin
             ->add('operationalObjective')
             ->add('description')
             ->add('isAvailableInResult')
+            ->add('couldBePenalized')
+            ->add('forcePenalize')
             ;
     }
     
@@ -76,5 +86,17 @@ class ArrangementProgramAdmin extends Admin
     
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) {
         $collection->remove('create');
+    }
+    
+    public function prePersist($object) {
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
+    }
+    
+    public function preUpdate($object) {
+        if($object->isCouldBePenalized() === false){
+            $object->setForcePenalize(false);
+        }
     }
 }

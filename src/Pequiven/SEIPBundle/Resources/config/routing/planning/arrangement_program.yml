@@ -1,9 +1,16 @@
-## YAML Template.
----
 pequiven_seip_arrangementprogram_by_gerencia:
     path: /{typeGroup}/{idGerencia}.{_format}
     defaults:
         _controller: pequiven_seip.controller.arrangementprogram:arrangementProgramByGerenciaAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+    methods: [GET]
+
+pequiven_seip_arrangementprogram_all:
+    path: /all/.{_format}
+    defaults:
+        _controller: pequiven_seip.controller.arrangementprogram:listAllAction
         _format: html
     requirements:
         _format: html|json|xml

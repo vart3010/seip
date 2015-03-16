@@ -54,7 +54,7 @@ final class SeipEvents
      *
      * @var string
      */
-    const RESULT_ARRANGEMENT_PROGRAM_UPDATE = 'pre_planning.post.send_to_draft';
+    const RESULT_ARRANGEMENT_PROGRAM_UPDATE = 'result.arrangement_program_update';
     
     /**
      * El pre_planning.post.send_to_draft este evento ocurre cuando se envia un item de la pre-planificacion a borrador

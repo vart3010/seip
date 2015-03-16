@@ -84,6 +84,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuResults($menu, $section);
         }
         
+        //Menú Estadística e Información
         if($this->isGranted('ROLE_SEIP_PLANNING_*')){
             $this->addPlanningMenu($menu, $section);
         }
@@ -169,11 +170,17 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
      */
     function addPlanningMenu(ItemInterface $menu, $section) 
     {
+        $title = $this->trans('statisticsAndInformation', array(), 'PequivenSEIPBundle');
+        $gerenciasRef = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsRef();
+        if($this->getUser()->getGerencia() && $this->getUser()->getGerencia()->getRef() == $gerenciasRef[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
+            $title = $this->trans('internalAudit', array(), 'PequivenSEIPBundle');
+        }
+        
         $child = $this->factory->createItem('planning',
             $this->getSubLevelOptions(array(
                 'uri' => null,
                 'labelAttributes' => array('icon' => 'fa fa-bar-chart',),
-            )))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section)));
+            )))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.main', $section),array('%titulo%' => $title)));
         
         if($this->isGranted('ROLE_SEIP_PLANNING_LIST_*')){
             
@@ -187,7 +194,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $subchild = $this->factory->createItem('planning.visualize.objetives',
                             $this->getSubLevelOptions(array(
                             'uri' => null,
-                            'labelAttributes' => array('icon' => 'icon-book',),
+                            'labelAttributes' => array('icon' => 'fa fa-cubes',),
                             ))
                         )
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.objetives.main', $section)));
@@ -229,7 +236,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $subchild = $this->factory->createItem('planning.visualize.indicators',
                         $this->getSubLevelOptions(array(
                         'uri' => null,
-                        'labelAttributes' => array('icon' => 'icon-book',),
+                        'labelAttributes' => array('icon' => 'fa fa-line-chart',),
                         ))
                     )
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.main', $section)));
@@ -252,9 +259,31 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'routeParameters' => array('level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO)
                     ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.operative', $section)));
                 }
+                if($this->isGranted('ROLE_SEIP_PLANNING_LIST_INDICATOR_ERROR')){
+                    $subchild->addChild('planning.visualize.indicators.error', array(
+                        'route' => 'pequiven_indicator_list_error',
+                    ))->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.indicators.withError', $section)));
+                }
 
                 $visualize->addChild($subchild);
             }//Fin menu Ver - Indicadores
+            
+            if($this->isGranted('ROLE_SEIP_PLANNING_LIST_ARRANGEMENT_PROGRAM')){
+                $subchild = $this->factory->createItem('planning.visualize.arrangement_programs',
+                    $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-tasks',),
+                    ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.arrangement_programs.main', $section)));
+                
+                $subchild->addChild('planning.visualize.arrangement_programs.list', array(
+                    'route' => 'pequiven_seip_arrangementprogram_all'
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.arrangement_programs.list', $section)));
+                
+                $visualize->addChild($subchild);
+            }
             
             if($this->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_*')){
                 
@@ -541,10 +570,27 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.main', $section)));
                 
                     if($this->isGranted('ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT')){
-                        $itemOperativeVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
+                        $itemByGerenciaVisualize = $this->factory->createItem('results.visualize.by_gerencia', array(
                             'route' => 'pequiven_seip_result_visualize_by_gerencia',
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_gerencia', $section)));
-                        $visualize->addChild($itemOperativeVisualize);
+                        $visualize->addChild($itemByGerenciaVisualize);
+                    }
+                    
+                    if($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')){
+                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.by_lineStrategic', array(
+                            'route' => 'pequiven_line_strategic_view_dashboard',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
+                        $visualize->addChild($itemStrategicsVisualize);
+                        
+                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.indicator.strategics', array(
+                            'route' => 'pequiven_line_strategic_indicators_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
+                        $visualize->addChild($itemStrategicsVisualize);
+                        
+                        $itemStrategicsObjetives = $this->factory->createItem('results.visualize.objetive.strategics', array(
+                            'route' => 'pequiven_line_strategic_view_objetives_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.objetive.strategics', $section)));
+                        $visualize->addChild($itemStrategicsObjetives);
                     }
                     
                      $itemPeriod = $this->factory->createItem('results.period',$this->getSubLevelOptions())
@@ -644,6 +690,13 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
             if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_*'))
             {
+                $pending = $this->factory->createItem('arrangement_programs.list.pending',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => '',),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.pending', $section)));
+                
                 //Menú Nivel 2: Visualizar
                  $visualize = $this->factory->createItem('arrangement_programs.visualize',
                         $this->getSubLevelOptions(array(
@@ -665,21 +718,29 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.assigned', $section)));
                  }
 
-                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_REVIEWING_OR_APPROVING')){
-                    $visualize
-                        ->addChild('arrangement_programs.for_reviewing_or_approving', array(
-                            'route' => 'pequiven_seip_arrangementprogram_for_reviewing_or_approving',
+                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING')){
+                    $pending
+                        ->addChild('arrangement_programs.for_reviewing', array(
+                            'route' => 'pequiven_seip_arrangementprogram_for_reviewing',
                         ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing_or_approving', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_reviewing', $section)));
+                 }
+                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING')){
+                    $pending
+                        ->addChild('arrangement_programs.for_approving', array(
+                            'route' => 'pequiven_seip_arrangementprogram_for_approving',
+                        ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_approving', $section)));
                  }
                  if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_NOTIFYING')){
-                    $visualize
+                    $pending
                         ->addChild('arrangement_programs.for_notifying', array(
                             'route' => 'pequiven_seip_arrangementprogram_for_notifying',
                         ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.for_notifying', $section)));
                  }
                 
+                $visualize->addChild($pending);
                 $child->addChild($visualize);
             }
             
@@ -795,13 +856,44 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //        return null;
 //    }
     
+    protected function trans($id,array $parameters = array(), $domain = 'messages')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     /**
      * 

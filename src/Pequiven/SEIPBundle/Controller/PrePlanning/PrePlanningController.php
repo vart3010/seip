@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 
 const PHP_TIME_LIMIT = 120;
-//const PHP_MEMORY_LIMIT = '256M';
-const PHP_MEMORY_LIMIT = '320M';
+const PHP_MEMORY_LIMIT = '256M';
+//const PHP_MEMORY_LIMIT = '320M';
 
 /**
  * Controlador de pre-planificacion
@@ -192,6 +192,7 @@ class PrePlanningController extends ResourceController
         ini_set("memory_limit",PHP_MEMORY_LIMIT);
         $level = $request->get('level',null);
         $success = false;
+        $id  = 0;
         if($level){
             $user = $this->getUser();
             $prePlanningService = $this->getPrePlanningService();
@@ -204,7 +205,8 @@ class PrePlanningController extends ResourceController
             }
 
             $objetivesArray = $this->getObjetivesArray($level);
-            $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $rootTreePrePlannig = $prePlanningService->buildTreePrePlannig($objetivesArray,$level);
+            $id = $rootTreePrePlannig->getId();
             $success = true;
         }else{
             $success = false;
@@ -212,6 +214,7 @@ class PrePlanningController extends ResourceController
         
         $data = array(
             "success" => $success,
+            "id" => $id,
         );
         $view = $this->view($data);
         return $this->handleView($view);
@@ -326,7 +329,7 @@ class PrePlanningController extends ResourceController
                 $em->persist($rootTreePrePlannig);
                 
                 $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
-                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
             $em->flush();
         }
@@ -353,7 +356,7 @@ class PrePlanningController extends ResourceController
             'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM',
             'ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL',
         ));
-        
+        $rootId = $request->get('root');
         $resource = $this->findOr404($request);
         $success = false;
         $data = array();
@@ -368,9 +371,8 @@ class PrePlanningController extends ResourceController
             $success = true;
             $em->persist($resource);
             if($lastItem === true){
-                $periodActive = $this->getPeriodService()->getPeriodActive();
                 $prePlanningService = $this->getPrePlanningService();
-                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannig($periodActive,$user,$level);
+                $rootTreePrePlannig = $prePlanningService->findRootTreePrePlannigById($rootId);
                 $data['messages'] = array(
                     'email_send'
                 );
@@ -378,7 +380,7 @@ class PrePlanningController extends ResourceController
                 $em->persist($rootTreePrePlannig);
                 
                 $event = new \Symfony\Component\EventDispatcher\GenericEvent($rootTreePrePlannig);
-                $this->container->get('event_dispatcher')->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
+                $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_DRAFT,$event);
             }
             $em->flush();
         }
@@ -401,7 +403,7 @@ class PrePlanningController extends ResourceController
 
         $prePlanningConfiguration = $configuration->getPrePlanningConfiguration();
         $objetivesArray = array();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $periodActive = $this->getPeriodService()->getEntityPeriodActive();
         
         if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO && $prePlanningConfiguration->getGerenciaSecond() !== null){
             $gerenciaSecond = $prePlanningConfiguration->getGerenciaSecond();
@@ -459,7 +461,7 @@ class PrePlanningController extends ResourceController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
@@ -502,5 +504,14 @@ class PrePlanningController extends ResourceController
             }
         }
         $this->getSecurityService()->checkSecurity($rol);
+    }
+    
+    /**
+     * 
+     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $this->container->get('event_dispatcher');
     }
 }

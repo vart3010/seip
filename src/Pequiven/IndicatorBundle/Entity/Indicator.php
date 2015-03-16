@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\IndicatorBundle\Model\Indicator as modelIndicator;
+use Pequiven\IndicatorBundle\Model\Indicator as ModelIndicator;
 use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 
 /**
@@ -15,9 +15,9 @@ use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
  * @ORM\Table(name="seip_indicator")
  * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\IndicatorRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @author matias
+ * @ORM\HasLifecycleCallbacks()
  */
-class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
+class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Result\ResultItemInterface,PeriodItemInterface
 {
     /**
      * @var integer
@@ -143,6 +143,15 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $objetives;
     
     /**
+     * LineStrategic
+     * 
+     * @var \Pequiven\MasterBundle\Entity\LineStrategic
+     * @ORM\ManyToMany(targetEntity="\Pequiven\MasterBundle\Entity\LineStrategic", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_linestrategics")
+     */
+    private $lineStrategics;
+    
+    /**
      * Periodo.
      * 
      * @var \Pequiven\SEIPBundle\Entity\Period
@@ -196,12 +205,12 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * Detalles del indicador
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",cascade={"persist","remove"})
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails",inversedBy="indicator",cascade={"persist","remove"})
      */
     protected $details;
     
     /**
-     * Indicador al que impacta este indicador
+     * Indicador al que suma este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",inversedBy="childrens",cascade={"persist"})
@@ -209,7 +218,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $parent;
     
     /**
-     * Indicadores que impactan a este indicador
+     * Indicadores que suman a este indicador (Para el cálculo de resultados)
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator 
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator",mappedBy="parent",cascade={"persist"}))
@@ -245,13 +254,58 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $deletedAt;
     
     /**
+     * ¿Se puede penalizar el resultado?
+     * @var boolean
+     * @ORM\Column(name="couldBePenalized",type="boolean")
+     */
+    private $couldBePenalized = true;
+    
+    /**
+     * ¿Forzar la penalizacion del resultado?
+     * @var boolean
+     * @ORM\Column(name="forcePenalize",type="boolean")
+     */
+    private $forcePenalize = false;
+    
+    /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
+    
+    /**
+     * Detalles de la formula del indicador
+     * @var \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+     * @ORM\OneToMany(targetEntity="Pequiven\MasterBundle\Entity\Formula\FormulaDetail",mappedBy="indicator",cascade={"persist","remove"}, orphanRemoval=true)
+     */
+    protected $formulaDetails;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="backward", type="boolean")
+     */
+    private $backward = false;
+    
+    /**
+     * Configuracion de origen de datos de los detalles de los valores de indicadores
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",mappedBy="indicator")
+     */
+    private $valueIndicatorConfig;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -711,7 +765,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function setValueFinal($valueFinal)
     {
         $this->progressToDate = 0;
-        if($valueFinal > 0 && $this->totalPlan > 0){
+        if($this->totalPlan != 0){
             $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
         }
         $this->valueFinal = $valueFinal;
@@ -733,7 +787,8 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * 
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
     }
 
@@ -954,6 +1009,7 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         if($this->id > 0){
             $this->id = null;
             
+            $this->ref = null;
             $this->createdAt = null;
             $this->lastDateCalculateResult = null;
             $this->updatedAt = null;
@@ -977,6 +1033,11 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         }
     }
     
+    public function setResult($result) 
+    {
+        $this->progressToDate = $result;
+    }
+    
     /**
      * Set resultReal
      *indicators
@@ -998,5 +1059,177 @@ class Indicator extends modelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultReal()
     {
         return $this->resultReal;
+    }
+    
+    function isCouldBePenalized() 
+    {
+        return $this->couldBePenalized;
+    }
+
+    function isForcePenalize() 
+    {
+        return $this->forcePenalize;
+    }
+
+    function setCouldBePenalized($couldBePenalized) 
+    {
+        $this->couldBePenalized = $couldBePenalized;
+        
+        return $this;
+    }
+
+    function setForcePenalize($forcePenalize) 
+    {
+        $this->forcePenalize = $forcePenalize;
+        
+        return $this;
+    }
+    
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
+    }
+    
+    /**
+     * Add lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     * @return Indicator
+     */
+    public function addLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics[] = $lineStrategics;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineStrategics
+     *
+     * @param \Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics
+     */
+    public function removeLineStrategic(\Pequiven\MasterBundle\Entity\LineStrategic $lineStrategics)
+    {
+        $this->lineStrategics->removeElement($lineStrategics);
+    }
+
+    /**
+     * Get lineStrategics
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineStrategics()
+    {
+        return $this->lineStrategics;
+    }
+    
+    /**
+     * Add formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     * @return Indicator
+     */
+    public function addFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $formulaDetails->setIndicator($this);
+        $this->formulaDetails->add($formulaDetails);
+
+        return $this;
+    }
+
+    /**
+     * Remove formulaDetails
+     *
+     * @param \Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails
+     */
+    public function removeFormulaDetail(\Pequiven\MasterBundle\Entity\Formula\FormulaDetail $formulaDetails)
+    {
+        $this->formulaDetails->removeElement($formulaDetails);
+    }
+
+    /**
+     * Get formulaDetails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFormulaDetails()
+    {
+        return $this->formulaDetails;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $backward
+     * @return Indicator
+     */
+    public function setBackward($backward)
+    {
+        $this->backward = $backward;
+
+        return $this;
+    }
+
+    /**
+     * Get backward
+     *
+     * @return boolean 
+     */
+    public function getBackward()
+    {
+        return $this->backward;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     */
+    function prePersist()
+    {
+        $this->details = new Indicator\IndicatorDetails;
+    }
+
+    /**
+     * Set valueIndicatorConfig
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig
+     * @return Indicator
+     */
+    public function setValueIndicatorConfig(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig $valueIndicatorConfig = null)
+    {
+        $this->valueIndicatorConfig = $valueIndicatorConfig;
+
+        return $this;
+    }
+
+    /**
+     * Get valueIndicatorConfig
+     *
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig 
+     */
+    public function getValueIndicatorConfig()
+    {
+        return $this->valueIndicatorConfig;
+    }
+    
+    public function getDescriptionWithStrPad($pad_length){
+        return str_pad($this->description, $pad_length, ' ',STR_PAD_RIGHT);
     }
 }

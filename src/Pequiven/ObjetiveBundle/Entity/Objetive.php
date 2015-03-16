@@ -9,7 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\ObjetiveBundle\Model\Objetive as modelObjetive;
 use Pequiven\SEIPBundle\Entity\PeriodItemInterface;
 use Pequiven\SEIPBundle\Entity\Result\ResultItemInterface;
-use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningObjectInterface;
 
 /**
  * Objetive
@@ -272,6 +271,21 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
+    
+    /**
+     * Sistema de calidad
+     * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
+     */
+    protected $qualitySystem;
 
     /**
      * Constructor
@@ -1010,17 +1024,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         return $this->period;
     }
     
-    public function __toString() {
-        $description = $this->getDescription();
-        $limit = 80;
-        if(strlen($description) > $limit)
-    {
-            $description = substr($this->getDescription(), 0,$limit).'...';
-        }
-        $toString = $this->getRef().' '.$description;
-        return $toString?:'-';
-    }
-    
     public function getDescriptionWithGerenciaSecond()
     {
         return $this->getDescriptionSelect() .' - ' . $this->getGerenciaSecond();
@@ -1122,6 +1125,25 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->results = $results;
     }
     
+    function isCouldBePenalized() 
+    {
+        return false;
+    }
+
+    function isForcePenalize() 
+    {
+        return false;
+    }
+    public function setResultReal($resultReal) {}
+    public function setResult($result) {}
+    
+    public function __toString() 
+    {
+        $description = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getDescription());
+        $toString = $this->getRef().' '.$description;
+        return $toString?:'-';
+    }
+    
     public function __clone() {
         if($this->id){
             $this->id = null;
@@ -1147,4 +1169,49 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         }
     }
 
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
+    }
+
+    /**
+     * Set qualitySystem
+     *
+     * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
+     * @return Objetive
+     */
+    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
+    {
+        $this->qualitySystem = $qualitySystem;
+
+        return $this;
+    }
+
+    /**
+     * Get qualitySystem
+     *
+     * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
+     */
+    public function getQualitySystem()
+    {
+        return $this->qualitySystem;
+    }
 }

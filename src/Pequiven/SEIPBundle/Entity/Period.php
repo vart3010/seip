@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PeriodRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Period extends Base
+class Period extends Base implements \Serializable
 {
     /**
      * @var integer
@@ -103,6 +103,30 @@ class Period extends Base
      * @ORM\Column(name="dateStartClearanceNotificationArrangementProgram", type="date", nullable=true)
      */
     private $dateStartClearanceNotificationArrangementProgram;
+
+    /**
+     * Fecha inicio de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateStartPenalty", type="date", nullable=true)
+     */
+    private $dateStartPenalty;
+    
+    /**
+     * Fecha fin de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateEndPenalty", type="date", nullable=true)
+     */
+    private $dateEndPenalty;
+    
+    /**
+     * Porcentaje de penalizacion
+     * @var \DateTime
+     *
+     * @ORM\Column(name="percentagePenalty", type="float", nullable=false)
+     */
+    private $percentagePenalty;
 
     /**
      * Fecha fin de holgura de notificación de programas de gestion
@@ -454,6 +478,136 @@ class Period extends Base
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+    
+    /**
+     * Set dateStartPenalty
+     *
+     * @param \DateTime $dateStartPenalty
+     * @return Period
+     */
+    public function setDateStartPenalty($dateStartPenalty)
+    {
+        $this->dateStartPenalty = $dateStartPenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStartPenalty
+     *
+     * @return \DateTime 
+     */
+    public function getDateStartPenalty()
+    {
+        return $this->dateStartPenalty;
+    }
+
+    /**
+     * Set dateEndPenalty
+     *
+     * @param \DateTime $dateEndPenalty
+     * @return Period
+     */
+    public function setDateEndPenalty($dateEndPenalty)
+    {
+        $this->dateEndPenalty = $dateEndPenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEndPenalty
+     *
+     * @return \DateTime 
+     */
+    public function getDateEndPenalty()
+    {
+        return $this->dateEndPenalty;
+    }
+
+    /**
+     * Set percentagePenalty
+     *
+     * @param float $percentagePenalty
+     * @return Period
+     */
+    public function setPercentagePenalty($percentagePenalty)
+    {
+        $this->percentagePenalty = $percentagePenalty;
+
+        return $this;
+    }
+
+    /**
+     * Get percentagePenalty
+     *
+     * @return float 
+     */
+    public function getPercentagePenalty()
+    {
+        return $this->percentagePenalty;
+    }
+    //TODO Objeto falla al ser serializado
+    public function serialize() {
+        $data = serialize(array(
+            $this->name,
+            $this->description,
+            $this->dateStart,
+            $this->dateEnd,
+            $this->status,
+            $this->dateStartNotificationArrangementProgram,
+            $this->dateEndNotificationArrangementProgram,
+            $this->dateStartLoadArrangementProgram,
+            $this->dateEndLoadArrangementProgram,
+            $this->dateStartClearanceNotificationArrangementProgram,
+            $this->dateStartPenalty,
+            $this->dateEndPenalty,
+            $this->percentagePenalty,
+            $this->dateEndClearanceNotificationArrangementProgram,
+            base64_encode(serialize($this->parent)),
+            base64_encode(serialize($this->child)),
+            $this->id,
+        ));
+//        echo $data;
+//        var_dump(unserialize(utf8_encode(utf8_decode($data))));
+////        echo utf8_decode(var_export(unserialize(utf8_encode($data)),true));
+//        die;
+        return base64_encode($data);
+    }
+    //TODO Objeto falla al ser desserializado
+    public function unserialize($serialized) {
+        $data = unserialize(base64_decode($serialized));
+//        var_dump($data);
+//        die;
+        
+        // add a few extra elements in the array to ensure that we have enough keys when unserializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 2, null));
+//        var_dump($data);
+        $data[14] = base64_decode($data[14]);
+        $data[15] = base64_decode($data[15]);
+        list(
+            $this->name,
+            $this->description,
+            $this->dateStart,
+            $this->dateEnd,
+            $this->status,
+            $this->dateStartNotificationArrangementProgram,
+            $this->dateEndNotificationArrangementProgram,
+            $this->dateStartLoadArrangementProgram,
+            $this->dateEndLoadArrangementProgram,
+            $this->dateStartClearanceNotificationArrangementProgram,
+            $this->dateStartPenalty,
+            $this->dateEndPenalty,
+            $this->percentagePenalty,
+            $this->dateEndClearanceNotificationArrangementProgram,
+            $this->parent,
+            $this->child,
+            $this->id,
+        ) = $data;
+        $this->parent = unserialize($this->parent);
+        $this->child = unserialize($this->child);
     }
     
     public function __toString() {

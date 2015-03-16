@@ -213,6 +213,11 @@ class ArrangementProgramManager implements ContainerAwareInterface
                 $valid = true;
             }
         }
+        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
+        {
+            $valid = true;
+        }
+        
         
         return $valid;
     }
@@ -319,7 +324,7 @@ class ArrangementProgramManager implements ContainerAwareInterface
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     private function isGranted($roles) {

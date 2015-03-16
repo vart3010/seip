@@ -32,3 +32,11 @@ pequiven_api:
 pequiven_pre_planning_main:
     resource: "@PequivenSEIPBundle/Resources/config/routing/prePlanning/main.yml"
     prefix:   /pre-planning
+    
+pequiven_line_strategic:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/line_strategic.yml"
+    prefix:   /line-strategic
+
+pequiven_planning_arrangement_program:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/planning/arrangement_program.yml"
+    prefix:   /arrangementprogram

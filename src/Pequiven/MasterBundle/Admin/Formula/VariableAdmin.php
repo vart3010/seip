@@ -19,6 +19,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $show
             ->add('name')
             ->add('description')
+            ->add('equation')
             ;
     }
     
@@ -26,6 +27,14 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $form
             ->add('name')
             ->add('description')
+            ->add('staticValue',null,array(
+                'required' => false,
+            ))
+            ->add('equation',null,array(
+                'attr' => array(
+                    'rows' => 10
+                )
+            ))
             ;
     }
     
@@ -33,6 +42,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $filter
             ->add('name')
             ->add('description')
+            ->add('staticValue')
             ;
     }
     
@@ -40,6 +50,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
         $list
             ->addIdentifier('name')
             ->addIdentifier('description')
+            ->addIdentifier('staticValue')
             ;
     }
     
@@ -58,7 +69,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     public function preUpdate($object) {

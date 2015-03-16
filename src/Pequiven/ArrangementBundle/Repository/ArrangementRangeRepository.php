@@ -8,7 +8,10 @@
 
 namespace Pequiven\ArrangementBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\SEIPBundle\Entity\Period;
+use Pequiven\SEIPBundle\Entity\User;
 /**
  * Description of ArrangementRangeRepository
  *

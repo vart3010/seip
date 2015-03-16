@@ -18,6 +18,11 @@ namespace Pequiven\SEIPBundle\Controller\Api;
  */
 class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
 {
+    const RESULT_OK = 1;
+    const RESULT_NO_ITEMS = 2;
+    const RESULT_NUM_PERSONAL_NOT_EXIST = 3;
+    const RESULT_INVALID_CONFIGURATION = 4;
+    
     private $errors;
     
     private function addErrorTrans($error,array $parameters = array()) {
@@ -33,6 +38,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
         $this->errors= array();
         $numPersonal = $request->get('numPersonal');
         $periodName = $request->get('period');
+        $status = self::RESULT_OK;
 
         $criteria = $arrangementPrograms = $objetives = $goals = $arrangementProgramsForObjetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         
@@ -53,6 +59,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
             $this->addErrorTrans('pequiven_seip.errors.the_number_staff_does_not_exist',array(
                 '%numPersonal%' => $numPersonal,
             ));
+            $status = self::RESULT_NUM_PERSONAL_NOT_EXIST;
         }
         
         if($periodName != '' && !$period){
@@ -118,6 +125,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
+                }else{
+                    $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_first_line_management',array(
+                        '%user%' => $user,
+                    ));
+                    $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
                 $gerenciaSecond = $user->getGerenciaSecond();
@@ -125,6 +137,11 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
+                }else{
+                    $this->addErrorTrans('pequiven_seip.errors.the_user_is_not_assigned_second_line_management',array(
+                        '%user%' => $user,
+                    ));
+                    $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             }else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_DIRECTIVE){
                 $objetivesStrategic = $this->get('pequiven.repository.objetive')->findAllStrategicByPeriod($period);
@@ -168,8 +185,8 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 }
             }
 
-            foreach ($goals as $key => $goal) {
-//                var_dump($goal->getTimeLine()->getArrangementProgram()->getId());
+            foreach ($goals as $key => $goal)
+            {
                 $goalDetails = $goal->getGoalDetails();
                 $summary = $goalDetails->getSummary();
                 
@@ -184,7 +201,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $goals[$key] = array(
                     'id' => sprintf('ME-%s',$goal->getId()),
                     'description' => $goal->getName(),
-                    'result' => $this->formatResult($goal->getGoalDetails()->getAdvance()),
+                    'result' => $this->formatResult($goal->getResult()),
                     'dateStart' => array(
                         'plan' => $this->formatDateTime($planDateStart),
                         'real' => $this->formatDateTime($realDateStart)
@@ -214,38 +231,33 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     continue;
                 }
                 //Se evalua que no tenga avance cargado
-                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
-                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
-                        '%arrangementProgram%' => $link,
-                    ));
-                    $canBeEvaluated = false;
-                }
-            }
-            foreach ($allIndicators as $indicator) {
-                if($indicator->hasNotification() === false){
-                    $url = $this->generateUrl('pequiven_indicator_show',
-                        array(
-                            'id' => $indicator->getId()
-                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-                    );
-                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
-                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
-                        '%indicator%' => $link,
-                    ));
-                    $canBeEvaluated = false;
-                }
+//                if($details->getLastNotificationInProgressByUser()  === null && $arrangementProgram->getResult() == 0){
+//                    $this->addErrorTrans('pequiven_seip.errors.the_management_program_does_not_progress_loaded',array(
+//                        '%arrangementProgram%' => $link,
+//                    ));
+//                    $canBeEvaluated = false;
+//                }
             }
             
-//            var_dump($this->errors);
-//            die;
-//            var_dump(count($objetives));
-//            die;
+//            Se comento para no evaluar los indicadores en cero
+//            foreach ($allIndicators as $indicator) {
+//                if($indicator->hasNotification() === false){
+//                    $url = $this->generateUrl('pequiven_indicator_show',
+//                        array(
+//                            'id' => $indicator->getId()
+//                        ),\Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+//                    );
+//                    $link = sprintf('<a href="%s" target="_blank">%s</a>',$url,$indicator);
+//                    $this->addErrorTrans('pequiven_seip.errors.the_indicator_has_not_loaded_values',array(
+//                        '%indicator%' => $link,
+//                    ));
+//                    $canBeEvaluated = false;
+//                }
+//            }
+
             $resultService = $this->getResultService();
             $isValidAdvance = $resultService->validateAdvanceOfObjetives($objetives);
-//            var_dump($isValidAdvance);
             if(!$isValidAdvance){
-//                var_dump($resultService->getErrors());
-//                die;
                 $canBeEvaluated = $isValidAdvance;
                 $this->addErrorTrans($resultService->getErrors());
             }
@@ -256,9 +268,18 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 $this->addErrorTrans('pequiven_seip.errors.user_has_no_associated_items_evaluation',array(
                     '%user%' => $user,
                 ));
+                $status = self::RESULT_NO_ITEMS;
             }
         }//endif if count errors
         
+        $totalItems = count($goals) + count($arrangementPrograms) + count($objetivesOO) + count($objetivesOT) + count($objetivesOE);
+        
+        if($totalItems == 0){
+            $canBeEvaluated = false;
+            $this->addErrorTrans('pequiven_seip.errors.user_not_quantity_items',array(
+                '%user%' => $user,
+            ));
+        }
         if(!$canBeEvaluated || count($this->errors) > 0){
             $goals = $arrangementPrograms = $objetives = $objetivesOO = $objetivesOT = $objetivesOE = array();
         }
@@ -279,7 +300,9 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                         ),
                     ),
                 ),
+                'quantityItems' => $totalItems,
             ),
+            'status' => $status,
             'errors' => $this->errors,
             'success' => true,
         );

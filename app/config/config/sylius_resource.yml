@@ -6,6 +6,13 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Monitor
                 controller: Pequiven\SEIPBundle\Controller\MonitorController
                 repository: Pequiven\SEIPBundle\Repository\MonitorRepository
+        pequiven.linestrategic:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:LineStrategic
+            classes:
+                controller: Pequiven\MasterBundle\Controller\LineStrategicController
+                model: Pequiven\MasterBundle\Entity\LineStrategic
+                repository: Pequiven\MasterBundle\Repository\LineStrategicRepository
         pequiven.objetive:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Objetive
@@ -95,6 +102,12 @@ sylius_resource:
                 controller: Pequiven\SEIPBundle\Controller\UserPermissionController
                 model: Pequiven\SEIPBundle\Entity\UserPermission
                 repository: Pequiven\SEIPBundle\Repository\UserPermissionRepository
+        pequiven_seip.arrangementrange:
+            driver: doctrine/orm
+            classes:
+                controller: Pequiven\ArrangementBundle\Controller\ArrangementRangeController
+                model: Pequiven\ArrangementBundle\Entity\ArrangementRange
+                repository: Pequiven\ArrangementBundle\Repository\ArrangementRangeRepository
         pequiven_seip.arrangementprogram:
             driver: doctrine/orm
             templates: PequivenArrangementProgramBundle:ArrangementProgram
@@ -171,3 +184,13 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+        pequiven.quality_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
+        pequiven.value_indicator_config:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator/ValueIndicator/ValueIndicatorConfig
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicator\ValueIndicatorConfigController
+                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig

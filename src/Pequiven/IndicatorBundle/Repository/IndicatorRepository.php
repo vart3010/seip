@@ -11,14 +11,14 @@ namespace Pequiven\IndicatorBundle\Repository;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Pequiven\MasterBundle\Entity\Gerencia;
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository as baseEntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
- * Description of IndicatorRepository
+ * Description of IndicatorRepository (pequiven.repository.indicator)
  *
  * @author matias
  */
-class IndicatorRepository extends baseEntityRepository {
+class IndicatorRepository extends EntityRepository {
     
     public function getByOptionRef($options = array()){
     
@@ -99,7 +99,8 @@ class IndicatorRepository extends baseEntityRepository {
      */
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $criteria['for_view'] = true;
-        return parent::createPaginator($criteria, $orderBy);
+        $orderBy['i.ref'] = 'ASC';
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -179,7 +180,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
+        $this->applyPeriodCriteria($queryBuilder);
 //        $this->applySorting($queryBuilder, $orderBy);
         
         return $this->getPaginator($queryBuilder);
@@ -261,8 +262,7 @@ class IndicatorRepository extends baseEntityRepository {
         $queryBuilder->groupBy('i.ref');
         $queryBuilder->orderBy('i.ref');
 
-//        $this->applyCriteria($queryBuilder, $criteria);
-//        $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         return $this->getPaginator($queryBuilder);
     }
@@ -286,6 +286,22 @@ class IndicatorRepository extends baseEntityRepository {
         $qb->setParameter('idObjetive', $objetive->getId());
         
         $qb->orderBy('i.ref');
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function findByLineStrategic($idLineStrategic){
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('i.lineStrategics','ls')
+                ->andWhere("ls.id = :idLineStrategic")
+                ->andWhere("i.deletedAt IS NULL")
+                ->setParameter('idLineStrategic', $idLineStrategic)
+        ;
         
         return $qb->getQuery()->getResult();
     }
@@ -397,6 +413,8 @@ class IndicatorRepository extends baseEntityRepository {
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $this->applyPeriodCriteria($queryBuilder);
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

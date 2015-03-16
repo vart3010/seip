@@ -113,7 +113,8 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     
     //RANGO ALTO BÁSICO
     /**
-     * Operator
+     * Operador rango alto basico
+     * 
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
      * @ORM\JoinColumn(name="op_rankTopBasic", referencedColumnName="id")
@@ -121,15 +122,16 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     private $opRankTopBasic;
     
     /**
-     * @var float
+     * Valor rango alto basico
      * 
+     * @var float
      * @ORM\Column(name="rankTopBasic", type="float", nullable=true)
      */
     private $rankTopBasic;
     
     //RANGO ALTO MIXTO
     /**
-     * Operator
+     * Operador del rango alto mixto
      * @var \Pequiven\MasterBundle\Entity\Operator
      * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Operator")
      * @ORM\JoinColumn(name="op_rankTopMixed_top", referencedColumnName="id")
@@ -431,6 +433,7 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     public function setObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetive = null)
     {
         $this->objetive = $objetive;
+        $this->objetive->setArrangementRange($this);
 
         return $this;
     }
@@ -454,6 +457,7 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
     public function setIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator = null)
     {
         $this->indicator = $indicator;
+        $this->indicator->setArrangementRange($this);
 
         return $this;
     }
@@ -1169,6 +1173,8 @@ class ArrangementRange extends modelArrangementRange implements \Pequiven\SEIPBu
             $this->period = null;
         }
     }
+    
+    
     
     public function __toString() {
         return (string)$this->id;

@@ -13,6 +13,8 @@ use Pequiven\MasterBundle\Model\LineStrategic as modelLineStrategic;
  *
  * @ORM\Table(name="seip_c_line_strategic")
  * @ORM\Entity(repositoryClass="Pequiven\MasterBundle\Repository\LineStrategicRepository")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class LineStrategic extends modelLineStrategic
 {
@@ -96,6 +98,11 @@ class LineStrategic extends modelLineStrategic
      * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="lineStrategics")
      */
     private $objetives;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", mappedBy="lineStrategics")
+     */
+    private $indicators;
 
     /**
      * @var boolean
@@ -103,6 +110,18 @@ class LineStrategic extends modelLineStrategic
      * @ORM\Column(name="enabled", type="boolean")
      */
     private $enabled;
+    
+    /**
+     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
+     */
+    private $deletedAt;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShow", type="integer")
+     */
+    private $orderShow;
 
 
     /**
@@ -345,12 +364,22 @@ class LineStrategic extends modelLineStrategic
         return $this->ref;
     }
     
+    function getDeletedAt() {
+        return $this->deletedAt;
+    }
+
+    function setDeletedAt($deletedAt) {
+        $this->deletedAt = $deletedAt;
+        
+        return $this;
+    }
+    
     /**
      * Get descriptionSelect
      * 
      * @return string
      */
-    public function getDescriptionSelect (){
+    public function getDescriptionSelect(){
         $this->descriptionSelect = $this->getRef() . ' ' . $this->getDescription();
         return $this->descriptionSelect;
     }
@@ -360,6 +389,7 @@ class LineStrategic extends modelLineStrategic
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         parent::__construct();
     }
 
@@ -394,5 +424,55 @@ class LineStrategic extends modelLineStrategic
     public function getObjetives()
     {
         return $this->objetives;
+    }
+    
+    /**
+     * Add indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     * @return LineStrategic
+     */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators[] = $indicators;
+
+        return $this;
+    }
+
+    /**
+     * Remove indicators
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+     */
+    public function removeIndicator(\Pequiven\ObjetiveBundle\Entity\Objetive $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+     * Get indicators
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIndicators()
+    {
+        return $this->indicators;
+    }
+    
+    public function getOrderShow() {
+        return $this->orderShow;
+    }
+
+    public function setOrderShow($orderShow) {
+        $this->orderShow = $orderShow;
+    }
+
+        
+    /**
+     * 
+     * @return string
+     */
+    public function __toString() {
+        return $this->getDescription() ? $this->getRef().' - '.$this->getDescription() : '-';
     }
 }

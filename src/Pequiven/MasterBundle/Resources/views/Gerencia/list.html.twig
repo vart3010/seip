@@ -1,6 +1,8 @@
 {#% extends "::base.html.twig" %#}
 {% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
 {% trans_default_domain 'PequivenMasterBundle' %}
+
 {% block title %}- {{ 'pequiven_master.gerencia_first'|trans }}{% endblock %}
 
 
@@ -19,7 +21,26 @@
 
 {% block body %}
     <div ng-controller="TableFormatController">
-        <!--<div ng-controller="ObjetiveTacticController">-->
+        <div ng-controller="TableGerenciaController">
+        
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
+                </summary>
+                <div class="with-padding">
+                    <div class="columns">
+                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                            <label class="bold">{{ 'pequiven_master.filters.qualitySystem'|trans }}</label>
+                            <br/>
+                            <div class="with-mid-padding" ng-init="" >
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.qualitySystem" ng-init="qualitySystems = {{ qualitySystems|serialize }}" ng-options="value as value.description for (key,value) in qualitySystems" >
+                                    <option value=''></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </details>
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaFirstList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
@@ -30,7 +51,7 @@
                             <a href="{$ result._links.self.href $}">{$result.description$}</a>
                         </td>
                         <td>
-                            <a href="{$ result.linkToExportMatriz $}" class="button">
+                            <a href="{$ urlExport $}" ng-click="exportToXLS(result.id)" class="button">
                                 <span class="button-icon"><span class="icon-download"></span></span>
                                 {{ 'pequiven_seip.buttons.export_xls'|trans({},'PequivenSEIPBundle') }}
                             </a>
@@ -38,7 +59,7 @@
                     </tr>
                 </table>
             </div>
-        <!--</div>-->
+        </div>
     </div>
 {% endblock %}
 
@@ -58,6 +79,11 @@
                 
                 return response;
             }
+            $(document).ready(function(){
+                $('.select2').select2({
+                    allowClear: true
+                });
+            });
     </script>
     
 {% endblock %}

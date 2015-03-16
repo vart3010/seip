@@ -36,7 +36,7 @@ class ResultController extends ResourceController
         
         $criteria = $request->get('filter',$this->config->getCriteria());
         $sorting = $request->get('sorting',$this->config->getSorting());
-        $repository = $em->getRepository('PequivenMasterBundle:GerenciaSecond');
+        $repository = $this->get('pequiven.repository.gerenciasecond');
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_LIST_RESULT_ALL')){
             $user = $this->getUser();
@@ -45,7 +45,7 @@ class ResultController extends ResourceController
                 $criteria['gerenciaSecondId'] = $user->getGerenciaSecond();
             }elseif ($rol == Rol::ROLE_MANAGER_FIRST) {
                 $criteria['gerenciaFirstId'] = $user->getGerencia();
-            }elseif ($rol == Rol::ROLE_GENERAL_COMPLEJO || $rol == Rol::ROLE_DIRECTIVE) {
+            }elseif ($rol == Rol::ROLE_GENERAL_COMPLEJO) {
                 $criteria['complejoId'] = $user->getComplejo();
             }
         }
@@ -125,17 +125,20 @@ class ResultController extends ResourceController
             $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA,'id' => $id));
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
-            $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
-            $objetives = $gerencia->getTacticalObjectives();
-            foreach ($objetives as $objetive) {
-                foreach ($objetive->getParents() as $parent) {
-                    if(!isset($tree[(string)$parent])){
-                        $tree[(string)$parent] = array(
-                            'parent' => $parent,
-                            'child' => array(),
-                        );
+            
+            $gerencia = $this->get('pequiven.repository.gerenciafirst')->findWithObjetives($id);
+            if($gerencia){
+                $objetives = $gerencia->getTacticalObjectives();
+                foreach ($objetives as $objetive) {
+                    foreach ($objetive->getParents() as $parent) {
+                        if(!isset($tree[(string)$parent])){
+                            $tree[(string)$parent] = array(
+                                'parent' => $parent,
+                                'child' => array(),
+                            );
+                        }
+                        $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                     }
-                    $tree[(string)$parent]['child'][(string)$objetive] = $objetive;
                 }
             }
             $entity = $gerencia;
@@ -143,7 +146,8 @@ class ResultController extends ResourceController
             $linkToExportResult = $this->generateUrl('pequiven_seip_result_export', array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
             $urlExportFromChart = $this->generateUrl('pequiven_seip_result_export_from_chart',array('level' => \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND,'id' => $id));
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
-            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
+            
+            $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
@@ -389,7 +393,7 @@ class ResultController extends ResourceController
         if($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA){
             $showResultObjetives = true;
             $caption = $this->trans('result.captionObjetiveTactical',array(),'PequivenSEIPBundle');
-            $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findWithObjetives($id);
+            $gerencia = $this->get('pequiven.repository.gerenciafirst')->findWithObjetives($id);
             $objetives = $gerencia->getTacticalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
@@ -405,7 +409,7 @@ class ResultController extends ResourceController
             $entity = $gerencia;
         }elseif($level == \Pequiven\SEIPBundle\Model\Common\CommonObject::LEVEL_GERENCIA_SECOND){
             $caption = $this->trans('result.captionObjetiveOperative',array(),'PequivenSEIPBundle');
-            $gerenciaSecond = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findWithObjetives($id);
+            $gerenciaSecond = $this->get('pequiven.repository.gerenciasecond')->findWithObjetives($id);
             $objetives = $gerenciaSecond->getOperationalObjectives();
             foreach ($objetives as $objetive) {
                 foreach ($objetive->getParents() as $parent) {
@@ -521,7 +525,7 @@ class ResultController extends ResourceController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

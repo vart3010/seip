@@ -36,6 +36,8 @@ abstract class Objetive implements ObjetiveInterface
      */
     protected $operationalArrangementPrograms;
     
+    const TYPE_OBJECT = 'objetive';
+    
     public function create(){
         
     }

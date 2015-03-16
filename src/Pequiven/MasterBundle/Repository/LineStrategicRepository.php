@@ -8,12 +8,17 @@
 
 namespace Pequiven\MasterBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
+
 /**
- * Description of LineStrategicRepository
+ * Description of LineStrategicRepository (pequiven.repository.linestrategic)
  *
  * @author matias
  */
 class LineStrategicRepository extends EntityRepository {
     //put your code here
+    
+    protected function getAlias() {
+        return 'ls';
+    }
 }

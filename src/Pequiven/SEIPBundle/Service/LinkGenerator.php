@@ -105,7 +105,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
         if(isset($parameters['truncate'])){
             $truncate = (int) $parameters['truncate'];
             if(strlen($label) > $truncate){
-                $label = substr($label, 0, $truncate).'...';
+                $label = mb_substr($label, 0, $truncate,'UTF-8').'...';
                 $addTitle = true;
             }
         }

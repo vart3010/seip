@@ -50,6 +50,8 @@ class AppKernel extends Kernel
             
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),//Bundle para auditar entidades
             
+            new \Genemu\Bundle\FormBundle\GenemuFormBundle(),//Tipos de form adicionales select2
+            
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
             new Tecnocreaciones\Bundle\TemplateBundle\TecnocreacionesTemplateBundle(),

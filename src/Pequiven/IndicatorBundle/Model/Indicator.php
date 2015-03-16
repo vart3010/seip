@@ -22,6 +22,11 @@ abstract class Indicator implements IndicatorInterface
     const TYPE_CALCULATION_FORMULA_AUTOMATIC = 1;
     
     /**
+     * Tipo de calculo por formula y valores de las variables automaticos desde ecuacion con las variables de lo hijos
+     */
+    const TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ = 2;
+    
+    /**
      * Indicador con fórmula asociada
      */
     const INDICATOR_WITH_FORMULA = 'INDICATOR_WITH_FORMULA';
@@ -40,6 +45,18 @@ abstract class Indicator implements IndicatorInterface
      * Indicador sin resultado
      */
     const INDICATOR_WITHOUT_RESULT = 'INDICATOR_WITHOUT_RESULT';
+    
+    /**
+     * Tipo de detalle (Ninguno)
+     */
+    const TYPE_DETAIL_NONE = 0;
+    
+    /**
+     * Tipo de detalle (Carga diara de produccion)
+     */
+    const TYPE_DETAIL_DAILY_LOAD_PRODUCTION = 1;
+    
+    const TYPE_OBJECT = 'indicator';
     
     /**
      * @var integer
@@ -62,6 +79,14 @@ abstract class Indicator implements IndicatorInterface
      */
     protected $labelSummary = '';
     
+    /**
+     * Tipo de detalle
+     * 
+     * @var integer
+     * @ORM\Column(name="typeDetailValue",type="integer")
+     */
+    protected $typeDetailValue = self::TYPE_DETAIL_NONE;
+
     /**
      * Set indicatorLevel
      *
@@ -117,6 +142,7 @@ abstract class Indicator implements IndicatorInterface
         static $typesOfCalculation = array(
             self::TYPE_CALCULATION_FORMULA_MANUALLY => 'pequiven_indicator.type_calculation.formula_manually',
             self::TYPE_CALCULATION_FORMULA_AUTOMATIC => 'pequiven_indicator.type_calculation.formula_automatic',
+            self::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ => 'pequiven_indicator.type_calculation.formula_automatic_from_eq',
         );
         return $typesOfCalculation;
     }
@@ -164,5 +190,73 @@ abstract class Indicator implements IndicatorInterface
         if(isset($labels[$this->labelSummary])){
             return $labels[$this->labelSummary];
         }
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\MasterBundle\Entity\Formula\Variable $variable
+     * @return \Pequiven\MasterBundle\Entity\Formula\FormulaDetail
+     */
+    function getFormulaDetailByVariable(\Pequiven\MasterBundle\Entity\Formula\Variable $variable)
+    {
+        $result = null;
+        foreach ($this->getFormulaDetails() as $formulaDetail)
+        {
+            if($formulaDetail->getVariable() === $variable)
+            {
+                $result = $formulaDetail;
+                break;
+            }
+        }
+        return $result;
+    }
+    
+    /**
+     * Etiquetas de los tipos de detalles del indicador
+     * @staticvar array $labelTypeDetail
+     * @return string
+     */
+    static function getLabelsTypeDetail()
+    {
+        static $labelTypeDetail = array(
+            self::TYPE_DETAIL_NONE => 'pequiven_indicator.type_detail.none',
+            self::TYPE_DETAIL_DAILY_LOAD_PRODUCTION => 'pequiven_indicator.type_detail.daily_load_production',
+        );
+        return $labelTypeDetail;
+    }
+    
+    /**
+     * Retorna la etiqueta del detalle del valor de indicador
+     * @return type
+     */
+    public function getLabelTypeDetailValue()
+    {
+        $labels = self::getLabelsTypeDetail();
+        if(isset($labels[$this->typeDetailValue])){
+            return $labels[$this->typeDetailValue];
+        }
+    }
+    
+    /**
+     * Set typeDetailValue
+     *
+     * @param integer $typeDetailValue
+     * @return Indicator
+     */
+    public function setTypeDetailValue($typeDetailValue)
+    {
+        $this->typeDetailValue = $typeDetailValue;
+
+        return $this;
+    }
+
+    /**
+     * Get typeDetailValue
+     *
+     * @return integer 
+     */
+    public function getTypeDetailValue()
+    {
+        return $this->typeDetailValue;
     }
 }

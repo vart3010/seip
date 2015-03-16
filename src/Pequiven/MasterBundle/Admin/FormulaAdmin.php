@@ -69,6 +69,7 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ->add('equation')
             ->add('equationReal')
             ->add('enabled')
+            ->add('variables')
             ;
     }
     
@@ -106,6 +107,6 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

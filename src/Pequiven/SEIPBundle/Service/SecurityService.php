@@ -65,7 +65,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             }elseif($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $objetive = $arrangementProgram->getOperationalObjective();
                 $gerenciaSecond = $objetive->getGerenciaSecond();
-                $gerencia = $gerenciaSecond->getGerencia();
+                $gerencia = $objetive->getGerencia();
                 if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
                     $valid = true;
                 }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
@@ -184,7 +184,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }else{
             foreach ($indicator->getObjetives() as $objetive) {
                 $gerenciaSecond = $objetive->getGerenciaSecond();
-                $gerencia = $gerenciaSecond->getGerencia();
+                $gerencia = $objetive->getGerencia();
 
                 if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
                     $valid = true;
@@ -266,7 +266,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             $valid = true;
         }else{
             $gerenciaSecond = $objetive->getGerenciaSecond();
-            $gerencia = $gerenciaSecond->getGerencia();
+            $gerencia = $objetive->getGerencia();
             
             if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
                 $valid = true;
@@ -316,6 +316,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
             }
             $methodValidMap = $this->getMethodValidMap();
+//            var_dump($methodValidMap);
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
                 $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
@@ -451,6 +452,6 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      */
     public function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
 }

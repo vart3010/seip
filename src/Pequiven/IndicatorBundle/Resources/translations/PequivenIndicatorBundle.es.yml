@@ -2,6 +2,10 @@ pequiven_indicator:
     value: Valor
     #Registrar
     indicators: Indicadores
+    indicatorsWithError: Indicadores con errores
+    indicatorsWithoutError: Indicadores sin errores
+    indicatorsWithoutErrorText: Nada que reseñar
+    error: Error
     add: Añadir
     list: Lista
     strategic: Estratégico
@@ -13,8 +17,18 @@ pequiven_indicator:
     indicator_strategic: Indicador Estratégico
     indicator_tactic: Indicador Táctico
     indicator_operative: Indicador Operativo
+    details_value_config: Detalles de valores
     indicator:
         add_observation: Agrege una observación al indicador
+        remove_values: Si elimina todos los resultados perdera los valores cargados ¿Desea continuar?
+        details_results: Detalles
+        buttons:
+            remove_values: Eliminar resultados
+            configure_details_results: Configurar detalles
+    indicator_details:
+        source_result_all: Todos los resultados
+        source_result_last_valid: Ultimo resultado valido (Con valor)
+        source_result_last: Ultimo resultado
 
     popup:
         description: Descripción
@@ -31,11 +45,15 @@ pequiven_indicator:
         main: Tipo de calculo
         formula_manually: Fórmula manual
         formula_automatic: Fórmula automatica
+        formula_automatic_from_eq: Fórmula automatica (Ecuación)
         simple_average: Promedio simple
         real_and_plan_automatic: Plan y Real automático
         real_automatic: Real automático
         accumulate: Acumulativo de cada carga
         real_and_plan_from_eq: Plan y real a partir de ecuación
+    type_detail:
+        none: Ninguno
+        daily_load_production: Producción diaria
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
@@ -61,6 +79,10 @@ pequiven_indicator:
         formula_unassigned: Fórmula no asignada.
         not_support_formula: Fórmula no compatible.
         trends_should_be_equal: Las tendencias deben ser iguales.
+        arrangementRange_not_assigned: Rango de Gestión no Asignado.
+        the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
+        the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
+        the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
         
 form:
     ref: Nro. de Referencia
@@ -74,7 +96,7 @@ form:
     line_strategic: Línea Estratégica
     lineStrategic: Línea Estratégica
     frequencyNotificationIndicator: Frecuencia de notificación
-    resultReal: Resultado Gestión
+    resultReal: Resultado de la medición
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
@@ -91,6 +113,7 @@ form:
     formulaIndicatorTactic: Fórmula del Indicador Táctico
     formulaIndicatorOperative: Fórmula del Indicador Operativo
     tendency: Tendencia
+    typeDetailValue: Detalle de valores
     conduct: Comportamiento
     indicatorStrategic: Indicador Estratégico
     indicatorTactic: Indicador Táctico
@@ -99,6 +122,7 @@ form:
     period: Período
     objetives: Objetivos
     associated_indicators: Indicadores asociados
+    parent_indicator: Indicador padre
     total_plan: Plan anual
     
     arrangementRangeType: Tipo de Rango
@@ -258,6 +282,7 @@ form:
         addIndicatorStrategic: Registro Indicador Estratégico
         addIndicatorTactic: Registro Indicador Táctico
         addIndicatorOperative: Registro Indicador Operativo
+    products: Productos
 
 action:
     messages:    

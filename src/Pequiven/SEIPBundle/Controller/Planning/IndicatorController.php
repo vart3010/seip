@@ -8,6 +8,7 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 
 /**
  * Controlador de los indicadores (Planificacion)
@@ -45,13 +46,43 @@ class IndicatorController extends ResourceController
             $errorFormula = $indicatorService->validateFormula($formula);
         }
         
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+            ),
+        );
+        
+        $resultService = $this->getResultService();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $indicatorRange = array();
+        $errorArrangementRange = null;
+        if($resource->getArrangementRange() !== null){//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($resource->getArrangementRange(), $resource->getTendency());
+            if($errorArrangementRange == null){
+                $tendency = $resource->getTendency();
+                $indicatorRange['good'] = $resultService->calculateRangeGood($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['middle'] = $resultService->calculateRangeMiddle($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $indicatorRange['bad'] = $resultService->calculateRangeBad($resource, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT);
+                $data['dataSource']['chart'] = $resultService->getDataChartWidget($resource);
+                $color = $arrangementRangeService->getDataColorRangeWidget($resource->getArrangementRange(), $resource->getTendency());
+                $data['dataSource']['colorRange']['color'] = $color;
+            }
+        } else{//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
+            $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
+        }
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('show.html'))
             ->setData(array(
                 $this->config->getResourceName() => $resource,
                 'errorFormula' => $errorFormula,
+                'errorArrangementRange' => $errorArrangementRange,
                 'indicatorService' => $indicatorService,
+                'data' => $data,
+                'indicatorRange' => $indicatorRange,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
@@ -173,6 +204,71 @@ class IndicatorController extends ResourceController
     }
     
     /**
+     * Lista de Errores en las fichas de Indicadores 
+     * 
+     * @param Request $request
+     * @return type
+     */
+    function listErrorAction(Request $request)
+    {   
+        $criteria = $request->get('filter', $this->config->getCriteria());
+        $sorting = $request->get('sorting', $this->config->getSorting());
+        $repository = $this->getRepository();
+
+        if ($this->config->isPaginated()) {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'createPaginatorByLevel', array($criteria, $sorting)
+            );
+
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if (($limit = $request->query->get('limit')) && $limit > 0) {
+                if ($limit > 100) {
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        } else {
+            $resources = $this->resourceResolver->getResource(
+                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
+            );
+        }
+        $routeParameters = array(
+            '_format' => 'json',
+        );
+        $apiDataUrl = $this->generateUrl('pequiven_indicator_list_error',$routeParameters);
+        
+        $view = $this
+                ->view()
+                ->setTemplate($this->config->getTemplate('listError.html'))
+                ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
+        if ($request->get('_format') == 'html') {
+            $labelsSummary = array();
+            foreach (Indicator::getLabelsSummary() as $key => $value) {
+                $labelsSummary[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenIndicatorBundle'),
+                );
+            }
+            
+            $data = array(
+                'apiDataUrl' => $apiDataUrl,
+                $this->config->getPluralResourceName() => $resources,
+                'labelsSummary' => $labelsSummary
+            );
+            $view->setData($data);
+        } else {
+            $formatData = $request->get('_formatData', 'default');
+
+            $view->setData($resources->toArray('', array(), $formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
      * A
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $entity
      * @param type $description
@@ -199,7 +295,7 @@ class IndicatorController extends ResourceController
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
         
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
 
         $totalResults = count($results);
         if (is_array($results) && $totalResults > 0) {
@@ -236,7 +332,7 @@ class IndicatorController extends ResourceController
             
         $gerencia = $request->request->get('gerencia');
 
-        $results = $em->getRepository('PequivenMasterBundle:GerenciaSecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
+        $results = $this->get('pequiven.repository.gerenciasecond')->findByGerenciaFirst(array('gerencia' => $gerencia));
 
         foreach ($results as $result) {
             $complejo = $result->getGerencia()->getComplejo();
@@ -255,11 +351,48 @@ class IndicatorController extends ResourceController
     }
     
     /**
+     * Elimina todos los valores cargados en un indicador
+     * @param Request $request
+     * @return type
+     */
+    public function removeValuesAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $em = $this->getDoctrine()->getManager();
+        foreach ($resource->getValuesIndicator() as $valueIndicator)
+        {
+            $em->remove($valueIndicator); 
+        }
+        $em->flush();
+        
+        return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
 }

@@ -5,7 +5,7 @@ namespace Pequiven\SEIPBundle\Model\Box\Indicator\Tactic;
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 
 /**
- * Resumen de los indicadores cargados a nivel tactico.
+ * Resumen de los indicadores cargados a nivel tactico en donde se muestra el plan y el total a cargar durante el período seleccionado.
  *
  * @author matias
  */
@@ -42,7 +42,7 @@ class SummaryBoxIndicatorCharged extends GenericBox {
         $dataLinkTactic = array();
         
         //Resultados Operativos
-        $resultsTactics = $em->getRepository('PequivenSEIPBundle:Monitor')->getTotalIndicatorTacticByGerenciaGroup();
+        $resultsTactics = $this->container->get('pequiven.repository.monitor')->getTotalIndicatorTacticByGerenciaGroup();
         
         foreach($resultsTactics as $resultTactic){
             $resTactic = $resultTactic['PlanIndTactic'] == 0 ? bcadd(0,'0',2) : bcadd(((float)$resultTactic['RealIndTactic'] / (float)$resultTactic['PlanIndTactic']) * 100,'0',2);

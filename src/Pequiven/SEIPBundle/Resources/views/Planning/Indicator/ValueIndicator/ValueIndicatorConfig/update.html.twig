@@ -1,0 +1,34 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% form_theme form _self %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set indicator = value_indicator_config.indicator %}
+{% set level = indicator.indicatorLevel.level %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven_indicator.indicator.details_results'|trans())
+    ) }}
+{% endblock %}
+
+{% block body %}
+{#    {{ dump(_context|keys) }}#}
+    {% set labelTypeDetailValue = indicator.getLabelTypeDetailValue|trans %}
+    <form method="POST" action="{{ path('pequiven_value_indicator_config_update',{'id':value_indicator_config.id }) }}">
+        {% include 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/ValueIndicatorConfig/_form.html.twig' %}
+        {{ actions.update() }}
+    </form>
+{% endblock %}
+

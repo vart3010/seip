@@ -51,6 +51,11 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
     const STATUS_APPROVED = 3;
     
     /**
+     * Estatus requerido
+     */
+    const STATUS_REQUIRED = 4;
+    
+    /**
      * No se ha seleccionado nada (Vacio)
      */
     const TO_IMPORT_DEFAULT = 0;
@@ -97,6 +102,7 @@ abstract class PrePlanning extends PrePlanningTypeObject implements PrePlanningI
             self::STATUS_IMPORTED => 'pequiven_seip.pre_planning.status.imported',
             self::STATUS_IN_REVIEW => 'pequiven_seip.pre_planning.status.in_review',
             self::STATUS_APPROVED => 'pequiven_seip.pre_planning.status.approved',
+            self::STATUS_REQUIRED => 'pequiven_seip.pre_planning.status.required',
         );
     }
 }

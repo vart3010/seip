@@ -125,6 +125,20 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
      */
     private $deletedAt;
     
+    /**
+     * Avance de la meta
+     * @ORM\Column(name="advance",type="float")
+     */
+    private $advance = 0;
+    
+    /**
+     * Resultado original
+     * 
+     * @var float
+     * @ORM\Column(name="resultReal",type="float")
+     */
+    protected $resultReal = 0;
+    
     public function __construct() {
         $this->responsibles = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -396,11 +410,7 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     
     public function __toString() 
     {
-        $limit = 80;
-        $toString = $this->getName();
-        if(strlen($toString) > $limit){
-            $toString = substr($toString, 0,$limit).'...';
-        }
+        $toString = \Pequiven\SEIPBundle\Service\ToolService::truncate($this->getName());
         return $toString?:'-';
     }
     
@@ -434,6 +444,39 @@ class Goal implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
     function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
         
+        return $this;
+    }
+
+    function getAdvance() 
+    {
+        return $this->advance;
+    }
+
+    function setAdvance($advance) 
+    {
+        $this->advance = $advance;
+    }
+    
+    public function setResult($result) 
+    {
+        $this->advance = $result;
+    }
+    
+    public function getResult() 
+    {
+        return $this->advance;
+    }
+    
+    /**
+     * Set resultReal
+     *indicators
+     * @param float $resultReal
+     * @return Indicator
+     */
+    public function setResultReal($resultReal)
+    {
+        $this->resultReal = $resultReal;
+
         return $this;
     }
     

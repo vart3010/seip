@@ -109,6 +109,19 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             }
         }
         $visitor->addData('_links',$links);
+        
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $errorArrangementRange = '';
+        if($indicator->getArrangementRange() !== null){//En caso de que el indicador tenga un rango de gestión asignado, se procede a evaluar la definición del rango
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($indicator->getArrangementRange(), $indicator->getTendency());
+            if($errorArrangementRange == null){
+                $errorArrangementRange = $this->trans('pequiven_indicator.indicatorsWithoutErrorText', array(), 'PequivenIndicatorBundle');
+            }
+        } else{//En caso de que el indicador no tenga un rango de gestión asignado se setea el mensaje de error
+            $errorArrangementRange = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
+        }
+        
+        $visitor->addData('errorText',$errorArrangementRange);
     }
     
     public function onPostSerializeGoalDetails(ObjectEvent $event) {
@@ -571,11 +584,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     
     public function onPostSerializeGoal(ObjectEvent $event)
     {
-        $goal = $event->getObject();
         
-        $event->getVisitor()->addData('_data',array(
-            'advance' => $goal->getGoalDetails()->getAdvance()
-        ));
     }
     
     public function setContainer(ContainerInterface $container = null) {
@@ -604,6 +613,24 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
     private function getArrangementProgramManager()
     {
         return $this->container->get('seip.arrangement_program.manager');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\ArrangementBundle\Service\ArrangementRangeService
+     */
+    protected function getArrangementRangeService()
+    {
+        return $this->container->get('pequiven_arrangement.service.arrangementrange');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->container->get('seip.service.result');
     }
     
     /**

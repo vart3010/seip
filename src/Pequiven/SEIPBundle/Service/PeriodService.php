@@ -14,7 +14,7 @@ namespace Pequiven\SEIPBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
- * Servicio para obtener datos del periodo (pequiven_arrangement_program.service.period)
+ * Servicio para obtener datos del periodo (pequiven_seip.service.period)
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class PeriodService extends ContainerAware 
@@ -53,6 +53,20 @@ class PeriodService extends ContainerAware
     }
     
     /**
+     * Evalua si se debe aplicar la penalizacion al resultado
+     * @return boolean
+     */
+    function isPenaltyInResult(\DateTime $dateToEvaluate = null)
+    {
+        if($dateToEvaluate === null){
+            return false;
+        }
+        $period = $this->getPeriodActive();
+        $r = ($dateToEvaluate >= $period->getDateStartPenalty() && $dateToEvaluate <= $period->getDateEndPenalty());
+        return $r;
+    }
+    
+    /**
      * Retorna si se encuetra habilitada la carga de programa de gestion para el periodo activo.
      * @return boolean
      */
@@ -72,19 +86,36 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive()
+    public function getPeriodActive($originalEntity = false)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
         $periodActiveSerialize = $session->get('periodActiveSerialize');
         $periodRepository = $this->getRepository();
         $period = null;
-        if($periodActiveSerialize !== null){
-            $period = unserialize($periodActiveSerialize);
+//        if($periodActiveSerialize !== null){
+//            $period = unserialize($periodActiveSerialize);
+//            if($period){
+//                $class = get_class($period);
+//                if (true === $pos = strrpos($class, '\\'.\Doctrine\Common\Persistence\Proxy::MARKER.'\\')) {
+////                    $period = $this->getDoctrine()->getManager()->merge($period);
+//                    $period = $periodRepository->find($period->getId());
+//                }
+//            }
+//        }
+        if(!$period){
+            $period = $this->getUser()->getPeriod();
         }
         if(!$period){
             $period = $periodRepository->findOneActive();
         }
+//        $period = $periodRepository->find($period->getId());
+//        var_dump($periodActiveSerialize);
+//        var_dump($period);
+//        var_dump($period->getName());
+//        var_dump($period);
+//        die;
+        
         return $period;
     }
     
@@ -98,6 +129,31 @@ class PeriodService extends ContainerAware
         $session = $request->getSession();
         $periodSerialize = serialize($period);
         $session->set('periodActiveSerialize', $periodSerialize);
+        $user = $this->getUser();
+        $user->setPeriod($period);
+        $this->getUserManager()->updateUser($user);
+    }
+    
+    /**
+     * Retorna la entidad del periodo activo para persistir en la base de datos la relacion
+     * @return \Pequiven\SEIPBundle\Entity\Period
+     */
+    public function getEntityPeriodActive($forPersist = false)
+    {
+        $period = $this->getPeriodActive();
+//        $periodRepository = $this->getRepository();
+//        return $periodRepository->find($period->getId());
+        return $period;
+    }
+    
+    /**
+     * Limpia de la cache el periodo selecionado
+     */
+    public function clearCachePeriodActive() 
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $session->remove('periodActiveSerialize');
     }
     
     /**
@@ -107,7 +163,7 @@ class PeriodService extends ContainerAware
     public function getNextPeriod()
     {
         $nextPeriod = null;
-        $periodActive = $this->getPeriodActive();
+        $periodActive = $this->getEntityPeriodActive();
         if($periodActive){
             $nextPeriod = $periodActive->getChild();
         }
@@ -142,6 +198,32 @@ class PeriodService extends ContainerAware
         return $listArrayPeriods;
     }
     
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
     private function isGranted($roles) {
         if (!$this->container->has('security.context')) {
             throw new \LogicException('The SecurityBundle is not registered in your application.');
@@ -166,5 +248,28 @@ class PeriodService extends ContainerAware
     private function getRepository()
     {
         return $this->container->get('pequiven.repository.period');
+    }
+    /**
+     * @return \FOS\UserBundle\Model\UserManager
+     */
+    private function getUserManager()
+    {
+        return $this->container->get('fos_user.user_manager');
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    private function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 }

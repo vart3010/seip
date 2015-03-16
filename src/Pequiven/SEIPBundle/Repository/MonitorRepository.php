@@ -8,13 +8,15 @@
 
 namespace Pequiven\SEIPBundle\Repository;
 
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
+
 /**
- * Description of MonitorRepository
+ * Description of MonitorRepository (pequiven.repository.monitor)
  *
  * @author matias
  */
-class MonitorRepository extends EntityRepository {
+class MonitorRepository extends EntityRepository 
+{
     
     /**
      * Crea un paginador para los objetivos tácticos
@@ -65,10 +67,6 @@ class MonitorRepository extends EntityRepository {
         $this->applyCriteria($queryBuilder, $criteria);
         $this->applySorting($queryBuilder, $orderBy);
         
-//        echo $queryBuilder->getQuery()->getSQL();
-        //echo count($queryBuilder->getQuery()->getResult());
-//        die();
-        
         return $this->getPaginator($queryBuilder);
     }
     
@@ -92,6 +90,7 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.gerencia', 'g');
         }
         
+        $this->applyPeriodCriteria($queryBuilder);
         $q = $queryBuilder->getQuery();
 
         return $q->getResult();
@@ -116,7 +115,7 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.typeGroup', 'gg');
             $queryBuilder->innerJoin('o.gerencia', 'g');
         }
-        
+        $this->applyPeriodCriteria($queryBuilder);
         $q = $queryBuilder->getQuery();
 
         return $q->getResult();
@@ -143,7 +142,7 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.gerencia', 'g');
             $queryBuilder->andWhere('o.indTacticOriginal > 0');
         }
-        
+        $this->applyPeriodCriteria($queryBuilder);
         $q = $queryBuilder->getQuery();
         
         return $q->getResult();
@@ -170,7 +169,7 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.gerencia', 'g');
             $queryBuilder->andWhere('o.indOperativeOriginal > 0');
         }
-        
+        $this->applyPeriodCriteria($queryBuilder);
         $q = $queryBuilder->getQuery();
 
         return $q->getResult();
@@ -196,9 +195,14 @@ class MonitorRepository extends EntityRepository {
             $queryBuilder->innerJoin('o.gerencia', 'g');
             $queryBuilder->groupBy('o.gerencia');
         }
-        
+        $this->applyPeriodCriteria($queryBuilder);
         $q = $queryBuilder->getQuery();
 
         return $q->getResult();
+    }
+    
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $this->applyPeriodCriteria($queryBuilder);
+        return parent::applyCriteria($queryBuilder, $criteria);
     }
 }

@@ -53,8 +53,11 @@ class ObjetiveStrategicController extends baseController {
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC',$entity);
         }
         
+        $indicatorService = $this->getIndicatorService();
+        
         return array(
-            'entity'      => $entity
+            'entity'      => $entity,
+            'indicatorService' => $indicatorService,
         );
     }
 
@@ -72,26 +75,19 @@ class ObjetiveStrategicController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['objetiveLevel'] = ObjetiveLevel::LEVEL_ESTRATEGICO;
+        $resources = $this->resourceResolver->getResource(
+            $repository, 'createPaginatorStrategic', array($criteria, $sorting)
+        );
 
-        if ($this->config->isPaginated()) {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorStrategic', array($criteria, $sorting)
-            );
-
-            $maxPerPage = $this->config->getPaginationMaxPerPage();
-            if (($limit = $request->query->get('limit')) && $limit > 0) {
-                if ($limit > 100) {
-                    $limit = 100;
-                }
-                $maxPerPage = $limit;
+        $maxPerPage = $this->config->getPaginationMaxPerPage();
+        if (($limit = $request->query->get('limit')) && $limit > 0) {
+            if ($limit > 100) {
+                $limit = 100;
             }
-            $resources->setCurrentPage($request->get('page', 1), true, true);
-            $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                    $repository, 'findBy', array($criteria, $sorting, $this->config->getLimit())
-            );
+            $maxPerPage = $limit;
         }
+        $resources->setCurrentPage($request->get('page', 1), true, true);
+        $resources->setMaxPerPage($maxPerPage);
 
         $view = $this
                 ->view()
@@ -141,7 +137,7 @@ class ObjetiveStrategicController extends baseController {
 
             if (isset($data['indicators'])) {
                 foreach ($data['indicators'] as $value) {
-                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                     $indicator->setTmp(false);
                     $em->persist($indicator);
                     $object->addIndicator($indicator);
@@ -314,7 +310,7 @@ class ObjetiveStrategicController extends baseController {
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**
@@ -324,5 +320,14 @@ class ObjetiveStrategicController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

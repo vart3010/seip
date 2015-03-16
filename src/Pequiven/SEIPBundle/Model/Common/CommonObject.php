@@ -46,6 +46,31 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const STATUS_WORKER_OUTSIDE_COMPANY = 4;
     
+    /**
+     * Resultado para la evaluación
+     */
+    const TYPE_RESULT_EVALUATION = 'EVALUATION';
+    
+    /**
+     * Resultado para la Gestión
+     */
+    const TYPE_RESULT_ARRANGEMENT = 'ARRANGEMENT';
+    
+    /**
+     * Rango Bueno (Verde)
+     */
+    const TYPE_RANGE_GOOD = 'GOOD';
+    
+    /**
+     * Rango Medio (Amarillo)
+     */
+    const TYPE_RANGE_MIDDLE = 'MIDDLE';
+    
+    /**
+     * Rango Malo (Rojo)
+     */
+    const TYPE_RANGE_BAD = 'BAD';
+    
     protected $em;
     protected $class;
     protected $repository;

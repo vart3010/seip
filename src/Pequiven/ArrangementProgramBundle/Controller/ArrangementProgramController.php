@@ -201,6 +201,74 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
+    
+    public function listAllAction(Request $request){
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ALL');
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $url = $this->generateUrl('pequiven_seip_arrangementprogram_all', array('_format' => 'json'));
+
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorByAll',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSEIPBundle:Planning:ArrangementProgram/list.html.twig')
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user,
+                'url' => $url,
+                'boxRender' => $boxRender,
+            ));
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
     /**
      * 
      * @param Request $request
@@ -285,12 +353,27 @@ class ArrangementProgramController extends SEIPController
      * @param Request $request
      * @return type
      */
-    function forReviewingApprovingAction(Request $request)
+    function forReviewingAction(Request $request)
     {
-        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_REVIEWING_OR_APPROVING');
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_REVIEWING');
         
-        $method = 'createPaginatorByAssigned';
-        $route = 'pequiven_seip_arrangementprogram_for_reviewing_or_approving';
+        $method = 'createPaginatorByAssignedForReviewing';
+        $route = 'pequiven_seip_arrangementprogram_for_reviewing';
+        $template = 'forReviewingApproving.html';
+        return $this->getSummaryResponse($request,$method,$route,$template);
+    }
+    
+    /**
+     * Retorna los programas de gestion por aprobar o revisar.
+     * @param Request $request
+     * @return type
+     */
+    function forApprovingAction(Request $request)
+    {
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_FOR_APPROVING');
+        
+        $method = 'createPaginatorByAssignedForApproving';
+        $route = 'pequiven_seip_arrangementprogram_for_approving';
         $template = 'forReviewingApproving.html';
         return $this->getSummaryResponse($request,$method,$route,$template);
     }
@@ -340,10 +423,11 @@ class ArrangementProgramController extends SEIPController
         $period = $this->getPeriodService()->getPeriodActive();
         $criteria['ap.period'] = $period;
         $criteria['ap.user'] = $this->getUser();
-        
-        $repository = $this->getRepository();
-
-        if ($this->config->isPaginated()) {
+        $resources = array();
+//        var_dump($method);
+//        die;
+        if($this->config->isApiRequest()){
+            $repository = $this->getRepository();
             $resources = $this->resourceResolver->getResource(
                 $repository,
                 $method,
@@ -358,12 +442,6 @@ class ArrangementProgramController extends SEIPController
             }
             $resources->setCurrentPage($request->get('page', 1), true, true);
             $resources->setMaxPerPage($maxPerPage);
-        } else {
-            $resources = $this->resourceResolver->getResource(
-                $repository,
-                'findBy',
-                array($criteria, $sorting, $this->config->getLimit())
-            );
         }
 
         $view = $this
@@ -442,7 +520,7 @@ class ArrangementProgramController extends SEIPController
             throw $this->createAccessDeniedHttpException($message);
         }
         
-        $period = $periodService->getPeriodActive();
+        $period = $periodService->getEntityPeriodActive();
         
         $entity
                 ->setType($type)
@@ -1057,6 +1135,7 @@ class ArrangementProgramController extends SEIPController
         }
         
         $management = (string)$resource->getTacticalObjective()->getGerencia();
+        $description = $resource->getDescription() ?:($this->trans('pequiven.arrangement_program.description_none'));
         
         $responsibles = '';
         
@@ -1094,6 +1173,7 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('B7',  $location)
                 ->setCellValue('F7',  $management)
                 ->setCellValue('J7',  $responsibles)
+                ->setCellValue('AA7',  $description)
             ;
         
         $timeline = $resource->getTimeline();
@@ -1276,10 +1356,10 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('AE'.$rowObservation,$reference);
         
         //Agregar los detalles del programa de gestion
-        $sendToReviewBy = ucfirst(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
+        $sendToReviewBy = ucwords(strtolower($details->getReviewedBy() ? $details->getReviewedBy() : $this->trans('pequiven.arrangement_program.no_send_to_review_date')));
         $revisionDate = $details->getRevisionDate() ? $details->getRevisionDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_revison_date');
         
-        $approvedBy = ucfirst(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
+        $approvedBy = ucwords(strtolower($details->getApprovedBy() ? $details->getApprovedBy() : $this->trans('pequiven.arrangement_program.no_approval_date')));
         $approvalDate = $details->getApprovalDate() ? $details->getApprovalDate()->format($this->getSeipConfiguration()->getGeneralDateFormat()) : $this->trans('pequiven.arrangement_program.no_approval_date');
         if($rowObservation > 26){
             $rowDetails = $rowObservation + 2;
@@ -1292,6 +1372,10 @@ class ArrangementProgramController extends SEIPController
                 ->setCellValue('L'.$rowDetails,$approvedBy)
                 ->setCellValue('AI'.$rowDetails,$approvalDate)
                 ;
+        $row = $rowDetails + 3;
+        $activeSheet->setCellValue(sprintf('B%s',$row),'NIVEL DE REVISION: 1');
+        $activeSheet->setCellValue(sprintf('AI%s',$row),'C-PG-DM-OI-R-002');
+        $activeSheet->getStyle(sprintf('B%s:AI%s',$row,$row))->getFont()->setSize(8);
         
         $activeSheet->calculateColumnWidths();
         $activeSheet->getRowDimension('1');
@@ -1390,7 +1474,7 @@ class ArrangementProgramController extends SEIPController
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
     
     /**

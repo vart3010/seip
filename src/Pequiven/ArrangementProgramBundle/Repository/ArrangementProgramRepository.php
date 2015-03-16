@@ -2,10 +2,10 @@
 
 namespace Pequiven\ArrangementProgramBundle\Repository;
 
-use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
 
 /**
  * Repositorio de programa de gestion
@@ -192,7 +192,7 @@ class ArrangementProgramRepository extends EntityRepository
      */
     public function createPaginatorByRol(array $criteria = null, array $orderBy = null) {
         $this->getUser();
-        return parent::createPaginator($criteria, $orderBy);
+        return $this->createPaginator($criteria, $orderBy);
     }
     
     /**
@@ -204,38 +204,32 @@ class ArrangementProgramRepository extends EntityRepository
     public function createPaginatorByGerencia(array $criteria = null, array $orderBy = null) {
         $this->getUser();
         return parent::createPaginator($criteria, $orderBy);
-//        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-//        
-//        $queryBuilder = $this->getCollectionQueryBuilder();
-//        $queryBuilder->innerJoin('ap.tacticalObjective', 'o');
-//        if(($gerencia = $criteria->remove('gerencia')) != null){
-//            $queryBuilder->andWhere('o.gerencia = ' . $gerencia);
-//        }
-//        
-//        if(isset($criteria['status'])){
-//            $queryBuilder->andWhere('ap.status = ' . $criteria['status']);
-//        }
-//        
-////        $this->applyCriteria($queryBuilder, $criteria);
-////        $this->applySorting($queryBuilder, $orderBy);
-//
-//        return $this->getPaginator($queryBuilder);
     }
     
     /**
-     * Retorna los programas de gestion los cuales tengo asignados para revision o aprobacion
      * 
      * @param array $criteria
      * @param array $orderBy
      * @return type
      */
-    public function createPaginatorByAssigned(array $criteria = null, array $orderBy = null) {
+    public function createPaginatorByAll(array $criteria = null, array $orderBy = null) {
+        $this->getUser();
+        return parent::createPaginator($criteria, $orderBy);
+    }
+    
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para revision
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAssignedForReviewing(array $criteria = null, array $orderBy = null) {
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $user = $criteria->remove('ap.user');
         
         $user->getId();
         $period = $criteria->remove('ap.period');
-        
         
         $queryBuilder = $this->getCollectionQueryBuilder();
         $this->applyCriteria($queryBuilder, $criteria->toArray());
@@ -250,10 +244,8 @@ class ArrangementProgramRepository extends EntityRepository
             ->innerJoin('to_g.configuration','to_g_c');
         
         $queryBuilder->leftJoin('to_g_c.arrangementProgramUserToRevisers', 'to_g_c_apr');
-        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveTactical', 'to_g_c_apt');
-        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap');
         
-        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apr.id = :user','to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apr.id = :user'));
         $queryBuilder
             ->andWhere('ap.period = :period')
             ->setParameter('period', $period)
@@ -261,6 +253,72 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
+        
+        $results = $queryBuilder->getQuery()->getResult();        
+        $filterResults = array();
+        foreach ($results as $result) {
+            if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                $gerenciaSecondToNotify = null;
+                $objetiveOperative = $result->getOperationalObjective();
+                $gerenciaSecond = $objetiveOperative->getGerenciaSecond();
+                if(
+                    $gerenciaSecond && ($gerencia = $gerenciaSecond->getGerencia()) != null 
+                    && ($gerenciaGroup = $gerencia->getGerenciaGroup()) != null
+                    && $gerenciaGroup->getGroupName() == \Pequiven\MasterBundle\Entity\GerenciaGroup::TYPE_COMPLEJOS
+                    )
+                    {
+                    $gerenciaSecondToNotify = $gerenciaSecond;
+                }
+                if($gerenciaSecondToNotify !== null && $user->getGerenciaSecond() !== $gerenciaSecond){
+                    continue;
+                }
+            }
+            $filterResults[] = $result;
+        }
+        $pagerfanta = new \Tecnocreaciones\Bundle\ResourceBundle\Model\Paginator\Paginator(new \Pagerfanta\Adapter\ArrayAdapter($filterResults));
+        $pagerfanta->setContainer($this->container);
+        return $pagerfanta;
+    }
+    
+    /**
+     * Retorna los programas de gestion los cuales tengo asignados para aprobacion
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorByAssignedForApproving(array $criteria = null, array $orderBy = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $user = $criteria->remove('ap.user');
+        
+        $user->getId();
+        $period = $criteria->remove('ap.period');
+        
+        $queryBuilder = $this->getCollectionQueryBuilder();
+        $this->applyCriteria($queryBuilder, $criteria->toArray());
+        
+        $queryBuilder
+                ->addSelect('to')
+                ->addSelect('to_g')
+                ->addSelect('to_g_c')
+                ;
+        
+        $queryBuilder
+            ->innerJoin('to_g.configuration','to_g_c');
+        
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveTactical', 'to_g_c_apt');
+        $queryBuilder->leftJoin('to_g_c.arrangementProgramUsersToApproveOperative', 'to_g_c_ap');
+        
+        $queryBuilder->andWhere($queryBuilder->expr()->orX('to_g_c_apt.id = :user','to_g_c_ap.id = :user'));
+        $queryBuilder
+            ->andWhere('ap.period = :period')
+            ->setParameter('period', $period)
+            ;
+        
+        $queryBuilder->setParameter('user', $user);
+        $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
         $results = $queryBuilder->getQuery()->getResult();        
         $filterResults = array();
@@ -330,8 +388,9 @@ class ArrangementProgramRepository extends EntityRepository
         
         $queryBuilder->setParameter('user', $user);
         $this->applySorting($queryBuilder, $orderBy);
+        $this->applyPeriodCriteria($queryBuilder);
         
-        $results = $queryBuilder->getQuery()->getResult();        
+        $results = $queryBuilder->getQuery()->getResult();
         $filterResults = array();
         foreach ($results as $result) {
             if($result->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
@@ -358,7 +417,7 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
-     * Retorna los programas de gestion los cuales tengo asignados para revision o aprobacion
+     * Retorna los programas de gestion los cuales tengo asignados
      * 
      * @param array $criteria
      * @param array $orderBy
@@ -544,6 +603,7 @@ class ArrangementProgramRepository extends EntityRepository
         }
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
+        $this->applyPeriodCriteria($queryBuilder);
     }
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
         parent::applySorting($queryBuilder, $sorting);

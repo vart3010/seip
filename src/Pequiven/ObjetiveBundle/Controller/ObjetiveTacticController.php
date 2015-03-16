@@ -58,11 +58,15 @@ class ObjetiveTacticController extends baseController {
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
         }
         
+        $indicatorService = $this->getIndicatorService();
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
             ->setTemplateVar('entity')
-            ->setData($resource)
+            ->setData(array(
+                'entity' => $resource,
+                'indicatorService' => $indicatorService,
+            ))
         ;
 
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));
@@ -172,13 +176,13 @@ class ObjetiveTacticController extends baseController {
                     for ($i = 0; $i < count($data['gerencia']); $i++) {
                         ${$nameObject . $i} = clone $object;
                         ${$nameObject . $i}->resetIndicators();
-                        $gerencia = $em->getRepository('PequivenMasterBundle:Gerencia')->findOneBy(array('id' => $data['gerencia'][$i]));
+                        $gerencia = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('id' => $data['gerencia'][$i]));
                         ${$nameObject . $i}->setGerencia($gerencia);
                         ${$nameObject . $i}->setPeriod($period);
                         ${$nameObject . $i}->setRef($totalRef[$i]);
                         if (isset($data['indicators'])) {
                             foreach ($data['indicators'] as $value) {
-                                $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                 $indicator->setTmp(false);
                                 $em->persist($indicator);
                                 ${$nameObject . $i}->addIndicator($indicator);
@@ -190,7 +194,7 @@ class ObjetiveTacticController extends baseController {
                     $j = 0;
                     for ($i = 0; $i < count($data['complejo']); $i++) {//Recorremos todas las localidades seleccionadas
                         //Obtenemos todas las gerencias de 1ra línea de las localidades seleccionadas
-                        $gerencias = $em->getRepository('PequivenMasterBundle:Gerencia')->findBy(array('complejo' => $data['complejo'][$i]));
+                        $gerencias = $this->get('pequiven.repository.gerenciafirst')->findBy(array('complejo' => $data['complejo'][$i]));
                         $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($gerencias)));
                         if($totalRef[0] != $data['ref']){
                             $this->updateIndicatorRef($data, $totalRef);
@@ -206,7 +210,7 @@ class ObjetiveTacticController extends baseController {
                             ${$nameObject . $j}->setRef($totalRef[$j]);
                             if (isset($data['indicators'])) {
                                 foreach ($data['indicators'] as $value) {
-                                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                                    $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                                     $indicator->setTmp(false);
                                     $em->persist($indicator);
                                     ${$nameObject . $j}->addIndicator($indicator);
@@ -228,7 +232,7 @@ class ObjetiveTacticController extends baseController {
                 $object->setRef($totalRef[0]);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                         $indicator->setTmp(false);
                         $em->persist($indicator);
                         $object->addIndicator($indicator);
@@ -244,7 +248,7 @@ class ObjetiveTacticController extends baseController {
                 $object->setPeriod($period);
                 if (isset($data['indicators'])) {
                     foreach ($data['indicators'] as $value) {
-                        $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                        $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                         $indicator->setTmp(false);
                         $em->persist($indicator);
                         $object->addIndicator($indicator);
@@ -300,8 +304,8 @@ class ObjetiveTacticController extends baseController {
         $em->getConnection()->beginTransaction();
 
         //$objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => '1.3.10.'));
-        //$indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => '1.3.9.'));
-        $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        //$indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => '1.3.9.'));
+        $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $totalRef[0]));
         $j = 1;
         foreach ($totalRef as $refObjetive) {//Recorremos todas las referencias de los objetivos creados
             if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
@@ -337,7 +341,7 @@ class ObjetiveTacticController extends baseController {
         $j = 1;
         foreach ($totalRef as $refObjetive) {//Recorremos todas las referencias de los objetivos creados
             if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
-                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refObjetive));
                 $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('ref' => $refObjetive));
                 foreach ($indicators as $indicator) {
                     $objetive->addIndicator($indicator);
@@ -370,7 +374,7 @@ class ObjetiveTacticController extends baseController {
         $em->getConnection()->beginTransaction();
 
         //Obtenemos los Indicatores Tácticos creados originalmente desde el formulario de Objetivos Tácticos
-        $indicatorsOriginals = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $totalRef[0]));
+        $indicatorsOriginals = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $totalRef[0]));
         $arrangementRangeOriginals = array();
         $k = 0;
         foreach ($indicatorsOriginals as $indicatorOriginal) {//Recorremos los Indicadores Tácticos creados originalmente desde el formulario de Objetivos Tácticos
@@ -384,7 +388,7 @@ class ObjetiveTacticController extends baseController {
         $periodActive = $this->getPeriodService()->getPeriodActive();
         foreach ($totalRef as $refObjetive) {
             if ($j > 1) {//En caso de que sea la referencia de los objetivos creados menos el primero
-                $indicators = $em->getRepository('PequivenIndicatorBundle:Indicator')->findBy(array('refParent' => $refObjetive));
+                $indicators = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refObjetive));
                 $p = 0;
                 foreach ($indicators as $indicator) {
                     ${$nameObject . $i} = new ArrangementRange();
@@ -458,7 +462,7 @@ class ObjetiveTacticController extends baseController {
             if ($i >= 1) {//Consultamos en caso de que exista más de una Gerencia de 1ra Línea
                 $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
                 foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
-                    $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+                    $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
                     ${$nameObject . $j} = new Indicator();
                     ${$nameObject . $j}->setRef('IT-' . $totalRef[$i] . $k);
                     ${$nameObject . $j}->setRefParent($totalRef[$i]);
@@ -624,7 +628,7 @@ class ObjetiveTacticController extends baseController {
         $dataGerencia = array();
         $complejos = $request->request->get('complejos');
         $em = $this->getDoctrine()->getManager();
-        $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $complejos));
+        $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions(array('complejos' => $complejos));
 
         foreach ($results as $result) {
             foreach ($result as $gerencia) {
@@ -656,9 +660,9 @@ class ObjetiveTacticController extends baseController {
         $user = $securityContext->getToken()->getUser();
 
         if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+            $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions();
         } else {
-            $results = $em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
+            $results = $this->get('pequiven.repository.gerenciafirst')->getGerenciaOptions(array('complejos' => $user->getComplejo()->getId()));
         }
 
         $totalResults = count($results);
@@ -772,7 +776,7 @@ class ObjetiveTacticController extends baseController {
         
         $k = 1; //Contador de Indicadores seleccionados en el Select del Formulario
         foreach ($data['indicators'] as $value) {//Recorremos los Indicadores Tácticos ya creados asociados al Objetivo Táctico a crear
-            $indicator = $em->getRepository('PequivenIndicatorBundle:Indicator')->findOneBy(array('id' => $value));
+            $indicator = $this->get("pequiven.repository.indicator")->findOneBy(array('id' => $value));
             $indicator->setRef('IT-' . $totalRef[0] . $k);
             $indicator->setRefParent($totalRef[0]);
             $em->persist($indicator);
@@ -795,7 +799,7 @@ class ObjetiveTacticController extends baseController {
      */
     private function getPeriodService()
     {
-        return $this->container->get('pequiven_arrangement_program.service.period');
+        return $this->container->get('pequiven_seip.service.period');
     }
 
     /**
@@ -805,5 +809,14 @@ class ObjetiveTacticController extends baseController {
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Service\IndicatorService
+     */
+    private function getIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.inidicator');
     }
 }

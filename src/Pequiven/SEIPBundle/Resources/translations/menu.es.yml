@@ -42,7 +42,9 @@ app:
                         main: Programas de Gestión
                         list: Lista
                         assigned: Asignados
-                        for_reviewing_or_approving: Por revisar o aprobar
+                        pending: Pendientes
+                        for_reviewing: Por revisar
+                        for_approving: Por aprobar
                         for_notifying: Por notificar
                         temaplate: Desde plantilla
                         add:
@@ -78,7 +80,7 @@ app:
                             list: Lista
                             add: Cargar
                     planning:
-                        main: Estadística e información
+                        main: %titulo%
                         objetives:
                             main: Objetivos
                             strategic: Estratégico
@@ -89,6 +91,10 @@ app:
                             strategic: Estratégico
                             tactic: Táctico
                             operative: Operativo
+                            withError: Con errores
+                        arrangement_programs:
+                            main: Programas de Gestión
+                            list: Lista
                         matriz: Matriz de Objetivos
                         results:
                             main: Resultados
@@ -112,10 +118,15 @@ app:
                         main: Resultados
                         visualize:
                             main: Visualizar
-                            strategic: Estratégico
+                            strategics: Estratégicos
+                            indicator:
+                                strategics: Indicadores Estratégicos
+                            objetive:
+                                strategics: Objetivos Estratégicos
                             tactic: Táctico
                             operative: Operativo
                             by_gerencia: Por gerencia
+                            by_lineStrategic: Por Línea Estratégica
                         notify:
                             main: Notificar
                             indicators: Indicadores

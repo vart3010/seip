@@ -125,6 +125,14 @@ class PrePlanning extends Model
     protected $requiresApproval = false;
     
     /**
+     * ¿Es requerido para importacion?
+     * 
+     * @var boolean
+     * @ORM\Column(name="requiredToImport",type="boolean")
+     */
+    protected $requiredToImport = false;
+    
+    /**
      * ¿para importar?
      * @var boolean
      * @ORM\Column(name="toImport",type="integer")
@@ -523,5 +531,30 @@ class PrePlanning extends Model
     public function getPrePlanningUser()
     {
         return $this->prePlanningUser;
+    }
+    
+    /**
+     * Set requiredToImport
+     *
+     * @param boolean $requiredToImport
+     * @return Objetive
+     */
+    public function setRequiredToImport($requiredToImport)
+    {
+        $this->requiredToImport = $requiredToImport;
+        if($requiredToImport == true){
+            $this->status = self::STATUS_REQUIRED;
+        }
+        return $this;
+    }
+
+    /**
+     * Get requiredToImport
+     *
+     * @return boolean 
+     */
+    public function getRequiredToImport()
+    {
+        return $this->requiredToImport;
     }
 }
