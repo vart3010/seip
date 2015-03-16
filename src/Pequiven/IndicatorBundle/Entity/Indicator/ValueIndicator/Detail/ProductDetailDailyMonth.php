@@ -530,7 +530,7 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Tipo de producto
      * @var type 
-     * @Extjs\Model\Field(type="int",mapping="product.typeOf")
+     * @Extjs\Model\Field(type="string",mapping="product.typeOf")
      */
     private $productTypeOf;
 

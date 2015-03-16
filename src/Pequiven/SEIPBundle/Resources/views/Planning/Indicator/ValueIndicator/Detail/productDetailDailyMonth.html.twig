@@ -5,41 +5,8 @@
 {% block stylesheet %}
     {{ parent() }}
     
-    <style type="text/css" media="screen">
-        .x-grid-row-summary .x-grid-cell-inner {
-            font-weight: bold;
-        }
-        .icon-grid {
-            background: url(../shared/icons/fam/grid.png) no-repeat 0 -1px;
-        }
-        .x-group-hd-container {
-            display:none;
-        }
-        /* Tags */
-        .tag {
-            padding: 0 4px 2px;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-	}
-	.ie9 .tag {
-		padding: 1px 4px;
-	}
-	small.tag {
-		font-size: 10px;
-		line-height: 14px;
-		text-transform: uppercase;
-		padding: 0 2px;
-		vertical-align: 1px;
-		border-width: 1px;
-		border-style: solid;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
-		border-radius: 3px;
-	}
-        
-    </style>
-    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">
+    {#<link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">#}
+    
 {% endblock %}
 
 {% block javascript %}
@@ -47,11 +14,21 @@
         var formatPhp = "Y-m-d H:i:s";
         Ext.require([
             'Ext.grid.*',
+            'Ext.layout.container.Border',
             'Ext.data.*',
             'Ext.form.field.Number',
             'Ext.form.field.Date',
-            'Ext.layout.container.Fit'
+            'Ext.tip.QuickTipManager'
         ]);
+        function groupParseToString(v){
+            var label = '';
+            if(v.groupValue == '0'){
+                label = 'Productos';
+            }else if(v.groupValue == '1'){
+                label = 'Servicios';
+            }
+            return label;
+        }
         
         Ext.onReady(function(){
             var store = Ext.create('Ext.data.Store', {
@@ -74,18 +51,7 @@
                     }
                 },
                 listeners: {
-                    write: function (store, operation) {
-                        var record = operation.getRecords()[0],
-                                name = Ext.String.capitalize(operation.action),
-                                verb;
-                        if (name == 'Destroy') {
-                            verb = 'Destroyed';
-                        } else {
-                            verb = name + 'd';
-                        }
-
-                        },
-                        update: function (store, record, operation, modifiedFieldNames, eOpts) {
+                    update: function (store, record, operation, modifiedFieldNames, eOpts) {
                             if (Ext.data.Model.EDIT == operation) {
                                 store.getProxy().setExtraParam("_method", "PUT");
                             } else if (Ext.data.Model.COMMIT == operation) {
@@ -112,6 +78,14 @@
                 xtype: 'numberfield',
                 minValue: 0
             };
+            
+            var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
+                  id: 'group',
+                  ftype: 'groupingsummary',
+                  groupHeaderTpl: '{[groupParseToString(values,name)]}',
+                 hideGroupedHeader: true,
+                 enableGroupingMenu: false
+            });
             var grid = Ext.create('Ext.grid.Panel', {
                 selType: 'cellmodel',
                 renderTo: 'grid-summary',
@@ -121,58 +95,68 @@
                 title: '{{ indicator }}',
                 store: store,
                 iconCls: 'icon-user',
-                features: [{
-                    id: 'group',
-                    ftype: 'groupingsummary',
-                    groupHeaderTpl: '{name} aa',
-                    hideGroupedHeader: true,
-                    enableGroupingMenu: true
-                },{
-                    ftype: 'summary',
-                    dock: 'bottom'
-                }],
+                layout: 'border',
+                features: [groups],
                 split: true,
-                columns: [{
-                        text: 'Nro',
-                        width: 30,
-                        sortable: true,
-                        locked: true,
-                        renderer: function (v, meta, rec, rowIndex) {
-                            return ++rowIndex;
-                        }
-                    },{
-                        text: '{{ "pequiven.name"|trans({},"messages") }}',
-                        flex: 1,
-                        sortable: true,
-                        variableRowHeight: true,
-                        dataIndex: 'productName',
-                        locked: true,
-                        hideable: false,
-                        summaryType: 'count',
-                        summaryRenderer: function(value, summaryData, dataIndex) {
-                            return ((value === 0 || value > 1) ? '(' + value + ' Products)' : '(1 Product)');
-                        },
-                    },{
-                        text: '{{ 'pequiven_seip.cumulative'|trans }}',
-                        locked: true,
-                        columns: [
-                            {
-                                text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
-                                dataIndex: 'totalPlan',
-                                width: 50,
-                            },
-                            {
-                                text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
-                                dataIndex: 'totalReal',
-                                width: 50,
-                            },
-                            {
-                                text: '{{ "pequiven.goals.percentaje"|trans({},"PequivenArrangementProgramBundle") }}',
-                                dataIndex: 'percentaje',
-                                width: 50,
+                lockedViewConfig: {
+                    scroll: 'horizontal'
+                },
+                columns: [
+                {
+                    text: '{{ 'Productos y Servicios'|trans }}',
+                    flex: 1,
+                    locked: true,
+                    sortable: false,
+
+                    // This may have wrapped HTML which causes unpredictable row heights
+                    variableRowHeight: true,
+                    hideable: false,
+                    columns:[
+                        {
+                            text: 'Nro',
+                            width: 30,
+                            sortable: true,
+                            locked: true,
+                            renderer: function (v, meta, rec, rowIndex) {
+                                return ++rowIndex;
                             }
-                        ]
-                    },{
+                        },{
+                            text: '{{ "pequiven.name"|trans({},"messages") }}',
+                            flex: 1,
+                            width: 200,
+                            sortable: true,
+                            variableRowHeight: true,
+                            dataIndex: 'productName',
+                            locked: true,
+                            hideable: false,
+                            summaryType: 'count',
+                            summaryRenderer: function(value, summaryData, dataIndex) {
+                                return ((value === 0 || value > 1) ? '(' + value + ')' : '(1)');
+                            },
+                        },{
+                            text: '{{ 'pequiven_seip.cumulative'|trans }}',
+                            locked: true,
+                            columns: [
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'totalPlan',
+                                    width: 50,
+                                },
+                                {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'totalReal',
+                                    width: 50,
+                                },
+                                {
+                                    text: '{{ "pequiven.goals.percentaje"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'percentaje',
+                                    width: 50,
+                                }
+                            ]
+                        }
+                    ]
+                }
+                ,{
                         text: '{{ 'pequiven_seip.form.dayX'|trans({'%x%': 1}) }}',
                         columns: [
                             {
@@ -193,9 +177,9 @@
             });
         });
     </script>
+    
 {% endblock %}
 
 {% block content %}
-    aa
     <div id="grid-summary"></div>
 {% endblock content %}

@@ -46,6 +46,7 @@ class ProductAdmin extends BaseAdmin
             ->add('components','sonata_type_model_autocomplete',array(
                 'property' => array('name'),
                 'multiple' => true,
+                'required' => false,
                 'callback' => function (ProductAdmin $admin, $property, $value){
                     $datagrid = $admin->getDatagrid();
                     $qb = $datagrid->getQuery();
