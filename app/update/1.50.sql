@@ -1,3 +1,34 @@
 -- Agregando tipo de detalle del indicator
 ALTER TABLE seip_indicator ADD typeDetailValue INT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD typeDetailValue INT DEFAULT NULL;
+
+-- Agregando campo resumen de la gerencia
+ALTER TABLE seip_c_gerencia ADD resume VARCHAR(50) DEFAULT NULL;
+ALTER TABLE seip_c_gerencia_audit ADD resume VARCHAR(50) DEFAULT NULL;
+UPDATE seip_c_gerencia AS g SET g.resume = g.ref
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_ESTIMACION_COSTOS' WHERE `seip_c_gerencia`.`id` = 11;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_CONTROL_GESTION_OFIC_PRESIDENCIA' WHERE `seip_c_gerencia`.`id` = 12;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_TRANSPORTE_AEREO' WHERE `seip_c_gerencia`.`id` = 13;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_PLANIFICACIÓN_ESTRATEGICA_NUEVOS_DESARROLLOS' WHERE `seip_c_gerencia`.`id` = 14;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_SEG_CTROL_FINANCIERO_ADMVO_PROY' WHERE `seip_c_gerencia`.`id` = 15;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_PROYECTOS_INTERNACIONALES' WHERE `seip_c_gerencia`.`id` = 16;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_RECURSOS_HUMANOS' WHERE `seip_c_gerencia`.`id` = 18;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_AUDITORIA_INTERNA' WHERE `seip_c_gerencia`.`id` = 19;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_CONSULTORIA_JURIDICA_Y_RPTE_JUDICIAL' WHERE `seip_c_gerencia`.`id` = 20;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_CONTRATACIONES' WHERE `seip_c_gerencia`.`id` = 21;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_FINANZAS' WHERE `seip_c_gerencia`.`id` = 22;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_AUTOMATIZACION_INFORMATICA_Y_TELECOMUNICACIONES' WHERE `seip_c_gerencia`.`id` = 23;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_PREVENCION_Y_CONTROL_PERDIDAS' WHERE `seip_c_gerencia`.`id` = 24;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_SALUD' WHERE `seip_c_gerencia`.`id` = 25;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_ADMINISTRACION_Y_SERVICIOS' WHERE `seip_c_gerencia`.`id` = 26;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_ASUNTOS_PUBLICOS' WHERE `seip_c_gerencia`.`id` = 27;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_DESARROLLO_SOCIAL' WHERE `seip_c_gerencia`.`id` = 28;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE' WHERE `seip_c_gerencia`.`id` = 29;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_SISTEMA_INTEGRADO_GESTION' WHERE `seip_c_gerencia`.`id` = 30;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_DIRECCION_PROYECTOS' WHERE `seip_c_gerencia`.`id` = 31;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_OFICINA_PRESIDENCIA' WHERE `seip_c_gerencia`.`id` = 32;
+UPDATE `seip`.`seip_c_gerencia` SET `ref` = 'GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA' WHERE `seip_c_gerencia`.`id` = 33;
+UPDATE `seip`.`seip_c_gerencia` SET `resume` = 'Proy. RPS' WHERE `seip_c_gerencia`.`id` = 33;
+INSERT INTO `seip`.`seip_gerencia_configuration` (`id`, `created_at`, `updated_at`) VALUES ('33', NOW(), NOW());
+UPDATE `seip`.`seip_c_gerencia` SET `configuration_id` = '33' WHERE `seip_c_gerencia`.`id` = 33;
+INSERT INTO `seip`.`seip_monitor` (`id`, `fk_gerencia`, `created_at`, `updated_at`, `objTacticOriginal`, `objTacticVinculante`, `indTacticOriginal`, `indTacticVinculante`, `objOperativeOriginal`, `objOperativeVinculante`, `indOperativeOriginal`, `indOperativeVinculante`, `arrangementProgramTactic`, `arrangementProgramOperative`, `objTacticOriginalReal`, `objTacticVinculanteReal`, `indTacticOriginalReal`, `indTacticVinculanteReal`, `objOperativeOriginalReal`, `objOperativeVinculanteReal`, `indOperativeOriginalReal`, `indOperativeVinculanteReal`, `arrangementProgramTacticReal`, `arrangementProgramOperativeReal`, `fk_type_group`, `period_id`) VALUES (NULL, '33', NOW(), NOW(), '1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '1');

@@ -171,8 +171,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     function addPlanningMenu(ItemInterface $menu, $section) 
     {
         $title = $this->trans('statisticsAndInformation', array(), 'PequivenSEIPBundle');
-        $gerenciasRef = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsRef();
-        if($this->getUser()->getGerencia() && $this->getUser()->getGerencia()->getRef() == $gerenciasRef[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
+        $gerenciasResume = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsResume();
+        if($this->getUser()->getGerencia() && $this->getUser()->getGerencia()->getRef() == $gerenciasResume[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
             $title = $this->trans('internalAudit', array(), 'PequivenSEIPBundle');
         }
         

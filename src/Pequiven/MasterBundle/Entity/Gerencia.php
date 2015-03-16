@@ -153,6 +153,13 @@ class Gerencia extends modelGerencia
     private $gerenciaSecondSupports;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="resume", type="string", length=50, nullable=true)
+     */
+    private $resume;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -580,4 +587,21 @@ class Gerencia extends modelGerencia
     {
         return $this->gerenciaSecondSupports;
     }
+    
+    /**
+     * Get Resume
+     * @return type
+     */
+    function getResume() {
+        return $this->resume;
+    }
+
+    /**
+     * Set Resume
+     * @param type $resume
+     */
+    function setResume($resume) {
+        $this->resume = $resume;
+    }
+
 }

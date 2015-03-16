@@ -406,7 +406,7 @@ class MonitorController extends baseController {
             $dataLinkTactic[] = array('typeGroup' => $resultTactic['Gerencia'],'porcCarga' => $resTactic, 'urlGerencia' => $urlGerencia);
             if($resultTactic['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
-                $categories[] = array('label' => $resultTactic['Ref'], 'toolText' => $resultTactic['Gerencia']);
+                $categories[] = array('label' => $resultTactic['Resume'], 'toolText' => $resultTactic['Gerencia']);
             } else{
                 $optionsChart = array('typeLabel' => 'auto');
                 $categories[] = array('label' => $resultTactic['Gerencia']);
@@ -448,7 +448,7 @@ class MonitorController extends baseController {
             $dataLinkOperative[] = array('typeGroup' => $resultOperative['Gerencia'],'porcCarga' => $resOperative, 'urlGerencia' => $urlGerencia);
             if($resultOperative['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
-                $categories[] = array('label' => $resultOperative['Ref'], 'toolText' => $resultOperative['Gerencia']);
+                $categories[] = array('label' => $resultOperative['Resume'], 'toolText' => $resultOperative['Gerencia']);
             } else{
                 $optionsChart = array('typeLabel' => 'auto');
                 $categories[] = array('label' => $resultOperative['Gerencia']);
@@ -490,7 +490,7 @@ class MonitorController extends baseController {
             $dataLink[] = array('typeGroup' => $result['Gerencia'],'porcCarga' => $res, 'urlGerencia' => $urlGerencia);
             if($result['Grupo'] == 'CORP'){
                 $optionsChart = array('typeLabel' => 'stagger');
-                $categories[] = array('label' => $result['Ref'], 'toolText' => $result['Gerencia']);
+                $categories[] = array('label' => $result['Resume'], 'toolText' => $result['Gerencia']);
             } else{
                 $optionsChart = array('typeLabel' => 'auto');
                 $categories[] = array('label' => $result['Gerencia']);
