@@ -22,10 +22,11 @@
         ]);
         function groupParseToString(v){
             var label = '';
+            var countChild = ""+v.children.length;
             if(v.groupValue == '0'){
-                label = 'Productos';
+                label = 'Productos ('+countChild+')';
             }else if(v.groupValue == '1'){
-                label = 'Servicios';
+                label = 'Servicios ('+countChild+')';
             }
             return label;
         }
@@ -82,7 +83,7 @@
             var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
                   id: 'group',
                   ftype: 'groupingsummary',
-                  groupHeaderTpl: '{[groupParseToString(values,name)]}',
+                  groupHeaderTpl: '{[groupParseToString(values)]}',
                  hideGroupedHeader: true,
                  enableGroupingMenu: false
             });
@@ -128,11 +129,7 @@
                             variableRowHeight: true,
                             dataIndex: 'productName',
                             locked: true,
-                            hideable: false,
-                            summaryType: 'count',
-                            summaryRenderer: function(value, summaryData, dataIndex) {
-                                return ((value === 0 || value > 1) ? '(' + value + ')' : '(1)');
-                            },
+                            hideable: false
                         },{
                             text: '{{ 'pequiven_seip.cumulative'|trans }}',
                             locked: true,
