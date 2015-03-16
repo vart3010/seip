@@ -50,6 +50,13 @@ class ProductDetailDailyMonth extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
+    
+    /**
+     * Componentes del producto
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
+     * @ORM\ManyToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",cascade={"persist","remove"})
+     */
+    private $components;
 
     /**
      * Mes
@@ -527,6 +534,14 @@ class ProductDetailDailyMonth extends BaseModel
      */
     private $productTypeOf;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->components = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -2099,5 +2114,38 @@ class ProductDetailDailyMonth extends BaseModel
     public function getValueIndicatorDetail()
     {
         return $this->valueIndicatorDetail;
+    }
+
+    /**
+     * Add components
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $components
+     * @return ProductDetailDailyMonth
+     */
+    public function addComponent(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $components)
+    {
+        $this->components->add($components);
+
+        return $this;
+    }
+
+    /**
+     * Remove components
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $components
+     */
+    public function removeComponent(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $components)
+    {
+        $this->components->removeElement($components);
+    }
+
+    /**
+     * Get components
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComponents()
+    {
+        return $this->components;
     }
 }

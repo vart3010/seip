@@ -189,6 +189,18 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                     $productDetailDailyMonth = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
                     $productDetailDailyMonth->setProduct($product);
                     $productDetailDailyMonth->setMonth($numResult);
+                    
+                    if(count($product->getComponents()) > 0){
+                        foreach ($product->getComponents() as $component) {
+                            $productDetailDailyMonthComponent = new \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth();
+                            $productDetailDailyMonthComponent->setProduct($component);
+                            $productDetailDailyMonthComponent->setMonth($numResult);
+                            
+                            $productDetailDailyMonthComponent->setValueIndicatorDetail($valueIndicatorDetail);
+                            $productDetailDailyMonth->addComponent($productDetailDailyMonthComponent);
+                        }
+                    }
+                    
                     $valueIndicatorDetail->addProductsDetailDailyMonth($productDetailDailyMonth);
                 }
                 $em->persist($valueIndicatorDetail);
@@ -196,6 +208,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             }
             $dataApi = $valueIndicatorDetail->getProductsDetailDailyMonth();
             $groupSerialization[] = 'product';
+            $groupSerialization[] = 'components';
             
             $template = 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/Detail/productDetailDailyMonth.html.twig';
         }

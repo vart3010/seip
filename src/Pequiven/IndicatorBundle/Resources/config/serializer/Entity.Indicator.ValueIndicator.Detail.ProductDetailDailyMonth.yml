@@ -10,6 +10,9 @@ Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDai
         month:
             expose: true
             groups: [api_list]
+        components:
+            expose: true
+            groups: [components]
         totalPlan:
             expose: true
             groups: [api_list]

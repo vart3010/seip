@@ -1317,7 +1317,6 @@ angular.module('seipModule.controllers', [])
             
             $scope.getUrlForValueIndicator = function(valueIndicator,numResult)
             {
-                
                 var url = Routing.generate('pequiven_value_indicator_show_detail',{id:valueIndicator.id,numResult: (numResult + 1)});
                 return url;
             };

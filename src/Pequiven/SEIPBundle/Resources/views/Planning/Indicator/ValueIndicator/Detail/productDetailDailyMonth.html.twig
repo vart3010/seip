@@ -58,7 +58,7 @@
                 autoLoad: true,
                 autoSync: true,
                 model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',
-                groupField: 'id',
+                groupField: 'productTypeOf',
                 proxy: {
                     type: 'rest',
                     url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
