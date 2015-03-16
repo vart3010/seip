@@ -30,7 +30,8 @@ class ProductAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
-            ->add('typeOf','choices',array(
+            ->add('components')
+            ->add('typeOf','choice',array(
                 'choices' => Product::getTypesLabel(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
@@ -42,6 +43,21 @@ class ProductAdmin extends BaseAdmin
     {
         $form
             ->add('name')
+            ->add('components','sonata_type_model_autocomplete',array(
+                'property' => array('name'),
+                'multiple' => true,
+                'callback' => function (ProductAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->setParameter('enabled', true)
+                        ->andWhere($alias.'.typeOf = :typeOf')
+                        ->setParameter('typeOf', Product::TYPE_PRODUCT)
+                        ;
+                },
+            ))
             ->add('typeOf','choice',array(
                 'choices' => Product::getTypesLabel(),
                 'translation_domain' => 'PequivenSEIPBundle'

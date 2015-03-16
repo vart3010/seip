@@ -58,7 +58,7 @@
                 autoLoad: true,
                 autoSync: true,
                 model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',
-                groupField: 'productTypeOf.',
+                groupField: 'id',
                 proxy: {
                     type: 'rest',
                     url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
@@ -124,10 +124,14 @@
                 features: [{
                     id: 'group',
                     ftype: 'groupingsummary',
-                    groupHeaderTpl: '{name}',
-                    hideGroupedHeader: false,
-                    enableGroupingMenu: false
+                    groupHeaderTpl: '{name} aa',
+                    hideGroupedHeader: true,
+                    enableGroupingMenu: true
+                },{
+                    ftype: 'summary',
+                    dock: 'bottom'
                 }],
+                split: true,
                 columns: [{
                         text: 'Nro',
                         width: 30,
@@ -140,9 +144,14 @@
                         text: '{{ "pequiven.name"|trans({},"messages") }}',
                         flex: 1,
                         sortable: true,
+                        variableRowHeight: true,
                         dataIndex: 'productName',
                         locked: true,
-                        hideable: false
+                        hideable: false,
+                        summaryType: 'count',
+                        summaryRenderer: function(value, summaryData, dataIndex) {
+                            return ((value === 0 || value > 1) ? '(' + value + ' Products)' : '(1 Product)');
+                        },
                     },{
                         text: '{{ 'pequiven_seip.cumulative'|trans }}',
                         locked: true,
