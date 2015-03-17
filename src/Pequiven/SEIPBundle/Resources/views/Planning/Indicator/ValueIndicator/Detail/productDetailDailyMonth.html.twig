@@ -37,6 +37,7 @@
                 autoSync: true,
                 model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',
                 groupField: 'productTypeOf',
+{#                groupers: ['productTypeOf','id'],#}
                 proxy: {
                     type: 'rest',
                     url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
@@ -81,9 +82,9 @@
             };
             
             var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
-                  id: 'group',
-                  ftype: 'groupingsummary',
-                  groupHeaderTpl: '{[groupParseToString(values)]}',
+                 id: 'group',
+                 ftype: 'groupingsummary',
+                 groupHeaderTpl: '{[groupParseToString(values)]}',
                  hideGroupedHeader: true,
                  enableGroupingMenu: false
             });
