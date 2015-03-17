@@ -448,6 +448,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
                     }
                 } else{
                     $result = 0;
@@ -483,6 +486,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
 //                        $result = 0;
                     }
                 } else{
@@ -514,6 +520,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
 //                        $result = 0;
                     }
                 } else{
