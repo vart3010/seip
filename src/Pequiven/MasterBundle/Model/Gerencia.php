@@ -62,6 +62,9 @@ abstract class Gerencia implements GerenciaFirstInterface
     const REF_GERENCIA_DESARROLLO_SOCIAL = 28;
     const REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE = 29;
     const REF_GERENCIA_SISTEMA_INTEGRADO_GESTION = 30;
+    const REF_GERENCIA_DIRECCION_PROYECTOS = 31;
+    const REF_GERENCIA_OFICINA_PRESIDENCIA = 32;
+    const REF_GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA = 33;
     
     //Tipo de Gerencias (Medular o Vinculante)
     const GERENCIA_TYPE_MODULAR = 1;//En caso de que sólo exista en complejos y no en Sede Corporativa
@@ -104,7 +107,10 @@ abstract class Gerencia implements GerenciaFirstInterface
         $this->refName[self::REF_GERENCIA_ASUNTOS_PUBLICOS] = 'GERENCIA_ASUNTOS_PUBLICOS';
         $this->refName[self::REF_GERENCIA_DESARROLLO_SOCIAL] = 'GERENCIA_DESARROLLO_SOCIAL';
         $this->refName[self::REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE] = 'GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE';
-        $this->refName[self::REF_GERENCIA_SISTEMA_INTEGRADO_GESTION] = 'GERENCIA_SISTEMA_INTEGRADO_GESTION';    
+        $this->refName[self::REF_GERENCIA_SISTEMA_INTEGRADO_GESTION] = 'GERENCIA_SISTEMA_INTEGRADO_GESTION';
+        $this->refName[self::REF_GERENCIA_DIRECCION_PROYECTOS] = 'GERENCIA_DIRECCION_PROYECTOS';
+        $this->refName[self::REF_GERENCIA_OFICINA_PRESIDENCIA] = 'GERENCIA_OFICINA_PRESIDENCIA';
+        $this->refName[self::REF_GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA] = 'GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA';
     }
     
     /**
@@ -138,12 +144,12 @@ abstract class Gerencia implements GerenciaFirstInterface
     /**
      * Retorna las referencias definidas para las Gerencias de 1ra Línea
      * 
-     * @staticvar array $labelsStatus
+     * @staticvar array $labelsResume
      * @return string
      */
-    static function getLabelsRef()
+    static function getLabelsResume()
     {
-        static $labelsRef = array(
+        static $labelsResume = array(
             self::REF_GERENCIA_GENERAL_CPM => 'GERENCIA_GENERAL_CPM',
             self::REF_GERENCIA_UNFER => 'GERENCIA_UNFER',
             self::REF_GERENCIA_UNPI => 'GERENCIA_UNPI',
@@ -178,7 +184,10 @@ abstract class Gerencia implements GerenciaFirstInterface
             self::REF_GERENCIA_DESARROLLO_SOCIAL => 'GERENCIA_DESARROLLO_SOCIAL',
             self::REF_GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE => 'GERENCIA_SEGURIDAD_HIGIENE_Y_AMBIENTE',
             self::REF_GERENCIA_SISTEMA_INTEGRADO_GESTION => 'GERENCIA_SISTEMA_INTEGRADO_GESTION',
+            self::REF_GERENCIA_DIRECCION_PROYECTOS => 'GERENCIA_DIRECCION_PROYECTOS',
+            self::REF_GERENCIA_OFICINA_PRESIDENCIA => 'GERENCIA_OFICINA_PRESIDENCIA',
+            self::REF_GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA => 'GERENCIA_PROYECTOS_REVOLUCION_PETROQUIMICA',
         );
-        return $labelsRef;
+        return $labelsResume;
     }
 }

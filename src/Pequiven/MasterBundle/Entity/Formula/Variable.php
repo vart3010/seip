@@ -86,7 +86,7 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
      * 
      * @return type
      */
-    public function getStaticValue() {
+    public function isStaticValue() {
         return $this->staticValue;
     }
 

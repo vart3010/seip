@@ -1,0 +1,17 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="with-padding">
+    <div class="columns">
+    {% for lineStrategic in linesStrategics %}
+    <div class="four-columns six-columns-tablet twelve-columns-mobile new-row-mobile">
+        <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}">
+            <span class="centrar_imagen">
+                <img class="icon-strategic" id="iconMoney" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+            </span>
+            <p class="title-icon-strategic">{{ lineStrategic.description }}</p>
+            <i class="{{ iconsLineStrategic[lineStrategic.level] }} fa-5x"></i>
+        </a>
+    </div>
+    {% endfor %}
+    </div>
+</div>

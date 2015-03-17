@@ -2218,13 +2218,13 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderWidgetIndicatorStrategic = function(id,data) {
+            $scope.renderWidgetIndicatorStrategic = function(id,data,width,height) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
                         "type": "bulb",
                         "renderAt": id,
-                        "width": "100%",
-                        "height": "5%",
+                        "width": width,
+                        "height": height,
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,

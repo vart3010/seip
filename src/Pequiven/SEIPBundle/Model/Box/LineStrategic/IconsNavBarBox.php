@@ -22,6 +22,7 @@ class IconsNavBarBox extends GenericBox
     public function getParameters() {
         
         $em = $this->getDoctrine()->getManager();
+        $idLineStrategic = $this->getRequest()->get('id');
         
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
@@ -29,6 +30,7 @@ class IconsNavBarBox extends GenericBox
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
+            'idLineStrategic' => $idLineStrategic,
         );
     }
     

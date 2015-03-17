@@ -171,8 +171,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     function addPlanningMenu(ItemInterface $menu, $section) 
     {
         $title = $this->trans('statisticsAndInformation', array(), 'PequivenSEIPBundle');
-        $gerenciasRef = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsRef();
-        if($this->getUser()->getGerencia() && $this->getUser()->getGerencia()->getRef() == $gerenciasRef[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
+        $gerenciasResume = \Pequiven\MasterBundle\Entity\Gerencia::getLabelsResume();
+        if($this->getUser()->getGerencia() && $this->getUser()->getGerencia()->getRef() == $gerenciasResume[\Pequiven\MasterBundle\Entity\Gerencia::REF_GERENCIA_AUDITORIA_INTERNA]){
             $title = $this->trans('internalAudit', array(), 'PequivenSEIPBundle');
         }
         
@@ -577,9 +577,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     }
                     
                     if($this->isGranted('ROLE_SEIP_RESULT_LIST_STRATEGICS')){
-                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.strategics', array(
+                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.by_lineStrategic', array(
                             'route' => 'pequiven_line_strategic_view_dashboard',
-                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.strategics', $section)));
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.by_lineStrategic', $section)));
+                        $visualize->addChild($itemStrategicsVisualize);
+                        
+                        $itemStrategicsVisualize = $this->factory->createItem('results.visualize.indicator.strategics', array(
+                            'route' => 'pequiven_line_strategic_indicators_strategics',
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.visualize.indicator.strategics', $section)));
                         $visualize->addChild($itemStrategicsVisualize);
                         
                         $itemStrategicsObjetives = $this->factory->createItem('results.visualize.objetive.strategics', array(

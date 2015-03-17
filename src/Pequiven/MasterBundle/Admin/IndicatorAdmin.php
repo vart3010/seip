@@ -29,6 +29,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsTypeDetail(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
+            ->add('calculationMethod','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
             ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
@@ -77,6 +81,10 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('lineStrategics')
             ->add('typeOfCalculation','choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('calculationMethod','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getLabelsCalculationMethod(),
                 'translation_domain' => 'PequivenIndicatorBundle'
             ))
             ->add('typeDetailValue','choice',array(

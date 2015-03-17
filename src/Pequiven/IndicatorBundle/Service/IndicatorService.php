@@ -270,8 +270,8 @@ class IndicatorService implements ContainerAwareInterface
         );
         $chart = array();
         
-        $chart['caption'] = $indicator->getDescription();
-        $chart["captionPadding"] = "10";
+//        $chart['caption'] = $indicator->getDescription();
+//        $chart["captionPadding"] = "10";
         $chart["showshadow"] = "0";
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
@@ -280,6 +280,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["baseFontColor"] = "#333333";
         $chart["baseFont"] = "Helvetica Neue,Arial";
         $chart["captionFontSize"] = "10";
+//        $chart["captionFontBold"] = "1";
         $chart["showborder"] = "0";
         $chart["bgcolor"] = "#FFFFFF";
         $chart["bgalpha"] = "0";
@@ -325,6 +326,43 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['colorRange']['color'] = $color;
         
         return $data;
+    }
+    
+    public function resultWithArrangementRangeColor(Indicator $indicator){
+        $color = '';
+        $text = number_format($indicator->getResultReal(), 2, ',', '.').'%';
+        $title = '';
+        $resultService = $this->getResultService();
+        $arrangementRangeService = $this->getArrangementRangeService();
+        $arrangementRange = $indicator->getArrangementRange();
+        $tendency = $indicator->getTendency();
+        $errorArrangementRange = null;
+        if($arrangementRange !== null){
+            $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
+            if($errorArrangementRange == null){
+                if($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $color = "#1aaf5d";
+                } elseif($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $color = "#f2c500";
+                } elseif($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                    $color = "#c02d00";
+                }
+            } else{
+                $color = "#000000";
+                $text = $errorArrangementRange;
+            }
+        } else{
+            $color = "#000000";
+            $text = $this->trans('pequiven_indicator.errors.arrangementRange_not_assigned', array(), 'PequivenIndicatorBundle');
+        }
+        
+        if(!$indicator->hasNotification()){
+            $color = "#000000";
+            $title = $this->trans('pequiven_indicator.summary.without_result', array(), 'PequivenIndicatorBundle');
+        }
+        
+        $response = '<span title="'.$title.'" style="color:'.$color.';"><b>'.$text.'</b></span>';
+        return $response;
     }
     
     /**

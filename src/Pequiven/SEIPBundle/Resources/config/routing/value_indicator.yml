@@ -1,10 +1,10 @@
 pequiven_value_indicator_get_form:
-    path: /{idIndicator}/get-form
+    path: /{idIndicator}/get-form.{_format}
     defaults:
         _controller: pequiven.controller.value_indicator:getFormAction
         _format: html
     requirements:
-        _format: html
+        _format: html|json
     methods: [GET]
     options:
         expose: true

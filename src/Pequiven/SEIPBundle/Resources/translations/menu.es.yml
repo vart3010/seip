@@ -119,11 +119,14 @@ app:
                         visualize:
                             main: Visualizar
                             strategics: Estratégicos
+                            indicator:
+                                strategics: Indicadores Estratégicos
                             objetive:
                                 strategics: Objetivos Estratégicos
                             tactic: Táctico
                             operative: Operativo
                             by_gerencia: Por gerencia
+                            by_lineStrategic: Por Línea Estratégica
                         notify:
                             main: Notificar
                             indicators: Indicadores
