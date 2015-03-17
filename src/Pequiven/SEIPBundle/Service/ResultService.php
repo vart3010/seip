@@ -1223,7 +1223,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                             }
                         }
                     }
-//                    var_dump($nameParameter);
                     $valueIndicator->setParameter($nameParameter,$valueParameter);
                 }
             }else if($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN){
@@ -1239,16 +1238,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
                     $totalRealChild += $value;
                     $totalPlanChild++;
-                    if($i == 11){
-//                        var_dump( 'Result '.$value.' $formulaUsed = '.$childValueIndicator->getFormula()->getId().' indicator: '.$childValueIndicator->getIndicator()->getRef());
-                    }
-                }
-//                $variableToPlanValueName
-//                $variableToRealValueName
-                if($i == 11){
-//                    var_dump('Total real '.$totalRealChild);
-//                    var_dump('Total plan '.$totalPlanChild);
-//                    
                 }
                 $valueIndicator->setParameter($variableToPlanValueName,$totalPlanChild);
                 $valueIndicator->setParameter($variableToRealValueName,$totalRealChild);
