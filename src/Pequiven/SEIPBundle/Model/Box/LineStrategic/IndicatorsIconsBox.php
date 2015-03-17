@@ -20,6 +20,10 @@ class IndicatorsIconsBox extends GenericBox
         return 'pequiven_seip.box.linestrategic.icons_indicator_dashboard';
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getParameters() {
         
         $em = $this->getDoctrine()->getManager();
