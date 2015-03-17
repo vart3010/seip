@@ -527,7 +527,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-        
+        if($result == 0){
+            $amountPenalty = 0;
+        }
         $indicator->setResult($result - $amountPenalty);
         
         $em = $this->getDoctrine()->getManager();
@@ -537,7 +539,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($andFlush){
             $em->flush();
         }
-        
         $objetives = $indicator->getObjetives();
         
         $this->updateResultOfObjects($objetives);
