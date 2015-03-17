@@ -1,0 +1,6 @@
+Pequiven\IndicatorBundle\Model\Indicator\ValueIndicator:
+    exclusion_policy: ALL
+    properties:
+        formulaParameters:
+            expose: true
+            groups: [api_list]

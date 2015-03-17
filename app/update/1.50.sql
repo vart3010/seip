@@ -32,3 +32,7 @@ UPDATE `seip`.`seip_c_gerencia` SET `resume` = 'Proy. RPS' WHERE `seip_c_gerenci
 INSERT INTO `seip`.`seip_gerencia_configuration` (`id`, `created_at`, `updated_at`) VALUES ('33', NOW(), NOW());
 UPDATE `seip`.`seip_c_gerencia` SET `configuration_id` = '33' WHERE `seip_c_gerencia`.`id` = 33;
 INSERT INTO `seip`.`seip_monitor` (`id`, `fk_gerencia`, `created_at`, `updated_at`, `objTacticOriginal`, `objTacticVinculante`, `indTacticOriginal`, `indTacticVinculante`, `objOperativeOriginal`, `objOperativeVinculante`, `indOperativeOriginal`, `indOperativeVinculante`, `arrangementProgramTactic`, `arrangementProgramOperative`, `objTacticOriginalReal`, `objTacticVinculanteReal`, `indTacticOriginalReal`, `indTacticVinculanteReal`, `objOperativeOriginalReal`, `objOperativeVinculanteReal`, `indOperativeOriginalReal`, `indOperativeVinculanteReal`, `arrangementProgramTacticReal`, `arrangementProgramOperativeReal`, `fk_type_group`, `period_id`) VALUES (NULL, '33', NOW(), NOW(), '1', '0', '1', '0', '1', '0', '1', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '1');
+
+-- Agregando metodo de calculo del indicador respecto a los hijos
+ALTER TABLE seip_indicator ADD calculationMethod INT NOT NULL;
+ALTER TABLE seip_indicator_audit ADD calculationMethod INT DEFAULT NULL;

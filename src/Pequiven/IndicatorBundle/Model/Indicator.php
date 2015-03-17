@@ -56,6 +56,15 @@ abstract class Indicator implements IndicatorInterface
      */
     const TYPE_DETAIL_DAILY_LOAD_PRODUCTION = 1;
     
+    /**
+     * Metodo de calculo tradicional donde se acumulan las variables
+     */
+    const CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES = 0;
+    /**
+     * Metodo de calculo por promedio de los resultados de cada hijos en sus resultados
+     */
+    const CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN = 1;
+    
     const TYPE_OBJECT = 'indicator';
     
     /**
@@ -86,6 +95,14 @@ abstract class Indicator implements IndicatorInterface
      * @ORM\Column(name="typeDetailValue",type="integer")
      */
     protected $typeDetailValue = self::TYPE_DETAIL_NONE;
+    
+    /**
+     * Metodos de calculo
+     * 
+     * @var integer
+     * @ORM\Column(name="calculationMethod",type="integer")
+     */
+    protected $calculationMethod = self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES;
 
     /**
      * Set indicatorLevel
@@ -223,6 +240,30 @@ abstract class Indicator implements IndicatorInterface
             self::TYPE_DETAIL_DAILY_LOAD_PRODUCTION => 'pequiven_indicator.type_detail.daily_load_production',
         );
         return $labelTypeDetail;
+    }
+    
+    /**
+     * Retorna las etiquetas de cada metodo de calculo
+     * @return type
+     */
+    static function getLabelsCalculationMethod()
+    {
+        return array(
+            self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES => 'pequiven_indicator.calculation_method.accumulation_of_variables',
+            self::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN => 'pequiven_indicator.calculation_method.average_based_number_children',
+        );
+    }
+    
+    /**
+     * 
+     * @return Retorna la etiqueta del meotod de calculo del indicador
+     */
+    public function getLabelCalculationMethod() 
+    {
+        $labels = self::getLabelsCalculationMethod();
+        if(isset($labels[$this->calculationMethod])){
+            return $labels[$this->calculationMethod];
+        }
     }
     
     /**
