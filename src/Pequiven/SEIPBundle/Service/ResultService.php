@@ -1230,7 +1230,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
                 $results = $resultsItems[$i];
-//                var_dump($results);
                 $totalRealChild = 0.0;
                 $totalPlanChild = 0;
                 foreach ($results as $childValueIndicator) {
@@ -1330,9 +1329,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
       
-//        var_dump($formulaParameters);
-//        var_dump($sourceEquationReal);
-//        var_dump($equation_real);
         return array(
             'real' => $equation_real,
             'plan' => $equation_plan,
@@ -1570,8 +1566,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         } elseif($div > $rangeTop && $div < $rangeMiddle){
             $type = CommonObject::TYPE_RANGE_MIDDLE;
         }
-        
-//        var_dump($type.' '.$div.' '.$total.' '.$value);
         
         return $type;
     }
