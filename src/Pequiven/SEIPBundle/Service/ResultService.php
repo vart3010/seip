@@ -391,19 +391,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 
         $formula = $indicator->getFormula();
         if($formula !== null && $indicatorService->validateFormula($formula) === null){
-            $typeOfCalculation = $formula->getTypeOfCalculation();
             if($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_MANUALLY){
-                if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
-                    $this->calculateFormulaSimpleAverage($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
-                    $this->calculateFormulaRealPlanAutomatic($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
-                    $this->calculateFormulaRealAutomatic($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
-                    $this->calculateFormulaAccumulate($indicator);
-                }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                    $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
-                }
+                $this->evaluateIndicatorByFormula($indicator);
             } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC){
                 $this->calculateFormulaRealPlanAutomaticFromChild($indicator);
             } elseif ($indicator->getTypeOfCalculation() == Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC_FROM_EQ){
@@ -524,7 +513,28 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
     }
     
-    
+    /**
+     * Evalua el resultado del indicador de acuerdo al tipo de calculo de la formula
+     * @param Indicator $indicator
+     */
+    private function evaluateIndicatorByFormula(Indicator &$indicator)
+    {
+        $formula = $indicator->getFormula();
+        $typeOfCalculation = $formula->getTypeOfCalculation();
+        if($typeOfCalculation == Formula::TYPE_CALCULATION_SIMPLE_AVERAGE){
+            $this->calculateFormulaSimpleAverage($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+            $this->calculateFormulaRealPlanAutomatic($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AUTOMATIC){
+            $this->calculateFormulaRealAutomatic($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_ACCUMULATE){
+            $this->calculateFormulaAccumulate($indicator);
+        }elseif($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+            $this->calculateFormulaRealPlanAutomaticFromEQ($indicator);
+        }
+    }
+
+
     /**
      * Función que recalcula el resultado para el rango verde
      * @param Indicator $indicator
@@ -1015,10 +1025,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         
         $resultsItems = array();
+        $formula = $indicator->getFormula();
         //Obtener los valores de los hijos
         foreach ($childrens as $child) {
             $i = 0;
-            $formula = $child->getFormula();
             
             foreach ($child->getValuesIndicator() as $valueIndicator) {
                 if(!isset($resultsItems[$i])){
@@ -1069,7 +1079,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
         //Actualizar valores de los resultados del indicador padre.
-        $formula = $indicator->getFormula();
         if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
             $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
             $variableToRealValueName = $formula->getVariableToRealValue()->getName();
@@ -1111,6 +1120,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $valueIndicator->setParameter($variableToRealValueName, $real);
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
+            $valueIndicator->setFormula($formula);
             $i++;
         }
         $indicator
@@ -1175,67 +1185,96 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $variableToPlanValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN;
         $variableToRealValueName = Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL;
         $i = 0;
-
+        $calculationMethod = $indicator->getCalculationMethod();
+        $formulaUsed = $indicator->getFormula();
         foreach ($indicator->getValuesIndicator() as $valueIndicator) 
         {
-            $formulaUsed = $indicator->getFormula();
             $typeOfCalculation = $formulaUsed->getTypeOfCalculation();
-            foreach ($formulaUsed->getVariables() as $variable) 
-            {
-
+            if($calculationMethod == Indicator::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES){
+                foreach ($formulaUsed->getVariables() as $variable) 
+                {
+                    if(isset($resultsItems[$i]) == false){
+                        continue;
+                    }
+                    $nameParameter = $variable->getName();
+                    $valueParameter = $valueIndicator->getParameter($nameParameter,0);
+                    $results = $resultsItems[$i];
+                    if($variable->isFromEQ()){
+                        $now = new \DateTime();
+                        $tool_service = new ToolService();
+                        $parametersForTemplate = array(
+                            'indicator' => $indicator,
+                            'result_number' => ($i + 1),
+                            'date_now' => new \DateTime(),
+                            'tool_service' => $tool_service,
+                            'results' => $results,
+                        );
+                        $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
+                    }else{
+                        if(!$variable->isStaticValue()){
+                            $valueParameter = 0;
+                        }
+                        foreach ($results as $resultItem)
+                        {
+                            $childValueParameter = $resultItem->getParameter($nameParameter,0);
+                            if($childValueParameter !== null)
+                            {
+                                $valueParameter += $childValueParameter;
+                            }
+                        }
+                    }
+//                    var_dump($nameParameter);
+                    $valueIndicator->setParameter($nameParameter,$valueParameter);
+                }
+            }else if($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN){
                 if(isset($resultsItems[$i]) == false){
                     continue;
                 }
-                $nameParameter = $variable->getName();
-                $valueParameter = $valueIndicator->getParameter($nameParameter,0);
                 $results = $resultsItems[$i];
-                if($variable->isFromEQ()){
-                    $now = new \DateTime();
-                    $tool_service = new ToolService();
-                    $parametersForTemplate = array(
-                        'indicator' => $indicator,
-                        'result_number' => ($i + 1),
-                        'date_now' => new \DateTime(),
-                        'tool_service' => $tool_service,
-                    );
-                    $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
-                }else{
-                    if(!$variable->getStaticValue()){
-                        $valueParameter = 0;
-                    }
-                    foreach ($results as $resultItem)
-                    {
-                        $childValueParameter = $resultItem->getParameter($nameParameter,0);
-                        if($childValueParameter !== null)
-                        {
-                            $valueParameter += $childValueParameter;
-                        }
+//                var_dump($results);
+                $totalRealChild = 0.0;
+                $totalPlanChild = 0;
+                foreach ($results as $childValueIndicator) {
+                    $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
+                    $totalRealChild += $value;
+                    $totalPlanChild++;
+                    if($i == 11){
+//                        var_dump( 'Result '.$value.' $formulaUsed = '.$childValueIndicator->getFormula()->getId().' indicator: '.$childValueIndicator->getIndicator()->getRef());
                     }
                 }
-                $valueIndicator->setParameter($nameParameter,$valueParameter);
-            }
-            if($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
-                $i++;
-                $resultItem = $this->getFormulaResultFromEQ($formulaUsed, $valueIndicator->getFormulaParameters());
-                if($details){
-                    if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
-                        continue;
-                    }
+//                $variableToPlanValueName
+//                $variableToRealValueName
+                if($i == 11){
+//                    var_dump('Total real '.$totalRealChild);
+//                    var_dump('Total plan '.$totalPlanChild);
+//                    
                 }
-                $totalPlan += $resultItem['plan'];
-                $totalReal += $resultItem['real'];
-            }else{
-                $totalPlan += $valueIndicator->getParameter($variableToPlanValueName);
-                $totalReal += $valueIndicator->getParameter($variableToRealValueName);
+                $valueIndicator->setParameter($variableToPlanValueName,$totalPlanChild);
+                $valueIndicator->setParameter($variableToRealValueName,$totalRealChild);
             }
-//            die();
+            $i++;
+//            if($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
+//                $resultItem = $this->getFormulaResultFromEQ($formulaUsed, $valueIndicator->getFormulaParameters());
+//                if($details){
+//                    if($details->getSourceResult() == Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+//                        continue;
+//                    }
+//                }
+//                $totalPlan += $resultItem['plan'];
+//                $totalReal += $resultItem['real'];
+//            }else{
+//                $totalPlan += $valueIndicator->getParameter($variableToPlanValueName);
+//                $totalReal += $valueIndicator->getParameter($variableToRealValueName);
+//            }
             
             $value = $indicatorService->calculateFormulaValue($formulaUsed, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($value);
         }
-        $indicator
-            ->setTotalPlan($totalPlan)
-            ->setValueFinal($totalReal);
+        $this->evaluateIndicatorByFormula($indicator);
+//        $indicator
+//            ->setTotalPlan($totalPlan)
+//            ->setValueFinal($totalReal);
 //        die;
     }
     

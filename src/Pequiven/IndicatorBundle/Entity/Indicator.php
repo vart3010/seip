@@ -124,7 +124,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Formula
      * @var \Pequiven\MasterBundle\Entity\Formula
-     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula")
+     * @ORM\ManyToOne(targetEntity="\Pequiven\MasterBundle\Entity\Formula",inversedBy="indicators")
      * @ORM\JoinColumn(name="fk_formula", referencedColumnName="id")
      */
     private $formula;
@@ -1231,5 +1231,28 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     public function getDescriptionWithStrPad($pad_length){
         return str_pad($this->description, $pad_length, ' ',STR_PAD_RIGHT);
+    }
+
+    /**
+     * Set calculationMethod
+     *
+     * @param integer $calculationMethod
+     * @return Indicator
+     */
+    public function setCalculationMethod($calculationMethod)
+    {
+        $this->calculationMethod = $calculationMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get calculationMethod
+     *
+     * @return integer 
+     */
+    public function getCalculationMethod()
+    {
+        return $this->calculationMethod;
     }
 }

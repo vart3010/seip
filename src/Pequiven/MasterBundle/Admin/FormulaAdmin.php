@@ -36,6 +36,7 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
             ->add('sourceEquationPlan',null,array(
                 'label' => 'Source Equation Plan (equation_plan)'
             ))
+            ->add('indicators')
             ;
         
     }
