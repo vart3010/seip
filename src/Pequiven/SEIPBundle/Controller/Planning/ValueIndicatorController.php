@@ -124,6 +124,7 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 'valueIndicator' => $valueIndicator
             ))
         ;
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $view;
     }
     
