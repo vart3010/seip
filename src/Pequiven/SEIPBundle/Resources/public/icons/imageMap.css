@@ -11,9 +11,9 @@ and open the template in the editor.
 /*.imageMap {width:100%; position:relative; margin-bottom:200px;}*/
 /*.imageMap img {display:block; width:100%; border-radius:20px;}*/
 /*.imageMap .hotspots {width:100%; height:100%; position:absolute; left:0; top:0; visibility:hidden;}*/
-.imageMap a:hover {display:block; position:absolute; background:#000; z-index:100; opacity:0.2; filter: alpha(opacity=20); border:1px solid transparent; border-radius:10px;}
+/*.imageMap a:hover {display:block; position:absolute; background:#000; z-index:100; opacity:0.2; filter: alpha(opacity=20); border:1px solid transparent; border-radius:10px;}
 .imageMap a.shape_line {
-}
+}*/
 /*.imageMap a.p2 {left:76%; top:13%; width:21%; height:30%;}
 .imageMap a.p3 {left:5%; top:44%; width:22%; height:42%;}
 .imageMap a.p4 {left:28%; top:41%; width:26.5%; height:43%;}
