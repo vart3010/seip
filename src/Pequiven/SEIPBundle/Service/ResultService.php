@@ -375,7 +375,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
-        
+        $em = $this->getDoctrine()->getManager();
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -399,7 +399,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaAutomaticFromEQFromChild($indicator);
             }
         }
-        
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+            $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $valueIndicator->getFormulaParameters());
+            $valueIndicator->setValueOfIndicator($valueOfIndicator);
+            $em->persist($valueIndicator);
+        }
         $indicator->updateLastDateCalculateResult();
         
         $tendenty = $indicator->getTendency();
@@ -520,8 +524,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         
         $indicator->setResult($result - $amountPenalty);
-        
-        $em = $this->getDoctrine()->getManager();
         
         $em->persist($indicator);
         $em->persist($details);
