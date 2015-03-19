@@ -29,8 +29,11 @@ class IndicatorService implements ContainerAwareInterface
      * @param array $data
      * @return int
      */
-    public function calculateFormulaValue(Formula $formula,array $data) 
+    public function calculateFormulaValue(Formula $formula,$data) 
     {
+        if(!is_array($data)){
+            $data = array();
+        }
         $variables = $formula->getVariables();
         foreach ($variables as $variable) {
             $name = $variable->getName();
