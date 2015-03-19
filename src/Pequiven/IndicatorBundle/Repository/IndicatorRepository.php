@@ -436,13 +436,13 @@ class IndicatorRepository extends EntityRepository {
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
-        $sorting = new \Doctrine\Common\Collections\ArrayCollection($sorting);
+//        $sorting = new \Doctrine\Common\Collections\ArrayCollection($sorting);
+//        
+//        if(($sortByResultReal = $sorting->remove('resultReal')) !== null){
+//            $queryBuilder->orderBy("i.resultReal",  strtoupper($sortByResultReal));
+//        }
         
-        if(($sortByResultReal = $sorting->remove('resultReal')) !== null){
-            $queryBuilder->orderBy("i.resultReal",  strtoupper($sortByResultReal));
-        }
-        
-        parent::applySorting($queryBuilder, $sorting->toArray());
+        parent::applySorting($queryBuilder, $sorting);
     }
     
     protected function getAlias() {
