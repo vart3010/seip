@@ -399,6 +399,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaAutomaticFromEQFromChild($indicator);
             }
         }
+        //Refrescando los valores de cada resultado del indicador
         foreach ($indicator->getValuesIndicator() as $valueIndicator) {
             $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $valueIndicator->getFormulaParameters());
             $valueIndicator->setValueOfIndicator($valueOfIndicator);
