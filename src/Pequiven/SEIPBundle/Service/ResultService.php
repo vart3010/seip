@@ -385,6 +385,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $details
                 ->setPreviusValue($previusValue)
                 ;
+        if($indicator->getFrequencyNotificationIndicator() === null){
+            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada.',(string)$indicator));
+        }
         
         $indicatorService = $this->getIndicatorService();
         $arrangementRangeService = $this->getArrangementRangeService();
