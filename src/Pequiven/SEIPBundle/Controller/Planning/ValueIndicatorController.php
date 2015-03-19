@@ -214,7 +214,11 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
             $template = 'PequivenSEIPBundle:Planning:Indicator/ValueIndicator/Detail/productDetailDailyMonth.html.twig';
         }
         if ($this->config->isApiRequest()) {
-            $data = $dataApi;
+            $data = array(
+            "success" => true,
+                "text" =>  "Root",
+                "children"=> $this->getStructureTree($dataApi),
+            );
         }
         $view = $this
             ->view()
@@ -223,6 +227,46 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         ;
         $view->getSerializationContext()->setGroups($groupSerialization);
         return $view;
+    }
+    
+    private function getStructureTree($objects,$limitCurrentLevel = 0) 
+    {
+        $tree = array();
+        foreach ($objects as $child) {
+           $tree[] = $this->getLeaf($child,$limitCurrentLevel);
+        }
+        return $tree;
+    }
+    
+    private function getLeaf(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $item,$limitCurrentLevel)
+    {
+        $expanded = true;
+//        , 'product'
+        $serializationContext = \JMS\Serializer\SerializationContext::create()->setGroups(array('id','api_list'));
+        $child = json_decode($this->getSerializer()->serialize($item, 'json',$serializationContext),true);
+//        $child = array(
+//            'id' => $item->getId(),
+//            'name' => $item->getProduct()->getName(),
+//        );
+        $child['name'] = $item->getProduct()->getName();
+//        $child['leaf'] = true;
+        $child['iconCls'] = "task-folder";
+        $child['parentId'] = null;
+        
+        if(count($item->getComponents()) > 0){
+            $child['parentId'] = $item->getId();
+            $limitLevel = 5;
+            if($limitCurrentLevel < $limitLevel){
+                $child['expanded'] = true;
+                $child['children'] = $this->getStructureTree($item->getComponents(), ($limitCurrentLevel+1));
+            }else{
+                $child['expanded'] = false;
+            }
+            $child['leaf'] = false;
+        }else{
+            $child['expanded'] = false;
+        }
+        return $child;
     }
     
     /**
@@ -307,5 +351,14 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
     private function getUnitConverter()
     {
         return $this->container->get('tecnocreaciones_tools.unit_converter');
+    }
+    
+    /**
+     * 
+     * @return \JMS\Serializer\Serializer
+     */
+    private function getSerializer()
+    {
+        return $this->container->get('jms_serializer');
     }
 }

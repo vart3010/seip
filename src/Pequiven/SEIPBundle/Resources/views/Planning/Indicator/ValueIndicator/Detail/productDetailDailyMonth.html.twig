@@ -3,10 +3,26 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block stylesheet %}
-    {{ parent() }}
     
     {#<link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">#}
-    
+    <style>
+        .x-grid-tree-node-expanded .x-tree-icon-parent {
+{#            background-image: none;#}
+        }
+        .x-panel-header-default {
+            background-color: #bd0000;
+            background-image: none;
+            border: 2px solid #e60101;
+        }
+        #title-1025-textEl {
+            color: #ffffff;
+        }
+        .x-panel-header-default-top {
+            -webkit-box-shadow: #f42a41 0 1px 0 0 inset;
+            -moz-box-shadow: #f42a41 0 1px 0 0 inset;
+            box-shadow: #f42a41 0 1px 0 0 inset;
+        }
+    </style>
 {% endblock %}
 
 {% block javascript %}
@@ -16,6 +32,7 @@
             'Ext.grid.*',
             'Ext.layout.container.Border',
             'Ext.data.*',
+            'Ext.tree.*',
             'Ext.form.field.Number',
             'Ext.form.field.Date',
             'Ext.tip.QuickTipManager'
@@ -32,21 +49,338 @@
         }
         
         Ext.onReady(function(){
-            var store = Ext.create('Ext.data.Store', {
+            Ext.define("ProductDetailDailyMonth", {
+                extend: "Ext.data.TreeModel",
+                idProperty: "id",
+                fields: [
+                    {
+                            name: "id",            
+                            type: "int",            
+                            useNull: true,            
+                            persist: false            
+                    },
+                    {
+                            name: null,            
+                            type: "int",            
+                            useNull: true            
+                    },
+                    {
+                            name: "month",            
+                            type: "int"            
+                    },
+                    {
+                            name: "totalPlan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "totalReal",            
+                            type: "float"            
+                    },
+                    {
+                            name: "percentaje",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day1Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day1Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day2Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day2Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day3Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day3Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day4Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day4Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day5Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day5Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day6Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day6Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day7Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day7Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day8Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day8Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day9Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day9Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day10Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day10Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day11Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day11Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day12Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day12Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day13Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day13Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day14Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day14Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day15Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day15Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day16Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day16Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day17Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day17Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day18Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day18Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day19Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day19Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day20Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day20Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day21Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day21Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day22Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day22Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day23Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day23Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day24Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day24Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day25Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day25Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day26Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day26Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day27Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day27Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day28Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day28Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day29Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day29Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day30Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day30Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day31Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day31Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "productName",            
+                            type: "string",            
+                            mapping: "product.name"            
+                    },
+                    {
+                            name: "productTypeOf",            
+                            type: "string",            
+                            mapping: "product.typeOf"            
+                    },
+                    {
+                            name: "enabled",            
+                            type: "boolean"            
+                    },
+                    {
+                            name: "createdAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    },
+                    {
+                            name: "updatedAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    },
+                    {
+                            name: "deletedAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    }
+                ],
+                proxy: {"type":"rest","url":"/api/indicator-value/product-detail-daily-month","format":"json","writer":{"type":"json","writeRecordId":false}}
+            });
+            
+            var store = Ext.create('Ext.data.TreeStore', {
+                {#model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',#}
+                model: 'ProductDetailDailyMonth',
                 autoLoad: true,
                 autoSync: true,
-                model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',
-                groupField: 'productTypeOf',
-{#                groupers: ['productTypeOf','id'],#}
                 proxy: {
-                    type: 'rest',
+                    type: 'ajax',
                     url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
-                    reader: {
-                        type: 'json',
-                        rootProperty: 'data'
-                    },
-                    writer: {
-                        type: 'json'
+                    api: {
+                        create: 'createPersons',
+                        read: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
+{#                        read: 'http://localhost/symfony/seip/web/app_dev.php/pre-planning/get-pre-planning?level=3&nodeRoot=1&referral=import&_dc=1426780350108&node=root',#}
+                        update: 'updatePersons',
+                        destroy: 'destroyPerson'
                     },
                     actionMethods: {
                         update: 'POST'
@@ -81,7 +415,7 @@
                 minValue: 0
             };
             
-            var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
+            {#var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
                  id: 'group',
                  ftype: 'groupingsummary',
                  groupHeaderTpl: '{[groupParseToString(values)]}',
@@ -103,35 +437,39 @@
                 lockedViewConfig: {
                     scroll: 'horizontal'
                 },
+                
+            });#}
+            
+            //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
+            var tree = Ext.create('Ext.tree.Panel', {
+                title: 'Produccion diaria',
+                width: 1000,
+                height: 600,
+                renderTo: 'tree-summary',
+                collapsible: false,
+                useArrows: true,
+                rootVisible: false,
+                store: store,
+                multiSelect: true,
+                selType: 'cellmodel',
+                plugins: [cellEditing],
                 columns: [
                 {
                     text: '{{ 'Productos y Servicios'|trans }}',
                     flex: 1,
                     locked: true,
                     sortable: false,
-
-                    // This may have wrapped HTML which causes unpredictable row heights
-                    variableRowHeight: true,
-                    hideable: false,
                     columns:[
                         {
-                            text: 'Nro',
-                            width: 30,
-                            sortable: true,
-                            locked: true,
-                            renderer: function (v, meta, rec, rowIndex) {
-                                return ++rowIndex;
-                            }
-                        },{
+                            xtype: 'treecolumn', //this is so we know which column will show the tree
                             text: '{{ "pequiven.name"|trans({},"messages") }}',
                             flex: 1,
                             width: 200,
-                            sortable: true,
-                            variableRowHeight: true,
-                            dataIndex: 'productName',
-                            locked: true,
-                            hideable: false
-                        },{
+                            sortable: false,
+                            dataIndex: 'name',
+{#                            locked: true,#}
+                        },
+                        {
                             text: '{{ 'pequiven_seip.cumulative'|trans }}',
                             locked: true,
                             columns: [
@@ -173,11 +511,12 @@
                     }
                 ]
             });
-        });
+            
+        });//Fin on ready
     </script>
     
 {% endblock %}
 
 {% block content %}
-    <div id="grid-summary"></div>
+    <div id="tree-summary"></div>
 {% endblock content %}

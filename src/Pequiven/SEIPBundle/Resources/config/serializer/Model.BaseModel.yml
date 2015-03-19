@@ -3,7 +3,7 @@ Pequiven\SEIPBundle\Model\BaseModel:
     properties:
         createdAt:
             expose: true
-            groups: [api_list]
+            groups: [api_details]
         updatedAt:
             expose: true
-            groups: [api_list]
+            groups: [api_details]
