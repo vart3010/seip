@@ -441,6 +441,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($value, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
                     }
                 } else{
                     $result = 0;
@@ -476,6 +479,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
 //                        $result = 0;
                     }
                 } else{
@@ -494,19 +500,23 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 if($indicator->hasNotification()){
                     if($this->calculateRangeGood($indicator,$tendenty)){//Rango Verde R*100% (Máximo 100)
                           $result = $this->recalculateResultByRange($indicator,$tendenty);
+                          if($result > 100){
+                              $result = 100;
+                          }
                     } else if($this->calculateRangeMiddle($indicator,$tendenty)){//Rango Medio R*50%
                         $result = $this->recalculateResultByRange($indicator,$tendenty);
-                        $result = 100 - $result;
                         $varMulti = 10*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
 //                        $result = $result / 2;
                     } else if($this->calculateRangeBad($indicator,$tendenty)){//Rango Rojo R*0%
                         $result = $this->recalculateResultByRange($indicator,$tendenty);
-                        $result = 100 - $result;
                         $varMulti = 20*$result;
                         $varDiv = bcdiv($varMulti, 100, 2);
                         $result = bcsub($result, $varDiv, 2);
+                        if($result < 0){
+                            $result = 0;
+                        }
 //                        $result = 0;
                     }
                 } else{
@@ -522,7 +532,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($indicator->isCouldBePenalized() && ($periodService->isPenaltyInResult($lastNotificationAt) === true || $indicator->isForcePenalize() === true)){
             $amountPenalty = $periodService->getPeriodActive()->getPercentagePenalty();
         }
-        
+        if($result == 0){
+            $amountPenalty = 0;
+        }
         $indicator->setResult($result - $amountPenalty);
         
         $em->persist($indicator);
@@ -530,7 +542,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         if($andFlush){
             $em->flush();
         }
-        
         $objetives = $indicator->getObjetives();
         
         $this->updateResultOfObjects($objetives);
