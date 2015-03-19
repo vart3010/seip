@@ -36,3 +36,10 @@ INSERT INTO `seip`.`seip_monitor` (`id`, `fk_gerencia`, `created_at`, `updated_a
 -- Agregando metodo de calculo del indicador respecto a los hijos
 ALTER TABLE seip_indicator ADD calculationMethod INT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD calculationMethod INT DEFAULT NULL;
+
+-- Agregando Etiquetas del Indicador
+CREATE TABLE seip_indicator_tag (id INT AUTO_INCREMENT NOT NULL, indicator_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, description VARCHAR(300) DEFAULT NULL, equationReal LONGTEXT NOT NULL, typeTag  INT NOT NULL, typeCalculationTag INT NOT NULL, valueOfTag DOUBLE PRECISION NOT NULL, textOfTag VARCHAR(300) DEFAULT NULL, `show` TINYINT(1) NOT NULL, deletedAt DATETIME DEFAULT NULL, createdBy_id INT NOT NULL, updatedBy_id INT DEFAULT NULL, INDEX IDX_A12328E23174800F (createdBy_id), INDEX IDX_A12328E265FF1AEC (updatedBy_id), INDEX IDX_A12328E24402854A (indicator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E23174800F FOREIGN KEY (createdBy_id) REFERENCES seip_user (id);
+ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E265FF1AEC FOREIGN KEY (updatedBy_id) REFERENCES seip_user (id);
+ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E24402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id);
+
