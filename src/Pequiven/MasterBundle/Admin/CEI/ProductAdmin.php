@@ -44,7 +44,7 @@ class ProductAdmin extends BaseAdmin
         $form
             ->add('name')
             ->add('components','sonata_type_model_autocomplete',array(
-                'property' => array('name'),
+                'property' => 'name',
                 'multiple' => true,
                 'required' => false,
                 'callback' => function (ProductAdmin $admin, $property, $value){
@@ -55,6 +55,7 @@ class ProductAdmin extends BaseAdmin
                         ->andWhere($alias.'.enabled = :enabled')
                         ->setParameter('enabled', true)
                         ->andWhere($alias.'.typeOf = :typeOf')
+                        ->andWhere($qb->expr()->like($alias.'.name',"'%".$value."%'"))
                         ->setParameter('typeOf', Product::TYPE_PRODUCT)
                         ;
                 },
