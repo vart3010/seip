@@ -1369,7 +1369,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 if(isset($formulaParameters[$name])){
                     $$name = $value;
                 }
-            }
         }
         @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
