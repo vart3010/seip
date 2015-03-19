@@ -386,7 +386,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 ->setPreviusValue($previusValue)
                 ;
         if($indicator->getFrequencyNotificationIndicator() === null){
-            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada.',(string)$indicator));
+            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada. #%s',(string)$indicator,$indicator->getId()));
         }
         
         $indicatorService = $this->getIndicatorService();
