@@ -3,6 +3,11 @@
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/imageMap.css') }}">
+{% endblock %}
+
 {% block body %}
     <br/>
     {% if is_granted('ROLE_PREVIOUS_ADMIN') %}

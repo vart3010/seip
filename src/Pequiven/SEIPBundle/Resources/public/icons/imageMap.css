@@ -1,0 +1,58 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16/03/2015, 01:46:48 PM
+    Author     : matias
+*/
+
+/*.imageMap {width:100%; position:relative; margin-bottom:200px;}*/
+/*.imageMap img {display:block; width:100%; border-radius:20px;}*/
+/*.imageMap .hotspots {width:100%; height:100%; position:absolute; left:0; top:0; visibility:hidden;}*/
+/*.imageMap a:hover {display:block; position:absolute; background:#000; z-index:100; opacity:0.2; filter: alpha(opacity=20); border:1px solid transparent; border-radius:10px;}
+.imageMap a.shape_line {
+}*/
+/*.imageMap a.p2 {left:76%; top:13%; width:21%; height:30%;}
+.imageMap a.p3 {left:5%; top:44%; width:22%; height:42%;}
+.imageMap a.p4 {left:28%; top:41%; width:26.5%; height:43%;}
+.imageMap a.p5 {left:55%; top:64%; width:15%; height:26%;}
+.imageMap a.p6 {left:72%; top:53%; width:25%; height:35%;}*/
+/*.imageMap a + p {position:absolute; left:0%; top:102%; width:100%; color:#000; display:none;}*/
+
+/*.imageMap:hover .hotspots {visibility:visible;}*/
+
+/*.imageMap .hotspots div:hover b {width:0; padding:0;}
+.imageMap .hotspots div:hover p {display:block;}*/
+/*.imageMap .hotspots div:hover a {background:#fff; z-index:100; opacity:0.3; filter: alpha(opacity=30); border:1px solid #000;}*/
+
+
+/*.imagewrap {display:block; position:relative; width:750px; height:600px; margin:40px auto; z-index:100;}
+.backer {display:block; width:750px; height:600px; background:url(/menu/animalmap/animalDefault.png); position:absolute; left:0; top:0; z-index:-1;}
+.backer:after {display:block; width:250px; background:#fff; border-radius:10px; box-shadow:2px 2px 5px rgba(0,0,0,0.4); position:absolute; left:280px; top:50px; padding:15px; font:normal 14px/18px 'latomedium', arial, sans-serif; color:#000;}
+.imageMap {border:0; display:block; position:absolute; left:0; top:0; z-index:100;}
+#animalmap {display:block; position:relative;}*/
+area {display:block;}
+
+/*area:hover ~ span:before {display:block; width:750px; height:600px; position:absolute; left:0; top:0;}*/
+/*area:nth-of-type(1):hover ~ span:before {content:url(animalmap/monkeyPanel.png);}
+area:nth-of-type(2):hover ~ span:before {content:url(animalmap/vulturePanel.png);}
+area:nth-of-type(3):hover ~ span:before {content:url(animalmap/tigerPanel.png);}
+area:nth-of-type(4):hover ~ span:before {content:url(animalmap/snakePanel.png);}
+area:nth-of-type(5):hover ~ span:before {content:url(animalmap/zebraPanel.png);}
+area:nth-of-type(6):hover ~ span:before {content:url(animalmap/ostrichPanel.png);}
+area:nth-of-type(7):hover ~ span:before {content:url(animalmap/ostrichPanel.png);}*/
+
+/*area:nth-of-type(1):hover ~ span:after {content:"Monkeys are generally considered to be intelligent. Unlike apes, monkeys usually have tails.";}
+area:nth-of-type(2):hover ~ span:after {content:"A particular characteristic of many vultures is a bald head, devoid of normal feathers.";}
+area:nth-of-type(3):hover ~ span:after {content:"Tigers are among the most recognisable and popular of the world's charismatic megafauna. They have featured prominently in ancient mythology and folklore.";}
+area:nth-of-type(4):hover ~ span:after {content:"Snakes are elongate, legless, carnivorous reptiles of the suborder Serpentes that can be distinguished from legless lizards by their lack of eyelids and external ears.";}
+area:nth-of-type(5):hover ~ span:after {content:"Zebras are several species of African equids (horse family) united by their distinctive black and white stripes. Their stripes come in different patterns, unique to each individual.";}
+area:nth-of-type(6):hover ~ span:after {content:"The ostrich is farmed around the world, particularly for its feathers, which are decorative and are also used as feather dusters.";}
+area:nth-of-type(7):hover ~ span:after {content:"The ostrich is farmed around the world, particularly for its feathers, which are decorative and are also used as feather dusters.";}*/
+
+/* for IE10+ to display the full image map */
+/*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.backer {display:block; width:750px; height:600px; background:url(animalmap/ie.jpg); position:absolute; left:0; top:0; z-index:-1;}
+}*/

@@ -1,9 +1,15 @@
 <div class="with-padding">
     <div class="columns">
-        <div class="twelve-columns four-columns-tablet six-columns-mobile" {#style="max-width:100%; margin-bottom: -3px; margin-top: 4px"#} style="display:inline-block;" >
+        <div class="twelve-columns four-columns-tablet six-columns-mobile imageMap" {#style="max-width:100%; margin-bottom: -3px; margin-top: 4px"#} style="display:inline-block;" >
         {#    <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />#}
-            <div style="text-align: center;">
-                <img width="50%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}" />
+            <div style="text-align: center;" {#class="hotspots"#}>
+                <img width="50%" height="50%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}" {#usemap="#linemap"#} />
+                {#<div>
+                    <a href="#line" class="circle_logo_line" aria-haspopup="false"></a>
+                </div>#}
+                {#<map name="linemap">
+                  <area shape="circle" coords="233,234,150" href="#lines" >
+                </map>#}
             </div>
         </div>
     </div>
