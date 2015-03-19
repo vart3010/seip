@@ -244,7 +244,7 @@ class IndicatorController extends ResourceController
                 ->setTemplate($this->config->getTemplate('listError.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula','resultIndicator'));
         if ($request->get('_format') == 'html') {
             $labelsSummary = array();
             foreach (Indicator::getLabelsSummary() as $key => $value) {

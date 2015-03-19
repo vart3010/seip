@@ -86,6 +86,12 @@
                             <td data-title="'{{ 'pequiven_indicator.indicators'|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
                                 <a href="{$ result._links.self.href $}">{$ result.ref+result.description $} {#({$ result.gerenciaSecond $})#}</a>
                             </td>
+                            <td data-title="Aporte">
+                                <a href="{$ result._links.self.href $}">{$ result.progressToDate|myNumberFormat $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
+                            <td data-title="Medición">
+                                <a href="{$ result._links.self.href $}">{$ result.resultReal|myNumberFormat $} {#({$ result.gerenciaSecond $})#}</a>
+                            </td>
                             <td data-title="'{{ 'pequiven_indicator.error'|trans }}'">
                                 <a href="{$ result._links.self.href $}">{$ result.errorText $} {#({$ result.gerenciaSecond $})#}</a>
                             </td>
