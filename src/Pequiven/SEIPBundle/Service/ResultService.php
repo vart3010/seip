@@ -375,7 +375,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     public function refreshValueIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicator,$andFlush = true)
     {
-        
+        $em = $this->getDoctrine()->getManager();
         $details = $indicator->getDetails();
         if(!$details){
             $details = new \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorDetails();
@@ -385,6 +385,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $details
                 ->setPreviusValue($previusValue)
                 ;
+        if($indicator->getFrequencyNotificationIndicator() === null){
+            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada. #%s',(string)$indicator,$indicator->getId()));
+        }
         
         $indicatorService = $this->getIndicatorService();
         $arrangementRangeService = $this->getArrangementRangeService();
@@ -399,7 +402,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaAutomaticFromEQFromChild($indicator);
             }
         }
-        
+        foreach ($indicator->getValuesIndicator() as $valueIndicator) {
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            if(is_array($formulaParameters)){
+                $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $formulaParameters);
+                $valueIndicator->setValueOfIndicator($valueOfIndicator);
+                $em->persist($valueIndicator);
+            }
+        }
         $indicator->updateLastDateCalculateResult();
         
         $tendenty = $indicator->getTendency();
@@ -532,8 +542,6 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $amountPenalty = 0;
         }
         $indicator->setResult($result - $amountPenalty);
-        
-        $em = $this->getDoctrine()->getManager();
         
         $em->persist($indicator);
         $em->persist($details);
@@ -1076,8 +1084,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
                         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                        $plan = $formulaParameters[$variableToPlanValueName];
-                        $real = $formulaParameters[$variableToRealValueName];
+                        if(isset($formulaParameters[$variableToPlanValueName])){
+                            $plan = $formulaParameters[$variableToPlanValueName];
+                        }
+                        if(isset($formulaParameters[$variableToRealValueName])){
+                            $real = $formulaParameters[$variableToRealValueName];
+                        }
                     }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
                         $plan = $result['plan'];
@@ -1320,6 +1332,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN, $resultItem['plan']);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL, $resultItem['real']);
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
@@ -1356,7 +1370,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
-        
+        if(!is_array($formulaParameters)){
+            $formulaParameters = array();
+        }
         foreach ($formulaParameters as $name => $value) {
                 $$name = 0;
                 if(isset($formulaParameters[$name])){
