@@ -401,9 +401,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         }
         //Refrescando los valores de cada resultado del indicador
         foreach ($indicator->getValuesIndicator() as $valueIndicator) {
-            $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $valueIndicator->getFormulaParameters());
-            $valueIndicator->setValueOfIndicator($valueOfIndicator);
-            $em->persist($valueIndicator);
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            if(is_array($formulaParameters)){
+                $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $formulaParameters);
+                $valueIndicator->setValueOfIndicator($valueOfIndicator);
+                $em->persist($valueIndicator);
+            }
         }
         $indicator->updateLastDateCalculateResult();
         
@@ -1359,12 +1362,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
         
-        foreach ($formulaParameters as $name => $value) {
+        if(is_array($formulaParameters)){
+            foreach ($formulaParameters as $name => $value) {
                 $$name = 0;
                 if(isset($formulaParameters[$name])){
                     $$name = $value;
                 }
             }
+        }
         @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
       
