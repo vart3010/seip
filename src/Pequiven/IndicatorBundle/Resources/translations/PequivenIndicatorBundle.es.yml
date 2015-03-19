@@ -6,6 +6,8 @@ pequiven_indicator:
     indicatorsWithoutError: Indicadores sin errores
     indicatorsWithoutErrorText: Nada que reseñar
     error: Error
+    measuring: Medición
+    contributionToTheObjective: Aporte al Objetivo
     add: Añadir
     list: Lista
     strategic: Estratégico

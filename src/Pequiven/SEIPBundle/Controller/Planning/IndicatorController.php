@@ -217,7 +217,7 @@ class IndicatorController extends ResourceController
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
-                    $repository, 'createPaginatorByLevel', array($criteria, $sorting)
+                    $repository, 'createPaginatorForAll', array($criteria, $sorting)
             );
 
             $maxPerPage = $this->config->getPaginationMaxPerPage();
@@ -244,7 +244,7 @@ class IndicatorController extends ResourceController
                 ->setTemplate($this->config->getTemplate('listError.html'))
                 ->setTemplateVar($this->config->getPluralResourceName())
         ;
-        $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read','formula','resultIndicator'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','api_details','sonata_api_read','resultIndicator','tendency'));
         if ($request->get('_format') == 'html') {
             $labelsSummary = array();
             foreach (Indicator::getLabelsSummary() as $key => $value) {

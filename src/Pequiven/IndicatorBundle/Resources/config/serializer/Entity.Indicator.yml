@@ -61,3 +61,6 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         resultReal:
             expose: true
             groups: [resultIndicator]
+        arrangementRange:
+            expose: true
+            groups: [arrangementRange]

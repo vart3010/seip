@@ -104,6 +104,18 @@ class IndicatorRepository extends EntityRepository {
     }
     
     /**
+     * Crea un paginador para la vista de todos los indicadores, sin importar su nivel
+     * 
+     * @param array $criteria
+     * @param array $orderBy
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    function createPaginatorForAll(array $criteria = null, array $orderBy = null) {
+        $criteria['for_view'] = true;
+        return $this->createPaginator($criteria, $orderBy);
+    }
+    
+    /**
      * Crea un paginador para los indicadores estratégicos
      * 
      * @param array $criteria
@@ -342,6 +354,12 @@ class IndicatorRepository extends EntityRepository {
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('i.description', "'%".$description."%'"),$queryBuilder->expr()->like('i.ref', "'%".$description."%'")));
         }
         
+        //Filtro por Tendencia
+        if(($tendency = $criteria->remove('tendency')) !== null){
+            $queryBuilder->innerJoin('i.tendency', 't');
+            $queryBuilder->andWhere($queryBuilder->expr()->like('t.description', "'%".$tendency."%'"));
+        }
+        
         //Filtro nivel del Indicador
         if(($level = $criteria->remove('indicatorLevel')) !== null){
             if($level > IndicatorLevel::LEVEL_ESTRATEGICO){
@@ -418,7 +436,13 @@ class IndicatorRepository extends EntityRepository {
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {
-        parent::applySorting($queryBuilder, $sorting);
+        $sorting = new \Doctrine\Common\Collections\ArrayCollection($sorting);
+        
+        if(($sortByResultReal = $sorting->remove('resultReal')) !== null){
+            $queryBuilder->orderBy("i.resultReal",  strtoupper($sortByResultReal));
+        }
+        
+        parent::applySorting($queryBuilder, $sorting->toArray());
     }
     
     protected function getAlias() {
