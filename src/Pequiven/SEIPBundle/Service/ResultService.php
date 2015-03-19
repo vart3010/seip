@@ -400,9 +400,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             }
         }
         foreach ($indicator->getValuesIndicator() as $valueIndicator) {
-            $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $valueIndicator->getFormulaParameters());
-            $valueIndicator->setValueOfIndicator($valueOfIndicator);
-            $em->persist($valueIndicator);
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            if(is_array($formulaParameters)){
+                $valueOfIndicator = $indicatorService->calculateFormulaValue($formula, $formulaParameters);
+                $valueIndicator->setValueOfIndicator($valueOfIndicator);
+                $em->persist($valueIndicator);
+            }
         }
         $indicator->updateLastDateCalculateResult();
         
@@ -1357,7 +1360,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
-        
+        if(!is_array($formulaParameters)){
+            $formulaParameters = array();
+        }
         foreach ($formulaParameters as $name => $value) {
                 $$name = 0;
                 if(isset($formulaParameters[$name])){
