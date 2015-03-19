@@ -1361,9 +1361,10 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $indicatorService = $this->getIndicatorService();
         $sourceEquationPlan = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationPlan());
         $sourceEquationReal = $indicatorService->parseFormulaVars($formula,$formula->getSourceEquationReal());
-        
-        if(is_array($formulaParameters)){
-            foreach ($formulaParameters as $name => $value) {
+        if(!is_array($formulaParameters)){
+            $formulaParameters = array();
+        }
+        foreach ($formulaParameters as $name => $value) {
                 $$name = 0;
                 if(isset($formulaParameters[$name])){
                     $$name = $value;
