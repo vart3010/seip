@@ -552,6 +552,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $this->updateResultOfObjects($objetives);
         
+        $indicatorService->updateTagIndicator($indicator);
+        
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }

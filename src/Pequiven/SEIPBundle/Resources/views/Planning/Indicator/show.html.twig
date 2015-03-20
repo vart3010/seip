@@ -194,6 +194,13 @@
             {% endif %}
         </div>
     </fieldset>
+    {% if indicator.tagsIndicator|length > 0 %}    
+        <br /><br />
+        <fieldset class="fieldset">
+            <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans) }}&nbsp;</legend>
+            {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+        </fieldset>
+    {% endif %}
         <br /><br />
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
         <br /><br />

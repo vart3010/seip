@@ -416,6 +416,26 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
+     * 
+     * @param Indicator $indicator
+     */
+    public function updateTagIndicator(Indicator &$indicator){
+        $em = $this->getDoctrine()->getManager();
+        
+        foreach($indicator->getTagsIndicator() as $tagIndicator){
+            if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_VALUE_FROM_EQUATION){
+                $parametersForTemplate = array(
+                    'indicator' => $indicator,
+                );
+                $valueTag = trim($this->renderString($tagIndicator->getEquationReal(),$parametersForTemplate));
+                $tagIndicator->setValueOfTag($valueTag);
+                $em->persist($tagIndicator);
+                $em->flush();
+            }
+        }
+    }
+    
+    /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */
@@ -472,5 +492,19 @@ class IndicatorService implements ContainerAwareInterface
         }
 
         return $this->container->get('doctrine');
+    }
+    
+    /**
+     * Renders a string view.
+     *
+     * @param string   $view       The view name
+     * @param array    $parameters An array of parameters to pass to the view
+     * @param Response $response   A response instance
+     *
+     * @return String twig
+     */
+    private function renderString($string, array $parameters = array())
+    {
+        return $this->container->get('app.twig_string')->render($string, $parameters);
     }
 }
