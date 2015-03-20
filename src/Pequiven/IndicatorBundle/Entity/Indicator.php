@@ -297,6 +297,21 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $valueIndicatorConfig;
     
     /**
+     * Etiquetas del indicador
+     * 
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorTag
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
+     */
+    protected $tagsIndicator;
+    
+    /**
+     * ¿EL resultado del indicador en Porcentaje?
+     * @var boolean
+     * @ORM\Column(name="resultInPercentage",type="boolean")
+     */
+    private $resultInPercentage = true;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -304,6 +319,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->valuesIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tagsIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -766,7 +782,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         $this->progressToDate = 0;
         if($this->totalPlan != 0){
-            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+            if($this->resultInPercentage){
+                $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+            } else{
+                $this->progressToDate = ($valueFinal / $this->totalPlan);
+            }
+        } else{
+            $this->progressToDate = $valueFinal;
         }
         $this->valueFinal = $valueFinal;
 
@@ -1254,5 +1276,63 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getCalculationMethod()
     {
         return $this->calculationMethod;
+    }
+    
+    /**
+     * Add tagsIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
+     * @return Indicator
+     */
+    public function addTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
+    {
+        $tagsIndicator->setIndicator($this);
+        
+        $this->tagsIndicator->add($tagsIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove tagsIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator
+     */
+    public function removeTagsIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator $tagsIndicator)
+    {
+        $this->tagsIndicator->removeElement($tagsIndicator);
+    }
+
+    /**
+     * Get tagsIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTagsIndicator()
+    {
+        return $this->tagsIndicator;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $resultInPercentage
+     * @return Indicator
+     */
+    public function setResultInPercentage($resultInPercentage)
+    {
+        $this->resultInPercentage = $resultInPercentage;
+
+        return $this;
+    }
+
+    /**
+     * Get resultInPercentage
+     *
+     * @return boolean 
+     */
+    public function getResultInPercentage()
+    {
+        return $this->resultInPercentage;
     }
 }
