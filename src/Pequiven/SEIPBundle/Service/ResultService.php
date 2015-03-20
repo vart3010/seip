@@ -385,6 +385,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         $details
                 ->setPreviusValue($previusValue)
                 ;
+        if($indicator->getFrequencyNotificationIndicator() === null){
+            throw new \Exception(sprintf('El indicador "%s" no tiene frecuencia de notificacion asignada. #%s',(string)$indicator,$indicator->getId()));
+        }
         
         $indicatorService = $this->getIndicatorService();
         $arrangementRangeService = $this->getArrangementRangeService();
@@ -1081,8 +1084,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     if($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
                         $variableToPlanValueName = $formula->getVariableToPlanValue()->getName();
                         $variableToRealValueName = $formula->getVariableToRealValue()->getName();
-                        $plan = $formulaParameters[$variableToPlanValueName];
-                        $real = $formulaParameters[$variableToRealValueName];
+                        if(isset($formulaParameters[$variableToPlanValueName])){
+                            $plan = $formulaParameters[$variableToPlanValueName];
+                        }
+                        if(isset($formulaParameters[$variableToRealValueName])){
+                            $real = $formulaParameters[$variableToRealValueName];
+                        }
                     }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
                         $plan = $result['plan'];
@@ -1324,6 +1331,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN, $resultItem['plan']);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL, $resultItem['real']);
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
