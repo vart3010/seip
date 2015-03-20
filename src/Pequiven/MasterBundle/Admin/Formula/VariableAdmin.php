@@ -30,6 +30,9 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('staticValue',null,array(
                 'required' => false,
             ))
+            ->add('usedOnlyByTag',null,array(
+                'required' => false,
+            ))
             ->add('equation',null,array(
                 'attr' => array(
                     'rows' => 10
@@ -43,6 +46,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->add('name')
             ->add('description')
             ->add('staticValue')
+            ->add('usedOnlyByTag')
             ;
     }
     
@@ -51,6 +55,7 @@ class VariableAdmin extends Admin implements \Symfony\Component\DependencyInject
             ->addIdentifier('name')
             ->addIdentifier('description')
             ->addIdentifier('staticValue')
+            ->addIdentifier('usedOnlyByTag')
             ;
     }
     

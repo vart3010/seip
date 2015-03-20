@@ -38,4 +38,14 @@ abstract class TagIndicator
      * Valor ingresado por el usuario
      */
     const TAG_VALUE_FROM_INPUT = 2;
+    
+    /**
+     * Origen de resultado (Acumulado de Todas las notificaciones)
+     */
+    const SOURCE_RESULT_ALL = 0;
+    
+    /**
+     * Origen de resultado (Tomar la ultima notificación)
+     */
+    const SOURCE_RESULT_LAST = 1;
 }

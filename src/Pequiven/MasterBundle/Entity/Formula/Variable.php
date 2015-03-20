@@ -83,22 +83,31 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     private $staticValue = false;
     
     /**
-     * 
-     * @return type
+     * ¿La Variable es usada sólo por una etiqueta del indicador?
+     * @var boolean 
+     * @ORM\Column(name="usedOnlyByTag",type="boolean")
+     */
+    private $usedOnlyByTag = false;
+    
+    /**
+     * Get staticValue
+     *
+     * @return boolean 
      */
     public function isStaticValue() {
         return $this->staticValue;
     }
 
     /**
-     * 
+     * Set staticValue
      * @param type $staticValue
+     * @return Variable
      */
     public function setStaticValue($staticValue) {
         $this->staticValue = $staticValue;
     }
 
-        /**
+    /**
      * Get id
      *
      * @return integer 
@@ -289,5 +298,24 @@ class Variable extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemIn
     public function getEquation()
     {
         return $this->equation;
+    }
+    
+    /**
+     * Get usedOnlyByTag
+     *
+     * @return boolean 
+     */
+    public function getUsedOnlyByTag()
+    {
+        return $this->usedOnlyByTag;
+    }
+
+    /**
+     * Set usedOnlyByTag
+     * @param type $usedOnlyByTag
+     * @return Variable
+     */
+    public function setUsedOnlyByTag($usedOnlyByTag) {
+        $this->usedOnlyByTag = $usedOnlyByTag;
     }
 }

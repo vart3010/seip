@@ -38,8 +38,23 @@ ALTER TABLE seip_indicator ADD calculationMethod INT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD calculationMethod INT DEFAULT NULL;
 
 -- Agregando Etiquetas del Indicador
-CREATE TABLE seip_indicator_tag (id INT AUTO_INCREMENT NOT NULL, indicator_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, description VARCHAR(300) DEFAULT NULL, equationReal LONGTEXT NOT NULL, typeTag  INT NOT NULL, typeCalculationTag INT NOT NULL, valueOfTag DOUBLE PRECISION NOT NULL, textOfTag VARCHAR(300) DEFAULT NULL, `show` TINYINT(1) NOT NULL, deletedAt DATETIME DEFAULT NULL, createdBy_id INT NOT NULL, updatedBy_id INT DEFAULT NULL, INDEX IDX_A12328E23174800F (createdBy_id), INDEX IDX_A12328E265FF1AEC (updatedBy_id), INDEX IDX_A12328E24402854A (indicator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE seip_indicator_tag (id INT AUTO_INCREMENT NOT NULL, indicator_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, description VARCHAR(300) DEFAULT NULL, equationReal LONGTEXT NOT NULL, typeTag INT NOT NULL, typeCalculationTag INT NOT NULL, valueOfTag DOUBLE PRECISION NOT NULL, textOfTag VARCHAR(300) DEFAULT NULL, `show` TINYINT(1) NOT NULL, deletedAt DATETIME DEFAULT NULL, sourceResult INT NOT NULL, createdBy_id INT NOT NULL, updatedBy_id INT DEFAULT NULL, INDEX IDX_A12328E23174800F (createdBy_id), INDEX IDX_A12328E265FF1AEC (updatedBy_id), INDEX IDX_A12328E24402854A (indicator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E23174800F FOREIGN KEY (createdBy_id) REFERENCES seip_user (id);
 ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E265FF1AEC FOREIGN KEY (updatedBy_id) REFERENCES seip_user (id);
 ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E24402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id);
 
+ALTER TABLE Variable ADD usedOnlyByTag TINYINT(1) NOT NULL;
+ALTER TABLE Variable_audit ADD usedOnlyByTag TINYINT(1) DEFAULT NULL;
+
+ALTER TABLE seip_indicator ADD resultInPercentage TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD resultInPercentage TINYINT(1) DEFAULT NULL;
+UPDATE seip_indicator SET resultInPercentage = 1;
+
+CREATE TABLE seip_indicator_tag_audit (id INT NOT NULL, rev INT NOT NULL, indicator_id INT DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, description VARCHAR(300) DEFAULT NULL, equationReal LONGTEXT DEFAULT NULL, typeTag INT DEFAULT NULL, typeCalculationTag INT DEFAULT NULL, valueOfTag DOUBLE PRECISION DEFAULT NULL, textOfTag VARCHAR(300) DEFAULT NULL, `show` TINYINT(1) DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, sourceResult INT DEFAULT NULL, createdBy_id INT DEFAULT NULL, updatedBy_id INT DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE seip_indicator_tag CHANGE indicator_id indicator_id INT DEFAULT NULL;
+ALTER TABLE seip_indicator_tag CHANGE equationReal equationReal LONGTEXT DEFAULT NULL;
+ALTER TABLE seip_indicator_tag CHANGE createdBy_id createdBy_id INT DEFAULT NULL;
+
+ALTER TABLE seip_indicator_tag CHANGE `show` showTag TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_tag_audit CHANGE `show` showTag TINYINT(1) DEFAULT NULL;
+ALTER TABLE seip_indicator_tag CHANGE indicator_id indicator_id INT NOT NULL;

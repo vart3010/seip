@@ -49,7 +49,6 @@ class TagIndicator extends Model
      * 
      * @var \Pequiven\SEIPBundle\Entity\User
      * @ORM\ManyToOne(targetEntity="\Pequiven\SEIPBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $createdBy;
 
@@ -71,7 +70,7 @@ class TagIndicator extends Model
     /**
      * Ecuación real con variables
      * @var string
-     * @ORM\Column(name="equationReal", type="text")
+     * @ORM\Column(name="equationReal", type="text", nullable=true)
      */
     private $equationReal;
     
@@ -118,14 +117,21 @@ class TagIndicator extends Model
     /**
      * @var boolean
      *
-     * @ORM\Column(name="show", type="boolean")
+     * @ORM\Column(name="showTag", type="boolean")
      */
-    private $show = true;
+    private $showTag = true;
     
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * Origen de resultado
+     * @var integer
+     * @ORM\Column(name="sourceResult",type="integer")
+     */
+    private $sourceResult = self::SOURCE_RESULT_ALL;
     
     /**
      * Get id
@@ -189,7 +195,7 @@ class TagIndicator extends Model
      * @param \Pequiven\SEIPBundle\Entity\User $createdBy
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      */
-    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy)
+    public function setCreatedBy(\Pequiven\SEIPBundle\Entity\User $createdBy = null)
     {
         $this->createdBy = $createdBy;
 
@@ -276,9 +282,8 @@ class TagIndicator extends Model
     
     /**
      * Set typeTag
-     *
-     * @param integer $typeTag
-     * @return TagIndicator
+     * @param type $typeTag
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      */
     public function setTypeTag($typeTag)
     {
@@ -390,24 +395,24 @@ class TagIndicator extends Model
     /**
      * Set show
      *
-     * @param boolean $show
+     * @param boolean $showTag
      * @return \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      */
-    public function setShow($show)
+    public function setShowTag($showTag)
     {
-        $this->show = $show;
+        $this->showTag = $showTag;
 
         return $this;
     }
 
     /**
-     * Get show
+     * Get showTag
      *
      * @return boolean 
      */
-    public function getShow()
+    public function getShowTag()
     {
-        return $this->show;
+        return $this->showTag;
     }
 
     
@@ -416,9 +421,36 @@ class TagIndicator extends Model
         return $this->deletedAt;
     }
 
+    /**
+     * Set deletedAt
+     * @param type $deletedAt
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
+     */
     function setDeletedAt($deletedAt) 
     {
         $this->deletedAt = $deletedAt;
         return $this;
+    }
+    
+    /**
+     * Set sourceResult
+     * @param type $sourceResult
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
+     */
+    public function setSourceResult($sourceResult)
+    {
+        $this->sourceResult = $sourceResult;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceResult
+     *
+     * @return integer 
+     */
+    public function getSourceResult()
+    {
+        return $this->sourceResult;
     }
 }

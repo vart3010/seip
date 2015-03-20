@@ -305,6 +305,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $tagsIndicator;
     
     /**
+     * ¿EL resultado del indicador en Porcentaje?
+     * @var boolean
+     * @ORM\Column(name="resultInPercentage",type="boolean")
+     */
+    private $resultInPercentage = true;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -775,7 +782,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         $this->progressToDate = 0;
         if($this->totalPlan != 0){
-            $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+            if($this->resultInPercentage){
+                $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
+            } else{
+                $this->progressToDate = ($valueFinal / $this->totalPlan);
+            }
+        } else{
+            $this->progressToDate = $valueFinal;
         }
         $this->valueFinal = $valueFinal;
 
@@ -1298,5 +1311,28 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getTagsIndicator()
     {
         return $this->tagsIndicator;
+    }
+    
+    /**
+     * Set backward
+     *
+     * @param boolean $resultInPercentage
+     * @return Indicator
+     */
+    public function setResultInPercentage($resultInPercentage)
+    {
+        $this->resultInPercentage = $resultInPercentage;
+
+        return $this;
+    }
+
+    /**
+     * Get resultInPercentage
+     *
+     * @return boolean 
+     */
+    public function getResultInPercentage()
+    {
+        return $this->resultInPercentage;
     }
 }
