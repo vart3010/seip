@@ -305,7 +305,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $tagsIndicator;
     
     /**
-     * ¿EL resultado del indicador en Porcentaje?
+     * ¿El resultado del indicador se calcula en tipo Porcentaje?
      * @var boolean
      * @ORM\Column(name="resultInPercentage",type="boolean")
      */
