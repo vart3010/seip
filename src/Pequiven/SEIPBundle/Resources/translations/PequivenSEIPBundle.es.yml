@@ -43,6 +43,12 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    pre_planning_user:
+        status:
+            draft: Borrador
+            imported: Importado
+            in_review: En revisión
+            approved: Aprobado
     user:
         user: Usuario
         localization:
