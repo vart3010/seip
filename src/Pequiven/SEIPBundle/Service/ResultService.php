@@ -1047,11 +1047,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            
-            $totalPlan += $formulaParameters[$variableToPlanValueName];
-            $totalReal += $formulaParameters[$variableToRealValueName];
             $i++;
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $plan = $formulaParameters[$variableToPlanValueName];
+            $real = $formulaParameters[$variableToRealValueName];
+            
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($plan != 0 || $real != 0)){
+                        $totalPlan = $plan;
+                        $totalReal = $real;
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    continue;
+                }
+            }
+            $totalPlan += $plan;
+            $totalReal += $real;
         }
 //        die;
         $value = $totalReal;

@@ -39,6 +39,10 @@
             {{ entity.goal|number_format(2,',','.') }}%
         </p>
         
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.period'|trans({},'PequivenSEIPBundle') }}</label>
+            {{ entity.period }}
+        </p>
         <!-- ¿Evaluación por Objetivo Operativo? -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.evalByObjetiveOperative'|trans }}</label>
@@ -87,6 +91,7 @@
 <br /><br />
 
 <p class="button-height align-right">
+{#    {{ buttons.edit(path("pequiven_objetive_edit",{id:entity.id})) }}&nbsp;#}
     {% set urlUpdateResulReferral = (path('objetiveTactic_show',{id:entity.id})) %}
     {% include 'PequivenObjetiveBundle:Common:buttons.html.twig' %}
 </p>
