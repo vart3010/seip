@@ -43,6 +43,7 @@ pequiven_seip:
     direction: Dirección
     rol: Rol
     users: Usuarios SEIP
+    period: Periodo
     pre_planning_user:
         status:
             draft: Borrador
