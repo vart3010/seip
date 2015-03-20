@@ -35,7 +35,11 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('valueOfTag')
             ->add('textOfTag')
             ->add('indicator')
-            ->add('equationReal')
+            ->add('equationReal',null,array(
+                'attr' => array(
+                    'rows' => 10
+                )
+            ))
             ->add('typeTag')
             ->add('typeCalculationTag')
             ->add('sourceResult')

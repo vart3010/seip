@@ -416,7 +416,7 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
-     * 
+     * Actualiza las Etiquetas del Indicador que dependen de una ecuación
      * @param Indicator $indicator
      */
     public function updateTagIndicator(Indicator &$indicator){
