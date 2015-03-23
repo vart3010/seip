@@ -1296,13 +1296,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
 //                var_dump($results);
                 $totalRealChild = 0.0;
                 $totalPlanChild = 0;
-                $j = 0;
+//                $j = 0;
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
-                    $j++;
-                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
-                        continue;
-                    }
+//                    $j++;
+//                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
+//                        continue;
+//                    }
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
                     $totalRealChild += $value;
                     $totalPlanChild++;
