@@ -235,6 +235,18 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.indicator.tag_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\TagIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
+            
     sonata.admin.quality_system.quality_system:
         class: Pequiven\MasterBundle\Admin\QualitySystem\QualitySystemAdmin
         tags:

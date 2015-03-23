@@ -352,6 +352,13 @@ class PrePlanningService extends ContainerAware
         return $child;
     }
     
+    /**
+     * Importa una pre planificacion
+     * @param PrePlanning $prePlanning
+     * @param User $user
+     * @return boolean
+     * @throws \Pequiven\SEIPBundle\Service\Exception
+     */
     public function importItem(PrePlanning $prePlanning,User $user) 
     {
         $success = false;
@@ -367,70 +374,79 @@ class PrePlanningService extends ContainerAware
         }
         $this->getSecurityService()->checkSecurity($perm);
         
-        if($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED)
+        $parent = $prePlanning->getParent();
+        $validToImport = true;
+        if($parent && $parent->getTypeObject() != PrePlanning::TYPE_OBJECT_ROOT_NODE){
+            if($parent->getStatus() !== PrePlanning::STATUS_IMPORTED){
+                $validToImport = false;
+                $success = 'Es obligatorio importar el item padre.';
+            }
+        }
+        if($validToImport && ($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED))
         {
             $em = $this->getDoctrine()->getManager();
-                $cloneService = $this->getCloneService();
-                $sequenceGenerator = $this->getSequenceGenerator();
-                $typeObject = $prePlanning->getTypeObject();
-                $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
-                if($itemInstance){
-                    $em->getConnection()->beginTransaction(); // suspend auto-commit
-                    
-                    try {
-                        $itemInstanceCloned = null;
-                        if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE)
-                        {
-                            $level = $itemInstance->getObjetiveLevel()->getLevel();
-                            $parents = $itemInstance->getParents();
+            $cloneService = $this->getCloneService();
+            $sequenceGenerator = $this->getSequenceGenerator();
+            
+            $typeObject = $prePlanning->getTypeObject();
+            $itemInstance = $this->getCloneService()->findInstancePrePlanning($prePlanning);
+            if($itemInstance){
+                $em->getConnection()->beginTransaction(); // suspend auto-commit
 
-                                $parentsCloned = array();
-                                foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
-                                    $cloneObjetive = $cloneService->cloneObject($parent);
-                                    $parentsCloned[] = $cloneObjetive;
-                                }
-                                $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-                                if(!$itemInstanceCloned){
-                                    $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-                                    foreach ($parentsCloned as $parentCloned) {
-                                        $parentCloned->addChildren($itemInstanceCloned);
-                                        $this->persist($parentCloned);
-                                    }
-                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
-                                    $itemInstanceCloned->setRef($ref);
-                                    $this->persist($itemInstanceCloned);
-                                }
-                        }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM){
-                            $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-                            if(!$itemInstanceCloned){
-                                $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                try {
+                    $itemInstanceCloned = null;
+                    if($typeObject == PrePlanning::TYPE_OBJECT_OBJETIVE)
+                    {
+                        $level = $itemInstance->getObjetiveLevel()->getLevel();
+                        $parents = $itemInstance->getParents();
+
+                            $parentsCloned = array();
+                            foreach ($parents as $parent) {//Cloar los objetivos estrategicos aqui se mantiene la referencia
+                                $cloneObjetive = $cloneService->cloneObject($parent);
+                                $parentsCloned[] = $cloneObjetive;
                             }
-                        }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
                             $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
                             if(!$itemInstanceCloned){
                                 $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-                            }
-                        }elseif($typeObject == PrePlanning::TYPE_OBJECT_INDICATOR){
-                            $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
-                            if(!$itemInstanceCloned){
-                                $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
-                                $ref = $sequenceGenerator->getNextRefChildIndicator($itemInstanceCloned);
+                                foreach ($parentsCloned as $parentCloned) {
+                                    $parentCloned->addChildren($itemInstanceCloned);
+                                    $this->persist($parentCloned);
+                                }
+                                $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
                                 $itemInstanceCloned->setRef($ref);
                                 $this->persist($itemInstanceCloned);
                             }
+                    }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM){
+                        $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                        if(!$itemInstanceCloned){
+                            $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                         }
-                        if($itemInstanceCloned){
-                            $success = true;
-                            $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
-                            $this->persist($prePlanning,true);
+                    }elseif($typeObject == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL){
+                        $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                        if(!$itemInstanceCloned){
+                            $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
                         }
-                        
-                        $em->getConnection()->commit();
-                    } catch (Exception $e) {
-                        $em->getConnection()->rollback();
-                        throw $e;
+                    }elseif($typeObject == PrePlanning::TYPE_OBJECT_INDICATOR){
+                        $itemInstanceCloned = $cloneService->findCloneInstance($itemInstance);
+                        if(!$itemInstanceCloned){
+                            $itemInstanceCloned = $cloneService->cloneObject($itemInstance);
+                            $ref = $sequenceGenerator->getNextRefChildIndicator($itemInstanceCloned);
+                            $itemInstanceCloned->setRef($ref);
+                            $this->persist($itemInstanceCloned);
+                        }
                     }
-                }//FIN item instance
+                    if($itemInstanceCloned){
+                        $success = true;
+                        $prePlanning->setStatus(PrePlanning::STATUS_IMPORTED);
+                        $this->persist($prePlanning,true);
+                    }
+
+                    $em->getConnection()->commit();
+                } catch (Exception $e) {
+                    $em->getConnection()->rollback();
+                    throw $e;
+                }
+            }//FIN item instance
         }
         return $success;
     }  

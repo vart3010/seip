@@ -27,7 +27,10 @@
                             <span ng-if="result.gerenciaSecond">{$ result.gerenciaSecond.description $}</span>
                         </td>
                         <td data-title="'{{ 'pequiven_seip.headers.status'|trans }}'" filter="{'name' : 'text'}">
-                            {$ result.status $}
+                            <span ng-if="result.status == {{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_DRAFT') }}">{{ labels_status[constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_DRAFT')]|trans }}</span>
+                            <span ng-if="result.status == {{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_IMPORTED') }}">{{ labels_status[constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_IMPORTED')]|trans }}</span>
+                            <span ng-if="result.status == {{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_IN_REVIEW') }}">{{ labels_status[constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_IN_REVIEW')]|trans }}</span>
+                            <span ng-if="result.status == {{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_APPROVED') }}">{{ labels_status[constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanningUser::STATUS_APPROVED')]|trans }}</span>
                         </td>
                         <td data-title="'{{ 'pequiven_seip.headers.username'|trans }}'" filter="{'name' : 'text'}">
                             <a href="{$ result.user._links.self.href $}">{$ result.user.username $}</a>

@@ -46,6 +46,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('valuesIndicator')
             ->add('couldBePenalized')
             ->add('forcePenalize')
+            ->add('resultInPercentage')
             ->add('requiredToImport')
             ->add('details')
             ;
@@ -123,6 +124,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('forcePenalize',null,array(
                 'required' => false,
             ))
+            ->add('resultInPercentage',null,array(
+                'required' => false,
+            ))
             ->add('requiredToImport',null,array(
                 'required' => false,
             ))
@@ -162,6 +166,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('valueFinal')
             ->add('couldBePenalized')
             ->add('forcePenalize')
+            ->add('resultInPercentage')
             ->add('requiredToImport')
             ->add('enabled')
             ;

@@ -221,7 +221,12 @@
                     failure: function(response, opts) {
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
-                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       var jsonResponse = Ext.decode(response.responseText);
+                       var errorMessage = "";
+                       if(jsonResponse.message != ""){
+                           errorMessage = "("+jsonResponse.message+")";
+                       }
+                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"..."+errorMessage);
                        tree.body.unmask();
                        console.log('server-side failure with status code ' + response.status);
                     }

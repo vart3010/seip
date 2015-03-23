@@ -2,6 +2,7 @@ pequiven_indicator:
     value: Valor
     #Registrar
     indicators: Indicadores
+    tagIndicators: Etiquetas del Indicador
     indicatorsWithError: Indicadores con errores
     indicatorsWithoutError: Indicadores sin errores
     indicatorsWithoutErrorText: Nada que reseñar

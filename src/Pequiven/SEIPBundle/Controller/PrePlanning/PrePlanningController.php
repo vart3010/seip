@@ -284,8 +284,14 @@ class PrePlanningController extends ResourceController
         $user = $this->getUser();
         $prePlanningService = $this->getPrePlanningService();
         $success = $prePlanningService->importItem($prePlanning, $user);
+        $error = '';
+        if(is_string($success) === true){
+            $error = $success;
+            $success = false;
+        }
         $data = array(
             "success" => $success,
+            "message" => $error,
         );
         $view = $this->view($data);
         if($success == false){
@@ -308,8 +314,20 @@ class PrePlanningController extends ResourceController
         $success = false;
         $data = array();
         $em = $this->getDoctrine()->getManager();
+//        var_dump(get_class($resource));
         
-        if($resource->getStatus() == PrePlanning::STATUS_DRAFT){
+        $parent = $resource->getParent();
+        $validToImport = true;
+        $message = "";
+        if($parent && $parent->getTypeObject() != PrePlanning::TYPE_OBJECT_ROOT_NODE){
+            if($parent->getStatus() !== PrePlanning::STATUS_IN_REVIEW && $parent->getStatus() !== PrePlanning::STATUS_IMPORTED)
+            {
+                $validToImport = false;
+                $message = 'Es obligatorio enviar a revisión el item padre.';
+            }
+        }
+        if($validToImport && $resource->getStatus() == PrePlanning::STATUS_DRAFT)
+        {
             $lastItem = (boolean)$request->get('lastItem',false);
             $level = $request->get('level',null);
             
@@ -332,11 +350,18 @@ class PrePlanningController extends ResourceController
                 $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
             $em->flush();
+        }else{
+            $success = false;
+            $message = 'No se pudo enviar a revisión.';
         }
         
         $data["success"] = $success;
+        $data["message"] = $message;
         
         $view = $this->view($data);
+        if($success === false){
+            $view->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_ACCEPTABLE);
+        }
         
         return $this->handleView($view);
     }

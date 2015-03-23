@@ -32,7 +32,7 @@
                         {% if isValueIndicatorConfig == true %}
                             <a href="#" ng-click="openPopUp(getUrlForValueIndicator(valueIndicator,$index))" class="showPopup">
                         {% endif %}
-                            {$ valueIndicator.valueOfIndicator | myNumberFormat:3 $}
+                            {$ valueIndicator.valueOfIndicator | myNumberFormat:2 $}
                         {% if isValueIndicatorConfig == true %}
                             </a>
                         {% endif %}
