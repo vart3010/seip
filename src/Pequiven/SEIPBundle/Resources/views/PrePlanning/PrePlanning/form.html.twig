@@ -186,29 +186,6 @@
             var itemsToImport = [];
             var functionActionItem = function(item){};
             
-            var functionImportarItem = function(item){
-                var name = item.get('name');
-                tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Importando "+name+ "...");
-                var urlImport = Routing.generate('pequiven_pre_planning_import',{id:item.get('id')});
-                Ext.Ajax.request({
-                url: urlImport,
-                    success: function(response, opts) {
-                       tree.body.unmask();
-                       tree.body.mask("Item #"+(itemsToImportCurrent)+" importado correctamente...");
-                       clearTimeout(itemsToImportTimeOut);
-                       itemsToImportReady = true;
-                       callAjaxItemToImport();
-                    },
-                    failure: function(response, opts) {
-                       clearTimeout(itemsToImportTimeOut);
-                       itemsToImportReady = true;
-                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
-                       tree.body.unmask();
-                       console.log('server-side failure with status code ' + response.status);
-                    }
-                });
-            };
-            
             var functionSendToRevisionItem = function(item){
                 var name = item.get('name');
                 tree.body.mask("("+(itemsToImportCurrent + 1)+"/"+itemsToImportLength+") - Enviando a revisión "+name+ "...");
@@ -229,7 +206,12 @@
                     failure: function(response, opts) {
                        clearTimeout(itemsToImportTimeOut);
                        itemsToImportReady = true;
-                       Ext.Msg.alert('Error',"Ocurrio un error importando el item "+name+"...");
+                       var jsonResponse = Ext.decode(response.responseText);
+                       var errorMessage = "";
+                       if(jsonResponse.message != ""){
+                           errorMessage = "("+jsonResponse.message+")";
+                       }
+                       Ext.Msg.alert('Error',"Ocurrio un error enviando a revisión el item "+name+"..."+errorMessage);
                        tree.body.unmask();
                        console.log('server-side failure with status code ' + response.status);
                     }

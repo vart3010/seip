@@ -1,0 +1,7 @@
+<ul class="fa-ul">
+{% for tagIndicator in indicator.tagsIndicator %}
+    <li>
+        <b>{{ tagIndicator.description }}:</b>&nbsp;{% if tagIndicator.typeTag == constant('Pequiven\\IndicatorBundle\\Entity\\Indicator\\TagIndicator::TAG_TYPE_NUMERIC') %} {{ tagIndicator.valueOfTag|myNumberFormat }} {% else %} {{ tagIndicator.textOfTag }} {% endif %}
+{#        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}#}    </li>
+{% endfor  %}
+</ul>

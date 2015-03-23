@@ -552,6 +552,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $this->updateResultOfObjects($objetives);
         
+        $indicatorService->updateTagIndicator($indicator);
+        
         if($indicator->getParent() !== null){
             $this->refreshValueIndicator($indicator->getParent(),true);
         }
@@ -1045,11 +1047,24 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         
         $totalPlan = $totalReal = $value = 0.0;
         foreach ($valuesIndicator as $valueIndicator) {
-            $formulaParameters = $valueIndicator->getFormulaParameters();
-            
-            $totalPlan += $formulaParameters[$variableToPlanValueName];
-            $totalReal += $formulaParameters[$variableToRealValueName];
             $i++;
+            $formulaParameters = $valueIndicator->getFormulaParameters();
+            $plan = $formulaParameters[$variableToPlanValueName];
+            $real = $formulaParameters[$variableToRealValueName];
+            
+            if($details){
+                if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
+                    if(($plan != 0 || $real != 0)){
+                        $totalPlan = $plan;
+                        $totalReal = $real;
+                    }
+                    continue;
+                }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
+                    continue;
+                }
+            }
+            $totalPlan += $plan;
+            $totalReal += $real;
         }
 //        die;
         $value = $totalReal;
@@ -1280,8 +1295,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $results = $resultsItems[$i];
                 $totalRealChild = 0.0;
                 $totalPlanChild = 0;
+                $j = 0;
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $j++;
+                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
+                        continue;
+                    }
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
                     $totalRealChild += $value;
                     $totalPlanChild++;

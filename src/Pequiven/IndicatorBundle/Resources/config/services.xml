@@ -25,6 +25,12 @@
             </call>
         </service>
         
+        <service id="pequiven_indicator.service.tag_indicator" class="Pequiven\IndicatorBundle\Service\TagIndicatorService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+        
         <!-- Formulario de registro de Indicador Estratégico De Objetivo Estratégico -->
         <service id="pequiven_indicator.strategicfo.registration.form.type" class="Pequiven\IndicatorBundle\Form\Type\Strategic\RegistrationFormType">
             <tag name="form.type" alias="pequiven_indicator_strategicfo_registration" />
