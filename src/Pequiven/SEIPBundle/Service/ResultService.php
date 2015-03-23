@@ -1279,7 +1279,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         }
                         foreach ($results as $resultItem)
                         {
-                            $childValueParameter = $resultItem->getParameter($nameParameter,0);
+                            $childValueParameter = $resultItem->getParameter($nameParameter);
                             if($childValueParameter !== null)
                             {
                                 if($variable->isStaticValue()){//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo

@@ -7,6 +7,7 @@ use ErrorException;
 use Exception;
 use LogicException;
 use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\MasterBundle\Entity\Formula\Variable;
 use Pequiven\MasterBundle\Entity\LineStrategic;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\MasterBundle\Entity\Formula;
@@ -22,13 +23,11 @@ class TagIndicatorService implements ContainerAwareInterface
 {
     private $container;
     
-    public function getPNRAction(Indicator $Indicator){
+    public function getPNR(Indicator $Indicator){
         $real = $plan = $total = 0;
         foreach($Indicator->getValuesIndicator() as $valueIndicator){
-            foreach($valueIndicator->getFormulaParameters() as $formulaParameter){
-                $real+= $formulaParameter['real'];
-                $plan+= $formulaParameter['plan'];
-            }
+            $real+= $valueIndicator->getParameter('real',0);
+            $plan+= $valueIndicator->getParameter('plan',0);
         }
         $total = $plan - $real;
         return $total;
