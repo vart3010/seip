@@ -21,8 +21,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TagIndicatorService implements ContainerAwareInterface
 {
     private $container;
+    
+    public function getPNRAction(Indicator $Indicator){
+        $real = $plan = $total = 0;
+        foreach($Indicator->getValuesIndicator() as $valueIndicator){
+            foreach($valueIndicator->getFormulaParameters() as $formulaParameter){
+                $real+= $formulaParameter['real'];
+                $plan+= $formulaParameter['plan'];
+            }
+        }
+        $total = $plan - $real;
+        return $total;
+    }
 
-/**
+    /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */
