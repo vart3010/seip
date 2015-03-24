@@ -7,6 +7,7 @@ use ErrorException;
 use Exception;
 use LogicException;
 use Pequiven\IndicatorBundle\Entity\Indicator;
+use Pequiven\MasterBundle\Entity\Formula\Variable;
 use Pequiven\MasterBundle\Entity\LineStrategic;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\MasterBundle\Entity\Formula;
@@ -21,8 +22,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TagIndicatorService implements ContainerAwareInterface
 {
     private $container;
+    
+    public function getPNR(Indicator $Indicator){
+        $real = $plan = $total = 0;
+        foreach($Indicator->getValuesIndicator() as $valueIndicator){
+            $real+= $valueIndicator->getParameter('real',0);
+            $plan+= $valueIndicator->getParameter('plan',0);
+        }
+        $total = $plan - $real;
+        return $total;
+    }
 
-/**
+    /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */

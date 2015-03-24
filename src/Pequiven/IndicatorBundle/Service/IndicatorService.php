@@ -421,11 +421,13 @@ class IndicatorService implements ContainerAwareInterface
      */
     public function updateTagIndicator(Indicator &$indicator){
         $em = $this->getDoctrine()->getManager();
+        $tagIndicatorService = $this->getTagIndicatorService();
         
         foreach($indicator->getTagsIndicator() as $tagIndicator){
             if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_VALUE_FROM_EQUATION){
                 $parametersForTemplate = array(
                     'indicator' => $indicator,
+                    'tagIndicatorService' => $tagIndicatorService,
                 );
                 $valueTag = trim($this->renderString($tagIndicator->getEquationReal(),$parametersForTemplate));
                 $tagIndicator->setValueOfTag($valueTag);
@@ -442,6 +444,15 @@ class IndicatorService implements ContainerAwareInterface
     public function getResultService()
     {
         return $this->container->get('seip.service.result');
+    }
+    
+    /**
+     * Servicio de las Etiquetas del Indicador
+     * @return \Pequiven\IndicatorBundle\Service\TagIndicatorService
+     */
+    public function getTagIndicatorService()
+    {
+        return $this->container->get('pequiven_indicator.service.tag_indicator');
     }
     
     /**

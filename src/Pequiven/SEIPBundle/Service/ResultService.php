@@ -1091,7 +1091,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             
             foreach ($child->getValuesIndicator() as $valueIndicator) {
                 if(!isset($resultsItems[$i])){
-                    $resultsItems[$i] = array('plan' => 0.0,'real' => 0.0);
+                    $resultsItems[$i] = array(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => 0.0,Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => 0.0);
                 }
                 $plan = $real = 0.0;
                 $formulaParameters = $valueIndicator->getFormulaParameters();
@@ -1107,12 +1107,12 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         }
                     }elseif($formula->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){
                         $result = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-                        $plan = $result['plan'];
-                        $real = $result['real'];
+                        $plan = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $real = $result[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
                     }
                 
-                $resultsItems[$i]['plan'] = $resultsItems[$i]['plan'] + $plan;
-                $resultsItems[$i]['real'] = $resultsItems[$i]['real'] + $real;
+                $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] + $plan;
+                $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] + $real;
                 $i++;
                 
             }//fin for each
@@ -1127,17 +1127,17 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
-                        $totalPlan = $resultItem['plan'];
-                        $totalReal = $resultItem['real'];
+                    if(($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
+                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
                     }
                     continue;
                 }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
                     continue;
                 }
             }
-            $totalPlan += $resultItem['plan'];
-            $totalReal += $resultItem['real'];
+            $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+            $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
         $frequencyNotificationIndicator = $indicator->getFrequencyNotificationIndicator();
         
@@ -1176,8 +1176,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $plan = $real = 0.0;
             if(isset($resultsItems[$i])){
-                $plan = $resultsItems[$i]['plan'];
-                $real = $resultsItems[$i]['real'];
+                $plan = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                $real = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
             }
             $valueIndicator->setParameter($variableToPlanValueName, $plan);
             $valueIndicator->setParameter($variableToRealValueName, $real);
@@ -1279,10 +1279,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                         }
                         foreach ($results as $resultItem)
                         {
-                            $childValueParameter = $resultItem->getParameter($nameParameter,0);
+                            $childValueParameter = $resultItem->getParameter($nameParameter);
                             if($childValueParameter !== null)
                             {
-                                $valueParameter += $childValueParameter;
+                                if($variable->isStaticValue()){//En caso de que la variable sea "estática" y tenga que obtener el valor del indicador hijo
+                                    $valueParameter = $childValueParameter;
+                                } else{
+                                    $valueParameter += $childValueParameter;
+                                }
                             }
                         }
                     }
@@ -1295,13 +1299,13 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $results = $resultsItems[$i];
                 $totalRealChild = 0.0;
                 $totalPlanChild = 0;
-                $j = 0;
+//                $j = 0;
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
-                    $j++;
-                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
-                        continue;
-                    }
+//                    $j++;
+//                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
+//                        continue;
+//                    }
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
                     $totalRealChild += $value;
                     $totalPlanChild++;
@@ -1351,14 +1355,14 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($valuesIndicator as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             $resultItem = $this->getFormulaResultFromEQ($formula, $formulaParameters);
-            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN, $resultItem['plan']);
-            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL, $resultItem['real']);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN, $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN]);
+            $valueIndicator->setParameter(Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL, $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL]);
             $i++;
             if($details){
                 if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST_VALID){
-                    if(($resultItem['plan'] != 0 || $resultItem['real'] != 0)){
-                        $totalPlan = $resultItem['plan'];
-                        $totalReal = $resultItem['real'];
+                    if(($resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN] != 0 || $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL] != 0)){
+                        $totalPlan = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+                        $totalReal = $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
                     }
                     continue;
                 }elseif($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $i !== $valuesIndicatorQuantity){
@@ -1367,8 +1371,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 }
             }
             
-            $totalPlan += $resultItem['plan'];
-            $totalReal += $resultItem['real'];
+            $totalPlan += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
+            $totalReal += $resultItem[Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL];
         }
 
         $value = $totalReal;
@@ -1402,8 +1406,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
       
         return array(
-            'real' => $equation_real,
-            'plan' => $equation_plan,
+        Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_REAL => $equation_real,
+        Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN => $equation_plan,
         );
     }
 

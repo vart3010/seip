@@ -781,8 +781,8 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function setValueFinal($valueFinal)
     {
         $this->progressToDate = 0;
-        if($this->totalPlan != 0){
-            if($this->resultInPercentage){
+        if($this->totalPlan != 0){//En caso de que el valor plan sea diferente de cero
+            if($this->resultInPercentage){//En caso de que el resultado del indicador tenga que convertirse en valor porcentual
                 $this->progressToDate = ($valueFinal / $this->totalPlan) * 100;
             } else{
                 $this->progressToDate = ($valueFinal / $this->totalPlan);
