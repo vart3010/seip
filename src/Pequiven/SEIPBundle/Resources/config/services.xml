@@ -148,15 +148,15 @@
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Modelo de Caja Indicadores Operativos por Grupo de Gerencia de 1ra Línea -->
-        <service id="oeprative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
+        <service id="operative.summary_box_indicator_charged_by_group" class="Pequiven\SEIPBundle\Model\Box\Indicator\Operative\SummaryBoxIndicatorChargedByGroup">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box de dashboard de planificacion -->
-        <service id="operative.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
+        <service id="pequiven_seip.box.planningdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\PlanningDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box de dashboard generico -->
-        <service id="operative.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
+        <service id="pequiven_seip.box.genericdashboardbox" class="Pequiven\SEIPBundle\Model\Box\Dashboard\GenericDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box donde se definen las Áreas del sistema para en un futuro separar todo tipo frames -->

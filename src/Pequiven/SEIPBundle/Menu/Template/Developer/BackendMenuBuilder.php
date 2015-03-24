@@ -315,6 +315,35 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $child->addChild($subchild);
         }
         
+        if($this->isGranted('ROLE_SEIP_PLANNING_MONITOR_*')){
+            $subchild = $this->factory->createItem('planning.monitor',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                ))
+            )->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.monitor.main',$section)));
+            
+            if($this->isGranted('ROLE_SEIP_PLANNING_MONITOR_OBJECTIVE_TACTIC')){
+                $subchild->addChild('planning.monitor.objective_tactic', array(
+                    'route' => 'monitorObjetiveTactic',
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.monitor.objective_tactic', $section)));
+            }
+            if($this->isGranted('ROLE_SEIP_PLANNING_MONITOR_OBJECTIVE_OPERATIVE')){
+                $subchild->addChild('planning.monitor.objective_operative', array(
+                    'route' => 'monitorObjetiveOperative',
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.monitor.objective_operative', $section)));
+            }
+            if($this->isGranted('ROLE_SEIP_PLANNING_MONITOR_ARRANGEMENT_PROGRAM')){
+                $subchild->addChild('planning.monitor.arrangement_program', array(
+                    'route' => 'monitorArrangementProgram',
+                ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.monitor.arrangement_program', $section)));
+            }
+            
+            $child->addChild($subchild);
+        }
+        
         $menu->addChild($child);
     }
     

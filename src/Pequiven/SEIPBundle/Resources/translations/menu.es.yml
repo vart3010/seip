@@ -105,6 +105,11 @@ app:
                         operations:
                             main: Operaciones
                             recalculate_results: Recalcular resultados
+                        monitor:
+                            main: Monitor de Carga
+                            objective_tactic: Objetivos Tácticos
+                            objective_operative: Objetivos Operativos
+                            arrangement_program: Programas de Gestión
                     objetives:
                         main: Objetivos
                         visualize:
