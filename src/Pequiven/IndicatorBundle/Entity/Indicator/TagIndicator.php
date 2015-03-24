@@ -134,6 +134,13 @@ class TagIndicator extends Model
     private $sourceResult = self::SOURCE_RESULT_ALL;
     
     /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición en el indicador?
+     * @var boolean
+     * @ORM\Column(name="showInIndicatorResult",type="boolean")
+     */
+    private $showInIndicatorResult = false;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -453,4 +460,26 @@ class TagIndicator extends Model
     {
         return $this->sourceResult;
     }
+    
+    /**
+     * Set showInIndicatorResult
+     *
+     * @param boolean $showInIndicatorResult
+     * @return Indicator
+     */
+    public function setShowInIndicatorResult($showInIndicatorResult) {
+        $this->showInIndicatorResult = $showInIndicatorResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showInIndicatorResult
+     *
+     * @return boolean 
+     */
+    public function getShowInIndicatorResult() {
+        return $this->showInIndicatorResult;
+    }
+
 }

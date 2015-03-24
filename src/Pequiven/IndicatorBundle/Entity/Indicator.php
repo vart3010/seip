@@ -312,6 +312,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $resultInPercentage = true;
     
     /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición?
+     * @var boolean
+     * @ORM\Column(name="showTagInResult",type="boolean")
+     */
+    private $showTagInResult = false;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1314,7 +1321,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
-     * Set backward
+     * Set resultInPercentage
      *
      * @param boolean $resultInPercentage
      * @return Indicator
@@ -1334,5 +1341,45 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getResultInPercentage()
     {
         return $this->resultInPercentage;
+    }
+    
+    /**
+     * Set showTagInResult
+     *
+     * @param boolean $showTagInResult
+     * @return Indicator
+     */
+    public function setShowTagInResult($showTagInResult)
+    {
+        $this->showTagInResult = $showTagInResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showTagInResult
+     *
+     * @return boolean 
+     */
+    public function getShowTagInResult()
+    {
+        return $this->showTagInResult;
+    }
+    
+    
+    public function showResultOfIndicator(){
+        if(!$this->showTagInResult){
+            return $this->resultReal;
+        } else{
+            foreach ($this->getTagsIndicator() as $tagIndicator){
+                if($tagIndicator->getShowInIndicatorResult()){
+                    if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC){
+                        return $tagIndicator->getValueOfTag();
+                    } else{
+                        return $tagIndicator->getTextOfTag();
+                    }
+                }
+            }
+        }
     }
 }

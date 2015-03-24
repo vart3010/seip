@@ -127,6 +127,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('resultInPercentage',null,array(
                 'required' => false,
             ))
+            ->add('showTagInResult',null,array(
+                'required' => false,
+            ))
             ->add('requiredToImport',null,array(
                 'required' => false,
             ))

@@ -42,6 +42,9 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ))
             ->add('typeTag')
             ->add('typeCalculationTag')
+            ->add('showInIndicatorResult',null,array(
+                'required' => false,
+            ))
             ->add('sourceResult')
             ;
     }
