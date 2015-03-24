@@ -89,6 +89,12 @@ pequiven_indicator:
         the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
         the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
         the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
+    type_tag:
+        tagNumeric: Numérica
+        tagText: Texto
+    type_value_tag:
+        fromEquation: A partir de ecuación
+        fromInput: Ingresado manualmente
         
 form:
     ref: Nro. de Referencia

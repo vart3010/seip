@@ -40,8 +40,14 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
                     'rows' => 10
                 )
             ))
-            ->add('typeTag')
-            ->add('typeCalculationTag')
+            ->add('typeTag','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator::getLabelTypesOfTag(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
+            ->add('typeCalculationTag','choice',array(
+                'choices' => \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator::getLabelTypesOfValueInput(),
+                'translation_domain' => 'PequivenIndicatorBundle'
+            ))
             ->add('showInIndicatorResult',null,array(
                 'required' => false,
             ))
