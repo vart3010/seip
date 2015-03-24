@@ -3,14 +3,37 @@
         <div class="twelve-columns four-columns-tablet six-columns-mobile imageMap" {#style="max-width:100%; margin-bottom: -3px; margin-top: 4px"#} style="display:inline-block;" >
         {#    <img width="200%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/estadisticas.jpg') }}" style="margin-left: 15%" />#}
             <div style="text-align: center;" {#class="hotspots"#}>
-                <img width="50%" height="50%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}" {#usemap="#linemap"#} />
+                <img id="image_line" width="50%" height="50%" src="{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}" usemap="#linemap" />
                 {#<div>
                     <a href="#line" class="circle_logo_line" aria-haspopup="false"></a>
                 </div>#}
-                {#<map name="linemap">
+                <map name="linemap">
                   <area shape="circle" coords="233,234,150" href="#lines" >
-                </map>#}
+                </map>
             </div>
         </div>
     </div>
 </div>
+                
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var img = new Image();
+            img.onload = function() {
+                var imgLine = $("#image_line");
+                console.log(img.clientWidth);
+                var distancia= $("#image_line").offset();
+                var location = $("#image_line").position();
+                console.log(img.height*0.50);
+                console.log(img.naturalHeight);
+                console.log($("#image_line").innerWidth());
+                console.log($("#image_line").innerHeight());
+                console.log($("#image_line").outerWidth());
+                console.log($("#image_line").outerHeight());
+                console.log($("#image_line").width());
+                console.log($("#image_line").height());
+            };
+            img.src = "{{ asset('bundles/pequivenseip/logotipos-pqv/logo_lineas_estrategicas.jpg') }}";
+        });
+    </script>
+{% endblock %}
