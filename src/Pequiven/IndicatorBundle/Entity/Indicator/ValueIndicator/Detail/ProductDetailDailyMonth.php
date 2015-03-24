@@ -23,6 +23,7 @@ use Tpg\ExtjsBundle\Annotation as Extjs;
  * @ORM\Entity()
  * @Extjs\Model()
  * @Extjs\ModelProxy("/api/indicator-value/product-detail-daily-month")
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductDetailDailyMonth extends BaseModel
 {
@@ -39,7 +40,7 @@ class ProductDetailDailyMonth extends BaseModel
      * Detalle de valor del indicador
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail
      * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail",inversedBy="productsDetailDailyMonth")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $valueIndicatorDetail;
 
@@ -54,9 +55,16 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Componentes del producto
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
-     * @ORM\ManyToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",cascade={"persist","remove"},mappedBy="parent")
      */
     private $components;
+    
+    /**
+     * Producto padre
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
+     * @ORM\ManyToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth",inversedBy="components")
+     */
+    private $parent;
 
     /**
      * Mes
@@ -82,9 +90,9 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Porcentaje de cumplimiento
      * @var float
-     * @ORM\Column(name="percentaje",type="float")
+     * @ORM\Column(name="percentage",type="float")
      */
-    private $percentaje = 0;
+    private $percentage = 0;
     
     /**
      * Dia 1 (Plan)
@@ -622,26 +630,26 @@ class ProductDetailDailyMonth extends BaseModel
     }
 
     /**
-     * Set percentaje
+     * Set percentage
      *
-     * @param float $percentaje
+     * @param float $percentage
      * @return ProductDetailDailyMonth
      */
-    public function setPercentaje($percentaje)
+    public function setPercentage($percentage)
     {
-        $this->percentaje = $percentaje;
+        $this->percentage = $percentage;
 
         return $this;
     }
 
     /**
-     * Get percentaje
+     * Get percentage
      *
      * @return float 
      */
-    public function getPercentaje()
+    public function getPercentage()
     {
-        return $this->percentaje;
+        return $this->percentage;
     }
 
     /**
@@ -2124,6 +2132,7 @@ class ProductDetailDailyMonth extends BaseModel
      */
     public function addComponent(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $components)
     {
+        $components->setParent($this);
         $this->components->add($components);
 
         return $this;
@@ -2147,5 +2156,110 @@ class ProductDetailDailyMonth extends BaseModel
     public function getComponents()
     {
         return $this->components;
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
+     */
+    function getParent() 
+    {
+        return $this->parent;
+    }
+    
+    /**
+     * 
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $parent
+     */
+    function setParent(\Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth $parent) 
+    {
+        $this->parent = $parent;
+        
+        return $this;
+    }
+    
+    /**
+     * Metodo que se ejecuta antes de actualizar la entidad
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $reflection = new \ReflectionClass($this);
+        $methods = $reflection->getMethods();
+        
+        $nameMatchReal = '^getDay\w+Real$';
+        $nameMatchPlan = '^getDay\w+Plan$';
+        
+        $totalReal = $totalPlan = 0.0;
+        foreach ($methods as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
+                continue;
+            }
+            $value = 0.0;
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $value = $this->$methodName();
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $totalReal +=  $value;
+            }
+            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $totalPlan +=  $value;
+            }
+        }
+        $this->setTotalPlan($totalPlan);
+        $this->setTotalReal($totalReal);
+        $percentage = 0;
+        if($totalPlan != 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $this->setPercentage($percentage);
+    }
+    
+    public function updateParentTotals()
+    {
+        $components = $this->getComponents();
+        $quantity = count($components);
+        $totalPlan = $totalReal = $totalPercentage = 0.0;
+        $reflection = new \ReflectionClass(new self());
+        $properties = $reflection->getProperties();
+
+        $nameMatchReal = '^day\w+Real$';
+        $nameMatchPlan = '^day\w+Plan$';
+        $totalsChilds = array();
+        
+        $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
+        foreach ($components as $component) {
+            $totalPlan += $component->getTotalPlan();
+            $totalReal += $component->getTotalReal();
+            $totalPercentage += $component->getPercentage();
+            
+            foreach ($properties as $property) {
+                $propertyName = $property->getName();
+//                print_r($propertyName);
+                $class = $property->getDeclaringClass();
+                if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
+                    continue;
+                }
+                if(preg_match('/'.$nameMatchReal.'/i', $propertyName) == false && preg_match('/'.$nameMatchPlan.'/i', $propertyName) == false){
+                    continue;
+                }
+                
+                if(!isset($totalsChilds[$propertyName])){
+                    $totalsChilds[$propertyName] = 0.0;
+                }
+                $value = (float)$propertyAccessor->getValue($component, $propertyName);
+                
+                $propertyTotal = $totalsChilds[$propertyName] + $value;
+                $totalsChilds[$propertyName] = $propertyTotal;
+            }
+        }
+        foreach ($totalsChilds as $property => $value) {
+            $propertyAccessor->setValue($this, $property, $value);
+        }
+//        $this->setTotalPlan($totalPlan);
+//        $this->setTotalReal($totalReal);
+//        $this->setPercentage($totalPercentage);
     }
 }

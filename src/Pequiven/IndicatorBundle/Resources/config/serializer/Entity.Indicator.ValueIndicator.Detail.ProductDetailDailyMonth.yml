@@ -19,7 +19,7 @@ Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDai
         totalReal:
             expose: true
             groups: [api_list]
-        percentaje:
+        percentage:
             expose: true
             groups: [api_list]
         day1Plan:

@@ -130,6 +130,18 @@ body > a:focus
 .fa-cubes {
     content: '\f1b3';
 }
+.fa-truck {
+    content: '\f0d1';
+}
+.fa-cogs {
+    content: '\f085';
+}
+.fa-sort-amount-asc {
+    content: '\f160';
+}
+.fa-cog {
+    content: '\f013';
+}
 
 a:hover {
     color: #09f;

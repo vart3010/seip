@@ -161,6 +161,8 @@ pequiven_seip:
         type:
             product: Producto
             service: Servicio
+            products: Productos
+            services: Servicios
     notify:
         one_similar_notification: Una notificación similar
         n_similar_notifications: %d notificaciones similares

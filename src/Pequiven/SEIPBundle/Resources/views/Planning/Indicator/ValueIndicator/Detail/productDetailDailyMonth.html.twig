@@ -7,7 +7,7 @@
     {#<link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">#}
     <style>
         .x-grid-tree-node-expanded .x-tree-icon-parent {
-{#            background-image: none;#}
+            background-image: none;
         }
         .x-panel-header-default {
             background-color: #bd0000;
@@ -77,7 +77,7 @@
                             type: "float"            
                     },
                     {
-                            name: "percentaje",            
+                            name: "percentage",            
                             type: "float"            
                     },
                     {
@@ -367,20 +367,39 @@
                 proxy: {"type":"rest","url":"/api/indicator-value/product-detail-daily-month","format":"json","writer":{"type":"json","writeRecordId":false}}
             });
             
+            var refreshBtn = Ext.create("Ext.Button", {
+                itemId: 'refreshBtn',
+                text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                glyph: 'xf021@FontAwesome',
+                xtype: 'button',
+                disabled: false,
+                handler: function(){
+                    store.load();
+                }
+            });
+            var buttonsAllow = [ refreshBtn ];
+            var baseClsColumnPlan = "bg-column-gray";
+            
             var store = Ext.create('Ext.data.TreeStore', {
-                {#model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',#}
+{#                model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',#}
                 model: 'ProductDetailDailyMonth',
                 autoLoad: true,
                 autoSync: true,
                 proxy: {
-                    type: 'ajax',
+                    type: 'rest',
                     url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
                     api: {
-                        create: 'createPersons',
+                        create: null,
                         read: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
-{#                        read: 'http://localhost/symfony/seip/web/app_dev.php/pre-planning/get-pre-planning?level=3&nodeRoot=1&referral=import&_dc=1426780350108&node=root',#}
-                        update: 'updatePersons',
-                        destroy: 'destroyPerson'
+                        update: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json' }) }}',
+                        destroy: null
+                    },
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'children'
+                    },
+                    writer: {
+                        type: 'json'
                     },
                     actionMethods: {
                         update: 'POST'
@@ -406,39 +425,45 @@
                             store.remove(context.record);
                         }
                     },
+                    beforeedit: function (editor, context, eOpts) {
+                        var data = context.record.data;
+                        if (data.children != undefined && data.children.length > 0) {
+                            {#context.value = formatNumber(context.value);#}
+                            return false;
+                        }
+                        return true;
+                    }
                 }
             });
-                
-            var widthColumnDays = 50;
+            
+            //Renderiza el valor de las columnas
+            function renderColumDetails(val, metaData, record, rowIndex, colIndex, store) {
+                var originalVal = val;
+                val = formatNumber(val);
+                if (record.get("children") != null && record.get("children").length > 0) {
+                        metaData.css = 'td-bg-disabled';
+                }else {
+                    if (originalVal > 0) {
+                        val = '<span style="color:green;">' + val + '</span>';
+                    } else if (originalVal < 0) {
+                        val = '<span style="color:red;">' + val + '</span>';
+                    }
+                }
+                return val;
+            }
+            //Formatea los numeros a dos decimales
+            function renderColumnNumber(val, metaData, record, rowIndex, colIndex, store){
+                return formatNumber(val);
+            }
+            
+            var widthColumnDays = 65;
+            var widthColumnAcumulated = 60;
+            var alignColumn = 'center';
+            
             var fieldTypeDayProperties = {
                 xtype: 'numberfield',
                 minValue: 0
             };
-            
-            {#var groups = Ext.create('Ext.grid.feature.GroupingSummary',{
-                 id: 'group',
-                 ftype: 'groupingsummary',
-                 groupHeaderTpl: '{[groupParseToString(values)]}',
-                 hideGroupedHeader: true,
-                 enableGroupingMenu: false
-            });
-            var grid = Ext.create('Ext.grid.Panel', {
-                selType: 'cellmodel',
-                renderTo: 'grid-summary',
-                height: 580,
-                plugins: [cellEditing],
-                frame: true,
-                title: '{{ indicator }}',
-                store: store,
-                iconCls: 'icon-user',
-                layout: 'border',
-                features: [groups],
-                split: true,
-                lockedViewConfig: {
-                    scroll: 'horizontal'
-                },
-                
-            });#}
             
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {
@@ -453,6 +478,10 @@
                 multiSelect: true,
                 selType: 'cellmodel',
                 plugins: [cellEditing],
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: buttonsAllow
+                }],
                 columns: [
                 {
                     text: '{{ 'Productos y Servicios'|trans }}',
@@ -467,7 +496,7 @@
                             width: 200,
                             sortable: false,
                             dataIndex: 'name',
-{#                            locked: true,#}
+                            locked: true,
                         },
                         {
                             text: '{{ 'pequiven_seip.cumulative'|trans }}',
@@ -476,17 +505,24 @@
                                 {
                                     text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
                                     dataIndex: 'totalPlan',
-                                    width: 50,
+                                    width: widthColumnAcumulated,
+                                    baseCls: baseClsColumnPlan,
+                                    align: alignColumn,
+                                    renderer: renderColumnNumber,
                                 },
                                 {
                                     text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
                                     dataIndex: 'totalReal',
-                                    width: 50,
+                                    width: widthColumnAcumulated,
+                                    align: alignColumn,
+                                    renderer: renderColumnNumber,
                                 },
                                 {
                                     text: '{{ "pequiven.goals.percentaje"|trans({},"PequivenArrangementProgramBundle") }}',
-                                    dataIndex: 'percentaje',
-                                    width: 50,
+                                    dataIndex: 'percentage',
+                                    width: widthColumnAcumulated,
+                                    align: alignColumn,
+                                    renderer: renderColumnNumber,
                                 }
                             ]
                         }
@@ -499,13 +535,18 @@
                                 text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
                                 dataIndex: 'day1Plan',
                                 width: widthColumnDays,
-                                field: fieldTypeDayProperties
+                                field: fieldTypeDayProperties,
+                                baseCls: baseClsColumnPlan,
+                                align: alignColumn,
+                                renderer: renderColumDetails,
                             },
                             {
                                 text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
                                 dataIndex: 'day1Real',
                                 width: widthColumnDays,
-                                field: fieldTypeDayProperties
+                                field: fieldTypeDayProperties,
+                                align: alignColumn,
+                                renderer: renderColumDetails,
                             }
                         ]
                     }
