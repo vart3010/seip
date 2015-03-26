@@ -171,25 +171,15 @@
             {% if indicator.parent %}
                 <div class="inline-label">
                     <label class="label">{{ 'form.parent_indicator'|trans }}</label>
-                    <span>{{ generateLink(indicator.parent) }}</span>
+                    {% set childrens = [indicator.parent] %}
+                    {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                 </div>
             {% endif %}
             {% if (indicator.childrens | length) > 0 %}
                 <div class="inline-label">
                     <label class="label">{{ 'form.associated_indicators'|trans }}</label>
-                    <ul class="fa-ul">
-                        {% for child in indicator.childrens %}
-                            <li>{{ generateLink(child) }}
-                                {% if indicator.typeOfCalculation == constant('Pequiven\\IndicatorBundle\\Model\\Indicator::TYPE_CALCULATION_FORMULA_AUTOMATIC') %}
-                                    &nbsp;
-                                    {% set validChild = indicatorService.validateChildOfParent(child) %}
-                                    {% if  validChild != null %}
-                                        <span class="tag red-bg">{{ validChild }}</span>
-                                    {% endif %}
-                                {% endif %}
-                                </li>
-                        {% endfor %}
-                    </ul>
+                    {% set childrens = indicator.childrens %}
+                    {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                 </div>
             {% endif %}
         </div>

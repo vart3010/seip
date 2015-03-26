@@ -1,5 +1,8 @@
 <ul class="fa-ul">
-{% for indicator in entity.indicators %}
+{% if childrens is not defined %}
+    {% set childrens = entity.indicators %}
+{% endif %}
+{% for indicator in childrens %}
     <li>
         {% set avancedUsed = indicator.getResult %}
         {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
