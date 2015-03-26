@@ -456,6 +456,38 @@
                 return formatNumber(val);
             }
             
+            function totalizeChildren(record,property){
+                var total = record.get("totalPlan");
+                var children = record.get("children");
+                if(children != null && children.length > 0){
+                    var i = 0;
+                    total = 0;
+                    for(i = 0; i < children.length; i++){
+                        var v = children[i][property];
+                        if(v != undefined){
+                            total = total + v;
+                        }
+                    }
+                }
+                return total;
+            }
+            
+            function renderColumnTotal(val, metaData, record, rowIndex, colIndex, store){
+                
+                var property = "totalPlan";
+                
+                return renderColumnNumber(totalizeChildren(record,property), metaData, record, rowIndex, colIndex, store);
+            }
+            
+            function renderColumnReal(val, metaData, record, rowIndex, colIndex, store){
+                var property = "totalReal";
+                return renderColumnNumber(totalizeChildren(record,property), metaData, record, rowIndex, colIndex, store);
+            }
+            
+            function renderColumnTotalPercentage(val, metaData, record, rowIndex, colIndex, store){
+                return renderColumnNumber(val, metaData, record, rowIndex, colIndex, store);
+            }
+            
             var widthColumnDays = 65;
             var widthColumnAcumulated = 60;
             var alignColumn = 'center';
@@ -508,21 +540,21 @@
                                     width: widthColumnAcumulated,
                                     baseCls: baseClsColumnPlan,
                                     align: alignColumn,
-                                    renderer: renderColumnNumber,
+                                    renderer: renderColumnTotal,
                                 },
                                 {
                                     text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
                                     dataIndex: 'totalReal',
                                     width: widthColumnAcumulated,
                                     align: alignColumn,
-                                    renderer: renderColumnNumber,
+                                    renderer: renderColumnReal,
                                 },
                                 {
                                     text: '{{ "pequiven.goals.percentaje"|trans({},"PequivenArrangementProgramBundle") }}',
                                     dataIndex: 'percentage',
                                     width: widthColumnAcumulated,
                                     align: alignColumn,
-                                    renderer: renderColumnNumber,
+                                    renderer: renderColumnTotalPercentage,
                                 }
                             ]
                         }
