@@ -402,6 +402,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $this->calculateFormulaAutomaticFromEQFromChild($indicator);
             }
         }
+        //Refrescando los valores de cada resultado del indicador
         foreach ($indicator->getValuesIndicator() as $valueIndicator) {
             $formulaParameters = $valueIndicator->getFormulaParameters();
             if(is_array($formulaParameters)){
@@ -1401,7 +1402,7 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 if(isset($formulaParameters[$name])){
                     $$name = $value;
                 }
-            }
+        }
         @eval(sprintf('$equation_real = %s;',$sourceEquationReal));
         @eval(sprintf('$equation_plan = %s;',$sourceEquationPlan));
       

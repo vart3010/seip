@@ -136,6 +136,7 @@ pequiven:
         abbr_planned: P
         abbr_real: R
         summary: Avances
+        percentaje: %
 seip:
     table:
         header:

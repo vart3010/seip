@@ -157,6 +157,12 @@ pequiven_seip:
     selected: Seleccionado(s)
     all: Todos
     search: Buscar
+    product:
+        type:
+            product: Producto
+            service: Servicio
+            products: Productos
+            services: Servicios
     notify:
         one_similar_notification: Una notificación similar
         n_similar_notifications: %d notificaciones similares
@@ -211,6 +217,9 @@ pequiven_seip:
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%
+    cumulative: Acumulado
+    form:
+        dayX: Día %x%
     security:
         permission_denied: Permiso denegado!
         403:

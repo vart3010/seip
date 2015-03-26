@@ -1,0 +1,15 @@
+pequiven_value_indicator_detail_create:
+    path: /{indicator_value_id}/create
+    defaults:
+        _controller: pequiven.controller.value_indicator_detail:createAction
+        _format: html
+    options:
+        expose: true
+        
+pequiven_value_indicator_detail_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.value_indicator_detail:showAction
+        _format: html
+    options:
+        expose: true

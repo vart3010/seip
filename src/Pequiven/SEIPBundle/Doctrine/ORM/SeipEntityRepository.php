@@ -16,12 +16,16 @@ use Pequiven\SEIPBundle\Service\PeriodService;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Description of SeipEntityRepository
+ * Repositorio base para entidades seip
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
 class SeipEntityRepository extends EntityRepository
 {
+    /**
+     * 
+     * @return QueryBuilder
+     */
     public function getQueryAllEnabled()
     {
         $qb = $this->getQueryBuilder();
