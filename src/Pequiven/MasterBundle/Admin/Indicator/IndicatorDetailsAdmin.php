@@ -49,19 +49,8 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
         $selectUnitParameters = array();
         
         $unitConverter = $this->getUnitConverter();
-        $unitsTypes = $unitConverter->getAvailableUnit()->getUnitsTypes();
-        $selectUnits = array();
-        foreach ($unitsTypes as $type => $data) {
-            $dataUnits = array();
-            $unitDescription = $data['description'];
-            foreach ($data['units'] as $unit)
-            {
-                $dataUnits[json_encode(array('unitType' => $type,'unit' => $unit['name']))] = sprintf('%s (%s)',$unit['name'],$unit['aliases'][0]);
-            }
-            $selectUnits [] = array(
-                $unitDescription => $dataUnits,
-            );
-        }
+        $selectUnits = $unitConverter->toArray();
+        
         $selectUnitParameters['choices'] = $selectUnits;
         $selectUnitParameters['empty_value'] = '';
         $selectUnitParameters['required'] = false;
