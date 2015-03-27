@@ -1,3 +1,4 @@
+#Vista de las Líneas Estratégicas (Íconos)
 pequiven_line_strategic_view_dashboard:
     path: /dashboard/{_format}
     defaults:
@@ -8,6 +9,7 @@ pequiven_line_strategic_view_dashboard:
         id: \d+
     methods: [GET]
     
+#Vista de los Indicadores Estratégicos (Modo Informe Ejecutivo)
 pequiven_line_strategic_indicators_strategics:
     path: /indicator/{_format}
     defaults:
@@ -18,6 +20,7 @@ pequiven_line_strategic_indicators_strategics:
         id: \d+
     methods: [GET]
     
+#Vista de una Línea Estratégica
 pequiven_line_strategic_show:
     path: /{id}.{_format}
     defaults:
@@ -27,7 +30,8 @@ pequiven_line_strategic_show:
         _format: html|json|xml
         id: \d+
     methods: [GET]
-    
+
+#Vista de los Objetivos Estratégicos
 pequiven_line_strategic_view_objetives_strategics:
     path: /objetive/{_format}
     defaults:

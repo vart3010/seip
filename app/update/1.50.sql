@@ -63,3 +63,7 @@ ALTER TABLE seip_indicator ADD showTagInResult TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD showTagInResult TINYINT(1) DEFAULT NULL;
 ALTER TABLE seip_indicator_tag ADD showInIndicatorResult TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_tag_audit ADD showInIndicatorResult TINYINT(1) DEFAULT NULL;
+
+ALTER TABLE seip_indicator ADD summary LONGTEXT NOT NULL;
+ALTER TABLE seip_indicator_audit ADD summary LONGTEXT DEFAULT NULL;
+UPDATE seip_indicator SET summary = description;

@@ -326,6 +326,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $indicatorWeight = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="summary", type="text")
+     */
+    private $summary;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1395,5 +1402,28 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
                 }
             }
         }
+    }
+    
+    /**
+     * Set summary
+     *
+     * @param string $summary
+     * @return Indicator
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Get summary
+     *
+     * @return string 
+     */
+    public function getSummary()
+    {
+        return $this->summary;
     }
 }
