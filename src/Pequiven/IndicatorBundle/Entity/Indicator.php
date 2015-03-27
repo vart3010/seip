@@ -319,6 +319,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showTagInResult = false;
     
     /**
+     * ¿Mostar etiqueta "valor" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealValue",type="boolean")
+     */
+    private $showRealValue = true;
+    
+    /**
+     * ¿Mostar etiqueta "Plan anual" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanValue",type="boolean")
+     */
+    private $showPlanValue = true;
+    
+    /**
      * @var float
      * 
      * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
@@ -1426,4 +1440,36 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->summary;
     }
+    
+    function getShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function getShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+    
+    function isShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function isShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+
+    function setShowRealValue($showRealValue) 
+    {
+        $this->showRealValue = $showRealValue;
+    }
+
+    function setShowPlanValue($showPlanValue) 
+    {
+        $this->showPlanValue = $showPlanValue;
+    }
+
+
 }
