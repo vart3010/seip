@@ -24,12 +24,21 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('id')
             ->add('valueOfTag')
             ->add('indicator')
+            ->add('unitResult')
             ->add('createdAt')
             ->add('createdBy')
             ;
     }
     
-    protected function configureFormFields(FormMapper $form) {
+    protected function configureFormFields(FormMapper $form) 
+    {
+        $unitConverter = $this->getUnitConverter();
+        $selectUnits = $unitConverter->toArray();
+        
+        $selectUnitParameters['choices'] = $selectUnits;
+        $selectUnitParameters['empty_value'] = '';
+        $selectUnitParameters['required'] = false;
+        
         $form
             ->add('description')
             ->add('valueOfTag')
@@ -52,6 +61,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
                 'required' => false,
             ))
             ->add('sourceResult')
+            ->add('unitResult',"choice",$selectUnitParameters)
             ;
     }
     
@@ -80,5 +90,14 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) 
     {
         $this->container = $container;
+    }
+    
+    /**
+     * 
+     * @return \Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter
+     */
+    private function getUnitConverter()
+    {
+        return $this->container->get('tecnocreaciones_tools.unit_converter');
     }
 }
