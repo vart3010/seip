@@ -39,6 +39,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('goal')
             ->add('formula')
             ->add('tendency')
+            ->add('summary')
             ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
@@ -79,6 +80,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         $form
             ->add('ref')
             ->add('description')
+            ->add('summary')
             ->add('lineStrategics')
             ->add('typeOfCalculation','choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
