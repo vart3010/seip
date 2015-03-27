@@ -230,7 +230,11 @@ class ObjetiveRepository extends EntityRepository {
 
         if ($securityContext->isGranted(array('ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX', 'ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX')) && !isset($criteria['gerencia'])) {
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
+        } elseif($user->getGerencia()){
+            $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
         }
+        
+        
 
         //Si esta seteado el parámetro de nivel del objetivo, lo anexamos al query
         if (isset($criteria['objetiveLevel'])) {
@@ -295,6 +299,8 @@ class ObjetiveRepository extends EntityRepository {
             $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
             $queryBuilder->andWhere('gs.modular =:modular');
             $queryBuilder->setParameter('modular', true);
+        } elseif($user->getGerencia()){
+            $queryBuilder->andWhere('o.gerencia = ' . $user->getGerencia()->getId());
         }
 
         if (isset($criteria['gerenciaFirst'])) {
