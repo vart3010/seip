@@ -67,3 +67,8 @@ ALTER TABLE seip_indicator_tag_audit ADD showInIndicatorResult TINYINT(1) DEFAUL
 ALTER TABLE seip_indicator ADD summary LONGTEXT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD summary LONGTEXT DEFAULT NULL;
 UPDATE seip_indicator SET summary = description;
+
+
+ALTER TABLE seip_indicator ADD showRealValue TINYINT(1) NOT NULL, ADD showPlanValue TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD showRealValue TINYINT(1) DEFAULT NULL, ADD showPlanValue TINYINT(1) DEFAULT NULL;
+UPDATE `seip_indicator` SET showRealValue = 1,showPlanValue = 1 WHERE 1;
