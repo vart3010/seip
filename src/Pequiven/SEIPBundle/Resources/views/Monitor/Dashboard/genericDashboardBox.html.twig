@@ -26,9 +26,11 @@
             var img = new Image();
             img.onload = function() {
                 widthWindowIni = window.innerWidth;
-                console.log(widthWindowIni);
+                
+                {#console.log(widthWindowIni);
                 console.log($("#hidden_before").offset);
-                console.log($("#hidden_before").offset().rigth);
+                console.log($("#hidden_before").offset().rigth);#}
+                
 {#                circle_line.setAttribute('coords',window.innerWidth*0.365*0.5+','+window.innerWidth*0.365*0.5+','+window.innerWidth*0.365*0.321);#}
 {#                $('map').imageMapResize();#}
                 circle_line.setAttribute('coords',((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5*0.7);
@@ -39,7 +41,9 @@
             window.onresize = function() {
 {#                $('map').imageMapResize();#}
 {#                console.log($("#main").position());#}
-                console.log(window.innerWidth);
+    
+{#                console.log(window.innerWidth);#}
+                
                 var newWidthWindow = window.innerWidth;
                 if(newWidthWindow > 990){
                     circle_line.setAttribute('coords',((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5+','+((window.innerWidth*0.78)-60)*0.5*0.5*0.7);
