@@ -172,6 +172,7 @@
                 <div class="inline-label">
                     <label class="label">{{ 'form.parent_indicator'|trans }}</label>
                     {% set childrens = [indicator.parent] %}
+                    {% set indicatorWeight = true %}
                     {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                 </div>
             {% endif %}
@@ -179,6 +180,7 @@
                 <div class="inline-label">
                     <label class="label">{{ 'form.associated_indicators'|trans }}</label>
                     {% set childrens = indicator.childrens %}
+                    {% set indicatorWeight = true %}
                     {% include 'PequivenObjetiveBundle:Common:indicators.html.twig' %}
                 </div>
             {% endif %}

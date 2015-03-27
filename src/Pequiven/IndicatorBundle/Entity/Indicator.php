@@ -319,6 +319,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showTagInResult = false;
     
     /**
+     * @var float
+     * 
+     * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
+     */
+    private $indicatorWeight = 0;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="summary", type="text")
@@ -1373,7 +1380,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this->showTagInResult;
     }
     
-    
+    function getIndicatorWeight() {
+        return $this->indicatorWeight;
+    }
+
+    function setIndicatorWeight($indicatorWeight) {
+        $this->indicatorWeight = $indicatorWeight;
+    }
+
     public function showResultOfIndicator(){
         if(!$this->showTagInResult){
             return $this->resultReal;
