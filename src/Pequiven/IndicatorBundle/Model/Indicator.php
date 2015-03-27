@@ -68,6 +68,10 @@ abstract class Indicator implements IndicatorInterface
      * Metodo de calculo por promedio del plan y real acumulado de los hijos
      */
     const CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN = 2;
+    /**
+     * Metodo de calculo por promedio ponderado del resultado de los hijos
+     */
+    const CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN = 3;
     
     const TYPE_OBJECT = 'indicator';
     
@@ -256,6 +260,7 @@ abstract class Indicator implements IndicatorInterface
             self::CALCULATION_METHOD_ACCUMULATION_OF_VARIABLES => 'pequiven_indicator.calculation_method.accumulation_of_variables',
             self::CALCULATION_METHOD_AVERAGE_BASED_ON_NUMBER_CHILDREN => 'pequiven_indicator.calculation_method.average_based_number_children',
             self::CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN => 'pequiven_indicator.calculation_method.average_plan_real_children',
+            self::CALCULATION_METHOD_WEIGHTED_AVERAGE_RESULT_CHILDREN => 'pequiven_indicator.calculation_method.weighted_average_result_children',
         );
     }
     

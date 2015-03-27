@@ -6,7 +6,12 @@
     <li>
         {% set avancedUsed = indicator.getResult %}
         {% include 'PequivenObjetiveBundle:Common:percentajeBarResult.html.twig' %}
-        {{ generateLink(indicator) }}{% if indicator.weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ indicator.weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}
+        {% if indicatorWeight is defined %}
+            {% set weight = indicator.indicatorWeight %}
+        {% else %}
+            {% set weight = indicator.weight %}
+        {% endif %}
+        {{ generateLink(indicator) }}{% if weight > 0 %}&nbsp;({{ 'pequiven_seip.results.weight'|trans({},'PequivenSEIPBundle') }} {{ weight }}%){% endif %} - {{ indicatorService.resultWithArrangementRangeColor(indicator)|raw }}
     </li>
 {% endfor  %}
 </ul>
