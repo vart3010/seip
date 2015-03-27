@@ -1297,22 +1297,56 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     continue;
                 }
                 $results = $resultsItems[$i];
-//                var_dump($results);
                 $totalRealChild = 0.0;
                 $totalPlanChild = 0;
-//                $j = 0;
                 foreach ($results as $childValueIndicator) {
                     $formulaChild = $childValueIndicator->getIndicator()->getFormula();
-//                    $j++;
-//                    if($details->getSourceResult() == \Pequiven\IndicatorBundle\Model\Indicator\IndicatorDetails::SOURCE_RESULT_LAST && $j !== $valuesIndicatorQuantity){
-//                        continue;
-//                    }
                     $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
                     $totalRealChild += $value;
                     $totalPlanChild++;
                 }
                 $valueIndicator->setParameter($variableToPlanValueName,$totalPlanChild);
                 $valueIndicator->setParameter($variableToRealValueName,$totalRealChild);
+            }else if($calculationMethod == Indicator::CALCULATION_METHOD_AVERAGE_PLAN_REAL_CHILDREN){
+                if(isset($resultsItems[$i]) == false){
+                    continue;
+                }
+                $results = $resultsItems[$i];
+//                var_dump($results);
+                $totalRealChild = $totalPlanChild = 0.0;
+                $totalChild = count($results);
+//                $j = 0;
+                foreach ($results as $childValueIndicator) {
+                    $formulaChild = $childValueIndicator->getIndicator()->getFormula();
+                    $value = $indicatorService->calculateFormulaValue($formulaChild, $childValueIndicator->getFormulaParameters());
+                    if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                        $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                        $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    }else {
+                        $planVariableName = $variableToPlanValueName;
+                        $realVariableName = $variableToRealValueName;
+                    }
+                    $valuePlan = $childValueIndicator->getParameter($planVariableName);
+                    $valueReal = $childValueIndicator->getParameter($realVariableName);
+//                    var_dump($valuePlan);
+//                    var_dump($valueReal);
+                    $totalPlanChild += (float)$valuePlan;
+                    $totalRealChild += (float)$valueReal;
+                }
+//                var_dump($totalChild);
+//                var_dump($totalPlanChild);
+                $totalPlanAcumulated = ($totalPlanChild / $totalChild);
+                $totalRealAcumulated = ($totalRealChild / $totalChild);
+                if($formulaUsed->getTypeOfCalculation() == Formula::TYPE_CALCULATION_REAL_AND_PLAN_AUTOMATIC){
+                    $planVariableName = $formulaUsed->getVariableToPlanValue()->getName();
+                    $realVariableName = $formulaUsed->getVariableToRealValue()->getName();
+                    $valueIndicator->setParameter($planVariableName,$totalPlanAcumulated);
+                    $valueIndicator->setParameter($realVariableName, $totalRealAcumulated);
+                }
+                
+                $valueIndicator->setParameter($variableToPlanValueName,$totalPlanAcumulated);
+                $valueIndicator->setParameter($variableToRealValueName, $totalRealAcumulated);
+//                var_dump($valueIndicator->getFormulaParameters());
             }
             $i++;
 //            if($typeOfCalculation == Formula::TYPE_CALCULATION_REAL_AND_PLAN_FROM_EQ){

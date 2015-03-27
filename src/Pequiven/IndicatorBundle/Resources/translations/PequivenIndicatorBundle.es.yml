@@ -60,6 +60,7 @@ pequiven_indicator:
     calculation_method:
         accumulation_of_variables: Acumulación de variables
         average_based_number_children: Promedio en base a número de hijos
+        average_plan_real_children: Promedio de las variables plan y real en base a número de hijos
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
