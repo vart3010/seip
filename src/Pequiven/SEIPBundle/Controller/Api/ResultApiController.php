@@ -122,14 +122,22 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                 );
             }
             
+            $gerenciaFirst = $user->getGerencia();
+            $gerenciaSecond = $user->getGerenciaSecond();
+            
+            if($gerenciaFirst && $gerenciaFirst->isValidAudit() === false){
+               $isValidAudit = false; 
+               $this->addErrorTrans('pequiven_seip.errors.the_first_line_management_no_audit',array("%gerenciaFirst%" => $gerenciaFirst));
+               $status = self::RESULT_NO_AUDIT;
+            }
+            if($gerenciaSecond && $gerenciaSecond->isValidAudit() === false){
+               $isValidAudit = false; 
+               $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit',array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
+               $status = self::RESULT_NO_AUDIT;
+            }
+            
             if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_FIRST || $user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_GENERAL_COMPLEJO) {
-                $gerenciaFirst = $user->getGerencia();
                 if($gerenciaFirst){
-                    if($gerenciaFirst->isValidAudit() === false){
-                       $isValidAudit = false; 
-                       $this->addErrorTrans('pequiven_seip.errors.the_first_line_management_no_audit',array("%gerenciaFirst%" => $gerenciaFirst));
-                       $status = self::RESULT_NO_AUDIT;
-                    }
                     foreach ($gerenciaFirst->getTacticalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
@@ -140,17 +148,7 @@ class ResultApiController extends \FOS\RestBundle\Controller\FOSRestController
                     $status = self::RESULT_INVALID_CONFIGURATION;
                 }
             } else if($user->getLevelRealByGroup() == \Pequiven\MasterBundle\Model\Rol::ROLE_MANAGER_SECOND) {
-                $gerenciaSecond = $user->getGerenciaSecond();
                 if($gerenciaSecond){
-                    if($gerenciaSecond->isValidAudit() === false){
-                       $isValidAudit = false; 
-                       $this->addErrorTrans('pequiven_seip.errors.the_first_line_management_no_audit',array("%gerenciaFirst%" => $gerenciaFirst));
-                       $status = self::RESULT_NO_AUDIT;
-                    }else if($gerenciaSecond->getGerencia()->isValidAudit() === false){
-                       $isValidAudit = false; 
-                       $this->addErrorTrans('pequiven_seip.errors.the_second_line_management_no_audit',array("%gerenciaSecond%" => $gerenciaSecond->getGerencia()));
-                       $status = self::RESULT_NO_AUDIT;
-                    }
                     foreach ($gerenciaSecond->getOperationalObjectives() as $objetive) {
                         $objetives[$objetive->getId()] = $objetive;
                     }
