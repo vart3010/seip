@@ -348,6 +348,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $summary;
     
     /**
+     * Snippet para calcular el plan
+     * @var string
+     * @ORM\Column(name="snippetPlan",type="text",nullable=true)
+     */
+    protected $snippetPlan;
+    
+    /**
+     * Snippet para calcular el real
+     * @var string
+     * @ORM\Column(name="snippetReal",type="text",nullable=true)
+     */
+    protected $snippetReal;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1472,5 +1486,60 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->showPlanValue = $showPlanValue;
     }
 
+    /**
+     * Get forcePenalize
+     *
+     * @return boolean 
+     */
+    public function getForcePenalize()
+    {
+        return $this->forcePenalize;
+    }
 
+    /**
+     * Set snippetPlan
+     *
+     * @param string $snippetPlan
+     * @return Indicator
+     */
+    public function setSnippetPlan($snippetPlan)
+    {
+        $this->snippetPlan = $snippetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetPlan
+     *
+     * @return string 
+     */
+    public function getSnippetPlan()
+    {
+        return $this->snippetPlan;
+    }
+
+    /**
+     * Set snippetReal
+     *
+     * @param string $snippetReal
+     * @return Indicator
+     */
+    public function setSnippetReal($snippetReal)
+    {
+        $this->snippetReal = $snippetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetReal
+     *
+     * @return string 
+     */
+    public function getSnippetReal()
+    {
+        return $this->snippetReal;
+    }
+    
 }

@@ -410,6 +410,22 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                 $em->persist($valueIndicator);
             }
         }
+        
+        $snippetPlan = $indicator->getSnippetPlan();
+        $snippetReal = $indicator->getSnippetReal();
+        
+        $parametersForTemplate = array(
+            'indicator' => $indicator,
+        );
+        if($snippetPlan !== null){
+            $snippetPlanValue = trim($this->renderString($snippetPlan,$parametersForTemplate));
+            $indicator->setTotalPlan($snippetPlanValue);
+        }
+        if($snippetReal !== null){
+            $snippetRealValue = trim($this->renderString($snippetReal,$parametersForTemplate));
+            $indicator->setValueFinal($snippetRealValue);
+        }
+        
         $indicator->updateLastDateCalculateResult();
         
         $tendenty = $indicator->getTendency();
@@ -1265,13 +1281,9 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
                     $valueParameter = $valueIndicator->getParameter($nameParameter,0);
                     $results = $resultsItems[$i];
                     if($variable->isFromEQ()){
-                        $now = new \DateTime();
-                        $tool_service = new ToolService();
                         $parametersForTemplate = array(
                             'indicator' => $indicator,
                             'result_number' => ($i + 1),
-                            'date_now' => new \DateTime(),
-                            'tool_service' => $tool_service,
                             'results' => $results,
                         );
                         $valueParameter = trim($this->renderString($variable->getEquation(),$parametersForTemplate));
@@ -1844,6 +1856,11 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
      */
     private function renderString($string, array $parameters = array())
     {
+        $toolService = new ToolService();
+        $parameters = array_merge($parameters,array(
+            'tool_service' => $toolService,
+            'date_now' => new \DateTime(),
+        ));
         return $this->container->get('app.twig_string')->render($string, $parameters);
     }
 }
