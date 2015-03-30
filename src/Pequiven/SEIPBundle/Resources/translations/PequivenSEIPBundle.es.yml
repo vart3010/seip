@@ -372,8 +372,13 @@ pequiven_seip_box_tactic_summaryindicatorcharged: Indicadores tacticos.
 pequiven_seip_box_tactic_summaryindicatorchargedbygroup: Indicadores tacticos por gerencia.
 pequiven_seip_box_operative_summaryindicatorcharged: Indicadores operativos.
 pequiven_seip_box_operative_summaryindicatorchargedbygroup: Indicadores operativos por gerencia.
-pequiven_seip_box_operative_genericdashboard: Bienvenida general a los usuarios.
-pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificacion.
+pequiven_seip_box_genericdashboardbox: Bienvenida general a los usuarios.
+pequiven_seip_box_dashboard_planningdashboard: Bienvenida para los trabajadores de planificación
+pequiven_seip_box_linestrategic_icons_indicator_dashboard: Indcadores Estratégicos (Íconos)
+pequiven_seip_box_linestrategic_icons_indicator_by_line_dashboard: Indicadores Estratégicos por Línea Estratégica
+pequiven_seip_box_linestrategic_icons_dashboard: Línea Estratégicas (Íconos)
+pequiven_seip_box_linestrategic_iconsnavbar : Línea Estratégicas (Barra de Navegación)
+pequiven_indicator_box_iconssummary: Indicadores Estratégicos (Librito)
 
 miscellaneous:
     noCharged: No Cargado

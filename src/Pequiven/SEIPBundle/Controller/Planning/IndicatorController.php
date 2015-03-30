@@ -55,6 +55,8 @@ class IndicatorController extends ResourceController
             ),
         );
         
+        $indicatorService->updateTagIndicator($resource);
+        
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
         $indicatorRange = array();

@@ -36,9 +36,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
+            ->add('indicatorWeight')
             ->add('goal')
             ->add('formula')
             ->add('tendency')
+            ->add('summary')
             ->add('arrangementRange')
             ->add('frequencyNotificationIndicator')
             ->add('valueFinal')
@@ -47,6 +49,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('couldBePenalized')
             ->add('forcePenalize')
             ->add('resultInPercentage')
+            ->add('showRealValue')
+            ->add('showPlanValue')
             ->add('requiredToImport')
             ->add('details')
             ;
@@ -79,6 +83,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         $form
             ->add('ref')
             ->add('description')
+            ->add('summary',null,array(
+                'required' => false,
+            ))
             ->add('lineStrategics')
             ->add('typeOfCalculation','choice',array(
                 'choices' => \Pequiven\IndicatorBundle\Entity\Indicator::getTypesOfCalculation(),
@@ -95,6 +102,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('refParent')
             ->add('totalPlan')
             ->add('weight')
+            ->add('indicatorWeight')
             ->add('goal')
             ->add('formula')
             ->add('tendency')
@@ -125,6 +133,15 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 'required' => false,
             ))
             ->add('resultInPercentage',null,array(
+                'required' => false,
+            ))
+            ->add('showTagInResult',null,array(
+                'required' => false,
+            ))
+            ->add('showRealValue',null,array(
+                'required' => false,
+            ))
+            ->add('showPlanValue',null,array(
                 'required' => false,
             ))
             ->add('requiredToImport',null,array(

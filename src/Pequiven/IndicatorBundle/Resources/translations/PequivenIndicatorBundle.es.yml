@@ -60,6 +60,8 @@ pequiven_indicator:
     calculation_method:
         accumulation_of_variables: Acumulación de variables
         average_based_number_children: Promedio en base a número de hijos
+        average_plan_real_children: Promedio de las variables plan y real en base a número de hijos
+        weighted_average_result_children: Promedio ponderado de los resultadosa de los hijos
     results: Resultado(s)
     value_indicator:
         enter_values_variables: Ingrese los valores de las variables
@@ -89,6 +91,12 @@ pequiven_indicator:
         the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
         the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
         the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
+    type_tag:
+        tagNumeric: Numérica
+        tagText: Texto
+    type_value_tag:
+        fromEquation: A partir de ecuación
+        fromInput: Ingresado manualmente
         
 form:
     ref: Nro. de Referencia

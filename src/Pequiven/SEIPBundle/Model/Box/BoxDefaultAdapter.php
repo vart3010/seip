@@ -25,25 +25,26 @@ class BoxDefaultAdapter extends BoxBaseAdapter
         
         $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
         $boxActive->setBoxName('pequiven_seip_box_my_arrangementprogram_summary');
-        $boxActive->setArea(AreasBox::PRINCIPAL,array('position' => 1));
+        $boxActive->setArea(AreasBox::PRINCIPAL,array('position' => 0));
         $boxActives[] = $boxActive;
         
-        if($this->isGranted('ROLE_WORKER_PLANNING')){
-            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('pequiven_seip_box_tactic_summaryindicatorcharged');
-            $boxActive->setArea(AreasBox::PRINCIPAL,array('position' => 0));
-
-            $boxActives[] = $boxActive;
-        }
+//        if($this->isGranted('ROLE_WORKER_PLANNING')){
+//            $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
+//            $boxActive->setBoxName('pequiven_seip_box_tactic_summaryindicatorcharged');
+//            $boxActive->setArea(AreasBox::PRINCIPAL,array('position' => 0));
+//
+//            $boxActives[] = $boxActive;
+//        }
         if($this->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('pequiven_seip_box_dashboard_planningdashboard');
+//            $boxActive->setBoxName('pequiven_seip_box_dashboard_planningdashboard');
+            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
             $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;
         }else{
             $boxActive = new \Tecnocreaciones\Bundle\BoxBundle\Model\BoxStaticLocked();
-            $boxActive->setBoxName('pequiven_seip_box_operative_genericdashboard');
+            $boxActive->setBoxName('pequiven_seip_box_genericdashboardbox');
             $boxActive->setArea(AreasBox::DASHBOARD,array('position' => 0));
 
             $boxActives[] = $boxActive;

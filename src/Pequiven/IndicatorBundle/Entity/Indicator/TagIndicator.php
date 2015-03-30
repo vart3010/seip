@@ -18,6 +18,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\TagIndicator as Model;
  * @ORM\Table(name="seip_indicator_tag")
  * @ORM\Entity()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @ORM\HasLifecycleCallbacks()
  */
 class TagIndicator extends Model
 {
@@ -132,6 +133,20 @@ class TagIndicator extends Model
      * @ORM\Column(name="sourceResult",type="integer")
      */
     private $sourceResult = self::SOURCE_RESULT_ALL;
+    
+    /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición en el indicador?
+     * @var boolean
+     * @ORM\Column(name="showInIndicatorResult",type="boolean")
+     */
+    private $showInIndicatorResult = false;
+    
+    /**
+     * Unidad del resultado
+     * @var string
+     * @ORM\Column(name="unitResult",type="string",length=90, nullable=true)
+     */
+    private $unitResult;
     
     /**
      * Get id
@@ -452,5 +467,46 @@ class TagIndicator extends Model
     public function getSourceResult()
     {
         return $this->sourceResult;
+    }
+    
+    /**
+     * Set showInIndicatorResult
+     *
+     * @param boolean $showInIndicatorResult
+     * @return Indicator
+     */
+    public function setShowInIndicatorResult($showInIndicatorResult) {
+        $this->showInIndicatorResult = $showInIndicatorResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showInIndicatorResult
+     *
+     * @return boolean 
+     */
+    public function getShowInIndicatorResult() {
+        return $this->showInIndicatorResult;
+    }
+    
+    function getUnitResult() {
+        return $this->unitResult;
+    }
+
+    function setUnitResult($unitResult) {
+        $this->unitResult = $unitResult;
+    }
+    
+    function getUnitResultValue()
+    {
+        $result = "";
+        if($this->unitResult != ""){
+            $unit = @json_decode($this->unitResult);
+            if($unit->unit){
+                $result = $unit->unit;
+            }
+        }
+        return $result;
     }
 }

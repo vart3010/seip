@@ -48,4 +48,34 @@ abstract class TagIndicator
      * Origen de resultado (Tomar la ultima notificación)
      */
     const SOURCE_RESULT_LAST = 1;
+    
+    /**
+     * Retorna los tipos de etiquetas de indicador que hay.
+     * 
+     * @staticvar array $typesOfTag
+     * @return array
+     */
+    static function getLabelTypesOfTag()
+    {
+        static $typesOfTag = array(
+            self::TAG_TYPE_NUMERIC => 'pequiven_indicator.type_tag.tagNumeric',
+            self::TAG_TYPE_TEXT => 'pequiven_indicator.type_tag.tagText',
+        );
+        return $typesOfTag;
+    }
+    
+    /**
+     * Tipo de entrada del valor de la etiqueta.
+     * 
+     * @staticvar array $typesOfValueInput
+     * @return array
+     */
+    static function getLabelTypesOfValueInput()
+    {
+        static $typesOfValueInput = array(
+            self::TAG_VALUE_FROM_EQUATION => 'pequiven_indicator.type_value_tag.fromEquation',
+            self::TAG_VALUE_FROM_INPUT => 'pequiven_indicator.type_value_tag.fromInput',
+        );
+        return $typesOfValueInput;
+    }
 }

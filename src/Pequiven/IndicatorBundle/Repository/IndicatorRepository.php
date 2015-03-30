@@ -18,8 +18,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  *
  * @author matias
  */
-class IndicatorRepository extends EntityRepository {
-    
+class IndicatorRepository extends EntityRepository 
+{
     public function getByOptionRef($options = array()){
     
         $em = $this->getEntityManager();
@@ -178,6 +178,8 @@ class IndicatorRepository extends EntityRepository {
         
         if($securityContext->isGranted(array('ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_INDICATOR_ADD_RESULT')) && !isset($criteria['gerencia'])){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
+        } elseif($user->getGerencia()){
+            $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         
         //Si esta seteado el parámetro de gerencia de 1ra línea, lo anexamos al query
@@ -252,7 +254,7 @@ class IndicatorRepository extends EntityRepository {
                 $queryBuilder->andWhere('gs.modular =:modular');
                 $queryBuilder->setParameter('modular', true);
             }
-        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT'))){
+        } elseif($securityContext->isGranted(array('ROLE_INDICATOR_ADD_RESULT')) || $user->getGerencia()){
             $queryBuilder->andWhere('ob.gerencia = '.$user->getGerencia()->getId());
         }
         

@@ -74,3 +74,20 @@ ALTER TABLE seip_indicator_tag CHANGE createdBy_id createdBy_id INT DEFAULT NULL
 ALTER TABLE seip_indicator_tag CHANGE `show` showTag TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_tag_audit CHANGE `show` showTag TINYINT(1) DEFAULT NULL;
 ALTER TABLE seip_indicator_tag CHANGE indicator_id indicator_id INT NOT NULL;
+
+ALTER TABLE seip_indicator ADD showTagInResult TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD showTagInResult TINYINT(1) DEFAULT NULL;
+ALTER TABLE seip_indicator_tag ADD showInIndicatorResult TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_tag_audit ADD showInIndicatorResult TINYINT(1) DEFAULT NULL;
+
+ALTER TABLE seip_indicator ADD summary LONGTEXT NOT NULL;
+ALTER TABLE seip_indicator_audit ADD summary LONGTEXT DEFAULT NULL;
+UPDATE seip_indicator SET summary = description;
+
+
+ALTER TABLE seip_indicator ADD showRealValue TINYINT(1) NOT NULL, ADD showPlanValue TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD showRealValue TINYINT(1) DEFAULT NULL, ADD showPlanValue TINYINT(1) DEFAULT NULL;
+UPDATE `seip_indicator` SET showRealValue = 1,showPlanValue = 1 WHERE 1;
+
+ALTER TABLE seip_indicator_tag ADD unitResult VARCHAR(90) DEFAULT NULL;
+ALTER TABLE seip_indicator_tag_audit ADD unitResult VARCHAR(90) DEFAULT NULL;

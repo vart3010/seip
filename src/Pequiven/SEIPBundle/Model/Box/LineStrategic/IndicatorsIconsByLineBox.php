@@ -17,7 +17,7 @@ class IndicatorsIconsByLineBox extends GenericBox
     }
 
     public function getName() {
-        return 'pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard';
+        return 'pequiven_seip_box_linestrategic_icons_indicator_by_line_dashboard';
     }
 
     public function getParameters() {

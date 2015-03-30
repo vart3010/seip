@@ -291,6 +291,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     
     /**
      * Configuracion de origen de datos de los detalles de los valores de indicadores
+     * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
      * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",inversedBy="indicator")
      */
@@ -310,6 +311,41 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="resultInPercentage",type="boolean")
      */
     private $resultInPercentage = true;
+    
+    /**
+     * ¿Se mostrará la etiqueta en vez del resultado de medición?
+     * @var boolean
+     * @ORM\Column(name="showTagInResult",type="boolean")
+     */
+    private $showTagInResult = false;
+    
+    /**
+     * ¿Mostar etiqueta "valor" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showRealValue",type="boolean")
+     */
+    private $showRealValue = true;
+    
+    /**
+     * ¿Mostar etiqueta "Plan anual" en la ficha del indicador?
+     * @var boolean
+     * @ORM\Column(name="showPlanValue",type="boolean")
+     */
+    private $showPlanValue = true;
+    
+    /**
+     * @var float
+     * 
+     * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
+     */
+    private $indicatorWeight = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="summary", type="text")
+     */
+    private $summary;
     
     /**
      * Constructor
@@ -1314,7 +1350,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
-     * Set backward
+     * Set resultInPercentage
      *
      * @param boolean $resultInPercentage
      * @return Indicator
@@ -1335,4 +1371,106 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->resultInPercentage;
     }
+    
+    /**
+     * Set showTagInResult
+     *
+     * @param boolean $showTagInResult
+     * @return Indicator
+     */
+    public function setShowTagInResult($showTagInResult)
+    {
+        $this->showTagInResult = $showTagInResult;
+
+        return $this;
+    }
+
+    /**
+     * Get showTagInResult
+     *
+     * @return boolean 
+     */
+    public function getShowTagInResult()
+    {
+        return $this->showTagInResult;
+    }
+    
+    function getIndicatorWeight() {
+        return $this->indicatorWeight;
+    }
+
+    function setIndicatorWeight($indicatorWeight) {
+        $this->indicatorWeight = $indicatorWeight;
+    }
+
+    public function showResultOfIndicator(){
+        if(!$this->showTagInResult){
+            return $this->resultReal;
+        } else{
+            foreach ($this->getTagsIndicator() as $tagIndicator){
+                if($tagIndicator->getShowInIndicatorResult()){
+                    if($tagIndicator->getTypeTag() == Indicator\TagIndicator::TAG_TYPE_NUMERIC){
+                        return $tagIndicator->getValueOfTag();
+                    } else{
+                        return $tagIndicator->getTextOfTag();
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Set summary
+     *
+     * @param string $summary
+     * @return Indicator
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Get summary
+     *
+     * @return string 
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+    
+    function getShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function getShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+    
+    function isShowRealValue() 
+    {
+        return $this->showRealValue;
+    }
+
+    function isShowPlanValue() 
+    {
+        return $this->showPlanValue;
+    }
+
+    function setShowRealValue($showRealValue) 
+    {
+        $this->showRealValue = $showRealValue;
+    }
+
+    function setShowPlanValue($showPlanValue) 
+    {
+        $this->showPlanValue = $showPlanValue;
+    }
+
+
 }
