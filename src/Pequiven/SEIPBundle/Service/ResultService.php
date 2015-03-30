@@ -1174,6 +1174,8 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
         foreach ($indicator->getValuesIndicator() as $valueIndicator) {
             $formulaUsed = $valueIndicator->getFormula();
             $formulaParameters = $valueIndicator->getFormulaParameters();
+            $variableToPlanValueName = $formulaUsed->getVariableToPlanValue();
+            $variableToRealValueName = $formulaUsed->getVariableToRealValue();
             $plan = $real = 0.0;
             if(isset($resultsItems[$i])){
                 $plan = $resultsItems[$i][Formula\Variable::VARIABLE_REAL_AND_PLAN_FROM_EQ_PLAN];
