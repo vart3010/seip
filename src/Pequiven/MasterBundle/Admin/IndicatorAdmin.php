@@ -63,7 +63,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             'class' => 'Pequiven\IndicatorBundle\Entity\Indicator',
             'multiple' => true,
             'required' => false,
-            "property" => array("ref","description")
+            "property" => array("ref","description"),
         );
         $id = null;
         if($object != null && $object->getId() !== null){
@@ -73,14 +73,13 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
 //                return $repository->getQueryChildrenLevel($level);
 //            };
             $childrensParameters['callback'] = function ($admin, $property, $value) {
-                $datagrid = $admin->getDatagrid();
-                $queryBuilder = $datagrid->getQuery();
-                var_dump(get_class($queryBuilder));die;
-                $queryBuilder
-                    ->andWhere($queryBuilder->getRootAlias() . '.foo=:barValue')
-                    ->setParameter('barValue', $admin->getRequest()->get('bar'))
-                ;
-                $datagrid->setValue($property, null, $value);
+//                $datagrid = $admin->getDatagrid();
+//                $queryBuilder = $datagrid->getQuery();
+//                $queryBuilder
+//                    ->andWhere($queryBuilder->getRootAlias() . '.foo=:barValue')
+//                    ->setParameter('barValue', $admin->getRequest()->get('bar'))
+//                ;
+//                $datagrid->setValue($property, null, $value);
             };
             $id = $object->getId();
         }
@@ -182,8 +181,12 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     ))
                 ->end()
                 ->with('Snippets')
-                    ->add("snippetPlan")
-                    ->add("snippetReal")
+                    ->add("snippetPlan",null,array(
+                        "attr" => array("rows" => 4,)
+                    ))
+                    ->add("snippetReal",null,array(
+                        "attr" => array("rows" => 4,)
+                    ))
                 ->end()
             ->end()
             ;
