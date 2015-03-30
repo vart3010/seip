@@ -333,7 +333,20 @@ class IndicatorService implements ContainerAwareInterface
     
     public function resultWithArrangementRangeColor(Indicator $indicator){
         $color = '';
-        $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.').'%';
+        $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.');
+        if($indicator->getShowTagInResult()){
+            foreach ($indicator->getTagsIndicator() as $tagIndicator){
+                if($tagIndicator->getShowInIndicatorResult()){
+                    if($tagIndicator->getUnitResult() != ""){
+                        $text.= ' '.strtoupper($tagIndicator->getUnitResultValue());
+                    } else{
+                        $text.= '%';
+                    }
+                }
+            }
+        } else{
+            $text.= '%';
+        }
         $title = '';
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
