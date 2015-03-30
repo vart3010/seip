@@ -18,8 +18,8 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository as EntityRepository;
  *
  * @author matias
  */
-class IndicatorRepository extends EntityRepository {
-    
+class IndicatorRepository extends EntityRepository 
+{
     public function getByOptionRef($options = array()){
     
         $em = $this->getEntityManager();
