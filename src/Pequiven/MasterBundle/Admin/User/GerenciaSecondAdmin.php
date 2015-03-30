@@ -34,6 +34,7 @@ class GerenciaSecondAdmin extends Admin
             ->add('operationalObjectives')
             ->add('gerenciaVinculants')
             ->add('gerenciaSupports')
+            ->add('validAudit')
             ->add('createdAt')
             ->add('enabled')
             ;
@@ -68,6 +69,9 @@ class GerenciaSecondAdmin extends Admin
                 'multiple' => true,
                 'required' => false,
             ))
+            ->add('validAudit',null,array(
+                'required' => false,
+            ))
             ->add('enabled',null,array(
                 'required' => false,
             ))
@@ -81,6 +85,7 @@ class GerenciaSecondAdmin extends Admin
             ->add('abbreviation')
             ->add('description')
             ->add('gerencia')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }

@@ -75,3 +75,12 @@ UPDATE `seip_indicator` SET showRealValue = 1,showPlanValue = 1 WHERE 1;
 
 ALTER TABLE seip_indicator_tag ADD unitResult VARCHAR(90) DEFAULT NULL;
 ALTER TABLE seip_indicator_tag_audit ADD unitResult VARCHAR(90) DEFAULT NULL;
+
+
+ALTER TABLE seip_c_gerencia ADD validAudit TINYINT(1) NOT NULL;
+ALTER TABLE seip_c_gerencia_audit ADD validAudit TINYINT(1) DEFAULT NULL;
+ALTER TABLE seip_c_gerencia_second ADD validAudit TINYINT(1) NOT NULL;
+ALTER TABLE seip_c_gerencia_second_audit ADD validAudit TINYINT(1) DEFAULT NULL;
+
+UPDATE `seip_c_gerencia` SET validAudit = 1 WHERE 1;
+UPDATE `seip_c_gerencia_second` SET validAudit = 1 WHERE 1;
