@@ -41,6 +41,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
         
         $form
             ->add('description')
+            ->add('orderShow')
             ->add('valueOfTag')
             ->add('textOfTag')
             ->add('indicator')

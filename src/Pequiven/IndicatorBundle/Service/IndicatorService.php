@@ -438,6 +438,16 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
+     * 
+     * @param Indicator $indicator
+     */
+    public function getTagIndicatorByOrder(Indicator $indicator){
+        $tagsIndicator = $this->container->get('pequiven.repository.tagIndicator')->findBy(array('indicator' => $indicator->getId()),array('orderShow' => 'ASC'));
+        
+        return $tagsIndicator;
+    }
+    
+    /**
      * Servicio que calcula los resultados
      * @return \Pequiven\SEIPBundle\Service\ResultService
      */

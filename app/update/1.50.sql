@@ -77,3 +77,7 @@ UPDATE `seip_indicator` SET showRealValue = 1,showPlanValue = 1 WHERE 1;
 
 ALTER TABLE seip_indicator_tag ADD unitResult VARCHAR(90) DEFAULT NULL;
 ALTER TABLE seip_indicator_tag_audit ADD unitResult VARCHAR(90) DEFAULT NULL;
+
+ALTER TABLE seip_indicator_tag ADD orderShow INT NOT NULL;
+ALTER TABLE seip_indicator_tag_audit ADD orderShow INT DEFAULT NULL;
+UPDATE seip_indicator_tag SET orderShow = 1;
