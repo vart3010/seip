@@ -8,12 +8,13 @@ parameters:
 
     mailer_transport:  smtp
     mailer_host:       mail.pequiven.com
-    mailer_user:       rarias
-    mailer_password:   s3cr3t0d13l
+    mailer_user:       seip
+    mailer_password:   pequiven
 
     locale:            es
     secret:            ThisTokenIsNotSoSecretChangeIt
     main_cdn: http://seip.pequiven.com
 
+    bin_node: /usr/local/bin/node
     bin_ugly_js: /usr/local/bin/uglifyjs
     bin_ugly_css: /usr/local/bin/uglifycss
