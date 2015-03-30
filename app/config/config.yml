@@ -43,6 +43,7 @@ assetic:
     use_controller: false
 #    bundles:        ['FOSJsRoutingBundle']
     #java: /usr/bin/java
+    node: "%bin_node%"
     filters:
         cssrewrite: ~
         uglifyjs2:
