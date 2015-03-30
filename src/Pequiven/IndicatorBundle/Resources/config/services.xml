@@ -113,5 +113,13 @@
         <service id="pequiven_indicator.box.icons_summary" class="Pequiven\IndicatorBundle\Model\Box\IconsSummaryBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
+        
+        <!-- Repositorio de las Etiquetas del Indicador -->
+        <service id="pequiven.repository.tagindicator" class="Pequiven\IndicatorBundle\Repository\TagIndicatorRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator" />
+        </service>
     </services>
 </container>

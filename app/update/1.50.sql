@@ -68,6 +68,8 @@ ALTER TABLE seip_indicator ADD summary LONGTEXT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD summary LONGTEXT DEFAULT NULL;
 UPDATE seip_indicator SET summary = description;
 
+ALTER TABLE seip_indicator ADD indicatorWeight DOUBLE PRECISION DEFAULT NULL;
+ALTER TABLE seip_indicator_audit ADD indicatorWeight DOUBLE PRECISION DEFAULT NULL;
 
 ALTER TABLE seip_indicator ADD showRealValue TINYINT(1) NOT NULL, ADD showPlanValue TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD showRealValue TINYINT(1) DEFAULT NULL, ADD showPlanValue TINYINT(1) DEFAULT NULL;
@@ -86,3 +88,7 @@ UPDATE `seip_c_gerencia_second` SET validAudit = 1 WHERE 1;
 -- Snippet en indicador
 ALTER TABLE seip_indicator ADD snippetPlan LONGTEXT DEFAULT NULL, ADD snippetReal LONGTEXT DEFAULT NULL;
 ALTER TABLE seip_indicator_audit ADD snippetPlan LONGTEXT DEFAULT NULL, ADD snippetReal LONGTEXT DEFAULT NULL;
+
+ALTER TABLE seip_indicator_tag ADD orderShow INT NOT NULL;
+ALTER TABLE seip_indicator_tag_audit ADD orderShow INT DEFAULT NULL;
+UPDATE seip_indicator_tag SET orderShow = 1;

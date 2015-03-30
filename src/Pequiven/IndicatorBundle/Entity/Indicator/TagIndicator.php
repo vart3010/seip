@@ -16,7 +16,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\TagIndicator as Model;
  * Etiquetas del indicador
  *
  * @ORM\Table(name="seip_indicator_tag")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\IndicatorBundle\Repository\TagIndicatorRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
@@ -147,6 +147,13 @@ class TagIndicator extends Model
      * @ORM\Column(name="unitResult",type="string",length=90, nullable=true)
      */
     private $unitResult;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShow", type="integer")
+     */
+    private $orderShow = 1;
     
     /**
      * Get id
@@ -509,4 +516,14 @@ class TagIndicator extends Model
         }
         return $result;
     }
+    
+    function getOrderShow() {
+        return $this->orderShow;
+    }
+
+    function setOrderShow($orderShow) {
+        $this->orderShow = $orderShow;
+    }
+
+
 }

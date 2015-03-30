@@ -2175,6 +2175,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            //Widget de los rangos de gestión de los indicadores
             $scope.renderWidgetRange = function(id,data) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
@@ -2195,6 +2196,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            //Widget de los indicadores en forma de bulbo (Por ejemplo en el dashboard de los indicadores estratégicos)
             $scope.renderWidgetIndicatorStrategic = function(id,data,width,height) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({
