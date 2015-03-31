@@ -1,0 +1,50 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block javascripts_base %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/tecnocreacionesvzlagovernment/template/developer/js/developr.input.js') }}"></script>
+{% endblock javascripts_base %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator.indicatorLevel.level %}
+
+{% block stylesheets_base %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/pequivenseip/icons/icons.css') }}">
+{% endblock %}
+
+{% block before_body %}
+    {#{{ contentHeader(
+        {(urlParent):textParent},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven.show'|trans({},'messages'))
+    ) }}#}
+{% endblock %}
+
+{% block body -%}
+    
+    {{ boxRender.renderBox('pequiven_seip.box.indicators_dashboard')|raw }}
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/fusioncharts.js') }}"></script>
+    <script src="{{  asset('bundles/pequivenseip/fusioncharts/js/themes/fusioncharts.theme.fint.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        jQuery(document).ready(function(){            
+        });
+    </script>
+{% endblock javascript %}

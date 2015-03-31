@@ -81,3 +81,7 @@ ALTER TABLE seip_indicator_tag_audit ADD unitResult VARCHAR(90) DEFAULT NULL;
 ALTER TABLE seip_indicator_tag ADD orderShow INT NOT NULL;
 ALTER TABLE seip_indicator_tag_audit ADD orderShow INT DEFAULT NULL;
 UPDATE seip_indicator_tag SET orderShow = 1;
+
+ALTER TABLE seip_indicator ADD evaluetaInPeriod TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD evaluetaInPeriod TINYINT(1) DEFAULT NULL;
+UPDATE seip_indicator SET evaluetaInPeriod = 1;

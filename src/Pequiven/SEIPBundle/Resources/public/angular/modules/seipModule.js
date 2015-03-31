@@ -2218,6 +2218,25 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            //Widget de los indicadores en forma de bulbo (Por ejemplo en el dashboard de los indicadores estratégicos)
+            $scope.renderWidgetMultiLevelPie = function(id,data,width,height) {
+                FusionCharts.ready(function() {
+                    var widgetMultiLevelPieChart = new FusionCharts({
+                        "type": "multilevelpie",
+                        "renderAt": id,
+                        "width": width,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "category": data.dataSource.category
+                        }
+                    });
+                    widgetMultiLevelPieChart.setTransparent(true);
+                    widgetMultiLevelPieChart.render();
+                })
+            };
+            
+            //Ejemplo de Widget tipo velocímetro de carro
             $scope.renderWidgetAngularRange = function(id) {
                 FusionCharts.ready(function() {
                     var revenueChart = new FusionCharts({

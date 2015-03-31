@@ -1,0 +1,63 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+<!-- Sección de las Líneas Estratégicas -->
+<div class="row-fluid">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <div class="span9" style="margin-left: 0;">
+                    <ul class="nav">
+                        {% for lineStrategic in linesStrategics %}
+                            <li {% if lineStrategic.id == idLineStrategic %} class="linestrategic-active" {% endif %} style="display: table-cell; float: none;">
+                                <a href="{{ path('pequiven_line_strategic_show',{id:lineStrategic.id}) }}" data-toggle="tab">
+                                    <span title="{{ lineStrategic.description }}">
+                                        <img style="padding: 20px;" class="snapshot-box-icon-header" src="{{ asset(iconsLineStrategic[lineStrategic.level]) }}">
+                                    </span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="hr-linestrategic-icons" />
+
+<!-- Sección Lateral Izquierda -->
+<div class="with-padding">
+    <div class="columns">
+        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 300px;">
+            <div class="with-padding">
+                <div class="columns">
+                    {% for indicatorGroup in indicatorsGroup %}
+                        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile {% if indicatorGroup.id == indicator.id %} linestrategic-active {% endif %}" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicatorGroup.ref }}',{{ dataWidget[indicatorGroup.ref]|json_encode() }},'100%','100px')">
+                            <a {% if indicatorGroup.id == indicator.id %} name="cargarInd" {% endif %} target="_blank" href="{{ path('pequiven_indicator_show',{id:indicatorGroup.id}) }}">
+                                <span title="{{ indicatorGroup.description }}">
+                                    <p style="text-align: center;margin-bottom: -5px;"><b>{{ indicatorGroup.summary }}</b></p>
+                                </span>
+                            </a>
+                            <span id="{{ indicatorGroup.ref }}"></span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
+            <div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','')">
+                <span id="pie"></span>
+            </div>
+{#            <span style="text-align: center;"><h2>{{ indicator.summary }}</h2></span>#}
+        </div>
+    </div>
+</div>
+
+{#{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            cargar();
+            function cargar(){
+                location.href = "#cargar";
+            }
+        };
+    </script>
+{% endblock javascript %}#}
