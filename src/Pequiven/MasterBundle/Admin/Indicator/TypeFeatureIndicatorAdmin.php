@@ -57,7 +57,7 @@ class TypeFeatureIndicatorAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
     protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->add("description")
+            ->addIdentifier("description")
             ->add("color")
             ->add("priority")
             ;
