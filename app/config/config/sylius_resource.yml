@@ -194,3 +194,9 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicator\ValueIndicatorConfigController
                 model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
+        pequiven.feature_indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator/FeatureIndicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\FeatureIndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator

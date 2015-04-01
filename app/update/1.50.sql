@@ -93,6 +93,19 @@ ALTER TABLE seip_indicator_tag ADD orderShow INT NOT NULL;
 ALTER TABLE seip_indicator_tag_audit ADD orderShow INT DEFAULT NULL;
 UPDATE seip_indicator_tag SET orderShow = 1;
 
+-- Mostrar resultados en indicador
+ALTER TABLE seip_indicator ADD showResults TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD showResults TINYINT(1) DEFAULT NULL;
+UPDATE seip_indicator SET showResults = 1;
+ALTER TABLE seip_indicator ADD showFeatures TINYINT(1) NOT NULL;
+ALTER TABLE seip_indicator_audit ADD showFeatures TINYINT(1) DEFAULT NULL;
+UPDATE seip_indicator SET showResults = 0,showFeatures = 1 WHERE fk_indicator_level = 1;
+
+CREATE TABLE seip_c_type_feature_indicator (id INT AUTO_INCREMENT NOT NULL, description LONGTEXT NOT NULL, color VARCHAR(20) NOT NULL, priority INT NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deletedAt DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE FeatureIndicator (id INT AUTO_INCREMENT NOT NULL, indicator_id INT NOT NULL, description LONGTEXT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deletedAt DATETIME DEFAULT NULL, typeFeatureIndicator_id INT NOT NULL, INDEX IDX_13D78E323BBE3A71 (typeFeatureIndicator_id), INDEX IDX_13D78E324402854A (indicator_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE FeatureIndicator ADD CONSTRAINT FK_13D78E323BBE3A71 FOREIGN KEY (typeFeatureIndicator_id) REFERENCES seip_c_type_feature_indicator (id);
+ALTER TABLE FeatureIndicator ADD CONSTRAINT FK_13D78E324402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id);
+
 ALTER TABLE seip_indicator ADD evaluetaInPeriod TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD evaluetaInPeriod TINYINT(1) DEFAULT NULL;
 UPDATE seip_indicator SET evaluetaInPeriod = 1;

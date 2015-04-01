@@ -6,6 +6,10 @@ pequiven_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/planning/indicator.yml"
     prefix:   /indicator
     
+pequiven_indicator_feature:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/indicator/feature_indicator.yml"
+    prefix:   /indicator/feature-indicator
+    
 pequiven_value_indicator:
     resource: "@PequivenSEIPBundle/Resources/config/routing/value_indicator.yml"
     prefix:   /value-indicator

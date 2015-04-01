@@ -29,9 +29,12 @@ pequiven:
         title:
             goal: Meta
             value_indicator: Valor del indicador
+            indicator_feature: Punto de atención
         confirm:
             goal:
                 delete_this_goal: ¿Desea eliminar esta meta?
+            indicator:
+                delete_feature: ¿Desea eliminar este punto de atención?
             arrangement_program:
                 open_on_save: ¿Desea abrir el formulario del detalle de las metas despues de guardar?
     validators:
