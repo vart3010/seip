@@ -48,7 +48,7 @@
     {% set indicatorDetails = indicator.details %}
     
     <fieldset class="fieldset">
-        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read'])) }}">{{ indicator }}&nbsp;</legend>
+        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator'])) }}">{{ indicator }}&nbsp;</legend>
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
 
@@ -197,8 +197,14 @@
             {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
         </fieldset>
     {% endif %}
-        <br /><br />
-        {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        {% if indicator.showResults %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        {% endif %}
+        {% if indicator.showFeatures %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
+        {% endif %}
         <br /><br />
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>

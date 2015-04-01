@@ -1237,6 +1237,54 @@ angular.module('seipModule.controllers', [])
                     $scope.openModalAuto();
                 }
             };
+            
+            //Carga el formulario de los los puntos de atencion del indicador
+            $scope.loadTemplateFeatureIndicator = function(resource){
+                $scope.initForm(resource);
+                if(isInit == false){
+                    isInit = true;
+                }
+                $scope.templateOptions.setTemplate($scope.templates[1]);
+                $scope.templateOptions.setParameterCallBack(resource);
+                $scope.templateOptions.setVar('evaluationResult',0);
+                if (resource) {
+                    $scope.templateOptions.enableModeEdit();
+                    $scope.openModalAuto();
+                } else {
+                    $scope.openModalAuto();
+                }
+            };
+            $scope.removeFeatureIndicator = function(featureIndicator){
+                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function() {
+                    notificationBarService.getLoadStatus().loading();
+                    var url = Routing.generate("pequiven_feature_indicator_delete",{id:featureIndicator.id});
+                        $http({
+                        method  : 'GET',
+                        url     : url,
+                        headers : { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With':'XMLHttpRequest' }  // set the headers so angular passing info as form data (not request payload)
+                    }).success(function(data){
+                        $scope.templateOptions.setVar("form", {errors: {}});
+                        
+                        $scope.indicator.featuresIndicator.remove(featureIndicator);
+                        notificationBarService.getLoadStatus().done();
+                        return true;
+                    }).error(function(data,status, headers, config){
+                        $scope.templateOptions.setVar("form", {errors:{}});
+                        if(data.errors){
+                            if(data.errors.errors){
+                                $.each(data.errors.errors,function(index,value){
+                                    notifyService.error(Translator.trans(value));
+                                });
+                            }
+                            $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                        }
+                        notificationBarService.getLoadStatus().done();
+                        return false;
+                    });
+                    
+                    
+                });
+            };
                 var evaluateFormula = function(save,successCallBack){
                     var formValueIndicator = angular.element('#form_value_indicator');
                     var formData = formValueIndicator.serialize();
@@ -1277,11 +1325,51 @@ angular.module('seipModule.controllers', [])
                     return false;
                 });
             };
+            var sendFeatureIndicator = function(successCallBack){
+                    var formValueIndicator = angular.element('#form_feature_indicator');
+                    var formData = formValueIndicator.serialize();
+                    var url = Routing.generate('pequiven_feature_indicator_add',{idIndicator : $scope.indicator.id});
+                    notificationBarService.getLoadStatus().loading();
+                 return $http({
+                    method  : 'POST',
+                    url     : url,
+                    data    : formData,
+                    headers : { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With':'XMLHttpRequest' }  // set the headers so angular passing info as form data (not request payload)
+                }).success(function(data){
+                    $scope.templateOptions.setVar("form", {errors: {}});
+                    $scope.templateOptions.setVar('evaluationResult',data.result);
+                    if(successCallBack){
+                        successCallBack(data);
+                    }
+                    notificationBarService.getLoadStatus().done();
+                    return true;
+                }).error(function(data,status, headers, config){
+                    $scope.templateOptions.setVar("form", {errors:{}});
+                    if(data.errors){
+                        if(data.errors.errors){
+                            $.each(data.errors.errors,function(index,value){
+                                notifyService.error(Translator.trans(value));
+                            });
+                        }
+                        $scope.templateOptions.setVar("form", {errors: data.errors.children});
+                    }
+                    $scope.templateOptions.setVar('evaluationResult',0);
+                    notificationBarService.getLoadStatus().done();
+                    return false;
+                });
+            };
             $scope.templateOptions.setVar('evaluateFormula',evaluateFormula);
+            $scope.templateOptions.setVar('sendFeatureIndicator',sendFeatureIndicator);
             $scope.templateOptions.setVar('evaluationResult',0);
             
             var confirmCallBack = function(){
                 evaluateFormula(true,function(data){
+                    $scope.indicator = data.indicator;
+                });
+                return true;
+            };
+            var confirmCallBack2 = function(){
+                sendFeatureIndicator(function(data){
                     $scope.indicator = data.indicator;
                 });
                 return true;
@@ -1298,14 +1386,17 @@ angular.module('seipModule.controllers', [])
                     parameters.id = resource.id;
                 }
                 var url = Routing.generate('pequiven_value_indicator_get_form',parameters);
+                var url2 = Routing.generate('pequiven_feature_indicator_get_form',parameters);
                 $scope.templates = [
                     {
                         name: 'pequiven.modal.title.value_indicator',
                         url: url,
                         confirmCallBack: confirmCallBack,
-    //                    cancelCallBack: $scope.cancelEditGoal,
-    //                    loadCallBack: $scope.setDataFormGoal,
-//                        initCallBack: initCallBack
+                    },
+                    {
+                        name: 'pequiven.modal.title.feature_indicator',
+                        url: url2,
+                        confirmCallBack: confirmCallBack2,
                     }
                 ];
                 $scope.templateOptions.setTemplate($scope.templates[0]);

@@ -64,3 +64,6 @@ Pequiven\IndicatorBundle\Entity\Indicator:
         arrangementRange:
             expose: true
             groups: [arrangementRange]
+        featuresIndicator:
+            expose: true
+            groups: [featuresIndicator]

@@ -28,6 +28,8 @@ pequiven_indicator:
         buttons:
             remove_values: Eliminar resultados
             configure_details_results: Configurar detalles
+        feature:
+            title: Puntos de atención
     indicator_details:
         source_result_all: Todos los resultados
         source_result_last_valid: Ultimo resultado valido (Con valor)
@@ -297,7 +299,9 @@ form:
         addIndicatorTactic: Registro Indicador Táctico
         addIndicatorOperative: Registro Indicador Operativo
     products: Productos
-
+    description_feature_indicator: Nota o Comentario
+    feature_indicator: Punto de atención
+        
 action:
     messages:    
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente

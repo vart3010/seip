@@ -247,6 +247,17 @@ services:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
             
+    sonata.admin.indicator.type_feature_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de punto de atención" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.quality_system.quality_system:
         class: Pequiven\MasterBundle\Admin\QualitySystem\QualitySystemAdmin
         tags:

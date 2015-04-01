@@ -379,3 +379,7 @@ miscellaneous:
 
 statisticsAndInformation: Estadística e Información
 internalAudit: Auditoría Interna
+
+        
+empty:
+    features_indicator: No hay ningún punto de observación.

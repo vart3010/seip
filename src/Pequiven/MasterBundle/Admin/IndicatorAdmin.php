@@ -51,6 +51,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('resultInPercentage')
             ->add('showRealValue')
             ->add('showPlanValue')
+            ->add('showResults')
+            ->add('showFeatures')
             ->add('requiredToImport')
             ->add('details')
             ;
@@ -186,6 +188,14 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                     ))
                     ->add("snippetReal",null,array(
                         "attr" => array("rows" => 4,)
+                    ))
+                ->end()
+                ->with('Opciones de visualizacion')
+                    ->add('showResults',null,array(
+                        'required' => false,
+                    ))
+                    ->add('showFeatures',null,array(
+                        'required' => false,
                     ))
                 ->end()
             ->end()
