@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Model\Box\LineStrategic;
+namespace Pequiven\SEIPBundle\Model\Box\Indicator;
 
 use Tecnocreaciones\Bundle\BoxBundle\Model\GenericBox;
 use Pequiven\MasterBundle\Entity\LineStrategic;

@@ -1,7 +1,19 @@
+#Ficha del indicador
 pequiven_indicator_show:
     path: /{id}.{_format}
     defaults:
         _controller: pequiven.controller.indicator:showAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        id: \d+
+    methods: [GET]
+    
+#Vista de los Indicadores Hijos
+pequiven_indicator_show_dashboard:
+    path: /{id}/dashboard.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:showDashboardAction
         _format: html
     requirements:
         _format: html|json|xml

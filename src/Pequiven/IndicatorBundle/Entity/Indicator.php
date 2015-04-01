@@ -362,6 +362,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $summary;
     
     /**
+     * ¿Será medido en el período actual?
+     * @var boolean
+     * @ORM\Column(name="evaluetaInPeriod",type="boolean")
+     */
+    private $evaluateInPeriod = true;
+    
+    /**
      * Snippet para calcular el plan
      * @var string
      * @ORM\Column(name="snippetPlan",type="text",nullable=true)
@@ -1507,6 +1514,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         $this->showPlanValue = $showPlanValue;
     }
+    
+    function getEvaluateInPeriod() {
+        return $this->evaluateInPeriod;
+    }
+
+    function setEvaluateInPeriod($evaluateInPeriod) {
+        $this->evaluateInPeriod = $evaluateInPeriod;
+    }
+
 
     /**
      * Get forcePenalize

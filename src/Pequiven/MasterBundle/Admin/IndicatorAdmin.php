@@ -142,6 +142,9 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('couldBePenalized',null,array(
                     'required' => false,
                 ))
+                ->add('evaluateInPeriod',null,array(
+                    'required' => false,
+                ))
                 ->add('forcePenalize',null,array(
                     'required' => false,
                 ))

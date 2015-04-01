@@ -174,11 +174,15 @@
             <tag name="tecnocreaciones_box.area.adapter" />
         </service>
         <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos -->
-        <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IndicatorsIconsBox">
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
         <!-- Box donde se renderizan los indicatores estratégicos en formato de íconos de acuerdo a una línea estratégica seleccionada -->
-        <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\LineStrategic\IndicatorsIconsByLineBox">
+        <service id="pequiven_seip.box.linestrategic.icons_indicator_by_line_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsIconsByLineBox">
+            <tag name="tecnocreaciones_box.box" />
+        </service>
+        <!-- Box con la base del dashboard de un indicador -->
+        <service id="pequiven_seip.box.indicators_dashboard" class="Pequiven\SEIPBundle\Model\Box\Indicator\IndicatorsDashboardBox">
             <tag name="tecnocreaciones_box.box" />
         </service>
          <!-- Box donde se renderizan las líneas estratégicas en formato de íconos para el dashboard a nivel estratégico --> 

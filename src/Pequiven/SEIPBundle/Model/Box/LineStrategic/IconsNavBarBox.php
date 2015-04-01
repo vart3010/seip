@@ -34,6 +34,7 @@ class IconsNavBarBox extends GenericBox
         );
     }
     
+    
     public function hasPermission() {
         return $this->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'));
     }
