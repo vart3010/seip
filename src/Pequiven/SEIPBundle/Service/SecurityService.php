@@ -41,6 +41,22 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgram',
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE' => 'evaluateTacticArrangementProgram',
+            
+            'ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC' => 'evaluateObjetiveEdit',
+            'ROLE_SEIP_OBJECTIVE_EDIT_TACTIC' => 'evaluateObjetiveEdit',
+            'ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE' => 'evaluateObjetiveEdit',
+            
+            'ROLE_SEIP_OBJECTIVE_DELETE_STRATEGIC' => 'evaluateObjetiveDelete',
+            'ROLE_SEIP_OBJECTIVE_DELETE_TACTIC' => 'evaluateObjetiveDelete',
+            'ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE' => 'evaluateObjetiveDelete',
+            
+            'ROLE_SEIP_INDICATOR_EDIT_STRATEGIC' => 'evaluateIndicatorEdit',
+            'ROLE_SEIP_INDICATOR_EDIT_TACTIC' => 'evaluateIndicatorEdit',
+            'ROLE_SEIP_INDICATOR_EDIT_OPERATIVE' => 'evaluateIndicatorEdit',
+            
+            'ROLE_SEIP_INDICATOR_DELETE_STRATEGIC' => 'evaluateIndicatorDelete',
+            'ROLE_SEIP_INDICATOR_DELETE_TACTIC' => 'evaluateIndicatorDelete',
+            'ROLE_SEIP_INDICATOR_DELETE_OPERATIVE' => 'evaluateIndicatorDelete',
         );
     }
     
@@ -257,6 +273,26 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
+    private function evaluateObjetiveEdit($rol,\Pequiven\ObjetiveBundle\Entity\Objetive $objective)
+    {
+        return ($objective->getPeriod()->isActive() === true);
+    }
+    
+    private function evaluateObjetiveDelete($rol,\Pequiven\ObjetiveBundle\Entity\Objetive $objective)
+    {
+        return ($objective->getPeriod()->isActive() === true);
+    }
+    
+    private function evaluateIndicatorEdit($rol,  \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        return ($indicator->getPeriod()->isActive() === true);
+    }
+    
+    private function evaluateIndicatorDelete($rol,  \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    {
+        return ($indicator->getPeriod()->isActive() === true);
+    }
+
     private function evaluateOperativeObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
     {
         $user = $this->getUser();
@@ -299,9 +335,9 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
      * @param type $rol
      * @param type $parameters
-     * @throws type
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function checkSecurity($rol = null,$parameters = null) {
+    public function checkSecurity($rol = null,$parameters = null,$throwException = true) {
         if($rol === null){
             throw $this->createAccessDeniedHttpException($this->trans('pequiven_seip.security.permission_denied'));
         }
@@ -313,15 +349,27 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         $quantityRoles = count($roles);
         foreach ($roles as $rol) {
             if(!$valid){
-                throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+                if($throwException === true){
+                    throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+                }else{
+                    return $valid;
+                }
             }
             $methodValidMap = $this->getMethodValidMap();
 //            var_dump($methodValidMap);
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
                 $valid = call_user_func_array(array($this,$method),array($rol,$parameters));
+                if(!$valid){
+                    if($throwException === true){
+                        throw $this->createAccessDeniedHttpException($this->buildMessage($rol));
+                    }else{
+                        return $valid;
+                    }
+                }
             }
         }
+        return $valid;
     }
     
     /**
@@ -415,6 +463,11 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     function isGranted($roles,$object = null)
     {
         return $this->getSecurityContext()->isGranted($roles,$object);
+    }
+    
+    function isGrantedFull($roles,$object = null)
+    {
+        return $this->checkSecurity($roles, $object,false);
     }
     
     /**

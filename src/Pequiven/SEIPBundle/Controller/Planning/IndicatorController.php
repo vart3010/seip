@@ -41,8 +41,8 @@ class IndicatorController extends ResourceController
         $hasPermissionToUpdate = $isAllowToDelete = false;
         if(isset($roleByLevel[$level])){
             $rol = $roleByLevel[$level];
-            $hasPermissionToUpdate = $securityService->isGranted($roleEditDeleteByLevel[$level][0]);
-            $isAllowToDelete = $securityService->isGranted($roleEditDeleteByLevel[$level][1]);
+            $hasPermissionToUpdate = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][0],$resource);
+            $isAllowToDelete = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][1],$resource);
         }
         $securityService->checkSecurity($rol);
         

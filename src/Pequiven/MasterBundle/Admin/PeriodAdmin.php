@@ -143,7 +143,7 @@ class PeriodAdmin extends Admin
             ->add('description')
             ->add('dateStart')
             ->add('dateEnd')
-            ->add('status')
+            ->add('status', null, array('editable' => true))
             ;
     }
     

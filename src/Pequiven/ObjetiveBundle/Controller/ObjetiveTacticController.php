@@ -59,8 +59,8 @@ class ObjetiveTacticController extends baseController {
         }
         
         $indicatorService = $this->getIndicatorService();
-        $hasPermissionToUpdate = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC");
-        $isAllowToDelete = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_DELETE_TACTIC");
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_TACTIC",$resource);
         
         $view = $this
             ->view()
