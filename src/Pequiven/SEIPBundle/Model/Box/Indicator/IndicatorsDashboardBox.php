@@ -50,15 +50,17 @@ class IndicatorsDashboardBox extends GenericBox
             while(!$flagParent){
                 if($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){//En caso de que estemos en el indicador Táctico
                     $flagParent = true;
-                    if($cont == 1){
-                        $indicatorsGroup = $indicatorParent->getChildrens();
+                    if($cont == 1){//En caso de que se este viendo un indicador táctico
+//                        $indicatorsGroup = $indicatorParent->getChildrens();
+                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
                     }
                     foreach($indicatorParent->getLineStrategics() as $lineStrategic){
                         $idLineStrategic = $lineStrategic->getId();
                     }
                 } else{
                     $cont++;
-                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de ser operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+//                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
                     $indicatorParent = $indicatorParent->getParent();
                 }
             }
