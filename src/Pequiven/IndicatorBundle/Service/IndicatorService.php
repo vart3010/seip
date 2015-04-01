@@ -346,6 +346,7 @@ class IndicatorService implements ContainerAwareInterface
      * @author Matias Jimenez
      */
     public function getDataDashboardWidgetMultiLevelPie(Indicator $indicator){
+        $objectIndicator = $indicator;
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -370,13 +371,12 @@ class IndicatorService implements ContainerAwareInterface
         $chart["showCanvasBorder"] = "0";
         $chart["pieFillAlpha"] = "90";
         $chart["pieBorderThickness"] = "2";
-        $chart["hoverFillColor"] = "#cccccc";
+        $chart["hoverFillColor"] = "#ddceca";
         $chart["pieBorderColor"] = "#ffffff";
         $chart["useHoverColor"] = "1";
         $chart["showValuesInTooltip"] = "1";
         $chart["showPercentInTooltip"] = "0";
         $chart["hasRTLText"] = "1";
-        $chart["plotTooltext"] = "\$label";
         
         //Seleccionamos la data del pie de acuerdo al nivel del indicador
         $category = array();
@@ -392,6 +392,7 @@ class IndicatorService implements ContainerAwareInterface
                 $category["color"] = "#ffffff";
                 $category["value"] = "100";
                 $category["toolText"] = $lineStrategic->getDescription();
+                $category["link"] = $this->generateUrl('pequiven_line_strategic_show', array('id' => $lineStrategic->getId()));
                 $categoryLineStrategic["label"] = $indicator->getRef();//$indicator->getSummary();
                 $categoryLineStrategic["color"] = $this->getColorOfResult($indicator);
                 $categoryLineStrategic["value"] = "100";
@@ -419,15 +420,50 @@ class IndicatorService implements ContainerAwareInterface
             while(!$flagParent){
                 if($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){//En caso de que estemos en el indicador Táctico
                     $flagParent = true;
-                    if($cont == 1){
-                        $indicatorsGroup = $indicatorParent->getChildrens();
+                    if($cont == 1){//En caso de que se este viendo un indicador táctico
+//                        $indicatorsGroup = $indicatorParent->getChildrens();
+                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
                     }
                     foreach($indicatorParent->getLineStrategics() as $lineStrategic){
                         $idLineStrategic = $lineStrategic->getId();
+                        
+                        $category["label"] = $lineStrategic->getRef();
+                        $category["color"] = "#ffffff";
+                        $category["value"] = "100";
+                        $category["toolText"] = $lineStrategic->getDescription();
+                        $category["link"] = $this->generateUrl('pequiven_line_strategic_show', array('id' => $lineStrategic->getId()));
+                        $categoryLineStrategic["label"] = $indicatorParent->getRef();//$indicator->getSummary();
+                        $categoryLineStrategic["color"] = $this->getColorOfResult($indicatorParent);
+                        $categoryLineStrategic["value"] = "100";
+                        $categoryLineStrategic["toolText"] = $indicatorParent->getDescription().' - '.number_format($indicatorParent->getResultReal(), 2, ',', '.');
+                        $categoryLineStrategic['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorParent->getId()));
+                        $categoryObjetiveStrategic["label"] = $objectIndicator->getRef();
+                        $categoryObjetiveStrategic["color"] = $this->getColorOfResult($objectIndicator);
+                        $categoryObjetiveStrategic["value"] = "100";
+                        $categoryObjetiveStrategic["toolText"] = $objectIndicator->getDescription().' - '.number_format($objectIndicator->getResultReal(), 2, ',', '.');
+                        $categoryObjetiveStrategic['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $objectIndicator->getId()));
+
+                        if(($numChildrens = count($objectIndicator->getChildrens())) > 0){
+                            $numDiv = bcdiv(100, $numChildrens,2);
+                            foreach($objectIndicator->getChildrens() as $children){
+                                $IndicatorOperativeArray = array();
+                                $IndicatorOperativeArray["label"] = $children->getRef();
+                                $IndicatorOperativeArray["color"] = $this->getColorOfResult($children);
+                                $IndicatorOperativeArray["value"] = $numDiv;
+                                $IndicatorOperativeArray["toolText"] = $children->getDescription().' - '.number_format($children->getResultReal(), 2, ',', '.');
+                                $IndicatorOperativeArray['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                                $categoryObjetiveTactic[] = $IndicatorOperativeArray;
+                            }
+                        }
+                        $categoryObjetiveStrategic['category'] = $categoryObjetiveTactic;//Anexamos los Objetivos Operativos
+                        $categoryLineStrategic['category'][] = $categoryObjetiveStrategic;//Anexamos el Objetivo Táctico
+                        $category["category"][] = $categoryLineStrategic;//Anexamos el Objetivo Estratégico
                     }
                 } else{
                     $cont++;
-                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de ser operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+//                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                    $objectIndicator = $indicatorParent;
                     $indicatorParent = $indicatorParent->getParent();
                 }
             }
