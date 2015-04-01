@@ -10,6 +10,7 @@ use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\LineStrategic;
 use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\MasterBundle\Entity\Formula;
+use Pequiven\IndicatorBundle\Entity\IndicatorLevel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -293,7 +294,9 @@ class IndicatorService implements ContainerAwareInterface
         $chart["toolTipBgAlpha"] = "80";
         $chart["toolTipBorderRadius"] = "2";
         $chart["toolTipPadding"] = "5";
-        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
+//        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
+        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        $chart["clickURLOverridesPlotLinks"] = "0";
         
         $color = $colorData = array();
         $colorData["minvalue"] = "0";
@@ -307,13 +310,18 @@ class IndicatorService implements ContainerAwareInterface
         if($arrangementRange !== null){
             $errorArrangementRange = $arrangementRangeService->validateArrangementRange($arrangementRange, $tendency);
             if($errorArrangementRange == null){
-                $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.').'%';
-                if($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-                    $colorData["code"] = "#1aaf5d";
-                } elseif($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-                    $colorData["code"] = "#f2c500";
-                } elseif($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
-                    $colorData["code"] = "#c02d00";
+                if($indicator->getEvaluateInPeriod()){//En caso de que sea medidio en el período actual
+                    $colorData["label"] = number_format($indicator->getResultReal(), 2, ',', '.').'%';
+                    if($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                        $colorData["code"] = "#1aaf5d";
+                    } elseif($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                        $colorData["code"] = "#f2c500";
+                    } elseif($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                        $colorData["code"] = "#c02d00";
+                    }
+                } else{
+                    $colorData["code"] = "#544040";
+                    $colorData["label"] = $this->trans('pequiven_indicator.errors.indicatorNoEvaluateInPeriod', array(), 'PequivenIndicatorBundle');
                 }
             } else{
                 $colorData["code"] = "#000000";
@@ -331,9 +339,159 @@ class IndicatorService implements ContainerAwareInterface
         return $data;
     }
     
+    /**
+     * Función que devuelve la data para el widget de tipo bulbo en el dashboard de los resultados estratégicos
+     * @param Indicator $indicator
+     * @return string
+     * @author Matias Jimenez
+     */
+    public function getDataDashboardWidgetMultiLevelPie(Indicator $indicator){
+        $objectIndicator = $indicator;
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'category' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart["caption"] = $indicator->getRef().'-'.$indicator->getSummary();
+//        $chart["subCaption"] = "Last Quarter";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["baseFontColor"] = "#000000";
+        $chart["baseFont"] = "Helvetica Neue,Arial";
+        $chart["basefontSize"] = "9";
+        $chart["subcaptionFontBold"] = "0";
+        $chart["bgcolor"] = "#FFFFFF";
+        $chart["canvasBgcolor"] = "#FFFFFF";
+        $chart["showBorder"] = "0";
+        $chart["showShadow"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["pieFillAlpha"] = "90";
+        $chart["pieBorderThickness"] = "2";
+        $chart["hoverFillColor"] = "#ddceca";
+        $chart["pieBorderColor"] = "#ffffff";
+        $chart["useHoverColor"] = "1";
+        $chart["showValuesInTooltip"] = "1";
+        $chart["showPercentInTooltip"] = "0";
+        $chart["hasRTLText"] = "1";
+        
+        //Seleccionamos la data del pie de acuerdo al nivel del indicador
+        $category = array();
+        $categoryLineStrategic = array();
+        $categoryObjetiveStrategic = array();
+        $categoryObjetiveTactic = array();
+        
+        //Para un Indicador de Nivel Estratégico
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+            foreach($indicator->getLineStrategics() as $lineStrategic){//Anexamos la data del centro
+                $idLineStrategic = $lineStrategic->getId();
+                $category["label"] = $lineStrategic->getRef();//$lineStrategic->getDescription();
+                $category["color"] = "#ffffff";
+                $category["value"] = "100";
+                $category["toolText"] = $lineStrategic->getDescription();
+                $category["link"] = $this->generateUrl('pequiven_line_strategic_show', array('id' => $lineStrategic->getId()));
+                $categoryLineStrategic["label"] = $indicator->getRef();//$indicator->getSummary();
+                $categoryLineStrategic["color"] = $this->getColorOfResult($indicator);
+                $categoryLineStrategic["value"] = "100";
+                $categoryLineStrategic["toolText"] = $indicator->getDescription().' - '.number_format($indicator->getResultReal(), 2, ',', '.');
+                $categoryLineStrategic['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+                if(($numChildrens = count($indicator->getChildrens())) > 0){
+                    $numDiv = bcdiv(100, $numChildrens,2);
+                    foreach($indicator->getChildrens() as $children){
+                        $IndicatorTacticArray = array();
+                        $IndicatorTacticArray["label"] = $children->getRef();
+                        $IndicatorTacticArray["color"] = $this->getColorOfResult($children);
+                        $IndicatorTacticArray["value"] = $numDiv;
+                        $IndicatorTacticArray["toolText"] = $indicator->getDescription().' - '.number_format($children->getResultReal(), 2, ',', '.');
+                        $IndicatorTacticArray['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                        $categoryObjetiveStrategic[] = $IndicatorTacticArray;
+                    }
+                }
+                $categoryLineStrategic['category'] = $categoryObjetiveStrategic;
+                $category["category"][] = $categoryLineStrategic;
+            }
+        } elseif(($indicatorParent = $indicator->getParent()) != NULL){
+            $seeTree = true;
+            $flagParent = false;
+            $cont = 1;
+            while(!$flagParent){
+                if($indicatorParent->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){//En caso de que estemos en el indicador Táctico
+                    $flagParent = true;
+                    if($cont == 1){//En caso de que se este viendo un indicador táctico
+//                        $indicatorsGroup = $indicatorParent->getChildrens();
+                        $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
+                    }
+                    foreach($indicatorParent->getLineStrategics() as $lineStrategic){
+                        $idLineStrategic = $lineStrategic->getId();
+                        
+                        $category["label"] = $lineStrategic->getRef();
+                        $category["color"] = "#ffffff";
+                        $category["value"] = "100";
+                        $category["toolText"] = $lineStrategic->getDescription();
+                        $category["link"] = $this->generateUrl('pequiven_line_strategic_show', array('id' => $lineStrategic->getId()));
+                        $categoryLineStrategic["label"] = $indicatorParent->getRef();//$indicator->getSummary();
+                        $categoryLineStrategic["color"] = $this->getColorOfResult($indicatorParent);
+                        $categoryLineStrategic["value"] = "100";
+                        $categoryLineStrategic["toolText"] = $indicatorParent->getDescription().' - '.number_format($indicatorParent->getResultReal(), 2, ',', '.');
+                        $categoryLineStrategic['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicatorParent->getId()));
+                        $categoryObjetiveStrategic["label"] = $objectIndicator->getRef();
+                        $categoryObjetiveStrategic["color"] = $this->getColorOfResult($objectIndicator);
+                        $categoryObjetiveStrategic["value"] = "100";
+                        $categoryObjetiveStrategic["toolText"] = $objectIndicator->getDescription().' - '.number_format($objectIndicator->getResultReal(), 2, ',', '.');
+                        $categoryObjetiveStrategic['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $objectIndicator->getId()));
+
+                        if(($numChildrens = count($objectIndicator->getChildrens())) > 0){
+                            $numDiv = bcdiv(100, $numChildrens,2);
+                            foreach($objectIndicator->getChildrens() as $children){
+                                $IndicatorOperativeArray = array();
+                                $IndicatorOperativeArray["label"] = $children->getRef();
+                                $IndicatorOperativeArray["color"] = $this->getColorOfResult($children);
+                                $IndicatorOperativeArray["value"] = $numDiv;
+                                $IndicatorOperativeArray["toolText"] = $children->getDescription().' - '.number_format($children->getResultReal(), 2, ',', '.');
+                                $IndicatorOperativeArray['link'] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $children->getId()));
+                                $categoryObjetiveTactic[] = $IndicatorOperativeArray;
+                            }
+                        }
+                        $categoryObjetiveStrategic['category'] = $categoryObjetiveTactic;//Anexamos los Objetivos Operativos
+                        $categoryLineStrategic['category'][] = $categoryObjetiveStrategic;//Anexamos el Objetivo Táctico
+                        $category["category"][] = $categoryLineStrategic;//Anexamos el Objetivo Estratégico
+                    }
+                } else{
+                    $cont++;
+//                    $indicatorsGroup = $indicatorParent->getChildrens();//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());//En caso de que se este viendo un indicador operativo, obtenemos los indicadores asociados al táctico, antes de actualizar el objeto indicadorPadre
+                    $objectIndicator = $indicatorParent;
+                    $indicatorParent = $indicatorParent->getParent();
+                }
+            }
+        }
+//        print_r($category);
+//        die();
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['category'][] = $category;
+        return $data;
+    }
+    
     public function resultWithArrangementRangeColor(Indicator $indicator){
         $color = '';
-        $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.').'%';
+        $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.');
+        if($indicator->getShowTagInResult()){
+            foreach ($indicator->getTagsIndicator() as $tagIndicator){
+                if($tagIndicator->getShowInIndicatorResult()){
+                    if($tagIndicator->getUnitResult() != ""){
+                        $text.= ' '.strtoupper($tagIndicator->getUnitResultValue());
+                    } else{
+                        $text.= '%';
+                    }
+                }
+            }
+        } else{
+            $text.= '%';
+        }
         $title = '';
         $resultService = $this->getResultService();
         $arrangementRangeService = $this->getArrangementRangeService();
@@ -366,6 +524,30 @@ class IndicatorService implements ContainerAwareInterface
         
         $response = '<span title="'.$title.'" style="color:'.$color.';"><b>'.$text.'</b></span>';
         return $response;
+    }
+    
+    /**
+     * Función que retorna el color del indicador de acuerdo al resultado de medición en comparación con el rango de gestión definido
+     * @param Indicator $indicator
+     * @return string
+     */
+    public function getColorOfResult(Indicator $indicator){
+        $resultService = $this->getResultService();
+        $tendency = $indicator->getTendency();
+        $color = "#ffffff";
+        if($indicator->getEvaluateInPeriod()){
+            if($resultService->calculateRangeGood($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $color = "#1aaf5d";
+            } elseif($resultService->calculateRangeMiddle($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $color = "#f2c500";
+            } elseif($resultService->calculateRangeBad($indicator, $tendency, CommonObject::TYPE_RESULT_ARRANGEMENT)){
+                $color = "#ff0000";
+            }
+        } else{
+            $color = "#544040";
+        }
+        
+        return $color;
     }
     
     /**
@@ -435,6 +617,16 @@ class IndicatorService implements ContainerAwareInterface
                 $em->flush();
             }
         }
+    }
+    
+    /**
+     * 
+     * @param Indicator $indicator
+     */
+    public function getTagIndicatorByOrder(Indicator $indicator){
+        $tagsIndicator = $this->container->get('pequiven.repository.tagIndicator')->findBy(array('indicator' => $indicator->getId()),array('orderShow' => 'ASC'));
+        
+        return $tagsIndicator;
     }
     
     /**

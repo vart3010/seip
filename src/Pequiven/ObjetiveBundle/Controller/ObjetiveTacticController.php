@@ -59,6 +59,9 @@ class ObjetiveTacticController extends baseController {
         }
         
         $indicatorService = $this->getIndicatorService();
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_TACTIC",$resource);
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Tactic:show.html.twig')
@@ -66,6 +69,8 @@ class ObjetiveTacticController extends baseController {
             ->setData(array(
                 'entity' => $resource,
                 'indicatorService' => $indicatorService,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'isAllowToDelete' => $isAllowToDelete,
             ))
         ;
 

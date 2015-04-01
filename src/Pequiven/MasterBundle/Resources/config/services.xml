@@ -73,6 +73,13 @@
         <service id="pequiven.repository.quality_system" class="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem" />
         </service>
+        
+        <!-- Servicio de las Líneas Estratégicas -->
+        <service id="pequiven_master.service.line_strategic" class="Pequiven\MasterBundle\Service\LineStrategicService">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
     </services>
     
 </container>

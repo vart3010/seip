@@ -204,3 +204,9 @@ sylius_resource:
             driver: doctrine/orm
             classes:
                 model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
+        pequiven.feature_indicator:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:Planning/Indicator/FeatureIndicator
+            classes:
+                controller: Pequiven\SEIPBundle\Controller\Planning\FeatureIndicatorController
+                model: Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator

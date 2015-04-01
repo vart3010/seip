@@ -310,4 +310,17 @@ abstract class Indicator implements IndicatorInterface
     {
         return $this->typeDetailValue;
     }
+    
+    /**
+     * Retorna las etiquetas de cada metodo de calculo
+     * @return type
+     */
+    static function getLabelsByLevelIndicator()
+    {
+        return array(
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_ESTRATEGICO => 'pequiven_indicator.indicator_strategic',
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_TACTICO => 'pequiven_indicator.indicator_tactic',
+            \Pequiven\IndicatorBundle\Entity\IndicatorLevel::LEVEL_OPERATIVO => 'pequiven_indicator.indicator_operative',
+        );
+    }
 }

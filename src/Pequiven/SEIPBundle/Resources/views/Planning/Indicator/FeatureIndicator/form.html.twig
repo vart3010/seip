@@ -1,0 +1,18 @@
+<form method="POST" id="form_feature_indicator">
+    <fieldset class="fieldset fields-list">
+        <div class="field-block button-height" >
+            {{ form_label(form.typeFeatureIndicator) }}
+            {{ form_widget(form.typeFeatureIndicator) }}
+            {{ form_errors(form.typeFeatureIndicator) }}
+        </div>
+        <div class="field-block button-height" >
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description) }}
+            {{ form_errors(form.description) }}
+        </div>
+        {% if featureIndicator != null %}
+            <input type="hidden" name="id" value="{{ featureIndicator.id }}" />
+        {% endif %}
+    </fieldset>
+    {{ form_rest(form) }}
+</form>

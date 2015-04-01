@@ -1,0 +1,15 @@
+Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        description:
+            expose: true
+            groups: [api_list]
+        color:
+            expose: true
+            groups: [api_list]
+        priority:
+            expose: true
+            groups: [api_details]

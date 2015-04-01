@@ -156,6 +156,7 @@ seip:
             value: Valor
             parameters: Parametros
             products: Productos
+            description_feature_indicator: Nota o comentario
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.

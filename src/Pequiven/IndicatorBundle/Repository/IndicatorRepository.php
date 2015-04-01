@@ -305,7 +305,7 @@ class IndicatorRepository extends EntityRepository
     }
     
     /**
-     * 
+     * Retorna los Indicadores de acuerdo a una Línea Estratégica seleccionada
      * @return type
      */
     public function findByLineStrategic($idLineStrategic){
@@ -319,6 +319,46 @@ class IndicatorRepository extends EntityRepository
         
         return $qb->getQuery()->getResult();
     }
+    
+    /**
+     * Retorna los indicadores de acuerdo a una Línea EStratégica seleccioanda y ordenados de acuerdo a como se mostrarán
+     * @param type $idLineStrategic
+     * @param type $orderBy
+     */
+    public function findByLineStrategicAndOrderShowFromParent($idLineStrategic, $orderBy = 'ASC'){
+        $qb = $this->getQueryBuilder();
+        $qb
+                ->innerJoin('i.lineStrategics','ls')
+                ->andWhere("ls.id = :idLineStrategic")
+                ->andWhere("i.deletedAt IS NULL")
+                ->setParameter('idLineStrategic', $idLineStrategic)
+                ->orderBy('i.orderShowFromParent', $orderBy)
+        ;
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /**
+     * 
+     * @param type $idParent
+     * @param type $orderBy
+     * @return type
+     */
+    function findByParentAndOrderShow($idParent,$orderBy = 'ASC') {
+        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder
+                ->innerJoin('i.parent', 'ip')
+                ->andWhere("ip.id = :idParent")
+                ->andWhere("i.deletedAt IS NULL")
+                ->andWhere("ip.deletedAt IS NULL")
+                ->setParameter('idParent', $idParent)
+                ->orderBy('i.orderShowFromParent', $orderBy)
+                ;
+        
+        return $queryBuilder->getQuery()->getResult();
+    }
+    
+    
     
     public function findQueryWithResultNull(\Pequiven\SEIPBundle\Entity\Period $period)
     {
@@ -434,7 +474,7 @@ class IndicatorRepository extends EntityRepository
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
         
-        $this->applyPeriodCriteria($queryBuilder);
+//        $this->applyPeriodCriteria($queryBuilder);
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

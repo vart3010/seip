@@ -35,6 +35,7 @@ class GerenciaAdmin extends Admin
             ->add('gerenciaSecondVinculants')
             ->add('gerenciaSecondSupports')
             ->add('gerenciaGroup')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }
@@ -67,6 +68,9 @@ class GerenciaAdmin extends Admin
                 'property' => array('description'),
                 'required' => false,
             ))
+            ->add('validAudit',null,array(
+                'required' => false,
+            ))
             ->add('enabled',null,array(
                 'required' => false,
             ))
@@ -80,6 +84,7 @@ class GerenciaAdmin extends Admin
             ->add('description')
             ->add('complejo')
             ->add('gerenciaGroup')
+            ->add('validAudit')
             ->add('enabled')
             ;
     }

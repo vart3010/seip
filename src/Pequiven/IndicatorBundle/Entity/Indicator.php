@@ -334,6 +334,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showPlanValue = true;
     
     /**
+     * ¿Mostar resultados del indicador?
+     * @var boolean
+     * @ORM\Column(name="showResults",type="boolean")
+     */
+    private $showResults = true;
+    
+    /**
+     * ¿Mostar puntos de atencion del indicador?
+     * @var boolean
+     * @ORM\Column(name="showFeatures",type="boolean")
+     */
+    private $showFeatures = false;
+    
+    /**
      * @var float
      * 
      * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
@@ -348,6 +362,41 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $summary;
     
     /**
+     * ¿Será medido en el período actual?
+     * @var boolean
+     * @ORM\Column(name="evaluetaInPeriod",type="boolean")
+     */
+    private $evaluateInPeriod = true;
+    
+    /**
+     * Snippet para calcular el plan
+     * @var string
+     * @ORM\Column(name="snippetPlan",type="text",nullable=true)
+     */
+    protected $snippetPlan;
+    
+    /**
+     * Snippet para calcular el real
+     * @var string
+     * @ORM\Column(name="snippetReal",type="text",nullable=true)
+     */
+    protected $snippetReal;
+    
+    /**
+     * Puntos de atencion
+     * @var Indicator\FeatureIndicator
+     * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator",mappedBy="indicator")
+     */
+    protected $featuresIndicator;
+    
+     /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShowFromParent", type="integer")
+     */
+    private $orderShowFromParent = 1;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -358,6 +407,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->tagsIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1079,7 +1129,11 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->valuesIndicator = new ArrayCollection();
             
             $this->valueFinal = 0;
+            $this->totalPlan = 0;
+            $this->progressToDate = 0;
+            $this->resultReal = 0;
             
+            $this->featuresIndicator = new ArrayCollection();
             $this->histories = new ArrayCollection();
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
@@ -1087,7 +1141,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
             
             $this->childrens = new ArrayCollection();
-            $this->progressToDate = 0;
         }
     }
     
@@ -1471,6 +1524,190 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         $this->showPlanValue = $showPlanValue;
     }
+    
+    function getEvaluateInPeriod() {
+        return $this->evaluateInPeriod;
+    }
+
+    function setEvaluateInPeriod($evaluateInPeriod) {
+        $this->evaluateInPeriod = $evaluateInPeriod;
+    }
 
 
+    /**
+     * Get forcePenalize
+     *
+     * @return boolean 
+     */
+    public function getForcePenalize()
+    {
+        return $this->forcePenalize;
+    }
+
+    /**
+     * Set snippetPlan
+     *
+     * @param string $snippetPlan
+     * @return Indicator
+     */
+    public function setSnippetPlan($snippetPlan)
+    {
+        $this->snippetPlan = $snippetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetPlan
+     *
+     * @return string 
+     */
+    public function getSnippetPlan()
+    {
+        return $this->snippetPlan;
+    }
+
+    /**
+     * Set snippetReal
+     *
+     * @param string $snippetReal
+     * @return Indicator
+     */
+    public function setSnippetReal($snippetReal)
+    {
+        $this->snippetReal = $snippetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get snippetReal
+     *
+     * @return string 
+     */
+    public function getSnippetReal()
+    {
+        return $this->snippetReal;
+    }
+    
+    /**
+     * Set showResults
+     *
+     * @param boolean $showResults
+     * @return Indicator
+     */
+    public function setShowResults($showResults)
+    {
+        $this->showResults = $showResults;
+
+        return $this;
+    }
+
+    /**
+     * Get showResults
+     *
+     * @return boolean 
+     */
+    public function getShowResults()
+    {
+        return $this->showResults;
+    }
+
+    /**
+     * Get showResults
+     *
+     * @return boolean 
+     */
+    public function isShowResults()
+    {
+        return $this->showResults;
+    }
+
+    /**
+     * Set showFeatures
+     *
+     * @param boolean $showFeatures
+     * @return Indicator
+     */
+    public function setShowFeatures($showFeatures)
+    {
+        $this->showFeatures = $showFeatures;
+
+        return $this;
+    }
+
+    /**
+     * Get showFeatures
+     *
+     * @return boolean 
+     */
+    public function getShowFeatures()
+    {
+        return $this->showFeatures;
+    }
+
+    /**
+     * Get showFeatures
+     *
+     * @return boolean 
+     */
+    public function isShowFeatures()
+    {
+        return $this->showFeatures;
+    }
+    
+    /**
+     * Add featuresIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
+     * @return Indicator
+     */
+    public function addFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
+    {
+        $featuresIndicator->setIndicator($this);
+        $this->featuresIndicator->add($featuresIndicator);
+
+        return $this;
+    }
+
+    /**
+     * Remove featuresIndicator
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator
+     */
+    public function removeFeaturesIndicator(\Pequiven\IndicatorBundle\Entity\Indicator\FeatureIndicator $featuresIndicator)
+    {
+        $this->featuresIndicator->removeElement($featuresIndicator);
+    }
+
+    /**
+     * Get featuresIndicator
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFeaturesIndicator()
+    {
+        return $this->featuresIndicator;
+    }
+
+    /**
+     * Set indicatorLevel
+     *
+     * @param \Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel
+     * @return Indicator
+     */
+    public function setIndicatorLevel(\Pequiven\IndicatorBundle\Entity\IndicatorLevel $indicatorLevel)
+    {
+        $this->indicatorLevel = $indicatorLevel;
+
+        return $this;
+    }
+    
+    function getOrderShowFromParent() {
+        return $this->orderShowFromParent;
+    }
+
+    function setOrderShowFromParent($orderShowFromParent) {
+        $this->orderShowFromParent = $orderShowFromParent;
+    }
 }

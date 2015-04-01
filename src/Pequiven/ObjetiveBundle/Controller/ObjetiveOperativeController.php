@@ -55,6 +55,10 @@ class ObjetiveOperativeController extends baseController
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
         }
         $indicatorService = $this->getIndicatorService();
+        
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE",$resource);
+        
         $view = $this
             ->view()
             ->setTemplate('PequivenObjetiveBundle:Operative:show.html.twig')
@@ -62,6 +66,8 @@ class ObjetiveOperativeController extends baseController
             ->setData(array(
                 'entity' => $resource,
                 'indicatorService' => $indicatorService,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'isAllowToDelete' => $isAllowToDelete,
             ))
         ;
         $groups = array_merge(array('id','api_list','gerencia','gerenciaSecond'), $request->get('_groups',array()));

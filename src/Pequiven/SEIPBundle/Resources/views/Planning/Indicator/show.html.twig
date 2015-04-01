@@ -48,7 +48,7 @@
     {% set indicatorDetails = indicator.details %}
     
     <fieldset class="fieldset">
-        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','valueIndicatorDetail'])) }}">{{ indicator }}&nbsp;</legend>
+        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator','valueIndicatorDetail'])) }}">{{ indicator }}&nbsp;</legend>
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
 
@@ -197,8 +197,14 @@
             {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
         </fieldset>
     {% endif %}
-        <br /><br />
-        {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        {% if indicator.showResults %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/results.html.twig' %}
+        {% endif %}
+        {% if indicator.showFeatures %}
+            <br /><br />
+            {% include 'PequivenSEIPBundle:Planning:Indicator/show/features.html.twig' %}
+        {% endif %}
         <br /><br />
         {% include 'PequivenSEIPBundle:Planning:Indicator/show/history.html.twig' with {'entity':indicator} %}
     </div>
@@ -233,6 +239,24 @@
             }
         )
     %}
+    
+{% if hasPermissionToUpdate is not defined %}
+    {% set hasPermissionToUpdate = false %}
+{% endif %}
+{% if isAllowToDelete is not defined %}
+    {% set isAllowToDelete = false %}
+{% endif %}
+
+{% if  hasPermissionToUpdate == true %}
+    &nbsp;
+    {{ buttons.generic(path('pequiven_indicator_update', { 'id': indicator.id }),('pequiven.edit'|trans({},'messages'))) }}
+{% endif %}
+
+{% if isAllowToDelete == true %}
+    &nbsp;
+    {% set redirectUrl = (path("pequiven_seip_default_index")) %}
+    {{ buttons.delete(path('pequiven_indicator_delete', { 'id': indicator.id,"redirectUrl": redirectUrl })) }}
+{% endif %}
 </p>
 
 {% endblock %}

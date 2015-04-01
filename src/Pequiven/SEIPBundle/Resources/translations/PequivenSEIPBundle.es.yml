@@ -202,6 +202,8 @@ pequiven_seip:
         user_not_quantity_items: El usuario "%user%" no tiene ningún item asociado para su evaluación.
         the_user_is_not_assigned_second_line_management: El usuario "%user%" no tiene asignada la gerencia de segunda línea.
         the_user_is_not_assigned_first_line_management: El usuario "%user%" no tiene asignada la gerencia de primera línea.
+        the_first_line_management_no_audit: La gerencia de primera línea "%gerenciaFirst%", no tiene auditoria.
+        the_second_line_management_no_audit: La gerencia de segunda línea "%gerenciaSecond%", no tiene auditoria.
     pre_planning:
         pre_planning: Planificación %period%
         list: Lista
@@ -214,6 +216,7 @@ pequiven_seip:
             in_review: En revisión
             approved: Aprobado
             required: Requerido
+            imported_and_deleted: Eliminado
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%
@@ -386,3 +389,7 @@ miscellaneous:
 
 statisticsAndInformation: Estadística e Información
 internalAudit: Auditoría Interna
+
+        
+empty:
+    features_indicator: No hay ningún punto de atención.

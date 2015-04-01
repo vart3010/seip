@@ -28,6 +28,8 @@ pequiven_indicator:
         buttons:
             remove_values: Eliminar resultados
             configure_details_results: Configurar detalles
+        feature:
+            title: Puntos de atención
     indicator_details:
         source_result_all: Todos los resultados
         source_result_last_valid: Ultimo resultado valido (Con valor)
@@ -91,6 +93,7 @@ pequiven_indicator:
         the_formula_should_only_have_two_defined_variables: La fórmula solo debe tener dos variables definidas (plan y real).
         the_formula_must_have_the_variables_defined_plan_and_real: La fórmula debe tener las variables definidas plan y real.
         the_indicator_xrequires_configuration_details_results: La "%typeDetailValue%", requiere la configuración de los detalles de resultados.
+        indicatorNoEvaluateInPeriod: El indicador no será evaludo en el período actual
     type_tag:
         tagNumeric: Numérica
         tagText: Texto
@@ -190,6 +193,12 @@ form:
         registerIndicatorOperative: ¿Desea guardar el Indicador Operativo?
     
     info:
+        indicator:
+            description: Escriba o actualice el enunciado del indicador.
+            weight: Peso del indicador respecto al objetivo, sino lo conoce coloque cero (0).
+            goal: Meta anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            total_plan: Plan anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            summary: Resumen del enunciado, este debe ser lo mas corto posible.
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo
@@ -297,7 +306,9 @@ form:
         addIndicatorTactic: Registro Indicador Táctico
         addIndicatorOperative: Registro Indicador Operativo
     products: Productos
-
+    description_feature_indicator: Nota o Comentario
+    feature_indicator: Punto de atención
+        
 action:
     messages:    
         registerIndicatorStrategicSuccessfull: Indicador Estratégico registrado exitosamente

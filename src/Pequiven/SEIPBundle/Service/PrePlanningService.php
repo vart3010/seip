@@ -275,6 +275,7 @@ class PrePlanningService extends ContainerAware
             'status' => $item->getStatus(),
             '_statusLabel' => '',
             '_hasPermissionRevision' => false,
+            '_isImportable' => false,
         );
         
         if($item->getLevelObject() == PrePlanning::LEVEL_OPERATIVO 
@@ -290,9 +291,9 @@ class PrePlanningService extends ContainerAware
             }
         }
         
-        if(($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned) || (!$itemInstanceCloned && $item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR'))){
-//            $item->setStatus(PrePlanning::STATUS_IN_REVIEW);
-//            $this->persist($item,true);
+        if(($item->getStatus() == PrePlanning::STATUS_IMPORTED && !$itemInstanceCloned)){
+            $item->setStatus(PrePlanning::STATUS_IMPORTED_AND_DELETED);
+            $this->persist($item,true);
         }
         if($itemInstanceCloned && $item->getStatus() != PrePlanning::STATUS_IMPORTED){
             $item->setStatus(PrePlanning::STATUS_IMPORTED);
@@ -306,7 +307,7 @@ class PrePlanningService extends ContainerAware
             $classStatus = 'blue';
         }
         $child['_statusLabel'] = sprintf('<span class="%s">%s</span>',$classStatus,$this->trans($item->getLabelStatus()));
-        
+        $_hasPermissionRevision = false;
         if($itemInstanceCloned){
             $child['status'] = PrePlanning::STATUS_IMPORTED;
             //Las metas no tienen link por lo tanto genero el link del programa
@@ -317,7 +318,6 @@ class PrePlanningService extends ContainerAware
             }
             $child['_statusLabel'] = sprintf('<a href="%s" target="_blank"><span class="green">Importado</span></a>',$configEntity['url']);
         }else{
-            $_hasPermissionRevision = false;
             if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_INDICATOR && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_STATISTICS_INDICATOR')){
                 $_hasPermissionRevision = true;
             }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_OBJETIVE && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_OBJETIVE')){
@@ -337,6 +337,9 @@ class PrePlanningService extends ContainerAware
                 }
             }
             $child['_hasPermissionRevision'] = $_hasPermissionRevision;
+        }
+        if($_hasPermissionRevision && ($item->getStatus() == PrePlanning::STATUS_IN_REVIEW || $item->getStatus() == PrePlanning::STATUS_REQUIRED || $item->getStatus() == PrePlanning::STATUS_IMPORTED_AND_DELETED)){
+            $child['_isImportable'] = true;
         }
         if(count($item->getChildrens()) > 0){
             $limitLevel = 2;
@@ -382,7 +385,7 @@ class PrePlanningService extends ContainerAware
                 $success = 'Es obligatorio importar el item padre.';
             }
         }
-        if($validToImport && ($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED))
+        if($validToImport && ($prePlanning->getStatus() == PrePlanning::STATUS_IN_REVIEW || $prePlanning->getStatus() == PrePlanning::STATUS_REQUIRED || $prePlanning->getStatus() == PrePlanning::STATUS_IMPORTED_AND_DELETED))
         {
             $em = $this->getDoctrine()->getManager();
             $cloneService = $this->getCloneService();
@@ -412,7 +415,11 @@ class PrePlanningService extends ContainerAware
                                     $parentCloned->addChildren($itemInstanceCloned);
                                     $this->persist($parentCloned);
                                 }
-                                $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+                                if($level == \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO){
+                                    $ref = $itemInstance->getRef();
+                                }else{
+                                    $ref = $sequenceGenerator->getNextRefChildObjetive($itemInstanceCloned);
+                                }
                                 $itemInstanceCloned->setRef($ref);
                                 $this->persist($itemInstanceCloned);
                             }

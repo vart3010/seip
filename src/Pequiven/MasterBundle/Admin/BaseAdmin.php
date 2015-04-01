@@ -35,7 +35,9 @@ abstract class BaseAdmin extends Admin
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->add('enabled')
+            ->add('enabled',null,array(
+                "required" => false,
+            ))
             ;
     }
     
@@ -49,7 +51,7 @@ abstract class BaseAdmin extends Admin
     protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->add('enabled')
+            ->add('enabled', null, array('editable' => true))
             ;
     }
 }
