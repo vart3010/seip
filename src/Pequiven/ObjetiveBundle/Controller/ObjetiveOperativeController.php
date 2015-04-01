@@ -56,8 +56,8 @@ class ObjetiveOperativeController extends baseController
         }
         $indicatorService = $this->getIndicatorService();
         
-        $hasPermissionToUpdate = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE");
-        $isAllowToDelete = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE");
+        $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_OPERATIVE",$resource);
+        $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_OPERATIVE",$resource);
         
         $view = $this
             ->view()

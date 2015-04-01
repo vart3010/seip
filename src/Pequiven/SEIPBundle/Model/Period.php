@@ -18,6 +18,11 @@ namespace Pequiven\SEIPBundle\Model;
  */
 abstract class Period implements PeriodInterface
 {
+    function isActive()
+    {
+        return $this->getStatus();
+    }
+    
     function getYear()
     {
         return $this->getDateStart()->format('Y');

@@ -51,7 +51,7 @@ abstract class BaseAdmin extends Admin
     protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->add('enabled')
+            ->add('enabled', null, array('editable' => true))
             ;
     }
 }
