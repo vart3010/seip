@@ -97,6 +97,7 @@ UPDATE seip_indicator_tag SET orderShow = 1;
 ALTER TABLE seip_indicator ADD showResults TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD showResults TINYINT(1) DEFAULT NULL;
 UPDATE seip_indicator SET showResults = 1;
+UPDATE seip_indicator SET showResults = 0,showFeatures = 1 WHERE fk_indicator_level = 1;
 ALTER TABLE seip_indicator ADD showFeatures TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD showFeatures TINYINT(1) DEFAULT NULL;
 
