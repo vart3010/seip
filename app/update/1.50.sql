@@ -96,3 +96,7 @@ UPDATE seip_indicator_tag SET orderShow = 1;
 ALTER TABLE seip_indicator ADD evaluetaInPeriod TINYINT(1) NOT NULL;
 ALTER TABLE seip_indicator_audit ADD evaluetaInPeriod TINYINT(1) DEFAULT NULL;
 UPDATE seip_indicator SET evaluetaInPeriod = 1;
+
+ALTER TABLE seip_indicator ADD orderShowFromParent INT NOT NULL;
+ALTER TABLE seip_indicator_audit ADD orderShowFromParent INT DEFAULT NULL;
+UPDATE seip_indicator SET orderShowFromParent = 1;

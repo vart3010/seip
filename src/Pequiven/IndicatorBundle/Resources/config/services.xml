@@ -25,6 +25,7 @@
             </call>
         </service>
         
+        <!-- Servicio de las Etiquetas del Indicador -->
         <service id="pequiven_indicator.service.tag_indicator" class="Pequiven\IndicatorBundle\Service\TagIndicatorService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

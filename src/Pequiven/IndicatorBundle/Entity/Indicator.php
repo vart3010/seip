@@ -369,6 +369,13 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $snippetReal;
     
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderShowFromParent", type="integer")
+     */
+    private $orderShowFromParent = 1;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1557,5 +1564,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->snippetReal;
     }
+    
+    function getOrderShowFromParent() {
+        return $this->orderShowFromParent;
+    }
+
+    function setOrderShowFromParent($orderShowFromParent) {
+        $this->orderShowFromParent = $orderShowFromParent;
+    }
+
+
     
 }

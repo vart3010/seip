@@ -36,7 +36,8 @@ class IndicatorsDashboardBox extends GenericBox
             foreach($indicator->getLineStrategics() as $lineStrategic){
                 $idLineStrategic = $lineStrategic->getId();
                 if(count($lineStrategic->getIndicators()) > 0){
-                    $indicatorsGroup = $lineStrategic->getIndicators();
+//                    $indicatorsGroup = $lineStrategic->getIndicators();
+                    $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
                 }
             }
             if(count($indicator->getChildrens()) > 0){

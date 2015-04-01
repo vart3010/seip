@@ -35,7 +35,10 @@ class IndicatorsIconsBox extends GenericBox
         $resultService = $this->getResultService();
         
         foreach($linesStrategics as $lineStrategic){
-            $indicators = $lineStrategic->getIndicators();
+//            $indicators = $lineStrategic->getIndicators();
+//            $indicators = $this->container->get('pequiven.repository.linestrategic')->findIndicatorsByOrderToShow($lineStrategic->getId());
+            $indicators = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
+//            $indicators = $this->container->get('pequiven.repository.indicator')->findBy(array('deletedAt' => null,'lineStrategics' => $lineStrategic),array('orderShowFromParent' => 'ASC'));
             $valueIndicators = $indicatorService->calculateSimpleAverage($lineStrategic,2);
             $type = $resultService->evaluateRangeByTotal($valueIndicators,count($indicators));
             
