@@ -6,3 +6,8 @@
         }
     )
 %}
+
+{#    {% if isAllowToDelete == true %}#}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_objetive_delete', { 'id': entity.id,"redirectUrl": redirectUrl })) }}
+{#    {% endif %}#}

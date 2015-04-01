@@ -88,17 +88,11 @@ class CloneService extends ContainerAware
     public function findCloneInstance($object) 
     {
         $em = $this->getDoctrine()->getManager();
-        $periodActive = $this->getPeriodService()->getPeriodActive();
-        $idSourceObject = $object->getId();
         
         $className = ClassUtils::getRealClass(get_class($object));
         $typeObject = PrePlanning::getTypeByClass($className);
         
-        $prePlanningCloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
-            'idSourceObject' => $idSourceObject,
-            'typeObject' => $typeObject,
-            'period' => $periodActive
-        ));
+        $prePlanningCloneEntityInstance = $this->findPrePlanningItemForObject($object);
         $entity = $classNameClonned = null;
         if($prePlanningCloneEntityInstance){
             $typeObject = $prePlanningCloneEntityInstance->getTypeObject();
@@ -114,6 +108,24 @@ class CloneService extends ContainerAware
         return $entity;
     }
     
+    private function findPrePlanningItemForObject($object)
+    {
+        $className = ClassUtils::getRealClass(get_class($object));
+        $typeObject = PrePlanning::getTypeByClass($className);
+        
+        $em = $this->getDoctrine()->getManager();
+        $periodActive = $this->getPeriodService()->getPeriodActive();
+        $idSourceObject = $object->getId();
+        
+        $prePlanningCloneEntityInstance = $em->getRepository('Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningItemClone')->findOneBy(array(
+            'idSourceObject' => $idSourceObject,
+            'typeObject' => $typeObject,
+            'period' => $periodActive
+        ));
+        return $prePlanningCloneEntityInstance;
+    }
+
+
     private function cloneObjetive(Objetive $objetive)
     {
         $entity = $this->findCloneInstance($objetive);
@@ -414,7 +426,10 @@ class CloneService extends ContainerAware
     private function saveClone(&$cloneObject,&$sourceObject,$andFlush = true)
     {
         
-        $prePlanningItemClone = new PrePlanningItemClone();
+        $prePlanningItemClone = $this->findPrePlanningItemForObject($sourceObject);
+        if(!$prePlanningItemClone){
+            $prePlanningItemClone = new PrePlanningItemClone();
+        }
         $cloneObject->setPeriod($this->getPeriodToClone());
         
         $this->persist($cloneObject,$andFlush);

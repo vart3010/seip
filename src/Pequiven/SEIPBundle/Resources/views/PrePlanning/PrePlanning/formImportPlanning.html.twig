@@ -286,7 +286,7 @@
                     var statusRequired = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_REQUIRED') }}';
                     for(i=0;i < items.length; i++){
                         var status = items[i].get('status');
-                        if((status == statusInReview || status == statusRequired) && items[i].get('checkBox') == true && items[i].get('_hasPermissionRevision') == true ){
+                        if(items[i].get('_isImportable') == true && items[i].get('checkBox') == true && items[i].get('_hasPermissionRevision') == true ){
                             itemsToImport.push(items[i]);
                         }
                     }
@@ -423,7 +423,7 @@
                                 cls += ' ' + cssPrefix + 'grid-checkcolumn-checked';
                             }
 
-                            if((record.get('status') == statusInReview || record.get('status') == statusRequired) && record.get('_hasPermissionRevision')){
+                            if((record.get('_isImportable') == true)){
                                 return '<img class="' + cls + '" src="' + Ext.BLANK_IMAGE_URL + '"/>';
                             }
                         },

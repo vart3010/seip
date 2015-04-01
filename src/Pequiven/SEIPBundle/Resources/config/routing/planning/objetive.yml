@@ -8,6 +8,15 @@ pequiven_objetive_list:
         level: 1|2|3
     methods: [GET]
     
+pequiven_objetive_delete:
+    path: /{id}/delete.{_format}
+    defaults:
+        _controller: pequiven.controller.objetive:deleteAction
+        _format: json
+    requirements:
+        _format: json
+    methods: [POST|DELETE]
+    
 #Select que devuelve las Gerencias de 1ra Línea para la visualización de objetivos a nivel Táctico
 objetiveGerenciaFirstTactic:
     path: /objetive/objetiveGerenciaFirstTactic
