@@ -65,5 +65,8 @@
             </call>
             <tag name="form.type" alias="pequiven_seip_arrangementprogram_template" />
         </service>
+        <service id="peqquiven.type.objetive" class="Pequiven\ObjetiveBundle\Form\Type\ObjetiveFormType">
+            <tag name="form.type" alias="pequiven_objetive_form" />
+        </service>
     </services>
 </container>

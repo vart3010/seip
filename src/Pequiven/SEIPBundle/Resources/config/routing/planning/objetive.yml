@@ -8,6 +8,17 @@ pequiven_objetive_list:
         level: 1|2|3
     methods: [GET]
     
+pequiven_objetive_update:
+    path: /{id}/update.{_format}
+    defaults:
+        _controller: pequiven.controller.objetive:updateAction
+        _format: html
+        _sylius:
+            form: pequiven_objetive_form
+    requirements:
+        _format: html|json
+    methods: [GET|POST]
+    
 pequiven_objetive_delete:
     path: /{id}/delete.{_format}
     defaults:

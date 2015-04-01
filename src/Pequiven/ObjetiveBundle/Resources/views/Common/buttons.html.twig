@@ -7,6 +7,11 @@
     )
 %}
 
+{#{% if  hasPermissionToUpdate == true %}#}
+        &nbsp;
+        {{ buttons.generic(path('pequiven_objetive_update', { 'id': entity.id }),('pequiven.edit'|trans({},'messages'))) }}
+{#    {% endif %}#}
+
 {#    {% if isAllowToDelete == true %}#}
         &nbsp;
         {{ buttons.delete(path('pequiven_objetive_delete', { 'id': entity.id,"redirectUrl": redirectUrl })) }}
