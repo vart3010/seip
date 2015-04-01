@@ -1129,7 +1129,11 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->valuesIndicator = new ArrayCollection();
             
             $this->valueFinal = 0;
+            $this->totalPlan = 0;
+            $this->progressToDate = 0;
+            $this->resultReal = 0;
             
+            $this->featuresIndicator = new ArrayCollection();
             $this->histories = new ArrayCollection();
             $this->observations = new ArrayCollection();
             $this->details = new Indicator\IndicatorDetails();
@@ -1137,7 +1141,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
             $this->objetives = new ArrayCollection();
             
             $this->childrens = new ArrayCollection();
-            $this->progressToDate = 0;
         }
     }
     

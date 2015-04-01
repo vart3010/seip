@@ -20,7 +20,28 @@ use Symfony\Component\Form\AbstractType;
  */
 class ObjetiveFormType extends AbstractType 
 {
-      
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) 
+    {
+        $builder->add("description","textarea",array(
+             'label' => 'form.objetive_statement',
+             'label_attr' => array('class' => 'label'), 
+             'translation_domain' => 'PequivenObjetiveBundle',
+             'attr' => array('cols' => 50, 'rows' => 5,'class' => 'input small-margin-right validate[required]')
+         ))
+        ->add("weight",null,array(
+            'label' => 'form.weight',
+            'label_attr' => array('class' => 'label'), 
+            'translation_domain' => 'PequivenObjetiveBundle',
+            'attr' => array('class' => 'input small-margin-right'),
+        ))
+        ->add("goal",null,array(
+            'label' => 'form.goal',
+            'label_attr' => array('class' => 'label'), 
+            'translation_domain' => 'PequivenObjetiveBundle',
+            'attr' => array('class' => 'input small-margin-right'),
+        ))
+        ;
+    }
     public function getName() 
     {
         return 'pequiven_objetive_form';

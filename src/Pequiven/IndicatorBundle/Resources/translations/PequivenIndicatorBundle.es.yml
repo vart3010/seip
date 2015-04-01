@@ -193,6 +193,12 @@ form:
         registerIndicatorOperative: ¿Desea guardar el Indicador Operativo?
     
     info:
+        indicator:
+            description: Escriba o actualice el enunciado del indicador.
+            weight: Peso del indicador respecto al objetivo, sino lo conoce coloque cero (0).
+            goal: Meta anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            total_plan: Plan anual del indicador, este valor normalmente es cien (100) pero sino lo conoce coloque cero (0).
+            summary: Resumen del enunciado, este debe ser lo mas corto posible.
         lineStrategic: Línea estratégica que seguirá el objetivo
         objetiveStrategic: Objetivo estratégico que seguirá el objetivo
         objetiveTactic: Objetivo táctico que seguirá el objetivo

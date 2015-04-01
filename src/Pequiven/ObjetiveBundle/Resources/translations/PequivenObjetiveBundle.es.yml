@@ -55,9 +55,14 @@ form:
     objetive: Objetivo
     objetive_level: Nivel de objetivo
     lineStrategic: Línea estratégica
+    objetive_statement: Enunciado
+    objetive_parents: Objetivos padres
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    indicator:
+        summary: Resúmen
+        total_plan: Plan anual
     gerenciaFirst: Gerencia 1ra línea
     gerenciaSecond: Gerencia 2da línea
     objetiveStrategic: Objetivo Estratégico

@@ -1,0 +1,76 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% trans_default_domain 'PequivenIndicatorBundle' %}
+
+{% set labelHeader = {
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_ESTRATEGICO')):'pequiven_indicator.indicator_strategic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_TACTICO')):'pequiven_indicator.indicator_tactic',
+        (constant('Pequiven\\IndicatorBundle\\Model\\IndicatorLevel::LEVEL_OPERATIVO')):'pequiven_indicator.indicator_operative',
+    } %}
+
+{% set level = indicator.indicatorLevel.level %}
+
+{% block before_body %}
+    {{ contentHeader(
+        {(path('pequiven_indicator_list',{'level':level})):(labelHeader[level])|trans},
+        { (path('pequiven_indicator_show',{'id':indicator.id})): (indicator.ref)},
+        ('pequiven.update'|trans({},'messages'))
+    ) }}
+{% endblock %}
+
+{% block body %}
+<form method="POST" action="{{ path("pequiven_indicator_update",{id:indicator.id}) }}">
+    <fieldset class="fieldset fields-list">
+            <legend class="legend">{{ 'form.indicator'|trans }}</legend>
+            <div class="field-block button-height">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.description'|trans }}</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.weight) }}
+                {{ form_widget(form.weight) }}
+                {{ form_errors(form.weight) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.weight'|trans }}</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.goal) }}
+                {{ form_widget(form.goal) }}
+                {{ form_errors(form.goal) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.goal'|trans }}</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.totalPlan) }}
+                {{ form_widget(form.totalPlan) }}
+                {{ form_errors(form.totalPlan) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.total_plan'|trans }}</span>
+                </span>
+            </div>
+            <div class="field-block button-height">
+                {{ form_label(form.summary) }}
+                {{ form_widget(form.summary) }}
+                {{ form_errors(form.summary) }}
+                <span class="info-spot">
+                    <span class="icon-info-round"></span>
+                    <span class="info-bubble">{{ 'form.info.indicator.summary'|trans }}</span>
+                </span>
+            </div>
+    </fieldset>
+    {{ form_rest(form) }}
+    {{ actions.update() }}
+</form>
+{% endblock body %}

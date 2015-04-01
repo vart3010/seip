@@ -171,7 +171,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     private $gerenciaSecond;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", inversedBy="parents", cascade={"persist","remove"})
      * @ORM\JoinTable(name="seip_objetives_parents",
      *      joinColumns={@ORM\JoinColumn(name="parent_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="children_id", referencedColumnName="id")})

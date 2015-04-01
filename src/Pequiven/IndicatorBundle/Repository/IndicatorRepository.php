@@ -474,7 +474,7 @@ class IndicatorRepository extends EntityRepository
         
         parent::applyCriteria($queryBuilder, $criteria->toArray());
         
-        $this->applyPeriodCriteria($queryBuilder);
+//        $this->applyPeriodCriteria($queryBuilder);
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

@@ -29,10 +29,21 @@ class IndicatorController extends ResourceController
             IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_INDICATOR_TACTIC'),
             IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_INDICATOR_OPERATIVE')
         );
+        
+        $roleEditDeleteByLevel = array(
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_EDIT_STRATEGIC',"ROLE_SEIP_INDICATOR_DELETE_STRATEGIC"),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_EDIT_TACTIC',"ROLE_SEIP_INDICATOR_DELETE_TACTIC"),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_EDIT_OPERATIVE',"ROLE_SEIP_INDICATOR_DELETE_OPERATIVE")
+        );
+        
+        $securityService = $this->getSecurityService();
+        
+        $hasPermissionToUpdate = $isAllowToDelete = false;
         if(isset($roleByLevel[$level])){
             $rol = $roleByLevel[$level];
+            $hasPermissionToUpdate = $securityService->isGranted($roleEditDeleteByLevel[$level][0]);
+            $isAllowToDelete = $securityService->isGranted($roleEditDeleteByLevel[$level][1]);
         }
-        $securityService = $this->getSecurityService();
         $securityService->checkSecurity($rol);
         
         if(!$securityService->isGranted($rol[1])){
@@ -85,6 +96,8 @@ class IndicatorController extends ResourceController
                 'indicatorService' => $indicatorService,
                 'data' => $data,
                 'indicatorRange' => $indicatorRange,
+                'hasPermissionToUpdate' => $hasPermissionToUpdate,
+                'isAllowToDelete' => $isAllowToDelete,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
@@ -438,6 +451,16 @@ class IndicatorController extends ResourceController
         $em->flush();
         
         return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    public function deleteAction(Request $request) 
+    {
+        $redirectUrl = $request->get("redirectUrl");
+        
+        $resource = $this->findOr404($request);
+        $this->domainManager->delete($resource);
+
+        return $this->redirectHandler->redirect($redirectUrl);
     }
     
     /**

@@ -210,6 +210,7 @@ pequiven_seip:
             in_review: En revisión
             approved: Aprobado
             required: Requerido
+            imported_and_deleted: Eliminado
         pre_pre_planning_management_x: Pre-planificando gerencia "%gerencia%".
     pdf:
         pageFooter: Página %page%/%totalPage%
