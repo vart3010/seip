@@ -54,10 +54,14 @@ class ObjetiveStrategicController extends baseController {
         }
         
         $indicatorService = $this->getIndicatorService();
+        $hasPermissionToUpdate = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC");
+        $isAllowToDelete = $securityService->isGranted("ROLE_SEIP_OBJECTIVE_DELETE_STRATEGIC");
         
         return array(
             'entity'      => $entity,
             'indicatorService' => $indicatorService,
+            'hasPermissionToUpdate' => $hasPermissionToUpdate,
+            'isAllowToDelete' => $isAllowToDelete,
         );
     }
 
