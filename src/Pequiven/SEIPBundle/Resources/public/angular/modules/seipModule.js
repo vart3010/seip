@@ -2316,6 +2316,7 @@ angular.module('seipModule.controllers', [])
                         "type": "multilevelpie",
                         "renderAt": id,
                         "width": width,
+                        "height": height,
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
@@ -2324,6 +2325,84 @@ angular.module('seipModule.controllers', [])
                     });
                     widgetMultiLevelPieChart.setTransparent(true);
                     widgetMultiLevelPieChart.render();
+                })
+            };
+            
+            $scope.renderWidgetDoughnut2d = function(id,width,height){
+                FusionCharts.ready(function() {
+                    var widgetDoughnut2d = new FusionCharts({
+                        "type": "doughnut2d",
+                        "renderAt": id,
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "Producción NO Realizada (PNR)",
+//                                "subCaption": "Last year",
+                                "numberPrefix": "$",
+                                "paletteColors": "#0075c2,#1aaf5d,#f2c500,#f45b00,#8e0000",
+                                "bgColor": "#ffffff",
+                                "showBorder": "0",
+                                "use3DLighting": "0",
+                                "showShadow": "0",
+                                "enableSmartLabels": "1",
+                                "startingAngle": "310",
+                                "showLabels": "0",
+                                "showPercentValues": "1",
+                                "showLegend": "1",
+                                "legendShadow": "0",
+                                "legendBorderAlpha": "0",
+                                "defaultCenterLabel": "Producción NO Realizada (PNR)",
+                                "centerLabel": "$displayValue{br}",
+                                "centerLabelBold": "1",
+                                "manageLabelOverflow": "1",
+                                "useEllipsesWhenOverflow": "1",
+                                "showTooltip": "0",
+                                "decimals": "0",
+                                "captionFontSize": "14",
+                                "captionPadding": "-10",
+//                                "subcaptionFontSize": "14",
+                                "subcaptionFontBold": "0",
+                                "borderThickness": "2",
+                                "legendPosition": "RIGHT",
+                                "useDataPlotColorForLabels": "1",
+                                "minimiseWrappingInLegend": "1"
+                             },
+                            "data": [
+                                {
+                                   "label": "Indicador de producción",
+                                   "value": "25.00",
+                                   "displayValue": "IT-1.1.2.3{br}99,86%",
+                                   "result": "99,86%",
+                                   "color": "#c02d00"
+                                },
+                                {
+                                   "label": "Indicador de compras",
+                                   "value": "25.00",
+                                   "displayValue": "IT-1.1.4.3{br}1,86%",
+                                   "result": "1,86%",
+                                   "color": "#c02d00"
+                                },
+                                {
+                                   "label": "Indicador de ventas",
+                                   "value": "25.00",
+                                   "displayValue": "IT-1.1.8.1{br}10,86%",
+                                   "result": "10,86%",
+                                   "color": "#c02d00"
+                                },
+                                {
+                                   "label": "Indicador de materia prima",
+                                   "value": "25.00",
+                                   "displayValue": "IT-1.1.10.2{br}46,86%",
+                                   "result": "46,86%",
+                                   "color": "#1aaf5d"
+                                }
+                             ]
+                        }
+                    });
+                    widgetDoughnut2d.setTransparent(true);
+                    widgetDoughnut2d.render();
                 })
             };
             

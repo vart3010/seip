@@ -340,7 +340,7 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
-     * Función que devuelve la data para el widget de tipo bulbo en el dashboard de los resultados estratégicos
+     * Función que devuelve la data para el widget de tipo torta multi nivel en el dashboard de cada indicador
      * @param Indicator $indicator
      * @return string
      * @author Matias Jimenez
@@ -368,6 +368,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["canvasBgcolor"] = "#FFFFFF";
         $chart["showBorder"] = "0";
         $chart["showShadow"] = "0";
+        $chart["showToolTipShadow"] = "1";
         $chart["showCanvasBorder"] = "0";
         $chart["pieFillAlpha"] = "90";
         $chart["pieBorderThickness"] = "2";
@@ -376,6 +377,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["useHoverColor"] = "1";
         $chart["showValuesInTooltip"] = "1";
         $chart["showPercentInTooltip"] = "0";
+        $chart["useEllipsesWhenOverflow"] = "1";
+        $chart["labelDisplay"] = "stagger";
         $chart["hasRTLText"] = "1";
         
         //Seleccionamos la data del pie de acuerdo al nivel del indicador
@@ -474,6 +477,24 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['category'][] = $category;
         return $data;
+    }
+    
+    /**
+     * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
+     * @param Indicator $indicator
+     * @return string
+     * @author Matias Jimenez
+     */
+    public function getDataDashboardWidgetDoughnut(Indicator $indicator){
+        $objectIndicator = $indicator;
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'category' => array(
+                ),
+            ),
+        );
+        $chart = array();
     }
     
     public function resultWithArrangementRangeColor(Indicator $indicator){
