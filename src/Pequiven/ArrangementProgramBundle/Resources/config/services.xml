@@ -68,5 +68,8 @@
         <service id="peqquiven.type.objetive" class="Pequiven\ObjetiveBundle\Form\Type\ObjetiveFormType">
             <tag name="form.type" alias="pequiven_objetive_form" />
         </service>
+        <service id="peqquiven.type.indicator" class="Pequiven\IndicatorBundle\Form\IndicatorType">
+            <tag name="form.type" alias="pequiven_indicatorbundle_indicator" />
+        </service>
     </services>
 </container>

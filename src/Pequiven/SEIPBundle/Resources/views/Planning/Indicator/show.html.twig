@@ -239,6 +239,16 @@
             }
         )
     %}
+{#{% if  hasPermissionToUpdate == true %}#}
+        &nbsp;
+        {{ buttons.generic(path('pequiven_indicator_update', { 'id': indicator.id }),('pequiven.edit'|trans({},'messages'))) }}
+{#    {% endif %}#}
+
+{#    {% if isAllowToDelete == true %}#}
+        &nbsp;
+        {% set redirectUrl = (path("pequiven_seip_default_index")) %}
+        {{ buttons.delete(path('pequiven_indicator_delete', { 'id': indicator.id,"redirectUrl": redirectUrl })) }}
+{#    {% endif %}#}
 </p>
 
 {% endblock %}

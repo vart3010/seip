@@ -440,6 +440,16 @@ class IndicatorController extends ResourceController
         return $this->redirectHandler->redirectTo($resource);
     }
     
+    public function deleteAction(Request $request) 
+    {
+        $redirectUrl = $request->get("redirectUrl");
+        
+        $resource = $this->findOr404($request);
+        $this->domainManager->delete($resource);
+
+        return $this->redirectHandler->redirect($redirectUrl);
+    }
+    
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService

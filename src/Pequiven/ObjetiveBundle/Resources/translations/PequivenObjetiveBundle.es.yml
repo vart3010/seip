@@ -60,6 +60,9 @@ form:
     location: Localidad
     complejo: Complejo
     gerencia: Gerencia
+    indicator:
+        summary: Resúmen
+        total_plan: Plan anual
     gerenciaFirst: Gerencia 1ra línea
     gerenciaSecond: Gerencia 2da línea
     objetiveStrategic: Objetivo Estratégico

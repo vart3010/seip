@@ -23,6 +23,10 @@ pequiven_seip:
         delete: Plantilla de programa de gestión eliminado.
 pequiven:
     objetive:
-        create: El objetivo de ha creado correctamente.
+        create: El objetivo se creo correctamente.
         update: El objetivo se actualizo correctamente.
         delete: El objetivo se elimino correctamente.
+    indicator:
+        create: El indicador se creo correctamente.
+        update: El indicador se actualizo correctamente.
+        delete: El indicador se elimino correctamente.
