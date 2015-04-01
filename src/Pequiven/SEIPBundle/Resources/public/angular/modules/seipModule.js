@@ -1255,7 +1255,7 @@ angular.module('seipModule.controllers', [])
                 }
             };
             $scope.removeFeatureIndicator = function(featureIndicator){
-                $scope.openModalConfirm('SEIP', function() {
+                $scope.openModalConfirm('pequiven.modal.confirm.indicator.delete_feature', function() {
                     notificationBarService.getLoadStatus().loading();
                     var url = Routing.generate("pequiven_feature_indicator_delete",{id:featureIndicator.id});
                         $http({
