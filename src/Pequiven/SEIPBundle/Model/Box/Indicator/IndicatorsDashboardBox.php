@@ -69,7 +69,7 @@ class IndicatorsDashboardBox extends GenericBox
         
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
         foreach($indicatorsGroup as $indicatorGroup){
-            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicatorGroup);
+            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicatorGroup,  \Pequiven\SEIPBundle\Model\Common\CommonObject::OPEN_URL_SAME_WINDOW);
         }
         
         $iconsLineStrategic = LineStrategic::getIcons();

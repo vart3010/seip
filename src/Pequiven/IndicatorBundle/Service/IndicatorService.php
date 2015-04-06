@@ -263,7 +263,7 @@ class IndicatorService implements ContainerAwareInterface
      * @return string
      * @author Matias Jimenez
      */
-    public function getDataDashboardWidgetBulb(Indicator $indicator){
+    public function getDataDashboardWidgetBulb(Indicator $indicator,$modeUrl = CommonObject::OPEN_URL_OTHER_WINDOW){
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -295,7 +295,11 @@ class IndicatorService implements ContainerAwareInterface
         $chart["toolTipBorderRadius"] = "2";
         $chart["toolTipPadding"] = "5";
 //        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
-        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        if($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW){
+            $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        } else{
+            $chart["clickURL"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        }
         $chart["clickURLOverridesPlotLinks"] = "0";
         
         $color = $colorData = array();

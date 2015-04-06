@@ -71,6 +71,10 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const TYPE_RANGE_BAD = 'BAD';
     
+    const OPEN_URL_OTHER_WINDOW = 0;
+    
+    const OPEN_URL_SAME_WINDOW = 1;
+    
     protected $em;
     protected $class;
     protected $repository;
