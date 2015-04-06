@@ -280,7 +280,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
         $chart["placeValuesInside"] = "1";
-        $chart["valueFontSize"] = "10";
+        $chart["valueFontSize"] = "13";
         $chart["baseFontColor"] = "#333333";
         $chart["baseFont"] = "Helvetica Neue,Arial";
         $chart["captionFontSize"] = "10";
@@ -523,6 +523,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["captionPadding"] = "-10";
         $chart["borderThickness"] = "2";
         $chart["labelFontBold"] = "1";
+        $chart["plotHoverEffect"] = "1";
+        $chart["legendCaptionBold"] = "1";
         $chart["legendPosition"] = "BOTTOM";
         $chart["useDataPlotColorForLabels"] = "1";
         $chart["minimiseWrappingInLegend"] = "1";
@@ -541,6 +543,7 @@ class IndicatorService implements ContainerAwareInterface
                 $set["displayValue"] = $indicatorChildren->getRef().' - '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["color"] = $this->getColorOfResult($indicatorChildren);
+                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show',array('id' => $indicatorChildren->getId()));
                 if($indicator->getIndicatorLevel()->getLevel() < IndicatorLevel::LEVEL_TACTICO){
                     $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
                 }
