@@ -631,17 +631,17 @@ class IndicatorService implements ContainerAwareInterface
     public function getArrowOfIndicator(Indicator $indicator){
         $textArrow = '<hgroup style="text-align: center;" class="thin breadcrumb">';
         if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
         } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'">'.$indicator->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'"><b>'.$indicator->getParent()->getRef().'</b></a></span>';
             $textArrow.= '<span style="padding-left:" class="icon-forward"></span>';
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
         } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'">'.$indicator->getParent()->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'"><b>'.$indicator->getParent()->getParent()->getRef().'</b></a></span>';
             $textArrow.= '<span class="icon-forward"></span>';
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'">'.$indicator->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'"><b>'.$indicator->getParent()->getRef().'</b></a></span>';
             $textArrow.= '<span class="icon-forward"></span>';
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
         }
         
         $textArrow.= '</hgroup>';
