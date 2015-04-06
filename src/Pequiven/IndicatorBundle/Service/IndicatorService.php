@@ -486,15 +486,63 @@ class IndicatorService implements ContainerAwareInterface
      * @author Matias Jimenez
      */
     public function getDataDashboardWidgetDoughnut(Indicator $indicator){
-        $objectIndicator = $indicator;
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
-                'category' => array(
+                'dataSet' => array(
                 ),
             ),
         );
         $chart = array();
+        
+//        $chart["caption"] = $indicator->getRef().'-'.$indicator->getSummary();
+        $chart["caption"] = $indicator->getSummary();
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["use3DLighting"] = "0";
+        $chart["showShadow"] = "0";
+        $chart["enableSmartLabels"] = "1";
+        $chart["startingAngle"] = "0";
+        $chart["showLabel"] = "1";
+        $chart["showPercentValues"] = "1";
+        $chart["showLegend"] = "1";
+        $chart["legendShadow"] = "0";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["defaultCenterLabel"] = $indicator->getSummary().': '.number_format($indicator->getResultReal(), 2, ',', '.').'%';
+        $chart["centerLabel"] = "\$label";
+        $chart["centerLabelBold"] = "1";
+        $chart["manageLabelOverflow"] = "1";
+        $chart["useEllipsesWhenOverflow"] = "1";
+        $chart["showTooltip"] = "1";
+        $chart["decimals"] = "0";
+        $chart["captionFontSize"] = "14";
+        $chart["captionPadding"] = "-10";
+        $chart["borderThickness"] = "2";
+        $chart["legendPosition"] = "BOTTOM";
+        $chart["useDataPlotColorForLabels"] = "1";
+        $chart["minimiseWrappingInLegend"] = "1";
+        
+        $dataSet = array();
+        
+        $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
+        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
+        
+        if($totalNumChildrens > 0){
+            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $set = array();
+                $set["label"] = $indicatorChildren->getSummary().': '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["value"] = $numDiv;
+                $set["displayValue"] = $indicatorChildren->getRef().' - '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["color"] = $this->getColorOfResult($indicatorChildren);
+                $dataSet[] = $set;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['dataSet'] = $dataSet;
+        return $data;
     }
     
     public function resultWithArrangementRangeColor(Indicator $indicator){
@@ -569,6 +617,32 @@ class IndicatorService implements ContainerAwareInterface
         }
         
         return $color;
+    }
+    
+    /**
+     * Función que retorna
+     * @param Indicator $indicator
+     * @return string
+     */
+    public function getArrowOfIndicator(Indicator $indicator){
+        $textArrow = '<hgroup style="text-align: center;" class="thin breadcrumb">';
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'">'.$indicator->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'">'.$indicator->getParent()->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'">'.$indicator->getParent()->getRef().'</a></span>';
+            $textArrow.= '<span class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'">'.$indicator->getRef().'</a></span>';
+        }
+        
+        $textArrow.= '</hgroup>';
+                    
+        return $textArrow;
     }
     
     /**

@@ -75,7 +75,8 @@ class IndicatorsDashboardBox extends GenericBox
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
         
-        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
+//        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
@@ -86,7 +87,9 @@ class IndicatorsDashboardBox extends GenericBox
             'indicatorsGroup' => $indicatorsGroup,
             'dataWidget' => $dataWidget,
             'indicator' => $indicator,
-            'dataMultiLevelPie' => $dataMultiLevelPie,
+//            'dataMultiLevelPie' => $dataMultiLevelPie,
+            'dataChart' => $dataChart,
+            'indicatorService' => $indicatorService,
         );
     }
     
