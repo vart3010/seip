@@ -30,3 +30,7 @@ pequiven:
         create: El indicador se creo correctamente.
         update: El indicador se actualizo correctamente.
         delete: El indicador se elimino correctamente.
+    value_indicator_config:
+        create: El indicador se configuro correctamente.
+        update: La configuración del indicador se actualizo correctamente.
+        delete: La configuración del indicador se elimino correctamente.

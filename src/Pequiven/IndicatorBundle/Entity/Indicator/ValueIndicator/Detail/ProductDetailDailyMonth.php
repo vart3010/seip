@@ -2214,7 +2214,9 @@ class ProductDetailDailyMonth extends BaseModel
         if($totalPlan != 0){
             $percentage = ($totalReal * 100) / $totalPlan;
         }
-        $this->setPercentage($percentage);
+        if($this->getComponents()->count()  == 0){
+            $this->setPercentage($percentage);
+        }
     }
     
     public function updateParentTotals()
@@ -2260,6 +2262,6 @@ class ProductDetailDailyMonth extends BaseModel
         }
 //        $this->setTotalPlan($totalPlan);
 //        $this->setTotalReal($totalReal);
-//        $this->setPercentage($totalPercentage);
+        $this->setPercentage($totalPercentage / $quantity);
     }
 }
