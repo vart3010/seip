@@ -665,7 +665,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["caption"] = $indicator->getSummary();
 //        $chart["subCaption"] = "Harry's SuperMart - Last Year";
         $chart["xAxisname"] = "Indicador";
-        $chart["yAxisName"] = "";
+        $chart["yAxisName"] = "TM";
 //        $chart["sYAxisName"] = "Medición %";
 //        $chart["numberPrefix"] = "$";
 //        $chart["sNumberSuffix"] = "%";

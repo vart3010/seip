@@ -63,14 +63,49 @@
                         <span id="chartColumn"></span>
                     </div>
                 {% else %}
+                    <p class="button-height">
+                    <a onclick="showDetail()">
+                        <span class="button-icon left-side blue-gradient">
+                            <span class="fa fa-pie-chart fa-1">
+                            </span>
+                        </span>
+                        <span id="textDetail">Ver Detalle</span>
+                    </a>
+                    </p>
                     <div ng-controller="DashboardController" ng-init="renderChartColumnLineSingleAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
                         <span id="chartColumn"></span>
+                    </div>
+                    <div ng-controller="DashboardController" ng-init="renderChartStackedSingleAxis('chartDetail')">
+                        <span id="chartDetail"></span>
                     </div>
                 {% endif %}
             {% endif %}
         </div>
     </div>
 </div>
+        
+{% block javascript %}
+    <script type="text/javascript">
+        var show = true;
+        function showDetail(){
+            if(show == true){//Ver Detalle
+                $("#chartColumn").hide();
+                $("#chartDetail").show();
+                $("#textDetail").text("Ver Global");
+                show = false;
+            } else{//Ver Global
+                $("#chartColumn").show();
+                $("#chartDetail").hide();
+                $("#textDetail").text("Ver Detalle");
+                show = true;
+            }
+        }
+        
+        $(document).ready(function() {
+            $("#chartDetail").hide();
+        });
+    </script>
+{% endblock javascript %}
 
 {#{% block javascript %}
     <script type="text/javascript">
