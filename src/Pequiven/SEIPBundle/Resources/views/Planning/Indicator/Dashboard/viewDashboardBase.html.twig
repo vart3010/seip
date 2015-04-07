@@ -58,9 +58,15 @@
                 <span id="pie"></span>
             </div>
             {% else %}
-            <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
-                <span id="chartColumn"></span>
-            </div>
+                {% if seeInColumnSingleAxis == false %}
+                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                        <span id="chartColumn"></span>
+                    </div>
+                {% else %}
+                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineSingleAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                        <span id="chartColumn"></span>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

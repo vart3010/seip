@@ -556,7 +556,11 @@ class IndicatorService implements ContainerAwareInterface
         return $data;
     }
     
-    
+    /**
+     * Gráfico de Columna con Línea y 2 ejes
+     * @param Indicator $indicator
+     * @return type
+     */
     public function getChartColumnLineDualAxis(Indicator $indicator){
         $data = array(
             'dataSource' => array(
@@ -634,6 +638,91 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetPlan;
         $data['dataSource']['dataset'][] = $medition;
+        
+//        var_dump(json_encode($data['dataSource']['dataset']));
+//        die();
+        
+        return $data;
+    }
+    
+    /**
+     * Gráfico de Columna con Línea y 2 ejes
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfResultIndicator(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataSet' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart["caption"] = $indicator->getSummary();
+//        $chart["subCaption"] = "Harry's SuperMart - Last Year";
+        $chart["xAxisname"] = "Indicador";
+        $chart["yAxisName"] = "";
+//        $chart["sYAxisName"] = "Medición %";
+//        $chart["numberPrefix"] = "$";
+//        $chart["sNumberSuffix"] = "%";
+//        $chart["sYAxisMaxValue"] = "100";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["formatNumberScale"] = "0";
+        $chart["thousandSeparator"] = ".";
+        $chart["decimalSeparator"] = ",";
+        $chart["decimals"] = "2";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["labelDisplay"] = "ROTATE";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        
+        $totalNumValues = count($indicator->getValuesIndicator());//Número de indicadores asociados
+        
+        $category = $dataSetReal = $dataSetPlan = array();
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        
+        if($totalNumValues > 0){
+            $indicatorValues = $indicator->getValuesIndicator();
+            $contMonth = 1;
+            $labelMonths = CommonObject::getLabelsMonths();
+            foreach($indicatorValues as $indicatorValue){
+                $formulaParameters = $indicatorValue->getFormulaParameters();
+                
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $labelMonths[$contMonth];
+                $dataReal["value"] = $formulaParameters['real'];//number_format($formulaParameters['real'], 2, ',', '.');
+                
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $contMonth++;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
         
 //        var_dump(json_encode($data['dataSource']['dataset']));
 //        die();

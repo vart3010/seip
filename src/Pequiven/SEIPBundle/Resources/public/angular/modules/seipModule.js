@@ -2480,6 +2480,25 @@ angular.module('seipModule.controllers', [])
                 })
             }
             
+            $scope.renderChartColumnLineSingleAxis = function(id,data){
+                FusionCharts.ready(function() {
+                    var chartColumnLineDualAxis = new FusionCharts({
+                        "type": "MSColumnLine3D",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "500",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset,
+                        }
+                    });
+                    chartColumnLineDualAxis.setTransparent(true);
+                    chartColumnLineDualAxis.render();
+                })
+            }
+            
             //Ejemplo de Widget tipo velocímetro de carro
             $scope.renderWidgetAngularRange = function(id) {
                 FusionCharts.ready(function() {

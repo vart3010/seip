@@ -80,6 +80,7 @@ class IndicatorsDashboardBox extends GenericBox
         
         $dataChartColumn = array();
         $seeInColumn = false;
+        $seeInColumnSingleAxis = false;
         
         $arrayIdProduccion = array();
         $arrayIdProduccion[] = 1; 
@@ -88,6 +89,12 @@ class IndicatorsDashboardBox extends GenericBox
             if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
                 $seeInColumn = true;
                 $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+            }
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
+            if(in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)){
+                $seeInColumn = true;
+                $seeInColumnSingleAxis = true;
+                $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
             }
         }
         
@@ -104,6 +111,7 @@ class IndicatorsDashboardBox extends GenericBox
             'dataChart' => $dataChart,
             'indicatorService' => $indicatorService,
             'seeInColumn' => $seeInColumn,
+            'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
             'dataChartColumn' => $dataChartColumn,
         );
     }
