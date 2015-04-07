@@ -2316,6 +2316,7 @@ angular.module('seipModule.controllers', [])
                         "type": "multilevelpie",
                         "renderAt": id,
                         "width": width,
+                        "height": height,
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
@@ -2324,6 +2325,24 @@ angular.module('seipModule.controllers', [])
                     });
                     widgetMultiLevelPieChart.setTransparent(true);
                     widgetMultiLevelPieChart.render();
+                })
+            };
+            
+            $scope.renderWidgetDoughnut2d = function(id,data,width,height){
+                FusionCharts.ready(function() {
+                    var widgetDoughnut2d = new FusionCharts({
+                        "type": "doughnut2d",
+                        "renderAt": id,
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "data": data.dataSource.dataSet
+                        }
+                    });
+                    widgetDoughnut2d.setTransparent(true);
+                    widgetDoughnut2d.render();
                 })
             };
             
