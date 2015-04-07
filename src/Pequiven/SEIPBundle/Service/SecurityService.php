@@ -73,6 +73,10 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC' => 'evaluateObjetiveApproved',
             'ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC' => 'evaluateObjetiveApproved',
             'ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE' => 'evaluateObjetiveApproved',
+            
+            'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC' => 'evaluateIndicatorApproved',
+            'ROLE_SEIP_INDICATOR_APPROVED_TACTIC' => 'evaluateIndicatorApproved',
+            'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE' => 'evaluateIndicatorApproved',
         );
     }
     
@@ -80,6 +84,18 @@ class SecurityService implements ContainerAwareInterface
     {
         $result = false;
         if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
+            $result = true;
+        }else{
+            $result = false;
+        }
+        
+        return $result;
+    }
+    
+    function evaluateIndicatorApproved($rol,Indicator $indicator)
+    {
+        $result = false;
+        if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
             $result = true;
         }else{
             $result = false;

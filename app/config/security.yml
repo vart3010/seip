@@ -87,6 +87,10 @@ security:
             - ROLE_SEIP_INDICATOR_DELETE_TACTIC
             - ROLE_SEIP_INDICATOR_DELETE_OPERATIVE
             
+            - ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC
+            - ROLE_SEIP_INDICATOR_APPROVED_TACTIC
+            - ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE
+            
 #            Menu de resultados
             - ROLE_SEIP_RESULT_LIST_BY_MANAGEMENT
             - ROLE_SEIP_RESULT_LIST_PERIOD

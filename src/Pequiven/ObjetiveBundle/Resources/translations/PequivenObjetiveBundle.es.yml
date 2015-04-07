@@ -39,6 +39,7 @@ pequiven_objetive:
     gerenciaSecond: Gerencia 2da Línea
     question:
         approved: ¿Desea aprobar el contenido de este objetivo?
+        approved_indicator: ¿Desea aprobar el contenido de este indicador?
 
     popup:
         description: Descripción

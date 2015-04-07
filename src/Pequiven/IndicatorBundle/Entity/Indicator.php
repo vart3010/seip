@@ -403,7 +403,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="status", type="integer")
      */
     protected $status = self::STATUS_DRAFT;
-
+    
     /**
      * Constructor
      */

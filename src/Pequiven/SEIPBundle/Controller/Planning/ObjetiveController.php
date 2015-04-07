@@ -235,7 +235,11 @@ class ObjetiveController extends ResourceController
 
         return $this->handleView($view);
     }
-    
+    /**
+     * Aprueba un objetivo
+     * @param Request $request
+     * @return type
+     */
     public function approvedAction(Request $request) 
     {
         $resource = $this->findOr404($request);
@@ -252,7 +256,7 @@ class ObjetiveController extends ResourceController
             $rol = $roleByLevel[$level];
         }
         
-        $securityService->checkSecurity($rol,$request);
+        $securityService->checkSecurity($rol,$resource);
         
         $details = $resource->getDetails();
         if($details === null){

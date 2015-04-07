@@ -31,9 +31,9 @@ class IndicatorController extends ResourceController
         );
         
         $roleEditDeleteByLevel = array(
-            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_EDIT_STRATEGIC',"ROLE_SEIP_INDICATOR_DELETE_STRATEGIC"),
-            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_EDIT_TACTIC',"ROLE_SEIP_INDICATOR_DELETE_TACTIC"),
-            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_EDIT_OPERATIVE',"ROLE_SEIP_INDICATOR_DELETE_OPERATIVE")
+            IndicatorLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_INDICATOR_EDIT_STRATEGIC',"ROLE_SEIP_INDICATOR_DELETE_STRATEGIC","ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC"),
+            IndicatorLevel::LEVEL_TACTICO => array('ROLE_SEIP_INDICATOR_EDIT_TACTIC',"ROLE_SEIP_INDICATOR_DELETE_TACTIC","ROLE_SEIP_INDICATOR_APPROVED_TACTIC"),
+            IndicatorLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_INDICATOR_EDIT_OPERATIVE',"ROLE_SEIP_INDICATOR_DELETE_OPERATIVE","ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE")
         );
         
         $securityService = $this->getSecurityService();
@@ -56,6 +56,8 @@ class IndicatorController extends ResourceController
             $formula = $resource->getFormula();
             $errorFormula = $indicatorService->validateFormula($formula);
         }
+        
+        $hasPermissionToApproved = $securityService->isGrantedFull($roleEditDeleteByLevel[$level][2],$resource);
         
         $data = array(
             'dataSource' => array(
@@ -98,6 +100,7 @@ class IndicatorController extends ResourceController
                 'indicatorRange' => $indicatorRange,
                 'hasPermissionToUpdate' => $hasPermissionToUpdate,
                 'isAllowToDelete' => $isAllowToDelete,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
             ))
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
@@ -171,6 +174,45 @@ class IndicatorController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','valuesIndicator','api_details','sonata_api_read'));
         return $this->handleView($view);
+    }
+    
+    /**
+     * Aprueba un indicador
+     * 
+     * @param Request $request
+     * @return type
+     */
+    public function approvedAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $securityService = $this->getSecurityService();
+        $roleByLevel = array(
+            \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC',
+            \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO => 'ROLE_SEIP_INDICATOR_APPROVED_TACTIC',
+            \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE',
+        );
+        
+        $level = $resource->getIndicatorLevel()->getLevel();
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $securityService->checkSecurity($rol,$resource);
+        
+        $details = $resource->getDetails();
+        if($details === null){
+            $details = new Indicator\IndicatorDetails();
+        }
+        $details->setApprovalDate(new \DateTime());
+        $details->setApprovedBy($this->getUser());
+        $resource->setDetails($details);
+        
+        $resource->setStatus(\Pequiven\IndicatorBundle\Entity\Indicator::STATUS_APPROVED);
+        
+        $this->domainManager->update($resource, 'approved');
+        
+        return $this->redirectHandler->redirectTo($resource);
     }
     
     /**
