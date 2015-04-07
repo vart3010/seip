@@ -222,6 +222,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('forcePenalize')
             ->add('resultInPercentage')
             ->add('requiredToImport')
+            ->add('period')
             ->add('enabled')
             ;
     }

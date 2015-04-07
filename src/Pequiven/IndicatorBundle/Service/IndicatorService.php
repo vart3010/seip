@@ -263,7 +263,7 @@ class IndicatorService implements ContainerAwareInterface
      * @return string
      * @author Matias Jimenez
      */
-    public function getDataDashboardWidgetBulb(Indicator $indicator){
+    public function getDataDashboardWidgetBulb(Indicator $indicator,$modeUrl = CommonObject::OPEN_URL_OTHER_WINDOW){
         $data = array(
             'dataSource' => array(
                 'chart' => array(),
@@ -280,7 +280,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["showvalue"] = "1";
         $chart["useColorNameAsValue"] = "1";
         $chart["placeValuesInside"] = "1";
-        $chart["valueFontSize"] = "10";
+        $chart["valueFontSize"] = "13";
         $chart["baseFontColor"] = "#333333";
         $chart["baseFont"] = "Helvetica Neue,Arial";
         $chart["captionFontSize"] = "10";
@@ -295,7 +295,11 @@ class IndicatorService implements ContainerAwareInterface
         $chart["toolTipBorderRadius"] = "2";
         $chart["toolTipPadding"] = "5";
 //        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show', array('id' => $indicator->getId()));
-        $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        if($modeUrl == CommonObject::OPEN_URL_OTHER_WINDOW){
+            $chart["clickURL"] = 'n-'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        } else{
+            $chart["clickURL"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
+        }
         $chart["clickURLOverridesPlotLinks"] = "0";
         
         $color = $colorData = array();
@@ -340,7 +344,7 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
-     * Función que devuelve la data para el widget de tipo bulbo en el dashboard de los resultados estratégicos
+     * Función que devuelve la data para el widget de tipo torta multi nivel en el dashboard de cada indicador
      * @param Indicator $indicator
      * @return string
      * @author Matias Jimenez
@@ -368,6 +372,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["canvasBgcolor"] = "#FFFFFF";
         $chart["showBorder"] = "0";
         $chart["showShadow"] = "0";
+        $chart["showToolTipShadow"] = "1";
         $chart["showCanvasBorder"] = "0";
         $chart["pieFillAlpha"] = "90";
         $chart["pieBorderThickness"] = "2";
@@ -376,6 +381,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["useHoverColor"] = "1";
         $chart["showValuesInTooltip"] = "1";
         $chart["showPercentInTooltip"] = "0";
+        $chart["useEllipsesWhenOverflow"] = "1";
+        $chart["labelDisplay"] = "stagger";
         $chart["hasRTLText"] = "1";
         
         //Seleccionamos la data del pie de acuerdo al nivel del indicador
@@ -476,6 +483,253 @@ class IndicatorService implements ContainerAwareInterface
         return $data;
     }
     
+    /**
+     * Función que devuelve la data para el widget de tipo dona en el dashboard del indicador
+     * @param Indicator $indicator
+     * @return string
+     * @author Matias Jimenez
+     */
+    public function getDataDashboardWidgetDoughnut(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'dataSet' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+//        $chart["caption"] = $indicator->getRef().'-'.$indicator->getSummary();
+        $chart["caption"] = $indicator->getSummary();
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["use3DLighting"] = "1";
+        $chart["showShadow"] = "0";
+        $chart["enableSmartLabels"] = "1";
+        $chart["startingAngle"] = "0";
+        $chart["showLabel"] = "1";
+        $chart["showPercentValues"] = "1";
+        $chart["showLegend"] = "1";
+        $chart["legendShadow"] = "0";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["defaultCenterLabel"] = $indicator->getSummary().': '.number_format($indicator->getResultReal(), 2, ',', '.').'%';
+        $chart["centerLabel"] = "\$label";
+        $chart["centerLabelBold"] = "1";
+        $chart["manageLabelOverflow"] = "1";
+        $chart["useEllipsesWhenOverflow"] = "1";
+        $chart["showTooltip"] = "1";
+        $chart["decimals"] = "0";
+        $chart["captionFontSize"] = "14";
+        $chart["captionPadding"] = "-10";
+        $chart["borderThickness"] = "2";
+        $chart["labelFontBold"] = "1";
+        $chart["plotHoverEffect"] = "1";
+        $chart["legendCaptionBold"] = "1";
+        $chart["legendPosition"] = "BOTTOM";
+        $chart["useDataPlotColorForLabels"] = "1";
+        $chart["minimiseWrappingInLegend"] = "1";
+        
+        $dataSet = array();
+        
+        $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
+        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
+        
+        if($totalNumChildrens > 0){
+            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $set = array();
+                $set["label"] = $indicatorChildren->getSummary().': '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["value"] = $numDiv;
+                $set["displayValue"] = $indicatorChildren->getRef().' - '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
+                $set["color"] = $this->getColorOfResult($indicatorChildren);
+                $set["labelLink"] = $this->generateUrl('pequiven_indicator_show',array('id' => $indicatorChildren->getId()));
+                if($indicator->getIndicatorLevel()->getLevel() < IndicatorLevel::LEVEL_TACTICO){
+                    $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
+                }
+                $dataSet[] = $set;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['dataSet'] = $dataSet;
+        return $data;
+    }
+    
+    /**
+     * Gráfico de Columna con Línea y 2 ejes
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getChartColumnLineDualAxis(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataSet' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart["caption"] = $indicator->getSummary();
+//        $chart["subCaption"] = "Harry's SuperMart - Last Year";
+        $chart["xAxisname"] = "Indicador";
+        $chart["pYAxisName"] = "";
+        $chart["sYAxisName"] = "Medición %";
+//        $chart["numberPrefix"] = "$";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["labelDisplay"] = "ROTATE";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        
+        $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
+        
+        $category = $dataSetReal = $dataSetPlan = $medition = array();
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $medition["seriesname"] = "Resultado Medición";
+        $medition["renderas"] = "line";
+        $medition["parentYAxis"] = "S";
+        $medition["showValues"] = "0";
+        
+        if($totalNumChildrens > 0){
+            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $indicatorChildren->getSummary();
+                $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
+                $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
+                $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
+                $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
+                $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
+                $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
+                
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+                $medition["data"][] = $dataMedition;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $medition;
+        
+//        var_dump(json_encode($data['dataSource']['dataset']));
+//        die();
+        
+        return $data;
+    }
+    
+    /**
+     * Gráfico de Columna con Línea y 2 ejes
+     * @param Indicator $indicator
+     * @return type
+     */
+    public function getDataChartOfResultIndicator(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'categories' => array(
+                ),
+                'dataSet' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart["caption"] = $indicator->getSummary();
+//        $chart["subCaption"] = "Harry's SuperMart - Last Year";
+        $chart["xAxisname"] = "Indicador";
+        $chart["yAxisName"] = "";
+//        $chart["sYAxisName"] = "Medición %";
+//        $chart["numberPrefix"] = "$";
+//        $chart["sNumberSuffix"] = "%";
+//        $chart["sYAxisMaxValue"] = "100";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["formatNumberScale"] = "0";
+        $chart["thousandSeparator"] = ".";
+        $chart["decimalSeparator"] = ",";
+        $chart["decimals"] = "2";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#000000";
+        $chart["valuePosition"] = "ABOVE";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "0";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["labelDisplay"] = "ROTATE";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        
+        $totalNumValues = count($indicator->getValuesIndicator());//Número de indicadores asociados
+        
+        $category = $dataSetReal = $dataSetPlan = array();
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        
+        if($totalNumValues > 0){
+            $indicatorValues = $indicator->getValuesIndicator();
+            $contMonth = 1;
+            $labelMonths = CommonObject::getLabelsMonths();
+            foreach($indicatorValues as $indicatorValue){
+                $formulaParameters = $indicatorValue->getFormulaParameters();
+                
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $labelMonths[$contMonth];
+                $dataReal["value"] = $formulaParameters['real'];//number_format($formulaParameters['real'], 2, ',', '.');
+                
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $contMonth++;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][]["category"] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        
+//        var_dump(json_encode($data['dataSource']['dataset']));
+//        die();
+        
+        return $data;
+    }
+    
     public function resultWithArrangementRangeColor(Indicator $indicator){
         $color = '';
         $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.');
@@ -548,6 +802,32 @@ class IndicatorService implements ContainerAwareInterface
         }
         
         return $color;
+    }
+    
+    /**
+     * Función que retorna
+     * @param Indicator $indicator
+     * @return string
+     */
+    public function getArrowOfIndicator(Indicator $indicator){
+        $textArrow = '<hgroup style="text-align: center;" class="thin breadcrumb">';
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'"><b>'.$indicator->getParent()->getRef().'</b></a></span>';
+            $textArrow.= '<span style="padding-left:" class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'"><b>'.$indicator->getParent()->getParent()->getRef().'</b></a></span>';
+            $textArrow.= '<span class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'"><b>'.$indicator->getParent()->getRef().'</b></a></span>';
+            $textArrow.= '<span class="icon-forward"></span>';
+            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
+        }
+        
+        $textArrow.= '</hgroup>';
+                    
+        return $textArrow;
     }
     
     /**

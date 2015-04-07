@@ -349,9 +349,12 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     
     private function addMenuPrePlanning(ItemInterface $menu, $section) {
         $nextPeriod = $this->getPeriodService()->getNextPeriod();
-        $periodName = 'No Definido';
+        $periodName = null;
         if($nextPeriod){
             $periodName = $nextPeriod->getName();
+        }
+        if($periodName === null){
+            return;
         }
         $child = $this->factory->createItem('preplanning',
             $this->getSubLevelOptions(array(

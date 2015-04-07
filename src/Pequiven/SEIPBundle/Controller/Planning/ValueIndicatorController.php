@@ -393,13 +393,17 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
                 
                 $formulaDetail = $indicator->getFormulaDetailByVariable($variable);
                 $unit = '';
+                $description = $variable->getDescription();
                 if($formulaDetail){
+                    if($formulaDetail->getVariableDescription()!= ""){
+                        $description = $formulaDetail->getVariableDescription();
+                    }
                     $unit = '('.$formulaDetail->getUnit().')';
                 }
                 
                 $type = 'text';
                 $parameters = array(
-                    'label' => $variable->getDescription() .' '.$unit,
+                    'label' => $description .' '.$unit,
                     'label_attr' => array(
                         'class' => 'label'
                     ),

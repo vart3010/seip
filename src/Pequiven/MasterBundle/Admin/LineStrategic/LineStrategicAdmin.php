@@ -39,8 +39,12 @@ class LineStrategicAdmin extends Admin implements \Symfony\Component\DependencyI
     // Fields to be shown on filter forms
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
-            ->add('objetives')
-            ->add('indicators')
+            ->add('objetives','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
+            ->add('indicators','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
             ;
     }
     // Fields to be shown on lists

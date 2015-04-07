@@ -58,6 +58,7 @@ class GoalAdmin extends Admin
             ->add('startDate')
             ->add('endDate')
             ->add('weight')
+            ->add("period")
             ;
     }
     

@@ -71,6 +71,12 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
      */
     const TYPE_RANGE_BAD = 'BAD';
     
+    const OPEN_URL_OTHER_WINDOW = 0;
+    
+    const OPEN_URL_SAME_WINDOW = 1;
+    
+    protected $months = array();
+    
     protected $em;
     protected $class;
     protected $repository;
@@ -104,5 +110,24 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
             self::STATUS_WORKER_OUTSIDE_COMPANY => 'Fuera de la Compañía',
         );
         return $labelsStatusWorker;
+    }
+    
+    static function getLabelsMonths(){
+        static $labelsMonths = array(
+            "1" => 'Enero',
+            "2" => 'Febrero',
+            "3" => 'Marzo',
+            "4" => 'Abril',
+            "5" => 'Mayo',
+            "6" => 'Junio',
+            "7" => 'Julio',
+            "8" => 'Agosto',
+            "9" => 'Septiembre',
+            "10" => 'Octubre',
+            "11" => 'Noviembre',
+            "12" => 'Diciembre',
+        );
+        
+        return $labelsMonths;
     }
 }

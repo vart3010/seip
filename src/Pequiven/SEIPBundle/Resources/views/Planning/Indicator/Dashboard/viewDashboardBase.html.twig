@@ -43,10 +43,31 @@
             </div>
         </div>
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
-            <div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','')">
+            {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
+                <span id="pie"></span>
+            </div>#}
+            
+            {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
+            {#<hgroup style="text-align: center;" class="thin breadcrumb">
+                <span class="thin"><a href="#">IE-.1.1.1.</a></span>
+                <span class="icon-forward"></span>
+                <span class="thin">IT-1.1.1.2.</span>
+            </hgroup>#}
+            {% if seeInColumn == false %}
+            <div ng-controller="DashboardController" ng-init="renderWidgetDoughnut2d('pie',{{ dataChart|json_encode() }},'100%','450')">
                 <span id="pie"></span>
             </div>
-{#            <span style="text-align: center;"><h2>{{ indicator.summary }}</h2></span>#}
+            {% else %}
+                {% if seeInColumnSingleAxis == false %}
+                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                        <span id="chartColumn"></span>
+                    </div>
+                {% else %}
+                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineSingleAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                        <span id="chartColumn"></span>
+                    </div>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>

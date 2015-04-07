@@ -68,7 +68,9 @@ class IndicatorDetailsAdmin extends Admin implements \Symfony\Component\Dependen
     protected function configureDatagridFilters(DatagridMapper $filter) 
     {
         $filter
-            ->add('indicator')
+            ->add('indicator','doctrine_orm_model_autocomplete',array(),null,array(
+                'property' => array('ref','description')
+            ))
             ;
     }
     protected function configureListFields(ListMapper $list) 

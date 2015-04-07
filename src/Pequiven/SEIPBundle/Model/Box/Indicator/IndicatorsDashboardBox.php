@@ -69,13 +69,35 @@ class IndicatorsDashboardBox extends GenericBox
         
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
         foreach($indicatorsGroup as $indicatorGroup){
-            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicatorGroup);
+            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicatorGroup,  \Pequiven\SEIPBundle\Model\Common\CommonObject::OPEN_URL_SAME_WINDOW);
         }
         
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
         
-        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
+//        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
+        $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
+        
+        $dataChartColumn = array();
+        $seeInColumn = false;
+        $seeInColumnSingleAxis = false;
+        
+        $arrayIdProduccion = array();
+        $arrayIdProduccion[] = 1; 
+        $arrayIdProduccion[] = 1043; 
+        
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
+            if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
+                $seeInColumn = true;
+                $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+            }
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
+            if(in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)){
+                $seeInColumn = true;
+                $seeInColumnSingleAxis = true;
+                $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+            }
+        }
         
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
@@ -86,7 +108,12 @@ class IndicatorsDashboardBox extends GenericBox
             'indicatorsGroup' => $indicatorsGroup,
             'dataWidget' => $dataWidget,
             'indicator' => $indicator,
-            'dataMultiLevelPie' => $dataMultiLevelPie,
+//            'dataMultiLevelPie' => $dataMultiLevelPie,
+            'dataChart' => $dataChart,
+            'indicatorService' => $indicatorService,
+            'seeInColumn' => $seeInColumn,
+            'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
+            'dataChartColumn' => $dataChartColumn,
         );
     }
     
