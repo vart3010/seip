@@ -19,6 +19,15 @@ pequiven_objetive_update:
         _format: html|json
     methods: [GET|POST]
     
+pequiven_objetive_approved:
+    path: /{id}/approved.{_format}
+    defaults:
+        _controller: pequiven.controller.objetive:approvedAction
+        _format: html
+    requirements:
+        _format: html
+    methods: [POST]
+    
 pequiven_objetive_delete:
     path: /{id}/delete.{_format}
     defaults:

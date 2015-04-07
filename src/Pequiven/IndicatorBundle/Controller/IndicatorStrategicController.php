@@ -41,6 +41,7 @@ class IndicatorStrategicController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_ESTRATEGICO;
+        $criteria['applyPeriodCriteria'] = true;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(

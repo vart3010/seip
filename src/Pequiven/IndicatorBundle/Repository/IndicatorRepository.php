@@ -471,10 +471,12 @@ class IndicatorRepository extends EntityRepository
                 }
             }
         }
-        
+        $applyPeriodCriteria = $criteria->remove('applyPeriodCriteria');
         parent::applyCriteria($queryBuilder, $criteria->toArray());
         
-//        $this->applyPeriodCriteria($queryBuilder);
+        if($applyPeriodCriteria){
+            $this->applyPeriodCriteria($queryBuilder);
+        }
     }
     
     protected function applySorting(\Doctrine\ORM\QueryBuilder $queryBuilder, array $sorting = null) {

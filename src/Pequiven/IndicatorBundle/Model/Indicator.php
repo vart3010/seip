@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Indicator implements IndicatorInterface
 {
     /**
+     * Estatus borrador
+     */
+    const STATUS_DRAFT = 0;
+    
+    /**
+     * Estatus Aprobado
+     */
+    const STATUS_APPROVED = 1;
+    
+    /**
      * Tipo de calculo por formula y valores de las variables manuales
      */
     const TYPE_CALCULATION_FORMULA_MANUALLY = 0;

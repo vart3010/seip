@@ -59,6 +59,7 @@ class ObjetiveTacticController extends baseController {
         }
         
         $indicatorService = $this->getIndicatorService();
+        $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC",$resource);
         $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC",$resource);
         $isAllowToDelete = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_DELETE_TACTIC",$resource);
         
@@ -71,6 +72,7 @@ class ObjetiveTacticController extends baseController {
                 'indicatorService' => $indicatorService,
                 'hasPermissionToUpdate' => $hasPermissionToUpdate,
                 'isAllowToDelete' => $isAllowToDelete,
+                'hasPermissionToApproved' => $hasPermissionToApproved,
             ))
         ;
 

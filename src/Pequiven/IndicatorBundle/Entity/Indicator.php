@@ -395,6 +395,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\Column(name="orderShowFromParent", type="integer")
      */
     private $orderShowFromParent = 1;
+    
+    /**
+     * Estatus del programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status = self::STATUS_DRAFT;
 
     /**
      * Constructor
@@ -1710,4 +1718,26 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     function setOrderShowFromParent($orderShowFromParent) {
         $this->orderShowFromParent = $orderShowFromParent;
     }
+    
+    /**
+     * 
+     * @return integer
+     */
+    function getStatus() 
+    {
+        return $this->status;
+    }
+
+    /**
+     * Establecer status Indicator::STATUS_*
+     * @param type $status
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    function setStatus($status) 
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
 }

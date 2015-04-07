@@ -236,6 +236,39 @@ class ObjetiveController extends ResourceController
         return $this->handleView($view);
     }
     
+    public function approvedAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $securityService = $this->getSecurityService();
+        $roleByLevel = array(
+            ObjetiveLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_STRATEGIC',
+            ObjetiveLevel::LEVEL_TACTICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_TACTIC',
+            ObjetiveLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_OPERATIVE',
+        );
+        
+        $level = $resource->getObjetiveLevel()->getLevel();
+        if(isset($roleByLevel[$level])){
+            $rol = $roleByLevel[$level];
+        }
+        
+        $securityService->checkSecurity($rol,$request);
+        
+        $details = $resource->getDetails();
+        if($details === null){
+            $details = new \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails();
+        }
+        $details->setApprovalDate(new \DateTime());
+        $details->setApprovedBy($this->getUser());
+        $resource->setDetails($details);
+        
+        $resource->setStatus(\Pequiven\ObjetiveBundle\Entity\Objetive::STATUS_APPROVED);
+        
+        $this->domainManager->update($resource, 'approved');
+        
+        return $this->redirectHandler->redirect($this->generateLinkUrlOnly($resource));
+    }
+    
     /**
      * Elimina un objetivo
      * @param Request $request

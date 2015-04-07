@@ -37,6 +37,8 @@ pequiven_objetive:
     complejo: Localidad
     gerenciaFirst: Gerencia 1ra Línea
     gerenciaSecond: Gerencia 2da Línea
+    question:
+        approved: ¿Desea aprobar el contenido de este objetivo?
 
     popup:
         description: Descripción
