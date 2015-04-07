@@ -84,6 +84,7 @@ class IndicatorsDashboardBox extends GenericBox
         
         $arrayIdProduccion = array();
         $arrayIdProduccion[] = 1; 
+        $arrayIdProduccion[] = 1043; 
         
         if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
             if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
