@@ -2461,6 +2461,25 @@ angular.module('seipModule.controllers', [])
                 })
             }
             
+            $scope.renderChartColumnLineDualAxis = function(id,data){
+                FusionCharts.ready(function() {
+                    var chartColumnLineDualAxis = new FusionCharts({
+                        "type": "mscolumn3dlinedy",
+                        "renderAt": id,
+//                        "width": width,
+//                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "categories": data.dataSource.categories,
+                            "dataset": data.dataSource.dataset,
+                        }
+                    });
+                    chartColumnLineDualAxis.setTransparent(true);
+                    chartColumnLineDualAxis.render();
+                })
+            }
+            
             //Ejemplo de Widget tipo velocímetro de carro
             $scope.renderWidgetAngularRange = function(id) {
                 FusionCharts.ready(function() {

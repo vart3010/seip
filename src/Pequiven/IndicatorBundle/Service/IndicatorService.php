@@ -556,6 +556,82 @@ class IndicatorService implements ContainerAwareInterface
         return $data;
     }
     
+    
+    public function getChartColumnLineDualAxis(Indicator $indicator){
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'dataSet' => array(
+                ),
+            ),
+        );
+        $chart = array();
+        
+        $chart["caption"] = "Product-wise Quarterly Revenue vs. Profit %";
+        $chart["subCaption"] = "Harry's SuperMart - Last Year";
+        $chart["xAxisname"] = "Indicador";
+        $chart["pYAxisName"] = "";
+        $chart["sYAxisName"] = "Medición %";
+        $chart["numberPrefix"] = "$";
+        $chart["sNumberSuffix"] = "%";
+        $chart["sYAxisMaxValue"] = "100";
+        $chart["bgColor"] = "#ffffff";
+        $chart["showBorder"] = "0";
+        $chart["showCanvasBorder"] = "0";
+        $chart["usePlotGradientColor"] = "0";
+        $chart["plotBorderAlpha"] = "10";
+        $chart["legendBorderAlpha"] = "0";
+        $chart["legendBgAlpha"] = "0";
+        $chart["legendShadow"] = "0";
+        $chart["showHoverEffect"] = "1";
+        $chart["valueFontColor"] = "#ffffff";
+        $chart["rotateValues"] = "1";
+        $chart["placeValuesInside"] = "1";
+        $chart["divlineColor"] = "#999999";
+        $chart["divLineDashed"] = "1";
+        $chart["divLineDashLen"] = "1";
+        $chart["divLineGapLen"] = "1";
+        $chart["labelDisplay"] = "STAGGER";
+        $chart["canvasBgColor"] = "#ffffff";
+        $chart["captionFontSize"] = "14";
+        $chart["subcaptionFontSize"] = "14";
+        $chart["subcaptionFontBold"] = "0";
+        
+        $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
+        
+        $category = $dataSetReal = $dataSetPlan = $medition = array();
+        $dataSetReal["seriesname"] = "Real";
+        $dataSetPlan["seriesname"] = "Plan";
+        $medition["seriesname"] = "Resultado Medición";
+        $medition["renderas"] = "line";
+        $medition["parentYAxis"] = "S";
+        $medition["showValues"] = "0";
+        
+        if($totalNumChildrens > 0){
+            $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $label = $dataReal = $dataPlan = $dataMedition = array();
+                $label["label"] = $indicatorChildren->getSummary();
+                $dataReal["value"] = number_format($indicatorChildren->getValueFinal(), 2, ',', '.');
+                $dataPlan["value"] = number_format($indicatorChildren->getTotalPlan(), 2, ',', '.');
+                $dataMedition["value"] = number_format($indicatorChildren->getResultReal(), 2, ',', '.');
+                
+                $category[] = $label;
+                $dataSetReal["data"][] = $dataReal;
+                $dataSetPlan["data"][] = $dataPlan;
+                $medition["data"][] = $dataMedition;
+            }
+        }
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['categories'][] = $category;
+        $data['dataSource']['dataset'][] = $dataSetReal;
+        $data['dataSource']['dataset'][] = $dataSetPlan;
+        $data['dataSource']['dataset'][] = $medition;
+        
+        return $data;
+    }
+    
     public function resultWithArrangementRangeColor(Indicator $indicator){
         $color = '';
         $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.');

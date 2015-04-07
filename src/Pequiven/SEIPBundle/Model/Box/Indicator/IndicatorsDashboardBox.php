@@ -78,6 +78,15 @@ class IndicatorsDashboardBox extends GenericBox
 //        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
         $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
         
+        $arrayIdProduccion = array();
+        $arrayIdProduccion[] = 1; 
+        
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
+            if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
+                $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator);
+            }
+        }
+        
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
