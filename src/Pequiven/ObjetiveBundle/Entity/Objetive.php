@@ -238,7 +238,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @var integer
      * @ORM\Column(name="status", type="integer")
      */
-    private $status = 0;
+    private $status = self::STATUS_DRAFT;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
@@ -286,7 +286,15 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
      */
     protected $qualitySystem;
-
+    
+    /**
+     * Detalles del objetivo
+     * 
+     * @var \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails
+     * @ORM\OneToOne(targetEntity="Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails",cascade={"persist","remove"})
+     */
+    protected $details;
+    
     /**
      * Constructor
      */
@@ -1213,5 +1221,28 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getQualitySystem()
     {
         return $this->qualitySystem;
+    }
+
+    /**
+     * Set details
+     *
+     * @param \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details
+     * @return Objetive
+     */
+    public function setDetails(\Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details = null)
+    {
+        $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * Get details
+     *
+     * @return \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails 
+     */
+    public function getDetails()
+    {
+        return $this->details;
     }
 }

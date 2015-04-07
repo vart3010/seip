@@ -47,6 +47,11 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
     const STATUS_WORKER_OUTSIDE_COMPANY = 4;
     
     /**
+     * Reposo indefinido
+     */
+    const STATUS_WORKER_INDEFINITE_BREAK = 5;
+    
+    /**
      * Resultado para la evaluación
      */
     const TYPE_RESULT_EVALUATION = 'EVALUATION';
@@ -108,6 +113,7 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
             self::STATUS_WORKER_ASSIGNED => 'Asignado',
             self::STATUS_WORKER_SUPERNUMERARY => 'Supernumerario',
             self::STATUS_WORKER_OUTSIDE_COMPANY => 'Fuera de la Compañía',
+            self::STATUS_WORKER_INDEFINITE_BREAK => 'Reposo indefinido',
         );
         return $labelsStatusWorker;
     }

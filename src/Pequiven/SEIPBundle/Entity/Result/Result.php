@@ -456,6 +456,10 @@ class Result extends ModelResult implements ResultItemInterface,PeriodItemInterf
     public function setResultReal($resultReal) {}
     public function setResult($result) {}
     
+    public function getStatus() {}
+
+    public function setStatus($status) {}
+    
     public function __clone() {
         if($this->id > 0){
             $this->id = null;

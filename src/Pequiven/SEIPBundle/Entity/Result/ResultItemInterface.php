@@ -57,4 +57,11 @@ interface ResultItemInterface
      * Resultado del item
      */
     function setResult($result);
+    
+    /**
+     * Status del item
+     */
+    function setStatus($status);
+    
+    function getStatus();
 }

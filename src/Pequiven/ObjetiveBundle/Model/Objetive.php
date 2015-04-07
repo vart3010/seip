@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Objetive implements ObjetiveInterface
 {
     /**
+     * Estatus borrador
+     */
+    const STATUS_DRAFT = 0;
+    
+    /**
+     * Estatus Aprobado
+     */
+    const STATUS_APPROVED = 1;
+    
+    /**
      * Nivel de objetivo
      * 
      * @var \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel

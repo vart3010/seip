@@ -26,6 +26,7 @@ pequiven:
         create: El objetivo se creo correctamente.
         update: El objetivo se actualizo correctamente.
         delete: El objetivo se elimino correctamente.
+        approved: El objetivo se aprobo correctamente.
     indicator:
         create: El indicador se creo correctamente.
         update: El indicador se actualizo correctamente.

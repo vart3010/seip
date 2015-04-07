@@ -40,6 +40,7 @@ class IndicatorOperativeController extends baseController {
         $repository = $this->getRepository();
 
         $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_OPERATIVO;
+        $criteria['applyPeriodCriteria'] = true;
         $criteria['gerencia'] = $request->get('gerencia');
 
         if ($this->config->isPaginated()) {
