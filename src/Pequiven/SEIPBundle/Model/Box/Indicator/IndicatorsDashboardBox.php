@@ -78,6 +78,27 @@ class IndicatorsDashboardBox extends GenericBox
 //        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
         $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
         
+        $dataChartColumn = array();
+        $seeInColumn = false;
+        $seeInColumnSingleAxis = false;
+        
+        $arrayIdProduccion = array();
+        $arrayIdProduccion[] = 1; 
+        $arrayIdProduccion[] = 1043; 
+        
+        if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
+            if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
+                $seeInColumn = true;
+                $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
+            }
+        } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
+            if(in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)){
+                $seeInColumn = true;
+                $seeInColumnSingleAxis = true;
+                $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+            }
+        }
+        
         return array(
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
@@ -90,6 +111,9 @@ class IndicatorsDashboardBox extends GenericBox
 //            'dataMultiLevelPie' => $dataMultiLevelPie,
             'dataChart' => $dataChart,
             'indicatorService' => $indicatorService,
+            'seeInColumn' => $seeInColumn,
+            'seeInColumnSingleAxis' => $seeInColumnSingleAxis,
+            'dataChartColumn' => $dataChartColumn,
         );
     }
     
