@@ -243,6 +243,7 @@ class IndicatorController extends ResourceController
         $repository = $this->getRepository();
         
         $criteria['indicatorLevel'] = $level;
+        $criteria['applyPeriodCriteria'] = true;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(
