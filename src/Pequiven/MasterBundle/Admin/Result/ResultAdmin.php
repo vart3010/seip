@@ -60,6 +60,7 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
             ->add('typeResult')
             ->add('typeCalculation')
             ->add('objetive')
+            ->add('period')
             ;
     }
     

@@ -66,13 +66,13 @@ class ArrangementProgramAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $filter) {
         $filter
             ->add('ref')
-            ->add('period')
             ->add('tacticalObjective')
             ->add('operationalObjective')
             ->add('description')
             ->add('isAvailableInResult')
             ->add('couldBePenalized')
             ->add('forcePenalize')
+            ->add('period')
             ;
     }
     
