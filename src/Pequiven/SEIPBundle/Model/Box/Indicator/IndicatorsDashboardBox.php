@@ -78,12 +78,16 @@ class IndicatorsDashboardBox extends GenericBox
 //        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
         $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
         
+        $dataChartColumn = array();
+        $seeInColumn = false;
+        
         $arrayIdProduccion = array();
         $arrayIdProduccion[] = 1; 
         
         if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
             if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
-                $dataChart = $indicatorService->getChartColumnLineDualAxis($indicator);
+                $seeInColumn = true;
+                $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
             }
         }
         
@@ -99,6 +103,8 @@ class IndicatorsDashboardBox extends GenericBox
 //            'dataMultiLevelPie' => $dataMultiLevelPie,
             'dataChart' => $dataChart,
             'indicatorService' => $indicatorService,
+            'seeInColumn' => $seeInColumn,
+            'dataChartColumn' => $dataChartColumn,
         );
     }
     

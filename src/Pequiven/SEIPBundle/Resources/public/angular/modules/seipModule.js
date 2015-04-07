@@ -2466,8 +2466,8 @@ angular.module('seipModule.controllers', [])
                     var chartColumnLineDualAxis = new FusionCharts({
                         "type": "mscolumn3dlinedy",
                         "renderAt": id,
-//                        "width": width,
-//                        "height": height,
+                        "width": "100%",
+                        "height": "500",
                         "dataFormat": "json",
                         "dataSource": {
                             "chart": data.dataSource.chart,
