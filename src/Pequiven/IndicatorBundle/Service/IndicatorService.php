@@ -818,8 +818,10 @@ class IndicatorService implements ContainerAwareInterface
             $textArrow.= '<span style="padding-left:" class="icon-forward"></span>';
             $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';
         } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
-            $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'"><b>'.$indicator->getParent()->getParent()->getRef().'</b></a></span>';
-            $textArrow.= '<span class="icon-forward"></span>';
+            if(count($indicator->getParent()->getParent()) > 0){
+                $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getParent()->getId())).'"><b>'.$indicator->getParent()->getParent()->getRef().'</b></a></span>';
+                $textArrow.= '<span class="icon-forward"></span>';
+            }
             $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getParent()->getId())).'"><b>'.$indicator->getParent()->getRef().'</b></a></span>';
             $textArrow.= '<span class="icon-forward"></span>';
             $textArrow.= '<span class="thin"><a href="'.$this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId())).'"><b>'.$indicator->getRef().'</b></a></span>';

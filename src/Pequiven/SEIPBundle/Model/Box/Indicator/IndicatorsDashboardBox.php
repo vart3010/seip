@@ -23,7 +23,7 @@ class IndicatorsDashboardBox extends GenericBox
     public function getParameters() {
         
         $em = $this->getDoctrine()->getManager();
-        $seeTree = false;//Bandera para saber si el indicador tiene relación con otros indicadores
+        $seeTagIndicators = false;//Bandera para saber si se mjestran o no las etiquetas del indicador
         $boxRender = $this->get('tecnocreaciones_box.render');//Servicio par allamar los boxes
         $idIndicator = $this->getRequest()->get('id');//Obtenemos el id del indicador a visualizar
         $indicator = $this->container->get('pequiven.repository.indicator')->find($idIndicator);//Obtenemos el indicador que se esta visualizando
@@ -40,11 +40,10 @@ class IndicatorsDashboardBox extends GenericBox
                     $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByLineStrategicAndOrderShowFromParent($lineStrategic->getId());
                 }
             }
-            if(count($indicator->getChildrens()) > 0){
-                $seeTree = true;
+            if(count($indicator->getChildrens()) == 0){
+                $seeTagIndicators = true;
             }
         } elseif(($indicatorParent = $indicator->getParent()) != NULL){
-            $seeTree = true;
             $flagParent = false;
             $cont = 1;
             while(!$flagParent){
@@ -53,6 +52,9 @@ class IndicatorsDashboardBox extends GenericBox
                     if($cont == 1){//En caso de que se este viendo un indicador táctico
 //                        $indicatorsGroup = $indicatorParent->getChildrens();
                         $indicatorsGroup = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicatorParent->getId());
+                        if(count($indicator->getChildrens()) == 0){
+                            $seeTagIndicators = true;
+                        }
                     }
                     foreach($indicatorParent->getLineStrategics() as $lineStrategic){
                         $idLineStrategic = $lineStrategic->getId();
@@ -85,17 +87,19 @@ class IndicatorsDashboardBox extends GenericBox
         $arrayIdProduccion = array();
         $arrayIdProduccion[] = 1; 
         $arrayIdProduccion[] = 1043; 
-        
+
         if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
             if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){
                 $seeInColumn = true;
                 $dataChartColumn = $indicatorService->getChartColumnLineDualAxis($indicator);
             }
         } elseif($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_OPERATIVO){
-            if(in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)){
-                $seeInColumn = true;
-                $seeInColumnSingleAxis = true;
-                $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+            if(count($indicator->getParent()->getParent()) > 0){
+                if(in_array($indicator->getParent()->getParent()->getId(), $arrayIdProduccion)){
+                    $seeInColumn = true;
+                    $seeInColumnSingleAxis = true;
+                    $dataChartColumn = $indicatorService->getDataChartOfResultIndicator($indicator);
+                }
             }
         }
         
@@ -103,7 +107,7 @@ class IndicatorsDashboardBox extends GenericBox
             'iconsLineStrategic' => $iconsLineStrategic,
             'linesStrategics' => $linesStrategics,
             'idLineStrategic' => $idLineStrategic,
-            'seeTree' => $seeTree,
+            'seeTagIndicators' => $seeTagIndicators,
             'boxRender' => $boxRender,
             'indicatorsGroup' => $indicatorsGroup,
             'dataWidget' => $dataWidget,

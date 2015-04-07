@@ -53,35 +53,46 @@
                 <span class="icon-forward"></span>
                 <span class="thin">IT-1.1.1.2.</span>
             </hgroup>#}
-            {% if seeInColumn == false %}
-            <div ng-controller="DashboardController" ng-init="renderWidgetDoughnut2d('pie',{{ dataChart|json_encode() }},'100%','450')">
-                <span id="pie"></span>
-            </div>
-            {% else %}
-                {% if seeInColumnSingleAxis == false %}
-                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
-                        <span id="chartColumn"></span>
-                    </div>
+            {% if seeTagIndicators == false %}
+                {% if seeInColumn == false %}
+                <div ng-controller="DashboardController" ng-init="renderWidgetDoughnut2d('pie',{{ dataChart|json_encode() }},'100%','450')">
+                    <span id="pie"></span>
+                </div>
                 {% else %}
-                    {% if indicator.id == '171' %}
-                        <p class="button-height">
-                        <a onclick="showDetail()">
-                            <span class="button-icon left-side blue-gradient">
-                                <span class="fa fa-pie-chart fa-1">
-                                </span>
-                            </span>
-                            <span id="textDetail">Ver Detalle</span>
-                        </a>
-                        </p>
-                    {% endif %}
-                    <div ng-controller="DashboardController" ng-init="renderChartColumnLineSingleAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
-                        <span id="chartColumn"></span>
-                    </div>
-                    {% if indicator.id == '171' %}
-                        <div ng-controller="DashboardController" ng-init="renderChartStackedSingleAxis('chartDetail')">
-                            <span id="chartDetail"></span>
+                    {% if seeInColumnSingleAxis == false %}
+                        <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                            <span id="chartColumn"></span>
                         </div>
+                    {% else %}
+                        {% if indicator.id == '171' %}
+                            <p class="button-height">
+                            <a onclick="showDetail()">
+                                <span class="button-icon left-side blue-gradient">
+                                    <span class="fa fa-pie-chart fa-1">
+                                    </span>
+                                </span>
+                                <span id="textDetail">Ver Detalle</span>
+                            </a>
+                            </p>
+                        {% endif %}
+                        <div ng-controller="DashboardController" ng-init="renderChartColumnLineSingleAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
+                            <span id="chartColumn"></span>
+                        </div>
+                        {% if indicator.id == '171' %}
+                            <div ng-controller="DashboardController" ng-init="renderChartStackedSingleAxis('chartDetail')">
+                                <span id="chartDetail"></span>
+                            </div>
+                        {% endif %}
                     {% endif %}
+                {% endif %}
+            {% else %}
+                {% if indicator.tagsIndicator|length > 0 %}    
+                    <fieldset class="fieldset">
+                        <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
+                        {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
+                    </fieldset>
+                {% else %}
+                    <span class="tag red-bg with-tooltip">{{ ('pequiven_indicator.empty'|trans({},'PequivenIndicatorBundle')) }}</span>
                 {% endif %}
             {% endif %}
         </div>
@@ -110,14 +121,3 @@
         });
     </script>
 {% endblock javascript %}
-
-{#{% block javascript %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            cargar();
-            function cargar(){
-                location.href = "#cargar";
-            }
-        };
-    </script>
-{% endblock javascript %}#}
