@@ -2482,7 +2482,7 @@ angular.module('seipModule.controllers', [])
             
             $scope.renderChartColumnLineSingleAxis = function(id,data){
                 FusionCharts.ready(function() {
-                    var chartColumnLineDualAxis = new FusionCharts({
+                    var chartColumnLineSingleAxis = new FusionCharts({
                         "type": "MSColumnLine3D",
                         "renderAt": id,
                         "width": "100%",
@@ -2494,8 +2494,178 @@ angular.module('seipModule.controllers', [])
                             "dataset": data.dataSource.dataset,
                         }
                     });
-                    chartColumnLineDualAxis.setTransparent(true);
-                    chartColumnLineDualAxis.render();
+                    chartColumnLineSingleAxis.setTransparent(true);
+                    chartColumnLineSingleAxis.render();
+                })
+            }
+            
+            $scope.renderChartStackedSingleAxis = function(id){
+                FusionCharts.ready(function() {
+                    var chartStackedSingleAxis = new FusionCharts({
+                        "type": "stackedcolumn3d",
+                        "renderAt": id,
+                        "width": "100%",
+                        "height": "500",
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": {
+                                "caption": "% Cumplimiento del Plan Producción Bruta de Fertilizantes",
+//                                "subCaption": "Harry's SuperMart",
+                                "xAxisname": "Productos",
+                                "yAxisName": "TM",
+                                "paletteColors": "#0075c2,#1aaf5d",
+                                "bgColor": "#ffffff",
+                                "borderAlpha": "20",
+                                "showCanvasBorder": "0",
+                                "usePlotGradientColor": "0",
+                                "plotBorderAlpha": "10",
+                                "legendBorderAlpha": "0",
+                                "legendShadow": "0",
+                                "valueFontColor": "#ffffff",
+                                "showXAxisLine": "1",
+                                "xAxisLineColor": "#999999",
+                                "divlineColor": "#999999",
+                                "divLineDashed": "1",
+                                "showAlternateHGridColor": "0",
+                                "subcaptionFontBold": "0",
+                                "subcaptionFontSize": "14",
+                                "showHoverEffect": "1",
+                                "formatNumberScale": "0",
+                                "thousandSeparator": ".",
+                                "decimalSeparator": ",",
+                                "decimals": "2",
+                                "labelDisplay": "ROTATE"
+                             },
+                             "categories": [
+                                {
+                                   "category": [
+                                      {
+                                         "label": "Enero"
+                                      },
+                                      {
+                                         "label": "Febrero"
+                                      },
+                                      {
+                                         "label": "Marzo"
+                                      },
+                                      {
+                                         "label": "Abril"
+                                      },
+                                      {
+                                         "label": "Mayo"
+                                      },
+                                      {
+                                         "label": "Junio"
+                                      },
+                                      {
+                                         "label": "Julio"
+                                      },
+                                      {
+                                         "label": "Agosto"
+                                      },
+                                      {
+                                         "label": "Septiembre"
+                                      },
+                                      {
+                                         "label": "Octubre"
+                                      },
+                                      {
+                                         "label": "Noviembre"
+                                      },
+                                      {
+                                         "label": "Diciembre"
+                                      }
+                                   ]
+                                }
+                             ],
+                             "dataset": [
+                                {
+                                   "seriesname": "Amoníaco",
+                                   "data": [
+                                      {
+                                         "value": "2582"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "3032"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "8514"
+                                      },
+                                      {
+                                         "value": "4346"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "6634"
+                                      },
+                                      {
+                                         "value": "0"
+                                      }
+                                   ]
+                                },
+                                {
+                                   "seriesname": "Urea",
+                                   "data": [
+                                      {
+                                         "value": "206"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      },
+                                      {
+                                         "value": "0"
+                                      }
+                                   ]
+                                }
+                             ]
+                          }
+                    });
+                    chartStackedSingleAxis.setTransparent(true);
+                    chartStackedSingleAxis.render();
                 })
             }
             

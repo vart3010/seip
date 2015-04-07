@@ -1,4 +1,5 @@
 pequiven_indicator:
+    empty: El indicador no tiene indicadores asociados ni etiquetas de descripción
     value: Valor
     #Registrar
     indicators: Indicadores
