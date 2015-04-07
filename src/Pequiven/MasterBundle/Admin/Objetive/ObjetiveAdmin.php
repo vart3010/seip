@@ -99,6 +99,7 @@ class ObjetiveAdmin extends Admin
             ->add('description')
             ->add('weight')
             ->add('requiredToImport')
+            ->add('period')
             ->add('enabled')
             ;
     }

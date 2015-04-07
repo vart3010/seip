@@ -103,6 +103,7 @@ class ArrangementRangeAdmin extends Admin implements \Symfony\Component\Dependen
             ->add('indicator','doctrine_orm_model_autocomplete',array(),null,array(
                 'property' => array('ref','description')
             ))
+            ->add("period")
             ;
     }
     
