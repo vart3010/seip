@@ -5,8 +5,7 @@ var seipModule = angular.module('seipModule', [
     'ngRoute',
     'seipModule.controllers',
     'notificationBarModule',
-    'ngCookies',
-    'ng-fusioncharts'
+    'ngCookies'
 ]);
 
 seipModule
