@@ -327,6 +327,8 @@ class PrePlanningService extends ContainerAware
             }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL')){
                 $_hasPermissionRevision = true;
             }
+            //No verificar dependencia para importar todo
+            /**
             if($_hasPermissionRevision && $parent && PrePlanning::isValidTypeObject($parent->getTypeObject())){
                 if($item->getTypeObject() != PrePlanning::TYPE_OBJECT_OBJETIVE){
                     $itemParentInstance = $cloneService->findInstancePrePlanning($parent);
@@ -336,6 +338,7 @@ class PrePlanningService extends ContainerAware
                     }
                 }
             }
+             */
             $child['_hasPermissionRevision'] = $_hasPermissionRevision;
         }
         if($_hasPermissionRevision && ($item->getStatus() == PrePlanning::STATUS_IN_REVIEW || $item->getStatus() == PrePlanning::STATUS_REQUIRED || $item->getStatus() == PrePlanning::STATUS_IMPORTED_AND_DELETED)){
