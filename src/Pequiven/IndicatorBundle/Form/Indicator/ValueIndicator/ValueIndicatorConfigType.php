@@ -15,17 +15,21 @@ class ValueIndicatorConfigType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        xdebug_print_function_stack();
+        die;
         $data = $builder->getData();
         $typeDetailValue = $data->getIndicator()->getTypeDetailValue();
         if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
             $builder
-                ->add('products',null,array(
+                ->add('products','tecno_ajax_autocomplete',array(
                     'label' => 'form.products',
-                    'class' => 'Pequiven\SEIPBundle\Entity\CEI\Product',
+                    'entity_alias' => 'products',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
-                        'class' => "input input-xlarge validate[required]"
+                        "class" => "input input-xlarge validate[required]"
                     ),
+                    "property" => array("name"),
+                    "multiple" => true,
                 ))
             ;
         }
