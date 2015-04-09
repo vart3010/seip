@@ -184,14 +184,14 @@ tecnocreaciones_tools:
     role_pattern_voter:
         enable: true
         role_pattern_voter_prefix: ROLE_SEIP_
-    extra_form_types:
-        enable: true
-        autocomplete_entities:
-            products:
-                class: Pequiven\SEIPBundle\Entity\CEI\Product
-#                role: ROLE_ADMIN
-                property: id
-                search: contains
+#    extra_form_types:
+#        enable: true
+#        autocomplete_entities:
+#            products:
+#                class: Pequiven\SEIPBundle\Entity\CEI\Product
+##                role: ROLE_ADMIN
+#                property: id
+#                search: contains
 
                 
 fos_oauth_server:
