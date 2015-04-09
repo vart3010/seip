@@ -2064,6 +2064,11 @@ angular.module('seipModule.controllers', [])
                 return cont;
             };
         })
+        
+        .controller('ChartsDashboardController', function($scope){
+            
+        })
+        
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 
             $scope.renderChartTactic = function(id,categories,dataPlanTactic,dataRealTactic,dataPorcTactic,caption,typeLabelDisplay) {

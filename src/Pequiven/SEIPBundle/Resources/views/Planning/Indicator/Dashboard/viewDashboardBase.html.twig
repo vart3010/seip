@@ -48,16 +48,20 @@
             </div>#}
             
             {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
-            {#<hgroup style="text-align: center;" class="thin breadcrumb">
-                <span class="thin"><a href="#">IE-.1.1.1.</a></span>
-                <span class="icon-forward"></span>
-                <span class="thin">IT-1.1.1.2.</span>
-            </hgroup>#}
-            {% if seeTagIndicators == false %}
+            
+            {% if seeTagIndicators == false %}{# En caso de que sólo se necesite ver #}
                 {% if seeInColumn == false %}
                 <div ng-controller="DashboardController" ng-init="renderWidgetDoughnut2d('pie',{{ dataChart|json_encode() }},'100%','450')">
                     <span id="pie"></span>
                 </div>
+                {#<div ng-controller="ChartsDashboardController">
+                    <div fusioncharts
+                         width="600"
+                         height="400"
+                         type="column2d"
+                         dataSource="{{myDataSource}}" >
+                    </div>
+                </div>#}
                 {% else %}
                     {% if seeInColumnSingleAxis == false %}
                         <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">

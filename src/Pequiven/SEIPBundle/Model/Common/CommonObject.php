@@ -30,24 +30,24 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
     const LEVEL_GERENCIA_SECOND = 3;
     
     /**
-     * 
+     * Trabajador Activo
      */
     const STATUS_WORKER_ACTIVE = 1;
     /**
-     * 
+     * Trabajador Asignado
      */
     const STATUS_WORKER_ASSIGNED = 2;
     /**
-     * 
+     * Trabajador Supernumerario
      */
     const STATUS_WORKER_SUPERNUMERARY = 3;
     /**
-     * 
+     * Trabajador Fuera de la Compañía
      */
     const STATUS_WORKER_OUTSIDE_COMPANY = 4;
     
     /**
-     * Reposo indefinido
+     * Trabajador con Reposo indefinido
      */
     const STATUS_WORKER_INDEFINITE_BREAK = 5;
     
