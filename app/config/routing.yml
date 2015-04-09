@@ -111,6 +111,6 @@ fos_oauth_server_token:
 fos_oauth_server_authorize:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
     
-TecnocreacionesToolsBundleExtraFormTypes:
-    resource: "@TecnocreacionesToolsBundle/Resources/config/routing/extra_form_types.xml"
-    prefix: /extra-form-types
+#TecnocreacionesToolsBundleExtraFormTypes:
+#    resource: "@TecnocreacionesToolsBundle/Resources/config/routing/extra_form_types.xml"
+#    prefix: /extra-form-types
