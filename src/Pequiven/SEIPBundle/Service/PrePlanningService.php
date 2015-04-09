@@ -130,7 +130,7 @@ class PrePlanningService extends ContainerAware
         return $root;
     }
     
-    private function setOriginObject(PrePlanning $prePlanning,$object,$levelPlanning)
+    private function setOriginObject(PrePlanning &$prePlanning,$object,$levelPlanning)
     {
         $user = $this->getUser();
         $configuration = $user->getConfiguration();
@@ -287,7 +287,7 @@ class PrePlanningService extends ContainerAware
             $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($item->getParent());
             $parentItemInstanceCloned = $this->getCloneService()->findCloneInstance($parentItemInstance);
             if(!$parentItemInstanceCloned){
-                $child['editable'] = false;
+//                $child['editable'] = false;
             }
         }
         
@@ -342,9 +342,10 @@ class PrePlanningService extends ContainerAware
             $child['_isImportable'] = true;
         }
         if(count($item->getChildrens()) > 0){
-            $limitLevel = 2;
+            $limitLevel = 3;
             if($limitCurrentLevel < $limitLevel){
-                $child['expanded'] = $expanded;
+//                $child['expanded'] = $expanded;
+                $child['expanded'] = true;
                 $child['children'] = $this->getStructureTree($item->getChildrens(), ($limitCurrentLevel+1));
             }else{
                 $child['expanded'] = false;
@@ -481,6 +482,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $prePlannigChild->setParameters($configEntity);
             $prePlannig->addChildren($prePlannigChild);
@@ -496,6 +500,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $configEntity['expanded'] = false;
             $prePlannigChild->setParameters($configEntity);
