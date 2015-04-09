@@ -36,7 +36,7 @@ twig:
         resources:
             - 'PequivenSEIPBundle:Template:Form/fields.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
-            - 'TecnocreacionesToolsBundle:ExtraFormTypes:fields.html.twig'
+#            - 'TecnocreacionesToolsBundle:ExtraFormTypes:fields.html.twig'
 
 # Assetic Configuration
 assetic:
