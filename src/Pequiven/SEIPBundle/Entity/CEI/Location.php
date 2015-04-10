@@ -134,7 +134,8 @@ class Location extends Model
         return $this->typeLocation;
     }
     
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getName()?:'-';
     }
 }

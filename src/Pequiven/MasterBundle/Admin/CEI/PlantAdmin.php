@@ -28,6 +28,7 @@ class PlantAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('location')
             ;
         parent::configureShowFields($show);
     }
@@ -36,6 +37,7 @@ class PlantAdmin extends BaseAdmin
     {
         $form
             ->add('name')
+            ->add('location')
             ;
         parent::configureFormFields($form);
     }
@@ -44,6 +46,7 @@ class PlantAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
+            ->add('location')
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -52,6 +55,7 @@ class PlantAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
+            ->addIdentifier('location')
             ;
         parent::configureListFields($list);
     }
