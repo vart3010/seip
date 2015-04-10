@@ -343,35 +343,20 @@ class ResultService implements \Symfony\Component\DependencyInjection\ContainerA
             'limitMonthToNow' => true,
             'refresh' => true,
         ));
-//        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
-//        $arrangementProgram->setResultReal($summary['advances']);
-        
+        $arrangementProgram->setResult($summary['advances'] - $amountPenalty);
+        $arrangementProgram->setResultReal($summary['advances']);
         $summary = $arrangementProgram->getSummary(array('refresh' => true));
+        $arrangementProgram->setTotalAdvance(($summary['advances'] - $amountPenalty));
         
         $em = $this->getDoctrine()->getManager();
-        $totalArrangementProgram = 0;
+        
         foreach ($arrangementProgram->getTimeline()->getGoals() as $goal) {
            $advance = $goal->getResult();
-           $weight = $goal->getWeight();
-           $totalAdvance = ($advance - $amountPenalty);
-           $totalAdvanceForTotal = $totalAdvance;
-           if($totalAdvanceForTotal > 100){
-               $totalAdvanceForTotal = 100;
-           }
-           $totalArrangementProgram = $totalArrangementProgram + (($totalAdvanceForTotal * $weight) / 100);
-           
-           $goal->setResult($totalAdvance);
+           $goal->setResult(($advance - $amountPenalty));
            $goal->setResultReal($advance);
            $em->persist($goal) ;
         }
-        $arrangementProgram->setResultReal($totalArrangementProgram);
-        if($totalArrangementProgram > 100){
-            $totalArrangementProgram = 100;
-        }
-        $arrangementProgram->setResult($totalArrangementProgram);
-//        $arrangementProgram->setResult($totalArrangementProgram - $amountPenalty);
-        $arrangementProgram->setTotalAdvance($totalArrangementProgram);
-        
+       
         $arrangementProgram->updateLastDateCalculateResult();
         
         $em->persist($arrangementProgram);
