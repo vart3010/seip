@@ -29,6 +29,9 @@ class CompanyAdmin extends Admin
             ->add('id')
             ->add('rif')
             ->add('description')
+            ->add('typeOfCompany')
+            ->add('affiliates')
+            ->add('mixeds')
             ->add('enabled')
             ->add('createdAt')
             ->add('updatedAt')
@@ -37,9 +40,25 @@ class CompanyAdmin extends Admin
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $object = $this->getSubject();
+        
+        $parameters = array();
+        
+        if($object != null){
+            $parameters['query_builder'] = function(\Doctrine\ORM\EntityRepository $repository) use ($object){
+                return $repository->getQueryNotMe($object);
+            };
+        }
         $form
             ->add('rif')
             ->add('description')
+            ->add('alias')
+            ->add('typeOfCompany','choice',array(
+                "choices" => \Pequiven\SEIPBundle\Entity\CEI\Company::getTypesOfCompanies(),
+                "translation_domain" => "PequivenMasterBundle"
+            ))
+            ->add('affiliates',null,$parameters)
+            ->add('mixeds',null,$parameters)
             ->add('enabled')
             ;
     }
@@ -49,6 +68,7 @@ class CompanyAdmin extends Admin
         $filter
             ->add('rif')
             ->add('description')
+            ->add('typeOfCompany')
             ->add('enabled')
             ;
     }

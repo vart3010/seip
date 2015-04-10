@@ -84,6 +84,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addMenuResults($menu, $section);
         }
         
+        //Menu de carga de datos
+        if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+            $this->addDataLoad($menu, $section);
+        }
+        
         //Menú Estadística e Información
         if($this->isGranted('ROLE_SEIP_PLANNING_*')){
             $this->addPlanningMenu($menu, $section);
@@ -705,6 +710,18 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         $menu->addChild($menuResults);
     }
     
+    private function addDataLoad(ItemInterface $menu, $section)
+    {
+        $child = $this->factory->createItem('data_load',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'fa fa-database',),
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.main', $section)));
+        $menu->addChild($child);
+    }
+
+
     /**
      * Construye el menu de Programa de Gestión
      * 
