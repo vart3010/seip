@@ -116,6 +116,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')
                 ->add('valueFinal')
+                ->add('charts','sonata_type_model_autocomplete',array(
+                    'property' => array('alias','description'),
+                    'multiple' => true,
+                    'required' => false,
+                ))
                 ->add('childrens','sonata_type_model_autocomplete',$childrensParameters);
                 if($object != null && $object->getId() !== null){
                     if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){

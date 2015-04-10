@@ -113,3 +113,11 @@ UPDATE seip_indicator SET evaluetaInPeriod = 1;
 ALTER TABLE seip_indicator ADD orderShowFromParent INT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD orderShowFromParent INT DEFAULT NULL;
 UPDATE seip_indicator SET orderShowFromParent = 1;
+
+-- Sección Gráficos del Indicador
+CREATE TABLE seip_chart (id INT AUTO_INCREMENT NOT NULL, fk_user_created_at INT DEFAULT NULL, fk_user_updated_at INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, description LONGTEXT NOT NULL, name VARCHAR(50) NOT NULL, alias VARCHAR(15) NOT NULL, deletedAt DATETIME DEFAULT NULL, INDEX IDX_15609EA8F54A16F1 (fk_user_created_at), INDEX IDX_15609EA83DA6CF46 (fk_user_updated_at), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE seip_indicators_charts (indicator_id INT NOT NULL, chart_id INT NOT NULL, INDEX IDX_8E5F39614402854A (indicator_id), INDEX IDX_8E5F3961BEF83E0A (chart_id), PRIMARY KEY(indicator_id, chart_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE seip_chart ADD CONSTRAINT FK_15609EA8F54A16F1 FOREIGN KEY (fk_user_created_at) REFERENCES seip_user (id);
+ALTER TABLE seip_chart ADD CONSTRAINT FK_15609EA83DA6CF46 FOREIGN KEY (fk_user_updated_at) REFERENCES seip_user (id);
+ALTER TABLE seip_indicators_charts ADD CONSTRAINT FK_8E5F39614402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id) ON DELETE CASCADE;
+ALTER TABLE seip_indicators_charts ADD CONSTRAINT FK_8E5F3961BEF83E0A FOREIGN KEY (chart_id) REFERENCES seip_chart (id) ON DELETE CASCADE;

@@ -535,11 +535,16 @@ class IndicatorService implements ContainerAwareInterface
         $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         
         if($totalNumChildrens > 0){
+            $sumResultChildren = 0;//Suma de resultados de medición de los hijos
             $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $sumResultChildren+= $indicatorChildren->getResultReal();
+            }
+            
             foreach($indicatorsChildrens as $indicatorChildren){
                 $set = array();
                 $set["label"] = $indicatorChildren->getSummary().': '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
-                $set["value"] = $numDiv;
+                $set["value"] = bcdiv($indicatorChildren->getResultReal(), $sumResultChildren,2);
                 $set["displayValue"] = $indicatorChildren->getRef().' - '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["color"] = $this->getColorOfResult($indicatorChildren);

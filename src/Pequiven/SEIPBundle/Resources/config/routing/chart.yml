@@ -1,0 +1,5 @@
+#Select que devuelve las Gerencias de 2da Línea para la visualización de objetivos a nivel Operativo
+getDataChartDoughnut:
+    path: /getDataChartDoughnut
+    defaults:
+        _controller: pequiven.controller.chart:getDataChartDoughnutAction

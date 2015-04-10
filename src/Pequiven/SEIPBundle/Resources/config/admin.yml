@@ -179,6 +179,18 @@ services:
         calls:
             - [ setTranslationDomain, [PequivenMasterBundle]]
             - [ setContainer, [@service_container]]
+    
+    sonata.admin.chart:
+        class: Pequiven\MasterBundle\Admin\ChartAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tipos de Gráficos", label: "Gráficos" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\Chart
+            - ~
+        calls:
+            - [ setTranslationDomain, [PequivenSEIPBundle]]
+            - [ setContainer, [@service_container]]
             
     sonata.admin.user.complejo:
         class: Pequiven\MasterBundle\Admin\User\ComplejoAdmin

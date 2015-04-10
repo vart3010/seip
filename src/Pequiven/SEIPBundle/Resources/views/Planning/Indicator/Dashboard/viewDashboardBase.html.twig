@@ -54,14 +54,14 @@
                 <div ng-controller="DashboardController" ng-init="renderWidgetDoughnut2d('pie',{{ dataChart|json_encode() }},'100%','450')">
                     <span id="pie"></span>
                 </div>
-                {#<div ng-controller="ChartsDashboardController">
+                <div ng-controller="ChartsDashboardController">
                     <div fusioncharts
-                         width="600"
-                         height="400"
-                         type="column2d"
-                         dataSource="{{myDataSource}}" >
+                        width="600"
+                        height="400"
+                        type="column2d"
+                        dataSource="{$ chartColumn $}" >
                     </div>
-                </div>#}
+                </div>
                 {% else %}
                     {% if seeInColumnSingleAxis == false %}
                         <div ng-controller="DashboardController" ng-init="renderChartColumnLineDualAxis('chartColumn',{{ dataChartColumn|json_encode() }})">
