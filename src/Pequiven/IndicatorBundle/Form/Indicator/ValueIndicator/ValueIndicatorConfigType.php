@@ -27,7 +27,7 @@ class ValueIndicatorConfigType extends AbstractType
                     'attr' => array(
                         "class" => "input input-xlarge validate[required]"
                     ),
-                    "property" => array("name","id"),
+                    "property" => array("name"),
                     "multiple" => true,
                     "callback" => function (\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $qb)
                     {
