@@ -29,7 +29,10 @@ class CompanyAdmin extends Admin
             ->add('id')
             ->add('rif')
             ->add('description')
-            ->add('typeOfCompany')
+            ->add('typeOfCompany','choice',array(
+                "choices" => \Pequiven\SEIPBundle\Entity\CEI\Company::getTypesOfCompanies(),
+                "translation_domain" => "PequivenMasterBundle"
+            ))
             ->add('affiliates')
             ->add('mixeds')
             ->add('enabled')

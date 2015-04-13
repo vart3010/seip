@@ -35,12 +35,39 @@ abstract class Company extends BaseModel
      */
     const TYPE_OF_COMPANY_MIXTA = 2;
     
+    /**
+     * Proceso de produccion
+     */
+    const TYPE_PROCESS_PRODUCTION = 0;
+    
     public static function getTypesOfCompanies()
     {
         return array(
             self::TYPE_OF_COMPANY_MATRIZ => 'pequiven_master.company.type.matriz',
             self::TYPE_OF_COMPANY_AFFILIATED => 'pequiven_master.company.type.affiliated',
             self::TYPE_OF_COMPANY_MIXTA => 'pequiven_master.company.type.mixta',
+        );
+    }
+    
+    /**
+     * Retorna todos los tipos de procesos
+     * @return type
+     */
+    public static function getTypesProcess()
+    {
+        return array(
+            self::TYPE_PROCESS_PRODUCTION => 'pequiven_master.company.process.production',
+        );
+    }
+    
+    /**
+     * Retorna los tipos de procesos disponibles
+     * @return type
+     */
+    public static function getTypesProcessAvailable()
+    {
+        return array(
+            self::TYPE_PROCESS_PRODUCTION => 'pequiven_master.company.process.production',
         );
     }
 }

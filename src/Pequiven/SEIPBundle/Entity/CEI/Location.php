@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\CEI\Location as Model;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_Location")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\LocationRepository")
  */
 class Location extends Model
 {
@@ -36,7 +36,7 @@ class Location extends Model
      * Empresa
      * @var Company
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
-     * @ORM\Joincolumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $company;
     
@@ -51,10 +51,17 @@ class Location extends Model
      * Tipo de sede
      * @var \Pequiven\SEIPBundle\Entity\CEI\TypeLocation
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\TypeLocation")
-     * @ORM\Joincolumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $typeLocation;
-
+    
+    /**
+     * Alias corto de la sede
+     * @var string
+     * @ORM\Column(name="alias",type="string",length=10)
+     */
+    private $alias;
+    
     /**
      * Get id
      *
@@ -132,6 +139,29 @@ class Location extends Model
     public function getTypeLocation()
     {
         return $this->typeLocation;
+    }
+    
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Location
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
     
     public function __toString()

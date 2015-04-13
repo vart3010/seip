@@ -15,6 +15,7 @@ use Knp\Menu\ItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Tecnocreaciones\Vzla\GovernmentBundle\Menu\MenuBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Pequiven\SEIPBundle\Entity\CEI\Company;
 
 /**
  * Main menu builder.
@@ -718,6 +719,47 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => 'fa fa-database',),
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.main', $section)));
+        $em = $this->getDoctrine()->getManager();
+        $locationRepository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Location");
+//        var_dump(get_class($locationRepository));die;
+        $locationsProduction = $locationRepository->findByCodeTypeLocation(\Pequiven\SEIPBundle\Model\CEI\TypeLocation::CODE_PLANT_PRODUCTION);
+        $locationsByTypeCompany = array();
+        foreach ($locationsProduction as $locationProduction) {
+            $typeOfCompany = $locationProduction->getCompany()->getTypeOfCompany();
+            if(!isset($locationsByTypeCompany[$typeOfCompany])){
+                $locationsByTypeCompany[$typeOfCompany] = array();
+            }
+            $locationsByTypeCompany[$typeOfCompany][] = $locationProduction;
+        }
+        
+        
+                //Proceso de produccion
+                 $processProduction = $this->factory->createItem('data_load.process_production',
+                        $this->getSubLevelOptions(array(
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.main', $section)));
+                 
+                 $processProductionMatriz = $this->factory->createItem('data_load.process_production.matriz',
+                        $this->getSubLevelOptions(array(
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.matriz', $section)));
+                 
+                 $processProduction->addChild($processProductionMatriz);
+                 
+                 $processProductionAffiliated = $this->factory->createItem('data_load.process.production.affiliated',
+                        $this->getSubLevelOptions(array(
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.affiliated', $section)));
+                 $processProduction->addChild($processProductionAffiliated);
+                 
+                 $processProductionMixta = $this->factory->createItem('data_load.process.production.mixta',
+                        $this->getSubLevelOptions(array(
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.process.production.mixta', $section)));
+                 $processProduction->addChild($processProductionMixta);
+                 
+         $child->addChild($processProduction);
+                 
         $menu->addChild($child);
     }
 
@@ -955,5 +997,21 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     
     private function isGranted($roles,$object = null) {
         return $this->securityContext->isGranted($roles,$object);
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
     }
 }

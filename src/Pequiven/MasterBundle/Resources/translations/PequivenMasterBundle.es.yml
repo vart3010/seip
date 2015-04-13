@@ -21,6 +21,8 @@ pequiven_master:
             matriz: Matriz
             affiliated: Filial
             mixta: Mixta
+        process:
+            production: Producción
 
 form:
     #Botones formulario
