@@ -20,7 +20,7 @@ use Pequiven\IndicatorBundle\Model\Indicator\TagIndicator as Model;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\HasLifecycleCallbacks()
  */
-class TagIndicator extends Model
+class TagIndicator extends Model implements \Pequiven\SEIPBundle\Entity\PeriodItemInterface
 {
     /**
      * @var integer
@@ -154,6 +154,15 @@ class TagIndicator extends Model
      * @ORM\Column(name="orderShow", type="integer")
      */
     private $orderShow = 1;
+    
+    /**
+     * Periodo.
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Period
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\Period")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $period;
     
     /**
      * Get id
@@ -524,6 +533,32 @@ class TagIndicator extends Model
     function setOrderShow($orderShow) {
         $this->orderShow = $orderShow;
     }
+    
+    function getPeriod() {
+        return $this->period;
+    }
 
-
+    function setPeriod(\Pequiven\SEIPBundle\Entity\Period $period) 
+    {
+        $this->period = $period;
+        
+        return $this;
+    }
+    
+    public function __clone() 
+    {
+        if($this->id > 0){
+            $this->id = null;
+            
+            $this->createdAt = null;
+            $this->updatedAt = null;
+            
+            $this->createdBy = null;
+            $this->updatedBy = null;
+            
+//            $this->indicator = null;
+            
+            $this->period = null;
+        }
+    }
 }

@@ -129,3 +129,11 @@ UPDATE seip_indicator SET evaluetaInPeriod = 1;
 ALTER TABLE seip_indicator ADD orderShowFromParent INT NOT NULL;
 ALTER TABLE seip_indicator_audit ADD orderShowFromParent INT DEFAULT NULL;
 UPDATE seip_indicator SET orderShowFromParent = 1;
+
+-- Periodo para tag indicador
+ALTER TABLE seip_indicator_tag ADD period_id INT DEFAULT NULL;
+ALTER TABLE seip_indicator_tag ADD CONSTRAINT FK_A12328E2EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
+CREATE INDEX IDX_A12328E2EC8B7ADE ON seip_indicator_tag (period_id);
+ALTER TABLE seip_indicator_tag_audit ADD period_id INT DEFAULT NULL;
+UPDATE seip_indicator_tag SET period_id = 1;
+ALTER TABLE seip_indicator_tag CHANGE period_id period_id INT NOT NULL;

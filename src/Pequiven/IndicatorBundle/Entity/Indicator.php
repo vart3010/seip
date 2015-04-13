@@ -300,7 +300,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Etiquetas del indicador
      * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorTag
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
