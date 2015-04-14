@@ -1,0 +1,9 @@
+Pequiven\SEIPBundle\Model\BaseModel:
+    exclusion_policy: ALL
+    properties:
+        createdAt:
+            expose: true
+            groups: [api_details]
+        updatedAt:
+            expose: true
+            groups: [api_details]

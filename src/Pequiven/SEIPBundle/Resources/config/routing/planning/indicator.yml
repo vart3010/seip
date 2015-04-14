@@ -21,6 +21,16 @@ pequiven_indicator_update:
         id: \d+
     methods: [GET|POST]
     
+pequiven_indicator_approved:
+    path: /{id}/approved.{_format}
+    defaults:
+        _controller: pequiven.controller.indicator:approvedAction
+        _format: html
+    requirements:
+        _format: html
+        id: \d+
+    methods: [POST]
+    
 pequiven_indicator_delete:
     path: /{id}/delete.{_format}
     defaults:

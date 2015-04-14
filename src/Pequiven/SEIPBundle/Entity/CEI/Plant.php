@@ -41,6 +41,13 @@ class Plant extends BaseModel
     private $name;
     
     /**
+     * Localizacion o empresa
+     * @var Location
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+     */
+    protected $location;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -71,6 +78,29 @@ class Plant extends BaseModel
     public function getName()
     {
         return $this->name;
+    }
+    
+    /**
+     * Set location
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
+     * @return Plant
+     */
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location = null)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
     
     public function __toString() 

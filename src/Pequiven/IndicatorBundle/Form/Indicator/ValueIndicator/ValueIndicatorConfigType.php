@@ -15,20 +15,27 @@ class ValueIndicatorConfigType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $data = $builder->getData();
-        $typeDetailValue = $data->getIndicator()->getTypeDetailValue();
-        if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
+        //Se comento por error en la busqueda de ajax no esta seteado el indicador
+//        $data = $builder->getData();
+//        $typeDetailValue = $data->getIndicator()->getTypeDetailValue();
+//        if($typeDetailValue == Indicator::TYPE_DETAIL_DAILY_LOAD_PRODUCTION){
             $builder
-                ->add('products',null,array(
+                ->add('products','tecno_ajax_autocomplete',array(
                     'label' => 'form.products',
-                    'class' => 'Pequiven\SEIPBundle\Entity\CEI\Product',
+                    'entity_alias' => 'products_alias',
                     'label_attr' => array('class' => 'label'),
                     'attr' => array(
-                        'class' => "input input-xlarge validate[required]"
+                        "class" => "input input-xlarge validate[required]"
                     ),
+                    "property" => array("name"),
+                    "multiple" => true,
+                    "callback" => function (\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $qb)
+                    {
+                        return $qb->getQueryAllComponents();
+                    }
                 ))
             ;
-        }
+//        }
     }
     
     /**

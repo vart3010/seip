@@ -67,7 +67,7 @@
     {% include 'PequivenArrangementProgramBundle:ArrangementProgramTemplate:show/history.html.twig' %}
     
 <script type="text/javascript">
-    $(function() {
+    {#$(function() {
             $('a.showPopup').click(function(e) {
                 e.preventDefault();
                 var $this = $(this);
@@ -89,7 +89,7 @@
                     }
                 }).width(width - horizontalPadding).height(heigth - verticalPadding);
             });
-    });
+    });#}
     $(function(){
         {% if app.session.flashbag.has('autoOpenOnSave') %}
             {% set tmpClear = app.session.flashbag.get('autoOpenOnSave') %}

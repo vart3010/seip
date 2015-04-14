@@ -293,14 +293,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * Configuracion de origen de datos de los detalles de los valores de indicadores
      * 
      * @var \Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig
-     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",mappedBy="indicator")
+     * @ORM\OneToOne(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorConfig",inversedBy="indicator")
      */
     private $valueIndicatorConfig;
     
     /**
      * Etiquetas del indicador
      * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorTag
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
@@ -397,6 +397,14 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $orderShowFromParent = 1;
     
     /**
+     * Estatus del programa de gestion
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    protected $status = self::STATUS_DRAFT;
+    
+    /**
      * Charts
      * 
      * @var \Pequiven\SEIPBundle\Entity\Chart
@@ -404,7 +412,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      * @ORM\JoinTable(name="seip_indicators_charts")
      */
     private $charts;
-
+    
     /**
      * Constructor
      */
@@ -1318,7 +1326,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->backward;
     }
-    
+
     /**
      * @ORM\PrePersist()
      */
@@ -1722,6 +1730,27 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     }
     
     /**
+     * 
+     * @return integer
+     */
+    function getStatus() 
+    {
+        return $this->status;
+    }
+
+    /**
+     * Establecer status Indicator::STATUS_*
+     * @param type $status
+     * @return \Pequiven\IndicatorBundle\Entity\Indicator
+     */
+    function setStatus($status) 
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    /**
      * Add charts
      *
      * @param \Pequiven\SEIPBundle\Entity\Chart $charts
@@ -1732,7 +1761,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->charts[] = $charts;
 
         return $this;
-}
+    }
 
     /**
      * Remove charts
@@ -1753,4 +1782,5 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->charts;
     }
+    
 }

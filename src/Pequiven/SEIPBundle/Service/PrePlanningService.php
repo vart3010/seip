@@ -130,7 +130,7 @@ class PrePlanningService extends ContainerAware
         return $root;
     }
     
-    private function setOriginObject(PrePlanning $prePlanning,$object,$levelPlanning)
+    private function setOriginObject(PrePlanning &$prePlanning,$object,$levelPlanning)
     {
         $user = $this->getUser();
         $configuration = $user->getConfiguration();
@@ -240,7 +240,7 @@ class PrePlanningService extends ContainerAware
         $icon = $item->getParameter('icon');
         $url = $item->getParameter('url');
         $expanded = $item->getParameter('expanded',true);
-        $name = $this->normalize_str($item->getName());
+        $name = ToolService::normalizeStr($item->getName());
         $nameSumary = ToolService::truncate($name, array(
             'limit' => 130
         ));
@@ -287,7 +287,7 @@ class PrePlanningService extends ContainerAware
             $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($item->getParent());
             $parentItemInstanceCloned = $this->getCloneService()->findCloneInstance($parentItemInstance);
             if(!$parentItemInstanceCloned){
-                $child['editable'] = false;
+//                $child['editable'] = false;
             }
         }
         
@@ -327,6 +327,8 @@ class PrePlanningService extends ContainerAware
             }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL')){
                 $_hasPermissionRevision = true;
             }
+            //No verificar dependencia para importar todo
+            /**
             if($_hasPermissionRevision && $parent && PrePlanning::isValidTypeObject($parent->getTypeObject())){
                 if($item->getTypeObject() != PrePlanning::TYPE_OBJECT_OBJETIVE){
                     $itemParentInstance = $cloneService->findInstancePrePlanning($parent);
@@ -336,15 +338,17 @@ class PrePlanningService extends ContainerAware
                     }
                 }
             }
+             */
             $child['_hasPermissionRevision'] = $_hasPermissionRevision;
         }
         if($_hasPermissionRevision && ($item->getStatus() == PrePlanning::STATUS_IN_REVIEW || $item->getStatus() == PrePlanning::STATUS_REQUIRED || $item->getStatus() == PrePlanning::STATUS_IMPORTED_AND_DELETED)){
             $child['_isImportable'] = true;
         }
         if(count($item->getChildrens()) > 0){
-            $limitLevel = 2;
+            $limitLevel = 3;
             if($limitCurrentLevel < $limitLevel){
-                $child['expanded'] = $expanded;
+//                $child['expanded'] = $expanded;
+                $child['expanded'] = true;
                 $child['children'] = $this->getStructureTree($item->getChildrens(), ($limitCurrentLevel+1));
             }else{
                 $child['expanded'] = false;
@@ -481,6 +485,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $prePlannigChild->setParameters($configEntity);
             $prePlannig->addChildren($prePlannigChild);
@@ -496,6 +503,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $configEntity['expanded'] = false;
             $prePlannigChild->setParameters($configEntity);
@@ -576,22 +586,6 @@ class PrePlanningService extends ContainerAware
     private function getLinkGeneratorService()
     {
         return $this->container->get('seip.service.link_generator');
-    }
-    
-    /**
-     * Elimina los acentos de una cadena
-     * @param type $str
-     * @return type
-     */
-    private function normalize_str($str) {
-        $invalid = array('Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-                            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
-                            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
-                            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
-        $str = str_replace(array_keys($invalid), array_values($invalid), $str);
-
-        return $str;
     }
     
     private function isGranted($roles) {

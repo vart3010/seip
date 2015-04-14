@@ -36,6 +36,7 @@ twig:
         resources:
             - 'PequivenSEIPBundle:Template:Form/fields.html.twig'
             - 'SonataCoreBundle:Form:datepicker.html.twig'
+            - 'TecnocreacionesToolsBundle:ExtraFormTypes:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -132,17 +133,17 @@ tecnocreaciones_vzla_government:
     config:
         main_route: 'pequiven_seip_default_index'
 
-#ext_direct:
-#    resource: "%kernel.root_dir%/config/template/extdirect_routing.yml"
-
 tpg_extjs:
     entities:
         - @PequivenArrangementProgramBundle/Entity/
         - @PequivenSEIPBundle/Entity/PrePlanning/
+        - @PequivenSEIPBundle/Entity/CEI/
+        - @PequivenIndicatorBundle/Entity/Indicator/ValueIndicator/Detail/
     remoting:
         bundles:
             - PequivenArrangementProgramBundle
             - PequivenSEIPBundle
+            - PequivenIndicatorBundle
     
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -183,6 +184,15 @@ tecnocreaciones_tools:
     role_pattern_voter:
         enable: true
         role_pattern_voter_prefix: ROLE_SEIP_
+    extra_form_types:
+        enable: true
+        autocomplete_entities:
+            products_alias:
+                class: Pequiven\SEIPBundle\Entity\CEI\Product
+#                role: ROLE_ADMIN
+                search: contains
+                form: pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig
+                field: products
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel

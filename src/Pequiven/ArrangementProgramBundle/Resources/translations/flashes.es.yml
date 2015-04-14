@@ -26,7 +26,13 @@ pequiven:
         create: El objetivo se creo correctamente.
         update: El objetivo se actualizo correctamente.
         delete: El objetivo se elimino correctamente.
+        approved: El objetivo se aprobo correctamente.
     indicator:
         create: El indicador se creo correctamente.
         update: El indicador se actualizo correctamente.
         delete: El indicador se elimino correctamente.
+        approved: El indicador se aprobo correctamente.
+    value_indicator_config:
+        create: El indicador se configuro correctamente.
+        update: La configuración del indicador se actualizo correctamente.
+        delete: La configuración del indicador se elimino correctamente.

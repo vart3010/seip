@@ -12,7 +12,7 @@
 namespace Pequiven\SEIPBundle\Entity\CEI;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\BaseModel;
+use Pequiven\SEIPBundle\Model\CEI\TypeLocation as BaseModel;
 
 /**
  * Tipo de sede

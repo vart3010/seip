@@ -1,0 +1,678 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block stylesheet %}
+    
+    {#<link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/colors3860.css?v=1') }}">#}
+    <style>
+        .x-grid-tree-node-expanded .x-tree-icon-parent {
+            background-image: none;
+        }
+        .x-panel-header-default {
+            background-color: #bd0000;
+            background-image: none;
+            border: 2px solid #e60101;
+        }
+        .x-title-text {
+            color: #ffffff;
+        }
+        .x-panel-header-default-top {
+            -webkit-box-shadow: #f42a41 0 1px 0 0 inset;
+            -moz-box-shadow: #f42a41 0 1px 0 0 inset;
+            box-shadow: #f42a41 0 1px 0 0 inset;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        var formatPhp = "Y-m-d H:i:s";
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.layout.container.Border',
+            'Ext.data.*',
+            'Ext.tree.*',
+            'Ext.form.field.Number',
+            'Ext.form.field.Date',
+            'Ext.tip.QuickTipManager'
+        ]);
+        function groupParseToString(v){
+            var label = '';
+            var countChild = ""+v.children.length;
+            if(v.groupValue == '0'){
+                label = 'Productos ('+countChild+')';
+            }else if(v.groupValue == '1'){
+                label = 'Servicios ('+countChild+')';
+            }
+            return label;
+        }
+        
+        Ext.onReady(function(){
+            Ext.define("ProductDetailDailyMonth", {
+                extend: "Ext.data.TreeModel",
+                idProperty: "id",
+                fields: [
+                    {
+                            name: "id",            
+                            type: "int",            
+                            useNull: true,            
+                            persist: false            
+                    },
+                    {
+                            name: null,            
+                            type: "int",            
+                            useNull: true            
+                    },
+                    {
+                            name: "month",            
+                            type: "int"            
+                    },
+                    {
+                            name: "totalPlan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "totalReal",            
+                            type: "float"            
+                    },
+                    {
+                            name: "percentage",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day1Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day1Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day2Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day2Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day3Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day3Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day4Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day4Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day5Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day5Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day6Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day6Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day7Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day7Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day8Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day8Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day9Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day9Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day10Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day10Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day11Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day11Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day12Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day12Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day13Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day13Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day14Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day14Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day15Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day15Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day16Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day16Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day17Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day17Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day18Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day18Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day19Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day19Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day20Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day20Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day21Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day21Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day22Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day22Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day23Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day23Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day24Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day24Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day25Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day25Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day26Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day26Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day27Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day27Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day28Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day28Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day29Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day29Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day30Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day30Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day31Plan",            
+                            type: "float"            
+                    },
+                    {
+                            name: "day31Real",            
+                            type: "float"            
+                    },
+                    {
+                            name: "productName",            
+                            type: "string",            
+                            mapping: "product.name"            
+                    },
+                    {
+                            name: "productTypeOf",            
+                            type: "string",            
+                            mapping: "product.typeOf"            
+                    },
+                    {
+                            name: "enabled",            
+                            type: "boolean"            
+                    },
+                    {
+                            name: "createdAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    },
+                    {
+                            name: "updatedAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    },
+                    {
+                            name: "deletedAt",            
+                            type: "date",            
+                            dateFormat: "Y-m-d H:i:s",            
+                            dateReadFormat: "Y-m-d H:i:s",            
+                            format: "Y-m-d H:i:s"            
+                    }
+                ],
+                proxy: {"type":"rest","url":"/api/indicator-value/product-detail-daily-month","format":"json","writer":{"type":"json","writeRecordId":false}}
+            });
+            
+            var refreshBtn = Ext.create("Ext.Button", {
+                itemId: 'refreshBtn',
+                text: '{{ "pequiven_seip.buttons.refresh"|trans }}',
+                glyph: 'xf021@FontAwesome',
+                xtype: 'button',
+                disabled: false,
+                handler: function(){
+                    store.load();
+                }
+            });
+            var buttonsAllow = [ refreshBtn ];
+            var baseClsColumnPlan = "bg-column-gray";
+            
+            var store = Ext.create('Ext.data.TreeStore', {
+{#                model: 'Pequiven.IndicatorBundle.Entity.Indicator.ValueIndicator.Detail.ProductDetailDailyMonth',#}
+                model: 'ProductDetailDailyMonth',
+                autoLoad: true,
+                autoSync: true,
+                proxy: {
+                    type: 'rest',
+                    url: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
+                    api: {
+                        create: null,
+                        read: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json',numResult: app.request.get('numResult') }) }}',
+                        update: '{{ path('pequiven_value_indicator_show_detail',{id:app.request.get('id'),_format:'json' }) }}',
+                        destroy: null
+                    },
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'children'
+                    },
+                    writer: {
+                        type: 'json'
+                    },
+                    actionMethods: {
+                        update: 'POST'
+                    }
+                },
+                listeners: {
+                    update: function (store, record, operation, modifiedFieldNames, eOpts) {
+                            if (Ext.data.Model.EDIT == operation) {
+                                store.getProxy().setExtraParam("_method", "PUT");
+                            } else if (Ext.data.Model.COMMIT == operation) {
+                                delete store.getProxy().getExtraParams()["_method"];
+                            }
+                        }
+                    }
+                });
+                
+            var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+                clicksToEdit: 1,
+                listeners: {
+                    cancelEdit: function (rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    },
+                    beforeedit: function (editor, context, eOpts) {
+                        var data = context.record.data;
+                        if (data.children != undefined && data.children.length > 0) {
+                            {#context.value = formatNumber(context.value);#}
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            });
+                
+            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
+                clicksToMoveEditor: 1,
+                autoCancel: false,
+                listeners: {
+                    cancelEdit: function (rowEditing, context) {
+                        // Canceling editing of a locally added, unsaved record: remove it
+                        if (context.record.phantom) {
+                            store.remove(context.record);
+                        }
+                    },
+                    beforeedit: function (editor, context, eOpts) {
+                        var data = context.record.data;
+                        if (data.children != undefined && data.children.length > 0) {
+                            {#context.value = formatNumber(context.value);#}
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+            });
+            
+            var gridColumns = null;
+            //Renderiza el valor de las columnas
+            function renderColumDetails(val, metaData, record, rowIndex, colIndex, store) {
+                var originalVal = val;
+                val = formatNumber(val);
+                if (record.get("children") != null && record.get("children").length > 0) {
+                        metaData.css = 'td-bg-disabled';
+                        if(gridColumns == null){
+                            gridColumns = tree.getView().getGridColumns();
+                        }
+                        var property = gridColumns[colIndex + 4].dataIndex;
+                        //console.log(property);
+                        val = totalizeChildren(record,property);
+                }else {
+                    if (originalVal > 0) {
+                        val = '<span style="color:green;">' + val + '</span>';
+                    } else if (originalVal < 0) {
+                        val = '<span style="color:red;">' + val + '</span>';
+                    }
+                }
+                //console.log(metaData);
+                //console.log(record);
+                
+                //console.log(colIndex);
+                //console.log(gridColumns);
+                //console.log(rowIndex);
+                //console.log(colIndex);
+                //return renderColumnNumber(totalizeChildren(record,property), metaData, record, rowIndex, colIndex, store);
+                return val;
+            }
+            //Formatea los numeros a dos decimales
+            function renderColumnNumber(val, metaData, record, rowIndex, colIndex, store){
+                return formatNumber(val);
+            }
+            function totalizeChildren(record,property){
+                var total = record.get(property);
+                var children = record.get("children");
+                if(children != null && children.length > 0){
+                    var i = 0;
+                    total = 0;
+                    for(i = 0; i < children.length; i++){
+                        var v = children[i][property];
+                        if(v != undefined){
+                            total = total + v;
+                        }
+                    }
+                }
+                return total;
+            }
+            
+            function promediateChildren(record,property){
+                //console.log("---- START ----");
+                var ceroChild = false;
+                var total = 0;
+                var children = record.get("children");
+                if(children != null){
+                    if(children.length > 0){
+                        var i = 0;
+                        total = 0;
+                        for(i = 0; i < children.length; i++){
+                            var v = children[i][property];
+                            //console.log("Result "+i+" ="+v);
+                            if(v != undefined){
+                                total = total + v;
+                            }
+                        }
+                        //console.log("Total child: "+children.length);
+                        total = total / children.length;
+                    }else{
+                        ceroChild = true;
+                    }
+                }else{
+                    ceroChild = true;
+                }
+                if(ceroChild == true){
+                    var totalPlan = record.get("totalPlan");
+                    total = (record.get("totalReal") * 100 ) / totalPlan;
+                    if(totalPlan == 0){
+                        total = 0;
+                    }
+                }
+{#                console.log("Total orig: "+total);#}
+                
+                //console.log("Total: "+total);
+                //console.log("---- FIN ----");
+                if(isNaN(total)){
+                    total = 0;
+                }
+                return total;
+            }
+            
+            function renderColumnTotal(val, metaData, record, rowIndex, colIndex, store){
+                
+                var property = "totalPlan";
+                
+                return renderColumnNumber(totalizeChildren(record,property), metaData, record, rowIndex, colIndex, store);
+            }
+            
+            function renderColumnReal(val, metaData, record, rowIndex, colIndex, store){
+                var property = "totalReal";
+                return renderColumnNumber(totalizeChildren(record,property), metaData, record, rowIndex, colIndex, store);
+            }
+            
+            function renderColumnTotalPercentage(val, metaData, record, rowIndex, colIndex, store){
+                var property = "percentage";
+                return renderColumnNumber(promediateChildren(record,property), metaData, record, rowIndex, colIndex, store);
+            }
+            
+            var widthColumnDays = 65;
+            var widthColumnAcumulated = 70;
+            var alignColumn = 'center';
+            
+            var fieldTypeDayProperties = {
+                xtype: 'numberfield',
+                minValue: 0
+            };
+            
+            var columnsTree = [
+                {
+                    text: '{{ 'Productos y Servicios'|trans }}',
+                    flex: 1,
+                    locked: true,
+                    sortable: false,
+                    columns:[
+                        {
+                            xtype: 'treecolumn', //this is so we know which column will show the tree
+                            text: '{{ "pequiven.name"|trans({},"messages") }}',
+                            flex: 1,
+                            width: 200,
+                            sortable: false,
+                            dataIndex: 'name',
+                            locked: true,
+                        },
+                        {
+                            text: '{{ 'pequiven_seip.cumulative'|trans }}',
+                            locked: true,
+                            columns: [
+                                {
+                                    text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'totalPlan',
+                                    width: widthColumnAcumulated,
+                                    baseCls: baseClsColumnPlan,
+                                    align: alignColumn,
+                                    renderer: renderColumnTotal,
+                                },
+                                {
+                                    text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'totalReal',
+                                    width: widthColumnAcumulated,
+                                    align: alignColumn,
+                                    renderer: renderColumnReal,
+                                },
+                                {
+                                    text: '{{ "pequiven.goals.percentaje"|trans({},"PequivenArrangementProgramBundle") }}',
+                                    dataIndex: 'percentage',
+                                    width: widthColumnAcumulated,
+                                    align: alignColumn,
+                                    renderer: renderColumnTotalPercentage,
+                                }
+                            ]
+                        }
+                    ]
+                }
+                    
+                ];
+            
+            {% for i in 1..31 %}
+                columnsTree.push({
+                        text: '{{ 'pequiven_seip.form.dayX'|trans({'%x%': i}) }}',
+                        columns: [
+                            {
+                                text: '{{ "pequiven.goals.abbr_planned"|trans({},"PequivenArrangementProgramBundle") }}',
+                                dataIndex: 'day{{ i }}Plan',
+                                width: widthColumnDays,
+                                field: fieldTypeDayProperties,
+                                baseCls: baseClsColumnPlan,
+                                align: alignColumn,
+                                renderer: renderColumDetails,
+                            },
+                            {
+                                text: '{{ "pequiven.goals.abbr_real"|trans({},"PequivenArrangementProgramBundle") }}',
+                                dataIndex: 'day{{ i }}Real',
+                                width: widthColumnDays,
+                                field: fieldTypeDayProperties,
+                                align: alignColumn,
+                                renderer: renderColumDetails,
+                            }
+                        ]
+                    });
+            {% endfor %}
+            
+            //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
+            var tree = Ext.create('Ext.tree.Panel', {
+                title: 'Produccion diaria',
+                width: 1200,
+                height: 600,
+                renderTo: 'tree-summary',
+                collapsible: false,
+                useArrows: true,
+                rootVisible: false,
+                store: store,
+                multiSelect: true,
+                selType: 'cellmodel',
+                plugins: [rowEditing],
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: buttonsAllow
+                }],
+                columns: columnsTree
+            });
+            
+        });//Fin on ready
+    </script>
+    
+{% endblock %}
+
+{% block content %}
+    <div id="tree-summary"></div>
+{% endblock content %}

@@ -1407,8 +1407,31 @@ angular.module('seipModule.controllers', [])
                 return false;
             };
             
-            
-            
+            $scope.getUrlForValueIndicator = function(valueIndicator,numResult)
+            {
+                var url = Routing.generate('pequiven_value_indicator_show_detail',{id:valueIndicator.id,numResult: (numResult + 1)});
+                return url;
+            };
+            $scope.openPopUp = function(url){
+                console.log(url);
+                var horizontalPadding = 10;
+                var verticalPadding = 10;
+                var width = 1200;
+                var heigth = 600;
+                $('<iframe id="site" src="' + url + '" style="padding:0"/>').dialog({
+                    title: 'SEIP',
+                    autoOpen: true,
+                    width: width,
+                    height: heigth,
+                    modal: true,
+                    resizable: true,
+                    autoResize: true,
+                    overlay: {
+                        opacity: 0.5,
+                        background: "black"
+                    }
+                }).width(width - horizontalPadding).height(heigth - verticalPadding);
+            };
             
         })
         .controller("MainContentController", function($scope, notificationBarService, sfTranslator, $timeout) {

@@ -350,7 +350,7 @@ services:
     sonata.admin.cei.product:
         class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Producto" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Productos y Servicios" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Product

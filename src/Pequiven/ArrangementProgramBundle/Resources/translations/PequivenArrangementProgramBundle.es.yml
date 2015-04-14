@@ -136,6 +136,7 @@ pequiven:
         abbr_planned: P
         abbr_real: R
         summary: Avances
+        percentaje: %
 seip:
     table:
         header:
@@ -154,11 +155,11 @@ seip:
             updated_by: Actualizado por
             value: Valor
             parameters: Parametros
-            products: Productos
+            products: Productos y Servicios
             description_feature_indicator: Nota o comentario
         empty:
             goals: No Hay Metas Cargadas.
             observations: No Hay Observaciones.
             events: No Hay Eventos Registrados.
             results: No Hay Resultados Cargados.
-            products: No Hay Productos Configurados.
+            products: No Hay Productos y Servicios Configurados.

@@ -19,3 +19,6 @@ Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator:
         formulaParameters:
             expose: true
             groups: [api_list]
+        valueIndicatorDetail:
+            expose: true
+            gropups: [valueIndicatorDetail]

@@ -63,6 +63,13 @@
                             <tr>
                                 <th scope="row">
                                     {{ product.name }}
+                                    {% if (product.components|length) > 0 %}
+                                        <ul>
+                                            {% for component in product.components %}
+                                                <li>{{ component }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
                                 </th>
                             </tr>
                         {% else %}

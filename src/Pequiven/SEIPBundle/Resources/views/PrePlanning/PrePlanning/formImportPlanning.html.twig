@@ -309,6 +309,42 @@
                 itemId: 'importBtn',
                 disabled: true
             });
+            
+            var importAllBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    var items = store.data.items;
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
+                    var i;
+                    var statusInReview = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_IN_REVIEW') }}';
+                    var statusRequired = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_REQUIRED') }}';
+                    for(i=0;i < items.length; i++){
+                        var status = items[i].get('status')
+                        items[i].set('checkBox',true);
+                        if(items[i].get('_isImportable') == true && items[i].get('checkBox') == true && items[i].get('_hasPermissionRevision') == true ){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Importar items', '¿Desea importar '+(itemsToImport.length)+' item(s) seleccionados?<br/>Esta acción va a crear los items en el periodo {{ (app.request.get('period',2014) + 1) }}.', function(btn){
+                           if(btn === 'yes'){
+                                itemsToImportLength = itemsToImport.length;
+                                tree.body.mask('Importando '+itemsToImportLength+" item(s)...");
+                                functionActionItem = functionImportarItem;
+                                functionActionItemCallback = functionImportarItemCallback;
+                                callAjaxItemToImport();
+                            }
+                        });
+                    }else{
+                        Ext.Msg.alert("", "No hay items selecionados para importar.");
+                    }
+                },
+                glyph :'xf0c5@FontAwesome',
+                text: 'Importar todo',
+                itemId: 'importAllBtn',
+                disabled: false
+            });
+            
             var sendToDraftBtn = Ext.create("Ext.Button", {
                 handler: function () {
                     var items = store.data.items;
@@ -368,7 +404,7 @@
                 }
             };
              
-            var buttonsAllow = [ saveChangeBtn,refreshBtn,importBtn,sendToDraftBtn ];
+            var buttonsAllow = [ saveChangeBtn,refreshBtn,importBtn,importAllBtn,sendToDraftBtn ];
              
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {

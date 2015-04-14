@@ -48,7 +48,7 @@
     {% set indicatorDetails = indicator.details %}
     
     <fieldset class="fieldset">
-        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator'])) }}">{{ indicator }}&nbsp;</legend>
+        <legend class="legend" ng-init="indicator = {{ indicator|serialize('json',serialization_context().setGroups(['id','api_list','valuesIndicator','api_details','sonata_api_read','featuresIndicator','valueIndicatorDetail'])) }}">{{ indicator }}&nbsp;</legend>
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.results.result'|trans({},'PequivenSEIPBundle') }}</label>
 
@@ -245,6 +245,15 @@
 {% endif %}
 {% if isAllowToDelete is not defined %}
     {% set isAllowToDelete = false %}
+{% endif %}
+
+{% if hasPermissionToApproved is not defined %}
+    {% set hasPermissionToApproved = false %}
+{% endif %}
+
+{% if  hasPermissionToApproved == true %}
+    &nbsp;
+    {{ buttons.generic_modal(path('pequiven_indicator_approved', { 'id': indicator.id }),('pequiven.arrangement_program.buttons.approved'|trans({},'PequivenArrangementProgramBundle')), {content:("pequiven_objetive.question.approved_indicator"|trans({},"PequivenObjetiveBundle")),icon: "icon-tick",gradient:"green-gradient"}) }}
 {% endif %}
 
 {% if  hasPermissionToUpdate == true %}

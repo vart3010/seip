@@ -52,6 +52,7 @@ class IndicatorTacticController extends baseController
         $repository = $this->getRepository();
 
         $criteria['indicatorLevel'] = IndicatorLevel::LEVEL_TACTICO;
+        $criteria['applyPeriodCriteria'] = true;
 
         if ($this->config->isPaginated()) {
             $resources = $this->resourceResolver->getResource(

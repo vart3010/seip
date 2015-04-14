@@ -27,9 +27,8 @@ class ValueIndicatorConfigController extends ResourceController
         
         $resource = $this->createNew();
         $resource->setIndicator($indicator);
-        
         $form = $this->getForm($resource);
-
+        
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $resource = $this->domainManager->create($resource);
 
@@ -52,7 +51,7 @@ class ValueIndicatorConfigController extends ResourceController
     {
         $resource = $this->findOr404($request);
         $form = $this->getForm($resource);
-
+        
         if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
             $indicator = $resource->getIndicator();
             $this->domainManager->update($resource);

@@ -11,14 +11,26 @@
 
 namespace Pequiven\SEIPBundle\Service;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Exception;
+use LogicException;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
+use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Rol;
+use Pequiven\ObjetiveBundle\Entity\Objetive;
+use Pequiven\SEIPBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Servicio para evaluar la seguridad en la aplicacion (seip.service.security)
  * 
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class SecurityService implements \Symfony\Component\DependencyInjection\ContainerAwareInterface
+class SecurityService implements ContainerAwareInterface
 {
     private $container;
     
@@ -57,10 +69,42 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             'ROLE_SEIP_INDICATOR_DELETE_STRATEGIC' => 'evaluateIndicatorDelete',
             'ROLE_SEIP_INDICATOR_DELETE_TACTIC' => 'evaluateIndicatorDelete',
             'ROLE_SEIP_INDICATOR_DELETE_OPERATIVE' => 'evaluateIndicatorDelete',
+            
+            'ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC' => 'evaluateObjetiveApproved',
+            'ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC' => 'evaluateObjetiveApproved',
+            'ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE' => 'evaluateObjetiveApproved',
+            
+            'ROLE_SEIP_INDICATOR_APPROVED_STRATEGIC' => 'evaluateIndicatorApproved',
+            'ROLE_SEIP_INDICATOR_APPROVED_TACTIC' => 'evaluateIndicatorApproved',
+            'ROLE_SEIP_INDICATOR_APPROVED_OPERATIVE' => 'evaluateIndicatorApproved',
         );
     }
     
-    private function evaluateTacticArrangementProgram($rol, \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram $arrangementProgram)
+    function evaluateObjetiveApproved($rol,Objetive $objetive) 
+    {
+        $result = false;
+        if($objetive->getStatus() == Objetive::STATUS_DRAFT && $objetive->getPeriod()->isActive() === true){
+            $result = true;
+        }else{
+            $result = false;
+        }
+        
+        return $result;
+    }
+    
+    function evaluateIndicatorApproved($rol,Indicator $indicator)
+    {
+        $result = false;
+        if($indicator->getStatus() == Indicator::STATUS_DRAFT && $indicator->getPeriod()->isActive() === true){
+            $result = true;
+        }else{
+            $result = false;
+        }
+        
+        return $result;
+    }
+    
+    private function evaluateTacticArrangementProgram($rol, ArrangementProgram $arrangementProgram)
     {
         $user = $this->getUser();
         $valid = false;
@@ -68,7 +112,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
-            if($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+            if($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                 $objetive = $arrangementProgram->getTacticalObjective();
                 $gerencia = $objetive->getGerencia();
                 if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
@@ -78,7 +122,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
                 }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
                     $valid = true;
                 }
-            }elseif($arrangementProgram->getType() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+            }elseif($arrangementProgram->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
                 $objetive = $arrangementProgram->getOperationalObjective();
                 $gerenciaSecond = $objetive->getGerenciaSecond();
                 $gerencia = $objetive->getGerencia();
@@ -176,7 +220,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     }
 
 
-    private function evaluateStrategicIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    private function evaluateStrategicIndicator($rol, Indicator $indicator)
     {
         $user = $this->getUser();
         $valid = false;
@@ -190,7 +234,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
-    function evaluateOperativeIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    function evaluateOperativeIndicator($rol, Indicator $indicator)
     {
         $valid = false;
         $user = $this->getUser();
@@ -221,7 +265,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
-    function evaluateTacticIndicator($rol, \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    function evaluateTacticIndicator($rol, Indicator $indicator)
     {
         $valid = false;
         $user = $this->getUser();
@@ -250,7 +294,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
-    private function evaluateTacticObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    private function evaluateTacticObjetive($rol, Objetive $objetive)
     {
         $valid = false;
         $user = $this->getUser();
@@ -273,27 +317,59 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
         }
     }
     
-    private function evaluateObjetiveEdit($rol,\Pequiven\ObjetiveBundle\Entity\Objetive $objective)
+    private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
-        return ($objective->getPeriod()->isActive() === true);
+        $result = false;
+        if($objective->getPeriod()->isActive() === true){
+            if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
     }
     
-    private function evaluateObjetiveDelete($rol,\Pequiven\ObjetiveBundle\Entity\Objetive $objective)
+    private function evaluateObjetiveDelete($rol,Objetive $objective)
     {
-        return ($objective->getPeriod()->isActive() === true);
+        $result = false;
+        if($objective->getPeriod()->isActive() === true){
+            if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
     }
     
-    private function evaluateIndicatorEdit($rol,  \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    private function evaluateIndicatorEdit($rol,  Indicator $indicator)
     {
-        return ($indicator->getPeriod()->isActive() === true);
+        $result = false;
+        if($indicator->getPeriod()->isActive() === true){
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
     }
     
-    private function evaluateIndicatorDelete($rol,  \Pequiven\IndicatorBundle\Entity\Indicator $indicator)
+    private function evaluateIndicatorDelete($rol,  Indicator $indicator)
     {
-        return ($indicator->getPeriod()->isActive() === true);
+        $result = false;
+        if($indicator->getPeriod()->isActive() === true){
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
     }
 
-    private function evaluateOperativeObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    private function evaluateOperativeObjetive($rol, Objetive $objetive)
     {
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
@@ -316,7 +392,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
             $this->checkSecurity();
         }
     }
-    private function evaluateStrategicObjetive($rol, \Pequiven\ObjetiveBundle\Entity\Objetive $objetive)
+    private function evaluateStrategicObjetive($rol, Objetive $objetive)
     {
         $user = $this->getUser();
         $valid = false;
@@ -335,7 +411,7 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
      * @param type $rol
      * @param type $parameters
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws AccessDeniedHttpException
      */
     public function checkSecurity($rol = null,$parameters = null,$throwException = true) {
         if($rol === null){
@@ -391,14 +467,14 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      *     throw $this->createAccessDeniedHttpException('Permission Denied!');
      *
      * @param string    $message  A message
-     * @param \Exception $previous The previous exception
+     * @param Exception $previous The previous exception
      *
-     * @return \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @return AccessDeniedHttpException
      */
-    private function createAccessDeniedHttpException($message = 'Permission Denied!', \Exception $previous = null)
+    private function createAccessDeniedHttpException($message = 'Permission Denied!', Exception $previous = null)
     {
         $this->setFlash('error', $message);
-        return new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException($message, $previous);
+        return new AccessDeniedHttpException($message, $previous);
     }
     
     protected function trans($id,array $parameters = array(), $domain = 'PequivenSEIPBundle')
@@ -422,13 +498,13 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     
     /**
      * 
-     * @return \Symfony\Component\Security\Core\SecurityContextInterface
-     * @throws \LogicException
+     * @return SecurityContextInterface
+     * @throws LogicException
      */
     protected function getSecurityContext()
     {
         if (!$this->container->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+            throw new LogicException('The SecurityBundle is not registered in your application.');
         }
 
         return $this->container->get('security.context');
@@ -437,16 +513,16 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
      /**
      * Get a user from the Security Context
      *
-     * @return \Pequiven\SEIPBundle\Entity\User
+     * @return User
      *
-     * @throws \LogicException If SecurityBundle is not available
+     * @throws LogicException If SecurityBundle is not available
      *
-     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     * @see TokenInterface::getUser()
      */
     private function getUser()
     {
         if (!$this->container->has('security.context')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application.');
+            throw new LogicException('The SecurityBundle is not registered in your application.');
         }
 
         if (null === $token = $this->container->get('security.context')->getToken()) {
@@ -472,28 +548,28 @@ class SecurityService implements \Symfony\Component\DependencyInjection\Containe
     
     /**
      * 
-     * @return \Pequiven\SEIPBundle\Service\Configuration
+     * @return Configuration
      */
     private function getSeipConfiguration()
     {
         return $this->container->get('seip.configuration');
     }
     
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+    public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
     
     /**
      * Shortcut to return the Doctrine Registry service.
      *
-     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     * @return Registry
      *
-     * @throws \LogicException If DoctrineBundle is not available
+     * @throws LogicException If DoctrineBundle is not available
      */
     public function getDoctrine()
     {
         if (!$this->container->has('doctrine')) {
-            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+            throw new LogicException('The DoctrineBundle is not registered in your application.');
         }
 
         return $this->container->get('doctrine');

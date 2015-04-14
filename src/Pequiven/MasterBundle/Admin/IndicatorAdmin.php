@@ -294,4 +294,13 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     {
         $collection->remove('create');
     }
+    
+    public function toString($object) 
+    {
+        $toString = '-';
+        if($object->getId() > 0){
+            $toString = $object->getRef().' - '.$object->getDescription();
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
+    }
 }
