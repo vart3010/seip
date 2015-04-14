@@ -74,7 +74,7 @@ class Chart extends ModelChart
     /**
      * @var string
      *
-     * @ORM\Column(name="alias", type="string", length=15)
+     * @ORM\Column(name="alias", type="string", length=25)
      */
     private $alias;
     
@@ -96,7 +96,7 @@ class Chart extends ModelChart
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
-    
+
     /**
      * Constructor
      */
@@ -297,7 +297,7 @@ class Chart extends ModelChart
     {
         return $this->userUpdatedAt;
     }
-    
+
     /**
      * Add indicators
      *

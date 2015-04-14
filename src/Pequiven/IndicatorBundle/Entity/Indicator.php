@@ -389,7 +389,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $featuresIndicator;
     
-     /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="orderShowFromParent", type="integer")
@@ -1732,7 +1732,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->charts[] = $charts;
 
         return $this;
-    }
+}
 
     /**
      * Remove charts

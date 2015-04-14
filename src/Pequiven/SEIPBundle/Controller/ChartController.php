@@ -4,6 +4,7 @@ namespace Pequiven\SEIPBundle\Controller;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador de gráficos en el SEIP
@@ -17,8 +18,10 @@ class ChartController extends SEIPController
      * Función que retorna la data para un gráfico de tipo dona. Ejemplo para los indicadores estratégicos y muestre como está constituido el mismo
      * @return JsonResponse
      */
-    public function getDataChartTypeDoughnut($idIndicator){
+    public function getDataChartTypeDoughnutAction(Request $request){
         $response = new JsonResponse();
+        
+        $idIndicator = $request->get('id');
         
         $indicatorService = $this->getIndicatorService();//Obtenemos el servicio del indicador
         

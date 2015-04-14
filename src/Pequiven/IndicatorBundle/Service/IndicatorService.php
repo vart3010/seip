@@ -532,7 +532,7 @@ class IndicatorService implements ContainerAwareInterface
         $dataSet = array();
         
         $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
-        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
+//        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         
         if($totalNumChildrens > 0){
             $sumResultChildren = 0;//Suma de resultados de medición de los hijos
