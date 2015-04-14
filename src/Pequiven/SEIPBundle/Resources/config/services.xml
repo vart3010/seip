@@ -261,5 +261,13 @@
         <service id="tecnocreaciones_tools.unit_converter.currency" class="Tecnocreaciones\Bundle\ToolsBundle\Service\UnitConverter\Type\CurrencyUnitType">
             <tag name="tecnocreaciones_tools.unit_converter.unit" />
         </service>
+        
+        <!-- Repositorio de Gráficos -->
+        <service id="pequiven.repository.seipchart" class="Pequiven\SEIPBundle\Repository\ChartRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Chart" />
+        </service>
     </services>
 </container>

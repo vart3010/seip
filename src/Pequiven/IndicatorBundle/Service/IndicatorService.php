@@ -532,14 +532,19 @@ class IndicatorService implements ContainerAwareInterface
         $dataSet = array();
         
         $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
-        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
+//        $numDiv = $totalNumChildrens > 0 ? bcdiv(100, $totalNumChildrens,2) : 100;
         
         if($totalNumChildrens > 0){
+            $sumResultChildren = 0;//Suma de resultados de medición de los hijos
             $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
+            foreach($indicatorsChildrens as $indicatorChildren){
+                $sumResultChildren+= $indicatorChildren->getResultReal();
+            }
+            
             foreach($indicatorsChildrens as $indicatorChildren){
                 $set = array();
                 $set["label"] = $indicatorChildren->getSummary().': '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
-                $set["value"] = $numDiv;
+                $set["value"] = bcdiv($indicatorChildren->getResultReal(), $sumResultChildren,2);
                 $set["displayValue"] = $indicatorChildren->getRef().' - '.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["color"] = $this->getColorOfResult($indicatorChildren);
@@ -576,9 +581,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["caption"] = $indicator->getSummary();
 //        $chart["subCaption"] = "Harry's SuperMart - Last Year";
         $chart["xAxisname"] = "Indicador";
-        $chart["pYAxisName"] = "";
+        $chart["pYAxisName"] = "TM";
         $chart["sYAxisName"] = "Medición %";
-//        $chart["numberPrefix"] = "$";
         $chart["sNumberSuffix"] = "%";
         $chart["sYAxisMaxValue"] = "100";
         $chart["bgColor"] = "#ffffff";
@@ -603,6 +607,13 @@ class IndicatorService implements ContainerAwareInterface
         $chart["captionFontSize"] = "14";
         $chart["subcaptionFontSize"] = "14";
         $chart["subcaptionFontBold"] = "0";
+//        $chart["formatNumber"] = "1";
+//        $chart["formatNumberScale"] = "1";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
         
         $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
         
@@ -681,6 +692,9 @@ class IndicatorService implements ContainerAwareInterface
         $chart["thousandSeparator"] = ".";
         $chart["decimalSeparator"] = ",";
         $chart["decimals"] = "2";
+        $chart["forceDecimals"] = "1";
+        $chart["yAxisValueDecimals"] = "2";
+        $chart["sYAxisValueDecimals"] = "2";
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "1";
         $chart["valueFontColor"] = "#000000";
