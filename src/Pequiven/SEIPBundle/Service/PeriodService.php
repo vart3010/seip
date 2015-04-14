@@ -145,6 +145,33 @@ class PeriodService extends ContainerAware
 //        return $periodRepository->find($period->getId());
         return $period;
     }
+
+    /**
+     * Retornando si esta abierto o no, el periodo activo
+     * @return type
+     * @throws Exception
+     */
+    public function isOpened()
+    {
+        $periodActive = $this->getPeriodActive();
+        if($periodActive === null){
+            throw new Exception("No hay periodo activo.");
+        }
+        
+        return $periodActive->isOpened();
+    }
+    
+    /**
+     * Lanza una excepcion de seguridad si el periodo no se encuentra abierto
+     * 
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    public function checkIsOpen()
+    {
+        if($this->isOpened() === false){
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException(sprintf('El periodo "%s", se encuentra cerrado.',(string)$this->getPeriodActive()));
+        }
+    }
     
     /**
      * Limpia de la cache el periodo selecionado

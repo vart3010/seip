@@ -147,7 +147,10 @@ class IndicatorStrategicController extends baseController {
      * @return type
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_STRATEGIC');
         
         $form = $this->createForm($this->get('pequiven_indicator.strategic.registration.form.type'));

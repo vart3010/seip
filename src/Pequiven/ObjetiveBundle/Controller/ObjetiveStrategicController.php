@@ -118,10 +118,14 @@ class ObjetiveStrategicController extends baseController {
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_STRATEGIC');
         
         $form = $this->createForm($this->get('pequiven_objetive.strategic.registration.form.type'));
+        
         //Obtenemos el valor del nivel del objetivo
         $em = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.context');

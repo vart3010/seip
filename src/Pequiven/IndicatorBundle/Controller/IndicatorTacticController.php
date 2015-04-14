@@ -99,6 +99,8 @@ class IndicatorTacticController extends baseController
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_TACTIC');
         
         $form = $this->createForm($this->get('pequiven_indicator.tactic.registration.form.type'));

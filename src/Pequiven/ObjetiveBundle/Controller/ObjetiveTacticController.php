@@ -30,8 +30,8 @@ use Pequiven\MasterBundle\Entity\Rol;
  *
  * @author matias
  */
-class ObjetiveTacticController extends baseController {
-
+class ObjetiveTacticController extends baseController 
+{
     /**
      * Función que retorna la vista con la lista de los objetivos tácticos
      * @Template("PequivenObjetiveBundle:Tactic:list.html.twig")
@@ -139,7 +139,10 @@ class ObjetiveTacticController extends baseController {
      * @return type
      * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_TACTIC');
         
         $form = $this->createForm($this->get('pequiven_objetive.tactic.registration.form.type'));
