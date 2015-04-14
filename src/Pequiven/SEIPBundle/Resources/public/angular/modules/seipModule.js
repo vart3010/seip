@@ -2067,13 +2067,26 @@ angular.module('seipModule.controllers', [])
         })
         
         .controller('ChartsDashboardController', function($scope, $http){
+            
             $scope.chargeChartDoughnut2d = function(indicatorId){
                 var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
-                    
+                $scope.chartDoughnut2d = {};
                 $http.get(getDataChartDoughnut).success(function(data) {
                     $scope.chartDoughnut2d = {
                         "chart": data.dataSource.chart,
                         "data": data.dataSource.dataSet
+                    }
+                });
+            }
+            
+            $scope.chargeChartColumnLineDualAxis = function(indicatorId){
+                var getDataChartColumnLineDualAxis = Routing.generate("getDataChartColumnLineDualAxis", {id: indicatorId});
+                $scope.chartColumnLineDualAxis = {};
+                $http.get(getDataChartColumnLineDualAxis).success(function(data) {
+                    $scope.chartColumnLineDualAxis = {
+                        "chart": data.dataSource.chart,
+                        "categories": data.dataSource.categories,
+                        "dataset": data.dataSource.dataset,
                     }
                 });
             }

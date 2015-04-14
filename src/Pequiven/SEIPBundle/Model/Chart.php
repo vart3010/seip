@@ -32,4 +32,14 @@ abstract class Chart
      */
     const TYPE_CHART_PIE_FROM_TAGS = 3;
     
+    /**
+     * Nombre del gráfico para mostrar los indicadores asociados
+     */
+    const CHART_INDICATORS_ASSOCIATED_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_WITH_RESULT';
+    
+    /**
+     * Gráfico para poder mostrar el real, plan y resultado de los indicadores asociados
+     */
+    const CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT';
+    
 }

@@ -581,9 +581,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["caption"] = $indicator->getSummary();
 //        $chart["subCaption"] = "Harry's SuperMart - Last Year";
         $chart["xAxisname"] = "Indicador";
-        $chart["pYAxisName"] = "";
+        $chart["pYAxisName"] = "TM";
         $chart["sYAxisName"] = "Medición %";
-//        $chart["numberPrefix"] = "$";
         $chart["sNumberSuffix"] = "%";
         $chart["sYAxisMaxValue"] = "100";
         $chart["bgColor"] = "#ffffff";
@@ -608,6 +607,13 @@ class IndicatorService implements ContainerAwareInterface
         $chart["captionFontSize"] = "14";
         $chart["subcaptionFontSize"] = "14";
         $chart["subcaptionFontBold"] = "0";
+//        $chart["formatNumber"] = "1";
+//        $chart["formatNumberScale"] = "1";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        $chart["decimals"] = "2";
         
         $totalNumChildrens = count($indicator->getChildrens());//Número de indicadores asociados
         
@@ -686,6 +692,9 @@ class IndicatorService implements ContainerAwareInterface
         $chart["thousandSeparator"] = ".";
         $chart["decimalSeparator"] = ",";
         $chart["decimals"] = "2";
+        $chart["forceDecimals"] = "1";
+        $chart["yAxisValueDecimals"] = "2";
+        $chart["sYAxisValueDecimals"] = "2";
         $chart["legendShadow"] = "0";
         $chart["showHoverEffect"] = "1";
         $chart["valueFontColor"] = "#000000";
