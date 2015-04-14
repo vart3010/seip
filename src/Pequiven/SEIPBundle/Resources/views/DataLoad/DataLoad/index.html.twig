@@ -1,0 +1,200 @@
+{% extends "PequivenSEIPBundle:Template:ExtJs/layout.html.twig" %}
+
+{% trans_default_domain 'PequivenArrangementProgramBundle' %}
+
+{% block stylesheet %}
+    
+{% endblock stylesheet %}
+{% block javascript %}
+    <script type="text/javascript">
+        var formatPhp = "Y-m-d H:i:s";
+        var month = '{{ 'now'|date('m') }}';
+        
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.form.field.Number',
+            'Ext.form.field.Date',
+            'Ext.tip.QuickTipManager',
+            'Ext.layout.container.Fit'
+        ]);
+        
+        Ext.onReady(function(){
+            Ext.tip.QuickTipManager.init();
+            
+            document.title = 'Ext JS Portal';
+
+            Ext.define('Portal.view.main.Header', {
+                extend: 'Ext.Container',
+
+                xtype: 'app-header',
+
+                title: document.title,
+                cls: 'app-header',
+                height: 52,
+
+                layout: {
+                    type: 'hbox',
+                    align: 'middle'
+                },
+
+                items: [{
+                    xtype: 'component',
+                    cls: 'app-header-logo'
+                },{
+                    xtype: 'component',
+                    cls: 'app-header-title',
+                    html: document.title,
+                    flex: 1
+                }]
+            });
+
+            Ext.define('Portal.view.stocks.Stocks', {
+                extend: 'Ext.grid.Panel',
+                xtype: 'stocks',
+
+                requires: [
+                    'widget.sparklineline'
+                ],
+
+                controller: 'stocks',
+
+                height: 300,
+
+                store: {
+                    type: 'stocks',
+                    autoLoad: true
+                },
+
+                stripeRows: true,
+                columnLines: true,
+
+                // Rapid updates are coalesced and flushed on a timer.
+                throttledUpdate: true,
+
+                columns: [{
+                    text: 'Company',
+                    flex: 1,
+                    sortable: true,
+                    dataIndex: 'name'
+                }, {
+                    text: 'Price',
+                    width: 75,
+                    formatter: 'usMoney',
+                    dataIndex: 'price',
+                    align: 'right'
+                }, {
+                    text: 'Trend',
+                    width: 100,
+                    dataIndex: 'trend',
+                    xtype: 'widgetcolumn',
+                    widget: {
+                        xtype: 'sparklineline',
+                        tipTpl: 'Price: {y:number("0.00")}'
+                    }
+                }, {
+                    text: 'Change',
+                    width: 80,
+                    producesHTML: true,
+                    renderer: 'renderChange',
+                    dataIndex: 'change',
+                    align: 'right'
+                }, {
+                    text: '%',
+                    width: 70,
+                    renderer: 'renderChangePercent',
+                    updater: 'updateChangePercent',
+                    dataIndex: 'pctChange',
+                    align: 'right'
+                }, {
+                    text: 'Last Updated',
+                    hidden: true,
+                    width: 175,
+                    sortable: true,
+                    formatter: 'date("m/d/Y H:i:s")',
+                    dataIndex: 'lastChange'
+                }]
+            });
+            
+            var shortLorem =
+            '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, '+
+            'sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales '+
+            'non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet '+
+            'tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla.</p>';
+
+            var constrainedWin = Ext.create('Ext.Window', {
+                title: 'Constrained Window',
+                width: 700,
+                height: 300,
+                html: 'Testtttttttttt',
+
+                // Constraining will pull the Window leftwards so that it's within the parent Window
+                //x: 1000,
+                //y: 20,
+                constrain: true,
+                //layout: 'fit',
+                collapsible: true,
+                autoScroll : true,
+                items: {
+                    border: false
+                }
+            });
+            var constrainedWin2 = Ext.create('Ext.Window', {
+                title: 'Constrained Window 2',
+                width: 700,
+                height: 300,
+                html: 'Ejeeee2222',
+
+                // Constraining will pull the Window leftwards so that it's within the parent Window
+                //x: 1000,
+                //y: 20,
+                constrain: true,
+                //layout: 'fit',
+                collapsible: true,  
+                autoScroll : true,
+                items: {
+                    border: false
+                }
+            });
+            
+            Ext.create('Ext.container.Container', {
+                width: 1000,
+                height: 600,
+                title: 'Border Layout',
+                layout: 'border',
+                autoScroll : true,
+                items: [{
+                    // xtype: 'panel' implied by default
+                    title: 'West Region is collapsible',
+                    region:'west',
+                    xtype: 'panel',
+                    margin: '5 0 0 5',
+                    width: 200,
+                    collapsible: true,   // make collapsible
+                    id: 'west-region-container',
+                    layout: 'fit'
+                },{
+                    //xtype: 'panel',
+                    xype: 'dashboard',
+                    reference: 'dashboard',
+                    stateful: false,
+                    title: 'Center Region',
+                    region: 'center',     // center region is required, no width/height specified
+                    layout: 'fit',
+                    //margin: '5 5 0 0',
+                    items: [
+                        constrainedWin,
+                        constrainedWin2
+                    ]
+                }],
+                renderTo: 'app-content'
+            });
+            constrainedWin.show();
+            constrainedWin2.show();
+        });
+    </script>
+{% endblock javascript %}
+
+{% block content %}
+    <div id="app-content"></div>
+{% endblock content %}

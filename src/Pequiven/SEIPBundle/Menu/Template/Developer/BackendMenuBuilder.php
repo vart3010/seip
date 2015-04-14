@@ -746,7 +746,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                      $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_MATRIZ];
                      foreach ($companies as $company) {
                          $processProductionMatriz->addChild('data_load.process_production.matriz.'.$company->getId(), array(
-                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                            'route' => 'pequiven_data_load_index',
                         ))->setLabel($company->getAlias());
                      }
                  }
@@ -762,7 +762,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                      $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_AFFILIATED];
                      foreach ($companies as $company) {
                          $processProductionAffiliated->addChild('data_load.process_production.affiliated.'.$company->getId(), array(
-                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                            'route' => 'pequiven_data_load_index',
                         ))->setLabel($company->getAlias());
                      }
                  }
@@ -777,7 +777,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                      $companies = $locationsByTypeCompany[Company::TYPE_OF_COMPANY_MIXTA];
                      foreach ($companies as $company) {
                          $processProductionMixta->addChild('data_load.process_production.mixta.'.$company->getId(), array(
-                            'route' => 'pequiven_master_menu_list_gerenciaFirst',
+                            'route' => 'pequiven_data_load_index',
                         ))->setLabel($company->getAlias());
                      }
                  }
