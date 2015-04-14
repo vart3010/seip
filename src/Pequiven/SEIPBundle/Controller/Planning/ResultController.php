@@ -509,7 +509,18 @@ class ResultController extends ResourceController
     
     public function indexObjetivesAction(Request $request)
     {
+        $level = $request->get("level");
+        $templates = array(
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO => "PequivenObjetiveBundle:Strategic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO => "PequivenObjetiveBundle:Tactic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO => "PequivenObjetiveBundle:Operative:list.html.twig",
+        );
+        if(!isset($templates[$level])){
+            throw $this->createNotFoundException();
+        }
         
+        $template = $templates[$level];
+        return $this->render($template);
     }
     
     protected function trans($id,array $parameters = array(), $domain = 'messages')

@@ -20,15 +20,13 @@ class ObjetiveStrategicController extends baseController {
 
     /**
      * Función que retorna la vista con la lista de los objetivos estratégicos
-     * @Template("PequivenObjetiveBundle:Strategic:list.html.twig")
      * @return type
      */
     public function listAction() 
     {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
         
-        return array(
-        );
+        return $this->render("PequivenObjetiveBundle:Strategic:list.html.twig");
     }
     
     /**
@@ -75,7 +73,7 @@ class ObjetiveStrategicController extends baseController {
     public function objetiveListAction(Request $request)
     {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_STRATEGIC');
-
+        
         $criteria = $request->get('filter', $this->config->getCriteria());
         $sorting = $request->get('sorting', $this->config->getSorting());
         $repository = $this->getRepository();

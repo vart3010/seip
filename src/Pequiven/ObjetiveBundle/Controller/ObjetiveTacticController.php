@@ -86,7 +86,8 @@ class ObjetiveTacticController extends baseController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function objetiveListAction(Request $request) {
+    public function objetiveListAction(Request $request) 
+    {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_LIST_TACTIC');
         
         $criteria = $request->get('filter', $this->config->getCriteria());

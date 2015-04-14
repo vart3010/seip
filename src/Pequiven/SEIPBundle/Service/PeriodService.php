@@ -225,6 +225,11 @@ class PeriodService extends ContainerAware
         return $listArrayPeriods;
     }
     
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
+    }
+    
     /**
      * Get a user from the Security Context
      *
