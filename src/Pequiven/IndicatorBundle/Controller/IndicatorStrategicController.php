@@ -18,14 +18,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class IndicatorStrategicController extends baseController {
 
     /** Función que retorna la vista con la lista de los indicadores estratégicos
-     * @Template("PequivenIndicatorBundle:Strategic:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_STRATEGIC');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Strategic:list.html.twig");
     }
 
     /**

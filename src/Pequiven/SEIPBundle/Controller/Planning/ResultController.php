@@ -507,6 +507,12 @@ class ResultController extends ResourceController
         return $this->redirect($this->generateUrl('pequiven_seip_result_export', array('level' => $level,'id' => $id)));
     }
     
+    /**
+     * Retorna el template para visualizar los objetivos deseados
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     public function indexObjetivesAction(Request $request)
     {
         $level = $request->get("level");
@@ -514,6 +520,22 @@ class ResultController extends ResourceController
             \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO => "PequivenObjetiveBundle:Strategic:list.html.twig",
             \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO => "PequivenObjetiveBundle:Tactic:list.html.twig",
             \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO => "PequivenObjetiveBundle:Operative:list.html.twig",
+        );
+        if(!isset($templates[$level])){
+            throw $this->createNotFoundException();
+        }
+        
+        $template = $templates[$level];
+        return $this->render($template);
+    }
+    
+    public function indexIndicatorsAction(Request $request) 
+    {
+        $level = $request->get("level");
+        $templates = array(
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO => "PequivenIndicatorBundle:Strategic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO => "PequivenIndicatorBundle:Tactic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO => "PequivenIndicatorBundle:Operative:list.html.twig",
         );
         if(!isset($templates[$level])){
             throw $this->createNotFoundException();

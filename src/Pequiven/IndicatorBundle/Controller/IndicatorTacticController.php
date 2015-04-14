@@ -29,14 +29,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class IndicatorTacticController extends baseController 
 {
     /**
-     * @Template("PequivenIndicatorBundle:Tactic:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_TACTIC');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Tactic:list.html.twig");
     }
 
     /**
