@@ -56,3 +56,34 @@ pequiven_seip_result_export_from_chart:
     requirements:
         id: "\d+"
     methods: [GET|POST]
+    
+pequiven_seip_result_visualize_objetives:
+    path: /visualize/objetives/{year}/{level}.{_format}
+    defaults:
+        _controller: pequiven.controller.result:indexObjetivesAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        year: \d+
+        level: 1|2|3
+    methods: [GET]
+    
+pequiven_seip_result_visualize_indicators:
+    path: /visualize/indicators/{year}.{_format}
+    defaults:
+        _controller: pequiven.controller.result:indexIndicatorsAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        year: \d+
+    methods: [GET]
+    
+pequiven_seip_result_visualize_arrangement_programs:
+    path: /visualize/arrangement-programs/{year}.{_format}
+    defaults:
+        _controller: pequiven.controller.result:indexArrangementProgramsAction
+        _format: html
+    requirements:
+        _format: html|json|xml
+        year: \d+
+    methods: [GET]

@@ -507,6 +507,11 @@ class ResultController extends ResourceController
         return $this->redirect($this->generateUrl('pequiven_seip_result_export', array('level' => $level,'id' => $id)));
     }
     
+    public function indexObjetivesAction(Request $request)
+    {
+        
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->get('translator')->trans($id, $parameters, $domain);
@@ -535,15 +540,6 @@ class ResultController extends ResourceController
     {
         return $this->container->get('pequiven_seip.service.fusion_chart');
     }
-    
-    /**
-     * Manejador de usuario o administrador
-     * @return \Pequiven\SEIPBundle\Model\PDF\SeipPdf
-     */
-//    private function getSeipPdf() 
-//    {
-//        return $this->container->get('seip.pdf');
-//    }
     
     /**
      * 
