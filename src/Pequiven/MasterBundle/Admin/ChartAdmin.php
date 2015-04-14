@@ -29,6 +29,7 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
         $form
             ->add('alias')
             ->add('description')
+            ->add('shortDescription')
             ->add('name')
             ;
     }
@@ -50,6 +51,7 @@ class ChartAdmin extends Admin implements \Symfony\Component\DependencyInjection
             ->addIdentifier('id')
             ->add('alias')
             ->add('description')
+            ->add('shortDescription')
             ->add('name')
             ;
     }

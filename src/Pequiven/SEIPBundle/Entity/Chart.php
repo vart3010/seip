@@ -67,7 +67,7 @@ class Chart extends ModelChart
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=20)
+     * @ORM\Column(name="shortDescription", type="string", length=20)
      */
     private $shortDescription;
     
@@ -188,6 +188,29 @@ class Chart extends ModelChart
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    /**
+     * Set shortDescription
+     *
+     * @param string $shortDescription
+     * @return Chart
+     */
+    public function setShortDescription($shortDescription)
+    {
+        $this->shortDescription = $shortDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get shortDescription
+     *
+     * @return string 
+     */
+    public function getShortDescription()
+    {
+        return $this->shortDescription;
     }
 
     /**
