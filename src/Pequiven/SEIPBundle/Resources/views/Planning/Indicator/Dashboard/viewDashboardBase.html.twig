@@ -26,7 +26,7 @@
 <!-- Sección Lateral Izquierda -->
 <div class="with-padding">
     <div class="columns">
-        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 300px;">
+        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 450px;">
             <div class="with-padding">
                 <div class="columns">
                     {% for indicatorGroup in indicatorsGroup %}
@@ -42,6 +42,7 @@
                 </div>
             </div>
         </div>
+                
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
             {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
                 <span id="pie"></span>
