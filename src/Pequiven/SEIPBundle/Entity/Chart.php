@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Pequiven\SEIPBundle\Model\Chart as ModelChart;
 
 /**
- * Indicator
+ * Chart
  *
  * @ORM\Table(name="seip_chart")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\ChartRepository")
