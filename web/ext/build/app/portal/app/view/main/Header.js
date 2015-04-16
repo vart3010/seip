@@ -1,4 +1,4 @@
-document.title = 'Ext JS Portal';
+document.title = 'SEIP';
 
 Ext.define('Portal.view.main.Header', {
     extend: 'Ext.Container',
