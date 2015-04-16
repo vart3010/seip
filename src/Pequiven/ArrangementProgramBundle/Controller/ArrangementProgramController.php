@@ -498,6 +498,8 @@ class ArrangementProgramController extends SEIPController
      */
     public function createAction(Request $request)
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $type = $request->get("type");
         
         $rol = null;

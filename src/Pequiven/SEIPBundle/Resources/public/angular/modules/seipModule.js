@@ -2,6 +2,7 @@
 
 // Declare app level module which depends on filters, and services
 var seipModule = angular.module('seipModule', [
+    'ng-fusioncharts',
     'ngRoute',
     'seipModule.controllers',
     'notificationBarModule',
@@ -2065,8 +2066,30 @@ angular.module('seipModule.controllers', [])
             };
         })
         
-        .controller('ChartsDashboardController', function($scope){
+        .controller('ChartsDashboardController', function($scope, $http){
             
+            $scope.chargeChartDoughnut2d = function(indicatorId){
+                var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
+                $scope.chartDoughnut2d = {};
+                $http.get(getDataChartDoughnut).success(function(data) {
+                    $scope.chartDoughnut2d = {
+                        "chart": data.dataSource.chart,
+                        "data": data.dataSource.dataSet
+                    }
+                });
+            }
+            
+            $scope.chargeChartColumnLineDualAxis = function(indicatorId){
+                var getDataChartColumnLineDualAxis = Routing.generate("getDataChartColumnLineDualAxis", {id: indicatorId});
+                $scope.chartColumnLineDualAxis = {};
+                $http.get(getDataChartColumnLineDualAxis).success(function(data) {
+                    $scope.chartColumnLineDualAxis = {
+                        "chart": data.dataSource.chart,
+                        "categories": data.dataSource.categories,
+                        "dataset": data.dataSource.dataset,
+                    }
+                });
+            }
         })
         
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -2374,121 +2397,6 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            $scope.renderChartStackedColumnLine = function(id){
-                FusionCharts.ready(function() {
-                    var widgetDoughnut2d = new FusionCharts({
-                        "type": "stackedcolumn3dline",
-                        "renderAt": id,
-//                        "width": width,
-//                        "height": height,
-                        "dataFormat": "json",
-                        "dataSource": {
-                            "chart": {
-                                "showvalues": "1",
-                                "caption": "Cost Analysis",
-                                "subcaption": "Last Year",
-                                "numberprefix": "$",
-                                "xaxisname": "Quarter",
-                                "yaxisname": "Cost",
-                                "paletteColors": "#0075c2,#1aaf5d,#f2c500",
-                                "bgColor": "#ffffff",
-                                "borderAlpha": "20",
-                                "showCanvasBorder": "0",
-                                "usePlotGradientColor": "0",
-                                "plotBorderAlpha": "10",
-                                "legendBorderAlpha": "0",
-                                "legendShadow": "0",
-                                "legendBgAlpha": "0",
-                                "valueFontColor": "#ffffff",
-                                "showXAxisLine": "1",
-                                "xAxisLineColor": "#999999",
-                                "divlineColor": "#999999",
-                                "divLineDashed": "1",
-                                "showAlternateHGridColor": "0",
-                                "subcaptionFontBold": "0",
-                                "subcaptionFontSize": "14",
-                                "showHoverEffect": "1"
-                             },
-                             "categories": [
-                                {
-                                   "category": [
-                                      {
-                                         "label": "Quarter 1"
-                                      },
-                                      {
-                                         "label": "Quarter 2"
-                                      },
-                                      {
-                                         "label": "Quarter 3"
-                                      },
-                                      {
-                                         "label": "Quarter 4"
-                                      }
-                                   ]
-                                }
-                             ],
-                            "dataset": [
-                                {
-                                   "seriesname": "Urea",
-                                   "data": [
-                                      {
-                                         "value": "235000"
-                                      },
-                                      {
-                                         "value": "225100"
-                                      },
-                                      {
-                                         "value": "222000"
-                                      },
-                                      {
-                                         "value": "230500"
-                                      }
-                                   ]
-                                },
-                                {
-                                   "seriesname": "Amoniaco",
-                                   "data": [
-                                      {
-                                         "value": "230000"
-                                      },
-                                      {
-                                         "value": "143000"
-                                      },
-                                      {
-                                         "value": "198000"
-                                      },
-                                      {
-                                         "value": "327600"
-                                      }
-                                   ]
-                                },
-                                {
-                                   "seriesname": "Budgeted cost",
-                                   "renderAs": "Line",
-                                   "showValues": "0",
-                                   "data": [
-                                      {
-                                         "value": "455000"
-                                      },
-                                      {
-                                         "value": "334000"
-                                      },
-                                      {
-                                         "value": "426000"
-                                      },
-                                      {
-                                         "value": "403000"
-                                      }
-                                   ]
-                                }
-                             ]
-                        }
-                    });
-                    widgetDoughnut2d.setTransparent(true);
-                    widgetDoughnut2d.render();
-                })
-            }
-            
             $scope.renderChartColumnLineDualAxis = function(id,data){
                 FusionCharts.ready(function() {
                     var chartColumnLineDualAxis = new FusionCharts({
@@ -2696,89 +2604,6 @@ angular.module('seipModule.controllers', [])
                     chartStackedSingleAxis.render();
                 })
             }
-            
-            //Ejemplo de Widget tipo velocímetro de carro
-            $scope.renderWidgetAngularRange = function(id) {
-                FusionCharts.ready(function() {
-                    var revenueChart = new FusionCharts({
-                        "type": "angulargauge",
-                        "renderAt": id,
-                        "width": "70%",
-                        "height": "60%",
-                        "dataFormat": "json",
-                        "dataSource": {
-                            "chart": {
-                                "manageResize": "1",
-                                "lowerlimit": "0",
-                                "upperlimit": "100",
-                                "lowerlimitdisplay": "Bad",
-                                "upperlimitdisplay": "Good",
-                                "palette": "1",
-                                "numbersuffix": "%",
-                                "tickvaluedistance": "10",
-                                "showvalue": "0",
-                                "gaugeinnerradius": "0",
-                                "bgcolor": "FFFFFF",
-                                "pivotfillcolor": "333333",
-                                "pivotradius": "8",
-                                "pivotfillmix": "333333, 333333",
-                                "pivotfilltype": "radial",
-                                "pivotfillratio": "0,100",
-                                "showtickvalues": "1",
-                                "showborder": "0"
-                            },
-                            "colorRange": {
-                                "color": [
-                                   {
-                                      "minValue": "0",
-                                      "maxValue": "35",
-                                      "label": "a",
-                                      "code": "#c02d00"
-                                   },
-                                   {
-                                      "minValue": "35",
-                                      "maxValue": "70",
-                                      "label": "b",
-                                      "code": "#f2c500"
-                                   },
-                                   {
-                                      "minValue": "70",
-                                      "maxValue": "90",
-                                      "label": "c",
-                                      "code": "#1aaf5d"
-                                   },
-                                   {
-                                      "minValue": "90",
-                                      "maxValue": "95",
-                                      "label": "d",
-                                      "code": "#f2c500"
-                                   },
-                                   {
-                                      "minValue": "95",
-                                      "maxValue": "100",
-                                      "label": "a",
-                                      "code": "#c02d00"
-                                   }
-                                ]
-                             },
-                             "dials": {
-                                "dial": [
-                                    {
-                                        "value": "92",
-                                        "rearextension": "15",
-                                        "radius": "100",
-                                        "bgcolor": "333333",
-                                        "bordercolor": "333333",
-                                        "basewidth": "8"
-                                    }
-                                ]
-                            }
-                        }
-                    });
-                    revenueChart.setTransparent(true);
-                    revenueChart.render();
-                })
-            };
         })
         .controller('TableMonitorOperativeController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
 

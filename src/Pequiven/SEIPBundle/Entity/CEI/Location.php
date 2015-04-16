@@ -58,7 +58,7 @@ class Location extends Model
     /**
      * Alias corto de la sede
      * @var string
-     * @ORM\Column(name="alias",type="string",length=10)
+     * @ORM\Column(name="alias",type="string",length=20)
      */
     private $alias;
     

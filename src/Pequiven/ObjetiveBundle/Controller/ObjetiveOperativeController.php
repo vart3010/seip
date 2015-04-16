@@ -188,6 +188,8 @@ class ObjetiveOperativeController extends baseController
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_OPERATIVE');
         
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));

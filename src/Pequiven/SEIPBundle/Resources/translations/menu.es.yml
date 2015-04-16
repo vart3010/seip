@@ -140,6 +140,12 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
+                            indicators: Indicadores
+                            arrangement_programs: Programas de Gestión
+                            level:
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                     pre_planning:
                         main: Planificación %period%
                         tactic: Táctico
