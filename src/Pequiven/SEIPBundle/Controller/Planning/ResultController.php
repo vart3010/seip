@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
 use Pequiven\MasterBundle\Entity\Rol;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 /**
  * Controlador para mostrar los resultados
@@ -545,6 +546,60 @@ class ResultController extends ResourceController
         return $this->render($template);
     }
     
+    public function indexArrangementProgramsAction(Request $request)
+    {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if(isset($criteria['typeManagement']) && $criteria['typeManagement'] == \Pequiven\MasterBundle\Entity\GerenciaSecond::TYPE_MANAGEMENT_BINDING){
+                unset($criteria['firstLineManagement']);
+                unset($criteria['complejo']);
+            }
+        }elseif($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+            
+            $criteria['firstLineManagement'] = $user->getGerencia()->getId();
+            $criteria['complejo'] = $user->getComplejo()->getId();
+        }
+        
+        $view = $this
+            ->view()
+            ->setTemplate("PequivenArrangementProgramBundle:ArrangementProgram:index.html.twig")
+            //->setTemplateVar()
+        ;
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
+            $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user
+            ));
+        return $this->handleView($view);
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->get('translator')->trans($id, $parameters, $domain);
@@ -581,5 +636,14 @@ class ResultController extends ResourceController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->get('seip.user_manager');
     }
 }
