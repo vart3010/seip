@@ -386,6 +386,7 @@ class IndicatorService implements ContainerAwareInterface
         $chart["thousandSeparator"] = ".";
         $chart["inDecimalSeparator"] = ",";
         $chart["inThousandSeparator"] = ".";
+        $chart["clickURL"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
         
         //Sección para Setear el dial
         $dial = array();
