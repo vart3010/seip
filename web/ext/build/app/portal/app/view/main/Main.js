@@ -12,6 +12,7 @@ Ext.define('Portal.view.main.Main', {
 
     requires: [
         'Ext.layout.container.Border',
+        'Ext.ux.dashboard.GoogleRssPart',
         'Ext.dashboard.Dashboard'
     ],
 
@@ -98,7 +99,7 @@ Ext.define('Portal.view.main.Main', {
             0.25
         ],
         parts: {
-            
+            rss: 'google-rss',
 
             stocks: {
                 viewTemplate: {
