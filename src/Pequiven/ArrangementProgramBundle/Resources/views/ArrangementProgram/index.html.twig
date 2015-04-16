@@ -107,7 +107,7 @@
                 </div>
             </details>
                 <div loading-container="tableParams.settings().$loading" ng-init="data.arrangementProgramStatusLabels = {{ labelsStatus|serialize }}">
-                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json'}) }}" export-csv="csv" class="table table-responsive">
+                    <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_seip_arrangementprogram_index',{_format:'json',_period: app.request.get("_period") }) }}" export-csv="csv" class="table table-responsive">
                         <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
                             <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'ap.ref': 'text' }">
                                 <img ng-if="result._data.summary.advances < 50" src="{{ asset('bundles/pequivenseip/logotipos/bullet_red.png') }}" class="semaphore">

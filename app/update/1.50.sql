@@ -196,3 +196,8 @@ ALTER TABLE seip_chart ADD CONSTRAINT FK_15609EA83DA6CF46 FOREIGN KEY (fk_user_u
 ALTER TABLE seip_chart ADD CONSTRAINT FK_15609EA8EC8B7ADE FOREIGN KEY (period_id) REFERENCES Period (id);
 ALTER TABLE seip_indicators_charts ADD CONSTRAINT FK_8E5F39614402854A FOREIGN KEY (indicator_id) REFERENCES seip_indicator (id) ON DELETE CASCADE;
 ALTER TABLE seip_indicators_charts ADD CONSTRAINT FK_8E5F3961BEF83E0A FOREIGN KEY (chart_id) REFERENCES seip_chart (id) ON DELETE CASCADE;
+
+-- Nuevos indices
+DROP INDEX planning_idx ON PrePlanningUser;
+CREATE UNIQUE INDEX planning_gf_idx ON PrePlanningUser (user_id, period_id, levelPlanning, gerenciaFirst_id);
+CREATE UNIQUE INDEX planning_gs_idx ON PrePlanningUser (user_id, period_id, levelPlanning, gerenciaSecond_id);
