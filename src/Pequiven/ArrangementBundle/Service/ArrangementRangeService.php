@@ -9,6 +9,7 @@ use LogicException;
 use Pequiven\ArrangementBundle\Entity\ArrangementRange;
 use Pequiven\MasterBundle\Entity\Tendency;
 use Pequiven\MasterBundle\Entity\ArrangementRangeType;
+use Pequiven\SEIPBundle\Model\Common\CommonObject;
 use Pequiven\IndicatorBundle\Entity\Indicator;
 use Pequiven\MasterBundle\Entity\Formula;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -193,9 +194,12 @@ class ArrangementRangeService implements ContainerAwareInterface
      * @param ArrangementRange $arrangementRange
      * @return array
      */
-    public function getDataColorRangeWidget(ArrangementRange $arrangementRange, Tendency $tendency){
+    public function getDataColorRangeWidget(ArrangementRange $arrangementRange, Tendency $tendency, $type = CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
         $color = array();
         $arrangementRangeTypeArray = ArrangementRangeType::getRefsSummary();
+        
+        $lowerLimit = 0;
+        $upperLimit = 100;
         // VERDE: #1aaf5d
         // AMARILLO: #f2c500
         // ROJO: #c02d00
@@ -210,13 +214,19 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
                 $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomBasic(), "10",2),2,',','.');
+                $lowerLimit = $colorLevel['minValue'];
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomBasic();
-                $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                }
                 $colorLevel['code'] = "#c02d00";
             } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
                 $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
+                $lowerLimit = $colorLevel['minValue'];
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
-                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                }
                 $colorLevel['code'] = "#c02d00";
             }
             $color[] = $colorLevel;
@@ -239,7 +249,9 @@ class ArrangementRangeService implements ContainerAwareInterface
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
                 $label.= $arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
             }
-            $colorLevel['label'] = $label;
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $label;
+            }
             $colorLevel['code'] = "#f2c500";
             $color[] = $colorLevel;
             
@@ -248,12 +260,18 @@ class ArrangementRangeService implements ContainerAwareInterface
             if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
                 $colorLevel['minValue'] = (string)$arrangementRange->getRankTopBasic();
                 $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankTopBasic(), "10",2),2,',','.');
-                $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                $upperLimit = $colorLevel['maxValue'];
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                }
                 $colorLevel['code'] = "#1aaf5d";
             } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
                 $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
                 $colorLevel['maxValue'] = number_format(bcsub($arrangementRange->getRankTopMixedBottom(), "10",2),2,',','.');
-                $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                $upperLimit = $colorLevel['maxValue'];
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                }
                 $colorLevel['code'] = "#1aaf5d";
             }
             $color[] = $colorLevel;
@@ -263,13 +281,19 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             if($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_BASIC]){
                 $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomBasic(), "10",2),2,',','.');
+                $lowerLimit = $colorLevel['minValue'];
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomBasic();
-                $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOprankBottomBasic().' '.$arrangementRange->getRankBottomBasic().'%';
+                }
                 $colorLevel['code'] = "#1aaf5d";
             } elseif($arrangementRange->getTypeRangeBottom() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_BOTTOM_MIXED]){
                 $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
+                $lowerLimit = $colorLevel['minValue'];
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
-                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'% y '.$arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+                }
                 $colorLevel['code'] = "#1aaf5d";
             }
             $color[] = $colorLevel;
@@ -292,7 +316,9 @@ class ArrangementRangeService implements ContainerAwareInterface
                 $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
                 $label.= $arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
             }
-            $colorLevel['label'] = $label;
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $label;
+            }
             $colorLevel['code'] = "#f2c500";
             $color[] = $colorLevel;
             
@@ -301,12 +327,18 @@ class ArrangementRangeService implements ContainerAwareInterface
             if($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_BASIC]){
                 $colorLevel['minValue'] = (string)$arrangementRange->getRankTopBasic();
                 $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankTopBasic(), "10",2),2,',','.');
-                $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                $upperLimit = $colorLevel['maxValue'];
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOprankTopBasic().' '.$arrangementRange->getRankTopBasic().'%';
+                }
                 $colorLevel['code'] = "#c02d00";
             } elseif($arrangementRange->getTypeRangeTop() == $arrangementRangeTypeArray[ArrangementRangeType::RANGE_TYPE_TOP_MIXED]){
                 $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
                 $colorLevel['maxValue'] = number_format(bcsub($arrangementRange->getRankTopMixedBottom(), "10",2),2,',','.');
-                $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                $upperLimit = $colorLevel['maxValue'];
+                if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                    $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+                }
                 $colorLevel['code'] = "#c02d00";
             }
             $color[] = $colorLevel;
@@ -316,8 +348,11 @@ class ArrangementRangeService implements ContainerAwareInterface
             //Rango Rojo
             $colorLevel = array();
             $colorLevel['minValue'] = number_format(bcsub($arrangementRange->getRankBottomMixedBottom(), "10",2),2,',','.');
+            $lowerLimit = $colorLevel['minValue'];
             $colorLevel['maxValue'] = (string)$arrangementRange->getRankBottomMixedBottom();
-            $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedBottom().' '.$arrangementRange->getRankBottomMixedBottom().'%';
+            }
             $colorLevel['code'] = "#c02d00";
             $color[] = $colorLevel;
             
@@ -325,7 +360,9 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleBottomMixedTop();
             $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleBottomMixedBottom();
-            $colorLevel['label'] = $arrangementRange->getOpRankMiddleBottomMixedTop().' '.$arrangementRange->getRankMiddleBottomMixedTop().'% y '.$arrangementRange->getOpRankMiddleBottomMixedBottom().' '.$arrangementRange->getRankMiddleBottomMixedBottom().'%';
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $arrangementRange->getOpRankMiddleBottomMixedTop().' '.$arrangementRange->getRankMiddleBottomMixedTop().'% y '.$arrangementRange->getOpRankMiddleBottomMixedBottom().' '.$arrangementRange->getRankMiddleBottomMixedBottom().'%';
+            }
             $colorLevel['code'] = "#f2c500";
             $color[] = $colorLevel;
             
@@ -333,7 +370,9 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             $colorLevel['minValue'] = (string)$arrangementRange->getRankTopMixedTop();
             $colorLevel['maxValue'] = (string)$arrangementRange->getRankTopMixedBottom();
-            $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $arrangementRange->getOpRankTopMixedTop().' '.$arrangementRange->getRankTopMixedTop().'% y '.$arrangementRange->getOpRankTopMixedBottom().' '.$arrangementRange->getRankTopMixedBottom().'%';
+            }
             $colorLevel['code'] = "#1aaf5d";
             $color[] = $colorLevel;
             
@@ -341,7 +380,9 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             $colorLevel['minValue'] = (string)$arrangementRange->getRankMiddleTopMixedTop();
             $colorLevel['maxValue'] = (string)$arrangementRange->getRankMiddleTopMixedBottom();
-            $colorLevel['label'] = $arrangementRange->getOpRankMiddleTopMixedTop().' '.$arrangementRange->getRankMiddleTopMixedTop().'% y '.$arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $arrangementRange->getOpRankMiddleTopMixedTop().' '.$arrangementRange->getRankMiddleTopMixedTop().'% y '.$arrangementRange->getOpRankMiddleTopMixedBottom().' '.$arrangementRange->getRankMiddleTopMixedBottom().'%';
+            }
             $colorLevel['code'] = "#f2c500";
             $color[] = $colorLevel;
             
@@ -349,12 +390,24 @@ class ArrangementRangeService implements ContainerAwareInterface
             $colorLevel = array();
             $colorLevel['minValue'] = (string)$arrangementRange->getRankBottomMixedTop();
             $colorLevel['maxValue'] = number_format(bcadd($arrangementRange->getRankBottomMixedTop(), "10",2),2,',','.');
-            $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'%';
+            $upperLimit= $colorLevel['maxValue'];
+            if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+                $colorLevel['label'] = $arrangementRange->getOpRankBottomMixedTop().' '.$arrangementRange->getRankBottomMixedTop().'%';
+            }
             $colorLevel['code'] = "#c02d00";
             $color[] = $colorLevel;
         }
         
-        return $color;
+        if($type == CommonObject::ARRANGEMENET_RANGE_WITH_CLEARANCE){
+            return $color;
+        } else{
+            $colorData = array(
+                'color' => $color,
+                'lowerLimit' => $lowerLimit,
+                'upperLimit' => $upperLimit,
+            );
+            return $colorData;
+        }
     }
     
     /**

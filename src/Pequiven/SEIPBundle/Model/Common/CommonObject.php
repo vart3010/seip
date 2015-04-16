@@ -80,6 +80,16 @@ class CommonObject implements \Symfony\Component\DependencyInjection\ContainerAw
     
     const OPEN_URL_SAME_WINDOW = 1;
     
+    //Tipos de holgura para mostrar el rango de gestión en forma gráfica
+   /**
+    * Rango de Gestión con holgura en los extremos
+    */
+    const ARRANGEMENET_RANGE_WITH_CLEARANCE = 0;
+    /**
+     * Rango de Gestión sin holgura en los extremos
+     */
+    const ARRANGEMENET_RANGE_WITHOUT_CLEARANCE = 1;
+    
     protected $months = array();
     
     protected $em;

@@ -2435,6 +2435,29 @@ angular.module('seipModule.controllers', [])
                 })
             }
             
+            $scope.renderChartAngularGauge = function(id,data,width,height){
+                FusionCharts.ready(function() {
+                    var chartAngularGauge = new FusionCharts({
+                        "type": "angulargauge",
+                        "renderAt": id,
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "colorrange": {
+                                "color": data.dataSource.colorRange.color
+                            },
+                            "dials": {
+                                "dial": data.dataSource.dials.dial
+                            },
+                        }
+                    });
+                    chartAngularGauge.setTransparent(true);
+                    chartAngularGauge.render();
+                })
+            }
+            
             $scope.renderChartStackedSingleAxis = function(id){
                 FusionCharts.ready(function() {
                     var chartStackedSingleAxis = new FusionCharts({

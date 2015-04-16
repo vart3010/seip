@@ -344,6 +344,73 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
+     * Función que devuelve la data para el widget de tipo tacómetro
+     * @param Indicator $indicator
+     * @return string
+     * @author Matias Jimenez
+     */
+    public function getDataWidgetAngularGauge(Indicator $indicator){
+        $arrangemenetRangeService = $this->getArrangementRangeService();
+        
+        $data = array(
+            'dataSource' => array(
+                'chart' => array(),
+                'colorRange' => array(
+                    'color' => array(),
+                ),
+                'dials' => array(
+                    'dial' => array(),
+                ),
+            ),
+        );
+        
+        //Sección Data Básica del Gráfico
+        $chart = array();
+        
+        $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
+        $chart["captionFontColor"] = $this->getColorOfResult($indicator);
+        $chart["captionOnTop"] = "0";
+        $chart["autoScale"] = "1";
+        $chart["numbersuffix"] = "%";
+        $chart["tickvaluedistance"] = "8";
+        $chart["showvalue"] = "0";
+        $chart["gaugeinnerradius"] = "0";
+        $chart["bgcolor"] = "FFFFFF";
+        $chart["pivotfillcolor"] = "6c6c6c";
+        $chart["pivotradius"] = "8";
+        $chart["pivotfilltype"] = "radial";
+        $chart["pivotfillratio"] = "0,100";
+        $chart["showtickvalues"] = "1";
+        $chart["showborder"] = "0";
+        $chart["decimalSeparator"] = ",";
+        $chart["thousandSeparator"] = ".";
+        $chart["inDecimalSeparator"] = ",";
+        $chart["inThousandSeparator"] = ".";
+        
+        //Sección para Setear el dial
+        $dial = array();
+        $dial["showValue"] = "0";
+        $dial["rearextension"] = "5";
+        $dial["radius"] = "50%";
+        $dial["bgcolor"] = "6c6c6c";
+        $dial["bordercolor"] = "333333";
+        $dial["basewidth"] = "4";
+        
+        $colorData = $arrangemenetRangeService->getDataColorRangeWidget($indicator->getArrangementRange(), $indicator->getTendency(), CommonObject::ARRANGEMENET_RANGE_WITHOUT_CLEARANCE);
+        
+        $chart["lowerlimit"] = $colorData['lowerLimit'];
+        $chart["upperlimit"] = $colorData['upperLimit'];
+        
+        $dial["value"] = $indicator->getResultReal() < (float)$colorData['lowerLimit'] ? number_format((float)$colorData['lowerLimit'], 2, ',', '.') : ($indicator->getResultReal() > (float)$colorData['upperLimit'] ? number_format((float)$colorData['upperLimit'], 2, ',', '.') : number_format($indicator->getResultReal(), 2, ',', '.'));
+        
+        $data['dataSource']['chart'] = $chart;
+        $data['dataSource']['colorRange']['color'] = $colorData['color'];
+        $data['dataSource']['dials']['dial'] = $dial;
+        
+        return $data;
+    }
+    
+    /**
      * Función que devuelve la data para el widget de tipo torta multi nivel en el dashboard de cada indicador
      * @param Indicator $indicator
      * @return string
@@ -744,6 +811,11 @@ class IndicatorService implements ContainerAwareInterface
         return $data;
     }
     
+    /**
+     * Función que retorna un span con el reusltado del indciador ademaś del color de acuerdo al rango donde cayó.
+     * @param Indicator $indicator
+     * @return string
+     */
     public function resultWithArrangementRangeColor(Indicator $indicator){
         $color = '';
         $text = number_format($indicator->showResultOfIndicator(), 2, ',', '.');

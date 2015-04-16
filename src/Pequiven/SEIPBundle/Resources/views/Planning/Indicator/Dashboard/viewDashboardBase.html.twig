@@ -30,10 +30,10 @@
             <div class="with-padding">
                 <div class="columns">
                     {% for indicatorGroup in indicatorsGroup %}
-                        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile {% if indicatorGroup.id == indicator.id %} linestrategic-active {% endif %}" style="display: inline-block;" ng-controller="DashboardController" ng-init="renderWidgetIndicatorStrategic('{{ indicatorGroup.ref }}',{{ dataWidget[indicatorGroup.ref]|json_encode() }},'100%','100px')">
+                        <div class="twelve-columns twelve-columns-tablet twelve-columns-mobile new-row-mobile {% if indicatorGroup.id == indicator.id %} linestrategic-active {% endif %}" style="display: inline-block;" ng-controller="DashboardController" ng-init="{% if indicatorGroup.evaluateInPeriod == true %} renderChartAngularGauge('{{ indicatorGroup.ref }}',{{ dataWidget[indicatorGroup.ref]|json_encode() }},'100%','100px') {% else %} renderWidgetIndicatorStrategic('{{ indicatorGroup.ref }}',{{ dataWidget[indicatorGroup.ref]|json_encode() }},'100%','100px') {% endif %}">
                             <a {% if indicatorGroup.id == indicator.id %} name="cargarInd" {% endif %} target="_blank" href="{{ path('pequiven_indicator_show',{id:indicatorGroup.id}) }}">
                                 <span title="{{ indicatorGroup.description }}">
-                                    <p style="text-align: center;margin-bottom: -5px;"><b>{{ indicatorGroup.summary }}</b></p>
+                                    <p style="text-align: center;margin-bottom: -2px;"><b>{{ indicatorGroup.summary }}</b></p>
                                 </span>
                             </a>
                             <span id="{{ indicatorGroup.ref }}"></span>
