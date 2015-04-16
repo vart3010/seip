@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanningUser as Model;
  * Pre-Planificacion de usuario
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="planning_idx", columns={"user_id", "period_id","levelPlanning"}),@ORM\UniqueConstraint(name="planninguser_ref_idx", columns={"ref"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="planning_gf_idx", columns={"user_id", "period_id","levelPlanning","gerenciaFirst_id"}),@ORM\UniqueConstraint(name="planning_gs_idx", columns={"user_id", "period_id","levelPlanning","gerenciaSecond_id"}), @ORM\UniqueConstraint(name="planninguser_ref_idx", columns={"ref"})})
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\PrePlanning\PrePlanningUserRepository")
  */
 class PrePlanningUser extends Model
