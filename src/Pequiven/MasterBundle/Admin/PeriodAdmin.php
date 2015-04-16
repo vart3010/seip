@@ -35,6 +35,9 @@ class PeriodAdmin extends Admin
             ->add('description')
             ->add('dateStart')
             ->add('dateEnd')
+            ->add('opened',null,array(
+                'required' => false,
+            ))
             ->add('status',null,array(
                 'required' => false,
             ))
@@ -106,6 +109,9 @@ class PeriodAdmin extends Admin
             ->add('dateStart','sonata_type_date_picker',array(
             ))
             ->add('dateEnd','sonata_type_date_picker',array(
+            ))
+            ->add('opened',null,array(
+                'required' => false,
             ))
             ->add('status',null,array(
                 'required' => false,

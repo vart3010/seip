@@ -393,3 +393,10 @@ internalAudit: Auditoría Interna
         
 empty:
     features_indicator: No hay ningún punto de atención.
+    
+chart:
+    type:
+        indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).
+        indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
+        resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
+        resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).

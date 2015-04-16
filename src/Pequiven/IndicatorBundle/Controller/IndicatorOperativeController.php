@@ -17,14 +17,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  */
 class IndicatorOperativeController extends baseController {
     /**
-     * @Template("PequivenIndicatorBundle:Operative:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_OPERATIVE');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Operative:list.html.twig");
     }
 
     /**
@@ -88,6 +86,8 @@ class IndicatorOperativeController extends baseController {
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_OPERATIVE');
         
         $periodService = $this->get('pequiven_seip.service.period');

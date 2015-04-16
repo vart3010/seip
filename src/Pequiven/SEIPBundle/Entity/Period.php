@@ -65,6 +65,14 @@ class Period extends Base implements \Serializable
     private $status = false;
 
     /**
+     * ¿El periodo esta abierto? (Si, esta cerrado no se permitira edicion alguna)
+     * @var boolean
+     *
+     * @ORM\Column(name="opened", type="boolean")
+     */
+    private $opened = true;
+
+    /**
      * Fecha inicio de notificación de programas de gestion.
      * @var \DateTime
      *
@@ -608,6 +616,21 @@ class Period extends Base implements \Serializable
         ) = $data;
         $this->parent = unserialize($this->parent);
         $this->child = unserialize($this->child);
+    }
+    
+    function isOpened() 
+    {
+        return $this->opened;
+    }
+    
+    function getOpened() 
+    {
+        return $this->opened;
+    }
+
+    function setOpened($opened) 
+    {
+        $this->opened = $opened;
     }
     
     public function __toString() {

@@ -637,30 +637,83 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     //Periodos
                     $periods = $this->container->get('pequiven.repository.period')->findAllForConsultation();
                     foreach ($periods as $period) {
+                        $_period = $period->getId();
                         $year = $period->getYear();
                         $itemName = 'results.notify.period.'.$period->getId();
                         $itemPeriodConsultation = $this->factory->createItem($itemName,$this->getSubLevelOptions(
-                             array(
-                                'route' => self::ROUTE_DEFAULT,
-                                'routeParameters' => array('year' => $year),
-                            )
+                             array()
                         ))->setLabel($year);
 
-                        $itemPeriodConsultationObjetives = $this->factory->createItem($itemName.$year.'objetives',$this->getSubLevelOptions(
+                        $itemPeriodConsultationObjetives = $this->factory->createItem($itemName.$_period.'objetives',$this->getSubLevelOptions(
                              array(
-                                'route' => self::ROUTE_DEFAULT,
-                                'routeParameters' => array('year' => $year),
                             )
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.objetives', $section)));
+
+                            $itemPeriodConsultationStrategic = $this->factory->createItem($itemName.$_period.'objetives'.'strategic',$this->getSubLevelOptions(
+                                 array(
+                                    'route' => "pequiven_seip_result_visualize_objetives",
+                                    'routeParameters' => array('_period' => $_period,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_ESTRATEGICO),
+                                )
+                            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.strategic', $section)));
+                            $itemPeriodConsultationObjetives->addChild($itemPeriodConsultationStrategic);
+
+                            $itemPeriodConsultationTactic = $this->factory->createItem($itemName.$_period.'objetives'.'tactic',$this->getSubLevelOptions(
+                                 array(
+                                    'route' => "pequiven_seip_result_visualize_objetives",
+                                    'routeParameters' => array('_period' => $_period,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_TACTICO),
+                                )
+                            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.tactic', $section)));
+                            $itemPeriodConsultationObjetives->addChild($itemPeriodConsultationTactic);
+
+                            $itemPeriodConsultationOperative = $this->factory->createItem($itemName.$_period.'objetives'.'operative',$this->getSubLevelOptions(
+                                 array(
+                                    'route' => "pequiven_seip_result_visualize_objetives",
+                                    'routeParameters' => array('_period' => $_period,'level' => \Pequiven\ObjetiveBundle\Entity\ObjetiveLevel::LEVEL_OPERATIVO),
+                                )
+                            ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.operative', $section)));
+                            $itemPeriodConsultationObjetives->addChild($itemPeriodConsultationOperative);
+                            
                         $itemPeriodConsultation->addChild($itemPeriodConsultationObjetives);
 
-                        $itemPeriodConsultationIndicators = $this->factory->createItem($itemName.$year.'indicators',$this->getSubLevelOptions(
+                        $itemPeriodConsultationIndicators = $this->factory->createItem($itemName.$_period.'indicators',$this->getSubLevelOptions(
                              array(
-                                'route' => self::ROUTE_DEFAULT,
-                                'routeParameters' => array('year' => $year),
                             )
                         ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.indicators', $section)));
+                            $itemPeriodConsultationIndicatorsStrategic = $this->factory->createItem($itemName.$_period.'indicators'.'strategic',$this->getSubLevelOptions(
+                                     array(
+                                        'route' => "pequiven_seip_result_visualize_indicators",
+                                        'routeParameters' => array('_period' => $_period,'level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_ESTRATEGICO),
+                                    )
+                                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.strategic', $section)));
+                            $itemPeriodConsultationIndicators->addChild($itemPeriodConsultationIndicatorsStrategic);
+                            
+                            $itemPeriodConsultationIndicatorsTactic = $this->factory->createItem($itemName.$_period.'indicators'.'tactic',$this->getSubLevelOptions(
+                                     array(
+                                        'route' => "pequiven_seip_result_visualize_indicators",
+                                        'routeParameters' => array('_period' => $_period,'level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_TACTICO),
+                                    )
+                                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.tactic', $section)));
+                            $itemPeriodConsultationIndicators->addChild($itemPeriodConsultationIndicatorsTactic);
+                            
+                            $itemPeriodConsultationIndicatorsOperative = $this->factory->createItem($itemName.$_period.'indicators'.'operative',$this->getSubLevelOptions(
+                                     array(
+                                        'route' => "pequiven_seip_result_visualize_indicators",
+                                        'routeParameters' => array('_period' => $_period,'level' => \Pequiven\IndicatorBundle\Model\IndicatorLevel::LEVEL_OPERATIVO),
+                                    )
+                                ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.level.operative', $section)));
+                            $itemPeriodConsultationIndicators->addChild($itemPeriodConsultationIndicatorsOperative);
+                            
                         $itemPeriodConsultation->addChild($itemPeriodConsultationIndicators);
+                        
+
+                        $itemPeriodArrangementPrograms = $this->factory->createItem($itemName.$_period.'arrangement_programs',$this->getSubLevelOptions(
+                             array(
+                                'route' => "pequiven_seip_result_visualize_arrangement_programs",
+                                'routeParameters' => array('_period' => $_period),
+                            )
+                        ))->setLabel($this->translate(sprintf('app.backend.menu.%s.results.period.arrangement_programs', $section)));
+                        $itemPeriodConsultation->addChild($itemPeriodArrangementPrograms);
+                        
 
                         $itemPeriod->addChild($itemPeriodConsultation);
                     }

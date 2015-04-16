@@ -389,7 +389,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $featuresIndicator;
     
-     /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="orderShowFromParent", type="integer")
@@ -405,6 +405,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $status = self::STATUS_DRAFT;
     
     /**
+     * Charts
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Chart
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Chart", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_charts")
+     */
+    private $charts;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -416,6 +425,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1738,6 +1748,39 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->status = $status;
         
         return $this;
+    }
+    
+    /**
+     * Add charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     * @return Indicator
+     */
+    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts[] = $charts;
+
+        return $this;
+    }
+
+    /**
+     * Remove charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     */
+    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts->removeElement($charts);
+    }
+
+    /**
+     * Get charts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCharts()
+    {
+        return $this->charts;
     }
     
 }
