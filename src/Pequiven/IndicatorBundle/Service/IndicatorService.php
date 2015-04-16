@@ -367,6 +367,13 @@ class IndicatorService implements ContainerAwareInterface
         //Sección Data Básica del Gráfico
         $chart = array();
         
+        //Sección para Setear el dial
+        $dial = array();
+        
+        $colorData = $arrangemenetRangeService->getDataColorRangeWidget($indicator->getArrangementRange(), $indicator->getTendency(), CommonObject::ARRANGEMENET_RANGE_WITHOUT_CLEARANCE);
+        
+        $chart["lowerlimit"] = $colorData['lowerLimit'];
+        $chart["upperlimit"] = $colorData['upperLimit'];
         $chart["caption"] = number_format($indicator->getResultReal(), 2, ',', '.');
         $chart["captionFontColor"] = $this->getColorOfResult($indicator);
         $chart["captionOnTop"] = "0";
@@ -375,8 +382,8 @@ class IndicatorService implements ContainerAwareInterface
         $chart["tickvaluedistance"] = "8";
         $chart["showvalue"] = "0";
         $chart["gaugeinnerradius"] = "0";
-        $chart["bgcolor"] = "FFFFFF";
-        $chart["pivotfillcolor"] = "6c6c6c";
+        $chart["bgcolor"] = "#FFFFFF";
+        $chart["pivotfillcolor"] = "#6c6c6c";
         $chart["pivotradius"] = "8";
         $chart["pivotfilltype"] = "radial";
         $chart["pivotfillratio"] = "0,100";
@@ -388,25 +395,18 @@ class IndicatorService implements ContainerAwareInterface
         $chart["inThousandSeparator"] = ".";
         $chart["clickURL"] = $this->generateUrl('pequiven_indicator_show_dashboard', array('id' => $indicator->getId()));
         
-        //Sección para Setear el dial
-        $dial = array();
+        $dial["value"] = $indicator->getResultReal() < (float)$colorData['lowerLimit'] ? $colorData['lowerLimit'] : ($indicator->getResultReal() > $colorData['upperLimit'] ? $colorData['upperLimit'] : number_format($indicator->getResultReal(), 2, ',', '.'));
         $dial["showValue"] = "0";
         $dial["rearextension"] = "5";
         $dial["radius"] = "50%";
-        $dial["bgcolor"] = "6c6c6c";
-        $dial["bordercolor"] = "333333";
+        $dial["bgcolor"] = "#6c6c6c";
+        $dial["bordercolor"] = "#333333";
         $dial["basewidth"] = "4";
-        
-        $colorData = $arrangemenetRangeService->getDataColorRangeWidget($indicator->getArrangementRange(), $indicator->getTendency(), CommonObject::ARRANGEMENET_RANGE_WITHOUT_CLEARANCE);
-        
-        $chart["lowerlimit"] = $colorData['lowerLimit'];
-        $chart["upperlimit"] = $colorData['upperLimit'];
-        
-        $dial["value"] = $indicator->getResultReal() < (float)$colorData['lowerLimit'] ? number_format((float)$colorData['lowerLimit'], 2, ',', '.') : ($indicator->getResultReal() > (float)$colorData['upperLimit'] ? number_format((float)$colorData['upperLimit'], 2, ',', '.') : number_format($indicator->getResultReal(), 2, ',', '.'));
+        $dial["editMode"] = "1";
         
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['colorRange']['color'] = $colorData['color'];
-        $data['dataSource']['dials']['dial'] = $dial;
+        $data['dataSource']['dials']['dial'][] = $dial;
         
         return $data;
     }
