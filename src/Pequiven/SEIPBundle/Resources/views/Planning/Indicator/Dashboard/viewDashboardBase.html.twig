@@ -26,7 +26,7 @@
 <!-- Sección Lateral Izquierda -->
 <div class="with-padding">
     <div class="columns">
-        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 300px;">
+        <div class="three-columns three-columns-tablet six-columns-mobile new-row-mobile" style="overflow-y: scroll; height: 450px;">
             <div class="with-padding">
                 <div class="columns">
                     {% for indicatorGroup in indicatorsGroup %}
@@ -42,6 +42,7 @@
                 </div>
             </div>
         </div>
+                
         <div class="nine-columns nine-columns-tablet six-columns-mobile new-row-mobile">
             {#<div ng-controller="DashboardController" ng-init="renderWidgetMultiLevelPie('pie',{{ dataMultiLevelPie|json_encode() }},'100%','400')">
                 <span id="pie"></span>
@@ -57,15 +58,15 @@
                         <ul class="tabs">
                             {% set cont = 1 %}
                             {% for chart in Charts %}
-                                <li {% if cont == 1 %} class="active" {% endif %}><a style="color: #000000;" href="#{{ chart.name }}">{{ chart.shortDescription }}</a></li>
+                                <li {% if cont == 1 %} class="active" {% endif %}><a style="color: #000000;" href="#tab-{{ chart.typeOfChart }}">{{ chart.shortDescription }}</a></li>
                                 {% set cont = cont + 1 %}
                             {% endfor %}
                         </ul>
                     
                         <div class="tabs-content" {#style="min-height: 500px;"#}>
                         {% for chart in Charts %}
-                            {% if  chart.name == constant('Pequiven\\SEIPBundle\\Entity\\Chart::CHART_INDICATORS_ASSOCIATED_WITH_RESULT') %}
-                                <div id="{{ chart.name }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
+                            {% if  chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_INDICATORS_ASSOCIATED') %}
+                                <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartDoughnut2d({{ indicator.id }})" fusioncharts
                                     width="100%"
                                     height="400"
                                     type="{{ chart.alias }}"
@@ -73,8 +74,8 @@
                                     dataSource="{$chartDoughnut2d$}" >
                                 </div>
                             {% endif %}
-                            {% if chart.name == constant('Pequiven\\SEIPBundle\\Entity\\Chart::CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT')  %}
-                                <div id="{{ chart.name }}" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }})" fusioncharts
+                            {% if chart.typeOfChart == constant('Pequiven\\SEIPBundle\\Entity\\Chart::TYPE_CHART_COLUMN_REAL_PLAN')  %}
+                                <div id="tab-{{ chart.typeOfChart }}" ng-init="chargeChartColumnLineDualAxis({{ indicator.id }})" fusioncharts
                                     width="100%"
                                     height="500"
                                     type="{{ chart.alias }}"

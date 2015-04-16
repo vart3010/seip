@@ -28,7 +28,7 @@ abstract class Chart
     const TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS = 2;
     
     /**
-     * Gráfico ???
+     * Gráfico para mostrar los resultados de diferentes variables y que forman parte de un mismo valor
      */
     const TYPE_CHART_PIE_FROM_TAGS = 3;
     
@@ -41,5 +41,50 @@ abstract class Chart
      * Gráfico para poder mostrar el real, plan y resultado de los indicadores asociados
      */
     const CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT = 'CHART_INDICATORS_ASSOCIATED_REAL_PLAN_WITH_RESULT';
+    
+    /**
+     * @var integer
+     * 
+     * @ORM\Column(name="typeOfChart", type="integer", nullable=false)
+     */
+    protected $typeOfChart = self::TYPE_CHART_INDICATORS_ASSOCIATED;
+    
+    
+    /**
+     * Retorna el tipo de gráfico
+     * @return integer
+     */
+    function getTypeOfChart() 
+    {
+        return $this->typeOfChart;
+    }
+    
+    /**
+     * Establece el tipo de gráfico
+     * 
+     * @param integer $typeOfChart Chart::TYPE_CHART_*
+     * @return \Pequiven\SEIPBundle\Model\Chart
+     */
+    function setTypeOfChart($typeOfChart) {
+        $this->typeOfChart = $typeOfChart;
+        
+        return $this;
+    }
+    
+    /**
+     * Retorna las etiquetas de cada tipo de gráfico que existe en el sistema
+     * @return type
+     */
+    static function getLabelsTypeOfChart()
+    {
+         static $typesOfChart = array(
+            self::TYPE_CHART_INDICATORS_ASSOCIATED => 'chart.type.indicatorsAssociatedDoughnut',
+            self::TYPE_CHART_COLUMN_REAL_PLAN => 'chart.type.indicatorsAssociatedRealPlanWithResult',
+            self::TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS => 'chart.type.resultsOfIndicator',
+            self::TYPE_CHART_PIE_FROM_TAGS => 'chart.type.resultsOfVariable',
+        );
+         
+         return $typesOfChart;
+    }
     
 }
