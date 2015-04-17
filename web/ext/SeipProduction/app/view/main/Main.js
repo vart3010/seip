@@ -9,7 +9,9 @@ Ext.define('SeipProduction.view.main.Main', {
     extend: 'Ext.container.Container',
     requires: [
         'SeipProduction.view.main.MainController',
-        'SeipProduction.view.main.MainModel'
+        'SeipProduction.view.main.MainModel',
+        'Ext.layout.container.Border',
+        'Ext.dashboard.Dashboard'
     ],
 
     xtype: 'app-main',
@@ -24,6 +26,10 @@ Ext.define('SeipProduction.view.main.Main', {
     },
 
     items: [{
+        id: 'app-header',
+        xtype: 'app-header',
+        region: 'north'
+    },{
         xtype: 'panel',
         bind: {
             title: '{name}'
