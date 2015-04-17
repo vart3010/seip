@@ -11,7 +11,8 @@ Ext.define('SeipProduction.view.main.Main', {
         'SeipProduction.view.main.MainController',
         'SeipProduction.view.main.MainModel',
         'Ext.layout.container.Border',
-        'Ext.dashboard.Dashboard'
+        'Ext.dashboard.Dashboard',
+        'Ext.ux.dashboard.GoogleRssPart',
     ],
 
     xtype: 'app-main',
@@ -43,11 +44,34 @@ Ext.define('SeipProduction.view.main.Main', {
             handler: 'onClickButton'
         }]
     },{
+        xtype: 'dashboard',
+        reference: 'dashboard',
         region: 'center',
-        xtype: 'tabpanel',
-        items:[{
-            title: 'Tab 1',
-            html: '<h2>Content appropriate for the current navigation.</h2>'
-        }]
-    }]
+        stateful: false,
+
+        columnWidths: [
+            0.35,
+            0.40,
+            0.25
+        ],
+        parts: {
+            productions: {
+                viewTemplate: {
+                    title: 'Productions',
+                    items: [{
+                        xtype: 'productions'
+                    }]
+                }
+            }
+        },
+
+        defaultContent: [
+            {
+                type: 'productions',
+                columnIndex: 0,
+                height: 300
+            }
+        ]
+    }
+    ]
 });
