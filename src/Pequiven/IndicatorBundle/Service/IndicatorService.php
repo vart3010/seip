@@ -370,7 +370,7 @@ class IndicatorService implements ContainerAwareInterface
         //Sección para Setear el dial
         $dial = array();
         
-        $colorData = $arrangemenetRangeService->getDataColorRangeWidget($indicator->getArrangementRange(), $indicator->getTendency(), CommonObject::ARRANGEMENET_RANGE_WITHOUT_CLEARANCE);
+        $colorData = $arrangemenetRangeService->getDataColorRangeWidget($indicator->getArrangementRange(), $indicator->getTendency(), CommonObject::ARRANGEMENT_RANGE_WITHOUT_CLEARANCE);
         
         $chart["lowerlimit"] = $colorData['lowerLimit'];
         $chart["upperlimit"] = $colorData['upperLimit'];
@@ -617,9 +617,9 @@ class IndicatorService implements ContainerAwareInterface
                 $set["toolText"] = $indicatorChildren->getSummary().':{br}'.number_format($indicatorChildren->getResultReal(), 2, ',', '.').'%';
                 $set["color"] = $this->getColorOfResult($indicatorChildren);
                 $set["labelLink"] = $this->generateUrl('pequiven_indicator_show',array('id' => $indicatorChildren->getId()));
-                if($indicator->getIndicatorLevel()->getLevel() < IndicatorLevel::LEVEL_TACTICO){
+//                if($indicator->getIndicatorLevel()->getLevel() < IndicatorLevel::LEVEL_TACTICO){
                     $set["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicatorChildren->getId()));
-                }
+//                }
                 $dataSet[] = $set;
             }
         }
@@ -630,7 +630,7 @@ class IndicatorService implements ContainerAwareInterface
     }
     
     /**
-     * Gráfico de Columna con Línea y 2 ejes
+     * Gráfico de Columna con Línea y 2 ejes (Para mostar la infocamción de 2 variables respecto al eje izquierdo y el resultado de la medición respecto al eje derecho)
      * @param Indicator $indicator
      * @return type
      */
@@ -647,10 +647,9 @@ class IndicatorService implements ContainerAwareInterface
         $chart = array();
         
         $chart["caption"] = $indicator->getSummary();
-//        $chart["subCaption"] = "Harry's SuperMart - Last Year";
         $chart["xAxisname"] = "Indicador";
         $chart["pYAxisName"] = "TM";
-        $chart["sYAxisName"] = "Medición %";
+        $chart["sYAxisName"] = "% Cumplimiento";
         $chart["sNumberSuffix"] = "%";
         $chart["sYAxisMaxValue"] = "100";
         $chart["bgColor"] = "#ffffff";
@@ -675,8 +674,6 @@ class IndicatorService implements ContainerAwareInterface
         $chart["captionFontSize"] = "14";
         $chart["subcaptionFontSize"] = "14";
         $chart["subcaptionFontBold"] = "0";
-//        $chart["formatNumber"] = "1";
-//        $chart["formatNumberScale"] = "1";
         $chart["decimalSeparator"] = ",";
         $chart["thousandSeparator"] = ".";
         $chart["inDecimalSeparator"] = ",";
@@ -688,12 +685,12 @@ class IndicatorService implements ContainerAwareInterface
         $category = $dataSetReal = $dataSetPlan = $medition = array();
         $dataSetReal["seriesname"] = "Real";
         $dataSetPlan["seriesname"] = "Plan";
-        $medition["seriesname"] = "Resultado Medición";
+        $medition["seriesname"] = "% Cumplimiento";
         $medition["renderas"] = "line";
         $medition["parentYAxis"] = "S";
         $medition["showValues"] = "0";
         
-        if($totalNumChildrens > 0){
+        if($totalNumChildrens > 0){//La info a mostrar es de los indicadores asociados
             $indicatorsChildrens = $this->container->get('pequiven.repository.indicator')->findByParentAndOrderShow($indicator->getId());//Obtenemos los indicadores asociados
             foreach($indicatorsChildrens as $indicatorChildren){
                 $label = $dataReal = $dataPlan = $dataMedition = array();
@@ -710,6 +707,20 @@ class IndicatorService implements ContainerAwareInterface
                 $dataSetPlan["data"][] = $dataPlan;
                 $medition["data"][] = $dataMedition;
             }
+        } else{//La info a mostrar es de los resultados propios en base al real o plan
+            $label = $dataReal = $dataPlan = $dataMedition = array();
+            $label["label"] = $indicator->getSummary();
+            $label["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicator->getId()));
+            $dataReal["value"] = number_format($indicator->getValueFinal(), 2, ',', '.');
+            $dataReal["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicator->getId()));
+            $dataPlan["value"] = number_format($indicator->getTotalPlan(), 2, ',', '.');
+            $dataPlan["link"] = $this->generateUrl('pequiven_indicator_show_dashboard',array('id' => $indicator->getId()));
+            $dataMedition["value"] = number_format($indicator->getResultReal(), 2, ',', '.');
+
+            $category[] = $label;
+            $dataSetReal["data"][] = $dataReal;
+            $dataSetPlan["data"][] = $dataPlan;
+            $medition["data"][] = $dataMedition;
         }
         
         $data['dataSource']['chart'] = $chart;
@@ -717,9 +728,6 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['dataset'][] = $dataSetReal;
         $data['dataSource']['dataset'][] = $dataSetPlan;
         $data['dataSource']['dataset'][] = $medition;
-        
-//        var_dump(json_encode($data['dataSource']['dataset']));
-//        die();
         
         return $data;
     }
@@ -805,9 +813,6 @@ class IndicatorService implements ContainerAwareInterface
         $data['dataSource']['chart'] = $chart;
         $data['dataSource']['categories'][]["category"] = $category;
         $data['dataSource']['dataset'][] = $dataSetReal;
-        
-//        var_dump(json_encode($data['dataSource']['dataset']));
-//        die();
         
         return $data;
     }

@@ -348,6 +348,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showFeatures = false;
     
     /**
+     * ¿Mostar los gráficos del indicador en la página de dashboard?
+     * @var boolean
+     * @ORM\Column(name="showCharts",type="boolean")
+     */
+    private $showCharts = true;
+    
+    /**
+     * ¿Mostar las etiquetas del indicador en la página del dashboard?
+     * @var boolean
+     * @ORM\Column(name="showTags",type="boolean")
+     */
+    private $showTags = false;
+    
+    /**
      * @var float
      * 
      * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
@@ -1782,5 +1796,50 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     {
         return $this->charts;
     }
-    
+
+    /**
+     * Set showCharts
+     *
+     * @param boolean $showCharts
+     * @return Indicator
+     */
+    public function setShowCharts($showCharts)
+    {
+        $this->showCharts = $showCharts;
+
+        return $this;
+    }
+
+    /**
+     * Get showCharts
+     *
+     * @return boolean 
+     */
+    public function getShowCharts()
+    {
+        return $this->showCharts;
+    }
+
+    /**
+     * Set showTags
+     *
+     * @param boolean $showTags
+     * @return Indicator
+     */
+    public function setShowTags($showTags)
+    {
+        $this->showTags = $showTags;
+
+        return $this;
+    }
+
+    /**
+     * Get showTags
+     *
+     * @return boolean 
+     */
+    public function getShowTags()
+    {
+        return $this->showTags;
+    }
 }

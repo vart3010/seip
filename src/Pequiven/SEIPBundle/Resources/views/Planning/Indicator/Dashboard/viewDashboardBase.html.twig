@@ -50,7 +50,7 @@
             
             {{ indicatorService.getArrowOfIndicator(indicator)|raw }}
             
-            {% if seeTagIndicators == false %}{# En caso de que sólo se necesite ver el gráfico #}
+            {% if indicator.showCharts %}{# En caso de que sólo se necesite ver el gráfico #}
                 <div ng-controller="ChartsDashboardController" >
                     {% set Charts = indicator.getCharts %}
                     
@@ -87,8 +87,9 @@
                         </div>
                     </div>
                 </div>
-            {% else %}
-                {% if indicator.tagsIndicator|length > 0 %}    
+            {% endif %}
+            {% if indicator.showTags %}
+                {% if indicator.tagsIndicator|length > 0 %}
                     <fieldset class="fieldset">
                         <legend class="legend">{{ ('pequiven_indicator.tagIndicators'|trans({},'PequivenIndicatorBundle')) }}&nbsp;</legend>
                         {% include 'PequivenIndicatorBundle:Common:tagIndicators.html.twig' %}
