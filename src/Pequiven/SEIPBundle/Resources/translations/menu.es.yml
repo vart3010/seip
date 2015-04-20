@@ -119,6 +119,22 @@ app:
                             operative: Operativo
                         matrices_objectives:
                             Matrices de objetivos
+                    sig:
+                        main: Sistema Integrado de Gestión
+                        objective:
+                            main: Objetivos
+                            create: Cargar
+                            visualize: Visualizar
+                            matrices_objectives:
+                                Matrices de objetivos
+                        indicator:
+                            main: Indicadores
+                            create: Cargar
+                            visualize: Visualizar
+                        arrangement_program: 
+                            main: Programas de Gestión
+                            create: Cargar
+                            visualize: Visualizar
                     results:
                         main: Resultados
                         visualize:
