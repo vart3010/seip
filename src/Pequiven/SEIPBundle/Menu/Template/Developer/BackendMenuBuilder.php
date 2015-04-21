@@ -95,6 +95,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
             $this->addPlanningMenu($menu, $section);
         }
         
+        //Menú SIG
+        if($this->isGranted('ROLE_SEIP_SIG_*')){
+            $this->addMenuSIG($menu, $section);
+        }
+        
         //Menú Administración
         if($this->securityContext->isGranted(array('ROLE_SONATA_ADMIN'))){
             $menu->addChild('admin', array(
@@ -102,11 +107,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'icon-card'),
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main',$section)));
         }
-        
-        //Menú SIG
-//        if($this->isGranted('ROLE_SIG_*')){
-            $this->addMenuSIG($menu, $section);
-//        }
+
         return $menu;
     }
     
