@@ -102,6 +102,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 'labelAttributes' => array('icon' => 'icon-card'),
             ))->setLabel($this->translate(sprintf('app.backend.menu.%s.admin.main',$section)));
         }
+        
+        //Menú SIG
+//        if($this->isGranted('ROLE_SIG_*')){
+            $this->addMenuSIG($menu, $section);
+//        }
         return $menu;
     }
     
@@ -109,6 +114,82 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
     	//
         $bcmenu = $this->createSidebarMenu($request);
         return $this->getCurrentMenuItem($bcmenu);
+    }
+    
+    /**
+     * Construye y añade el menu de objetivos
+     * @param ItemInterface $menu
+     * @param type $section
+     */
+    private function addMenuSIG(ItemInterface $menu, $section) {
+        $menuSig = $this->factory->createItem('sig',
+                $this->getSubLevelOptions(array(
+                    'uri' => null,
+                    'labelAttributes' => array('icon' => 'fa fa-cubes',),
+                ))
+                )
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.main', $section)));
+        
+            
+                //Menú Nivel 2: Visualizar
+                $objective = $this->factory->createItem('objective.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'objetive',
+                        'labelAttributes' => array('icon' => '',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.main', $section)));
+               //Ver 
+                $objective->addChild('sig.objective.list', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
+                
+                $objective->addChild('sig.objective.create', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.create', $section)));
+
+                $menuSig->addChild($objective);
+                
+                $indicator = $this->factory->createItem('indicator.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'indicator',
+                        'labelAttributes' => array('icon' => '',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.main', $section)));
+               //Ver 
+                $indicator->addChild('sig.indicator.list', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
+                
+                $indicator->addChild('sig.indicator.create', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.create', $section)));
+
+                $menuSig->addChild($indicator);
+                
+                $arrangementProgram = $this->factory->createItem('arrangement_program.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => 'arrangement_program',
+                        'labelAttributes' => array('icon' => '',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.main', $section)));
+               //Ver 
+                $arrangementProgram->addChild('sig.arrangement_program.list', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize', $section)));
+                
+                $arrangementProgram->addChild('sig.arrangement_program.create', array(
+                        'route' => '',
+                    ))
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.create', $section)));
+
+                $menuSig->addChild($arrangementProgram);
+                
+        $menu->addChild($menuSig);
     }
     
     /**

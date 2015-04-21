@@ -23,7 +23,7 @@ abstract class Chart
     const TYPE_CHART_COLUMN_REAL_PLAN = 1;
     
     /**
-     * Gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros
+     * Gráfico tipo barras vertical para mostrar el real/plan de los parámetros de cada mes. Sólo para el caso en que sean 2 parámetros (Bien sea plan y real automático o plan y real automático a partir de ecuación)
      */
     const TYPE_CHART_COLUMN_FROM_FORMULA_PARAMETERS = 2;
     
