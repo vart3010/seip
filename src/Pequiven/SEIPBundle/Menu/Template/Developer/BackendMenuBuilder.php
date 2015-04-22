@@ -144,11 +144,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'route' => '',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.visualize', $section)));
-                
-                $objective->addChild('sig.objective.create', array(
+
+                $objective->addChild('sig.objective.matrices_objectives', array(
                         'route' => '',
                     ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.create', $section)));
+                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.objective.matrices_objectives', $section)));
 
                 $menuSig->addChild($objective);
                 
@@ -163,11 +163,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'route' => '',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.visualize', $section)));
-                
-                $indicator->addChild('sig.indicator.create', array(
-                        'route' => '',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.indicator.create', $section)));
 
                 $menuSig->addChild($indicator);
                 
