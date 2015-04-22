@@ -52,12 +52,12 @@ class ObjetiveTacticController extends baseController
     {
         $securityService = $this->getSecurityService();
         $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
-        
+
         $resource = $this->findOr404($request);
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC')){
             $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
         }
-        
+
         $indicatorService = $this->getIndicatorService();
         $hasPermissionToApproved = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC",$resource);
         $hasPermissionToUpdate = $securityService->isGrantedFull("ROLE_SEIP_OBJECTIVE_EDIT_TACTIC",$resource);

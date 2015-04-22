@@ -16,6 +16,7 @@ pequiven_master:
         vinculatedToZIV: Esta gerencia esta vinculada a ZIV
     filters:
         qualitySystem: Sistema de calidad
+        arrangementSystem: Sistemas de gestión
     company:
         type:
             matriz: Matriz
