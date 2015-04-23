@@ -281,13 +281,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * Sistema de calidad
-     * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
-     */
-//    protected $qualitySystem;
-    
-    /**
      * Sistema de gestión
      * @var \Pequiven\SIGBundle\Entity\ManagementSystem
      * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
@@ -1206,29 +1199,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     {
         return $this->requiredToImport;
     }
-
-    /**
-     * Set qualitySystem
-     *
-     * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
-     * @return Objetive
-     */
-//    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
-//    {
-//        $this->qualitySystem = $qualitySystem;
-//
-//        return $this;
-//    }
-
-    /**
-     * Get qualitySystem
-     *
-     * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
-     */
-//    public function getQualitySystem()
-//    {
-//        return $this->qualitySystem;
-//    }
     
     /**
      * Set managementSystem
