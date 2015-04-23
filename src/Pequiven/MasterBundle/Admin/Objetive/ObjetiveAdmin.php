@@ -61,8 +61,8 @@ class ObjetiveAdmin extends Admin
                 ->end()
             ->end()
             ->tab('Details')
-                    ->add('qualitySystem',null,array(
-                        'query_builder' => function(\Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository $repository)
+                    ->add('managementSystem',null,array(
+                        'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository)
                         {
                             return $repository->getQueryAllEnabled();
                         }

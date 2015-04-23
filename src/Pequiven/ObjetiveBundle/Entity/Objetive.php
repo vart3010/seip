@@ -285,7 +285,14 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
      */
-    protected $qualitySystem;
+//    protected $qualitySystem;
+    
+    /**
+     * Sistema de gestión
+     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     */
+    protected $managementSystem;
     
     /**
      * Detalles del objetivo
@@ -1206,21 +1213,44 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
      * @return Objetive
      */
-    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
-    {
-        $this->qualitySystem = $qualitySystem;
-
-        return $this;
-    }
+//    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
+//    {
+//        $this->qualitySystem = $qualitySystem;
+//
+//        return $this;
+//    }
 
     /**
      * Get qualitySystem
      *
      * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
      */
-    public function getQualitySystem()
+//    public function getQualitySystem()
+//    {
+//        return $this->qualitySystem;
+//    }
+    
+    /**
+     * Set managementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @return Objetive
+     */
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
     {
-        return $this->qualitySystem;
+        $this->managementSystem = $managementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get managementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     */
+    public function getManagementSystem()
+    {
+        return $this->managementSystem;
     }
 
     /**

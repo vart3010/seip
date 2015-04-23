@@ -201,3 +201,16 @@ ALTER TABLE seip_indicators_charts ADD CONSTRAINT FK_8E5F3961BEF83E0A FOREIGN KE
 DROP INDEX planning_idx ON PrePlanningUser;
 CREATE UNIQUE INDEX planning_gf_idx ON PrePlanningUser (user_id, period_id, levelPlanning, gerenciaFirst_id);
 CREATE UNIQUE INDEX planning_gs_idx ON PrePlanningUser (user_id, period_id, levelPlanning, gerenciaSecond_id);
+
+-- Sistemas de Gestión SIG
+CREATE TABLE ManagementSystem (id INT AUTO_INCREMENT NOT NULL, description VARCHAR(150) NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deletedAt DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE ManagementSystem_audit (id INT NOT NULL, rev INT NOT NULL, description VARCHAR(150) DEFAULT NULL, enabled TINYINT(1) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE seip_objetive ADD managementSystem_id INT DEFAULT NULL;
+ALTER TABLE seip_objetive ADD CONSTRAINT FK_C239594B4ADC25A2 FOREIGN KEY (managementSystem_id) REFERENCES ManagementSystem (id);
+CREATE INDEX IDX_C239594B4ADC25A2 ON seip_objetive (managementSystem_id);
+ALTER TABLE seip_objetive_audit ADD managementSystem_id INT DEFAULT NULL;
+
+ALTER TABLE seip_objetive DROP FOREIGN KEY FK_C239594B68C46012;
+-- DROP INDEX IDX_C239594B68C46012 ON seip_objetive;
+ALTER TABLE seip_objetive DROP qualitySystem_id;
+ALTER TABLE seip_objetive_audit DROP qualitySystem_id;
