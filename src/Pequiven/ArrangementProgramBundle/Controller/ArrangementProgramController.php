@@ -501,6 +501,7 @@ class ArrangementProgramController extends SEIPController
         $this->getPeriodService()->checkIsOpen();
         
         $type = $request->get("type");
+        $associate = $request->get("associate");
         
         $rol = null;
         $rolesByType = array(
@@ -528,7 +529,8 @@ class ArrangementProgramController extends SEIPController
                 ->setType($type)
                 ->setPeriod($period)
                 ->setCreatedBy($user);
-        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+//        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+        $entity->setCategoryArrangementProgram($this->get('pequiven.repository.category_arrangement_program')->find($associate));
         if($request->isMethod('GET') === true && ($templateSourceId = $request->get('templateSource',null)) !== null){
             
             $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE');
@@ -544,7 +546,7 @@ class ArrangementProgramController extends SEIPController
             }
             $entity->setTimeline($timeLine);
         }
-        $form = $this->createCreateForm($entity,array('type' => $type));
+        $form = $this->createCreateForm($entity,array('type' => $type,'associate' => $associate));
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }

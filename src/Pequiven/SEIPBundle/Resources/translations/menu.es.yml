@@ -131,7 +131,10 @@ app:
                             visualize: Visualizar
                         arrangement_program: 
                             main: Programas de Gestión
-                            create: Cargar
+                            add:
+                                main: Cargar
+                                tactic: Táctico
+                                operative: Operativo
                             visualize: Visualizar
                     results:
                         main: Resultados

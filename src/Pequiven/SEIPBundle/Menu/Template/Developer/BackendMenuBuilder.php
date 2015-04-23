@@ -166,22 +166,47 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 
                 $menuSig->addChild($indicator);
                 
+                
+                //Sección Programas de Gestión
                 $arrangementProgram = $this->factory->createItem('arrangement_program.main',
                         $this->getSubLevelOptions(array(
                         'uri' => 'arrangement_program',
                         'labelAttributes' => array('icon' => '',),
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.main', $section)));
-               //Ver 
-                $arrangementProgram->addChild('sig.arrangement_program.list', array(
+                //Visualizar
+                $arrangementProgram->addChild('sig.arrangement_program.visualize', array(
                         'route' => '',
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize', $section)));
-                
-                $arrangementProgram->addChild('sig.arrangement_program.create', array(
-                        'route' => '',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.create', $section)));
+                //Añadir
+                if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*')){
+
+                    $subchild = $this->factory->createItem('sig.arrangement_program.add.main',
+                        $this->getSubLevelOptions(array(
+                        'uri' => null,
+                        'labelAttributes' => array('icon' => 'icon-book',),
+                        ))
+                    )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
+
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC')){
+                        $subchild
+                        ->addChild('sig.arrangement_program.add.tactic', array(
+                            'route' => 'pequiven_arrangementprogram_create',
+                            'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.tactic', $section)));
+                    }
+                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')){
+                        $subchild->addChild('sig.arrangement_program.add.operative', array(
+                            'route' => 'pequiven_arrangementprogram_create',
+                            'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),
+                        ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.operative', $section)));
+                    }
+
+                    $arrangementProgram->addChild($subchild);
+                }
 
                 $menuSig->addChild($arrangementProgram);
                 
@@ -1003,14 +1028,14 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     $subchild
                     ->addChild('arrangement_programs.tactic', array(
                         'route' => 'pequiven_arrangementprogram_create',
-                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC),
+                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.tactic', $section)));
                 }
                 if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')){
                     $subchild->addChild('arrangement_programs.operative', array(
                         'route' => 'pequiven_arrangementprogram_create',
-                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE),
+                        'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA),
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.operative', $section)));
                 }

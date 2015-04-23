@@ -14,6 +14,9 @@ abstract class ArrangementProgram
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
     
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_PLA = 2;
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_SIG = 1;
+    
     /**
      * Resumen Tipo "Cargados"
      */
@@ -457,7 +460,7 @@ abstract class ArrangementProgram
     }
     
     /**
-     * Revuelve el objetivo dependiendo del tipo de programa de gestion
+     * Devuelve el objetivo dependiendo del tipo de programa de gestion
      */
     function getObjetiveByType() {
         $objetive = null;
