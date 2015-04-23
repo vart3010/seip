@@ -27,9 +27,9 @@ class GerenciaController extends baseController {
     public function listAction(){
         $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         
-        $managementSystems = $this->get('pequiven.repository.sig_management_system')->getAllEnabled();
+        $qualitySystems = $this->get('pequiven.repository.quality_system')->getAllEnabled();
         return array(
-            'managementSystems' => $managementSystems,
+            'qualitySystems' => $qualitySystems,
         );
     }
     
@@ -198,10 +198,10 @@ class GerenciaController extends baseController {
     {
         $this->getSecurityService()->checkSecurity(array('ROLE_SEIP_OBJECTIVE_LIST_MATRIX_OBJECTIVES','ROLE_SEIP_PLANNING_LIST_OBJECTIVE_MATRIX_OBJECTIVES'));
         
-        $managementSystemId = $request->get('managementSystem');
-        $managementSystem = null;
-        if($managementSystemId !== null){
-            $managementSystem = $this->get('pequiven.repository.sig_management_system')->find($managementSystemId);
+        $qualitySystemId = $request->get('qualitySystem');
+        $qualitySystem = null;
+        if($qualitySystemId !== null){
+            $qualitySystem = $this->get('pequiven.repository.quality_system')->find($qualitySystemId);
         }
         
         $idGerencia = $request->get('id');
@@ -263,7 +263,7 @@ class GerenciaController extends baseController {
         
         $lastRowOpe = 8;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
-            if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
+            if($qualitySystem !== null && $qualitySystem !== $objetiveTactic->getQualitySystem()){
                 continue;
             }
             $indicatorsTactics = $objetiveTactic->getIndicators();
@@ -272,7 +272,7 @@ class GerenciaController extends baseController {
             $totalObjetiveOperatives = count($objetivesOperatives);
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
-                    if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
+                    if($qualitySystem !== null && $qualitySystem !== $objetiveOperative->getQualitySystem()){
                         continue;
                     }
                     $contTotalObjOperatives = 0;

@@ -1,19 +1,28 @@
 <?php
 
-namespace Pequiven\SIGBundle\Entity;
+/*
+ * This file is part of the TecnoCreaciones package.
+ * 
+ * (c) www.tecnocreaciones.com
+ * 
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Pequiven\SEIPBundle\Entity\QualitySystem;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Sistema de gestión
+ * Sistema de calidad
  *
- * @author 
+ * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\ManagementSystemRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ManagementSystem
+class QualitySystem 
 {
     /**
      * @var integer
@@ -73,7 +82,7 @@ class ManagementSystem
      * Set description
      *
      * @param string $description
-     * @return ManagementSystem
+     * @return QualitySystem
      */
     public function setDescription($description)
     {
@@ -96,7 +105,7 @@ class ManagementSystem
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ManagementSystem
+     * @return QualitySystem
      */
     public function setCreatedAt($createdAt)
     {
@@ -119,7 +128,7 @@ class ManagementSystem
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return ManagementSystem
+     * @return QualitySystem
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -142,7 +151,7 @@ class ManagementSystem
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return ManagementSystem
+     * @return QualitySystem
      */
     public function setDeletedAt($deletedAt)
     {
@@ -165,7 +174,7 @@ class ManagementSystem
      * Set enabled
      *
      * @param boolean $enabled
-     * @return ManagementSystem
+     * @return QualitySystem
      */
     public function setEnabled($enabled)
     {

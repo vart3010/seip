@@ -184,6 +184,10 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
+        pequiven.quality_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
         pequiven.value_indicator_config:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Indicator/ValueIndicator/ValueIndicatorConfig
@@ -212,9 +216,3 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Chart
                 controller: Pequiven\SEIPBundle\Controller\ChartController
                 repository: Pequiven\SEIPBundle\Repository\ChartRepository
-        pequiven.sig_management_system:
-            driver: doctrine/orm
-            classes:
-                model: Pequiven\SIGBundle\Entity\ManagementSystem
-                repository: Pequiven\SIGBundle\Repository\ManagementRepository
-
