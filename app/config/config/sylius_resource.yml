@@ -213,8 +213,15 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Chart
                 controller: Pequiven\SEIPBundle\Controller\ChartController
                 repository: Pequiven\SEIPBundle\Repository\ChartRepository
+                
         pequiven.sig_management_system:
             driver: doctrine/orm
             classes:
                 model: Pequiven\SIGBundle\Entity\ManagementSystem
                 repository: Pequiven\SIGBundle\Repository\ManagementSystemRepository
+                
+        pequiven.sig_politic_management_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SIGBundle\Entity\PoliticManagementSystem
+                repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository

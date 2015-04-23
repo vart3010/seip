@@ -434,7 +434,8 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [admin]]
-            
+    
+    # Sistemas de Gestión
     sonata.admin.sig_management_system:
         class: Pequiven\MasterBundle\Admin\SIG\ManagementSystemAdmin
         tags:
@@ -442,6 +443,18 @@ services:
         arguments:
             - ~
             - Pequiven\SIGBundle\Entity\ManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    # Políticas de Sistemas de Gestión
+    sonata.admin.sig_politic_management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\PoliticManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Políticas de Sistemas de Gestión" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\PoliticManagementSystem
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

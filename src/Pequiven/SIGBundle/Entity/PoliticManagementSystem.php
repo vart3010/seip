@@ -4,16 +4,16 @@ namespace Pequiven\SIGBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Pequiven\SIGBundle\Model\ManagementSystem as modelManagementSystem;
+use Pequiven\SIGBundle\Model\PoliticManagementSystem as modelPoliticManagementSystem;
 
 /**
- * Sistema de gestión
+ * Política del Sistema de gestión
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\ManagementSystemRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class ManagementSystem extends modelManagementSystem
+class PoliticManagementSystem extends modelPoliticManagementSystem
 {
     /**
      * @var integer
@@ -27,9 +27,16 @@ class ManagementSystem extends modelManagementSystem
     /**
      * Descripcion
      * @var string
-     * @ORM\Column(name="description",type="string",length=150)
+     * @ORM\Column(name="description",type="string",length=50)
      */
     private $description;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descriptionBody", type="text")
+     */
+    private $descriptionBody;
     
     /**
      * Habilitado para consultas
@@ -58,13 +65,6 @@ class ManagementSystem extends modelManagementSystem
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
-    /**
-     * Política de Sistema de Gestión
-     * @var \Pequiven\SIGBundle\Entity\PoliticManagementSystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\PoliticManagementSystem")
-     */
-    protected $politicManagementSystem;
 
     /**
      * Get id
@@ -80,7 +80,7 @@ class ManagementSystem extends modelManagementSystem
      * Set description
      *
      * @param string $description
-     * @return ManagementSystem
+     * @return PoliticManagementSystem
      */
     public function setDescription($description)
     {
@@ -103,7 +103,7 @@ class ManagementSystem extends modelManagementSystem
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return ManagementSystem
+     * @return PoliticManagementSystem
      */
     public function setCreatedAt($createdAt)
     {
@@ -126,7 +126,7 @@ class ManagementSystem extends modelManagementSystem
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return ManagementSystem
+     * @return PoliticManagementSystem
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -149,7 +149,7 @@ class ManagementSystem extends modelManagementSystem
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return ManagementSystem
+     * @return PoliticManagementSystem
      */
     public function setDeletedAt($deletedAt)
     {
@@ -172,7 +172,7 @@ class ManagementSystem extends modelManagementSystem
      * Set enabled
      *
      * @param boolean $enabled
-     * @return ManagementSystem
+     * @return PoliticManagementSystem
      */
     public function setEnabled($enabled)
     {
@@ -196,25 +196,25 @@ class ManagementSystem extends modelManagementSystem
     }
 
     /**
-     * Set politicManagementSystem
+     * Set descriptionBody
      *
-     * @param \Pequiven\SIGBundle\Entity\PoliticManagementSystem $politicManagementSystem
-     * @return ManagementSystem
+     * @param string $descriptionBody
+     * @return PoliticManagementSystem
      */
-    public function setPoliticManagementSystem(\Pequiven\SIGBundle\Entity\PoliticManagementSystem $politicManagementSystem = null)
+    public function setDescriptionBody($descriptionBody)
     {
-        $this->politicManagementSystem = $politicManagementSystem;
+        $this->descriptionBody = $descriptionBody;
 
         return $this;
     }
 
     /**
-     * Get politicManagementSystem
+     * Get descriptionBody
      *
-     * @return \Pequiven\SIGBundle\Entity\PoliticManagementSystem 
+     * @return string 
      */
-    public function getPoliticManagementSystem()
+    public function getDescriptionBody()
     {
-        return $this->politicManagementSystem;
+        return $this->descriptionBody;
     }
 }

@@ -210,7 +210,16 @@ ALTER TABLE seip_objetive ADD CONSTRAINT FK_C239594B4ADC25A2 FOREIGN KEY (manage
 CREATE INDEX IDX_C239594B4ADC25A2 ON seip_objetive (managementSystem_id);
 ALTER TABLE seip_objetive_audit ADD managementSystem_id INT DEFAULT NULL;
 
+-- Eliminación de Relación entre Objetivos y Sistemas de Calidad
 ALTER TABLE seip_objetive DROP FOREIGN KEY FK_C239594B68C46012;
 -- DROP INDEX IDX_C239594B68C46012 ON seip_objetive;
 ALTER TABLE seip_objetive DROP qualitySystem_id;
 ALTER TABLE seip_objetive_audit DROP qualitySystem_id;
+
+-- Políticas de Sistemas de Gestión SIG
+CREATE TABLE PoliticManagementSystem (id INT AUTO_INCREMENT NOT NULL, description VARCHAR(50) NOT NULL, descriptionBody LONGTEXT NOT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, deletedAt DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+CREATE TABLE PoliticManagementSystem_audit (id INT NOT NULL, rev INT NOT NULL, description VARCHAR(50) DEFAULT NULL, descriptionBody LONGTEXT DEFAULT NULL, enabled TINYINT(1) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, deletedAt DATETIME DEFAULT NULL, revtype VARCHAR(4) NOT NULL, PRIMARY KEY(id, rev)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE ManagementSystem ADD politicManagementSystem_id INT DEFAULT NULL;
+ALTER TABLE ManagementSystem ADD CONSTRAINT FK_49A8BFF6763F1C FOREIGN KEY (politicManagementSystem_id) REFERENCES PoliticManagementSystem (id);
+CREATE INDEX IDX_49A8BFF6763F1C ON ManagementSystem (politicManagementSystem_id);
+ALTER TABLE ManagementSystem_audit ADD politicManagementSystem_id INT DEFAULT NULL;

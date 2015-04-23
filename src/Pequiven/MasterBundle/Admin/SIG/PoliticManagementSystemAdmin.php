@@ -11,13 +11,14 @@ use Sonata\AdminBundle\Form\FormMapper;
  * Administrador de los sistemas de gestión
  *
  */
-class ManagementSystemAdmin extends Admin
+class PoliticManagementSystemAdmin extends Admin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
         $show
             ->add('id')
             ->add('description')
+            ->add('descriptionBody')
             ->add('enabled')
             ->add('createdAt')
             ->add('updatedAt')
@@ -28,18 +29,12 @@ class ManagementSystemAdmin extends Admin
     protected function configureFormFields(FormMapper $form) 
     {
         $form
-            ->tab('General')
-                    ->add('description')
-                    ->add('enabled',null,array(
-                        'required' => false,
-                    ))
-                ->end()
-            ->end()
-            ->tab('Details')
-                    ->add('politicManagementSystem')
-                ->end()
-            ->end()
-        ;
+            ->add('description')
+            ->add('descriptionBody')
+            ->add('enabled',null,array(
+                'required' => false,
+            ))
+            ;
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
