@@ -1,28 +1,19 @@
 <?php
 
-/*
- * This file is part of the TecnoCreaciones package.
- * 
- * (c) www.tecnocreaciones.com
- * 
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Pequiven\SEIPBundle\Entity\QualitySystem;
+namespace Pequiven\SIGBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Sistema de calidad
+ * Sistema de gestión
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * @author 
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\ManagementSystemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class QualitySystem 
+class ManagementSystem
 {
     /**
      * @var integer
@@ -82,7 +73,7 @@ class QualitySystem
      * Set description
      *
      * @param string $description
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setDescription($description)
     {
@@ -105,7 +96,7 @@ class QualitySystem
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setCreatedAt($createdAt)
     {
@@ -128,7 +119,7 @@ class QualitySystem
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -151,7 +142,7 @@ class QualitySystem
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setDeletedAt($deletedAt)
     {
@@ -174,7 +165,7 @@ class QualitySystem
      * Set enabled
      *
      * @param boolean $enabled
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setEnabled($enabled)
     {

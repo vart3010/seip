@@ -1,15 +1,6 @@
 <?php
 
-/*
- * This file is part of the TecnoCreaciones package.
- * 
- * (c) www.tecnocreaciones.com
- * 
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Pequiven\MasterBundle\Admin\QualitySystem;
+namespace Pequiven\MasterBundle\Admin\SIG;
 
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -17,11 +8,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Administrador de los sistemas de calidad
+ * Administrador de los sistemas de gestión
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
+ * @author 
  */
-class QualitySystemAdmin extends Admin
+class ManagementSystemAdmin extends Admin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {

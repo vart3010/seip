@@ -269,17 +269,6 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.quality_system.quality_system:
-        class: Pequiven\MasterBundle\Admin\QualitySystem\QualitySystemAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Sistemas de calidad" ,label: "Sistema de calidad" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
          
     sonata.admin.cei.cause_stop:
         class: Pequiven\MasterBundle\Admin\CEI\CauseStopAdmin
@@ -445,3 +434,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [admin]]
+            
+    sonata.admin.sig.management_system:
+        class: Pequiven\MasterBundle\Admin\SIG\ManagementSystemAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "SIG" ,label: "Sistemas de Gestión" }
+        arguments:
+            - ~
+            - Pequiven\SIGBundle\Entity\ManagementSystem
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]

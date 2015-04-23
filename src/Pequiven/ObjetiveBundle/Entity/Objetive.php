@@ -281,11 +281,11 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * Sistema de calidad
-     * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
+     * Sistema de gestión
+     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
      */
-    protected $qualitySystem;
+    protected $managementSystem;
     
     /**
      * Detalles del objetivo
@@ -1201,29 +1201,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
 
     /**
-     * Set qualitySystem
-     *
-     * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
-     * @return Objetive
-     */
-    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
-    {
-        $this->qualitySystem = $qualitySystem;
-
-        return $this;
-    }
-
-    /**
-     * Get qualitySystem
-     *
-     * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
-     */
-    public function getQualitySystem()
-    {
-        return $this->qualitySystem;
-    }
-
-    /**
      * Set details
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details
@@ -1244,5 +1221,28 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getDetails()
     {
         return $this->details;
+    }
+    
+    /**
+     * Set managementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @return Objetive
+     */
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
+    {
+        $this->managementSystem = $managementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get managementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     */
+    public function getManagementSystem()
+    {
+        return $this->managementSystem;
     }
 }

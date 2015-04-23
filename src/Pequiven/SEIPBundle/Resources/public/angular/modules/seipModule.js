@@ -2687,7 +2687,7 @@ angular.module('seipModule.controllers', [])
         })
         .controller('TableGerenciaController',function($scope){
             $scope.model = {
-                qualitySystem: []
+                managementSystem: []
             };
             
             $scope.exportToXLS = function(id)
@@ -2695,8 +2695,8 @@ angular.module('seipModule.controllers', [])
                 var parameters = {
                     id: id
                 };
-                if ($scope.model.qualitySystem != null && $scope.model.qualitySystem.id != undefined) {
-                    parameters.qualitySystem = $scope.model.qualitySystem.id;
+                if ($scope.model.managementSystem != null && $scope.model.managementSystem.id != undefined) {
+                    parameters.managementSystem = $scope.model.managementSystem.id;
                 }
                 var url = 'pequiven_gerenciafirst_export';
                 $scope.urlExport = Routing.generate(url,parameters);
