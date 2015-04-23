@@ -2066,8 +2066,10 @@ angular.module('seipModule.controllers', [])
             };
         })
         
+        //Controlador para los gráficos a mostrar en el dashboard del indicador
         .controller('ChartsDashboardController', function($scope, $http){
             
+            //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
             $scope.chargeChartDoughnut2d = function(indicatorId){
                 var getDataChartDoughnut = Routing.generate("getDataChartDoughnut", {id: indicatorId});
                 $scope.chartDoughnut2d = {};
@@ -2079,6 +2081,7 @@ angular.module('seipModule.controllers', [])
                 });
             }
             
+            //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
             $scope.chargeChartColumnLineDualAxis = function(indicatorId){
                 var getDataChartColumnLineDualAxis = Routing.generate("getDataChartColumnLineDualAxis", {id: indicatorId});
                 $scope.chartColumnLineDualAxis = {};
@@ -2090,6 +2093,7 @@ angular.module('seipModule.controllers', [])
                     }
                 });
             }
+            
         })
         
         .controller('DashboardController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
@@ -2360,7 +2364,6 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
-            //Widget de los indicadores en forma de bulbo (Por ejemplo en el dashboard de los indicadores estratégicos)
             $scope.renderWidgetMultiLevelPie = function(id,data,width,height) {
                 FusionCharts.ready(function() {
                     var widgetMultiLevelPieChart = new FusionCharts({
@@ -2379,6 +2382,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            //Gráfico en forma de dona para mostrar los indicadores asociados (Resumen, Referencia y Resultado de la Medición)
             $scope.renderWidgetDoughnut2d = function(id,data,width,height){
                 FusionCharts.ready(function() {
                     var widgetDoughnut2d = new FusionCharts({
@@ -2397,6 +2401,7 @@ angular.module('seipModule.controllers', [])
                 })
             };
             
+            //Gráfico para mostrar información de 2 variables (respecto al eje izquierdo) y el resultado de la medición (respecto al eje derecho en valor porcentual)
             $scope.renderChartColumnLineDualAxis = function(id,data){
                 FusionCharts.ready(function() {
                     var chartColumnLineDualAxis = new FusionCharts({
@@ -2432,6 +2437,30 @@ angular.module('seipModule.controllers', [])
                     });
                     chartColumnLineSingleAxis.setTransparent(true);
                     chartColumnLineSingleAxis.render();
+                })
+            }
+            
+            //Gráfico en forma tacómetro (Usado para mostrar el resultado de los indicadores estratégicos en el dashboard)
+            $scope.renderChartAngularGauge = function(id,data,width,height){
+                FusionCharts.ready(function() {
+                    var chartAngularGauge = new FusionCharts({
+                        "type": "angulargauge",
+                        "renderAt": id,
+                        "width": width,
+                        "height": height,
+                        "dataFormat": "json",
+                        "dataSource": {
+                            "chart": data.dataSource.chart,
+                            "colorrange": {
+                                "color": data.dataSource.colorRange.color
+                            },
+                            "dials": {
+                                "dial": data.dataSource.dials.dial
+                            },
+                        }
+                    });
+                    chartAngularGauge.setTransparent(true);
+                    chartAngularGauge.render();
                 })
             }
             
