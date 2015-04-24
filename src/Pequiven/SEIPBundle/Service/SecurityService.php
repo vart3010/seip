@@ -434,7 +434,6 @@ class SecurityService implements ContainerAwareInterface
                 }
             }
             $methodValidMap = $this->getMethodValidMap();
-//            var_dump($methodValidMap);
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
                 $valid = call_user_func_array(array($this,$method),array($rol,$parameters));

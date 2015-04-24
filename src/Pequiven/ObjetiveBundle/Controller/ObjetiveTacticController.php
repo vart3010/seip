@@ -175,8 +175,7 @@ class ObjetiveTacticController extends baseController
 
             //Si el usuario tiene rol Directivo
             if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
-                //En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
-                if (!isset($data['check_gerencia'])) {
+                if (!isset($data['check_gerencia'])) {//En caso de que las gerencias a impactar por el objetivo sean seleccionadas en el select
                     $totalRef = $this->setRef(array('objetiveStrategics' => $data['parents'], 'totalGerencias' => count($data['gerencia'])));
                     if($totalRef[0] != $data['ref']){
                         $this->updateIndicatorRef($data, $totalRef);
