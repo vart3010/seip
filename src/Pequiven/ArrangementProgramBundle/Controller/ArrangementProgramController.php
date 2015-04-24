@@ -613,11 +613,17 @@ class ArrangementProgramController extends SEIPController
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE'),
         );
+//        $rolesByType = array(
+//            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
+//            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
+//        );
         if(isset($rolesByType[$entity->getType()])){
             $rol = $rolesByType[$entity->getType()];
         }
         $securityService = $this->getSecurityService();
         $securityService->checkSecurity($rol);
+//        var_dump($rol);
+//        die();
         if(!$securityService->isGranted($rol[1])){
             $securityService->checkSecurity($rol[0],$entity);
         }
