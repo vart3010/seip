@@ -14,8 +14,8 @@ abstract class ArrangementProgram
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
     
-    const ASSOCIATE_ARRANGEMENT_PROGRAM_PLA = 2;
     const ASSOCIATE_ARRANGEMENT_PROGRAM_SIG = 1;
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_PLA = 2;
     
     /**
      * Resumen Tipo "Cargados"
