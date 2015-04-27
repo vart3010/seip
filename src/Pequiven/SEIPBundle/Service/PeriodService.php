@@ -103,7 +103,7 @@ class PeriodService extends ContainerAware
 //                }
 //            }
 //        }
-        if(!$period){
+        if(!$period && $this->isGranted('ROLE_SEIP_PLANNING_*')){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
