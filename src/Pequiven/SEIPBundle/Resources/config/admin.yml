@@ -424,6 +424,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.fail:
+        class: Pequiven\MasterBundle\Admin\CEI\FailAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Fallas de PNR" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Fail
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:
