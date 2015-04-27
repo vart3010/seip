@@ -210,11 +210,21 @@ class PeriodService extends ContainerAware
     {
         $request = $this->getRequest();
         $session = $request->getSession();
-        $listArrayPeriods = $session->get('listPeriods');
+        if($this->isGranted('ROLE_SEIP_PLANNING_*')){
+            $listArrayPeriods = $session->get('listPeriods');
+        } else{
+            $listArrayPeriods = array();
+        }
         if($listArrayPeriods !== null){
             return $listArrayPeriods;
         }
-        $periods = $this->getPeriodsAvailableConsultation();
+        
+        if($this->isGranted('ROLE_SEIP_PLANNING_*')){
+            $periods = $this->getPeriodsAvailableConsultation();
+        } else{
+            $periods = $this->getPeriodActive();
+        }
+        
         foreach ($periods as $period) {
             $listArrayPeriods[] = array(
                 'id' => $period->getId(),
