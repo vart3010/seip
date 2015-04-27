@@ -266,6 +266,8 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
@@ -300,6 +302,8 @@ class SecurityService implements ContainerAwareInterface
         
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
@@ -336,6 +340,8 @@ class SecurityService implements ContainerAwareInterface
         
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
