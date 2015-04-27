@@ -84,9 +84,9 @@ class ObjetiveRepository extends EntityRepository {
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
 
-        $query = $this->createQueryBuilder('o');
+        $query = $this->getQueryBuilder();
+//        $query = $this->createQueryBuilder('o');
         $query
-                ->select('o')
                 ->innerJoin('o.parents', 'p')
                 ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
         ;
@@ -102,7 +102,7 @@ class ObjetiveRepository extends EntityRepository {
         } else {
             if (!isset($options['searchByRef'])) {
                 if ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX', 'ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
-                    if (!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))) {
+                    if (!$securityContext->isGranted(array('ROLE_WORKER_PLANNING')) || $securityContext->isGranted(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE'))){
                         $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
                     }
                 }
