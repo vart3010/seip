@@ -1,6 +1,6 @@
 <?php
 
-namespace Pequiven\SEIPBundle\Controller;
+namespace Pequiven\SIGBundle\Controller;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
 use Symfony\Component\HttpFoundation\JsonResponse;
