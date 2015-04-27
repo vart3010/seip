@@ -65,12 +65,13 @@ class ObjetiveRepository extends EntityRepository {
      */
     public function getByLineStrategic($lineStrategicsArray) {
         //$em = $this->getEntityManager();
-        $query = $this->createQueryBuilder('o');
+        $query = $this->getQueryBuilder();
+//        $query = $this->createQueryBuilder('o');
         $query
-                ->select('o')
                 ->innerJoin('o.lineStrategics', 'ls')
                 ->andWhere($query->expr()->in('ls.id', $lineStrategicsArray))
         ;
+        $this->applyPeriodCriteria($query);
         return $query->getQuery()->getResult();
     }
 
@@ -636,6 +637,10 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('period', $period)
         ;
         return $qb->getQuery()->getResult();
+    }
+    
+    protected function getAlias() {
+        return 'o';
     }
 
 }

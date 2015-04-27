@@ -35,6 +35,9 @@
         
          <!-- Repositorio de Objetivo Estratégico -->
         <service id="pequiven.repository.objetivestrategic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         <service id="pequiven.repository.objetive" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
@@ -46,11 +49,17 @@
         
         <!-- Repositorio de Objetivo Táctico -->
         <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         
         <!-- Repositorio de Objetivo Operativo -->
         <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         <service id="pequiven.repository.monitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">

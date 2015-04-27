@@ -611,7 +611,7 @@ class ObjetiveTacticController extends baseController
         //En caso de que la variable de línea estratégica sea un número
         if (is_array($lineStrategicArray)) {
             //$results = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('lineStrategics' => $lineStrategicArray,'objetiveLevel' => $objetiveLevelId));
-            $results = $em->getRepository('PequivenObjetiveBundle:Objetive')->getByLineStrategic($lineStrategicArray);
+            $results = $this->get('pequiven.repository.objetive')->getByLineStrategic($lineStrategicArray);
             $totalResults = count($results);
             if (is_array($results) && $totalResults > 0) {
                 foreach ($results as $result) {
