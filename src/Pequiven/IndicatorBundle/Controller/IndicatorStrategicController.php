@@ -101,6 +101,7 @@ class IndicatorStrategicController extends baseController {
             $data = $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
 
             $object->setRefParent($data['refObjetive']);
+            $object->setSummary($data['description']);
             $object->setTmp(true);
             
             $data['tendency'] = (int)$data['tendency'];            

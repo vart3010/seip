@@ -120,6 +120,7 @@ class IndicatorTacticController extends baseController
             $period = $periodService->getPeriodActive();
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
+            $object->setSummary($data['description']);
             $refIndicator = $data['ref'];
 
             $data['tendency'] = (int)$data['tendency'];
