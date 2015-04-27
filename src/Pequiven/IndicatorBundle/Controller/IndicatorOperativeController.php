@@ -106,8 +106,8 @@ class IndicatorOperativeController extends baseController {
 
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
-            $object->setSummary($data['description']);
             $data = $this->container->get('request')->get("pequiven_indicator_operative_registration");
+            $object->setSummary($data['description']);
 
             if(strlen($data['gerenciaSecond']) == 0){
                 $em->getConnection()->rollback();
