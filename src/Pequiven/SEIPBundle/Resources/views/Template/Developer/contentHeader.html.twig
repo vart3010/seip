@@ -24,7 +24,7 @@
         {% set referer = app.request.getUri %}
         <div class="absolute-right">
                 <span id="labelPeriod">{{ period }}&nbsp;</span>
-                {% if is_granted(['ROLE_SEIP_PLANNING_*']) %}
+                {% if type ==  constant('Pequiven\\SEIPBundle\\Model\\Period::VIEW_ALL_PERIODS') %}
                     <select id="selectPeriod" name="selectPeriod" class="hide">
                     {% for listArrayPeriod in listArrayPeriods %}
                         <option value="{{ path('seip_change_period',{period:listArrayPeriod['id'],referer:referer}) }}" {% if listArrayPeriod['id'] == period.id %}selected="selected"{% endif %} >{{ listArrayPeriod['description'] }}</option>

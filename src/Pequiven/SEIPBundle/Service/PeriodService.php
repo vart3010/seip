@@ -86,7 +86,7 @@ class PeriodService extends ContainerAware
      * Retorna el periodo activo
      * @return \Pequiven\SEIPBundle\Entity\Period
      */
-    public function getPeriodActive($originalEntity = false)
+    public function getPeriodActive($type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -103,7 +103,7 @@ class PeriodService extends ContainerAware
 //                }
 //            }
 //        }
-        if(!$period && $this->isGranted('ROLE_SEIP_PLANNING_*')){
+        if(!$period && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
             $period = $this->getUser()->getPeriod();
         }
         if(!$period){
@@ -206,11 +206,11 @@ class PeriodService extends ContainerAware
         return $this->getRepository()->findAll();
     }
     
-    public function getListArrayPeriodsAvailableConsultation()
+    public function getListArrayPeriodsAvailableConsultation($type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
-        if($this->isGranted('ROLE_SEIP_PLANNING_*')){
+        if($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
             $listArrayPeriods = $session->get('listPeriods');
         } else{
             $listArrayPeriods = array();
@@ -219,10 +219,10 @@ class PeriodService extends ContainerAware
             return $listArrayPeriods;
         }
         
-        if($this->isGranted('ROLE_SEIP_PLANNING_*')){
+        if($type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
             $periods = $this->getPeriodsAvailableConsultation();
         } else{
-            $periods = $this->getPeriodActive();
+            $periods = $this->getPeriodActive($type);
         }
         
         foreach ($periods as $period) {
