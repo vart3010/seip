@@ -429,6 +429,8 @@ class ObjetiveRepository extends EntityRepository {
             }
             $qb->orWhere($qb->expr()->in('o.id', $objetivesMedular));
         }
+        
+        $this->applyPeriodCriteria($qb);
 
         return $qb;
     }

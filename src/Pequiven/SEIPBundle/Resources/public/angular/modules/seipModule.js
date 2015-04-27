@@ -375,8 +375,8 @@ angular.module('seipModule.controllers', [])
                 if(value != ''){
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("objetiveTactic_show", {id: value,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                        $scope.complejo = data.gerencia.complejo;
-                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.gerencia);
+                        $scope.complejo = data.entity.gerencia.complejo;
+                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.entity.gerencia);
                         notificationBarService.getLoadStatus().done();
                     });
                 }
@@ -385,8 +385,8 @@ angular.module('seipModule.controllers', [])
                 if(val != ''){
                     notificationBarService.getLoadStatus().loading();
                     $http.get(Routing.generate("objetiveOperative_show", {id: val,_format: 'json',_groups:['complejo'] })).success(function(data) {
-                        $scope.complejo = data.complejo;
-                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.gerenciaSecond);
+                        $scope.complejo = data.entity.complejo;
+                        $scope.templateOptions.setVar('gerenciaOfObjetive',data.entity.gerenciaSecond);
                         notificationBarService.getLoadStatus().done();
                     });
                 }

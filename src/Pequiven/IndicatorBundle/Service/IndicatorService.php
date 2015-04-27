@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Servicios para el indicador
  * 
- * @service pequiven_indicator.service.inidicator
+ * service pequiven_indicator.service.inidicator
  * @author Carlos Mendoza<inhack20@gmail.com>
  */
 class IndicatorService implements ContainerAwareInterface
