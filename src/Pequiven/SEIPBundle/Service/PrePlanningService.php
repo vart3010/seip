@@ -532,7 +532,7 @@ class PrePlanningService extends ContainerAware
     /**
      * @return PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

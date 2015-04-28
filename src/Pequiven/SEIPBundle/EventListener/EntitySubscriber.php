@@ -16,11 +16,12 @@ namespace Pequiven\SEIPBundle\EventListener;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class EntitySubscriber extends \Symfony\Component\DependencyInjection\ContainerAware implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+class EntitySubscriber extends BaseEventListerner
 {
     public static function getSubscribedEvents() {
         return array(
-            SeipEvents::REPORT_TEMPLATE_PRE_CREATE => "onReportTemplatePreCreate"
+            SeipEvents::REPORT_TEMPLATE_PRE_CREATE => "onReportTemplatePreCreate",
+            SeipEvents::PRODUCT_REPORT_PRE_CREATE => "onProductReportPreCreate",
         );
     }
     
@@ -33,20 +34,16 @@ class EntitySubscriber extends \Symfony\Component\DependencyInjection\ContainerA
         
     }
     
-    /**
-     * 
-     * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
-     */
-    private function getSequenceGenerator() 
+    public function onProductReportPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
     {
-        return $this->container->get('seip.sequence_generator');
-    }
-    
-    /**
-     * @return \Pequiven\SEIPBundle\Service\PeriodService
-     */
-    private function getPeriodService()
-    {
-        return $this->container->get('pequiven_seip.service.period');
+        $entity = $event->getSubject();
+        
+//        $entity->setPeriod($this->getPeriodService()->getPeriodActive(true));
+        
+        $request = $this->getRequest();
+        $reportTemplateId = $request->get("reportTemplate");
+        $reportTemplate = $this->find("Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate", $reportTemplateId);
+        $entity->setReportTemplate($reportTemplate);
+        
     }
 }

@@ -17,3 +17,17 @@ pequiven_report_template_show:
     defaults:
         _controller: pequiven.controller.report_template:showAction
     methods: [GET]
+    
+pequiven_report_template_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.report_template:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplate
+    methods: [GET|POST|PUT]
+    
+pequiven_report_template_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.report_template:deleteAction
+    methods: [GET|DELETE]

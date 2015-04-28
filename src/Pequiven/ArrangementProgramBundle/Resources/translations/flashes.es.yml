@@ -36,3 +36,11 @@ pequiven:
         create: El indicador se configuro correctamente.
         update: La configuración del indicador se actualizo correctamente.
         delete: La configuración del indicador se elimino correctamente.
+    report_template:
+        create: El reporte se creo de correctamente.
+        update: El reporte se actualizo correctamente.
+        delete: El reporte se elimino correctamente.
+    product_report:
+        create: El producto se agrego de correctamente.
+        update: El producto se actualizo correctamente.
+        delete: El producto se elimino correctamente.

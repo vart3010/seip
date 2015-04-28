@@ -88,4 +88,77 @@ abstract class BaseEventListerner implements \Symfony\Component\EventDispatcher\
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
         $this->container = $container;
     }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\SequenceGenerator
+     */
+    protected function getSequenceGenerator() 
+    {
+        return $this->container->get('seip.sequence_generator');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * Shortcut to return the request service.
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     *
+     */
+    public function getRequest()
+    {
+        return $this->container->get('request_stack')->getCurrentRequest();
+    }
+    
+    /**
+     * Shortcut to return the Doctrine Registry service.
+     *
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     *
+     * @throws \LogicException If DoctrineBundle is not available
+     */
+    public function getDoctrine()
+    {
+        if (!$this->container->has('doctrine')) {
+            throw new \LogicException('The DoctrineBundle is not registered in your application.');
+        }
+
+        return $this->container->get('doctrine');
+    }
+    
+    /**
+     * Returns true if the service id is defined.
+     *
+     * @param string $id The service id
+     *
+     * @return bool    true if the service id is defined, false otherwise
+     */
+    public function has($id)
+    {
+        return $this->container->has($id);
+    }
+
+    /**
+     * Gets a service by id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
+     */
+    public function get($id)
+    {
+        return $this->container->get($id);
+    }
+    
+    protected function find($className, $id) 
+    {
+        return $this->getDoctrine()->getManager()->find($className, $id);
+    }
 }

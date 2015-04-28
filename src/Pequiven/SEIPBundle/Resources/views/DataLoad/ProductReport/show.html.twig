@@ -1,0 +1,69 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.report_template.report_template'|trans }}</label>
+                    {{ generateLink(product_report.reportTemplate) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Production line'|trans }}</label>
+                    {{ product_report.productionLine }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Product'|trans }}</label>
+                    {{ product_report.product }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Product unit'|trans }}</label>
+                    {{ product_report.productUnit }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Plant'|trans }}</label>
+                    {{ product_report.plant }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Is raw material'|trans }}</label>
+                    {{ product_report.isRawMaterial|render_yes_no }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Is final product'|trans }}</label>
+                    {{ product_report.isFinalProduct|render_yes_no }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ product_report.enabled|render_yes_no }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_product_report_update', { 'id': product_report.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_product_report_delete', { 'id': product_report.id })) }}
+    </p>
+                    
+{% endblock %}

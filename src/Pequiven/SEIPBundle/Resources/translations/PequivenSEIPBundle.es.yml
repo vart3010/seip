@@ -411,6 +411,7 @@ internalAudit: Auditoría Interna
         
 empty:
     features_indicator: No hay ningún punto de atención.
+    product_report: No hay productos agregados.
     
 chart:
     type:
@@ -420,11 +421,12 @@ chart:
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
 
 Name: Nombre
+nro: "#"
+"Production line": Linea de negocio
 "Type report": Tipo de reporte
 "Is raw material": ¿Es materia prima?
 "Is final product": ¿Es producto final?
 "Product unit": Unidad del producto
 "Product": Producto
-"Production line": Linea de negocio
 "Plant": Planta
 "Enabled": ¿Activo?

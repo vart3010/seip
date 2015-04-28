@@ -256,4 +256,12 @@ class ProductReport extends BaseModel
     {
         return $this->reportTemplate;
     }
+    
+    public function __toString() {
+        $_toString = "-";
+        if($this->getProduct()){
+            $_toString = (string)$this->getProduct();
+        }
+        return $_toString;
+    }
 }

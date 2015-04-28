@@ -1470,21 +1470,4 @@ class ArrangementProgramController extends SEIPController
     protected function trans($id, array $parameters = array(), $domain = 'PequivenArrangementProgramBundle') {
         return parent::trans($id, $parameters, $domain);
     }
-    
-    /**
-     * @return \Pequiven\SEIPBundle\Service\PeriodService
-     */
-    private function getPeriodService()
-    {
-        return $this->container->get('pequiven_seip.service.period');
-    }
-    
-    /**
-     * 
-     * @return \Pequiven\SEIPBundle\Service\SecurityService
-     */
-    protected function getSecurityService()
-    {
-        return $this->container->get('seip.service.security');
-    }
 }

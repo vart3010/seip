@@ -33,6 +33,7 @@ class CoreExtension extends \Twig_Extension
                 return str_pad($input, $padlength, $padstring, $padtype);
             }),
             new \Twig_SimpleFilter('myNumberFormat', array($this,'myNumberFormat')),
+            new \Twig_SimpleFilter('render_yes_no', array($this,'renderYesNo'),array('is_safe' => array('html')) ),
         );
     }
     
@@ -118,6 +119,22 @@ class CoreExtension extends \Twig_Extension
     }
     
     /**
+     * Renderiza un si y no con color de tag
+     * @param type $status
+     * @return type
+     */
+    public function renderYesNo($status)
+    {
+        $template = '<span class="tag %s">%s</span>';
+        if($status === true){
+            $response = sprintf($template,"",$this->trans("pequiven.yes"));
+        }else{
+            $response = sprintf($template,"red-bg",$this->trans("pequiven.no"));
+        }
+        return $response;
+    }
+    
+    /**
      * Returns the name of the extension.
      *
      * @return string The extension name
@@ -151,7 +168,7 @@ class CoreExtension extends \Twig_Extension
      * 
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

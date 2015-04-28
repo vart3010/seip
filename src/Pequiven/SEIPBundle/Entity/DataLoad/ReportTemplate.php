@@ -60,7 +60,6 @@ class ReportTemplate extends BaseModel
      */
     private $productsReport;
     
-    
     /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
