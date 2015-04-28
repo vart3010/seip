@@ -13,6 +13,7 @@
 
 {% block body -%}
     <form method="POST" action="{{ path("pequiven_product_report_update",{id:product_report.id }) }}">
+        <input type="hidden" name="_metod" value="PUT" />
        <br /><br />
        {% include 'PequivenSEIPBundle:DataLoad/ProductReport:_form.html.twig' %}
        {{ actions.update() }}

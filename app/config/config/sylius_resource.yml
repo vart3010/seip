@@ -223,6 +223,7 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\ReportTemplateController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository
                 
         pequiven.product_report:
             driver: doctrine/orm

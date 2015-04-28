@@ -1,0 +1,14 @@
+{% extends "PequivenSEIPBundle:Template:Developer/Common/tableFormat1.html.twig" %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.report_template.report_template"|trans ),
+        ( 'pequiven.list'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    
+{% endblock %}

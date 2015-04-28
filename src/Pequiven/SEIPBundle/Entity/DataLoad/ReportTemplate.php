@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\ReportTemplate as BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_template")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository")
  */
 class ReportTemplate extends BaseModel
 {
