@@ -37,6 +37,7 @@ class LinkGeneratorService extends LinkGenerator
             array('class' => 'Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram','icon' => 'fa fa-tasks','route' => 'pequiven_seip_arrangementprogram_show'),
             array('class' => 'Pequiven\ObjetiveBundle\Entity\Objetive','icon' => 'fa fa-cogs','method' => 'renderObjetive'),
             array('class' => 'Pequiven\ObjetiveBundle\Entity\Objetive','icon' => 'fa fa-cogs','method' => 'renderObjetiveResult','type' => self::TYPE_LINK_OBJETIVE_RESULT),
+            array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate','icon' => 'fa fa-file-o','route' => 'pequiven_report_template_show'),
         );
     }
     

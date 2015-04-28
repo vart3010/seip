@@ -1,0 +1,19 @@
+pequiven_report_template_index:
+    path: /
+    defaults:
+        _controller: pequiven.controller.report_template:indexAction
+    methods: [GET]
+    
+pequiven_report_template_create:
+    path: /create
+    defaults:
+        _controller: pequiven.controller.report_template:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_reporttemplate
+    methods: [GET|POST]
+    
+pequiven_report_template_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.report_template:showAction
+    methods: [GET]

@@ -1,0 +1,53 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+                
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.products'|trans }}</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_product_report_create',{reportTemplate: app.request.get('id')}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+        <thead>
+            <tr>
+                <th scope="col" width="10%">{{ 'seip.table.header.nro'|trans }}</th>
+                <th scope="col" width="25%">{{ 'seip.table.header.name'|trans }}</th>
+                <th scope="col" width="13%" class="hide-on-mobile-portrait">{{ 'seip.table.header.start_date'|trans }}</th>
+                <th scope="col" width="13%" class="hide-on-tablet">{{ 'seip.table.header.end_date'|trans }}</th>
+                <th scope="col" width="10%" class="hide-on-tablet">{{ 'seip.table.header.weight'|trans }}</th>
+                <th scope="col" width="29%">{{ 'seip.table.header.responsible_goal'|trans }}</th>
+            </tr>
+        </thead>
+        {% set colspan = 6 %}
+        <tbody>
+            <tr >
+                <td colspan="{{ colspan }}" class="empty_row">
+                    {{ "seip.table.empty.goals"|trans }}
+                </td>
+            </tr>
+            <tr ng-repeat="goal in goals">
+                <td>{$ $index + 1 $} - 
+                        <span ng-class="getClassForMeter(goal.advance,1)"></span>
+                        <span ng-class="getClassForMeter(goal.advance,2)"></span>
+                        <span ng-class="getClassForMeter(goal.advance,3)"></span>
+                        {$ goal.advance $}%
+                </td>
+                <th scope="row">
+                    {$ goal.name $}<br>
+                    <small>{$ goal.observations $}</small>
+                </th>
+                <td>{$ goal.startDate | myDate $}</td>
+                <td>{$ goal.endDate| myDate $}</td>
+                <td>{$ goal.weight $}%</td>
+                <td>
+                    <span ng-repeat="responsible in goal.responsibles">
+                        {$ responsible.firstname + " "+ responsible.lastname $} <small class="tag">{$ " ("+responsible.username+")" $}</small><span ng-if="!$last">,</span><span ng-if="$last">.</span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+        
+    </div>
+</div>

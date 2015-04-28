@@ -3,6 +3,10 @@ pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
     home: Página de inicio
+    name: Nombre
+    type_report: Tipo de reporte
+    add: Añadir
+    products: Productos
 
     #Login
     sign_in: Ingresar
@@ -300,6 +304,17 @@ pequiven_seip:
         type:
             internal: Interna
             external: Externa
+    report_template:
+        report_template: Plantilla de reporte
+        type:
+            production: Producción
+            inventory: Inventario
+            consumption_services: Consumo de servicios
+            raw_materials: Consumo de materia prima
+    product_report:
+        product_report: Producto
+        
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -403,3 +418,13 @@ chart:
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+
+Name: Nombre
+"Type report": Tipo de reporte
+"Is raw material": ¿Es materia prima?
+"Is final product": ¿Es producto final?
+"Product unit": Unidad del producto
+"Product": Producto
+"Production line": Linea de negocio
+"Plant": Planta
+"Enabled": ¿Activo?

@@ -216,3 +216,17 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Chart
                 controller: Pequiven\SEIPBundle\Controller\ChartController
                 repository: Pequiven\SEIPBundle\Repository\ChartRepository
+                
+        pequiven.report_template:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ReportTemplate
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ReportTemplateController
+                
+        pequiven.product_report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ProductReport
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ProductReportController

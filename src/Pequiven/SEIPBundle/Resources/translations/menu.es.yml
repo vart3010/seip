@@ -169,10 +169,6 @@ app:
                         planning: Planificación
                         statistics: Estadística
                     data_load:
-                        main: Carga de data
-                        process:
-                            production:
-                                main: Producción
-                                matriz: Matriz
-                                affiliated: Filial
-                                mixta: Mixta
+                        main: Reportes
+                        list: Lista
+                        add: Agregar

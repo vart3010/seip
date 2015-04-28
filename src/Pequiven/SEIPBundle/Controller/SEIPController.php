@@ -55,4 +55,12 @@ class SEIPController extends ResourceController
     {
         return $this->container->get('seip.service.security');
     }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->get('pequiven_seip.service.period');
+    }
 }

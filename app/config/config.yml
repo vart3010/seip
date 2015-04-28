@@ -191,8 +191,13 @@ tecnocreaciones_tools:
                 class: Pequiven\SEIPBundle\Entity\CEI\Product
 #                role: ROLE_ADMIN
                 search: contains
-                form: pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig
-                field: products
+                form: pequiven_seipbundle_dataload_productreport
+                field: product
+            plants_alias:
+                class: Pequiven\SEIPBundle\Entity\CEI\Plant
+                search: contains
+                form: pequiven_seipbundle_dataload_productreport
+                field: plant
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel

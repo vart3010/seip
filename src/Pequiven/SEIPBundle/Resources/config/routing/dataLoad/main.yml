@@ -1,0 +1,7 @@
+pequiven_data_load:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/report_template.yml"
+    prefix:   /report-template
+    
+pequiven_product_report:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_report.yml"
+    prefix:   /product-report

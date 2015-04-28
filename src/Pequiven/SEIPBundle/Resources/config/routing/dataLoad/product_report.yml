@@ -1,0 +1,13 @@
+pequiven_product_report_create:
+    path: /{reportTemplate}/create
+    defaults:
+        _controller: pequiven.controller.product_report:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_productreport
+    methods: [GET|POST]
+    
+pequiven_product_report_show:
+    path: /{id}/create
+    defaults:
+        _controller: pequiven.controller.product_report:showAction
+    methods: [GET]
