@@ -1,7 +1,10 @@
 pequiven_report_template_index:
-    path: /
+    path: /.{_format}
     defaults:
         _controller: pequiven.controller.report_template:indexAction
+        _format: html
+    requirements:
+        _format: json|html
     methods: [GET]
     
 pequiven_report_template_create:

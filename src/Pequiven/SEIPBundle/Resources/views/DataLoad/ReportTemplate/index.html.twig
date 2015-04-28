@@ -10,5 +10,30 @@
 {% endblock %}
 
 {% block body %}
-    
+    <div ng-controller="TableFormatController">
+        <div loading-container="tableParams.settings().$loading">
+            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_report_template_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
+                <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                    <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rt.ref': 'text' }">
+                        <a href="{$ result._links.self.show $}">{$ result.ref $}</a>
+                    </td>
+                    <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rt.name': 'text' }">
+                        {$ result.name $}
+                    </td>
+                    <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
+                        {$ result.period.name $}
+                    </td>
+                    <td data-title="'{{ 'Type report'|trans }}'">
+                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_PRODUCTION') }}">{{ "pequiven_seip.report_template.type.production"|trans }}</span>
+                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_INVENTORY') }}">{{ "pequiven_seip.report_template.type.inventory"|trans }}</span>
+                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_CONSUMPTION_SERVICES') }}">{{ "pequiven_seip.report_template.type.consumption_services"|trans }}</span>
+                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_RAW_MATERIALS') }}">{{ "pequiven_seip.report_template.type.raw_materials"|trans }}</span>
+                    </td>
+                    <td class="low-padding align-center">
+                        <a href="{$ result._links.self.update $}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {% endblock %}

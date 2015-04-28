@@ -20,5 +20,22 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ReportTemplateRepository extends SeipEntityRepository 
 {
+    protected function applyCriteria(\Doctrine\ORM\QueryBuilder $queryBuilder, array $criteria = null) {
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        //
+        
+        if(($ref = $criteria->remove("rt.ref")))
+        {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("rt.ref","'%".$ref."%'"));
+        }
+        if(($name = $criteria->remove("rt.name")))
+        {
+            $queryBuilder->andWhere($queryBuilder->expr()->like("rt.name","'%".$name."%'"));        }
+        
+        return parent::applyCriteria($queryBuilder, $criteria->toArray());
+    }
     
+    protected function getAlias() {
+        return "rt";
+    }
 }

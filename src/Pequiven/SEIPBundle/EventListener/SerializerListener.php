@@ -45,6 +45,7 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerencia', 'class' => 'Pequiven\MasterBundle\Entity\Gerencia', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGerenciaSecond', 'class' => 'Pequiven\MasterBundle\Entity\GerenciaSecond', 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeGoal', 'class' => 'Pequiven\ArrangementProgramBundle\Entity\Goal', 'format' => 'json'),
+            array('event' => Events::POST_SERIALIZE, 'method' => 'onPostSerializeReportTemplate', 'class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate', 'format' => 'json'),
         );
     }
 
@@ -561,6 +562,17 @@ class SerializerListener implements EventSubscriberInterface,  ContainerAwareInt
         }
             
         $event->getVisitor()->addData('rol',$rol);
+    }
+    
+    public function onPostSerializeReportTemplate(ObjectEvent $event)
+    {
+        $object = $event->getObject();
+        $links = array(
+            "self" => array(),
+        );
+        $links['self']['show'] = $this->generateUrl('pequiven_report_template_show', array('id' => $object->getId()));
+        $links['self']['update'] = $this->generateUrl('pequiven_report_template_update', array('id' => $object->getId()));
+        $event->getVisitor()->addData('_links',$links);
     }
     
     public function onPostSerializeGerencia(ObjectEvent $event) {
