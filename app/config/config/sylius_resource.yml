@@ -184,10 +184,7 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\PrePlanning\PrePlanningUserController
                 model: Pequiven\SEIPBundle\Entity\PrePlanning\PrePlanningUser
-        pequiven.quality_system:
-            driver: doctrine/orm
-            classes:
-                model: Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
+                
         pequiven.value_indicator_config:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Indicator/ValueIndicator/ValueIndicatorConfig
@@ -216,3 +213,36 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Chart
                 controller: Pequiven\SEIPBundle\Controller\ChartController
                 repository: Pequiven\SEIPBundle\Repository\ChartRepository
+                
+        pequiven.report_template:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ReportTemplate
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ReportTemplateController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository
+                
+        pequiven.product_report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ProductReport
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ProductReportController
+                
+        pequiven.sig_management_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SIGBundle\Entity\ManagementSystem
+                repository: Pequiven\SIGBundle\Repository\ManagementSystemRepository
+                
+        pequiven.sig_politic_management_system:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\SIGBundle\Entity\PoliticManagementSystem
+                repository: Pequiven\SIGBundle\Repository\PoliticManagementSystemRepository
+        
+        pequiven.category_arrangement_program:
+            driver: doctrine/orm
+            classes:
+                model: Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
+                repository: Pequiven\MasterBundle\Repository\ArrangementProgram\CategoryArrangementProgramRepository

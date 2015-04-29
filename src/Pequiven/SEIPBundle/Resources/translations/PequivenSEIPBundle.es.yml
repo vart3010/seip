@@ -3,6 +3,11 @@ pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
     home: Página de inicio
+    name: Nombre
+    type_report: Tipo de reporte
+    add: Añadir
+    products: Productos
+    ref: Referencia
 
     #Login
     sign_in: Ingresar
@@ -296,7 +301,21 @@ pequiven_seip:
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
+    fail:
+        type:
+            internal: Interna
+            external: Externa
+    report_template:
+        report_template: Plantilla de reporte
+        type:
+            production: Producción
+            inventory: Inventario
+            consumption_services: Consumo de servicios
+            raw_materials: Consumo de materia prima
+    product_report:
+        product_report: Producto
         
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -393,6 +412,7 @@ internalAudit: Auditoría Interna
         
 empty:
     features_indicator: No hay ningún punto de atención.
+    product_report: No hay productos agregados.
     
 chart:
     type:
@@ -400,3 +420,14 @@ chart:
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+
+Name: Nombre
+nro: "#"
+"Production line": Linea de negocio
+"Type report": Tipo de reporte
+"Is raw material": ¿Es materia prima?
+"Is final product": ¿Es producto final?
+"Product unit": Unidad del producto
+"Product": Producto
+"Plant": Planta
+"Enabled": ¿Activo?

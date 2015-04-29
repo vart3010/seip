@@ -371,7 +371,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * @var string
      *
-     * @ORM\Column(name="summary", type="text")
+     * @ORM\Column(name="summary", type="text", nullable=true)
      */
     private $summary;
     

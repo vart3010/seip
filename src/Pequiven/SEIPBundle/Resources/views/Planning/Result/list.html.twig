@@ -4,9 +4,15 @@
 {% block title %}- {{ 'pequiven_master.gerencia_second'|trans({},'PequivenMasterBundle') }}{% endblock %}
 
 {% block before_body %}
-    {{ contentHeader(
-        ("result.list.titleObjetiveOperative"|trans)
-    ) }}
+    {% if is_granted('ROLE_SEIP_RESULT_BY_PERIOD') %}
+        {{ contentHeader(
+            [("result.list.titleObjetiveOperative"|trans)],0,1,0
+        ) }}
+    {% else %}
+        {{ contentHeader(
+            ("result.list.titleObjetiveOperative"|trans)
+        ) }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}

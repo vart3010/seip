@@ -30,10 +30,10 @@
                 <div class="with-padding">
                     <div class="columns">
                         <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_master.filters.arrangementSystem'|trans }}</label>
+                            <label class="bold">{{ 'pequiven_master.filters.managementSystem'|trans }}</label>
                             <br/>
                             <div class="with-mid-padding" ng-init="" >
-                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.qualitySystem" ng-init="qualitySystems = {{ qualitySystems|serialize }}" ng-options="value as value.description for (key,value) in qualitySystems" >
+                                <select class="select2 input-xlarge" id="selectComplejos" ng-model="model.managementSystem" ng-init="managementSystems = {{ managementSystems|serialize }}" ng-options="value as value.description for (key,value) in managementSystems" >
                                     <option value=''></option>
                                 </select>
                             </div>

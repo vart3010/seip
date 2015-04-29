@@ -21,6 +21,15 @@
             {{ entity.categoryArrangementProgram }}
         </div>
     {% endif %}
+    {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+        {% if form.managementSystem is defined %}
+            <div class="field-block button-height">
+                {{ form_label(form.managementSystem) }}
+                {{ form_widget(form.managementSystem) }}
+                {{ form_errors(form.managementSystem) }}
+            </div>
+        {% endif %}
+    {% endif %}
     {% if form.tacticalObjective is defined %}
         <div class="field-block button-height">
             {{ form_label(form.tacticalObjective) }}

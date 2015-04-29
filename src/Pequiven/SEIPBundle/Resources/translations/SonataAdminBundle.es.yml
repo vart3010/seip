@@ -1,1 +1,12 @@
 sonata_administration: Administración
+Name: Nombre
+"Type Fail": Tipo de falla
+"Fail List": Lista de fallas
+Enabled: ¿Activo?
+Components: Componentes
+"Type Of": Tipo
+Production Line: Linea de negocio
+Plant: Planta
+"Is Raw Material": ¿Es materia prima?
+"Is Final Product": ¿Es producto final?
+"Product Unit": Unidad del producto

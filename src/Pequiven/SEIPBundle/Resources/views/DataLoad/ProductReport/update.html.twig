@@ -1,0 +1,22 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_report.product_report"|trans ),
+        ( 'pequiven.update'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_product_report_update",{id:product_report.id }) }}">
+        <input type="hidden" name="_metod" value="PUT" />
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/ProductReport:_form.html.twig' %}
+       {{ actions.update() }}
+       {{ form_rest(form) }}
+   </form>
+{% endblock %}

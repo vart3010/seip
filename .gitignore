@@ -27,3 +27,4 @@ composer.lock
 /web/compiled/*.css
 *.~lock*
 /app/spool/
+/web/ext/SeipProduction/build/

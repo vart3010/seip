@@ -14,6 +14,9 @@ abstract class ArrangementProgram
     const TYPE_ARRANGEMENT_PROGRAM_TACTIC = 1;
     const TYPE_ARRANGEMENT_PROGRAM_OPERATIVE = 2;
     
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_SIG = 1;
+    const ASSOCIATE_ARRANGEMENT_PROGRAM_PLA = 2;
+    
     /**
      * Resumen Tipo "Cargados"
      */
@@ -90,6 +93,8 @@ abstract class ArrangementProgram
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     protected $type;
+    
+    private $managementSystem;
     
     /**
      * Retorna la etiqueta del tipo de programa de gestion
@@ -457,7 +462,7 @@ abstract class ArrangementProgram
     }
     
     /**
-     * Revuelve el objetivo dependiendo del tipo de programa de gestion
+     * Devuelve el objetivo dependiendo del tipo de programa de gestion
      */
     function getObjetiveByType() {
         $objetive = null;
@@ -480,6 +485,10 @@ abstract class ArrangementProgram
      * Devuelve el objetivo operativo
      */
     public function getOperationalObjective(){
+        
+    }
+    
+    public function getManagementSystem(){
         
     }
 }

@@ -33,12 +33,15 @@ class CoreExtension extends \Twig_Extension
                 return str_pad($input, $padlength, $padstring, $padtype);
             }),
             new \Twig_SimpleFilter('myNumberFormat', array($this,'myNumberFormat')),
+            new \Twig_SimpleFilter('render_yes_no', array($this,'renderYesNo'),array('is_safe' => array('html')) ),
         );
     }
     
-    function contentHeader() {
+    function contentHeader($args = array(),$type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS, $forceAllPeriods = false,$forceEvalArgs = true) {
         $parameters = array();
-        $args = func_get_args();
+        if($forceEvalArgs == true){
+          $args = func_get_args();
+        }
         foreach ($args as $key => $arg) {
             if(empty($arg)){
                 continue;
@@ -63,12 +66,19 @@ class CoreExtension extends \Twig_Extension
         $periodService = $this->getPeriodService();
         $period = $this->getPeriodService()->getPeriodActive();
         
-        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation();
+        if(!$this->isGranted('ROLE_SEIP_PLANNING_*') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+            if(!$forceAllPeriods){
+                $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE;
+            }
+        }
+        
+        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation($type);
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
                 'period' => $period,
                 'listArrayPeriods' => $listArrayPeriods,
+                'type' => $type
             )
         );
     }
@@ -118,6 +128,22 @@ class CoreExtension extends \Twig_Extension
     }
     
     /**
+     * Renderiza un si y no con color de tag
+     * @param type $status
+     * @return type
+     */
+    public function renderYesNo($status)
+    {
+        $template = '<span class="tag %s">%s</span>';
+        if($status === true){
+            $response = sprintf($template,"",$this->trans("pequiven.yes"));
+        }else{
+            $response = sprintf($template,"red-bg",$this->trans("pequiven.no"));
+        }
+        return $response;
+    }
+    
+    /**
      * Returns the name of the extension.
      *
      * @return string The extension name
@@ -147,11 +173,45 @@ class CoreExtension extends \Twig_Extension
         return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
     
+        /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
+    private function isGranted($roles) {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context')->isGranted($roles);
+    }
+    
     /**
      * 
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

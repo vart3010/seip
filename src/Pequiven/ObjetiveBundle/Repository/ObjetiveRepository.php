@@ -65,12 +65,13 @@ class ObjetiveRepository extends EntityRepository {
      */
     public function getByLineStrategic($lineStrategicsArray) {
         //$em = $this->getEntityManager();
-        $query = $this->createQueryBuilder('o');
+        $query = $this->getQueryBuilder();
+//        $query = $this->createQueryBuilder('o');
         $query
-                ->select('o')
                 ->innerJoin('o.lineStrategics', 'ls')
                 ->andWhere($query->expr()->in('ls.id', $lineStrategicsArray))
         ;
+        $this->applyPeriodCriteria($query);
         return $query->getQuery()->getResult();
     }
 
@@ -83,9 +84,9 @@ class ObjetiveRepository extends EntityRepository {
         $securityContext = $this->getSecurityContext();
         $user = $this->getUser();
 
-        $query = $this->createQueryBuilder('o');
+        $query = $this->getQueryBuilder();
+//        $query = $this->createQueryBuilder('o');
         $query
-                ->select('o')
                 ->innerJoin('o.parents', 'p')
                 ->andWhere($query->expr()->in('p.id', $objetiveParentsArray))
         ;
@@ -101,7 +102,7 @@ class ObjetiveRepository extends EntityRepository {
         } else {
             if (!isset($options['searchByRef'])) {
                 if ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX', 'ROLE_MANAGER_SECOND', 'ROLE_MANAGER_SECOND_AUX'))) {
-                    if (!$securityContext->isGranted(array('ROLE_WORKER_PLANNING'))) {
+                    if (!$securityContext->isGranted(array('ROLE_WORKER_PLANNING')) || $securityContext->isGranted(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE'))){
                         $query->andWhere("o.gerencia = " . $user->getGerencia()->getId());
                     }
                 }
@@ -428,6 +429,8 @@ class ObjetiveRepository extends EntityRepository {
             }
             $qb->orWhere($qb->expr()->in('o.id', $objetivesMedular));
         }
+        
+        $this->applyPeriodCriteria($qb);
 
         return $qb;
     }
@@ -456,6 +459,14 @@ class ObjetiveRepository extends EntityRepository {
                     ->setParameter("gerencia", $gerencia)
             ;
             $criteria->remove('view_planning');
+        }
+        
+        if(($managementSystem = $criteria->remove('idManagementSystem'))){
+            $qb
+                    ->innerjoin('o.managementSystem','ms')
+                    ->andWhere('ms.id = :managementSystemId')
+                    ->setParameter('managementSystemId', $managementSystem)
+                ;
         }
         return $qb->getQuery()->getResult();
     }
@@ -504,6 +515,36 @@ class ObjetiveRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Busca los objetivos tácticos de un sistema de gestión
+     * @return type
+     */
+    function findObjetivesTacticByManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem) {
+        return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
+    }
+    
+    function findQueryObjetivesTacticByManagementSystem($managementSystem) {
+        $user = $this->getUser();
+        $qb = $this->getQueryAllEnabled();
+        $qb
+                ->innerJoin("o.managementSystem", "ms")
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerencia", "g")
+                ->andWhere("ol.level = :level")
+                ->andWhere("ms.id = :managementSystemId")
+                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
+                ->setParameter("managementSystemId", $managementSystem)
+        ;
+        $level = $user->getLevelRealByGroup();
+        if ($level != Rol::ROLE_DIRECTIVE && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
+            $qb
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $user->getGerencia())
+            ;
+        }
+        return $qb;
+    }
+    
     /**
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type
@@ -636,6 +677,10 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('period', $period)
         ;
         return $qb->getQuery()->getResult();
+    }
+    
+    protected function getAlias() {
+        return 'o';
     }
 
 }
