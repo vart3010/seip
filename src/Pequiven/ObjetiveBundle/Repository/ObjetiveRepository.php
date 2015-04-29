@@ -520,7 +520,7 @@ class ObjetiveRepository extends EntityRepository {
      * @return type
      */
     function findObjetivesTacticByManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem) {
-        return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
+        return $this->findQueryObjetivesTacticByManagementSystem($managementSystem)->getQuery()->getResult();
     }
     
     function findQueryObjetivesTacticByManagementSystem($managementSystem) {
