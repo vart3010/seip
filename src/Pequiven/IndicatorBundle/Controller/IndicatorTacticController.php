@@ -120,6 +120,7 @@ class IndicatorTacticController extends baseController
             $period = $periodService->getPeriodActive();
             $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentTactic']));
             $object->setRefParent($objetive->getRef());
+            $object->setSummary($data['description']);
             $refIndicator = $data['ref'];
 
             $data['tendency'] = (int)$data['tendency'];
@@ -149,7 +150,7 @@ class IndicatorTacticController extends baseController
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator, 'period' => $period->getId()));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
@@ -240,7 +241,7 @@ class IndicatorTacticController extends baseController
     public function createObjetiveIndicator(Indicator $indicator) {
 
         $em = $this->getDoctrine()->getManager();
-        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent()));
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent(), 'period' => $indicator->getPeriod()->getId()));
         $totalObjetives = count($objetives);
         $em->getConnection()->beginTransaction();
         if ($totalObjetives > 0) {

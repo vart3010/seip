@@ -23,7 +23,7 @@ use Doctrine\ORM\EntityRepository;
 use Pequiven\ObjetiveBundle\Entity\ObjetiveLevel;
 
 /**
- * Description of AddObjetiveLevelFieldListener
+ * Descripción del Listener del Description of AddObjetiveLevelFieldListener
  *
  * @author matias
  */
@@ -103,7 +103,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         if ($objetiveParent) {
             $formOptions['data'] = $objetiveParent;
         }
-        
+
         //En caso de que el usuario tenga un rol superior a Gerente de 2da línea
         if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
             //En caso de que el formulario sea el de objetivo operativo

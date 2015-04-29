@@ -3,20 +3,6 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-    <!--
-    <parameters>
-        <parameter key="pequiven_master.example.class">Pequiven\MasterBundle\Example</parameter>
-    </parameters>
-
-    <services>
-        <service id="pequiven_master.example" class="%pequiven_master.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
-        </service>
-    </services>
-    -->
     
     <services>
         <!-- Servicio de la gerencia de 1ra línea -->
@@ -49,6 +35,9 @@
         
          <!-- Repositorio de Objetivo Estratégico -->
         <service id="pequiven.repository.objetivestrategic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         <service id="pequiven.repository.objetive" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
@@ -60,18 +49,21 @@
         
         <!-- Repositorio de Objetivo Táctico -->
         <service id="pequiven.repository.objetivetactic" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         
         <!-- Repositorio de Objetivo Operativo -->
         <service id="pequiven.repository.objetiveoperative" class="Pequiven\ObjetiveBundle\Repository\ObjetiveRepository">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
             <tag name="app.repository" class="Pequiven\ObjetiveBundle\Entity\Objetive" />
         </service>
         <service id="pequiven.repository.monitor" class="Pequiven\SEIPBundle\Repository\MonitorRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Monitor" />
-        </service>
-        <service id="pequiven.repository.quality_system" class="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository">
-            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem" />
         </service>
         
         <!-- Servicio de las Líneas Estratégicas -->

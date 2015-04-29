@@ -1,28 +1,19 @@
 <?php
 
-/*
- * This file is part of the TecnoCreaciones package.
- * 
- * (c) www.tecnocreaciones.com
- * 
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Pequiven\SEIPBundle\Entity\QualitySystem;
+namespace Pequiven\SIGBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Pequiven\SIGBundle\Model\ManagementSystem as modelManagementSystem;
 
 /**
- * Sistema de calidad
+ * Sistema de gestión
  *
- * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository")
+ * @ORM\Entity(repositoryClass="Pequiven\SIGBundle\Repository\ManagementSystemRepository")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class QualitySystem 
+class ManagementSystem extends modelManagementSystem
 {
     /**
      * @var integer
@@ -67,6 +58,13 @@ class QualitySystem
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
+    
+    /**
+     * Política de Sistema de Gestión
+     * @var \Pequiven\SIGBundle\Entity\PoliticManagementSystem
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\PoliticManagementSystem")
+     */
+    protected $politicManagementSystem;
 
     /**
      * Get id
@@ -82,7 +80,7 @@ class QualitySystem
      * Set description
      *
      * @param string $description
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setDescription($description)
     {
@@ -105,7 +103,7 @@ class QualitySystem
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setCreatedAt($createdAt)
     {
@@ -128,7 +126,7 @@ class QualitySystem
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -151,7 +149,7 @@ class QualitySystem
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setDeletedAt($deletedAt)
     {
@@ -174,7 +172,7 @@ class QualitySystem
      * Set enabled
      *
      * @param boolean $enabled
-     * @return QualitySystem
+     * @return ManagementSystem
      */
     public function setEnabled($enabled)
     {
@@ -195,5 +193,28 @@ class QualitySystem
     
     public function __toString() {
         return $this->getDescription()?:'-';
+    }
+
+    /**
+     * Set politicManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\PoliticManagementSystem $politicManagementSystem
+     * @return ManagementSystem
+     */
+    public function setPoliticManagementSystem(\Pequiven\SIGBundle\Entity\PoliticManagementSystem $politicManagementSystem = null)
+    {
+        $this->politicManagementSystem = $politicManagementSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get politicManagementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\PoliticManagementSystem 
+     */
+    public function getPoliticManagementSystem()
+    {
+        return $this->politicManagementSystem;
     }
 }

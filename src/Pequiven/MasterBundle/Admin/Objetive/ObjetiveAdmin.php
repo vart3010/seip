@@ -55,14 +55,15 @@ class ObjetiveAdmin extends Admin
                     ->add('indicators','sonata_type_model_autocomplete',array(
                         'property' => array('ref','description'),
                         'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('objetiveLevel')
                     ->add('period')
                 ->end()
             ->end()
             ->tab('Details')
-                    ->add('qualitySystem',null,array(
-                        'query_builder' => function(\Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository $repository)
+                    ->add('managementSystem',null,array(
+                        'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository)
                         {
                             return $repository->getQueryAllEnabled();
                         }

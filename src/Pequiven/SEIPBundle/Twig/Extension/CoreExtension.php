@@ -37,9 +37,11 @@ class CoreExtension extends \Twig_Extension
         );
     }
     
-    function contentHeader() {
+    function contentHeader($args = array(),$type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS, $forceAllPeriods = false,$forceEvalArgs = true) {
         $parameters = array();
-        $args = func_get_args();
+        if($forceEvalArgs == true){
+          $args = func_get_args();
+        }
         foreach ($args as $key => $arg) {
             if(empty($arg)){
                 continue;
@@ -64,12 +66,19 @@ class CoreExtension extends \Twig_Extension
         $periodService = $this->getPeriodService();
         $period = $this->getPeriodService()->getPeriodActive();
         
-        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation();
+        if(!$this->isGranted('ROLE_SEIP_PLANNING_*') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
+            if(!$forceAllPeriods){
+                $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE;
+            }
+        }
+        
+        $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation($type);
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 
             array(
                 'breadcrumbs' => $parameters,
                 'period' => $period,
                 'listArrayPeriods' => $listArrayPeriods,
+                'type' => $type
             )
         );
     }
@@ -162,6 +171,40 @@ class CoreExtension extends \Twig_Extension
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->container->get('translator')->trans($id, $parameters, $domain);
+    }
+    
+        /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @throws LogicException If SecurityBundle is not available
+     *
+     * @see TokenInterface::getUser()
+     */
+    public function getUser()
+    {
+        if (!$this->container->has('security.context')) {
+            throw new LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return;
+        }
+
+        return $user;
+    }
+    
+    private function isGranted($roles) {
+        if (!$this->container->has('security.context')) {
+            throw new \LogicException('The SecurityBundle is not registered in your application.');
+        }
+
+        return $this->container->get('security.context')->isGranted($roles);
     }
     
     /**

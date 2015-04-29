@@ -34,6 +34,10 @@ class SecurityService implements ContainerAwareInterface
 {
     private $container;
     
+    /**
+     * Lista de Métodos para validar
+     * @return type
+     */
     private function getMethodValidMap()
     {
         return array(
@@ -80,6 +84,12 @@ class SecurityService implements ContainerAwareInterface
         );
     }
     
+    /**
+     * Evalúa si el Objetivo (cualquier nivel) puede ser aprobado
+     * @param type $rol
+     * @param Objetive $objetive
+     * @return boolean
+     */
     function evaluateObjetiveApproved($rol,Objetive $objetive) 
     {
         $result = false;
@@ -92,6 +102,12 @@ class SecurityService implements ContainerAwareInterface
         return $result;
     }
     
+    /**
+     * Evalúa si el Indicador (cualquier nivel) puede ser aprobado
+     * @param type $rol
+     * @param Indicator $indicator
+     * @return boolean
+     */
     function evaluateIndicatorApproved($rol,Indicator $indicator)
     {
         $result = false;
@@ -104,6 +120,12 @@ class SecurityService implements ContainerAwareInterface
         return $result;
     }
     
+    /**
+     * Evalúa si el Programa de Gestión (cualquier nivel) puede ser visto
+     * @param type $rol
+     * @param ArrangementProgram $arrangementProgram
+     * @return boolean
+     */
     private function evaluateTacticArrangementProgram($rol, ArrangementProgram $arrangementProgram)
     {
         $user = $this->getUser();
@@ -169,6 +191,8 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
 
@@ -184,7 +208,12 @@ class SecurityService implements ContainerAwareInterface
             throw $this->createAccessDeniedHttpException($this->buildMessage('the_pre_planning_is_not_enabled', 'error'));
         }
     }
-    
+
+    /**
+     * Evalúa si la persona tiene permiso para ver los resultados (Nivel Táctico o Nivel Operativo)
+     * @param type $rol
+     * @param type $entity
+     */
     private function evaluateTacticResult($rol,$entity) 
     {
         $user = $this->getUser();
@@ -216,10 +245,16 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
 
-
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Indicadores Estratégicos
+     * @param type $rol
+     * @param Indicator $indicator
+     */
     private function evaluateStrategicIndicator($rol, Indicator $indicator)
     {
         $user = $this->getUser();
@@ -231,9 +266,52 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Indicadores Tácticos
+     * @param type $rol
+     * @param Indicator $indicator
+     */
+    function evaluateTacticIndicator($rol, Indicator $indicator)
+    {
+        $valid = false;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        if($rol === Rol::ROLE_DIRECTIVE){
+            $valid = true;
+        }else{
+            foreach ($indicator->getObjetives() as $objetive) {
+                $gerencia = $objetive->getGerencia();
+                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
+                    $valid = true;
+                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
+                    $valid = true;
+                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
+                    $valid = true;
+                }
+                
+                if($valid === true){
+                    break;
+                }
+            }
+        }
+        
+        if(!$valid){
+            $this->checkSecurity();
+        } else{
+            return $valid;
+        }
+    }
+    
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Indicadores Operativos
+     * @param type $rol
+     * @param Indicator $indicator
+     */
     function evaluateOperativeIndicator($rol, Indicator $indicator)
     {
         $valid = false;
@@ -262,38 +340,36 @@ class SecurityService implements ContainerAwareInterface
         
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
-    function evaluateTacticIndicator($rol, Indicator $indicator)
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Objetivos Estratégicos
+     * @param type $rol
+     * @param Objetive $objetive
+     */
+    private function evaluateStrategicObjetive($rol, Objetive $objetive)
     {
-        $valid = false;
         $user = $this->getUser();
+        $valid = false;
         $rol = $user->getLevelRealByGroup();
         if($rol === Rol::ROLE_DIRECTIVE){
             $valid = true;
         }else{
-            foreach ($indicator->getObjetives() as $objetive) {
-                $gerencia = $objetive->getGerencia();
-                if($rol == Rol::ROLE_GENERAL_COMPLEJO && $gerencia->getComplejo() === $user->getComplejo()){
-                    $valid = true;
-                }elseif($rol == Rol::ROLE_MANAGER_FIRST && $gerencia === $user->getGerencia()){
-                    $valid = true;
-                }elseif(($rol == Rol::ROLE_MANAGER_SECOND || $rol == Rol::ROLE_SUPERVISER || $rol == Rol::ROLE_WORKER_PQV) && $gerencia === $user->getGerenciaSecond()->getGerencia()){
-                    $valid = true;
-                }
-                
-                if($valid === true){
-                    break;
-                }
-            }
         }
-        
         if(!$valid){
             $this->checkSecurity();
         }
     }
     
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Objetivos Tácticos
+     * @param type $rol
+     * @param Objetive $objetive
+     * @return boolean
+     */
     private function evaluateTacticObjetive($rol, Objetive $objetive)
     {
         $valid = false;
@@ -314,61 +390,17 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
     
-    private function evaluateObjetiveEdit($rol,Objetive $objective)
-    {
-        $result = false;
-        if($objective->getPeriod()->isActive() === true){
-            if($objective->getStatus() == Objetive::STATUS_DRAFT){
-                $result = true;
-            }
-        }else{
-            $result = false;
-        }
-        return $result;
-    }
-    
-    private function evaluateObjetiveDelete($rol,Objetive $objective)
-    {
-        $result = false;
-        if($objective->getPeriod()->isActive() === true){
-            if($objective->getStatus() == Objetive::STATUS_DRAFT){
-                $result = true;
-            }
-        }else{
-            $result = false;
-        }
-        return $result;
-    }
-    
-    private function evaluateIndicatorEdit($rol,  Indicator $indicator)
-    {
-        $result = false;
-        if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
-            }
-        }else{
-            $result = false;
-        }
-        return $result;
-    }
-    
-    private function evaluateIndicatorDelete($rol,  Indicator $indicator)
-    {
-        $result = false;
-        if($indicator->getPeriod()->isActive() === true){
-            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
-                $result = true;
-            }
-        }else{
-            $result = false;
-        }
-        return $result;
-    }
-
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Objetivos Operativos
+     * @param type $rol
+     * @param Objetive $objetive
+     * @return boolean
+     */
     private function evaluateOperativeObjetive($rol, Objetive $objetive)
     {
         $user = $this->getUser();
@@ -390,22 +422,86 @@ class SecurityService implements ContainerAwareInterface
         }
         if(!$valid){
             $this->checkSecurity();
+        } else{
+            return $valid;
         }
     }
-    private function evaluateStrategicObjetive($rol, Objetive $objetive)
+    
+    /**
+     * Evalúa si el usuario tiene permiso para editar un Objetivo (cualquier nivel)
+     * @param type $rol
+     * @param Objetive $objective
+     * @return boolean
+     */
+    private function evaluateObjetiveEdit($rol,Objetive $objective)
     {
-        $user = $this->getUser();
-        $valid = false;
-        $rol = $user->getLevelRealByGroup();
-        if($rol === Rol::ROLE_DIRECTIVE){
-            $valid = true;
+        $result = false;
+        if($objective->getPeriod()->isActive() === true){
+            if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                $result = true;
+            }
         }else{
+            $result = false;
         }
-        if(!$valid){
-            $this->checkSecurity();
-        }
+        return $result;
     }
-
+    
+    /**
+     * Evalúa si el usuario tiene permiso para borrar un Objetivo (cualquier nivel)
+     * @param type $rol
+     * @param Objetive $objective
+     * @return boolean
+     */
+    private function evaluateObjetiveDelete($rol,Objetive $objective)
+    {
+        $result = false;
+        if($objective->getPeriod()->isActive() === true){
+            if($objective->getStatus() == Objetive::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
+    }
+    
+    /**
+     * Evalúa si el usuario tiene permiso para editar un Indicador (cualquier nivel)
+     * @param type $rol
+     * @param Indicator $indicator
+     * @return boolean
+     */
+    private function evaluateIndicatorEdit($rol,  Indicator $indicator)
+    {
+        $result = false;
+        if($indicator->getPeriod()->isActive() === true){
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
+    }
+    
+    /**
+     * Evalúa si el usuario tiene permiso para borrar un Indicador (cualquier nivel)
+     * @param type $rol
+     * @param Indicator $indicator
+     * @return boolean
+     */
+    private function evaluateIndicatorDelete($rol,  Indicator $indicator)
+    {
+        $result = false;
+        if($indicator->getPeriod()->isActive() === true){
+            if($indicator->getStatus() == Indicator::STATUS_DRAFT){
+                $result = true;
+            }
+        }else{
+            $result = false;
+        }
+        return $result;
+    }    
 
     /**
      * Evalua que el usuario tenga acceso a la seccion especifica, ademas se valida con un segundo metodo
@@ -432,7 +528,6 @@ class SecurityService implements ContainerAwareInterface
                 }
             }
             $methodValidMap = $this->getMethodValidMap();
-//            var_dump($methodValidMap);
             if($quantityRoles == 1 && isset($methodValidMap[$rol])){
                 $method = $methodValidMap[$rol];
                 $valid = call_user_func_array(array($this,$method),array($rol,$parameters));

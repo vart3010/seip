@@ -101,6 +101,7 @@ class IndicatorStrategicController extends baseController {
             $data = $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
 
             $object->setRefParent($data['refObjetive']);
+            $object->setSummary($data['description']);
             $object->setTmp(true);
             
             $data['tendency'] = (int)$data['tendency'];            
@@ -163,7 +164,7 @@ class IndicatorStrategicController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_strategic_registration");
-
+            $object->setSummary($data['description']);
             $data['tendency'] = (int)$data['tendency'];            
             $object->setUserCreatedAt($user);
             $object->setPeriod($this->getPeriodService()->getPeriodActive());

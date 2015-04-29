@@ -501,6 +501,7 @@ class ArrangementProgramController extends SEIPController
         $this->getPeriodService()->checkIsOpen();
         
         $type = $request->get("type");
+        $associate = $request->get("associate");
         
         $rol = null;
         $rolesByType = array(
@@ -516,19 +517,20 @@ class ArrangementProgramController extends SEIPController
         $user = $this->getUser();
         $periodService = $this->getPeriodService();
         
-        if(!$periodService->isAllowLoadArrangementProgram()){
+        if(!$periodService->isAllowLoadArrangementProgram()){//Consultamos si está habilitada la carga de programa de gestión en el perído actual
             $message = $this->trans('pequiven_seip.arrangementprogram.not_allow_load_arrangementprogram',array(),'flashes');
             $this->setFlash('error', $message);
             throw $this->createAccessDeniedHttpException($message);
         }
         
-        $period = $periodService->getEntityPeriodActive();
+        $period = $periodService->getEntityPeriodActive();//Obtenemos el período activo
         
         $entity
                 ->setType($type)
                 ->setPeriod($period)
                 ->setCreatedBy($user);
-        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+//        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+        $entity->setCategoryArrangementProgram($this->get('pequiven.repository.category_arrangement_program')->find($associate));
         if($request->isMethod('GET') === true && ($templateSourceId = $request->get('templateSource',null)) !== null){
             
             $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_FROM_TEMPLATE');
@@ -544,7 +546,7 @@ class ArrangementProgramController extends SEIPController
             }
             $entity->setTimeline($timeLine);
         }
-        $form = $this->createCreateForm($entity,array('type' => $type));
+        $form = $this->createCreateForm($entity,array('type' => $type,'associate' => $associate));
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }
@@ -611,11 +613,17 @@ class ArrangementProgramController extends SEIPController
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE'),
         );
+//        $rolesByType = array(
+//            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
+//            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
+//        );
         if(isset($rolesByType[$entity->getType()])){
             $rol = $rolesByType[$entity->getType()];
         }
         $securityService = $this->getSecurityService();
         $securityService->checkSecurity($rol);
+//        var_dump($rol);
+//        die();
         if(!$securityService->isGranted($rol[1])){
             $securityService->checkSecurity($rol[0],$entity);
         }
