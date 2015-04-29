@@ -27,6 +27,9 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
         $userTopLevel = null;
         foreach ($responsibles as $r) {
             foreach ($r->getGroups() as $group) {
+                if($group->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){
+                    continue;
+                }
                 if($group->getLevel() > $topLevel){
                     $topLevel = $group->getLevel();
                     $userTopLevel = $r;
@@ -44,6 +47,9 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
         $errors = array();
         if($responsible){
             foreach ($responsible->getGroups() as $group) {
+                if($group->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){
+                    continue;
+                }
                 foreach ($goals as $goal) {
                     foreach ($goal->getResponsibles() as $goalResponsible) {
                         foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {

@@ -16,6 +16,11 @@ class Rol extends BaseGroup {
      * Propietario
      */
     const TYPE_ROL_OWNER = 0;
+    
+    /**
+     * Rol Creado Especial
+     */
+    const TYPE_ROL_SPECIAL = 2;
 
     /**
      * Auxiliar
