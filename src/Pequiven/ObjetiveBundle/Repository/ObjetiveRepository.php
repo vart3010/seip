@@ -460,6 +460,14 @@ class ObjetiveRepository extends EntityRepository {
             ;
             $criteria->remove('view_planning');
         }
+        
+        if(($managementSystem = $criteria->remove('idManagementSystem'))){
+            $qb
+                    ->innerjoin('o.managementSystem','ms')
+                    ->andWhere('ms.id = :managementSystemId')
+                    ->setParameter('managementSystemId', $managementSystem)
+                ;
+        }
         return $qb->getQuery()->getResult();
     }
 
@@ -507,6 +515,36 @@ class ObjetiveRepository extends EntityRepository {
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Busca los objetivos tácticos de un sistema de gestión
+     * @return type
+     */
+    function findObjetivesTacticByManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem) {
+        return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
+    }
+    
+    function findQueryObjetivesTacticByManagementSystem($managementSystem) {
+        $user = $this->getUser();
+        $qb = $this->getQueryAllEnabled();
+        $qb
+                ->innerJoin("o.managementSystem", "ms")
+                ->innerJoin("o.objetiveLevel", "ol")
+                ->innerJoin("o.gerencia", "g")
+                ->andWhere("ol.level = :level")
+                ->andWhere("ms.id = :managementSystemId")
+                ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
+                ->setParameter("managementSystemId", $managementSystem)
+        ;
+        $level = $user->getLevelRealByGroup();
+        if ($level != Rol::ROLE_DIRECTIVE && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
+            $qb
+                    ->andWhere("g.id = :gerencia")
+                    ->setParameter("gerencia", $user->getGerencia())
+            ;
+        }
+        return $qb;
+    }
+    
     /**
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type

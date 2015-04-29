@@ -263,18 +263,18 @@ class GerenciaController extends baseController {
         
         $lastRowOpe = 8;
         foreach($objetivesTactics as $objetiveTactic){//Recorremos los objetivos tácticos de la Gerencia
-            if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
-                continue;
-            }
+//            if($managementSystem !== null && $managementSystem !== $objetiveTactic->getManagementSystem()){
+//                continue;
+//            }
             $indicatorsTactics = $objetiveTactic->getIndicators();
             $totalIndicatorTactics = count($indicatorsTactics);
             $objetivesOperatives = $objetiveTactic->getChildrens();
             $totalObjetiveOperatives = count($objetivesOperatives);
             if($totalObjetiveOperatives > 0){//Si el objetivo táctico tiene objetivos operativos
                 foreach($objetivesOperatives as $objetiveOperative){//Recorremos los Objetivos Operativos
-                    if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
-                        continue;
-                    }
+//                    if($managementSystem !== null && $managementSystem !== $objetiveOperative->getManagementSystem()){
+//                        continue;
+//                    }
                     $contTotalObjOperatives = 0;
                     $rowIniOpe = $row;//Fila Inicial del Objetivo Operativo
                     $indicatorsOperatives = $objetiveOperative->getIndicators();

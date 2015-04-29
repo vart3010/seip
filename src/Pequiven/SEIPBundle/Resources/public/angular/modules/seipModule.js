@@ -108,7 +108,8 @@ angular.module('seipModule.controllers', [])
                 arrangementprogramResponsibles: [],
                 arrangementProgram: {
                     categoryArrangementProgram: null
-                }
+                },
+                managementSystem: null
             };
             $scope.templateOptions.setModel(model);
             
@@ -256,7 +257,7 @@ angular.module('seipModule.controllers', [])
                 }
             };
 
-            //Setea la dta del formulario
+            //Setea la data del formulario
             $scope.setDataFormGoal = function(goal) {
                 $scope.initModelGoal(goal);
             };
@@ -284,6 +285,7 @@ angular.module('seipModule.controllers', [])
                 return false;
             };
 
+            var managementSystem = angular.element('#arrangementprogram_managementSystem');
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
@@ -307,6 +309,30 @@ angular.module('seipModule.controllers', [])
                 }
             };
             
+            managementSystem.on('change', function(e) {
+                if (e.val) {
+                    var managementSystemId = e.val;
+                    tacticalObjective.find('option').remove().end();
+                    notificationBarService.getLoadStatus().loading();
+                    $http.get(Routing.generate("pequiven_arrangementprogram_data_tactical_objectives", {idManagementSystem: managementSystemId})).success(function(data) {
+                        tacticalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
+                        angular.forEach(data, function(value) {
+                            tacticalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + ' - ' + value.gerencia.description + '</option>');
+                        });
+                        if (data.length > 0) {
+                            tacticalObjective.select2('val', e.val);
+                            tacticalObjective.select2('enable', true);
+                        } else {
+                            tacticalObjective.select2('val', '');
+                            tacticalObjective.select2('enable', false);
+                        }
+                        notificationBarService.getLoadStatus().done();
+                    });
+                } else {
+                    tacticalObjective.select2('val', '');
+                    tacticalObjective.select2('enable', false);
+                }
+            });
             tacticalObjective.on('change', function(e) {
                 if (e.val) {
                     if($scope.entityType == 1){

@@ -55,6 +55,7 @@ class ObjetiveAdmin extends Admin
                     ->add('indicators','sonata_type_model_autocomplete',array(
                         'property' => array('ref','description'),
                         'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('objetiveLevel')
                     ->add('period')

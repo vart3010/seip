@@ -109,6 +109,7 @@ pequiven:
     form:
         template_description: Descripción de la plantilla
         category_arrangement_program: Asociado a
+        managementSystem: Sistema de Gestión
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo
         operating_indicator: Indicador Operativo

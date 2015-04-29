@@ -277,7 +277,7 @@ class ObjetiveTacticController extends baseController
 
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             foreach ($totalRef as $value) {
-                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
                     $this->createArrangementRange($objetive, $data);
                 }

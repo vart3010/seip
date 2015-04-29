@@ -94,6 +94,8 @@ abstract class ArrangementProgram
      */
     protected $type;
     
+    private $managementSystem;
+    
     /**
      * Retorna la etiqueta del tipo de programa de gestion
      * @return string
@@ -483,6 +485,10 @@ abstract class ArrangementProgram
      * Devuelve el objetivo operativo
      */
     public function getOperationalObjective(){
+        
+    }
+    
+    public function getManagementSystem(){
         
     }
 }
