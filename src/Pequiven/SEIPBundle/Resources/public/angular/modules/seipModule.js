@@ -233,29 +233,29 @@ angular.module('seipModule.controllers', [])
         //Funcion que carga el template de la meta
         $scope.loadTemplateMeta = function(goal,index){
             $scope.model.goalCount = index;
-                var responsibles = arrangementprogramResponsibles.val();
-                if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
-                    $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
-                    return;
-                }
-                if (responsibles == null) {
-                    $scope.sendMessageError(null, 's2id_arrangementprogram_responsibles');
-                    return;
-                }
-                $scope.templateOptions.setTemplate($scope.templates[0]);
-                $scope.templateOptions.setParameterCallBack(goal);
-                if (goal) {
-                    $scope.templateOptions.enableModeEdit();
+            var responsibles = arrangementprogramResponsibles.val();
+            if ($scope.model.arrangementProgram.categoryArrangementProgram == null || $scope.model.arrangementProgram.categoryArrangementProgram == '') {
+                $scope.sendMessageError(null, 's2id_arrangementprogram_categoryArrangementProgram');
+                return;
+            }
+            if (responsibles == null) {
+                $scope.sendMessageError(null, 's2id_arrangementprogram_responsibles');
+                return;
+            }
+            $scope.templateOptions.setTemplate($scope.templates[0]);
+            $scope.templateOptions.setParameterCallBack(goal);
+            if (goal) {
+                $scope.templateOptions.enableModeEdit();
+                $scope.openModalAuto();
+            } else {
+                try { 
+                    $scope.openModalAuto(applyDatePickerDatePG);
+                } catch( err ) { 
                     $scope.openModalAuto();
-                } else {
-                    try { 
-                        $scope.openModalAuto(applyDatePickerDatePG);
-                    } catch( err ) { 
-                        $scope.openModalAuto();
-                    }
-                    
                 }
-            };
+
+            }
+        };
 
             //Setea la data del formulario
             $scope.setDataFormGoal = function(goal) {

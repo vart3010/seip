@@ -436,6 +436,8 @@ class ObjetiveRepository extends EntityRepository {
     }
 
     function findTacticalObjetives($user, array $criteria = array()) {
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $qb = $this->getQueryAllEnabled();
         $qb
                 ->innerJoin("o.objetiveLevel", "ol")
@@ -444,24 +446,26 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
         ;
         $level = $user->getLevelRealByGroup();
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
-            $qb
-                    ->andWhere("g.id = :gerencia")
-                    ->setParameter("gerencia", $user->getGerencia())
-            ;
-        } elseif ($criteria['view_planning']) {
-            if ($gerencia = $criteria->remove('gerencia') != null) {
-                
+        $managementSystem = $criteria->remove('idManagementSystem');
+        if($managementSystem == null){
+            if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
+                $qb
+                        ->andWhere("g.id = :gerencia")
+                        ->setParameter("gerencia", $user->getGerencia())
+                ;
+            } elseif ($criteria['view_planning']) {
+                if ($gerencia = $criteria->remove('gerencia') != null) {
+
+                }
+                $qb
+                        ->andWhere("g.id = :gerencia")
+                        ->setParameter("gerencia", $gerencia)
+                ;
+                $criteria->remove('view_planning');
             }
-            $qb
-                    ->andWhere("g.id = :gerencia")
-                    ->setParameter("gerencia", $gerencia)
-            ;
-            $criteria->remove('view_planning');
         }
         
-        if(($managementSystem = $criteria->remove('idManagementSystem'))){
+        if($managementSystem != null){
             $qb
                     ->innerjoin('o.managementSystem','ms')
                     ->andWhere('ms.id = :managementSystemId')

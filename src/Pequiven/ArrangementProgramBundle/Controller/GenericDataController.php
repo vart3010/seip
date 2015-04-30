@@ -48,16 +48,18 @@ class GenericDataController extends SEIPController
     }
     
     /**
-     * Obtiene los responsable que se pueden asignar a un programa de gestion
+     * Obtiene los responsable que se pueden asignar a un programa de gestion a planificación de procesos
      */
     function getResponsibleArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $categoryArrangementProgramId = $request->get('categoryArrangementProgramId');
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
             'firstname' => $query,
             'lastname' => $query,
             'numPersonal' => $query,
+            'categoryArrangementProgramId' => $categoryArrangementProgramId,
         );
         
         $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
