@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Formulario de plantilla de reporte
+ */
 class ReportTemplateType extends AbstractType
 {
         /**
@@ -27,6 +30,24 @@ class ReportTemplateType extends AbstractType
                 "attr" => array("class" => "select2 input-large"),
                 "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ReportTemplate::getTypeReports(),
                 "translation_domain" => "PequivenSEIPBundle"
+            ))
+            ->add("company",null,array(
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "input-xlarge select2"
+                ),
+            ))
+            ->add("location",null,array(
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "input-xlarge select2"
+                ),
+            ))
+            ->add("plant",null,array(
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "input-xlarge select2"
+                ),
             ))
         ;
     }
