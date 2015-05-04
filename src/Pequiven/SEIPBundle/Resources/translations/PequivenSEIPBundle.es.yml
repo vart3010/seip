@@ -314,6 +314,9 @@ pequiven_seip:
             raw_materials: Consumo de materia prima
     product_report:
         product_report: Producto
+        type:
+            final: Producto final
+            byproduct: Sub-Producto
     raw_material:
         type:
             internal: Interna
@@ -436,3 +439,5 @@ nro: "#"
 "Enabled": ¿Activo?
 "Company": Empresa
 "Location": Complejo
+"Type product": Tipo de producto
+"Raw material": Materia prima

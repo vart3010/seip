@@ -13,14 +13,34 @@
         {{ form_errors(form.product) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.typeProduct) }}
+        {{ form_widget(form.typeProduct) }}
+        {{ form_errors(form.typeProduct) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.productUnit) }}
         {{ form_widget(form.productUnit) }}
         {{ form_errors(form.productUnit) }}
     </div>
     <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.plant) }}
         {{ form_widget(form.plant) }}
         {{ form_errors(form.plant) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.rawMaterial) }}
+        {{ form_widget(form.rawMaterial) }}
+        {{ form_errors(form.rawMaterial) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.isRawMaterial) }}

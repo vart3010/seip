@@ -85,6 +85,40 @@ class ProductReport extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $reportTemplate;
+    
+    /**
+     * Empresa
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+    
+    /**
+     * Localizacion (complejo).
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $location;
+    
+    /**
+     * Materia prima
+     * @var \Pequiven\SEIPBundle\Entity\CEI\RawMaterial
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $rawMaterial;
+    
+    /**
+     * Tipo de producto
+     * @var integer
+     * @ORM\Column(name="type_product",type="integer")
+     */
+    private $typeProduct;
 
     /**
      * Get id
@@ -255,6 +289,98 @@ class ProductReport extends BaseModel
     public function getReportTemplate()
     {
         return $this->reportTemplate;
+    }
+    
+    /**
+     * Set typeProduct
+     *
+     * @param integer $typeProduct
+     * @return ProductReport
+     */
+    public function setTypeProduct($typeProduct)
+    {
+        $this->typeProduct = $typeProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get typeProduct
+     *
+     * @return integer 
+     */
+    public function getTypeProduct()
+    {
+        return $this->typeProduct;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
+     * @return ProductReport
+     */
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set location
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
+     * @return ProductReport
+     */
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set rawMaterial
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial
+     * @return ProductReport
+     */
+    public function setRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial)
+    {
+        $this->rawMaterial = $rawMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get rawMaterial
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\RawMaterial 
+     */
+    public function getRawMaterial()
+    {
+        return $this->rawMaterial;
     }
     
     public function __toString() {
