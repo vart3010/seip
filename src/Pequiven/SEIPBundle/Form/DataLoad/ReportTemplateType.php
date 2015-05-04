@@ -33,18 +33,21 @@ class ReportTemplateType extends AbstractType
             ))
             ->add("company",null,array(
                 'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
                 'attr' => array(
                     'class' => "input-xlarge select2"
                 ),
             ))
             ->add("location",null,array(
                 'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
                 'attr' => array(
                     'class' => "input-xlarge select2"
                 ),
             ))
             ->add("plant",null,array(
                 'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
                 'attr' => array(
                     'class' => "input-xlarge select2"
                 ),

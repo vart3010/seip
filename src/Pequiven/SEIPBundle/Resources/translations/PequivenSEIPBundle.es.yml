@@ -440,6 +440,7 @@ internalAudit: Auditoría Interna
 empty:
     features_indicator: No hay ningún punto de atención.
     product_report: No hay productos agregados.
+    product_planning: No hay ninguna planificación de productos.
     
 chart:
     type:
