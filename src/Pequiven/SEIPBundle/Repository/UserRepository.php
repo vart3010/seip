@@ -119,25 +119,34 @@ class UserRepository extends EntityRepository
      * @return type
      */
     function findQueryToAssingTacticArrangementProgramGoal(array $users,array $criteria = array()){
-        $qb = $this->getQueryBuilder();
-        $level = 0;
-        $usersId = array();
-        foreach ($users as $user) {
-            if($user->getLevelRealByGroup() > $level){
-                $level = $user->getLevelRealByGroup();
-            }
-            $usersId[] = $user->getId();
-        }
-        $qb
-            ->innerJoin('u.groups','g')
-            ->andWhere($qb->expr()->orX('g.level <= :level',$qb->expr()->in('u.id', $usersId)))
-//            ->andWhere('u.gerencia = :gerencia')
-            ->andWhere('g.typeRol = :typeRol')
-            ->setParameter('level', $level)
-            ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
-//            ->setParameter('gerencia', $user->getGerencia())
-            ;
+        
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        $categoryArrangementProgramId = $criteria['categoryArrangementProgramId'];
+        $qb = $this->getQueryBuilder();
+        
+        $qb
+                ->innerJoin('u.groups','g')
+                ->andWhere('g.typeRol = :typeRol')
+                ->setParameter('typeRol', \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_OWNER)
+                ;
+        
+        if($categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $level = 0;
+            $usersId = array();
+            foreach ($users as $user) {
+                if($user->getLevelRealByGroup() > $level){
+                    $level = $user->getLevelRealByGroup();
+                }
+                $usersId[] = $user->getId();
+            }
+            $qb
+                ->andWhere($qb->expr()->orX('g.level <= :level',$qb->expr()->in('u.id', $usersId)))
+    //            ->andWhere('u.gerencia = :gerencia')
+                ->setParameter('level', $level)
+    //            ->setParameter('gerencia', $user->getGerencia())
+                ;
+        }
+        
         $orX = $qb->expr()->orX();
         if( ($firstname = $criteria->remove('firstname')) ){
             $orX->add($qb->expr()->like('u.firstname', "'%".$firstname."%'"));

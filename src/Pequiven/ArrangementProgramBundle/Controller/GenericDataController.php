@@ -17,6 +17,7 @@ class GenericDataController extends SEIPController
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
         if(is_string($responsiblesId)){
             $responsiblesId = explode(',', $responsiblesId);
         }
@@ -34,6 +35,7 @@ class GenericDataController extends SEIPController
                 'firstname' => $query,
                 'lastname' => $query,
                 'numPersonal' => $query,
+                'categoryArrangementProgramId' => $categoryArrangementProgramId,
             );
             if($gerencia != null){
                 $criteria['gerencia'] = $gerencia;

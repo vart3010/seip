@@ -48,7 +48,7 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_OBJECTIVE_VIEW_TACTIC' => 'evaluateTacticObjetive',
             'ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateOperativeObjetive',
             'ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC' => 'evaluateTacticObjetiveSIG',
-            'ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateOperativeObjetiveSIG',
+            'ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateTacticObjetiveSIG',
             
             'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC' => 'evaluateStrategicIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_TACTIC' => 'evaluateTacticIndicator',
@@ -59,6 +59,8 @@ class SecurityService implements ContainerAwareInterface
             
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgram',
             'ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE' => 'evaluateTacticArrangementProgram',
+            'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC' => 'evaluateTacticArrangementProgramSIG',
+            'ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE' => 'evaluateTacticArrangementProgramSIG',
             
             'ROLE_SEIP_OBJECTIVE_EDIT_STRATEGIC' => 'evaluateObjetiveEdit',
             'ROLE_SEIP_OBJECTIVE_EDIT_TACTIC' => 'evaluateObjetiveEdit',
@@ -404,6 +406,25 @@ class SecurityService implements ContainerAwareInterface
      * @return boolean
      */
     private function evaluateTacticObjetiveSIG($rol, Objetive $objetive)
+    {
+        $valid = true;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        
+        if(!$valid){
+            $this->checkSecurity();
+        } else{
+            return $valid;
+        }
+    }
+    
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Programas de Gestión SIG
+     * @param type $rol
+     * @param ArrangementProgram $arrangementProgram
+     * @return boolean
+     */
+    private function evaluateTacticArrangementProgramSIG($rol, ArrangementProgram $arrangementProgram)
     {
         $valid = true;
         $user = $this->getUser();

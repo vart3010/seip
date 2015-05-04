@@ -505,8 +505,8 @@ class ArrangementProgramController extends SEIPController
         
         $rol = null;
         $rolesByType = array(
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC',
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => 'ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE',
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC'),
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE'),
         );
         if(isset($rolesByType[$type])){
             $rol = $rolesByType[$type];
@@ -616,8 +616,8 @@ class ArrangementProgramController extends SEIPController
         
         $rol = null;
         $rolesByType = array(
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC'),
-            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE'),
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
+            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
         );
 //        $rolesByType = array(
 //            ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
@@ -630,8 +630,20 @@ class ArrangementProgramController extends SEIPController
         $securityService->checkSecurity($rol);
 //        var_dump($rol);
 //        die();
-        if(!$securityService->isGranted($rol[1])){
-            $securityService->checkSecurity($rol[0],$entity);
+        if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC') || !$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE')){
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC') || !$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE')){
+                if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    $securityService->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC',$entity);
+                } else{
+                    $securityService->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE',$entity);
+                }
+            } else{
+                if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    $securityService->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC',$entity);
+                } else{
+                    $securityService->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE',$entity);
+                }
+            }
         }
         
         $deleteForm = $this->createDeleteForm($id);

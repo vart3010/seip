@@ -180,7 +180,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ))
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize', $section)));
                 //Añadir
-                if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_*')){
+                if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_*')){
 
                     $subchild = $this->factory->createItem('sig.arrangement_program.add.main',
                         $this->getSubLevelOptions(array(
@@ -189,7 +189,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.arrangement_programs.add.main', $section)));
 
-                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC')){
+                    if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_TACTIC')){
                         $subchild
                         ->addChild('sig.arrangement_program.add.tactic', array(
                             'route' => 'pequiven_arrangementprogram_create',
@@ -197,7 +197,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         ))
                         ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.add.tactic', $section)));
                     }
-                    if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')){
+                    if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE')){
                         $subchild->addChild('sig.arrangement_program.add.operative', array(
                             'route' => 'pequiven_arrangementprogram_create',
                             'routeParameters' => array('type' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE, 'associate' => \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG),

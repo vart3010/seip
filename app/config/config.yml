@@ -193,6 +193,12 @@ tecnocreaciones_tools:
                 search: contains
                 form: pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig
                 field: products
+            tactical_objectives_alias:
+                class: Pequiven\ObjetiveBundle\Entity\Objetive
+#                role: ROLE_ADMIN
+                search: contains
+                form: arrangementprogram
+                field: tacticalObjective
                 
 fos_oauth_server:
     db_driver: orm       # Driver availables: orm, mongodb, or propel
