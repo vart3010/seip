@@ -105,12 +105,14 @@ pequiven_arrangementprogram_data_template_email:
     methods: [GET]
     
 pequiven_arrangementprogram_data_responsible:
-    path: /arrangement-program-responsible.{_format}
+    path: /arrangement-program-responsible/{categoryArrangementProgramId}.{_format}
     defaults: 
         _controller: pequiven_seip.controller.arrangementprogram_data:getResponsibleArrangementProgramAction
+        categoryArrangementProgramId: 2
         _format: json
     requirements:
         _format: "json|xml"
+        categoryArrangementProgramId: 1|2
     methods: [GET]
     options:
         expose: true

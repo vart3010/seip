@@ -94,7 +94,7 @@ abstract class ArrangementProgram
      */
     protected $type;
     
-    private $managementSystem;
+    protected $managementSystem;
     
     /**
      * Retorna la etiqueta del tipo de programa de gestion
@@ -490,5 +490,10 @@ abstract class ArrangementProgram
     
     public function getManagementSystem(){
         
+    }
+    
+    public function setManagementSystem($managementSystem){
+        $this->managementSystem = $managementSystem;
+        return $this;
     }
 }

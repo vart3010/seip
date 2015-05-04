@@ -37,7 +37,7 @@
     var $collectionHolder;
 
     // setup an "add a tag" link
-    var $addTagLink = $('<a href="#" class="add_tag_link">Add a tag</a>');
+    var $addTagLink = $('<a href="#" class="add_tag_link">Añadir rango de distribucion</a>');
     var $newLinkLi = $('<li></li>').append($addTagLink);
     var dateFormat = "dd-mm-yy";
 
@@ -96,7 +96,7 @@
         }
         
         function addTagFormDeleteLink($tagFormLi) {
-            var $removeFormA = $('<a href="#">delete this tag</a>');
+            var $removeFormA = $('<a href="#">Eliminar este rango</a>');
             $tagFormLi.append($removeFormA);
 
             $removeFormA.on('click', function(e) {

@@ -8,18 +8,18 @@ Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram:
         period:
             - NotNull:
                 groups: [base]
-        categoryArrangementProgram:
-            - NotNull:
-                groups: [categoryArrangementProgram]
+#        categoryArrangementProgram:
+#            - NotNull:
+#                groups: [categoryArrangementProgram]
         tacticalObjective:
             - NotNull:
                 groups: [tacticalObjective]
         operationalObjective:
             - NotNull:
                 groups: [operationalObjective]
-        process:
-            - NotNull:
-                groups: [categoryArrangementProgram]
+#        process:
+#            - NotNull:
+#                groups: [categoryArrangementProgram]
         type:
             - NotNull:
                 groups: [base]

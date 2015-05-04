@@ -47,7 +47,7 @@
 <script type="text/javascript">
     var applyDatePickerDatePG = null;
     var urlResponsibles = '';
-    
+    var idCategoryArrangementProgram = $('#categoryArrangementProgramValue').val();
     var setUrlResponsibles = function(data){
               if(data == undefined){
                   data = [];
@@ -118,7 +118,7 @@
               
               var changeArrangementprogramResponsibles = function(){
                   var reponsibleId = arrangementprogramResponsibles.val();
-                  urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId});
+                  urlResponsibles = Routing.generate("pequiven_arrangementprogram_data_responsible_goals", {responsibles: reponsibleId, idCategoryArrangementProgram: idCategoryArrangementProgram});
                   setUrlResponsibles();
               };
               

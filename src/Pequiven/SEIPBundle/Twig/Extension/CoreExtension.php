@@ -64,13 +64,14 @@ class CoreExtension extends \Twig_Extension
             $parameters[] = $item;
         }
         $periodService = $this->getPeriodService();
-        $period = $this->getPeriodService()->getPeriodActive();
         
         if(!$this->isGranted('ROLE_SEIP_PLANNING_*') && $type == \Pequiven\SEIPBundle\Entity\Period::VIEW_ALL_PERIODS){
             if(!$forceAllPeriods){
                 $type = \Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE;
             }
         }
+        
+        $period = $this->getPeriodService()->getPeriodActive($type);
         
         $listArrayPeriods = $periodService->getListArrayPeriodsAvailableConsultation($type);
         return $this->container->get('templating')->render('PequivenSEIPBundle:Template:Developer/contentHeader.html.twig', 

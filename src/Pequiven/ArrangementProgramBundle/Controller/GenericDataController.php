@@ -17,6 +17,7 @@ class GenericDataController extends SEIPController
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
         if(is_string($responsiblesId)){
             $responsiblesId = explode(',', $responsiblesId);
         }
@@ -34,6 +35,7 @@ class GenericDataController extends SEIPController
                 'firstname' => $query,
                 'lastname' => $query,
                 'numPersonal' => $query,
+                'categoryArrangementProgramId' => $categoryArrangementProgramId,
             );
             if($gerencia != null){
                 $criteria['gerencia'] = $gerencia;
@@ -48,16 +50,18 @@ class GenericDataController extends SEIPController
     }
     
     /**
-     * Obtiene los responsable que se pueden asignar a un programa de gestion
+     * Obtiene los responsable que se pueden asignar a un programa de gestion a planificación de procesos
      */
     function getResponsibleArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $categoryArrangementProgramId = $request->get('categoryArrangementProgramId');
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
             'firstname' => $query,
             'lastname' => $query,
             'numPersonal' => $query,
+            'categoryArrangementProgramId' => $categoryArrangementProgramId,
         );
         
         $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
@@ -89,6 +93,8 @@ class GenericDataController extends SEIPController
     function getOperationalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
+        
         $objetiveTactic = $em->find('Pequiven\ObjetiveBundle\Entity\Objetive', $request->get('idObjetiveTactical'));
         if(!$objetiveTactic){
             throw $this->createNotFoundException('objetive tactic not found!');

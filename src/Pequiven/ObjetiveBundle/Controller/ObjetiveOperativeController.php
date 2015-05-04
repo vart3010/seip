@@ -48,11 +48,15 @@ class ObjetiveOperativeController extends baseController
     public function showAction(Request $request)
     {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE'));
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE','ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE'));
         $resource = $this->findOr404($request);
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE')){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            }
         }
         $indicatorService = $this->getIndicatorService();
         
