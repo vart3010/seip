@@ -8,6 +8,11 @@ pequiven_seip:
     add: Añadir
     products: Productos
     ref: Referencia
+    totalPlan: Total planificado
+    totalReal: Total real
+    plan_n: "Plan Dia %n%:"
+    real_n: "Real Dia %n%:"
+    percentage: Porcentaje
 
     #Login
     sign_in: Ingresar
@@ -130,6 +135,9 @@ pequiven_seip:
         export_xls: Exportar
         export_result: Exportar Resultados
         refresh: Refrescar
+        run_planning: Ejecutar planificación
+    question:
+        want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir de la planificacion?
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -317,6 +325,8 @@ pequiven_seip:
         type:
             final: Producto final
             byproduct: Sub-Producto
+        product_detail_daily_months: Detalles de producción
+        product_detail_daily_month: Detalle de producción
     raw_material:
         type:
             internal: Interna
@@ -446,6 +456,7 @@ empty:
     product_report: No hay productos agregados.
     product_planning: No hay ninguna planificación de productos.
     range: No hay rango de distribucion.
+    product_detail_daily_months: No hay detalles de producción.
     
 chart:
     type:

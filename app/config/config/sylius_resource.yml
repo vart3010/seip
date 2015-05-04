@@ -197,10 +197,6 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicator\ValueIndicatorDetailController
                 model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail
-        pequiven.product_detail_daily_month:
-            driver: doctrine/orm
-            classes:
-                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
         pequiven.feature_indicator:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Indicator/FeatureIndicator
@@ -259,3 +255,8 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\RangeController
+        pequiven.product_detail_daily_month:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth

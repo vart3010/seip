@@ -13,3 +13,7 @@ pequiven_data_load_product_planning:
 pequiven_data_load_range:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/range.yml"
     prefix:   /range
+    
+pequiven_data_load_product_detail_daily_month:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_detail_daily_month.yml"
+    prefix:   /product-detail-daily-month

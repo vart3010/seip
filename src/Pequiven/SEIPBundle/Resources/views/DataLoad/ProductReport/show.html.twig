@@ -86,7 +86,16 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
     <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/product_detail_daily_months.html.twig' %}
+    <br /><br />
     <p class="button-height align-right">
+        {{ buttons.generic_confirm(path("pequiven_product_report_run_planning",{ id: product_report.id }),"pequiven_seip.buttons.run_planning",{
+            content: ("pequiven_seip.question.want_create_production_details_from_planning"|trans),
+            translation_domain: "PequivenSEIPBundle",
+            icon: "icon-extract"
+            }) 
+        }}
+        &nbsp;
         {{ buttons.generic(path('pequiven_product_report_update', { 'id': product_report.id }),('pequiven.edit'|trans({},'messages'))) }}
         &nbsp;
         {{ buttons.delete(path('pequiven_product_report_delete', { 'id': product_report.id })) }}

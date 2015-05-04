@@ -127,8 +127,16 @@ class ProductReport extends BaseModel
      */
     protected $productPlannings;
     
+    /**
+     * Detalles del producto de cada mes
+     * @var Production\ProductDetailDailyMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport")
+     */
+    protected $productDetailDailyMonths;
+
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -427,6 +435,41 @@ class ProductReport extends BaseModel
     public function getProductPlannings()
     {
         return $this->productPlannings;
+    }
+    
+    /**
+     * Add productDetailDailyMonths
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths
+     * @return ProductReport
+     */
+    public function addProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths)
+    {
+        $productDetailDailyMonths->setProductReport($this);
+        
+        $this->productDetailDailyMonths->add($productDetailDailyMonths);
+
+        return $this;
+    }
+
+    /**
+     * Remove productDetailDailyMonths
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths
+     */
+    public function removeProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths)
+    {
+        $this->productDetailDailyMonths->removeElement($productDetailDailyMonths);
+    }
+
+    /**
+     * Get productDetailDailyMonths
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductDetailDailyMonths()
+    {
+        return $this->productDetailDailyMonths;
     }
     
     public function __toString() {

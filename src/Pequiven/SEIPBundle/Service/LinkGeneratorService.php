@@ -40,6 +40,7 @@ class LinkGeneratorService extends LinkGenerator
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate','icon' => 'fa fa-file-o','route' => 'pequiven_report_template_show'),
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\ProductReport','icon' => 'fa fa-tags','route' => 'pequiven_product_report_show'),
             array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning','icon' => '','route' => 'pequiven_product_planning_show',"translation_domain" => "PequivenSEIPBundle"),
+            array('class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth','icon' => '','route' => 'pequiven_product_detail_daily_month_show',"translation_domain" => "PequivenSEIPBundle"),
         );
     }
     

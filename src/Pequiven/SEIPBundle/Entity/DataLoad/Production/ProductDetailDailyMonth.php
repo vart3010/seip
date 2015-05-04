@@ -12,7 +12,7 @@
 namespace Pequiven\SEIPBundle\Entity\DataLoad\Production;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\BaseModel;
+use Pequiven\SEIPBundle\Model\DataLoad\Production\ProductDetailDailyMonth as BaseModel;
 use Tpg\ExtjsBundle\Annotation as Extjs;
 
 /**
@@ -39,7 +39,7 @@ class ProductDetailDailyMonth extends BaseModel
     /**
      * Producto de reporte
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="productDetailDailyMonths")
      * @ORM\JoinColumn(nullable=false)
      */
     private $productReport;
@@ -2140,5 +2140,13 @@ class ProductDetailDailyMonth extends BaseModel
     public function getProductReport()
     {
         return $this->productReport;
+    }
+    
+    public function __toString() {
+        $_toString = "";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
     }
 }
