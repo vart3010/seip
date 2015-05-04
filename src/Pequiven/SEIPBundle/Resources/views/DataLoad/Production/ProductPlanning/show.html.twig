@@ -1,0 +1,32 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_planning.product_planning"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.product_planning.product_planning'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven.ref'|trans({},'messages') }}</label>
+                    {{ generateLink(product_planning) }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_product_planning_update', { 'id': product_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_product_planning_delete', { 'id': product_planning.id })) }}
+    </p>
+{% endblock %}

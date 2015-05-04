@@ -246,3 +246,9 @@ sylius_resource:
             classes:
                 model: Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
                 repository: Pequiven\MasterBundle\Repository\ArrangementProgram\CategoryArrangementProgramRepository
+                
+        pequiven.product_planning:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/ProductPlanning
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning

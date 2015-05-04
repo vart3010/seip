@@ -240,6 +240,9 @@
         <service id="pequiven.form.product_report" class="Pequiven\SEIPBundle\Form\DataLoad\ProductReportType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_productreport" />
         </service>
+        <service id="pequiven.form.product_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productplanning" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.month) }}
+        {{ form_widget(form.month) }}
+        {{ form_errors(form.month) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.totalMonth) }}
+        {{ form_widget(form.totalMonth) }}
+        {{ form_errors(form.totalMonth) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.designCapacity) }}
+        {{ form_widget(form.designCapacity) }}
+        {{ form_errors(form.designCapacity) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.daysStops) }}
+        {{ form_widget(form.daysStops) }}
+        {{ form_errors(form.daysStops) }}
+    </div>
+</fieldset>

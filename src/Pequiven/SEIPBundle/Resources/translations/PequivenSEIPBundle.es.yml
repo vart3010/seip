@@ -325,6 +325,21 @@ pequiven_seip:
         type:
             fixed_value: Valor fijo
             capacity_factor: Factor de capacidad
+    product_planning:
+        product_planning: Planificación de producto
+    month:
+        1: Enero
+        2: Febrero
+        3: Marzo
+        4: Abril
+        5: Mayo
+        6: Junio
+        7: Julio
+        8: Agosto
+        9: Septiembre
+        10: Octubre
+        11: Noviembre
+        12: Diciembre
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -445,3 +460,7 @@ nro: "#"
 "Location": Complejo
 "Type product": Tipo de producto
 "Raw material": Materia prima
+"Month":  Mes
+"Total month": Total en el mes
+"Design capacity": Capacidad de diseño
+"Days stops": Dias de paradas

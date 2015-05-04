@@ -1,0 +1,49 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.product_planning.product_planning'|trans }}&nbsp;({{ product_report.productPlannings|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_product_planning_create',{productReport: product_report.id}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
+                    <th scope="col" width="35%" class="hide-on-tablet">{{ 'Plant'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+
+                {% for productReport in product_report.productPlannings %}
+                    <tr>
+                        <td>{{ loop.index }} - 
+                            {{ generateLink(productReport) }}
+                        </td>
+                        <th scope="row">
+                            {{ productReport.productionLine }}
+                        </th>
+                        <td>{{ productReport.productUnit }}</td>
+                        <td>{{ productReport.plant }}</td>
+                        <td class="low-padding align-center">
+                            <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.product_report"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

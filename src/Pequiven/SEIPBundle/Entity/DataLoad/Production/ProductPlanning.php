@@ -12,7 +12,7 @@
 namespace Pequiven\SEIPBundle\Entity\DataLoad\Production;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\BaseModel;
+use Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning as BaseModel;
 
 /**
  * Planificacion de producto
@@ -60,6 +60,13 @@ class ProductPlanning extends BaseModel
      */
     private $designCapacity;
     
+    /**
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="productPlannings")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $productReport;
+
     /**
      * Constructor
      */
@@ -178,5 +185,37 @@ class ProductPlanning extends BaseModel
     public function getDaysStops()
     {
         return $this->daysStops;
+    }
+
+    /**
+     * Set productReport
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport
+     * @return ProductPlanning
+     */
+    public function setProductReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport)
+    {
+        $this->productReport = $productReport;
+
+        return $this;
+    }
+
+    /**
+     * Get productReport
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport 
+     */
+    public function getProductReport()
+    {
+        return $this->productReport;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getMonth()){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
     }
 }

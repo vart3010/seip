@@ -119,6 +119,17 @@ class ProductReport extends BaseModel
      * @ORM\Column(name="type_product",type="integer")
      */
     private $typeProduct;
+    
+    /**
+     * Planificacion de productos
+     * @var Production\ProductPlanning
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport")
+     */
+    protected $productPlannings;
+    
+    public function __construct() {
+        $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -381,6 +392,41 @@ class ProductReport extends BaseModel
     public function getRawMaterial()
     {
         return $this->rawMaterial;
+    }
+    
+    /**
+     * Add productPlannings
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
+     * @return ProductReport
+     */
+    public function addProductPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings)
+    {
+        $productPlannings->setProductReport($this);
+        
+        $this->productPlannings[] = $productPlannings;
+
+        return $this;
+    }
+
+    /**
+     * Remove productPlannings
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
+     */
+    public function removeProductPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings)
+    {
+        $this->productPlannings->removeElement($productPlannings);
+    }
+
+    /**
+     * Get productPlannings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductPlannings()
+    {
+        return $this->productPlannings;
     }
     
     public function __toString() {
