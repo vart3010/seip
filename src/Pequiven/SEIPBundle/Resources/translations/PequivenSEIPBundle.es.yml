@@ -327,6 +327,8 @@ pequiven_seip:
             capacity_factor: Factor de capacidad
     product_planning:
         product_planning: Planificación de producto
+        without_stopping_day: Sin días de parada.
+
     month:
         1: Enero
         2: Febrero

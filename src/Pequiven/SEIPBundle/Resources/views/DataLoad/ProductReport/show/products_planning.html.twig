@@ -11,34 +11,34 @@
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="35%">{{ 'Product'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
-                    <th scope="col" width="35%" class="hide-on-tablet">{{ 'Plant'|trans }}</th>
+                    <th scope="col" width="35%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Total month'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet">{{ 'Design capacity'|trans }}</th>
+                    <th scope="col" width="35%" class="hide-on-tablet">{{ 'Days stops'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
             {% set colspan = 6 %}
             <tbody>
 
-                {% for productReport in product_report.productPlannings %}
+                {% for productPlanning in product_report.productPlannings %}
                     <tr>
                         <td>{{ loop.index }} - 
-                            {{ generateLink(productReport) }}
+                            {{ generateLink(productPlanning) }}
                         </td>
                         <th scope="row">
-                            {{ productReport.productionLine }}
+                            {{ productPlanning.totalMonth }}
                         </th>
-                        <td>{{ productReport.productUnit }}</td>
-                        <td>{{ productReport.plant }}</td>
+                        <td>{{ productPlanning.designCapacity }}</td>
+                        <td>{{ productPlanning.daysStops|length }}</td>
                         <td class="low-padding align-center">
-                            <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                            <a href="{{ path("pequiven_product_planning_update",{id: productPlanning.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                         </td>
                     </tr>
                 {% else %}
                     <tr >
                         <td colspan="{{ colspan }}" class="empty_row">
-                            {{ "empty.product_report"|trans }}
+                            {{ "empty.product_planning"|trans }}
                         </td>
                     </tr>
                 {% endfor %}
