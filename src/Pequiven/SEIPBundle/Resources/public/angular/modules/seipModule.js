@@ -289,10 +289,11 @@ angular.module('seipModule.controllers', [])
             var tacticalObjective = angular.element('#arrangementprogram_tacticalObjective');
             var operationalObjective = angular.element('#arrangementprogram_operationalObjective');
             var loadTemplateMetaButton = angular.element('#loadTemplateMeta');
+            var categoryArrangementProgramId = angular.element('#categoryArrangementProgramValue');
             $scope.setOperationalObjective = function(tacticalObjetive, selected) {
                 if (tacticalObjetive) {
                     notificationBarService.getLoadStatus().loading();
-                    $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
+                    $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive,idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function(data) {
                         var dataIndex = [];
                         angular.forEach(data, function(value) {
                             dataIndex[value.id] = value;
@@ -341,7 +342,7 @@ angular.module('seipModule.controllers', [])
                         var tacticalObjetive = e.val;
                         operationalObjective.find('option').remove().end();
                         notificationBarService.getLoadStatus().loading();
-                        $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive})).success(function(data) {
+                        $http.get(Routing.generate("pequiven_arrangementprogram_data_operational_objectives", {idObjetiveTactical: tacticalObjetive,idCategoryArrangementProgram: categoryArrangementProgramId.val()})).success(function(data) {
                             operationalObjective.append('<option value="">' + Translator.trans('pequiven.select') + '</option>');
                             angular.forEach(data, function(value) {
                                 operationalObjective.append('<option value="' + value.id + '">' + value.ref + " " + value.description + ' - ' + value.gerenciaSecond.description + '</option>');

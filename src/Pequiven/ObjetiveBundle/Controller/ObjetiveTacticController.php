@@ -51,11 +51,15 @@ class ObjetiveTacticController extends baseController
     public function showAction(Request $request) 
     {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC'));
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC','ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC'));
 
         $resource = $this->findOr404($request);
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_TACTIC')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC')){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_TACTIC',$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC',$resource);
+            }
         }
 
         $indicatorService = $this->getIndicatorService();

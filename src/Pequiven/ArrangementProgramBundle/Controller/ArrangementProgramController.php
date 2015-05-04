@@ -551,8 +551,13 @@ class ArrangementProgramController extends SEIPController
             $form->remove('timeline');
         }
         
+//            $form->remove('managementSystem');
+        
         $form->handleRequest($request);
-        if($request->isMethod('POST') && $form->isValid()){
+        
+        if($request->isMethod('POST')){
+            $data = $form->getData();
+            if($form->isValid()){
             $autoOpenOnSave = $request->get('autoOpenOnSave',false);
             if($autoOpenOnSave == true){
                 $this->setFlash('autoOpenOnSave', true);
@@ -583,6 +588,7 @@ class ArrangementProgramController extends SEIPController
             
             $this->domainManager->create($entity);
             return $this->redirect($this->generateUrl('pequiven_seip_arrangementprogram_show', array('id' => $entity->getId())));
+            }
         }
         $view = $form->createView();
         return array(

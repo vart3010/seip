@@ -56,6 +56,9 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
                     foreach ($goals as $goal) {
                         foreach ($goal->getResponsibles() as $goalResponsible) {
                             foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
+                                if($groupResponsibleGoal->getLevel() == 7000 || $groupResponsibleGoal->getLevel() == 8000){
+                                    continue;
+                                }
                                 if($groupResponsibleGoal->getLevel() > $group->getLevel()){
                                     $errors[$goalResponsible->getId()] = array('%responsibleProgram%' => $responsible,'%responsibleGoals%' => $goalResponsible, '%goal%' => $goal);
                                 }

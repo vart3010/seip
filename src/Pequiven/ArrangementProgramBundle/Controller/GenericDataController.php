@@ -91,6 +91,8 @@ class GenericDataController extends SEIPController
     function getOperationalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
+        
         $objetiveTactic = $em->find('Pequiven\ObjetiveBundle\Entity\Objetive', $request->get('idObjetiveTactical'));
         if(!$objetiveTactic){
             throw $this->createNotFoundException('objetive tactic not found!');

@@ -47,6 +47,8 @@ class SecurityService implements ContainerAwareInterface
             'ROLE_SEIP_OBJECTIVE_VIEW_STRATEGIC' => 'evaluateStrategicObjetive',
             'ROLE_SEIP_OBJECTIVE_VIEW_TACTIC' => 'evaluateTacticObjetive',
             'ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateOperativeObjetive',
+            'ROLE_SEIP_SIG_OBJECTIVE_VIEW_TACTIC' => 'evaluateTacticObjetiveSIG',
+            'ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE' => 'evaluateOperativeObjetiveSIG',
             
             'ROLE_SEIP_INDICATOR_VIEW_STRATEGIC' => 'evaluateStrategicIndicator',
             'ROLE_SEIP_INDICATOR_VIEW_TACTIC' => 'evaluateTacticIndicator',
@@ -388,6 +390,25 @@ class SecurityService implements ContainerAwareInterface
                 $valid = true;
             }
         }
+        if(!$valid){
+            $this->checkSecurity();
+        } else{
+            return $valid;
+        }
+    }
+    
+    /**
+     * Evalúa si el usuario tiene permiso para ver los Objetivos Tácticos
+     * @param type $rol
+     * @param Objetive $objetive
+     * @return boolean
+     */
+    private function evaluateTacticObjetiveSIG($rol, Objetive $objetive)
+    {
+        $valid = true;
+        $user = $this->getUser();
+        $rol = $user->getLevelRealByGroup();
+        
         if(!$valid){
             $this->checkSecurity();
         } else{

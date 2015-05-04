@@ -102,13 +102,15 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 }else{
                    $parameters['choices'] = array();
                 }
-                if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
-                    $form->add('tacticalObjective','entity',$parametersTactical);
-                    if($typeArrangementProgram == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                if($categoryArrangementProgram != null){
+                    if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+                        $form->add('tacticalObjective','entity',$parametersTactical);
+                        if($typeArrangementProgram == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                            $form->add('operationalObjective','entity',$parameters);
+                        }
+                    } else{
                         $form->add('operationalObjective','entity',$parameters);
                     }
-                } else{
-                    $form->add('operationalObjective','entity',$parameters);
                 }
             };
             
@@ -225,7 +227,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             $data = $form->getData();
             
             if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                $formModifier($event,$data->getTacticalObjective());
+                $formModifier($event,$data->getTacticalObjective(),$data->getCategoryArrangementProgram());
                 
             }
         });
@@ -245,13 +247,21 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 $data = $form->getData();
                 $groups = array();
                 if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                    $groups = array('base','tacticalObjective');
+                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+                        
+                    } else{
+                        $groups = array('base','tacticalObjective');
+                    }
                 }elseif($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                    $groups = array('base','operationalObjective');
+                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+                        
+                    } else{
+                        $groups = array('base','operationalObjective');
+                    }
                 }
-                if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
-                    $groups[] = 'categoryArrangementProgram';
-                }
+//                if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
+//                    $groups[] = 'categoryArrangementProgram';
+//                }
                 return $groups;
             },
         ));

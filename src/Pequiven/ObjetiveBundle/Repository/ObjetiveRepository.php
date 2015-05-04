@@ -553,11 +553,11 @@ class ObjetiveRepository extends EntityRepository {
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type
      */
-    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic) {
+    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic,$categoryArrangementProgramId = null) {
         return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
     }
 
-    function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic) {
+    function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic,$categoryArrangementProgramId = null) {
         $user = $this->getUser();
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -569,12 +569,15 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
         ;
-        $level = $user->getLevelRealByGroup();
-        if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
-            $qb
-                    ->andWhere("gs.id = :gerenciaSecond")
-                    ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
-            ;
+        
+        if($categoryArrangementProgramId != null && $categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $level = $user->getLevelRealByGroup();
+            if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
+                $qb
+                        ->andWhere("gs.id = :gerenciaSecond")
+                        ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+                ;
+            }
         }
         return $qb;
     }
