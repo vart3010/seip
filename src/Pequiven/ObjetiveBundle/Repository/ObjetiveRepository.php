@@ -436,6 +436,8 @@ class ObjetiveRepository extends EntityRepository {
     }
 
     function findTacticalObjetives($user, array $criteria = array()) {
+        
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         $qb = $this->getQueryAllEnabled();
         $qb
                 ->innerJoin("o.objetiveLevel", "ol")
@@ -444,24 +446,26 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter("level", ObjetiveLevel::LEVEL_TACTICO)
         ;
         $level = $user->getLevelRealByGroup();
-        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
-        if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
-            $qb
-                    ->andWhere("g.id = :gerencia")
-                    ->setParameter("gerencia", $user->getGerencia())
-            ;
-        } elseif ($criteria['view_planning']) {
-            if ($gerencia = $criteria->remove('gerencia') != null) {
-                
+        $managementSystem = $criteria->remove('idManagementSystem');
+        if($managementSystem == null){
+            if ($level != Rol::ROLE_DIRECTIVE && !$criteria['view_planning']) {
+                $qb
+                        ->andWhere("g.id = :gerencia")
+                        ->setParameter("gerencia", $user->getGerencia())
+                ;
+            } elseif ($criteria['view_planning']) {
+                if ($gerencia = $criteria->remove('gerencia') != null) {
+
+                }
+                $qb
+                        ->andWhere("g.id = :gerencia")
+                        ->setParameter("gerencia", $gerencia)
+                ;
+                $criteria->remove('view_planning');
             }
-            $qb
-                    ->andWhere("g.id = :gerencia")
-                    ->setParameter("gerencia", $gerencia)
-            ;
-            $criteria->remove('view_planning');
         }
         
-        if(($managementSystem = $criteria->remove('idManagementSystem'))){
+        if($managementSystem != null){
             $qb
                     ->innerjoin('o.managementSystem','ms')
                     ->andWhere('ms.id = :managementSystemId')
@@ -520,7 +524,7 @@ class ObjetiveRepository extends EntityRepository {
      * @return type
      */
     function findObjetivesTacticByManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem) {
-        return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
+        return $this->findQueryObjetivesTacticByManagementSystem($managementSystem)->getQuery()->getResult();
     }
     
     function findQueryObjetivesTacticByManagementSystem($managementSystem) {
@@ -549,11 +553,11 @@ class ObjetiveRepository extends EntityRepository {
      * Busca los objetivos operativos de un objetivo tactico y del usuario logueado
      * @return type
      */
-    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic) {
+    function findObjetivesOperationalByObjetiveTactic(Objetive $objetiveTactic,$categoryArrangementProgramId = null) {
         return $this->findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic)->getQuery()->getResult();
     }
 
-    function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic) {
+    function findQueryObjetivesOperationalByObjetiveTactic($objetiveTactic,$categoryArrangementProgramId = null) {
         $user = $this->getUser();
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -565,12 +569,15 @@ class ObjetiveRepository extends EntityRepository {
                 ->setParameter('parent', $objetiveTactic)
                 ->setParameter("level", ObjetiveLevel::LEVEL_OPERATIVO)
         ;
-        $level = $user->getLevelRealByGroup();
-        if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
-            $qb
-                    ->andWhere("gs.id = :gerenciaSecond")
-                    ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
-            ;
+        
+        if($categoryArrangementProgramId != null && $categoryArrangementProgramId == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $level = $user->getLevelRealByGroup();
+            if ($level != Rol::ROLE_DIRECTIVE && $level != Rol::ROLE_MANAGER_FIRST && $this->getSecurityContext()->isGranted('ROLE_ARRANGEMENT_PROGRAM_EDIT') == false) {
+                $qb
+                        ->andWhere("gs.id = :gerenciaSecond")
+                        ->setParameter("gerenciaSecond", $user->getGerenciaSecond())
+                ;
+            }
         }
         return $qb;
     }

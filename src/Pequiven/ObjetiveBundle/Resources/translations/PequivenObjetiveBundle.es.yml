@@ -47,6 +47,10 @@ pequiven_objetive:
         indicators: Indicadores
         created_at: Creado el
         updated_at: Actualizado el
+    status:
+        status: Estatus
+        draft: Borrador
+        approved: Aprobado
 
     #Buttons
     edit: Editar

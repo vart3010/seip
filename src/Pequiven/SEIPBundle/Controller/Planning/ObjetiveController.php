@@ -82,10 +82,18 @@ class ObjetiveController extends ResourceController
         ;
         $view->getSerializationContext()->setGroups(array('id','api_list','indicators','formula','gerenciaSecond'));
         if ($request->get('_format') == 'html') {
+            $labelsStatus = array();
+            foreach (\Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenObjetiveBundle'),
+                );
+            }
             $data = array(
                 'apiDataUrl' => $apiDataUrl,
                 $this->config->getPluralResourceName() => $resources,
                 'level' => $level,
+                'labelsStatus' => $labelsStatus,
             );
             $view->setData($data);
         } else {

@@ -268,7 +268,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $forcePenalize = false;
     
     /**
-     * ¿Es requerido para importacion?
+     * ¿Es requerido para importacion? Quiere decir que es obligatorio para el siguiente período a planificar.
      * 
      * @var boolean
      * @ORM\Column(name="requiredToImport",type="boolean")

@@ -180,4 +180,19 @@ abstract class Objetive implements ObjetiveInterface
         }
         return $gerencia;
     }
+    
+    /**
+     * Retorna las etiquetas definidas para los estatus del objetivo
+     * 
+     * @staticvar array $labelsStatus
+     * @return string
+     */
+    static function getLabelsStatus()
+    {
+        static $labelsStatus = array(
+            self::STATUS_DRAFT => 'pequiven_objetive.status.draft',
+            self::STATUS_APPROVED => 'pequiven_objetive.status.approved',
+        );
+        return $labelsStatus;
+    }
 }

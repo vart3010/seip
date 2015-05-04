@@ -76,6 +76,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
 //                            'ng-options' => 'value as value.description for (key,value) in data.operationalObjectives',
                         ),                        
                         'empty_value' => 'pequiven.select',
+//                        'disabled' => true,
                         'required' => true,
                     );
                 $data = $event->getData();
@@ -84,31 +85,37 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                     $managementSystem = (int)$data['managementSystem'];
                 }                
                 if($managementSystem != null && $categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
-                   $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) use ($managementSystem){
-                       return $repository->findQueryObjetivesTacticByManagementSystem($managementSystem);
-                   };
-                   $parametersTactical['query_builder'] = $qb;
+//                   $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) use ($managementSystem){
+//                       return $repository->findQueryObjetivesTacticByManagementSystem($managementSystem);
+//                   };
+//                   $parametersTactical['query_builder'] = $qb;
                 }else{
-                   $parametersTactical['choices'] = array();
+//                   $parametersTactical['choices'] = array();
                 }
                 if(is_array($data) && isset($data['tacticalObjective']) && $data['tacticalObjective'] != null){
                     $tacticalObjective = (int)$data['tacticalObjective'];
                 }
                 if($tacticalObjective){
-                   $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) use ($tacticalObjective){
-                       return $repository->findQueryObjetivesOperationalByObjetiveTactic($tacticalObjective);
-                   };
-                   $parameters['query_builder'] = $qb;
+                    if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+                        $qb = function (\Pequiven\ObjetiveBundle\Repository\ObjetiveRepository $repository) use ($tacticalObjective){
+                            return $repository->findQueryObjetivesOperationalByObjetiveTactic($tacticalObjective);
+                        };
+                        $parameters['query_builder'] = $qb;
+                    }
                 }else{
-                   $parameters['choices'] = array();
+                    if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+                        $parameters['choices'] = array();
+                    }
                 }
-                if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
-                    $form->add('tacticalObjective','entity',$parametersTactical);
-                    if($typeArrangementProgram == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                if($categoryArrangementProgram != null){
+                    if($categoryArrangementProgram->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+                        $form->add('tacticalObjective','entity',$parametersTactical);
+                        if($typeArrangementProgram == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                            $form->add('operationalObjective','entity',$parameters);
+                        }
+                    } else{
                         $form->add('operationalObjective','entity',$parameters);
                     }
-                } else{
-                    $form->add('operationalObjective','entity',$parameters);
                 }
             };
             
@@ -136,6 +143,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                             'label' => 'pequiven.form.managementSystem',
                             'class' => 'PequivenSIGBundle:ManagementSystem',
                             'property' => 'description',
+                            'mapped' => false,
                             'attr' => array(
                                 'class' => "select2 input-xlarge",
                                 "ng-model" => "model.managementSystem",
@@ -182,6 +190,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                             'label' => 'pequiven.form.managementSystem',
                             'class' => 'PequivenSIGBundle:ManagementSystem',
                             'property' => 'description',
+                            'mapped' => false,
                             'attr' => array(
                                 'class' => "select2 input-xlarge",
                                 "ng-model" => "model.managementSystem",
@@ -224,8 +233,8 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             $form = $event->getForm();
             $data = $form->getData();
             
-            if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                $formModifier($event,$data->getTacticalObjective());
+            if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE && $data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+                $formModifier($event,$data->getTacticalObjective(),$data->getCategoryArrangementProgram());
                 
             }
         });
@@ -245,13 +254,21 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                 $data = $form->getData();
                 $groups = array();
                 if($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                    $groups = array('base','tacticalObjective');
+//                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+//                        
+//                    } else{
+                        $groups = array('base','tacticalObjective');
+//                    }
                 }elseif($data->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                    $groups = array('base','operationalObjective');
+//                    if($data->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+//                        
+//                    } else{
+                        $groups = array('base','operationalObjective');
+//                    }
                 }
-                if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
-                    $groups[] = 'categoryArrangementProgram';
-                }
+//                if($this->getSeipConfiguration()->isSupportIntegratedManagementSystem() === true){
+//                    $groups[] = 'categoryArrangementProgram';
+//                }
                 return $groups;
             },
         ));
