@@ -314,7 +314,10 @@ pequiven_seip:
             raw_materials: Consumo de materia prima
     product_report:
         product_report: Producto
-        
+    raw_material:
+        type:
+            internal: Interna
+            external: Externa
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
