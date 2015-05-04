@@ -1,0 +1,60 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.range.question.delete"|trans) %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.range.ranges'|trans }}&nbsp;({{ product_planning.ranges|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path('pequiven_range_create',{productPlanning: product_planning.id}) }}" title="{{ 'pequiven.goals.goals'|trans }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="20%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'Total month'|trans }}</th>
+                    <th scope="col" width="20%" class="hide-on-tablet">{{ 'Design capacity'|trans }}</th>
+                    <th scope="col" width="20%" class="hide-on-tablet">{{ 'Days stops'|trans }}</th>
+                    <th scope="col" width="20%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 6 %}
+            <tbody>
+
+                {% for range in product_planning.ranges %}
+                    {% set tableIdRow = "row-range-"~range.id %}
+                    <tr id="{{ tableIdRow }}">
+                        <th scope="row">{{ loop.index }} - 
+                            {{ range.value }}&nbsp;{{ range.valueUnit }}
+                        </th>
+                        <td>
+                            {{ range.dateFrom|date("Y-m-d") }}
+                        </td>
+                        <td>{{ range.dateEnd|date("Y-m-d") }}</td>
+                        <td>{{ range.typeLabel|trans }}</td>
+                        <td class="low-padding align-center">
+                            <p class="button-height">
+                                <span class="button-group">
+                                        <a href="{{ path("pequiven_range_update",{id: range.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                        {% set deleteUrl = path("pequiven_range_delete",{id: range.id}) %}
+                                        {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.range"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

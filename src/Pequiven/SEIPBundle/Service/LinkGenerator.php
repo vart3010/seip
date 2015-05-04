@@ -52,6 +52,7 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
             'method' => 'renderDefault',
             'routeParameters' => array(),
             'labelMethod' => null,
+            'translation_domain' => null,
         );
         $configsObjects = array();
         foreach ($configsObjectsDeft as $key => $configObject)
@@ -98,6 +99,9 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
             $label = call_user_func_array($entity, $labelMethod,array());
         }else{
             $label = (string)$entity;
+        }
+        if($entityConfig["translation_domain"] !== null){
+            $label = $this->trans($label,array(),$entityConfig["translation_domain"]);
         }
         $originalLabel = $label;
         $truncate = 0;
@@ -243,6 +247,11 @@ abstract class LinkGenerator implements ContainerAwareInterface,  LinkGeneratorI
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+    
+    protected function trans($id, $parameters = array(), $domain = 'message')
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain);
     }
     
     public function setContainer(ContainerInterface $container = null) {

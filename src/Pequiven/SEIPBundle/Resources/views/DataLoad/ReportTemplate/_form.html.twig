@@ -1,4 +1,3 @@
-
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 <fieldset class="fieldset fields-list">
@@ -7,6 +6,21 @@
         {{ form_label(form.name) }}
         {{ form_widget(form.name) }}
         {{ form_errors(form.name) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.plant) }}
+        {{ form_widget(form.plant) }}
+        {{ form_errors(form.plant) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.typeReport) }}

@@ -1,0 +1,21 @@
+pequiven_range_create:
+    path: /{productPlanning}/create
+    defaults:
+        _controller: pequiven.controller.range:createAction
+        _sylius:
+            form: range
+    methods: [GET|POST]
+    
+pequiven_range_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.range:updateAction
+        _sylius:
+            form: range
+    methods: [GET|POST]
+    
+pequiven_range_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.range:deleteAction
+    methods: [GET|DELETE]

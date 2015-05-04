@@ -68,6 +68,33 @@ class ReportTemplate extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $period;
+    
+    /**
+     * Empresa.
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+    
+    /**
+     * Localizacion (complejo).
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $location;
+    
+    /**
+     * Planta.
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $plant;
 
     /**
      * Constructor
@@ -211,8 +238,78 @@ class ReportTemplate extends BaseModel
     {
         return $this->period;
     }
+
+    /**
+     * Set company
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
+     * @return ReportTemplate
+     */
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set location
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
+     * @return ReportTemplate
+     */
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set plant
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plant
+     * @return ReportTemplate
+     */
+    public function setPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plant)
+    {
+        $this->plant = $plant;
+
+        return $this;
+    }
+
+    /**
+     * Get plant
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant 
+     */
+    public function getPlant()
+    {
+        return $this->plant;
+    }
     
-    public function __toString() {
+    public function __toString() 
+    {
         return $this->getRef() ?: "-";
     }
 }

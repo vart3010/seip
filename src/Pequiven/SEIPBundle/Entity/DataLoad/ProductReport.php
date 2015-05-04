@@ -85,6 +85,59 @@ class ProductReport extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $reportTemplate;
+    
+    /**
+     * Empresa
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Company
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Company")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $company;
+    
+    /**
+     * Localizacion (complejo).
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Location
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $location;
+    
+    /**
+     * Materia prima
+     * @var \Pequiven\SEIPBundle\Entity\CEI\RawMaterial
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $rawMaterial;
+    
+    /**
+     * Tipo de producto
+     * @var integer
+     * @ORM\Column(name="type_product",type="integer")
+     */
+    private $typeProduct;
+    
+    /**
+     * Planificacion de productos
+     * @var Production\ProductPlanning
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport")
+     */
+    protected $productPlannings;
+    
+    /**
+     * Detalles del producto de cada mes
+     * @var Production\ProductDetailDailyMonth
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport")
+     */
+    protected $productDetailDailyMonths;
+
+    public function __construct() {
+        $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -255,6 +308,168 @@ class ProductReport extends BaseModel
     public function getReportTemplate()
     {
         return $this->reportTemplate;
+    }
+    
+    /**
+     * Set typeProduct
+     *
+     * @param integer $typeProduct
+     * @return ProductReport
+     */
+    public function setTypeProduct($typeProduct)
+    {
+        $this->typeProduct = $typeProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get typeProduct
+     *
+     * @return integer 
+     */
+    public function getTypeProduct()
+    {
+        return $this->typeProduct;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Company $company
+     * @return ProductReport
+     */
+    public function setCompany(\Pequiven\SEIPBundle\Entity\CEI\Company $company)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * Set location
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
+     * @return ProductReport
+     */
+    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set rawMaterial
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial
+     * @return ProductReport
+     */
+    public function setRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial)
+    {
+        $this->rawMaterial = $rawMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get rawMaterial
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\RawMaterial 
+     */
+    public function getRawMaterial()
+    {
+        return $this->rawMaterial;
+    }
+    
+    /**
+     * Add productPlannings
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
+     * @return ProductReport
+     */
+    public function addProductPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings)
+    {
+        $productPlannings->setProductReport($this);
+        
+        $this->productPlannings[] = $productPlannings;
+
+        return $this;
+    }
+
+    /**
+     * Remove productPlannings
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
+     */
+    public function removeProductPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings)
+    {
+        $this->productPlannings->removeElement($productPlannings);
+    }
+
+    /**
+     * Get productPlannings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductPlannings()
+    {
+        return $this->productPlannings;
+    }
+    
+    /**
+     * Add productDetailDailyMonths
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths
+     * @return ProductReport
+     */
+    public function addProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths)
+    {
+        $productDetailDailyMonths->setProductReport($this);
+        
+        $this->productDetailDailyMonths->add($productDetailDailyMonths);
+
+        return $this;
+    }
+
+    /**
+     * Remove productDetailDailyMonths
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths
+     */
+    public function removeProductDetailDailyMonth(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth $productDetailDailyMonths)
+    {
+        $this->productDetailDailyMonths->removeElement($productDetailDailyMonths);
+    }
+
+    /**
+     * Get productDetailDailyMonths
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductDetailDailyMonths()
+    {
+        return $this->productDetailDailyMonths;
     }
     
     public function __toString() {

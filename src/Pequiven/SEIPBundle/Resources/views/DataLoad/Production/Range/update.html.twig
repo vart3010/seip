@@ -1,0 +1,23 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.range.range"|trans ),
+        ( 'pequiven.update'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_range_update",{id:range.id }) }}">
+        <input type="hidden" name="_metod" value="PUT" />
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' %}
+       {{ actions.update() }}
+       {{ form_rest(form) }}
+   </form>
+   {% include 'PequivenSEIPBundle:DataLoad/Production/Range:javascripts.html.twig' %}
+{% endblock %}

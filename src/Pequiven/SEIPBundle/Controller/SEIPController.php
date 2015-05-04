@@ -29,6 +29,11 @@ class SEIPController extends ResourceController
         }
     }
     
+    protected function flush(){
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+    }
+            
     function remove($entity,$flush = false)
     {
         $em = $this->getDoctrine()->getManager();

@@ -470,6 +470,28 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.raw_material:
+        class: Pequiven\MasterBundle\Admin\CEI\RawMaterialAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Materia Prima" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\RawMaterial
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.day_stop:
+        class: Pequiven\MasterBundle\Admin\CEI\DayStopAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Dia de parada" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\DayStop
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:

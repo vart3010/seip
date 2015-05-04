@@ -44,3 +44,15 @@ pequiven:
         create: El producto se agrego de correctamente.
         update: El producto se actualizo correctamente.
         delete: El producto se elimino correctamente.
+    product_planning:
+        create: La planificación del producto se agrego de correctamente.
+        update: La planificación del producto se actualizo correctamente.
+        delete: La planificación del producto se elimino correctamente.
+    range:
+        create: El rango de distribución se agrego de correctamente.
+        update: El rango de distribución se actualizo correctamente.
+        delete: El rango de distribución se elimino correctamente.
+    product_detail_daily_month:
+        create: El detalle de produccion se agrego de correctamente.
+        update: El detalle de produccion se actualizo correctamente.
+        delete: El detalle de produccion se elimino correctamente.

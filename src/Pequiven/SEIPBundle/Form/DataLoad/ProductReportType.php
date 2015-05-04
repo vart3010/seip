@@ -25,12 +25,33 @@ class ProductReportType extends AbstractType
                 "property" => array("name"),
                 "entity_alias" => "products_alias"
             ))
+            ->add("typeProduct","choice",array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getTypeProductLabels(),
+            ))
             ->add('productUnit',"choice",array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),
                 "empty_value" => "",
                 "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getProductUnits(),
                 "required" => true,
+            ))
+            ->add("company",null,array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+            ))
+            ->add("location",null,array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+            ))
+            ->add("rawMaterial",null,array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
             ))
             ->add('plant',"tecno_ajax_autocomplete",array(
                 'label_attr' => array('class' => 'label'),
