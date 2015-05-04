@@ -217,7 +217,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
         {
             $valid = true;
         }
-        
+        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
+        {
+            $valid = true;
+        }
         
         return $valid;
     }
@@ -231,11 +234,14 @@ class ArrangementProgramManager implements ContainerAwareInterface
         //Security check
         $permission = true;
         $user = $this->getUser();
-        if ($entity->isNotificable() === false || 
-            ($this->isAllowToNotity($entity) === false)
-                ) {
-            $permission = false;
+        if(!$this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
+            if ($entity->isNotificable() === false || 
+                ($this->isAllowToNotity($entity) === false)
+                    ) {
+                $permission = false;
+            }
         }
+        
         return $permission;
     }
 
