@@ -11,13 +11,14 @@
 {% endblock %}
 
 {% block body %}
+    {% set productReport = product_planning.productReport %}
     <fieldset class="fieldset">
         <legend class="legend">{{ 'pequiven_seip.product_planning.product_planning'|trans }}</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
-                    {{ generateLink(product_planning.productReport) }}
+                    {{ generateLink(productReport) }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -29,13 +30,13 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Total month'|trans }}</label>
-                    {{ product_planning.totalMonth|trans }}
+                    {{ product_planning.totalMonth }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Design capacity'|trans }}</label>
-                    {{ product_planning.designCapacity|trans }}
+                    {{ product_planning.designCapacity }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
