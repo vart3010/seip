@@ -53,6 +53,8 @@
     </fieldset>
                 
     <br /><br />
+        {% include 'PequivenSEIPBundle:DataLoad:Production/ProductPlanning/show/ranges.html.twig' %}
+    <br /><br />
     <p class="button-height align-right">
         {{ buttons.generic(path('pequiven_product_planning_update', { 'id': product_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
         &nbsp;

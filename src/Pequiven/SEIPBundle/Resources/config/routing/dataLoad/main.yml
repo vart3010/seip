@@ -9,3 +9,7 @@ pequiven_product_report:
 pequiven_data_load_product_planning:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_planning.yml"
     prefix:   /product-planning
+    
+pequiven_data_load_range:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/range.yml"
+    prefix:   /range

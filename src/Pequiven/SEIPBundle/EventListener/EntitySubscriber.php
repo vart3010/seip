@@ -23,6 +23,7 @@ class EntitySubscriber extends BaseEventListerner
             SeipEvents::REPORT_TEMPLATE_PRE_CREATE => "onReportTemplatePreCreate",
             SeipEvents::PRODUCT_REPORT_PRE_CREATE => "onProductReportPreCreate",
             SeipEvents::PRODUCT_PLANNING_PRE_CREATE => "onProductPlanningPreCreate",
+            SeipEvents::PRODUCT_RANGE_CREATE => "onProductRangePreCreate",
         );
     }
     
@@ -51,5 +52,14 @@ class EntitySubscriber extends BaseEventListerner
         $productReportId = $request->get("productReport");
         $productReport = $this->find("Pequiven\SEIPBundle\Entity\DataLoad\ProductReport", $productReportId);
         $entity->setProductReport($productReport);
+    }
+    
+    public function onProductRangePreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
+    {
+        $entity = $event->getSubject();
+        $request = $this->getRequest();
+        $productPlanningId = $request->get("productPlanning");
+        $productPlanning = $this->find("Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning", $productPlanningId);
+        $entity->setProductPlanning($productPlanning);
     }
 }

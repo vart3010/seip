@@ -115,4 +115,16 @@ final class SeipEvents
      * @var string
      */
     const PRODUCT_PLANNING_PRE_CREATE = 'pequiven.product_planning.pre_create';
+    
+    /**
+     * El pequiven.range.pre_create este evento es lanzado antes de crear un rango de distribucion
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRODUCT_RANGE_CREATE = 'pequiven.range.pre_create';
 }

@@ -186,4 +186,13 @@ class Range extends BaseModel
     {
         return $this->value;
     }
+    
+    public function __toString() {
+        $_toString = "-";
+        
+        if($this->getId() > 0){
+            $_toString = $this->getId()."";
+        }
+        return $_toString;
+    }
 }

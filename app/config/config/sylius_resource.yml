@@ -252,3 +252,10 @@ sylius_resource:
             templates: PequivenSEIPBundle:DataLoad/Production/ProductPlanning
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning
+                
+        pequiven.range:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/Range
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\RangeController

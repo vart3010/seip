@@ -221,7 +221,7 @@ class ProductPlanning extends BaseModel
     public function __toString() 
     {
         $_toString = "-";
-        if($this->getMonth()){
+        if($this->getId() > 0){
             $_toString = $this->getMonthLabel();
         }
         return $_toString;

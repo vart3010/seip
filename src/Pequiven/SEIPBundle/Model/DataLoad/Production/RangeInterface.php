@@ -18,4 +18,6 @@ namespace Pequiven\SEIPBundle\Model\DataLoad\Production;
 interface RangeInterface
 {
     public function getType();
+    
+    public function getProductPlanning();
 }

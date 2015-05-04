@@ -323,9 +323,12 @@ pequiven_seip:
             external: Externa
     range:
         range: Rango de distribución
+        ranges: Rangos de distribución
         type:
             fixed_value: Valor fijo
             capacity_factor: Factor de capacidad
+        question:
+            delete: Desea eliminar este rango de distribución
     product_planning:
         product_planning: Planificación de producto
         without_stopping_day: Sin días de parada.
@@ -442,6 +445,7 @@ empty:
     features_indicator: No hay ningún punto de atención.
     product_report: No hay productos agregados.
     product_planning: No hay ninguna planificación de productos.
+    range: No hay rango de distribucion.
     
 chart:
     type:

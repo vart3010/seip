@@ -55,4 +55,20 @@ abstract class Range extends BaseModel implements RangeInterface
         }
         return $label;
     }
+    
+    /**
+     * Retorna la unidad dependiendo del valor
+     * @return string
+     */
+    public function getValueUnit()
+    {
+        $type = $this->getType();
+        $valueUnit = "";
+        if($type == self::TYPE_FIXED_VALUE){
+            $valueUnit = $this->getProductPlanning()->getProductReport()->getProductUnit();
+        }else if($type == self::TYPE_CAPACITY_FACTOR){
+            $valueUnit = "%";
+        }
+        return $valueUnit;
+    }
 }

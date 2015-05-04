@@ -1,0 +1,23 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.range.range"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path('pequiven_range_create',{productPlanning: app.request.get("productPlanning")})}}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' %}
+       {{ actions.create() }}
+       {{ form_rest(form) }}
+   </form>
+   
+   {% include 'PequivenSEIPBundle:DataLoad/Production/Range:javascripts.html.twig' %}
+{% endblock %}
