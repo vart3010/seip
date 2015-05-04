@@ -321,6 +321,10 @@ pequiven_seip:
         type:
             internal: Interna
             external: Externa
+    range:
+        type:
+            fixed_value: Valor fijo
+            capacity_factor: Factor de capacidad
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
