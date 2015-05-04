@@ -35,6 +35,13 @@ class ProductPlanningType extends AbstractType
                 "multiple" => true,
 //                "required" => false,
             ))
+            ->add("ranges","collection",array(
+                'label_attr' => array('class' => 'label'),
+                "type" => new RangeType(),
+                "allow_add"    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ))
         ;
     }
     

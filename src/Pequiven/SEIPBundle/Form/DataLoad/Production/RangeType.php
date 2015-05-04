@@ -15,10 +15,28 @@ class RangeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateFrom')
-            ->add('dateEnd')
-            ->add('type')
-            ->add('value')
+            ->add('dateFrom',"date",array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-large date-from"),
+                "widget" => "single_text",
+                'format' => 'dd-MM-yyyy',
+            ))
+            ->add('dateEnd',"date",array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-large date-end"),
+                "widget" => "single_text",
+                'format' => 'dd-MM-yyyy',
+            ))
+            ->add('type',"choice",array(
+                "empty_value" => "",
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "select input-large"),
+                "choices" => \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range::getTypeLabels(),
+            ))
+            ->add('value',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "input input-large"),
+            ))
         ;
     }
     
@@ -28,7 +46,8 @@ class RangeType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\Range'
+            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\Range',
+            "translation_domain" => "PequivenSEIPBundle",
         ));
     }
 
@@ -37,6 +56,6 @@ class RangeType extends AbstractType
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_production_range';
+        return 'range';
     }
 }

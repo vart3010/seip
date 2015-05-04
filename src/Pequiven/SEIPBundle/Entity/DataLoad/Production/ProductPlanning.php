@@ -70,7 +70,7 @@ class ProductPlanning extends BaseModel
     /**
      * Rangos de distribucion
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist"})
      */
     protected $ranges;
 
@@ -235,7 +235,10 @@ class ProductPlanning extends BaseModel
      */
     public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Production\Range $ranges)
     {
-        $this->ranges[] = $ranges;
+        $ranges->setProductPlanning($this);
+        if(!$this->ranges->contains($ranges)){
+            $this->ranges->add($ranges);
+        }
 
         return $this;
     }

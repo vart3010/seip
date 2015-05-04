@@ -43,14 +43,14 @@ class Range extends BaseModel
     /**
      * Fecha de inicio
      * @var \DateTime
-     * @ORM\Column(name="date_from",type="datetime")
+     * @ORM\Column(name="date_from",type="date")
      */
     private $dateFrom;
     
     /**
      * Fecha fin
      * @var \DateTime
-     * @ORM\Column(name="date_end",type="datetime")
+     * @ORM\Column(name="date_end",type="date")
      */
     private $dateEnd;
     

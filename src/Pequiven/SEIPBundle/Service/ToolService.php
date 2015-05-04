@@ -122,7 +122,7 @@ class ToolService
     public static function getMonthsLabels()
     {
         $months = array();
-        for($i = 1; $i <= 12; $i++){
+        for($i = 0; $i <= 11; $i++){
             $months[$i] = sprintf("pequiven_seip.month.%s",$i);
         }
         return $months;

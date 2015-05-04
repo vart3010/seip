@@ -322,6 +322,7 @@ pequiven_seip:
             internal: Interna
             external: Externa
     range:
+        range: Rango de distribución
         type:
             fixed_value: Valor fijo
             capacity_factor: Factor de capacidad
@@ -330,18 +331,18 @@ pequiven_seip:
         without_stopping_day: Sin días de parada.
 
     month:
-        1: Enero
-        2: Febrero
-        3: Marzo
-        4: Abril
-        5: Mayo
-        6: Junio
-        7: Julio
-        8: Agosto
-        9: Septiembre
-        10: Octubre
-        11: Noviembre
-        12: Diciembre
+        0: Enero
+        1: Febrero
+        2: Marzo
+        3: Abril
+        4: Mayo
+        5: Junio
+        6: Julio
+        7: Agosto
+        8: Septiembre
+        9: Octubre
+        10: Noviembre
+        11: Diciembre
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -467,3 +468,7 @@ nro: "#"
 "Total month": Total en el mes
 "Design capacity": Capacidad de diseño
 "Days stops": Dias de paradas
+"Date from": Fecha inicio
+"Date end": Fecha fin
+"Type": Tipo
+"Value": Valor
