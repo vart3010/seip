@@ -66,6 +66,13 @@ class ProductPlanning extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     protected $productReport;
+    
+    /**
+     * Rangos de distribucion
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning")
+     */
+    protected $ranges;
 
     /**
      * Constructor
@@ -73,6 +80,7 @@ class ProductPlanning extends BaseModel
     public function __construct()
     {
         $this->daysStops = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -217,5 +225,38 @@ class ProductPlanning extends BaseModel
             $_toString = $this->getMonthLabel();
         }
         return $_toString;
+    }
+
+    /**
+     * Add ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range $ranges
+     * @return ProductPlanning
+     */
+    public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Production\Range $ranges)
+    {
+        $this->ranges[] = $ranges;
+
+        return $this;
+    }
+
+    /**
+     * Remove ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range $ranges
+     */
+    public function removeRange(\Pequiven\SEIPBundle\Entity\DataLoad\Production\Range $ranges)
+    {
+        $this->ranges->removeElement($ranges);
+    }
+
+    /**
+     * Get ranges
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRanges()
+    {
+        return $this->ranges;
     }
 }

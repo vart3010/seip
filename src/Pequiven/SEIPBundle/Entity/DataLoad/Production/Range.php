@@ -35,7 +35,7 @@ class Range extends BaseModel
     /**
      * Planificacion de producto
      * @var ProductPlanning
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",inversedBy="ranges")
      * @ORM\JoinColumn(nullable=false)
      */
     private $productPlanning;
@@ -61,6 +61,13 @@ class Range extends BaseModel
      */
     private $type;
     
+    /**
+     * Valor fijo o porcentaje del factor de capacidad
+     * @var float
+     * @ORM\Column(name="value",type="float")
+     */
+    private $value;
+
     /**
      * Get id
      *
@@ -155,5 +162,28 @@ class Range extends BaseModel
     public function getProductPlanning()
     {
         return $this->productPlanning;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value
+     * @return Range
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return float 
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 }
