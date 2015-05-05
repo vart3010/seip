@@ -2672,7 +2672,10 @@ angular.module('seipModule.controllers', [])
                 arrangementProgramUserToRevisers: [],
                 arrangementProgramUsersToApproveTactical: [],
                 arrangementProgramUsersToApproveOperative: [],
-                arrangementProgramUsersToNotify: []
+                arrangementProgramUsersToNotify: [],
+                arrangementProgramSigUsersToReviser: [],
+                arrangementProgramSigUsersToApprove: [],
+                arrangementProgramSigUsersToNotify: []
             };
             $scope.templateOptions.setModel(model);
             
@@ -2707,6 +2710,33 @@ angular.module('seipModule.controllers', [])
             arrangementProgramUsersToNotify.change(function(){
                 var data = arrangementProgramUsersToNotify.select2('data');
                 $scope.model.arrangementProgramUsersToNotify = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramSigUsersToReviser = angular.element('#gerencia_configuration_arrangementProgramSigUsersToReviser');
+            arrangementProgramSigUsersToReviser.change(function(){
+                var data = arrangementProgramSigUsersToReviser.select2('data');
+                $scope.model.arrangementProgramSigUsersToReviser = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramSigUsersToApprove = angular.element('#gerencia_configuration_arrangementProgramSigUsersToApprove');
+            arrangementProgramSigUsersToApprove.change(function(){
+                var data = arrangementProgramSigUsersToApprove.select2('data');
+                $scope.model.arrangementProgramSigUsersToApprove = data;
+                $timeout(function(){
+                    $scope.$apply();
+                });
+            });
+            
+            var arrangementProgramSigUsersToNotify = angular.element('#gerencia_configuration_arrangementProgramSigUsersToNotify');
+            arrangementProgramSigUsersToNotify.change(function(){
+                var data = arrangementProgramSigUsersToNotify.select2('data');
+                $scope.model.arrangementProgramSigUsersToNotify = data;
                 $timeout(function(){
                     $scope.$apply();
                 });

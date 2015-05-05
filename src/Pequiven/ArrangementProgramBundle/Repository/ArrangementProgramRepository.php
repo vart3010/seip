@@ -27,6 +27,7 @@ class ArrangementProgramRepository extends EntityRepository
         $qb
             ->addSelect('ap_r')
             ->addSelect('ap_t')
+            ->addSelect('ap_ms')
             ->addSelect('ap_t_g')
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
@@ -39,6 +40,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
+            ->leftJoin('ap.managementSystem','ap_ms')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
             ->leftJoin('ap_t_g.goalDetails','ap_t_g_gd')
@@ -60,6 +62,7 @@ class ArrangementProgramRepository extends EntityRepository
         $qb
             ->addSelect('ap_r')
             ->addSelect('ap_t')
+            ->addSelect('ap_ms')
             ->addSelect('ap_t_g')
             ->addSelect('ap_t_g_r')
             ->addSelect('ap_r_g')
@@ -67,6 +70,7 @@ class ArrangementProgramRepository extends EntityRepository
             ->leftJoin('ap.responsibles','ap_r')
             ->leftJoin('ap_r.groups','ap_r_g')
             ->leftJoin('ap.timeline','ap_t')
+            ->leftJoin('ap.managementSystem','ap_ms')
             ->leftJoin('ap_t.goals','ap_t_g')
             ->leftJoin('ap_t_g.responsibles','ap_t_g_r')
             ->leftJoin('ap_t_g_r.groups','ap_t_g_r_g')

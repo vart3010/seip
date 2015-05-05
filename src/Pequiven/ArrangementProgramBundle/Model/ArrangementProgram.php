@@ -94,6 +94,12 @@ abstract class ArrangementProgram
      */
     protected $type;
     
+    /**
+     * Sistema de Calidad Asociado.
+     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
+     *
+     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
+     */
     protected $managementSystem;
     
     /**
@@ -488,12 +494,27 @@ abstract class ArrangementProgram
         
     }
     
-    public function getManagementSystem(){
-        
-    }
     
-    public function setManagementSystem($managementSystem){
+    /**
+     * Set ManagementSystem
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
+     * @return ArrangementProgram
+     */
+    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
+    {
         $this->managementSystem = $managementSystem;
+
         return $this;
+    }
+
+    /**
+     * Get getManagementSystem
+     *
+     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
+     */
+    public function getManagementSystem()
+    {
+        return $this->managementSystem;
     }
 }
