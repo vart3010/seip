@@ -19,5 +19,15 @@ use Pequiven\SEIPBundle\Controller\SEIPController;
  */
 class ProductPlanningController extends SEIPController
 {
-    
+    public function deleteAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_product_report_show",array(
+            "id" => $resource->getProductReport()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
+    }
 }

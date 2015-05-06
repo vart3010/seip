@@ -70,7 +70,7 @@ class ProductPlanning extends BaseModel
     /**
      * Rangos de distribucion
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist","remove"})
      */
     protected $ranges;
 
