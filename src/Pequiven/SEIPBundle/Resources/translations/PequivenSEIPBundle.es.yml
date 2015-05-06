@@ -137,7 +137,7 @@ pequiven_seip:
         refresh: Refrescar
         run_planning: Ejecutar planificación
     question:
-        want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir de la planificacion?
+        want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -340,7 +340,7 @@ pequiven_seip:
         question:
             delete: Desea eliminar este rango de distribución
     product_planning:
-        product_planning: Planificación de producto
+        product_planning: Presupuesto de producción
         without_stopping_day: Sin días de parada.
 
     month:
@@ -454,7 +454,7 @@ internalAudit: Auditoría Interna
 empty:
     features_indicator: No hay ningún punto de atención.
     product_report: No hay productos agregados.
-    product_planning: No hay ninguna planificación de productos.
+    product_planning: No hay ningún presupuesto de producción.
     range: No hay rango de distribucion.
     product_detail_daily_months: No hay detalles de producción.
     no_raw_material: Sin materia prima
@@ -481,7 +481,7 @@ nro: "#"
 "Type product": Tipo De Producto
 "Raw material": Materia Prima
 "Month":  Mes
-"Total month": Total En El Mes
+"Total month": Presupuesto De Producción Del Mes
 "Design capacity": Capacidad De Diseño
 "Daily production capacity": Capacidad De Producción Diaria
 "Days stops": Dias De Paradas
