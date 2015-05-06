@@ -4,7 +4,11 @@
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
 
-{% set configuration = entity.tacticalObjective.gerencia.configuration %}
+{% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+    {% set configuration = gerenciaSIG.configuration %}
+{% else %}
+    {% set configuration = entity.tacticalObjective.gerencia.configuration %}
+{% endif %}
 {% set validConfiguration = false %}
 {% if configuration != null %}
     {% set validConfiguration = true %}

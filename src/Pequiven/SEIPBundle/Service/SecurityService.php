@@ -430,7 +430,7 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateTacticArrangementProgramSIG($rol, ArrangementProgram $arrangementProgram)
     {
-        $valid = false;
+        $valid = true;
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
         

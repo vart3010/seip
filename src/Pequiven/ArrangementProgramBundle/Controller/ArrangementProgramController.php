@@ -615,6 +615,13 @@ class ArrangementProgramController extends SEIPController
         }
         
         $rol = null;
+        
+        if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            
+        } else{
+            
+        }
+        
         $rolesByType = array(
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC'),
             ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE => array('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE','ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'),
@@ -631,7 +638,7 @@ class ArrangementProgramController extends SEIPController
 //        var_dump($rol);
 //        die();
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_TACTIC') || !$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_ARRANGEMENT_PROGRAM_OPERATIVE')){
-            if(!$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC') || !$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE')){
+            if((!$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_TACTIC') && $securityService->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC')) || (!$securityService->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE') && $securityService->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_OPERATIVE'))){
                 if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
                     $securityService->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_VIEW_TACTIC',$entity);
                 } else{
@@ -657,6 +664,11 @@ class ArrangementProgramController extends SEIPController
         $isAllowToDelete = $arrangementProgramManager->isAllowToDelete($entity);
         $isAllowToNotity = $arrangementProgramManager->isAllowToNotity($entity);
         $isAllowSuperAdmin = $user->isAllowSuperAdmin();
+        $gerenciaSIG = null;
+        
+        if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+            $gerenciaSIG = $gerencias = $this->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
+        }
         
         return array(
             'entity'      => $entity,
@@ -668,6 +680,7 @@ class ArrangementProgramController extends SEIPController
             'isAllowToDelete' => $isAllowToDelete,
             'isAllowToNotity' => $isAllowToNotity,
             'isAllowSuperAdmin' => $isAllowSuperAdmin,
+            'gerenciaSIG' => $gerenciaSIG,
         );
     }
 
