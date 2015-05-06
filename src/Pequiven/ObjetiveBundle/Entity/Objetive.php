@@ -281,7 +281,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives")
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives", cascade={"persist","remove"})
     * @ORM\JoinTable(name="seip_objetives_management_systems")
     */
     private $managementSystems;
