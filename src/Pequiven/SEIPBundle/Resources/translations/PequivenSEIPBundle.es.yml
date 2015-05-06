@@ -457,7 +457,7 @@ empty:
     product_planning: No hay ninguna planificación de productos.
     range: No hay rango de distribucion.
     product_detail_daily_months: No hay detalles de producción.
-    no_raw_material: Sin materia prima.
+    no_raw_material: Sin materia prima
     
 chart:
     type:

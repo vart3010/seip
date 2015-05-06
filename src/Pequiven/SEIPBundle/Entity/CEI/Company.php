@@ -284,6 +284,6 @@ class Company extends BaseModel
     }
     
     public function __toString() {
-        return $this->getDescription()?:'-';
+        return $this->getAlias()?:'-';
     }
 }

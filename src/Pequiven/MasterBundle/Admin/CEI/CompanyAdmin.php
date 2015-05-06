@@ -85,6 +85,7 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
         $list
             ->addIdentifier('rif')
             ->add('description')
+            ->add('alias')
             ;
         parent::configureListFields($list);
     }
