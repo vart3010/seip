@@ -37,6 +37,9 @@ class ReportTemplateType extends AbstractType
                 'attr' => array(
                     'class' => "input-xlarge select2"
                 ),
+                "query_builder" => function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
+                    return $repository->getQueryAllEnabled();
+                }
             ))
             ->add("location",null,array(
                 'label_attr' => array('class' => 'label'),
@@ -44,13 +47,9 @@ class ReportTemplateType extends AbstractType
                 'attr' => array(
                     'class' => "input-xlarge select2"
                 ),
-            ))
-            ->add("plant",null,array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                'attr' => array(
-                    'class' => "input-xlarge select2"
-                ),
+                "query_builder" => function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
+                    return $repository->getQueryAllEnabled();
+                }
             ))
         ;
     }

@@ -86,15 +86,6 @@ class ReportTemplate extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
-    
-    /**
-     * Planta.
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $plant;
 
     /**
      * Constructor
@@ -283,29 +274,6 @@ class ReportTemplate extends BaseModel
     public function getLocation()
     {
         return $this->location;
-    }
-
-    /**
-     * Set plant
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plant
-     * @return ReportTemplate
-     */
-    public function setPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plant)
-    {
-        $this->plant = $plant;
-
-        return $this;
-    }
-
-    /**
-     * Get plant
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant 
-     */
-    public function getPlant()
-    {
-        return $this->plant;
     }
     
     public function __toString() 

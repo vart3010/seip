@@ -19,7 +19,7 @@ use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_unit_measure")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\UnitMeasureRepository")
  */
 class UnitMeasure extends ModelBaseMaster
 {

@@ -290,6 +290,12 @@
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Chart" />
         </service>
+        <service id="pequiven.repository.unit_measure" class="Pequiven\SEIPBundle\Repository\CEI\UnitMeasureRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure" />
+        </service>
+        <service id="pequiven.repository.plant" class="Pequiven\SEIPBundle\Repository\CEI\PlantRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Plant" />
+        </service>
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

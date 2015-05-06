@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
@@ -35,10 +35,8 @@ class CompanyAdmin extends Admin
             ))
             ->add('affiliates')
             ->add('mixeds')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
@@ -62,8 +60,8 @@ class CompanyAdmin extends Admin
             ))
             ->add('affiliates',null,$parameters)
             ->add('mixeds',null,$parameters)
-            ->add('enabled')
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
@@ -81,7 +79,7 @@ class CompanyAdmin extends Admin
         $list
             ->addIdentifier('rif')
             ->add('description')
-            ->add('enabled')
             ;
+        parent::configureListFields($list);
     }
 }

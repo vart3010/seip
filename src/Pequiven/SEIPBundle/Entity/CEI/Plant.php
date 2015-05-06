@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_Plant")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\PlantRepository")
  */
 class Plant extends BaseModel
 {
