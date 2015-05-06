@@ -1243,6 +1243,101 @@ angular.module('seipModule.controllers', [])
                 }
             });
         })
+        .controller('ReportArrangementProgramSigAllController', function($scope, $http) {
+            $scope.data = {
+                managementSystems: null,
+                responsibles: null,
+                arrangementProgramStatusLabels: null,
+            };
+            $scope.model = {
+                managementSystem: null,
+                arrangementProgramStatus: null,
+                responsiblesGoals: null,
+                responsibles: null,
+            };
+            var selectsDisable = [];
+            $scope.disableSelect = function(id){
+                selectsDisable.push(id);
+                angular.element('#'+id).select('enable',false);
+            };
+            
+            //Carga de Sistemas de Calidad
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_management_system'))
+                .success(function(data) {
+                    $scope.data.managementSystems = data;
+                    if($scope.model.managementSystem != null){
+                        $scope.setValueSelect2("selectManagementSystems", $scope.model.managementSystem, $scope.data.managementSystems, function(selected) {
+                            $scope.model.managementSystem = selected;
+                        });
+                    }
+                });
+            
+            $http.get(Routing.generate('pequiven_arrangementprogram_data_responsibles'))
+                    .success(function(data) {
+                        $scope.data.responsibles = data;
+                    });
+
+            //Ver el resumen de programas de gestión por status
+            $scope.viewByStatus = function(status){
+                $scope.tableParams.$params.filter['status'] = status;
+                var selectStatus = angular.element('#selectStatus');
+                selectStatus.select2("val",status);
+//                $scope.resetViewNotified();
+            }
+
+            $scope.$watch("model.managementSystem", function(newParams, oldParams) {
+                if ($scope.model.managementSystem != null && $scope.model.managementSystem.id != undefined) {
+                    $scope.tableParams.$params.filter['managementSystem'] = $scope.model.managementSystem.id;
+//                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['managementSystem'] = null;
+                }
+            });
+            $scope.$watch("model.arrangementProgramStatus", function(newParams, oldParams) {
+                if ($scope.model.arrangementProgramStatus != null && $scope.model.arrangementProgramStatus.id != undefined) {
+                    $scope.tableParams.$params.filter['status'] = $scope.model.arrangementProgramStatus.id;
+                    $scope.resetViewNotified();
+                } else {
+                    $scope.tableParams.$params.filter['status'] = null;
+                }
+            });
+            $scope.$watch("model.responsibles", function(newParams, oldParams) {
+                if ($scope.model.responsibles != null) {
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsibles").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsibles'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
+                    } else {
+                        $scope.tableParams.$params.filter['responsibles'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsibles'] = null;
+                }
+            });
+            $scope.$watch("model.responsiblesGoals", function(newParams, oldParams) {
+                if ($scope.model.responsiblesGoals != null) {
+                    var responsiblesId = [], i = 0;
+                    var responsibles =angular.element("#responsiblesGoals").select2('data');
+                    angular.forEach(responsibles, function(value) {
+                        responsiblesId.push(value.id);
+                        i++;
+                    });
+                    if (i > 0) {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = angular.toJson(responsiblesId);
+                        $scope.resetViewNotified();
+                    } else {
+                        $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                    }
+                } else {
+                    $scope.tableParams.$params.filter['responsiblesGoals'] = null;
+                }
+            });
+        })
         .controller('IndicatorResultController',function($scope,notificationBarService,$http,notifyService,$filter){
     
             $scope.urlValueIndicatorForm = null;

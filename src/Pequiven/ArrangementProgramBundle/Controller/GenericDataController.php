@@ -204,6 +204,22 @@ class GenericDataController extends SEIPController
     }
     
     /**
+     * Busca los sistemas de calidad
+     * @param type $param
+     */
+    function getManagementSystemsAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.sig_management_system');
+        $results = $repository->findAll();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    /**
      * Busca los responsables
      * @param type $param
      */

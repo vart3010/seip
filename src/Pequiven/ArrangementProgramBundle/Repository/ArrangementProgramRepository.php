@@ -211,13 +211,25 @@ class ArrangementProgramRepository extends EntityRepository
     }
     
     /**
-     * 
+     * Paginador de todos los Programas de Gestión (Sin filtro en primera instancia)
      * @param array $criteria
      * @param array $orderBy
      * @return type
      */
     public function createPaginatorByAll(array $criteria = null, array $orderBy = null) {
         $this->getUser();
+        return parent::createPaginator($criteria, $orderBy);
+    }
+    
+    /**
+     * Paginador de todos los Programas de Gestión pertenecientes a SIG (Sin filtro en primera instancia)
+     * @param array $criteria
+     * @param array $orderBy
+     * @return type
+     */
+    public function createPaginatorBySigAll(array $criteria = null, array $orderBy = null) {
+        $this->getUser();
+        $criteria['viewSig'] = true;
         return parent::createPaginator($criteria, $orderBy);
     }
     
@@ -481,6 +493,7 @@ class ArrangementProgramRepository extends EntityRepository
                 ->addSelect('to_g')
                 ->addSelect('oo')
                 ->addSelect('gs')
+                ->addSelect('ms')
                 ;
                 
         $queryBuilder
@@ -488,6 +501,7 @@ class ArrangementProgramRepository extends EntityRepository
                     ->leftJoin('to.gerencia', 'to_g')
                     ->leftJoin('ap.operationalObjective', 'oo')
                     ->leftJoin('oo.gerenciaSecond', 'gs')
+                    ->leftJoin('ap.managementSystem', 'ms')
                 ;
         if(($ref = $criteria->remove('ap.ref'))){
             $queryBuilder->andWhere($queryBuilder->expr()->like('ap.ref',"'%".$ref."%'"));
@@ -573,7 +587,22 @@ class ArrangementProgramRepository extends EntityRepository
                     ->setParameter('typeManagement', true)
                 ;
         }
-        
+        if(($viewSig = $criteria->remove('viewSig')) != null){
+            if($viewSig == true){
+                $queryBuilder
+                        ->innerJoin('ap.categoryArrangementProgram', 'cap')
+                        ->andWhere('cap.id = :idCategoryArrangementProgram')
+                        ->setParameter('idCategoryArrangementProgram', ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG)
+                        ;
+            }
+        }
+        //Filtro de sistemas de calidad
+        if(($managementSystem = $criteria->remove('managementSystem')) != null){
+            $queryBuilder  
+                ->andWhere('ms.id = :managementSystem')
+                ->setParameter('managementSystem', $managementSystem)
+                ;
+        }
         //VISTA DE ESTADÍSTICA E INFORMACIÓN POR GERENCIA
         if(isset($criteria['view_planning'])){
             if($criteria['view_planning'] == true){

@@ -113,7 +113,7 @@ class ArrangementProgramController extends SEIPController
     }
     
     /**
-     * Retorna los programas por gerencia
+     * Retorna los programas de gestión por gerencia. Especialmente cuando se visualiza a partir del monitor de carga.
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
@@ -201,7 +201,11 @@ class ArrangementProgramController extends SEIPController
         return $this->handleView($view);
     }
     
-    
+    /**
+     * Lista de todos los Programas de Gestión para los usuarios de la gerencia de Estadística e Información
+     * @param Request $request
+     * @return type
+     */
     public function listAllAction(Request $request){
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_ALL');
         
@@ -263,6 +267,66 @@ class ArrangementProgramController extends SEIPController
             ));
         }else{
             $view->getSerializationContext()->setGroups(array('id','api_list','period','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray('',array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Lista de todos los Programas de Gestión que pertenezcan al Sistema Integrado de Gestión
+     * @param Request $request
+     * @return type
+     */
+    public function listSigAllAction(Request $request){
+        $this->getSecurityService()->checkSecurity('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL');
+        
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        $boxRender = $this->get('tecnocreaciones_box.render');
+        
+        $url = $this->generateUrl('pequiven_seip_sig_arrangementprogram_all', array('_format' => 'json'));
+
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginatorBySigAll',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+
+        $view = $this
+            ->view()
+            ->setTemplate('PequivenSIGBundle:ArrangementProgram:list.html.twig')
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'user' => $user,
+                'url' => $url,
+                'boxRender' => $boxRender,
+            ));
+        }else{
+            $view->getSerializationContext()->setGroups(array('id','api_list','period','managementSystem','tacticalObjective','operationalObjective','complejo','gerencia','gerenciaSecond'));
             $formatData = $request->get('_formatData','default');
             $view->setData($resources->toArray('',array(),$formatData));
         }
