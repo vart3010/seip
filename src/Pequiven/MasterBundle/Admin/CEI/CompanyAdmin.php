@@ -35,6 +35,7 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
             ))
             ->add('affiliates')
             ->add('mixeds')
+            ->add('region')
             ;
         parent::configureShowFields($show);
     }
@@ -50,6 +51,7 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
                 return $repository->getQueryNotMe($object);
             };
         }
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
             ->add('rif')
             ->add('description')
@@ -60,6 +62,9 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
             ))
             ->add('affiliates',null,$parameters)
             ->add('mixeds',null,$parameters)
+            ->add('region',null,array(
+                "query_builder" => $queryAllEnable,
+            ))
             ;
         parent::configureFormFields($form);
     }
@@ -70,6 +75,7 @@ class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
             ->add('rif')
             ->add('description')
             ->add('typeOfCompany')
+            ->add('region')
             ->add('enabled')
             ;
     }

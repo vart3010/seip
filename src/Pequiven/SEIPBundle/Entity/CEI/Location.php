@@ -63,6 +63,13 @@ class Location extends Model
     private $alias;
     
     /**
+     * Region
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Region
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Region")
+     */
+    private $region;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -162,6 +169,29 @@ class Location extends Model
     public function getAlias()
     {
         return $this->alias;
+    }
+    
+    /**
+     * Set region
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Region $region
+     * @return ReportTemplate
+     */
+    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
     
     public function __toString()

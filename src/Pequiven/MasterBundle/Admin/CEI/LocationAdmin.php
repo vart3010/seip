@@ -42,6 +42,7 @@ class LocationAdmin extends BaseAdmin
             ->add('name')
             ->add('alias')
             ->add('typeLocation')
+            ->add('region')
             ;
         parent::configureFormFields($form);
     }
