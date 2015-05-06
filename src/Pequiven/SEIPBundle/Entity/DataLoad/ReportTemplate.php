@@ -56,7 +56,7 @@ class ReportTemplate extends BaseModel
     /**
      * Productos del reporte
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $productsReport;
     

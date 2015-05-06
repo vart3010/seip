@@ -31,11 +31,10 @@ class ProductReportType extends AbstractType
                 "attr" => array("class" => "select2 input-large"),
                 "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getTypeProductLabels(),
             ))
-            ->add('productUnit',"choice",array(
+            ->add('productUnit',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),
                 "empty_value" => "",
-                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getProductUnits(),
                 "required" => true,
             ))
             ->add("company",null,array(

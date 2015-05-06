@@ -25,7 +25,7 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))
-            ->add('designCapacity',null,array(
+            ->add('dailyProductionCapacity',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))

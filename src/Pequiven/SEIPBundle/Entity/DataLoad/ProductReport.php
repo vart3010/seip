@@ -123,14 +123,14 @@ class ProductReport extends BaseModel
     /**
      * Planificacion de productos
      * @var Production\ProductPlanning
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove"})
      */
     protected $productPlannings;
     
     /**
      * Detalles del producto de cada mes
      * @var Production\ProductDetailDailyMonth
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport",cascade={"remove"})
      */
     protected $productDetailDailyMonths;
 
@@ -193,29 +193,6 @@ class ProductReport extends BaseModel
     public function getIsFinalProduct()
     {
         return $this->isFinalProduct;
-    }
-
-    /**
-     * Set productUnit
-     *
-     * @param string $productUnit
-     * @return ProductReport
-     */
-    public function setProductUnit($productUnit)
-    {
-        $this->productUnit = $productUnit;
-
-        return $this;
-    }
-
-    /**
-     * Get productUnit
-     *
-     * @return string 
-     */
-    public function getProductUnit()
-    {
-        return $this->productUnit;
     }
 
     /**
@@ -472,6 +449,15 @@ class ProductReport extends BaseModel
         return $this->productDetailDailyMonths;
     }
     
+    function getProductUnit() {
+        return $this->productUnit;
+    }
+
+    function setProductUnit(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $productUnit) {
+        $this->productUnit = $productUnit;
+        return $this;
+    }
+        
     public function __toString() {
         $_toString = "-";
         if($this->getProduct()){

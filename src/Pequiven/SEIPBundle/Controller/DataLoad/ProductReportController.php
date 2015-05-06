@@ -54,7 +54,7 @@ class ProductReportController extends SEIPController
                     $value = $originalValue;
                 }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR){
                     $productPlanning = $range->getProductPlanning();
-                    $value = ($productPlanning->getDesignCapacity() / 100) * $originalValue;
+                    $value = ($productPlanning->getDailyProductionCapacity() / 100) * $originalValue;
                 }
                 for($day = $dayFrom; $day < $dayEnd; $day++){
                     $dayInt = (int)$day;
@@ -74,5 +74,17 @@ class ProductReportController extends SEIPController
         }
         
         return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    public function deleteAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_report_template_show",array(
+            "id" => $resource->getReportTemplate()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
     }
 }

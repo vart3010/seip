@@ -58,7 +58,7 @@ class ProductPlanning extends BaseModel
      * @var float
      * @ORM\Column(name="daily_production_capacity",type="float")
      */
-    private $designCapacity;
+    private $dailyProductionCapacity;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
@@ -137,29 +137,6 @@ class ProductPlanning extends BaseModel
     public function getTotalMonth()
     {
         return $this->totalMonth;
-    }
-
-    /**
-     * Set designCapacity
-     *
-     * @param float $designCapacity
-     * @return ProductPlanning
-     */
-    public function setDesignCapacity($designCapacity)
-    {
-        $this->designCapacity = $designCapacity;
-
-        return $this;
-    }
-
-    /**
-     * Get designCapacity
-     *
-     * @return float 
-     */
-    public function getDesignCapacity()
-    {
-        return $this->designCapacity;
     }
 
     /**
@@ -262,4 +239,14 @@ class ProductPlanning extends BaseModel
     {
         return $this->ranges;
     }
+    
+    function getDailyProductionCapacity() {
+        return $this->dailyProductionCapacity;
+    }
+
+    function setDailyProductionCapacity($dailyProductionCapacity) {
+        $this->dailyProductionCapacity = $dailyProductionCapacity;
+        return $this;
+    }
+
 }
