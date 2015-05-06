@@ -261,3 +261,4 @@ sylius_resource:
             templates: PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductDetailDailyMonthController

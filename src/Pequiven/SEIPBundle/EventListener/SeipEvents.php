@@ -127,4 +127,16 @@ final class SeipEvents
      * @var string
      */
     const PRODUCT_RANGE_CREATE = 'pequiven.range.pre_create';
+    
+    /**
+     * El pequiven.product_detail_daily_month.pre_create este evento es lanzado antes de crear un detalle de produccion
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PRODUCT_PRODUCT_DETAIL_DAILY_MONTH_PRE_CREATE = 'pequiven.product_detail_daily_month.pre_create';
 }

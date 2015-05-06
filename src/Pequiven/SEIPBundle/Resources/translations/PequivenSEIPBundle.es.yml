@@ -467,24 +467,24 @@ chart:
 
 Name: Nombre
 nro: "#"
-"Production line": Linea de negocio
-"Type report": Tipo de reporte
-"Is raw material": ¿Es materia prima?
-"Is final product": ¿Es producto final?
-"Product unit": Unidad del producto
+"Production line": Linea De Negocio
+"Type report": Tipo De Reporte
+"Is raw material": ¿Es Materia Prima?
+"Is final product": ¿Es Producto Final?
+"Product unit": Unidad Del Producto
 "Product": Producto
 "Plant": Planta
 "Enabled": ¿Activo?
 "Company": Empresa
 "Location": Complejo
-"Type product": Tipo de producto
-"Raw material": Materia prima
+"Type product": Tipo De Producto
+"Raw material": Materia Prima
 "Month":  Mes
-"Total month": Total en el mes
-"Design capacity": Capacidad de diseño
-"Daily production capacity": Capacidad de producción diaria
-"Days stops": Dias de paradas
-"Date from": Fecha inicio
-"Date end": Fecha fin
+"Total month": Total En El Mes
+"Design capacity": Capacidad De Diseño
+"Daily production capacity": Capacidad De Producción Diaria
+"Days stops": Dias De Paradas
+"Date from": Fecha Inicio
+"Date end": Fecha Fin
 "Type": Tipo
 "Value": Valor
