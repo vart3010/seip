@@ -81,11 +81,6 @@ class BaseModel implements BaseModelInterface
         return $this;
     }
     
-    /**
-     * @ORM\PrePersist()
-     * @param \DateTime $createdAt
-     * @return \Pequiven\SEIPBundle\Model\BaseModel
-     */
     function setCreatedAt(\DateTime $createdAt) 
     {
         $this->createdAt = $createdAt;
@@ -93,11 +88,6 @@ class BaseModel implements BaseModelInterface
         return $this;
     }
     
-    /**
-     * @ORM\PreUpdate()
-     * @param \DateTime $updatedAt
-     * @return \Pequiven\SEIPBundle\Model\BaseModel
-     */
     function setUpdatedAt(\DateTime $updatedAt) 
     {
         $this->updatedAt = $updatedAt;
