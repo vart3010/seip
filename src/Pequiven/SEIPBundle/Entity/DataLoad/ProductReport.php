@@ -72,8 +72,8 @@ class ProductReport extends BaseModel
 
     /**
      * Unidad del producto
-     * @var String
-     * @ORM\Column(name="product_unit")
+     * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
      */
     private $productUnit;
     

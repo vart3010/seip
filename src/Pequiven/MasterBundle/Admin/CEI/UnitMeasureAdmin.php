@@ -3,7 +3,7 @@
 /*
  * This file is part of the TecnoCreaciones package.
  * 
- * (c) www.tecnocreaciones.com
+ * (c) www.tecnocreaciones.com.ve
  * 
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,23 +14,22 @@ namespace Pequiven\MasterBundle\Admin\CEI;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
- * Administrador de planta
+ * Administrador de unidad de medida
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class PlantAdmin extends BaseAdmin
+class UnitMeasureAdmin extends BaseAdmin
 {
-    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
+    protected function configureShowFields(ShowMapper $show) 
     {
         $show
             ->add('id')
             ->add('name')
-            ->add('designCapacity')
-            ->add('unitMeasure')
-            ->add('location')
+            ->add('unit')
             ;
         parent::configureShowFields($show);
     }
@@ -39,9 +38,7 @@ class PlantAdmin extends BaseAdmin
     {
         $form
             ->add('name')
-            ->add('designCapacity')
-            ->add('unitMeasure')
-            ->add('location')
+            ->add('unit')
             ;
         parent::configureFormFields($form);
     }
@@ -50,9 +47,7 @@ class PlantAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
-            ->add('designCapacity')
-            ->add('unitMeasure')
-            ->add('location')
+            ->add('unit')
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -60,9 +55,9 @@ class PlantAdmin extends BaseAdmin
     protected function configureListFields(ListMapper $list) 
     {
         $list
+            ->addIdentifier('id')
             ->addIdentifier('name')
-            ->add('designCapacity')
-            ->add('location')
+            ->add('unit')
             ;
         parent::configureListFields($list);
     }

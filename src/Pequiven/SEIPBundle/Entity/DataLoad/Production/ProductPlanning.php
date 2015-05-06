@@ -54,9 +54,9 @@ class ProductPlanning extends BaseModel
     private $totalMonth;
     
     /**
-     * Capacidad de diseño diario
+     * Capacidad de producción diaria
      * @var float
-     * @ORM\Column(name="cesign_capacity",type="float")
+     * @ORM\Column(name="daily_production_capacity",type="float")
      */
     private $designCapacity;
     

@@ -492,6 +492,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.unit_measure:
+        class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Unidad de medida" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:
