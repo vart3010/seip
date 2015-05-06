@@ -23,7 +23,7 @@
     <div ng-controller="TableFormatController">
         <div ng-controller="TableGerenciaController">
         
-            <details class="details margin-bottom" open="">
+            {#<details class="details margin-bottom" open="">
                 <summary role="button" aria-expanded="true">
                     {{ 'pequiven.filters'|trans({},'messages') }}
                 </summary>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-            </details>
+            </details>#}
             <div loading-container="tableParams.settings().$loading">
                 <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('gerenciaFirstList',{_format:'json'}) }}" export-csv="csv" class="table table-responsive table-extra-info">
                     <tr ng-repeat="result in $data | filter:tableParams.search " data="{$ result|json $}">
