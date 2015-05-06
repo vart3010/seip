@@ -281,11 +281,10 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * Sistema de gestión
-     * @var \Pequiven\SIGBundle\Entity\ManagementSystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem")
-     */
-    protected $managementSystem;
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives")
+    * @ORM\JoinTable(name="seip_objetives_management_systems")
+    */
+    private $managementSystems;
     
     /**
      * Detalles del objetivo
@@ -304,6 +303,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->results = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1199,29 +1199,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     {
         return $this->requiredToImport;
     }
-    
-    /**
-     * Set managementSystem
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem
-     * @return Objetive
-     */
-    public function setManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystem = null)
-    {
-        $this->managementSystem = $managementSystem;
-
-        return $this;
-    }
-
-    /**
-     * Get managementSystem
-     *
-     * @return \Pequiven\SIGBundle\Entity\ManagementSystem 
-     */
-    public function getManagementSystem()
-    {
-        return $this->managementSystem;
-    }
 
     /**
      * Set details
@@ -1244,5 +1221,38 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getDetails()
     {
         return $this->details;
+    }
+    
+    /**
+     * Add managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     * @return Objetive
+     */
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems[] = $managementSystems;
+
+        return $this;
+    }
+
+    /**
+     * Remove managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     */
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems->removeElement($managementSystems);
+    }
+
+    /**
+     * Get managementSystems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getManagementSystems()
+    {
+        return $this->managementSystems;
     }
 }
