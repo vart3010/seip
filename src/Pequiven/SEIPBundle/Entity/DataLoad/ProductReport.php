@@ -64,13 +64,6 @@ class ProductReport extends BaseModel
     private $isRawMaterial = false;
     
     /**
-     * ¿Es producto final?
-     * @var boolean 
-     * @ORM\Column(name="is_final_product",type="boolean")
-     */
-    private $isFinalProduct = false;
-
-    /**
      * Unidad del producto
      * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
@@ -171,30 +164,7 @@ class ProductReport extends BaseModel
     {
         return $this->isRawMaterial;
     }
-
-    /**
-     * Set isFinalProduct
-     *
-     * @param boolean $isFinalProduct
-     * @return ProductReport
-     */
-    public function setIsFinalProduct($isFinalProduct)
-    {
-        $this->isFinalProduct = $isFinalProduct;
-
-        return $this;
-    }
-
-    /**
-     * Get isFinalProduct
-     *
-     * @return boolean 
-     */
-    public function getIsFinalProduct()
-    {
-        return $this->isFinalProduct;
-    }
-
+    
     /**
      * Set product
      *
