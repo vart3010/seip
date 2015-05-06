@@ -40,6 +40,13 @@ class ProductPlanning extends BaseModel
     private $month;
     
     /**
+     * Tipo (Bruta o Neta)
+     * @var integer
+     * @ORM\Column(name="type",type="integer",nullable=false)
+     */
+    private $type;
+
+    /**
      * Dias de paradas
      * @var \Pequiven\SEIPBundle\Entity\CEI\DayStop
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DayStop")
@@ -195,15 +202,6 @@ class ProductPlanning extends BaseModel
         return $this->productReport;
     }
     
-    public function __toString() 
-    {
-        $_toString = "-";
-        if($this->getId() > 0){
-            $_toString = $this->getMonthLabel();
-        }
-        return $_toString;
-    }
-
     /**
      * Add ranges
      *
@@ -249,4 +247,36 @@ class ProductPlanning extends BaseModel
         return $this;
     }
 
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * @return ProductPlanning
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
+    
 }

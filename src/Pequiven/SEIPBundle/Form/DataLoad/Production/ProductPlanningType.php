@@ -18,6 +18,12 @@ class ProductPlanningType extends AbstractType
             return $repository->getQueryAllEnabled();
         };
         $builder
+            ->add('type',"choice",array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "select2 input-large"),
+                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::getTypeLabels(),
+                "empty_value" => "",
+            ))
             ->add('month',"choice",array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),

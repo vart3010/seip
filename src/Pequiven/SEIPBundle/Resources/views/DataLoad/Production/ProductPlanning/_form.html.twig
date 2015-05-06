@@ -3,6 +3,11 @@
 <fieldset class="fieldset fields-list">
     <legend class="legend">{{ 'pequiven_seip.product_planning.product_planning'|trans }}</legend>
     <div class="field-block button-height">
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
+        {{ form_errors(form.type) }}
+    </div>
+    <div class="field-block button-height">
         {{ form_label(form.month) }}
         {{ form_widget(form.month) }}
         {{ form_errors(form.month) }}

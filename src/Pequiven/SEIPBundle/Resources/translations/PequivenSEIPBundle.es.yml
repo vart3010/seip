@@ -13,7 +13,9 @@ pequiven_seip:
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
     percentage: Porcentaje
-
+    gross: Bruta
+    net: Neta
+    
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame

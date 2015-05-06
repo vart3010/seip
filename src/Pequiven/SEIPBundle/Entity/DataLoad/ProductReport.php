@@ -128,7 +128,6 @@ class ProductReport extends BaseModel
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->rawMaterials = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -405,14 +404,6 @@ class ProductReport extends BaseModel
         return $this;
     }
         
-    public function __toString() {
-        $_toString = "-";
-        if($this->getProduct()){
-            $_toString = (string)$this->getProduct();
-        }
-        return $_toString;
-    }
-
     /**
      * Add rawMaterials
      *
@@ -445,4 +436,13 @@ class ProductReport extends BaseModel
     {
         return $this->rawMaterials;
     }
+    
+    public function __toString() {
+        $_toString = "-";
+        if($this->getProduct()){
+            $_toString = (string)$this->getProduct();
+        }
+        return $_toString;
+    }
+    
 }
