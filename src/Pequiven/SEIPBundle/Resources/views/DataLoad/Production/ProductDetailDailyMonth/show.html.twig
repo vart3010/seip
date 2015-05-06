@@ -30,19 +30,19 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.totalPlan'|trans }}</label>
-                    {{ product_detail_daily_month.totalPlan }}&nbsp;{{ productReport.productUnit }}
+                    {{ product_detail_daily_month.totalPlan|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.totalReal'|trans }}</label>
-                    {{ product_detail_daily_month.totalReal }}&nbsp;{{ productReport.productUnit }}
+                    {{ product_detail_daily_month.totalReal|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
-                    <label class="label">{{ 'pequiven_seip.totalReal'|trans }}</label>
-                    {{ product_detail_daily_month.percentage }}&nbsp;%
+                    <label class="label">{{ 'pequiven_seip.percentage'|trans }}</label>
+                    {{ product_detail_daily_month.percentage|myNumberFormat }}&nbsp;%
                 </p>
             </div>
         </div>
@@ -58,13 +58,13 @@
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
                             <label class="label">{{ 'pequiven_seip.plan_n'|trans({"%n%":i}) }}</label>
-                            {{ attribute(product_detail_daily_month,planN) }}&nbsp;{{ productReport.productUnit }}
+                            {{ attribute(product_detail_daily_month,planN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                         </p>
                     </div>
                     <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                         <p class="inline-label">
                             <label class="label">{{ 'pequiven_seip.real_n'|trans({"%n%":i}) }}</label>
-                            {{ attribute(product_detail_daily_month,realN) }}&nbsp;{{ productReport.productUnit }}
+                            {{ attribute(product_detail_daily_month,realN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                         </p>
                     </div>
                 </div>

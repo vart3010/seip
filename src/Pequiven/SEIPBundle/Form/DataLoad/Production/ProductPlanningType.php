@@ -14,6 +14,9 @@ class ProductPlanningType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
+            return $repository->getQueryAllEnabled();
+        };
         $builder
             ->add('month',"choice",array(
                 'label_attr' => array('class' => 'label'),
@@ -33,7 +36,7 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),
                 "multiple" => true,
-//                "required" => false,
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add("ranges","collection",array(
                 'label_attr' => array('class' => 'label'),

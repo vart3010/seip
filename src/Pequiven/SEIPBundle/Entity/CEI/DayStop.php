@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_day_stop")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository")
  */
 class DayStop extends BaseModel
 {

@@ -2034,47 +2034,46 @@ class ProductDetailDailyMonth extends BaseModel
         return $this->day31Real;
     }
 
-//    /**
-//     * Metodo que se ejecuta antes de actualizar la entidad
-//     * @ORM\PreUpdate()
-//     */
-//    public function preUpdate()
-//    {
-//        $reflection = new \ReflectionClass($this);
-//        $methods = $reflection->getMethods();
-//        
-//        $nameMatchReal = '^getDay\w+Real$';
-//        $nameMatchPlan = '^getDay\w+Plan$';
-//        
-//        $totalReal = $totalPlan = 0.0;
-//        foreach ($methods as $method) {
-//            $methodName = $method->getName();
-//            $class = $method->getDeclaringClass();
-//            if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
-//                continue;
-//            }
-//            $value = 0.0;
-//            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
-//                $value = $this->$methodName();
-//            }
-//            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
-//                $totalReal +=  $value;
-//            }
-//            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
-//                $totalPlan +=  $value;
-//            }
-//        }
-//        $this->setTotalPlan($totalPlan);
-//        $this->setTotalReal($totalReal);
-//        $percentage = 0;
-//        if($totalPlan != 0){
-//            $percentage = ($totalReal * 100) / $totalPlan;
-//        }
-//        if($this->getComponents()->count()  == 0){
-//            $this->setPercentage($percentage);
-//        }
-//    }
-//    
+    /**
+     * Metodo que se ejecuta antes de actualizar la entidad
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
+     */
+    public function preUpdate()
+    {
+        $reflection = new \ReflectionClass($this);
+        $methods = $reflection->getMethods();
+        
+        $nameMatchReal = '^getDay\w+Real$';
+        $nameMatchPlan = '^getDay\w+Plan$';
+        
+        $totalReal = $totalPlan = 0.0;
+        foreach ($methods as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth')){
+                continue;
+            }
+            $value = 0.0;
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $value = $this->$methodName();
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $totalReal +=  $value;
+            }
+            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $totalPlan +=  $value;
+            }
+        }
+        $this->setTotalPlan($totalPlan);
+        $this->setTotalReal($totalReal);
+        $percentage = 0;
+        if($totalPlan != 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $this->setPercentage($percentage);
+    }
+    
 //    public function updateParentTotals()
 //    {
 //        $components = $this->getComponents();
