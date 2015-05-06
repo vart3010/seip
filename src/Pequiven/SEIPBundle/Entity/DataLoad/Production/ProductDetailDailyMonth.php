@@ -2094,7 +2094,6 @@ class ProductDetailDailyMonth extends BaseModel
 //            
 //            foreach ($properties as $property) {
 //                $propertyName = $property->getName();
-////                print_r($propertyName);
 //                $class = $property->getDeclaringClass();
 //                if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
 //                    continue;

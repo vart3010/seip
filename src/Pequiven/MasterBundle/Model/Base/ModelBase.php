@@ -20,6 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks()
  */
 abstract  class ModelBase 
 {
@@ -56,10 +57,20 @@ abstract  class ModelBase
         return $this->deletedAt;
     }
 
+    /**
+     * @ORM\PrePersist()
+     * @param \DateTime $createdAt
+     * @return \Pequiven\SEIPBundle\Model\BaseModel
+     */
     function setCreatedAt(\DateTime $createdAt) {
         $this->createdAt = $createdAt;
     }
 
+    /**
+     * @ORM\PreUpdate()
+     * @param \DateTime $updatedAt
+     * @return \Pequiven\SEIPBundle\Model\BaseModel
+     */
     function setUpdatedAt(\DateTime $updatedAt) {
         $this->updatedAt = $updatedAt;
     }

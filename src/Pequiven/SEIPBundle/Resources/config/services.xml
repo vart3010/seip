@@ -99,9 +99,6 @@
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
         <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
@@ -301,6 +298,9 @@
         </service>
         <service id="pequiven.repository.day_stop" class="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\DayStop" />
+        </service>
+        <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
         </service>
     </services>
 </container>
