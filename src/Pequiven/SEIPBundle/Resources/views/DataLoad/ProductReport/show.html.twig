@@ -71,7 +71,11 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Raw material'|trans }}</label>
-                    {{ product_report.rawMaterial }}
+                    {% for rawMaterial in product_report.rawMaterials %}
+                        {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
+                    {% else %}
+                        {{ "empty.no_raw_material"|trans }}
+                    {% endfor %}
                 </p>
             </div>
         </div>

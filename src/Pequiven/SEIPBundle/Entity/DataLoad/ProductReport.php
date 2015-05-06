@@ -101,10 +101,9 @@ class ProductReport extends BaseModel
      * Materia prima
      * @var \Pequiven\SEIPBundle\Entity\CEI\RawMaterial
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
      */
-    private $rawMaterial;
+    private $rawMaterials;
     
     /**
      * Tipo de producto
@@ -129,6 +128,7 @@ class ProductReport extends BaseModel
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rawMaterials = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -327,29 +327,6 @@ class ProductReport extends BaseModel
     }
 
     /**
-     * Set rawMaterial
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial
-     * @return ProductReport
-     */
-    public function setRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial)
-    {
-        $this->rawMaterial = $rawMaterial;
-
-        return $this;
-    }
-
-    /**
-     * Get rawMaterial
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\RawMaterial 
-     */
-    public function getRawMaterial()
-    {
-        return $this->rawMaterial;
-    }
-    
-    /**
      * Add productPlannings
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
@@ -434,5 +411,38 @@ class ProductReport extends BaseModel
             $_toString = (string)$this->getProduct();
         }
         return $_toString;
+    }
+
+    /**
+     * Add rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     * @return ProductReport
+     */
+    public function addRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    {
+        $this->rawMaterials[] = $rawMaterials;
+
+        return $this;
+    }
+
+    /**
+     * Remove rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     */
+    public function removeRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    {
+        $this->rawMaterials->removeElement($rawMaterials);
+    }
+
+    /**
+     * Get rawMaterials
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRawMaterials()
+    {
+        return $this->rawMaterials;
     }
 }

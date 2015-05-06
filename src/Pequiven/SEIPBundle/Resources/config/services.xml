@@ -302,5 +302,8 @@
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
         </service>
+        <service id="pequiven.repository.raw_material" class="Pequiven\SEIPBundle\Repository\CEI\RawMaterialRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\RawMaterial" />
+        </service>
     </services>
 </container>

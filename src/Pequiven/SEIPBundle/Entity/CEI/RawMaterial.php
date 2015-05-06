@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\CEI\RawMaterial as BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_raw_material")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\RawMaterialRepository")
  */
 class RawMaterial extends BaseModel
 {

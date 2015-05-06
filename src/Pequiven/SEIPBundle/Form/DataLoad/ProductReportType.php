@@ -53,10 +53,11 @@ class ProductReportType extends AbstractType
                 "attr" => array("class" => "select2 input-large"),
                 "query_builder" => $queryBuilderEnable,
             ))
-            ->add("rawMaterial",null,array(
+            ->add("rawMaterials",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add('plant',"tecno_ajax_autocomplete",array(
                 'label_attr' => array('class' => 'label'),
