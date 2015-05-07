@@ -14,7 +14,12 @@
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.responsible_for_notify'|trans }}</label>
                 {% if validConfiguration == true %}
-                    {% for userNotify in configuration.arrangementProgramUsersToNotify %}
+                    {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+                        {% set usersNotify = configuration.arrangementProgramSigUsersToNotify %}
+                    {% else %}
+                        {% set usersNotify = configuration.arrangementProgramUsersToNotify %}
+                    {% endif %}
+                    {% for userNotify in usersNotify %}
                         <small class="tag orange-bg">{{ userNotify }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                     {% else %}
                         <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
@@ -26,7 +31,12 @@
             <p class="inline-label">
                 <label class="label">{{ 'pequiven.arrangement_program.responsible_for_review'|trans }}</label>
                 {% if validConfiguration == true %}
-                    {% for userReviser in configuration.arrangementProgramUserToRevisers %}
+                    {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+                        {% set usersRevisers = configuration.arrangementProgramSigUsersToReviser %}
+                    {% else %}
+                        {% set usersRevisers = configuration.arrangementProgramUserToRevisers %}
+                    {% endif %}
+                    {% for userReviser in usersRevisers %}
                         <small class="tag orange-bg">{{ userReviser }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                     {% else %}
                         <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
@@ -39,14 +49,24 @@
                 <label class="label">{{ 'pequiven.arrangement_program.manager_approval'|trans }}</label>
                 {% if validConfiguration == true %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC') %}
-                        {% for userApprove in configuration.arrangementProgramUsersToApproveTactical %}
+                        {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+                            {% set usersApproveTactical = configuration.arrangementProgramSigUsersToApprove %}
+                        {% else %}
+                            {% set usersApproveTactical = configuration.arrangementProgramUsersToApproveTactical %}
+                        {% endif %}
+                        {% for userApprove in usersApproveTactical %}
                             <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>
                         {% endfor %}
                     {% endif %}
                     {% if entity.type == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE') %}
-                        {% for userApprove in configuration.arrangementProgramUsersToApproveOperative %}
+                        {% if entity.categoryArrangementProgram.id == constant('Pequiven\\ArrangementProgramBundle\\Entity\\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG') %}
+                            {% set usersApproveOperative = configuration.arrangementProgramSigUsersToApprove %}
+                        {% else %}
+                            {% set usersApproveOperative = configuration.arrangementProgramUsersToApproveOperative %}
+                        {% endif %}
+                        {% for userApprove in usersApproveOperative %}
                             <small class="tag">{{ userApprove }}</small>{% if loop.last == false %},{% else %}.{% endif %}
                         {% else %}
                             <small class="tag red-bg">{{ 'pequiven.arrangement_program.you_must_assign_responsible'|trans }}</small>

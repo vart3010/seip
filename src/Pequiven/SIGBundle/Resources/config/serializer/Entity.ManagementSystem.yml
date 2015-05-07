@@ -1,0 +1,21 @@
+Pequiven\SIGBundle\Entity\ManagementSystem:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        createdAt:
+            expose: true
+            groups: [api_list]
+        updatedAt:
+            expose: true
+            groups: [api_details]
+        description:
+            expose: true
+            groups: [api_list]
+        ref:
+            expose: true
+            groups: [api_list]
+        objetives:
+            expose: true
+            groups: [objetives]

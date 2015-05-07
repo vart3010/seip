@@ -10,3 +10,6 @@ Pequiven\ArrangementProgramBundle\Model\ArrangementProgram:
         categoryArrangementProgram:
             expose: true
             groups: [api_list]
+        managementSystem:
+            expose: true
+            groups: [managementSystem]

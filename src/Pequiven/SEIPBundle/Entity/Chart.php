@@ -346,7 +346,7 @@ class Chart extends ModelChart
      *
      * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
      */
-    public function removeIndicator(\Pequiven\ObjetiveBundle\Entity\Objetive $indicators)
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
     {
         $this->indicators->removeElement($indicators);
     }

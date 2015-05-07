@@ -169,11 +169,27 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         'labelAttributes' => array('icon' => '',),
                         ))
                     )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.main', $section)));
-                //Visualizar
-                $arrangementProgram->addChild('sig.arrangement_program.visualize', array(
-                        'route' => '',
-                    ))
-                    ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize', $section)));
+                
+                if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_LIST_*'))
+                {
+                    //Menú Nivel 2: Visualizar
+                     $visualize = $this->factory->createItem('sig.arrangement_programs.visualize',
+                            $this->getSubLevelOptions(array(
+                            'uri' => 'null',
+                            'labelAttributes' => array('icon' => '',),
+                            ))
+                        )->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.main', $section)));
+                     if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_LIST_ALL')){
+                        $visualize
+                            ->addChild('sig.arrangement_program.visualize.listAll', array(
+                                'route' => 'pequiven_seip_sig_arrangementprogram_all',
+                            ))
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.sig.arrangement_program.visualize.listAll', $section)));
+                     }
+
+                    $arrangementProgram->addChild($visualize);
+                }
+                
                 //Añadir
                 if($this->isGranted('ROLE_SEIP_SIG_ARRANGEMENT_PROGRAM_CREATE_*')){
 

@@ -10,5 +10,7 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ManagementSystemRepository extends SeipEntityRepository
 {
-    
+    protected function getAlias() {
+        return 'ms';
+    }
 }

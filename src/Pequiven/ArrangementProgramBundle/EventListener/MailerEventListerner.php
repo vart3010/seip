@@ -168,17 +168,25 @@ class MailerEventListerner extends BaseEventListerner
      */
     private function getUserToReviser(ArrangementProgram $entity) {
         $configuration =  $this->getConfiguration($entity);
-        $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
-
         $users = array();
-        if($configuration){
-            foreach ($configuration->getArrangementProgramUserToRevisers() as $value) {
-                if($notifyToGerenciaSecond !== null){
-                    if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
-                        continue;
+        if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+
+            if($configuration){
+                foreach ($configuration->getArrangementProgramUserToRevisers() as $value) {
+                    if($notifyToGerenciaSecond !== null){
+                        if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                            continue;
+                        }
                     }
+                    $users[] = $value;
                 }
-                $users[] = $value;
+            }
+        } else{
+            if($configuration){
+                foreach ($configuration->getArrangementProgramSigUsersToReviser() as $value) {
+                    $users[] = $value;
+                }
             }
         }
         return $users;
@@ -192,17 +200,26 @@ class MailerEventListerner extends BaseEventListerner
      */
     private function getUserToNotify(ArrangementProgram $entity) {
         $configuration =  $this->getConfiguration($entity);
-        $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
-
         $users = array();
-        if($configuration){
-            foreach ($configuration->getArrangementProgramUsersToNotify() as $value) {
-                if($notifyToGerenciaSecond !== null){
-                    if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
-                        continue;
+        
+        if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+
+            if($configuration){
+                foreach ($configuration->getArrangementProgramUsersToNotify() as $value) {
+                    if($notifyToGerenciaSecond !== null){
+                        if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                            continue;
+                        }
                     }
+                    $users[] = $value;
                 }
-                $users[] = $value;
+            }
+        } else{
+            if($configuration){
+                foreach ($configuration->getArrangementProgramSigUsersToNotify() as $value) {
+                    $users[] = $value;
+                }
             }
         }
         return $users;
@@ -218,18 +235,26 @@ class MailerEventListerner extends BaseEventListerner
     {
         $configuration =  $this->getConfiguration($entity);
         $users = array();
-        if($configuration){
-            if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
-                $users = $configuration->getArrangementProgramUsersToApproveTactical();
-            }else if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
-                $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
-                $allUsersToAprrove = $configuration->getArrangementProgramUsersToApproveOperative();
-                foreach ($allUsersToAprrove as $value) {
-                    if($notifyToGerenciaSecond !== null){
-                        if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
-                            continue;
+        if($entity->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            if($configuration){
+                if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC){
+                    $users = $configuration->getArrangementProgramUsersToApproveTactical();
+                }else if($entity->getType() == ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE){
+                    $notifyToGerenciaSecond = $this->getNotifyToGerenciaSecond($entity);
+                    $allUsersToAprrove = $configuration->getArrangementProgramUsersToApproveOperative();
+                    foreach ($allUsersToAprrove as $value) {
+                        if($notifyToGerenciaSecond !== null){
+                            if($value->getGerenciaSecond() !== $notifyToGerenciaSecond){
+                                continue;
+                            }
                         }
+                        $users[] = $value;
                     }
+                }
+            }
+        } else{
+            if($configuration){
+                foreach ($configuration->getArrangementProgramSigUsersToApprove() as $value) {
                     $users[] = $value;
                 }
             }

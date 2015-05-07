@@ -93,6 +93,36 @@
                 {{ form_errors(form.configuration.arrangementProgramUsersToNotify) }}
             {% endif %}
         </div>
+        <div class="field-block button-height">
+            <label>Revisores Hallazgos SIG #<b>{$ model.arrangementProgramSigUsersToReviser.length $}</b></label>
+            <div id="gerencia_configuration_arrangementProgramSigUsersToReviser" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramSigUsersToReviser',{{ gerenciafirst.configuration.arrangementProgramSigUsersToReviser|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramSigUsersToReviser')"></div>
+            <input ng-repeat="user in model.arrangementProgramSigUsersToReviser" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramSigUsersToReviser][]" value="{$ user.id $}" />
+            {#{{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
+            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}#}
+            {% if form.configuration.arrangementProgramSigUsersToReviser is defined %}
+                {{ form_errors(form.configuration.arrangementProgramSigUsersToReviser) }}
+            {% endif %}
+        </div>
+        <div class="field-block button-height">
+            <label>Aprobadores Hallazgos SIG #<b>{$ model.arrangementProgramSigUsersToApprove.length $}</b></label>
+            <div id="gerencia_configuration_arrangementProgramSigUsersToApprove" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramSigUsersToApprove',{{ gerenciafirst.configuration.arrangementProgramSigUsersToApprove|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramSigUsersToApprove')"></div>
+            <input ng-repeat="user in model.arrangementProgramSigUsersToApprove" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramSigUsersToApprove][]" value="{$ user.id $}" />
+            {#{{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
+            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}#}
+            {% if form.configuration.arrangementProgramSigUsersToApprove is defined %}
+                {{ form_errors(form.configuration.arrangementProgramSigUsersToApprove) }}
+            {% endif %}
+        </div>
+        <div class="field-block button-height">
+            <label>Notificadores Hallazgos SIG #<b>{$ model.arrangementProgramSigUsersToNotify.length $}</b></label>
+            <div id="gerencia_configuration_arrangementProgramSigUsersToNotify" style='width: 270px' ng-init="setPreselectedData('gerencia_configuration_arrangementProgramSigUsersToNotify',{{ gerenciafirst.configuration.arrangementProgramSigUsersToNotify|serialize('json',serialization_context().setGroups(['id','api_list','sonata_api_read'])) }},'arrangementProgramSigUsersToNotify')"></div>
+            <input ng-repeat="user in model.arrangementProgramSigUsersToNotify" type="hidden" name="pequiven_masterbundle_gerencia[configuration][arrangementProgramSigUsersToNotify][]" value="{$ user.id $}" />
+            {#{{ form_label(form.configuration.arrangementProgramUserToRevisers) }}
+            {{ form_widget(form.configuration.arrangementProgramUserToRevisers) }}#}
+            {% if form.configuration.arrangementProgramSigUsersToNotify is defined %}
+                {{ form_errors(form.configuration.arrangementProgramSigUsersToNotify) }}
+            {% endif %}
+        </div>
         {{ form_widget(form._token) }}
         
         {{ actions.update() }}
@@ -131,6 +161,9 @@
             $("#gerencia_configuration_arrangementProgramUsersToApproveTactical").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToApproveOperative").select2(parametersUsers);
             $("#gerencia_configuration_arrangementProgramUsersToNotify").select2(parametersUsers);
+            $("#gerencia_configuration_arrangementProgramSigUsersToReviser").select2(parametersUsers);
+            $("#gerencia_configuration_arrangementProgramSigUsersToApprove").select2(parametersUsers);
+            $("#gerencia_configuration_arrangementProgramSigUsersToNotify").select2(parametersUsers);
             $("#pequiven_masterbundle_gerencia_gerenciaSecondVinculants").select2();
             $("#pequiven_masterbundle_gerencia_gerenciaSecondSupports").select2();
         });

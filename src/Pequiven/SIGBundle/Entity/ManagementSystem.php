@@ -65,7 +65,20 @@ class ManagementSystem extends modelManagementSystem
      * @ORM\ManyToOne(targetEntity="Pequiven\SIGBundle\Entity\PoliticManagementSystem")
      */
     protected $politicManagementSystem;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="managementSystems")
+    */
+    private $objetives;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -216,5 +229,38 @@ class ManagementSystem extends modelManagementSystem
     public function getPoliticManagementSystem()
     {
         return $this->politicManagementSystem;
+    }
+    
+    /**
+    * Add objetives
+    *
+    * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+    * @return ManagementSystem
+    */
+    public function addObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives[] = $objetives;
+
+        return $this;
+    }
+
+    /**
+    * Remove objetives
+    *
+    * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
+    */
+    public function removeChart(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    {
+        $this->objetives->removeElement($objetives);
+    }
+
+    /**
+    * Get objetives
+    *
+    * @return \Doctrine\Common\Collections\Collection 
+    */
+    public function getObjetives()
+    {
+        return $this->objetives;
     }
 }

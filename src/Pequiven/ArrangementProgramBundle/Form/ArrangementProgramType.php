@@ -143,7 +143,6 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                             'label' => 'pequiven.form.managementSystem',
                             'class' => 'PequivenSIGBundle:ManagementSystem',
                             'property' => 'description',
-                            'mapped' => false,
                             'attr' => array(
                                 'class' => "select2 input-xlarge",
                                 "ng-model" => "model.managementSystem",
@@ -152,7 +151,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
 //                                return $repository->findAll();
 //                            },
                             'empty_value' => 'pequiven.select',
-                            'required' => false,
+                            'required' => true,
                         ));
                         $formModifier($event,null,$object->getCategoryArrangementProgram());
                     } else{
@@ -190,7 +189,6 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
                             'label' => 'pequiven.form.managementSystem',
                             'class' => 'PequivenSIGBundle:ManagementSystem',
                             'property' => 'description',
-                            'mapped' => false,
                             'attr' => array(
                                 'class' => "select2 input-xlarge",
                                 "ng-model" => "model.managementSystem",
@@ -199,7 +197,7 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
 //                                return $repository->findAll();
 //                            },
                             'empty_value' => 'pequiven.select',
-                            'required' => false,
+                            'required' => true,
                         ));
                         $formModifier($event,null,$object->getCategoryArrangementProgram(),  ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE);
                     } else{

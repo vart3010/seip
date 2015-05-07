@@ -30,6 +30,9 @@ class ConfigurationType extends AbstractType
             ->add('arrangementProgramUsersToApproveTactical','entity',$parametersUser)
             ->add('arrangementProgramUsersToApproveOperative','entity',$parametersUser)
             ->add('arrangementProgramUsersToNotify','entity',$parametersUser)
+            ->add('arrangementProgramSigUsersToReviser','entity',$parametersUser)
+            ->add('arrangementProgramSigUsersToApprove','entity',$parametersUser)
+            ->add('arrangementProgramSigUsersToNotify','entity',$parametersUser)
         ;
     }
     
