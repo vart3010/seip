@@ -70,6 +70,11 @@ class ManagementSystem extends modelManagementSystem
     * @ORM\ManyToMany(targetEntity="\Pequiven\ObjetiveBundle\Entity\Objetive", mappedBy="managementSystems")
     */
     private $objetives;
+    
+    /**
+    * @ORM\ManyToMany(targetEntity="\Pequiven\IndicatorBundle\Entity\Indicator", mappedBy="managementSystems")
+    */
+    private $indicators;
 
     /**
      * Constructor
@@ -77,6 +82,7 @@ class ManagementSystem extends modelManagementSystem
     public function __construct()
     {
         $this->objetives = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -249,7 +255,7 @@ class ManagementSystem extends modelManagementSystem
     *
     * @param \Pequiven\ObjetiveBundle\Entity\Objetive $objetives
     */
-    public function removeChart(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
+    public function removeObjetive(\Pequiven\ObjetiveBundle\Entity\Objetive $objetives)
     {
         $this->objetives->removeElement($objetives);
     }
@@ -262,5 +268,38 @@ class ManagementSystem extends modelManagementSystem
     public function getObjetives()
     {
         return $this->objetives;
+    }
+    
+    /**
+    * Add indicators
+    *
+    * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+    * @return ManagementSystem
+    */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Objetive $indicators)
+    {
+        $this->indicators[] = $indicators;
+
+        return $this;
+    }
+
+    /**
+    * Remove indicators
+    *
+    * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+    */
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+    * Get indicators
+    *
+    * @return \Doctrine\Common\Collections\Collection 
+    */
+    public function getIndicators()
+    {
+        return $this->indicators;
     }
 }
