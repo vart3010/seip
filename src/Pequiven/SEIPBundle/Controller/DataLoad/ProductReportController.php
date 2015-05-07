@@ -72,10 +72,11 @@ class ProductReportController extends SEIPController
                 }
                 for($day = $dayFrom; $day < $dayEnd; $day++){
                     $dayInt = (int)$day;
+                    $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
                     if(in_array($dayInt,$daysStopsArray)){
+                        $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, 0);
                         continue;
                     }
-                    $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, $value);
                 }
             }
