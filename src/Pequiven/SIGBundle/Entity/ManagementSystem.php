@@ -276,7 +276,7 @@ class ManagementSystem extends modelManagementSystem
     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
     * @return ManagementSystem
     */
-    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Objetive $indicators)
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
     {
         $this->indicators[] = $indicators;
 
