@@ -223,16 +223,32 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $user = $this->getUser();
 
         $periodService = $this->getPeriodService();
-        if (
-            $configuration->getArrangementProgramUsersToNotify()->contains($user) === true 
-                && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
-                && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
-            ) {
-            
-            if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
-                $valid = true;
-            }elseif($periodService->isAllowNotifyArrangementProgram() === true){
-                $valid = true;
+        if($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            if (
+                $configuration->getArrangementProgramUsersToNotify()->contains($user) === true 
+                    && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
+                    && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+                ) {
+
+                if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+                    $valid = true;
+                }elseif($periodService->isAllowNotifyArrangementProgram() === true){
+                    $valid = true;
+                }
+            }
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
+            $configuration = $gerencia->getConfiguration();
+            if (
+                $configuration->getArrangementProgramSigUsersToNotify()->contains($user) === true 
+                    && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
+                    && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+                ) {
+                if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+                    $valid = true;
+                }elseif($periodService->isAllowNotifyArrangementProgram() === true){
+                    $valid = true;
+                }
             }
         }
         if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
