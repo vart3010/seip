@@ -411,7 +411,7 @@ class SecurityService implements ContainerAwareInterface
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
         
-        if($objetive->getManagementSystem()){
+        if($objetive->getManagementSystems()){
             $valid = true;
         }
         
