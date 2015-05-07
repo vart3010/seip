@@ -91,7 +91,7 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         }
         
         //Menú SIG
-        if($this->isGranted('ROLE_SEIP_SIG_*')){
+        if($this->isGranted('ROLE_SEIP_SIG_MENU')){
             $this->addMenuSIG($menu, $section);
         }
         
