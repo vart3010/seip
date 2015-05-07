@@ -17,14 +17,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
  */
 class IndicatorOperativeController extends baseController {
     /**
-     * @Template("PequivenIndicatorBundle:Operative:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_OPERATIVE');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Operative:list.html.twig");
     }
 
     /**
@@ -88,6 +86,8 @@ class IndicatorOperativeController extends baseController {
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_OPERATIVE');
         
         $periodService = $this->get('pequiven_seip.service.period');
@@ -107,6 +107,7 @@ class IndicatorOperativeController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_operative_registration");
+            $object->setSummary($data['description']);
 
             if(strlen($data['gerenciaSecond']) == 0){
                 $em->getConnection()->rollback();
@@ -144,7 +145,7 @@ class IndicatorOperativeController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId()));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
@@ -319,7 +320,7 @@ class IndicatorOperativeController extends baseController {
     public function createObjetiveIndicator(Indicator $indicator) {
 
         $em = $this->getDoctrine()->getManager();
-        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent()));
+        $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $indicator->getRefParent(),'period' => $indicator->getPeriod()->getId()));
         $totalObjetives = count($objetives);
         $em->getConnection()->beginTransaction();
         if ($totalObjetives > 0) {
@@ -510,7 +511,7 @@ class IndicatorOperativeController extends baseController {
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

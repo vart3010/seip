@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Pequiven\SEIPBundle\Model\PDF\SeipPdf;
 use Pequiven\MasterBundle\Entity\Rol;
+use Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram;
 
 /**
  * Controlador para mostrar los resultados
@@ -507,6 +508,98 @@ class ResultController extends ResourceController
         return $this->redirect($this->generateUrl('pequiven_seip_result_export', array('level' => $level,'id' => $id)));
     }
     
+    /**
+     * Retorna el template para visualizar los objetivos deseados
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
+    public function indexObjetivesAction(Request $request)
+    {
+        $level = $request->get("level");
+        $templates = array(
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO => "PequivenObjetiveBundle:Strategic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO => "PequivenObjetiveBundle:Tactic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO => "PequivenObjetiveBundle:Operative:list.html.twig",
+        );
+        if(!isset($templates[$level])){
+            throw $this->createNotFoundException();
+        }
+        
+        $template = $templates[$level];
+        return $this->render($template);
+    }
+    
+    public function indexIndicatorsAction(Request $request) 
+    {
+        $level = $request->get("level");
+        $templates = array(
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_ESTRATEGICO => "PequivenIndicatorBundle:Strategic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_TACTICO => "PequivenIndicatorBundle:Tactic:list.html.twig",
+            \Pequiven\ObjetiveBundle\Model\ObjetiveLevel::LEVEL_OPERATIVO => "PequivenIndicatorBundle:Operative:list.html.twig",
+        );
+        if(!isset($templates[$level])){
+            throw $this->createNotFoundException();
+        }
+        
+        $template = $templates[$level];
+        return $this->render($template);
+    }
+    
+    public function indexArrangementProgramsAction(Request $request)
+    {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $user = $this->getUser();
+        $level = $user->getLevelRealByGroup();
+        if($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO){
+            if(isset($criteria['typeManagement']) && $criteria['typeManagement'] == \Pequiven\MasterBundle\Entity\GerenciaSecond::TYPE_MANAGEMENT_BINDING){
+                unset($criteria['firstLineManagement']);
+                unset($criteria['complejo']);
+            }
+        }elseif($level == \Pequiven\MasterBundle\Entity\Rol::ROLE_MANAGER_FIRST){
+            
+            $criteria['firstLineManagement'] = $user->getGerencia()->getId();
+            $criteria['complejo'] = $user->getComplejo()->getId();
+        }
+        
+        $view = $this
+            ->view()
+            ->setTemplate("PequivenArrangementProgramBundle:ArrangementProgram:index.html.twig")
+            //->setTemplateVar()
+        ;
+            $labelsStatus = array();
+            foreach (ArrangementProgram::getLabelsStatus() as $key => $value) {
+                $labelsStatus[] = array(
+                    'id' => $key,
+                    'description' => $this->trans($value,array(),'PequivenArrangementProgramBundle'),
+                );
+            }
+            
+            $isAllowFilterComplejo = $this->getUserManager()->isAllowFilterComplejo($user);//Filtro de localidad
+            $isAllowFilterFirstLineManagement = $this->getUserManager()->isAllowFilterFirstLineManagement($user);//Filtro de gerencia de primera linea
+            $isAllowFilterManagementSecondLine = $this->getUserManager()->isAllowFilterManagementSecondLine($user);//Filtro de gerencia de segunda linea
+            $isAllowFilterTypeManagement = ($level >= \Pequiven\MasterBundle\Entity\Rol::ROLE_GENERAL_COMPLEJO);
+
+            $typesManagement = array();
+            foreach (\Pequiven\MasterBundle\Entity\GerenciaSecond::getTypesManagement() as $key => $typeManagement) {
+                $typesManagement[] = array(
+                    'id' => $key,
+                    'label' => $this->trans($typeManagement,array(),'PequivenArrangementProgramBundle')
+                );
+            }
+            
+            $view->setData(array(
+                'labelsStatus' => $labelsStatus,
+                'isAllowFilterComplejo' => $isAllowFilterComplejo,
+                'isAllowFilterFirstLineManagement' => $isAllowFilterFirstLineManagement,
+                'isAllowFilterManagementSecondLine' => $isAllowFilterManagementSecondLine,
+                'isAllowFilterTypeManagement' => $isAllowFilterTypeManagement,
+                'typesManagement' => $typesManagement,
+                'user' => $user
+            ));
+        return $this->handleView($view);
+    }
+    
     protected function trans($id,array $parameters = array(), $domain = 'messages')
     {
         return $this->get('translator')->trans($id, $parameters, $domain);
@@ -523,7 +616,7 @@ class ResultController extends ResourceController
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }
@@ -537,20 +630,20 @@ class ResultController extends ResourceController
     }
     
     /**
-     * Manejador de usuario o administrador
-     * @return \Pequiven\SEIPBundle\Model\PDF\SeipPdf
-     */
-//    private function getSeipPdf() 
-//    {
-//        return $this->container->get('seip.pdf');
-//    }
-    
-    /**
      * 
      * @return \Pequiven\SEIPBundle\Service\SecurityService
      */
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * Manejador de usuario o administrador
+     * @return \Pequiven\SEIPBundle\Model\UserManager
+     */
+    private function getUserManager() 
+    {
+        return $this->get('seip.user_manager');
     }
 }

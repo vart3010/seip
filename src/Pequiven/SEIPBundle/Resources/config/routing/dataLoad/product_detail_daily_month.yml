@@ -1,0 +1,27 @@
+pequiven_product_detail_daily_month_create:
+    path: /{productReport}/create
+    defaults:
+        _controller: pequiven.controller.product_detail_daily_month:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_productdetaildailymonth
+    methods: [GET|POST]
+
+pequiven_product_detail_daily_month_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.product_detail_daily_month:showAction
+    methods: [GET]
+    
+pequiven_product_detail_daily_month_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.product_detail_daily_month:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_productdetaildailymonth
+    methods: [GET|POST]
+    
+pequiven_product_detail_daily_month_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.product_detail_daily_month:deleteAction
+    methods: [GET|DELETE]

@@ -23,8 +23,8 @@ class IndicatorsDashboardBox extends GenericBox
     public function getParameters() {
         
         $em = $this->getDoctrine()->getManager();
-        $seeTagIndicators = false;//Bandera para saber si se mjestran o no las etiquetas del indicador
-        $boxRender = $this->get('tecnocreaciones_box.render');//Servicio par allamar los boxes
+        $seeTagIndicators = false;//Bandera para saber si se muestran o no las etiquetas del indicador
+        $boxRender = $this->get('tecnocreaciones_box.render');//Servicio para llamar los boxes
         $idIndicator = $this->getRequest()->get('id');//Obtenemos el id del indicador a visualizar
         $indicator = $this->container->get('pequiven.repository.indicator')->find($idIndicator);//Obtenemos el indicador que se esta visualizando
         $idLineStrategic = '';//Id de la Línea Estratégica
@@ -71,13 +71,20 @@ class IndicatorsDashboardBox extends GenericBox
         
         //Obtenemos la data para los widget en forma de bulbo de la barra lateral izquierda
         foreach($indicatorsGroup as $indicatorGroup){
-            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorService->getDataDashboardWidgetBulb($indicatorGroup,  \Pequiven\SEIPBundle\Model\Common\CommonObject::OPEN_URL_SAME_WINDOW);
+            $dataWidget[(string)$indicatorGroup->getRef()] = $indicatorGroup->getEvaluateInPeriod() == true ? $indicatorService->getDataWidgetAngularGauge($indicatorGroup) : $indicatorService->getDataDashboardWidgetBulb($indicatorGroup,  \Pequiven\SEIPBundle\Model\Common\CommonObject::OPEN_URL_SAME_WINDOW);
         }
         
         $iconsLineStrategic = LineStrategic::getIcons();
         $linesStrategics = $this->container->get('pequiven.repository.linestrategic')->findBy(array('deletedAt' => null));
         
-//        $dataMultiLevelPie = $indicatorService->getDataDashboardWidgetMultiLevelPie($indicator);
+        //Esta sección es para los distintos tipos de gráficos del indicador
+        
+        if(count($indicator->getCharts()) == 0){//En caso de que el indicador no tenga ningín gráfico asociado
+            $seeTagIndicators = true;
+        } else{
+           $charts = $indicator->getCharts();//Obtenemos los gráficos que están disponibles para el dashboard del indicador
+        }
+
         $dataChart = $indicatorService->getDataDashboardWidgetDoughnut($indicator);
         
         $dataChartColumn = array();
@@ -86,7 +93,7 @@ class IndicatorsDashboardBox extends GenericBox
         
         $arrayIdProduccion = array();
         $arrayIdProduccion[] = 1; 
-        $arrayIdProduccion[] = 1043; 
+        $arrayIdProduccion[] = 1043;
 
         if($indicator->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_TACTICO){
             if(in_array($indicator->getParent()->getId(), $arrayIdProduccion)){

@@ -17,6 +17,7 @@ class GenericDataController extends SEIPController
     function getResponsibleGoalsAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $responsiblesId = $request->get('responsibles',array());
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
         if(is_string($responsiblesId)){
             $responsiblesId = explode(',', $responsiblesId);
         }
@@ -34,6 +35,7 @@ class GenericDataController extends SEIPController
                 'firstname' => $query,
                 'lastname' => $query,
                 'numPersonal' => $query,
+                'categoryArrangementProgramId' => $categoryArrangementProgramId,
             );
             if($gerencia != null){
                 $criteria['gerencia'] = $gerencia;
@@ -48,16 +50,18 @@ class GenericDataController extends SEIPController
     }
     
     /**
-     * Obtiene los responsable que se pueden asignar a un programa de gestion
+     * Obtiene los responsable que se pueden asignar a un programa de gestion a planificación de procesos
      */
     function getResponsibleArrangementProgramAction(\Symfony\Component\HttpFoundation\Request $request)
     {
+        $categoryArrangementProgramId = $request->get('categoryArrangementProgramId');
         $query = $request->get('query');
         $criteria = array(
             'username' => $query,
             'firstname' => $query,
             'lastname' => $query,
             'numPersonal' => $query,
+            'categoryArrangementProgramId' => $categoryArrangementProgramId,
         );
         
         $results = $this->getRepositoryById('user')->findToAssingTacticArrangementProgram($criteria);
@@ -89,6 +93,8 @@ class GenericDataController extends SEIPController
     function getOperationalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $categoryArrangementProgramId = $request->get('idCategoryArrangementProgram');
+        
         $objetiveTactic = $em->find('Pequiven\ObjetiveBundle\Entity\Objetive', $request->get('idObjetiveTactical'));
         if(!$objetiveTactic){
             throw $this->createNotFoundException('objetive tactic not found!');
@@ -112,12 +118,13 @@ class GenericDataController extends SEIPController
     function getTacticalObjectivesAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $criteria = $request->get('filter',$this->config->getCriteria());
+        $criteria['idManagementSystem'] = $request->get('idManagementSystem');
         $user = $this->getUser();
         $repository = $this->get('pequiven.repository.objetiveoperative');
         $results = $repository->findTacticalObjetives($user,$criteria);
         $view = $this->view();
         $view->setData($results);
-        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        $view->getSerializationContext()->setGroups(array('id','api_list','gerencia'));
         return $this->handleView($view);
     }
     
@@ -193,6 +200,22 @@ class GenericDataController extends SEIPController
         $view = $this->view();
         $view->setData($results);
         $view->getSerializationContext()->setGroups(array('id','api_list','gerencias'));
+        return $this->handleView($view);
+    }
+    
+    /**
+     * Busca los sistemas de calidad
+     * @param type $param
+     */
+    function getManagementSystemsAction(\Symfony\Component\HttpFoundation\Request $request) {
+        
+        $user = $this->getUser();
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $repository = $this->get('pequiven.repository.sig_management_system');
+        $results = $repository->findAll();
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
         return $this->handleView($view);
     }
     

@@ -71,5 +71,8 @@
         <service id="peqquiven.type.indicator" class="Pequiven\IndicatorBundle\Form\IndicatorType">
             <tag name="form.type" alias="pequiven_indicatorbundle_indicator" />
         </service>
+        <service id="pequiven_arrangement_program.form.value_indicator_config" class="Pequiven\IndicatorBundle\Form\Indicator\ValueIndicator\ValueIndicatorConfigType">
+            <tag name="form.type" alias="pequiven_indicatorbundle_indicator_valueindicator_valueindicatorconfig" />
+        </service>
     </services>
 </container>

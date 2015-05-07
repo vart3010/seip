@@ -53,6 +53,8 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
             ->add('showPlanValue')
             ->add('showResults')
             ->add('showFeatures')
+            ->add('showCharts')
+            ->add('showTags')
             ->add('requiredToImport')
             ->add('details')
             ;
@@ -116,6 +118,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                 ->add('tendency')
                 ->add('frequencyNotificationIndicator')
                 ->add('valueFinal')
+                ->add('charts','sonata_type_model_autocomplete',array(
+                    'property' => array('alias','description'),
+                    'multiple' => true,
+                    'required' => false,
+                ))
                 ->add('childrens','sonata_type_model_autocomplete',$childrensParameters);
                 if($object != null && $object->getId() !== null){
                     if($object->getIndicatorLevel()->getLevel() == IndicatorLevel::LEVEL_ESTRATEGICO){
@@ -194,11 +201,19 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
                         "attr" => array("rows" => 4,)
                     ))
                 ->end()
-                ->with('Opciones de visualizacion')
+                ->with('Opciones de visualizacion en la ficha')
                     ->add('showResults',null,array(
                         'required' => false,
                     ))
                     ->add('showFeatures',null,array(
+                        'required' => false,
+                    ))
+                ->end()
+                ->with('Opciones de visualizacion en el dashboard')
+                    ->add('showCharts',null,array(
+                        'required' => false,
+                    ))
+                    ->add('showTags',null,array(
                         'required' => false,
                     ))
                 ->end()
@@ -276,7 +291,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

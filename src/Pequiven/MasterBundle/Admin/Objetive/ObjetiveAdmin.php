@@ -51,21 +51,22 @@ class ObjetiveAdmin extends Admin
                     ->add('childrens','sonata_type_model_autocomplete',array(
                         'property' => array('ref','description'),
                         'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('indicators','sonata_type_model_autocomplete',array(
                         'property' => array('ref','description'),
                         'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('objetiveLevel')
                     ->add('period')
                 ->end()
             ->end()
             ->tab('Details')
-                    ->add('qualitySystem',null,array(
-                        'query_builder' => function(\Pequiven\SEIPBundle\Repository\QualitySystem\QualitySystemRepository $repository)
-                        {
-                            return $repository->getQueryAllEnabled();
-                        }
+                    ->add('managementSystems','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('evalObjetive',null,array(
                         'required' => false,

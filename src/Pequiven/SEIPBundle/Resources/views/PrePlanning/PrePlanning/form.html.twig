@@ -271,6 +271,46 @@
                 disabled: true
             });
             
+            
+            var sendAllToReviewBtn = Ext.create("Ext.Button", {
+                handler: function () {
+                    var items = store.data.items;
+                    selectChild(items,1,true);
+                    
+                    itemsToImport = [];
+                    itemsToImportCurrent = 0;
+                    var i;
+                    var status = '{{ constant('Pequiven\\SEIPBundle\\Model\\PrePlanning\\PrePlanning::STATUS_DRAFT') }}';
+                    for(i=0;i < items.length; i++){
+                        if(items[i].get('status') == status && items[i].get('toImport') == true){
+                            itemsToImport.push(items[i]);
+                        }
+                    }
+                    if(itemsToImport.length > 0){
+                        Ext.Msg.confirm('Enviar a revisión', '¿Desea enviar a revisión '+(itemsToImport.length)+' item(s) seleccionados?', function(btn){
+                           if(btn === 'yes'){
+                               tree.body.mask("Guardando los cambios...");
+                                store.sync({
+                                    callback: function(r,options,success){
+                                        tree.body.unmask();
+                                        itemsToImportLength = itemsToImport.length;
+                                        tree.body.mask('Enviado a revisión '+itemsToImportLength+" item(s)...");
+                                        functionActionItem = functionSendToRevisionItem;
+                                        callAjaxItemToImport();
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        Ext.Msg.alert("", "No hay items selecionados para enviar a revisión.");
+                    }
+                },
+                glyph :'xf064@FontAwesome',
+                text: 'Enviar todo a revisión',
+                itemId: 'sendAllToReviewBtn',
+                disabled: false
+            });
+            
             var selectParent = function(node,checked){
                 if(node.get('editable') == true){
                     node.set('toImport',checked);
@@ -286,14 +326,19 @@
                     }
                 }
             };
-            var selectChild = function(childNodes,checked){
+            var selectChild = function(childNodes,checked,force){
                 var i;
+                if(force == undefined){
+                    force = false;
+                }
+                //console.log(force);
+                //console.log(childNodes);
                 for(i = 0; i < childNodes.length; i++){
                     if(childNodes[i].get('editable') == true){
                         childNodes[i].set('toImport',checked);
                     }
                     if(childNodes[i].childNodes.length > 0){
-                        selectChild(childNodes[i].childNodes);
+                        selectChild(childNodes[i].childNodes,checked,force);
                     }
                 }
             };
@@ -314,7 +359,7 @@
               allowBlank: true
             });
             
-            var buttonsAllow = [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, sendToReviewBtn ];
+            var buttonsAllow = [ startPrePlanningBtn,saveChangeBtn,returnChangesBtn,refreshBtn,btnDelete, sendToReviewBtn,sendAllToReviewBtn ];
              
             //Ext.ux.tree.TreeGrid is no longer a Ux. You can simply use a tree.TreePanel
             var tree = Ext.create('Ext.tree.Panel', {

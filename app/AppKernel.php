@@ -51,6 +51,7 @@ class AppKernel extends Kernel
             new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),//Bundle para auditar entidades
             
             new \Genemu\Bundle\FormBundle\GenemuFormBundle(),//Tipos de form adicionales select2
+//            new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
             
             new Tecnocreaciones\Bundle\AjaxFOSUserBundle\TecnocreacionesAjaxFOSUserBundle(),//Manejador se sesion via ajax
             new Tecnocreaciones\Vzla\GovernmentBundle\TecnocreacionesVzlaGovernmentBundle(),//Plantilla
@@ -59,6 +60,7 @@ class AppKernel extends Kernel
             new Tecnocreaciones\Bundle\ToolsBundle\TecnocreacionesToolsBundle(),
             
             new Pequiven\SEIPBundle\PequivenSEIPBundle(),
+            new Pequiven\SIGBundle\PequivenSIGBundle(),
             new Pequiven\MasterBundle\PequivenMasterBundle(),
             new Pequiven\ObjetiveBundle\PequivenObjetiveBundle(),
             new Pequiven\IndicatorBundle\PequivenIndicatorBundle(),

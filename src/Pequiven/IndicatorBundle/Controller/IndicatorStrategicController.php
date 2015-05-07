@@ -18,14 +18,12 @@ use Tecnocreaciones\Bundle\ResourceBundle\Controller\ResourceController as baseC
 class IndicatorStrategicController extends baseController {
 
     /** Función que retorna la vista con la lista de los indicadores estratégicos
-     * @Template("PequivenIndicatorBundle:Strategic:list.html.twig")
      * @return type
      */
     public function listAction() {
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_LIST_STRATEGIC');
         
-        return array(
-        );
+        return $this->render("PequivenIndicatorBundle:Strategic:list.html.twig");
     }
 
     /**
@@ -103,6 +101,7 @@ class IndicatorStrategicController extends baseController {
             $data = $this->container->get('request')->get("pequiven_indicator_strategicfo_registration");
 
             $object->setRefParent($data['refObjetive']);
+            $object->setSummary($data['description']);
             $object->setTmp(true);
             
             $data['tendency'] = (int)$data['tendency'];            
@@ -147,7 +146,10 @@ class IndicatorStrategicController extends baseController {
      * @return type
      * @throws \Pequiven\IndicatorBundle\Controller\Exception
      */
-    public function createAction(Request $request) {
+    public function createAction(Request $request) 
+    {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_INDICATOR_CREATE_STRATEGIC');
         
         $form = $this->createForm($this->get('pequiven_indicator.strategic.registration.form.type'));
@@ -162,7 +164,7 @@ class IndicatorStrategicController extends baseController {
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_indicator_strategic_registration");
-
+            $object->setSummary($data['description']);
             $data['tendency'] = (int)$data['tendency'];            
             $object->setUserCreatedAt($user);
             $object->setPeriod($this->getPeriodService()->getPeriodActive());
@@ -418,7 +420,7 @@ class IndicatorStrategicController extends baseController {
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

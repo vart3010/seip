@@ -51,6 +51,7 @@ class Product extends BaseModel
     
     /**
      * Componentes o subproductos
+     * 
      * @var Product
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
      */

@@ -106,7 +106,7 @@ class FormulaAdmin extends Admin implements \Symfony\Component\DependencyInjecti
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

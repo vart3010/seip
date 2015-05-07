@@ -281,11 +281,10 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     protected $requiredToImport = false;
     
     /**
-     * Sistema de calidad
-     * @var \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem")
-     */
-    protected $qualitySystem;
+    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="objetives", cascade={"persist","remove"})
+    * @ORM\JoinTable(name="seip_objetives_management_systems")
+    */
+    private $managementSystems;
     
     /**
      * Detalles del objetivo
@@ -304,6 +303,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
         $this->indicators = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lineStrategics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->results = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1201,29 +1201,6 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     }
 
     /**
-     * Set qualitySystem
-     *
-     * @param \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem
-     * @return Objetive
-     */
-    public function setQualitySystem(\Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem $qualitySystem = null)
-    {
-        $this->qualitySystem = $qualitySystem;
-
-        return $this;
-    }
-
-    /**
-     * Get qualitySystem
-     *
-     * @return \Pequiven\SEIPBundle\Entity\QualitySystem\QualitySystem 
-     */
-    public function getQualitySystem()
-    {
-        return $this->qualitySystem;
-    }
-
-    /**
      * Set details
      *
      * @param \Pequiven\ObjetiveBundle\Entity\Objetive\ObjetiveDetails $details
@@ -1244,5 +1221,38 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
     public function getDetails()
     {
         return $this->details;
+    }
+    
+    /**
+     * Add managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     * @return Objetive
+     */
+    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems[] = $managementSystems;
+
+        return $this;
+    }
+
+    /**
+     * Remove managementSystems
+     *
+     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
+     */
+    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
+    {
+        $this->managementSystems->removeElement($managementSystems);
+    }
+
+    /**
+     * Get managementSystems
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getManagementSystems()
+    {
+        return $this->managementSystems;
     }
 }

@@ -119,6 +119,25 @@ app:
                             operative: Operativo
                         matrices_objectives:
                             Matrices de objetivos
+                    sig:
+                        main: Sistema Integrado de Gestión
+                        objective:
+                            main: Objetivos
+                            visualize: Visualizar
+                            matrices_objectives:
+                                Matrices de objetivos
+                        indicator:
+                            main: Indicadores
+                            visualize: Visualizar
+                        arrangement_program: 
+                            main: Programas de Gestión
+                            add:
+                                main: Cargar
+                                tactic: Táctico
+                                operative: Operativo
+                            visualize:
+                                main: Visualizar
+                                listAll: Lista
                     results:
                         main: Resultados
                         visualize:
@@ -140,9 +159,19 @@ app:
                             main: Periodo
                             objetives: Objetivos
                             indicators: Indicadores
+                            indicators: Indicadores
+                            arrangement_programs: Programas de Gestión
+                            level:
+                                strategic: Estratégico
+                                tactic: Táctico
+                                operative: Operativo
                     pre_planning:
                         main: Planificación %period%
                         tactic: Táctico
                         operative: Operativo
                         planning: Planificación
                         statistics: Estadística
+                    data_load:
+                        main: Reportes
+                        list: Lista
+                        add: Agregar

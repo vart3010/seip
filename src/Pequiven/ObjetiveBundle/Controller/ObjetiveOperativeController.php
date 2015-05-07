@@ -48,11 +48,15 @@ class ObjetiveOperativeController extends baseController
     public function showAction(Request $request)
     {
         $securityService = $this->getSecurityService();
-        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE'));
+        $securityService->checkSecurity(array('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE','ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE','ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE'));
         $resource = $this->findOr404($request);
         
         if(!$securityService->isGranted('ROLE_SEIP_PLANNING_VIEW_OBJECTIVE_OPERATIVE')){
-            $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            if(!$securityService->isGranted('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE')){
+                $securityService->checkSecurity('ROLE_SEIP_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            } else{
+                $securityService->checkSecurity('ROLE_SEIP_SIG_OBJECTIVE_VIEW_OPERATIVE',$resource);
+            }
         }
         $indicatorService = $this->getIndicatorService();
         
@@ -188,6 +192,8 @@ class ObjetiveOperativeController extends baseController
      */
     public function createAction(Request $request) 
     {
+        $this->getPeriodService()->checkIsOpen();
+        
         $this->getSecurityService()->checkSecurity('ROLE_SEIP_OBJECTIVE_CREATE_OPERATIVE');
         
         $form = $this->createForm($this->get('pequiven_objetive.operative.registration.form.type'));
@@ -460,7 +466,7 @@ class ObjetiveOperativeController extends baseController
 
             //Obtenemos el o los últimos objetivos guardados y le añadimos el rango de gestión o semáforo
             foreach($totalRef as $value){
-                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value));
+                $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
                     $this->createArrangementRange($objetive, $data);
                 }
@@ -1281,7 +1287,7 @@ class ObjetiveOperativeController extends baseController
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

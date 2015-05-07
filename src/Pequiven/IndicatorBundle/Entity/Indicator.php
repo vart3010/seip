@@ -268,7 +268,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $forcePenalize = false;
     
     /**
-     * ¿Es requerido para importacion?
+     * ¿Es requerido para importacion? Quiere decir que es obligatorio para el siguiente período a planificar.
      * 
      * @var boolean
      * @ORM\Column(name="requiredToImport",type="boolean")
@@ -300,7 +300,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * Etiquetas del indicador
      * 
-     * @var \Pequiven\IndicatorBundle\Entity\Indicator\IndicatorTag
+     * @var \Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
      * @ORM\OneToMany(targetEntity="Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator",mappedBy="indicator",cascade={"persist","remove"})
      */
     protected $tagsIndicator;
@@ -348,6 +348,20 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $showFeatures = false;
     
     /**
+     * ¿Mostar los gráficos del indicador en la página de dashboard?
+     * @var boolean
+     * @ORM\Column(name="showCharts",type="boolean")
+     */
+    private $showCharts = true;
+    
+    /**
+     * ¿Mostar las etiquetas del indicador en la página del dashboard?
+     * @var boolean
+     * @ORM\Column(name="showTags",type="boolean")
+     */
+    private $showTags = false;
+    
+    /**
      * @var float
      * 
      * @ORM\Column(name="indicatorWeight", type="float", nullable=true)
@@ -357,7 +371,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     /**
      * @var string
      *
-     * @ORM\Column(name="summary", type="text")
+     * @ORM\Column(name="summary", type="text", nullable=true)
      */
     private $summary;
     
@@ -389,7 +403,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
      */
     protected $featuresIndicator;
     
-     /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="orderShowFromParent", type="integer")
@@ -405,6 +419,15 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     protected $status = self::STATUS_DRAFT;
     
     /**
+     * Charts
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\Chart
+     * @ORM\ManyToMany(targetEntity="\Pequiven\SEIPBundle\Entity\Chart", inversedBy="indicators")
+     * @ORM\JoinTable(name="seip_indicators_charts")
+     */
+    private $charts;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -416,6 +439,7 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->childrens=  new \Doctrine\Common\Collections\ArrayCollection();
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1740,4 +1764,82 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         return $this;
     }
     
+    /**
+     * Add charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     * @return Indicator
+     */
+    public function addChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts[] = $charts;
+
+        return $this;
+    }
+
+    /**
+     * Remove charts
+     *
+     * @param \Pequiven\SEIPBundle\Entity\Chart $charts
+     */
+    public function removeChart(\Pequiven\SEIPBundle\Entity\Chart $charts)
+    {
+        $this->charts->removeElement($charts);
+    }
+
+    /**
+     * Get charts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCharts()
+    {
+        return $this->charts;
+    }
+
+    /**
+     * Set showCharts
+     *
+     * @param boolean $showCharts
+     * @return Indicator
+     */
+    public function setShowCharts($showCharts)
+    {
+        $this->showCharts = $showCharts;
+
+        return $this;
+    }
+
+    /**
+     * Get showCharts
+     *
+     * @return boolean 
+     */
+    public function getShowCharts()
+    {
+        return $this->showCharts;
+    }
+
+    /**
+     * Set showTags
+     *
+     * @param boolean $showTags
+     * @return Indicator
+     */
+    public function setShowTags($showTags)
+    {
+        $this->showTags = $showTags;
+
+        return $this;
+    }
+
+    /**
+     * Get showTags
+     *
+     * @return boolean 
+     */
+    public function getShowTags()
+    {
+        return $this->showTags;
+    }
 }

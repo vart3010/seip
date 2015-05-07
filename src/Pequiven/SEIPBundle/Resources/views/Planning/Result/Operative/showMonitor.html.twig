@@ -2,9 +2,15 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% block before_body %}
-    {{ contentHeader(
+    {% if is_granted('ROLE_SEIP_RESULT_BY_PERIOD') %}
+        {{ contentHeader(
+            [(entity)],0,1,0
+        ) }}
+    {% else %}
+        {{ contentHeader(
         (entity)
     ) }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}

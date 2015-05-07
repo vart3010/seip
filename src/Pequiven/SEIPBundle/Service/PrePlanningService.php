@@ -130,7 +130,7 @@ class PrePlanningService extends ContainerAware
         return $root;
     }
     
-    private function setOriginObject(PrePlanning $prePlanning,$object,$levelPlanning)
+    private function setOriginObject(PrePlanning &$prePlanning,$object,$levelPlanning)
     {
         $user = $this->getUser();
         $configuration = $user->getConfiguration();
@@ -287,7 +287,7 @@ class PrePlanningService extends ContainerAware
             $parentItemInstance = $this->getCloneService()->findInstancePrePlanning($item->getParent());
             $parentItemInstanceCloned = $this->getCloneService()->findCloneInstance($parentItemInstance);
             if(!$parentItemInstanceCloned){
-                $child['editable'] = false;
+//                $child['editable'] = false;
             }
         }
         
@@ -327,6 +327,8 @@ class PrePlanningService extends ContainerAware
             }else if($item->getTypeObject() == PrePlanning::TYPE_OBJECT_ARRANGEMENT_PROGRAM_GOAL && $this->isGranted('ROLE_SEIP_PRE_PLANNING_OPERATION_IMPORT_PLANNING_ARRANGEMENT_PROGRAM_GOAL')){
                 $_hasPermissionRevision = true;
             }
+            //No verificar dependencia para importar todo
+            /**
             if($_hasPermissionRevision && $parent && PrePlanning::isValidTypeObject($parent->getTypeObject())){
                 if($item->getTypeObject() != PrePlanning::TYPE_OBJECT_OBJETIVE){
                     $itemParentInstance = $cloneService->findInstancePrePlanning($parent);
@@ -336,15 +338,17 @@ class PrePlanningService extends ContainerAware
                     }
                 }
             }
+             */
             $child['_hasPermissionRevision'] = $_hasPermissionRevision;
         }
         if($_hasPermissionRevision && ($item->getStatus() == PrePlanning::STATUS_IN_REVIEW || $item->getStatus() == PrePlanning::STATUS_REQUIRED || $item->getStatus() == PrePlanning::STATUS_IMPORTED_AND_DELETED)){
             $child['_isImportable'] = true;
         }
         if(count($item->getChildrens()) > 0){
-            $limitLevel = 2;
+            $limitLevel = 3;
             if($limitCurrentLevel < $limitLevel){
-                $child['expanded'] = $expanded;
+//                $child['expanded'] = $expanded;
+                $child['expanded'] = true;
                 $child['children'] = $this->getStructureTree($item->getChildrens(), ($limitCurrentLevel+1));
             }else{
                 $child['expanded'] = false;
@@ -481,6 +485,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $prePlannigChild->setParameters($configEntity);
             $prePlannig->addChildren($prePlannigChild);
@@ -496,6 +503,9 @@ class PrePlanningService extends ContainerAware
         foreach ($objects as $object) {
             $prePlannigChild = $this->createNew();
             $this->setOriginObject($prePlannigChild,$object,$levelPlanning);
+            if($levelPlanning == PrePlanning::LEVEL_TACTICO && $prePlannigChild->getLevelObject() == PrePlanning::LEVEL_OPERATIVO){
+                return;
+            }
             $configEntity = $linkGeneratorService->getConfigFromEntity($object);
             $configEntity['expanded'] = false;
             $prePlannigChild->setParameters($configEntity);
@@ -522,7 +532,7 @@ class PrePlanningService extends ContainerAware
     /**
      * @return PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

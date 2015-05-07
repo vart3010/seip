@@ -1,0 +1,7 @@
+pequiven_data_load_index:
+    path: /.{_format}
+    defaults: 
+        _controller: PequivenSEIPBundle:DataLoad/DataLoad:index
+        _format: html
+    requirements:
+        _format: "json|html"

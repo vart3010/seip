@@ -12,6 +12,7 @@ pequiven:
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
         description_none: Ninguna
+        managementSystem: Sistema de Calidad
         period: Período
         process: Proceso
         management: Gerencia
@@ -48,6 +49,7 @@ pequiven:
         list_template: Lista de plantillas
         template: Plantilla
         list: Lista
+        listSig: Programas de Gestión SIG
         observations: Observaciones al programa
         include_responsible_management: Incluir los responsables de la
         responsible_management: Responsables de la gerencia
@@ -109,6 +111,7 @@ pequiven:
     form:
         template_description: Descripción de la plantilla
         category_arrangement_program: Asociado a
+        managementSystem: Sistema de Gestión
         tactical_objective: Objetivo Táctico
         operational_objective: Objetivo Operativo
         operating_indicator: Indicador Operativo

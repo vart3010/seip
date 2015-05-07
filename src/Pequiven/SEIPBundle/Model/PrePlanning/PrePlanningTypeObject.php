@@ -63,6 +63,7 @@ abstract class PrePlanningTypeObject implements TypePrePlanningInterface
             self::TYPE_OBJECT_FREQUENCY_NOTIFICATION_INDICATOR => 'Pequiven\IndicatorBundle\Entity\Indicator\FrequencyNotificationIndicator',
             self::TYPE_OBJECT_VARIABLE => 'Pequiven\MasterBundle\Entity\Formula\Variable',
             self::TYPE_OBJECT_INDICATOR_LEVEL => 'Pequiven\IndicatorBundle\Entity\IndicatorLevel',
+            self::TYPE_OBJECT_TAG_INDICATOR => 'Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator',
         );
     }
     

@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
@@ -29,19 +29,44 @@ class CompanyAdmin extends Admin
             ->add('id')
             ->add('rif')
             ->add('description')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('typeOfCompany','choice',array(
+                "choices" => \Pequiven\SEIPBundle\Entity\CEI\Company::getTypesOfCompanies(),
+                "translation_domain" => "PequivenMasterBundle"
+            ))
+            ->add('affiliates')
+            ->add('mixeds')
+            ->add('region')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $object = $this->getSubject();
+        
+        $parameters = array();
+        
+        if($object != null){
+            $parameters['query_builder'] = function(\Doctrine\ORM\EntityRepository $repository) use ($object){
+                return $repository->getQueryNotMe($object);
+            };
+        }
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
             ->add('rif')
             ->add('description')
-            ->add('enabled')
+            ->add('alias')
+            ->add('typeOfCompany','choice',array(
+                "choices" => \Pequiven\SEIPBundle\Entity\CEI\Company::getTypesOfCompanies(),
+                "translation_domain" => "PequivenMasterBundle"
+            ))
+            ->add('affiliates',null,$parameters)
+            ->add('mixeds',null,$parameters)
+            ->add('region',null,array(
+                "query_builder" => $queryAllEnable,
+            ))
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
@@ -49,6 +74,8 @@ class CompanyAdmin extends Admin
         $filter
             ->add('rif')
             ->add('description')
+            ->add('typeOfCompany')
+            ->add('region')
             ->add('enabled')
             ;
     }
@@ -58,7 +85,8 @@ class CompanyAdmin extends Admin
         $list
             ->addIdentifier('rif')
             ->add('description')
-            ->add('enabled')
+            ->add('alias')
             ;
+        parent::configureListFields($list);
     }
 }

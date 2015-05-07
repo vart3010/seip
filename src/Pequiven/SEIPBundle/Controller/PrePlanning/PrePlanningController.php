@@ -318,9 +318,10 @@ class PrePlanningController extends ResourceController
         
         $parent = $resource->getParent();
         $validToImport = true;
-        $message = "";
+        $message = 'No se pudo enviar a revisión.';
         if($parent && $parent->getTypeObject() != PrePlanning::TYPE_OBJECT_ROOT_NODE){
-            if($parent->getStatus() !== PrePlanning::STATUS_IN_REVIEW && $parent->getStatus() !== PrePlanning::STATUS_IMPORTED)
+            
+            if($parent->getStatus() !== PrePlanning::STATUS_IN_REVIEW && $parent->getStatus() !== PrePlanning::STATUS_IMPORTED && $parent->getStatus() != PrePlanning::STATUS_REQUIRED)
             {
                 $validToImport = false;
                 $message = 'Es obligatorio enviar a revisión el item padre.';
@@ -350,9 +351,9 @@ class PrePlanningController extends ResourceController
                 $this->getEventDispatcher()->dispatch(\Pequiven\SEIPBundle\EventListener\SeipEvents::PRE_PLANNING_POST_SEND_TO_REVIEW,$event);
             }
             $em->flush();
+            $message = 'Se envio a revision correctamente.';
         }else{
             $success = false;
-            $message = 'No se pudo enviar a revisión.';
         }
         
         $data["success"] = $success;
@@ -484,7 +485,7 @@ class PrePlanningController extends ResourceController
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

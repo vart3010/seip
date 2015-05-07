@@ -1,0 +1,22 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_report.product_detail_daily_month"|trans ),
+        ( 'pequiven.update'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_product_detail_daily_month_update",{id:product_detail_daily_month.id }) }}">
+        <input type="hidden" name="_metod" value="PUT" />
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:_form.html.twig' %}
+       {{ actions.update() }}
+       {{ form_rest(form) }}
+   </form>
+{% endblock %}

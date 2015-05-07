@@ -14,6 +14,7 @@ namespace Pequiven\SEIPBundle\Repository\PrePlanning;
 use Pequiven\SEIPBundle\Entity\Period;
 use Pequiven\SEIPBundle\Entity\User;
 use Tecnocreaciones\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Pequiven\SEIPBundle\Model\PrePlanning\PrePlanning;
 
 /**
  * Repositorio de la preplafinicacion del usuario
@@ -44,6 +45,20 @@ class PrePlanningUserRepository extends EntityRepository
             ->setParameter('user', $user)
             ->setParameter('levelPlanning', $levelPlanning)
             ;
+        
+        $prePlanningConfiguration = $user->getConfiguration()->getPrePlanningConfiguration();
+        if($levelPlanning == PrePlanning::LEVEL_TACTICO){
+            
+            $qb
+                ->andWhere("p.gerenciaFirst = :gerenciaFirst")
+                ->setParameter("gerenciaFirst",$prePlanningConfiguration->getGerencia())
+                ;
+        }else if($levelPlanning == PrePlanning::LEVEL_OPERATIVO){
+            $qb
+                ->andWhere("p.gerenciaSecond = :gerenciaSecond")
+                ->setParameter("gerenciaSecond", $prePlanningConfiguration->getGerenciaSecond())
+                ;
+        }
         return $qb->getQuery()->getOneOrNullResult();
     }
     

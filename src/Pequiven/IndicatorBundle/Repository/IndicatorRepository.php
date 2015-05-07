@@ -334,6 +334,7 @@ class IndicatorRepository extends EntityRepository
                 ->setParameter('idLineStrategic', $idLineStrategic)
                 ->orderBy('i.orderShowFromParent', $orderBy)
         ;
+        $this->applyPeriodCriteria($qb);
         
         return $qb->getQuery()->getResult();
     }
