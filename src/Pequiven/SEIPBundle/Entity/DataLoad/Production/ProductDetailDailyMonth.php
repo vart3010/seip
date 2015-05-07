@@ -4018,7 +4018,7 @@ class ProductDetailDailyMonth extends BaseModel
     {
         $this->totalizeByType("Gross");
         $this->totalizeByType("Net");
-
+//        die;
     }
     
     private function totalizeByType($prefix) 
@@ -4059,6 +4059,10 @@ class ProductDetailDailyMonth extends BaseModel
             $percentage = ($totalReal * 100) / $totalPlan;
         }
         $this->$methodPercentage($percentage);
+//        var_dump($methodTotalPlan);
+//        var_dump($methodTotalReal);
+//        var_dump($methodPercentage);
+//        
 //        var_dump($totalPlan);
 //        var_dump($totalReal);
 //        var_dump($percentage);

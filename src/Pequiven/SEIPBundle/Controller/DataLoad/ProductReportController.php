@@ -40,6 +40,7 @@ class ProductReportController extends SEIPController
             if(!isset($productDetailDailyMonthsCache[$productPlanning->getMonth()])){
                 $productDetailDailyMonth = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth();
                 $productDetailDailyMonth->setMonth($productPlanning->getMonth());
+                $productDetailDailyMonth->setProductReport($resource);
                 $productDetailDailyMonthsCache[$productPlanning->getMonth()] = $productDetailDailyMonth;
             }else{
                 $productDetailDailyMonth = $productDetailDailyMonthsCache[$productPlanning->getMonth()];
@@ -78,11 +79,12 @@ class ProductReportController extends SEIPController
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, $value);
                 }
             }
-            $resource->addProductDetailDailyMonth($productDetailDailyMonth);
-            $this->save($productDetailDailyMonth,false);
             $countProduct++;
         }
         if($countProduct > 0){
+            foreach ($productDetailDailyMonthsCache as $productDetailDailyMonth) {
+                $this->save($productDetailDailyMonth,false);
+            }
             $this->flush();
         }
         
