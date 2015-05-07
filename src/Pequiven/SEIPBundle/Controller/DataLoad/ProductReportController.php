@@ -70,6 +70,7 @@ class ProductReportController extends SEIPController
                     $productPlanning = $range->getProductPlanning();
                     $value = ($productPlanning->getDailyProductionCapacity() / 100) * $originalValue;
                 }
+                
                 for($day = $dayFrom; $day < $dayEnd; $day++){
                     $dayInt = (int)$day;
                     $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
@@ -88,7 +89,6 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
-        
         return $this->redirectHandler->redirectTo($resource);
     }
     
