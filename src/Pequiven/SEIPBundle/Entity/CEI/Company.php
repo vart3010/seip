@@ -77,6 +77,13 @@ class Company extends BaseModel
     private $mixeds;
     
     /**
+     * Region
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Region
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Region")
+     */
+    private $region;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -253,7 +260,30 @@ class Company extends BaseModel
         return $this->mixeds;
     }
     
+    /**
+     * Set region
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Region $region
+     * @return ReportTemplate
+     */
+    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+    
     public function __toString() {
-        return $this->getDescription()?:'-';
+        return $this->getAlias()?:'-';
     }
 }

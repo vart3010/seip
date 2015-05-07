@@ -197,10 +197,6 @@ sylius_resource:
             classes:
                 controller: Pequiven\SEIPBundle\Controller\Planning\ValueIndicator\ValueIndicatorDetailController
                 model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\ValueIndicatorDetail
-        pequiven.product_detail_daily_month:
-            driver: doctrine/orm
-            classes:
-                model: Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth
         pequiven.feature_indicator:
             driver: doctrine/orm
             templates: PequivenSEIPBundle:Planning/Indicator/FeatureIndicator
@@ -213,6 +209,21 @@ sylius_resource:
                 model: Pequiven\SEIPBundle\Entity\Chart
                 controller: Pequiven\SEIPBundle\Controller\ChartController
                 repository: Pequiven\SEIPBundle\Repository\ChartRepository
+                
+        pequiven.report_template:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ReportTemplate
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ReportTemplateController
+                repository: Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository
+                
+        pequiven.product_report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/ProductReport
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\ProductReportController
                 
         pequiven.sig_management_system:
             driver: doctrine/orm
@@ -231,3 +242,23 @@ sylius_resource:
             classes:
                 model: Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram
                 repository: Pequiven\MasterBundle\Repository\ArrangementProgram\CategoryArrangementProgramRepository
+                
+        pequiven.product_planning:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/ProductPlanning
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductPlanningController
+                
+        pequiven.range:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/Range
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\RangeController
+        pequiven.product_detail_daily_month:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductDetailDailyMonthController

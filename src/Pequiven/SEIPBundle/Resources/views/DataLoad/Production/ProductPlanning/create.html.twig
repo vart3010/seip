@@ -1,0 +1,28 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_planning.product_planning"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/tecnocreacionesvzlagovernment/template/developer/css/styles/table3860.css?v=1') }}">
+{% endblock stylesheets %}
+
+{% block body -%}
+    <form method="POST" action="{{ path('pequiven_product_planning_create',{productReport: app.request.get("productReport"),type: app.request.get("type")})}}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Production/ProductPlanning:_form.html.twig' %}
+       {{ actions.create() }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
+   </form>
+{% endblock %}

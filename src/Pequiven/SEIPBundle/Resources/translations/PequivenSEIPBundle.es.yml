@@ -3,7 +3,19 @@ pequiven_seip:
   #Index
     seip: Sistema Estadístico de Información Petroquímica
     home: Página de inicio
-
+    name: Nombre
+    type_report: Tipo de reporte
+    add: Añadir
+    products: Productos
+    ref: Referencia
+    totalPlan: Total planificado
+    totalReal: Total real
+    plan_n: "Plan Dia %n%:"
+    real_n: "Real Dia %n%:"
+    percentage: Porcentaje
+    gross: Bruta
+    net: Neta
+    
     #Login
     sign_in: Ingresar
     remind_me: Recuerdame
@@ -71,6 +83,9 @@ pequiven_seip:
         gerenciaSecond:  Gerencia de 2da linea
         rol: Rol
         actions: Acciones
+        totalPlan: TP
+        totalReal: TR
+        percentage: "%"
     results:
         results: Resultados
         resultsStrategics: Resultados Estratégicos
@@ -125,6 +140,9 @@ pequiven_seip:
         export_xls: Exportar
         export_result: Exportar Resultados
         refresh: Refrescar
+        run_planning: Ejecutar planificación
+    question:
+        want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -296,7 +314,56 @@ pequiven_seip:
             role_seip_planning_operation_recalculate_result: Usted no tiene permiso para realizar la operación de recalcular resultados.
         error:
             the_pre_planning_is_not_enabled: La pre-planificacion no se encuentra habilitada.
-        
+    fail:
+        type:
+            internal: Interna
+            external: Externa
+    report_template:
+        report_template: Plantilla de reporte
+        type:
+            production: Producción
+            inventory: Inventario
+            consumption_services: Consumo de servicios
+            raw_materials: Consumo de materia prima
+    product_report:
+        product_report: Producto
+        type:
+            final: Producto final
+            byproduct: Sub-Producto
+        product_detail_daily_months: Detalles de producción
+        product_detail_daily_month: Detalle de producción
+        question:
+            delete: Desea eliminar este detalle de producción
+    raw_material:
+        type:
+            internal: Interna
+            external: Externa
+    range:
+        range: Rango de distribución
+        ranges: Rangos de distribución
+        type:
+            fixed_value: Valor fijo
+            capacity_factor: Factor de capacidad
+        question:
+            delete: Desea eliminar este rango de distribución
+    product_planning:
+        product_planning: Presupuesto de producción
+        without_stopping_day: Sin días de parada.
+
+    month:
+        0: Enero
+        1: Febrero
+        2: Marzo
+        3: Abril
+        4: Mayo
+        5: Junio
+        6: Julio
+        7: Agosto
+        8: Septiembre
+        9: Octubre
+        10: Noviembre
+        11: Diciembre
+            
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
                     
@@ -393,6 +460,11 @@ internalAudit: Auditoría Interna
         
 empty:
     features_indicator: No hay ningún punto de atención.
+    product_report: No hay productos agregados.
+    product_planning: No hay ningún presupuesto de producción.
+    range: No hay rango de distribucion.
+    product_detail_daily_months: No hay detalles de producción.
+    no_raw_material: Sin materia prima
     
 chart:
     type:
@@ -400,3 +472,28 @@ chart:
         indicatorsAssociatedRealPlanWithResult: Indicadores Asociados con real, plan y resultados (Columna y 2 ejes).
         resultsOfIndicator: Resultados Asociados al Indicador (2 parámetros).
         resultsOfVariable: Resultados de Variables y que forman parte de un mismo valor (Acumuladas).
+
+Name: Nombre
+nro: "#"
+"Production line": Linea De Negocio
+"Type report": Tipo De Reporte
+"Is raw material": ¿Es Materia Prima?
+"Is final product": ¿Es Producto Final?
+"Product unit": Unidad Del Producto
+"Product": Producto
+"Plant": Planta
+"Enabled": ¿Activo?
+"Company": Empresa
+"Location": Complejo
+"Type product": Tipo De Producto
+"Raw material": Materia Prima
+"Month":  Mes
+"Total month": Presupuesto De Producción Del Mes
+"Design capacity": Capacidad De Diseño
+"Daily production capacity": Capacidad De Producción Diaria
+"Days stops": Dias De Paradas
+"Date from": Fecha Inicio
+"Date end": Fecha Fin
+"Type": Tipo
+"Value": Valor
+"Raw materials": Materias primas

@@ -28,6 +28,8 @@ class PlantAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('designCapacity')
+            ->add('unitMeasure')
             ->add('location')
             ;
         parent::configureShowFields($show);
@@ -37,6 +39,8 @@ class PlantAdmin extends BaseAdmin
     {
         $form
             ->add('name')
+            ->add('designCapacity')
+            ->add('unitMeasure')
             ->add('location')
             ;
         parent::configureFormFields($form);
@@ -46,6 +50,8 @@ class PlantAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
+            ->add('designCapacity')
+            ->add('unitMeasure')
             ->add('location')
             ;
         parent::configureDatagridFilters($filter);
@@ -55,7 +61,8 @@ class PlantAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
-            ->addIdentifier('location')
+            ->add('designCapacity')
+            ->add('location')
             ;
         parent::configureListFields($list);
     }

@@ -114,4 +114,17 @@ class ToolService
 
         return $str;
     }
+    
+    /**
+     * Retorna los meses del año con las etiquetas
+     * @return type
+     */
+    public static function getMonthsLabels()
+    {
+        $months = array();
+        for($i = 0; $i <= 11; $i++){
+            $months[$i] = sprintf("pequiven_seip.month.%s",$i);
+        }
+        return $months;
+    }
 }

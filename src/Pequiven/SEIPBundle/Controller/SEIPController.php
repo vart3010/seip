@@ -29,6 +29,11 @@ class SEIPController extends ResourceController
         }
     }
     
+    protected function flush(){
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+    }
+            
     function remove($entity,$flush = false)
     {
         $em = $this->getDoctrine()->getManager();
@@ -54,5 +59,13 @@ class SEIPController extends ResourceController
     protected function getSecurityService()
     {
         return $this->container->get('seip.service.security');
+    }
+    
+    /**
+     * @return \Pequiven\SEIPBundle\Service\PeriodService
+     */
+    protected function getPeriodService()
+    {
+        return $this->get('pequiven_seip.service.period');
     }
 }

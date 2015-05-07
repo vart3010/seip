@@ -41,6 +41,41 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
+    
+    sonata.admin.indicator.value_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\ValueIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Valor de indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.indicator.tag_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\TagIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Etiqueta del indicador" }
+        arguments:
+            - ~
+            - Pequiven\IndicatorBundle\Entity\Indicator\TagIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            - [ setContainer, [@service_container]]
+            
+    sonata.admin.indicator.type_feature_indicator:
+        class: Pequiven\MasterBundle\Admin\Indicator\TypeFeatureIndicatorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador" ,label_catalogue: "SonataUserBundle", label: "Tipo de punto de atención" }
+        arguments:
+            - ~
+            - Pequiven\MasterBundle\Entity\Indicator\TypeFeatureIndicator
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    
     sonata.admin.objetive:
         class: Pequiven\MasterBundle\Admin\Objetive\ObjetiveAdmin
         tags:
@@ -98,6 +133,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             - [ setContainer, [@service_container]]
+            
+    sonata.admin.indicator.report_template:
+        class: Pequiven\MasterBundle\Admin\DataLoad\ReportTemplateAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Indicador", label: "Plantilla de reporte" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
             
     sonata.admin.core.period:
         class: Pequiven\MasterBundle\Admin\PeriodAdmin
@@ -409,6 +455,61 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\TypeLocation
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.fail:
+        class: Pequiven\MasterBundle\Admin\CEI\FailAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Fallas de PNR" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Fail
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.raw_material:
+        class: Pequiven\MasterBundle\Admin\CEI\RawMaterialAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Materia Prima" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\RawMaterial
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.day_stop:
+        class: Pequiven\MasterBundle\Admin\CEI\DayStopAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Dia de parada" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\DayStop
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.unit_measure:
+        class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Unidad de medida" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.region:
+        class: Pequiven\MasterBundle\Admin\CEI\RegionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Región" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Region
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

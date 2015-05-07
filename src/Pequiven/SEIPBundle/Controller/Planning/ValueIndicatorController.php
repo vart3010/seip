@@ -256,6 +256,12 @@ class ValueIndicatorController extends \Pequiven\SEIPBundle\Controller\SEIPContr
         return $view;
     }
     
+    /**
+     * @deprecated since version number
+     * @param Request $request
+     * @return type
+     * @throws type
+     */
     function updateDetailAction(Request $request) 
     {
         $valueIndicator = $this->getRepository()->find($request->get("id"));

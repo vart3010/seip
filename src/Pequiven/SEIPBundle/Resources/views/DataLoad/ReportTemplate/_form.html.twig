@@ -1,0 +1,30 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.typeReport) }}
+        {{ form_widget(form.typeReport) }}
+        {{ form_errors(form.typeReport) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+        {{ form_errors(form.name) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.company) }}
+        {{ form_widget(form.company) }}
+        {{ form_errors(form.company) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.location) }}
+        {{ form_widget(form.location) }}
+        {{ form_errors(form.location) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.region) }}
+        {{ form_widget(form.region) }}
+        {{ form_errors(form.region) }}
+    </div>
+</fieldset>

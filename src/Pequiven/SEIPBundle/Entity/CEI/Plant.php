@@ -19,7 +19,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_Plant")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\PlantRepository")
  */
 class Plant extends BaseModel
 {
@@ -41,12 +41,27 @@ class Plant extends BaseModel
     private $name;
     
     /**
+     * Capacidad de diseño
+     * 
+     * @var float
+     * @ORM\Column(name="design_capacity",type="float")
+     */
+    private $designCapacity;
+
+    /**
+     * Unidad de medida
+     * @var UnitMeasure
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
+     */
+    protected $unitMeasure;
+
+    /**
      * Localizacion o empresa
      * @var Location
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
      */
     protected $location;
-
+    
     /**
      * Get id
      *
@@ -101,6 +116,52 @@ class Plant extends BaseModel
     public function getLocation()
     {
         return $this->location;
+    }
+    
+    /**
+     * Set designCapacity
+     *
+     * @param float $designCapacity
+     * @return Plant
+     */
+    public function setDesignCapacity($designCapacity)
+    {
+        $this->designCapacity = $designCapacity;
+
+        return $this;
+    }
+
+    /**
+     * Get designCapacity
+     *
+     * @return float 
+     */
+    public function getDesignCapacity()
+    {
+        return $this->designCapacity;
+    }
+    
+    /**
+     * Set unitMeasure
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $unitMeasure
+     * @return Plant
+     */
+    public function setUnitMeasure(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $unitMeasure = null)
+    {
+        $this->unitMeasure = $unitMeasure;
+
+        return $this;
+    }
+
+    /**
+     * Get unitMeasure
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure 
+     */
+    public function getUnitMeasure()
+    {
+        return $this->unitMeasure;
     }
     
     public function __toString() 

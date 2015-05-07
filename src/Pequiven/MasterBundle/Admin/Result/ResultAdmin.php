@@ -96,7 +96,7 @@ class ResultAdmin extends Admin implements \Symfony\Component\DependencyInjectio
     /**
      * @return \Pequiven\SEIPBundle\Service\PeriodService
      */
-    private function getPeriodService()
+    protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
     }

@@ -1,0 +1,160 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.product_planning.product_planning'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.month) }}
+        {{ form_widget(form.month) }}
+        {{ form_errors(form.month) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.totalMonth) }}
+        {{ form_widget(form.totalMonth) }}
+        {{ form_errors(form.totalMonth) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.dailyProductionCapacity) }}
+        {{ form_widget(form.dailyProductionCapacity) }}
+        {{ form_errors(form.dailyProductionCapacity) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.daysStops) }}
+        {{ form_widget(form.daysStops) }}
+        {{ form_errors(form.daysStops) }}
+    </div>
+    <div class="field-block button-height">
+{#        {{ form_widget(form.ranges.vars.prototype)|e }}#}
+        <ul class="tags unstyled-list" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
+            {% for range in form.ranges %}
+                <li>
+                    {% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: range} %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</fieldset>
+<script type="text/javascript">
+    var $collectionHolder;
+
+    // setup an "add a tag" link
+    var $addTagLink = $('<a href="#" class="add_tag_link">Añadir rango de distribucion</a>');
+    var $newLinkLi = $('<li></li>').append($addTagLink);
+    var dateFormat = "dd-mm-yy";
+
+    jQuery(document).ready(function() {
+        var selectMonth = $("#pequiven_seipbundle_dataload_production_productplanning_month");
+        var lastDateEnd = null;
+        function addTagForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+            $(".select2Type").select2();
+            
+            // add a delete link to the new form
+            addTagFormDeleteLink($newFormLi);
+            var idDateFrom = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateFrom";
+            var idDateEnd = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateEnd";
+            
+            var monthOfPlanning = selectMonth.val();
+            //console.log(index);
+            var date = new Date();
+            if(monthOfPlanning != ""){
+                date.setMonth(monthOfPlanning);
+            }
+            
+            $( "#"+idDateFrom ).datepicker({
+              defaultDate: date,
+              changeMonth: false,
+              numberOfMonths: 1,
+              stepMonths: 0,
+              onClose: function( selectedDate ) {
+                 $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
+              },
+              dateFormat: dateFormat
+            });
+            $( "#"+idDateEnd ).datepicker({
+              defaultDate: date,
+              changeMonth: false,
+              numberOfMonths: 1,
+              stepMonths: 0,
+              onClose: function( selectedDate ) {
+                $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
+              },
+              dateFormat: dateFormat
+            });
+            if(lastDateEnd != null){
+                var formatFrom = "dd-MM-yyyy";
+                var dateString = lastDateEnd.val();
+                var myDate = getDateFromFormat(dateString,formatFrom);
+                var m = new Date(myDate);
+                m.setDate(m.getDate() + 1);
+                if(myDate === 0){
+                    myDate = dateString;
+                }
+                $( "#"+idDateFrom ).datepicker( "option", "minDate", m );
+            }
+
+            lastDateEnd = $( "#"+idDateEnd );
+        }
+        
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#">Eliminar este rango</a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+        
+        // Get the ul that holds the collection of tags
+        $collectionHolder = $('ul.tags');
+        
+        // add a delete link to all of the existing tag form li elements
+        $collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+
+        // add the "add a tag" anchor and li to the tags ul
+        $collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+        
+        $addTagLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm($collectionHolder, $newLinkLi);
+        });
+        $( ".date-from").datepicker({
+          changeMonth: false,
+          numberOfMonths: 1,
+          dateFormat: dateFormat
+        });
+        $( ".date-end").datepicker({
+          changeMonth: false,
+          numberOfMonths: 1,
+          dateFormat: dateFormat
+        });
+    });
+</script>
+            
