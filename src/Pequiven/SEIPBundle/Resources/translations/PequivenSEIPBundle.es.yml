@@ -329,6 +329,8 @@ pequiven_seip:
             byproduct: Sub-Producto
         product_detail_daily_months: Detalles de producción
         product_detail_daily_month: Detalle de producción
+        question:
+            delete: Desea eliminar este detalle de producción
     raw_material:
         type:
             internal: Interna
