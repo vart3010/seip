@@ -1,36 +1,29 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
-<fieldset class="fieldset fields-list">
-    <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
-    <div class="field-block button-height">
-        {{ form_label(form.month) }}
-        {{ form_widget(form.month) }}
-        {{ form_errors(form.month) }}
+<h3 class="thin underline">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</h3>
+<div class="field-block button-height">
+    {{ form_label(form.month) }}
+    {{ form_widget(form.month) }}
+    {{ form_errors(form.month) }}
+</div>
+
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+            <li class="active"><a href="#tab-1">{{ "pequiven_seip.gross"|trans }}</a></li>
+            <li><a href="#tab-2">{{ "pequiven_seip.net"|trans }}</a></li>
+    </ul>
+
+    <div class="tabs-content">
+        <div id="tab-1" class="with-padding">
+            {% set typeProduction = ("pequiven_seip.gross"|trans) %}
+            {% set prefix = "Gross" %}
+            {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:_sub_form.html.twig' %}
+        </div>
+
+        <div id="tab-2" class="with-padding">
+            {% set typeProduction = ("pequiven_seip.net"|trans) %}
+            {% set prefix = "Net" %}
+            {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:_sub_form.html.twig' %}
+        </div>
     </div>
-    {% for i in 1..31 %}
-            <div class="field-block button-height">
-                {% set planN = "day"~ i ~"Plan" %}
-                {% set realN = "day" ~ i ~ "Real" %}
-                    <div class="columns">
-                        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                            <p class="inline-label">
-                                <label class="label">{{ 'pequiven_seip.plan_n'|trans({"%n%":i}) }}</label>
-                                {% set currentFormPlan = attribute(form,planN) %}
-    {#                            {{ form_label(currentFormPlan) }}#}
-                                {{ form_widget(currentFormPlan) }}
-                                {{ form_errors(currentFormPlan) }}
-                            </p>
-                        </div>
-                        <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                            <p class="inline-label">
-                                <label class="label">{{ 'pequiven_seip.real_n'|trans({"%n%":i}) }}</label>
-                                {% set currentFormReal = attribute(form,realN) %}
-    {#                            {{ form_label(currentFormReal) }}#}
-                                {{ form_widget(currentFormReal) }}
-                                {{ form_errors(currentFormReal) }}
-                            </p>
-                        </div>
-                    </div>
-            </div>
-        {% endfor %}
-</fieldset>
+</div>

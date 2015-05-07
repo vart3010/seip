@@ -30,46 +30,47 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.totalPlan'|trans }}</label>
-                    {{ product_detail_daily_month.totalPlan|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
+                    {{ product_detail_daily_month.totalGrossPlan|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.totalReal'|trans }}</label>
-                    {{ product_detail_daily_month.totalReal|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
+                    {{ product_detail_daily_month.totalGrossReal|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.percentage'|trans }}</label>
-                    {{ product_detail_daily_month.percentage|myNumberFormat }}&nbsp;%
+                    {{ product_detail_daily_month.grossPercentage|myNumberFormat }}&nbsp;%
                 </p>
             </div>
         </div>
     </fieldset>
                 
     <br /><br />
-    <fieldset class="fieldset">
-        <legend class="legend">{{ 'pequiven_seip.product_report.product_detail_daily_month'|trans }}</legend>
-        {% for i in 1..31 %}
-            {% set planN = "day"~ i ~"Plan" %}
-            {% set realN = "day" ~ i ~ "Real" %}
-                <div class="columns">
-                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven_seip.plan_n'|trans({"%n%":i}) }}</label>
-                            {{ attribute(product_detail_daily_month,planN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
-                        </p>
-                    </div>
-                    <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                        <p class="inline-label">
-                            <label class="label">{{ 'pequiven_seip.real_n'|trans({"%n%":i}) }}</label>
-                            {{ attribute(product_detail_daily_month,realN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
-                        </p>
-                    </div>
-                </div>
-        {% endfor %}
-    </fieldset>
+        
+    <div class="standard-tabs margin-bottom" id="add-tabs">
+        <ul class="tabs">
+                <li class="active"><a href="#tab-1">{{ "pequiven_seip.gross"|trans }}</a></li>
+                <li><a href="#tab-2">{{ "pequiven_seip.net"|trans }}</a></li>
+        </ul>
+
+        <div class="tabs-content">
+            <div id="tab-1" class="with-padding">
+                {% set prefix = "Gross" %}
+                {% set typeProduction = ("pequiven_seip.gross"|trans) %}
+                {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:show/details.html.twig' %}
+            </div>
+
+            <div id="tab-2" class="with-padding">
+                {% set prefix = "Net" %}
+                {% set typeProduction = ("pequiven_seip.net"|trans) %}
+                {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:show/details.html.twig' %}
+            </div>
+        </div>
+    </div>
+    
     <br /><br />
         
     <p class="button-height align-right">
