@@ -428,13 +428,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     private $charts;
     
     /**
-    * @var \Pequiven\SIGBundle\Entity\ManagementSystem
-    * @ORM\ManyToMany(targetEntity="Pequiven\SIGBundle\Entity\ManagementSystem", inversedBy="indicators", cascade={"persist","remove"})
-    * @ORM\JoinTable(name="seip_indicators_management_systems")
-    */
-    private $managementSystems;
-    
-    /**
      * Constructor
      */
     public function __construct()
@@ -447,7 +440,6 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
         $this->formulaDetails = new \Doctrine\Common\Collections\ArrayCollection();
         $this->featuresIndicator = new \Doctrine\Common\Collections\ArrayCollection();
         $this->charts = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->managementSystems = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1849,38 +1841,5 @@ class Indicator extends ModelIndicator implements \Pequiven\SEIPBundle\Entity\Re
     public function getShowTags()
     {
         return $this->showTags;
-    }
-    
-    /**
-     * Add managementSystems
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
-     * @return Indicator
-     */
-    public function addManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
-    {
-        $this->managementSystems[] = $managementSystems;
-
-        return $this;
-    }
-
-    /**
-     * Remove managementSystems
-     *
-     * @param \Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems
-     */
-    public function removeManagementSystem(\Pequiven\SIGBundle\Entity\ManagementSystem $managementSystems)
-    {
-        $this->managementSystems->removeElement($managementSystems);
-    }
-
-    /**
-     * Get managementSystems
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getManagementSystems()
-    {
-        return $this->managementSystems;
     }
 }

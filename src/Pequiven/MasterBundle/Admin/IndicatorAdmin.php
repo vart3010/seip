@@ -184,11 +184,6 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         $form
             ->tab("Details")
                 ->with('Details')
-                    ->add('managementSystems','sonata_type_model_autocomplete',array(
-                        'property' => array('description'),
-                        'multiple' => true,
-                        'required' => false,
-                    ))
                     ->add('details','sonata_type_admin',array(
                          'cascade_validation' => true,
                          'delete' => false,
