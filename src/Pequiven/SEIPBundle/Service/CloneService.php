@@ -207,9 +207,9 @@ class CloneService extends ContainerAware
             if($entity->getFrequencyNotificationIndicator()){
                 $entity->setFrequencyNotificationIndicator($this->cloneObject($entity->getFrequencyNotificationIndicator()));
             }
-            if($indicator->getParent()){
-                $indicator->setParent($this->cloneObject($indicator->getParent()));
-            }
+//            if($indicator->getParent()){
+//                $entity->setParent($this->cloneObject($indicator->getParent()));
+//            }
             if($entity->getParent()){
                 $entity->setParent($this->cloneObject($entity->getParent()));
             }
