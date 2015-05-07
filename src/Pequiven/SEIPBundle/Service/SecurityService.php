@@ -407,9 +407,13 @@ class SecurityService implements ContainerAwareInterface
      */
     private function evaluateTacticObjetiveSIG($rol, Objetive $objetive)
     {
-        $valid = true;
+        $valid = false;
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
+        
+        if($objetive->getManagementSystem()){
+            $valid = true;
+        }
         
         if(!$valid){
             $this->checkSecurity();
@@ -429,6 +433,10 @@ class SecurityService implements ContainerAwareInterface
         $valid = true;
         $user = $this->getUser();
         $rol = $user->getLevelRealByGroup();
+        
+        if($arrangementProgram->getCategoryArrangementProgram()->getId() == ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_SIG){
+            $valid = true;
+        }
         
         if(!$valid){
             $this->checkSecurity();

@@ -40,6 +40,13 @@ class ProductPlanning extends BaseModel
     private $month;
     
     /**
+     * Tipo (Bruta o Neta)
+     * @var integer
+     * @ORM\Column(name="type",type="integer",nullable=false)
+     */
+    private $type;
+
+    /**
      * Dias de paradas
      * @var \Pequiven\SEIPBundle\Entity\CEI\DayStop
      * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DayStop")
@@ -54,11 +61,11 @@ class ProductPlanning extends BaseModel
     private $totalMonth;
     
     /**
-     * Capacidad de diseño diario
+     * Capacidad de producción diaria
      * @var float
-     * @ORM\Column(name="cesign_capacity",type="float")
+     * @ORM\Column(name="daily_production_capacity",type="float")
      */
-    private $designCapacity;
+    private $dailyProductionCapacity;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
@@ -70,7 +77,7 @@ class ProductPlanning extends BaseModel
     /**
      * Rangos de distribucion
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\Range",mappedBy="productPlanning",cascade={"persist","remove"})
      */
     protected $ranges;
 
@@ -140,29 +147,6 @@ class ProductPlanning extends BaseModel
     }
 
     /**
-     * Set designCapacity
-     *
-     * @param float $designCapacity
-     * @return ProductPlanning
-     */
-    public function setDesignCapacity($designCapacity)
-    {
-        $this->designCapacity = $designCapacity;
-
-        return $this;
-    }
-
-    /**
-     * Get designCapacity
-     *
-     * @return float 
-     */
-    public function getDesignCapacity()
-    {
-        return $this->designCapacity;
-    }
-
-    /**
      * Add daysStops
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\DayStop $daysStops
@@ -218,15 +202,6 @@ class ProductPlanning extends BaseModel
         return $this->productReport;
     }
     
-    public function __toString() 
-    {
-        $_toString = "-";
-        if($this->getId() > 0){
-            $_toString = $this->getMonthLabel();
-        }
-        return $_toString;
-    }
-
     /**
      * Add ranges
      *
@@ -262,4 +237,46 @@ class ProductPlanning extends BaseModel
     {
         return $this->ranges;
     }
+    
+    function getDailyProductionCapacity() {
+        return $this->dailyProductionCapacity;
+    }
+
+    function setDailyProductionCapacity($dailyProductionCapacity) {
+        $this->dailyProductionCapacity = $dailyProductionCapacity;
+        return $this;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * @return ProductPlanning
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
+    
 }

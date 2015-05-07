@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Form\FormMapper;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class CompanyAdmin extends Admin
+class CompanyAdmin extends \Pequiven\MasterBundle\Admin\BaseAdmin
 {
     protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
     {
@@ -35,10 +35,9 @@ class CompanyAdmin extends Admin
             ))
             ->add('affiliates')
             ->add('mixeds')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('region')
             ;
+        parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
@@ -52,6 +51,7 @@ class CompanyAdmin extends Admin
                 return $repository->getQueryNotMe($object);
             };
         }
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
             ->add('rif')
             ->add('description')
@@ -62,8 +62,11 @@ class CompanyAdmin extends Admin
             ))
             ->add('affiliates',null,$parameters)
             ->add('mixeds',null,$parameters)
-            ->add('enabled')
+            ->add('region',null,array(
+                "query_builder" => $queryAllEnable,
+            ))
             ;
+        parent::configureFormFields($form);
     }
     
     protected function configureDatagridFilters(DatagridMapper $filter) 
@@ -72,6 +75,7 @@ class CompanyAdmin extends Admin
             ->add('rif')
             ->add('description')
             ->add('typeOfCompany')
+            ->add('region')
             ->add('enabled')
             ;
     }
@@ -81,7 +85,8 @@ class CompanyAdmin extends Admin
         $list
             ->addIdentifier('rif')
             ->add('description')
-            ->add('enabled')
+            ->add('alias')
             ;
+        parent::configureListFields($list);
     }
 }

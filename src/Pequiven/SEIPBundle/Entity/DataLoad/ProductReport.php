@@ -64,16 +64,9 @@ class ProductReport extends BaseModel
     private $isRawMaterial = false;
     
     /**
-     * ¿Es producto final?
-     * @var boolean 
-     * @ORM\Column(name="is_final_product",type="boolean")
-     */
-    private $isFinalProduct = false;
-
-    /**
      * Unidad del producto
-     * @var String
-     * @ORM\Column(name="product_unit")
+     * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
      */
     private $productUnit;
     
@@ -108,10 +101,9 @@ class ProductReport extends BaseModel
      * Materia prima
      * @var \Pequiven\SEIPBundle\Entity\CEI\RawMaterial
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
      */
-    private $rawMaterial;
+    private $rawMaterials;
     
     /**
      * Tipo de producto
@@ -123,14 +115,14 @@ class ProductReport extends BaseModel
     /**
      * Planificacion de productos
      * @var Production\ProductPlanning
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning",mappedBy="productReport",cascade={"remove"})
      */
     protected $productPlannings;
     
     /**
      * Detalles del producto de cada mes
      * @var Production\ProductDetailDailyMonth
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport",cascade={"remove"})
      */
     protected $productDetailDailyMonths;
 
@@ -171,53 +163,7 @@ class ProductReport extends BaseModel
     {
         return $this->isRawMaterial;
     }
-
-    /**
-     * Set isFinalProduct
-     *
-     * @param boolean $isFinalProduct
-     * @return ProductReport
-     */
-    public function setIsFinalProduct($isFinalProduct)
-    {
-        $this->isFinalProduct = $isFinalProduct;
-
-        return $this;
-    }
-
-    /**
-     * Get isFinalProduct
-     *
-     * @return boolean 
-     */
-    public function getIsFinalProduct()
-    {
-        return $this->isFinalProduct;
-    }
-
-    /**
-     * Set productUnit
-     *
-     * @param string $productUnit
-     * @return ProductReport
-     */
-    public function setProductUnit($productUnit)
-    {
-        $this->productUnit = $productUnit;
-
-        return $this;
-    }
-
-    /**
-     * Get productUnit
-     *
-     * @return string 
-     */
-    public function getProductUnit()
-    {
-        return $this->productUnit;
-    }
-
+    
     /**
      * Set product
      *
@@ -380,29 +326,6 @@ class ProductReport extends BaseModel
     }
 
     /**
-     * Set rawMaterial
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial
-     * @return ProductReport
-     */
-    public function setRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterial)
-    {
-        $this->rawMaterial = $rawMaterial;
-
-        return $this;
-    }
-
-    /**
-     * Get rawMaterial
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\RawMaterial 
-     */
-    public function getRawMaterial()
-    {
-        return $this->rawMaterial;
-    }
-    
-    /**
      * Add productPlannings
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlannings
@@ -472,6 +395,63 @@ class ProductReport extends BaseModel
         return $this->productDetailDailyMonths;
     }
     
+    /**
+     * Get productDetailDailyMonths
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductDetailDailyMonthsSortByMonth()
+    {
+        $sorted = array();
+        foreach ($this->productDetailDailyMonths as $productDetailDailyMonth) {
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
+    function getProductUnit() {
+        return $this->productUnit;
+    }
+
+    function setProductUnit(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $productUnit) {
+        $this->productUnit = $productUnit;
+        return $this;
+    }
+        
+    /**
+     * Add rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     * @return ProductReport
+     */
+    public function addRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    {
+        $this->rawMaterials[] = $rawMaterials;
+
+        return $this;
+    }
+
+    /**
+     * Remove rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     */
+    public function removeRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    {
+        $this->rawMaterials->removeElement($rawMaterials);
+    }
+
+    /**
+     * Get rawMaterials
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRawMaterials()
+    {
+        return $this->rawMaterials;
+    }
+    
     public function __toString() {
         $_toString = "-";
         if($this->getProduct()){
@@ -479,4 +459,5 @@ class ProductReport extends BaseModel
         }
         return $_toString;
     }
+    
 }

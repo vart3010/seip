@@ -20,17 +20,28 @@ class ArrangementProgramManager implements ContainerAwareInterface
      * @return boolean
      */
     public function isAllowToReview(ArrangementProgram $entity) {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
         $valid = false;
-        if(!$configuration){
-            return $valid;
-        }
         $user = $this->getUser();
-        
-        foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
-            if($user === $userToReviser){
-                $valid = true;
-                break;
+        if($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+            if(!$configuration){
+                return $valid;
+            }
+
+            foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
+                if($user === $userToReviser){
+                    $valid = true;
+                    break;
+                }
+            }
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
+            $configuration = $gerencia->getConfiguration();
+            foreach ($configuration->getArrangementProgramSigUsersToReviser() as $userSigToReviser) {
+                if($user === $userSigToReviser){
+                    $valid = true;
+                    break;
+                }
             }
         }
         return $valid;
@@ -42,23 +53,34 @@ class ArrangementProgramManager implements ContainerAwareInterface
      * @return boolean
      */
     public function isAllowToApprove(ArrangementProgram $entity) {
-        $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+        
         $valid = false;
-        if(!$configuration){
-            return $valid;
-        }
-        if($entity->getStatus() == ArrangementProgram::STATUS_REJECTED || $entity->getStatus() == ArrangementProgram::STATUS_APPROVED){
-            return $valid;
-        }
         $user = $this->getUser();
         
-        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
-            && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
-            $valid = true;
-        }
-        if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
-            && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
-            $valid = true;
+        if($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            $configuration = $entity->getTacticalObjective()->getGerencia()->getConfiguration();
+            
+            if(!$configuration){
+                return $valid;
+            }
+            if($entity->getStatus() == ArrangementProgram::STATUS_REJECTED || $entity->getStatus() == ArrangementProgram::STATUS_APPROVED){
+                return $valid;
+            }
+
+            if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_TACTIC 
+                && $configuration->getArrangementProgramUsersToApproveTactical()->contains($user) === true){
+                $valid = true;
+            }
+            if($entity->getType() === ArrangementProgram::TYPE_ARRANGEMENT_PROGRAM_OPERATIVE 
+                && $configuration->getArrangementProgramUsersToApproveOperative()->contains($user) === true){
+                $valid = true;
+            }
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
+            $configuration = $gerencia->getConfiguration();
+            if($configuration->getArrangementProgramSigUsersToApprove()->contains($user) === true){
+                $valid = true;
+            }
         }
         return $valid;
     }

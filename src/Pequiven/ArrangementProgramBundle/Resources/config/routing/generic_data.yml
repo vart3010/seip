@@ -86,6 +86,17 @@ pequiven_arrangementprogram_data_complejos:
     options:
         expose: true
         
+pequiven_arrangementprogram_data_management_system:
+    path: /management-system.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.arrangementprogram_data:getManagementSystemsAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+    options:
+        expose: true
+        
 pequiven_arrangementprogram_data_responsibles:
     path: /responsibles.{_format}
     defaults: 

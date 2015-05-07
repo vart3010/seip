@@ -56,7 +56,7 @@ class ReportTemplate extends BaseModel
     /**
      * Productos del reporte
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate",cascade={"remove"})
      */
     private $productsReport;
     
@@ -88,14 +88,14 @@ class ReportTemplate extends BaseModel
     private $location;
     
     /**
-     * Planta.
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     * Region
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Region
      *
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Region")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $plant;
-
+    private $region;
+    
     /**
      * Constructor
      */
@@ -284,28 +284,28 @@ class ReportTemplate extends BaseModel
     {
         return $this->location;
     }
-
+    
     /**
-     * Set plant
+     * Set region
      *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plant
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Region $region
      * @return ReportTemplate
      */
-    public function setPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plant)
+    public function setRegion(\Pequiven\SEIPBundle\Entity\CEI\Region $region)
     {
-        $this->plant = $plant;
+        $this->region = $region;
 
         return $this;
     }
 
     /**
-     * Get plant
+     * Get region
      *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Plant 
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Region 
      */
-    public function getPlant()
+    public function getRegion()
     {
-        return $this->plant;
+        return $this->region;
     }
     
     public function __toString() 

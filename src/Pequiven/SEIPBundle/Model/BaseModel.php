@@ -20,6 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @ORM\MappedSuperclass()
+ * @ORM\HasLifecycleCallbacks()
  */
 class BaseModel implements BaseModelInterface
 {
@@ -79,14 +80,14 @@ class BaseModel implements BaseModelInterface
         
         return $this;
     }
-
+    
     function setCreatedAt(\DateTime $createdAt) 
     {
         $this->createdAt = $createdAt;
         
         return $this;
     }
-
+    
     function setUpdatedAt(\DateTime $updatedAt) 
     {
         $this->updatedAt = $updatedAt;

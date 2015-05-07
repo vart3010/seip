@@ -467,7 +467,7 @@ class ObjetiveRepository extends EntityRepository {
         
         if($managementSystem != null){
             $qb
-                    ->innerjoin('o.managementSystem','ms')
+                    ->innerjoin('o.managementSystems','ms')
                     ->andWhere('ms.id = :managementSystemId')
                     ->setParameter('managementSystemId', $managementSystem)
                 ;
@@ -531,7 +531,7 @@ class ObjetiveRepository extends EntityRepository {
         $user = $this->getUser();
         $qb = $this->getQueryAllEnabled();
         $qb
-                ->innerJoin("o.managementSystem", "ms")
+                ->innerJoin("o.managementSystems", "ms")
                 ->innerJoin("o.objetiveLevel", "ol")
                 ->innerJoin("o.gerencia", "g")
                 ->andWhere("ol.level = :level")

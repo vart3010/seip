@@ -52,459 +52,916 @@ class ProductDetailDailyMonth extends BaseModel
     private $month;
     
     /**
-     * Total plan
+     * Total plan (Bruta)
      * @var float
-     * @ORM\Column(name="totalPlan",type="float")
+     * @ORM\Column(name="totalGrossPlan",type="float")
      */
-    private $totalPlan = 0;
+    private $totalGrossPlan = 0;
     
     /**
-     * Total real
+     * Total real (Bruta)
      * @var float
-     * @ORM\Column(name="totalReal",type="float")
+     * @ORM\Column(name="totalGrossReal",type="float")
      */
-    private $totalReal = 0;
+    private $totalGrossReal = 0;
     
     /**
-     * Porcentaje de cumplimiento
+     * Porcentaje de cumplimiento (Bruta)
      * @var float
-     * @ORM\Column(name="percentage",type="float")
+     * @ORM\Column(name="grossPercentage",type="float")
      */
-    private $percentage = 0;
+    private $grossPercentage = 0;
     
     /**
-     * Dia 1 (Plan)
+     * Total plan (Neta)
      * @var float
-     * @ORM\Column(name="day1Plan",type="float")
+     * @ORM\Column(name="totalNetPlan",type="float")
      */
-    private $day1Plan = 0;
+    private $totalNetPlan = 0;
     
     /**
-     * Dia 1 (Real)
+     * Total real (Neta)
      * @var float
-     * @ORM\Column(name="day1Real",type="float")
+     * @ORM\Column(name="totalNetReal",type="float")
      */
-    private $day1Real = 0;
+    private $totalNetReal = 0;
     
     /**
-     * Dia 2 (Plan)
+     * Porcentaje de cumplimiento (Neta)
      * @var float
-     * @ORM\Column(name="day2Plan",type="float")
+     * @ORM\Column(name="netPercentage",type="float")
      */
-    private $day2Plan = 0;
+    private $netPercentage = 0;
     
+    //Bruta
     /**
-     * Dia 2 (Real)
+     * Dia 1 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day2Real",type="float")
+     * @ORM\Column(name="day1GrossPlan",type="float")
      */
-    private $day2Real = 0;
+    private $day1GrossPlan = 0;
     
     /**
-     * Dia 3 (Plan)
+     * Dia 1 (GrossReal)
      * @var float
-     * @ORM\Column(name="day3Plan",type="float")
+     * @ORM\Column(name="day1GrossReal",type="float")
      */
-    private $day3Plan = 0;
+    private $day1GrossReal = 0;
     
     /**
-     * Dia 3 (Real)
+     * Dia 2 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day3Real",type="float")
+     * @ORM\Column(name="day2GrossPlan",type="float")
      */
-    private $day3Real = 0;
+    private $day2GrossPlan = 0;
     
     /**
-     * Dia 4 (Plan)
+     * Dia 2 (GrossReal)
      * @var float
-     * @ORM\Column(name="day4Plan",type="float")
+     * @ORM\Column(name="day2GrossReal",type="float")
      */
-    private $day4Plan = 0;
+    private $day2GrossReal = 0;
     
     /**
-     * Dia 4 (Real)
+     * Dia 3 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day4Real",type="float")
+     * @ORM\Column(name="day3GrossPlan",type="float")
      */
-    private $day4Real = 0;
+    private $day3GrossPlan = 0;
     
     /**
-     * Dia 5 (Plan)
+     * Dia 3 (GrossReal)
      * @var float
-     * @ORM\Column(name="day5Plan",type="float")
+     * @ORM\Column(name="day3GrossReal",type="float")
      */
-    private $day5Plan = 0;
+    private $day3GrossReal = 0;
     
     /**
-     * Dia 5 (Real)
+     * Dia 4 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day5Real",type="float")
+     * @ORM\Column(name="day4GrossPlan",type="float")
      */
-    private $day5Real = 0;
+    private $day4GrossPlan = 0;
     
     /**
-     * Dia 6 (Plan)
+     * Dia 4 (GrossReal)
      * @var float
-     * @ORM\Column(name="day6Plan",type="float")
+     * @ORM\Column(name="day4GrossReal",type="float")
      */
-    private $day6Plan = 0;
+    private $day4GrossReal = 0;
     
     /**
-     * Dia 6 (Real)
+     * Dia 5 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day6Real",type="float")
+     * @ORM\Column(name="day5GrossPlan",type="float")
      */
-    private $day6Real = 0;
+    private $day5GrossPlan = 0;
     
     /**
-     * Dia 7 (Plan)
+     * Dia 5 (GrossReal)
      * @var float
-     * @ORM\Column(name="day7Plan",type="float")
+     * @ORM\Column(name="day5GrossReal",type="float")
      */
-    private $day7Plan = 0;
+    private $day5GrossReal = 0;
     
     /**
-     * Dia 7 (Real)
+     * Dia 6 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day7Real",type="float")
+     * @ORM\Column(name="day6GrossPlan",type="float")
      */
-    private $day7Real = 0;
+    private $day6GrossPlan = 0;
     
     /**
-     * Dia 8 (Plan)
+     * Dia 6 (GrossReal)
      * @var float
-     * @ORM\Column(name="day8Plan",type="float")
+     * @ORM\Column(name="day6GrossReal",type="float")
      */
-    private $day8Plan = 0;
+    private $day6GrossReal = 0;
     
     /**
-     * Dia 8 (Real)
+     * Dia 7 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day8Real",type="float")
+     * @ORM\Column(name="day7GrossPlan",type="float")
      */
-    private $day8Real = 0;
+    private $day7GrossPlan = 0;
     
     /**
-     * Dia 9 (Plan)
+     * Dia 7 (GrossReal)
      * @var float
-     * @ORM\Column(name="day9Plan",type="float")
+     * @ORM\Column(name="day7GrossReal",type="float")
      */
-    private $day9Plan = 0;
+    private $day7GrossReal = 0;
     
     /**
-     * Dia 9 (Real)
+     * Dia 8 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day9Real",type="float")
+     * @ORM\Column(name="day8GrossPlan",type="float")
      */
-    private $day9Real = 0;
+    private $day8GrossPlan = 0;
     
     /**
-     * Dia 10 (Plan)
+     * Dia 8 (GrossReal)
      * @var float
-     * @ORM\Column(name="day10Plan",type="float")
+     * @ORM\Column(name="day8GrossReal",type="float")
      */
-    private $day10Plan = 0;
+    private $day8GrossReal = 0;
     
     /**
-     * Dia 10 (Real)
+     * Dia 9 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day10Real",type="float")
+     * @ORM\Column(name="day9GrossPlan",type="float")
      */
-    private $day10Real = 0;
+    private $day9GrossPlan = 0;
     
     /**
-     * Dia 11 (Plan)
+     * Dia 9 (GrossReal)
      * @var float
-     * @ORM\Column(name="day11Plan",type="float")
+     * @ORM\Column(name="day9GrossReal",type="float")
      */
-    private $day11Plan = 0;
+    private $day9GrossReal = 0;
     
     /**
-     * Dia 11 (Real)
+     * Dia 10 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day11Real",type="float")
+     * @ORM\Column(name="day10GrossPlan",type="float")
      */
-    private $day11Real = 0;
+    private $day10GrossPlan = 0;
     
     /**
-     * Dia 12 (Plan)
+     * Dia 10 (GrossReal)
      * @var float
-     * @ORM\Column(name="day12Plan",type="float")
+     * @ORM\Column(name="day10GrossReal",type="float")
      */
-    private $day12Plan = 0;
+    private $day10GrossReal = 0;
     
     /**
-     * Dia 12 (Real)
+     * Dia 11 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day12Real",type="float")
+     * @ORM\Column(name="day11GrossPlan",type="float")
      */
-    private $day12Real = 0;
+    private $day11GrossPlan = 0;
     
     /**
-     * Dia 13 (Plan)
+     * Dia 11 (GrossReal)
      * @var float
-     * @ORM\Column(name="day13Plan",type="float")
+     * @ORM\Column(name="day11GrossReal",type="float")
      */
-    private $day13Plan = 0;
+    private $day11GrossReal = 0;
     
     /**
-     * Dia 13 (Real)
+     * Dia 12 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day13Real",type="float")
+     * @ORM\Column(name="day12GrossPlan",type="float")
      */
-    private $day13Real = 0;
+    private $day12GrossPlan = 0;
     
     /**
-     * Dia 14 (Plan)
+     * Dia 12 (GrossReal)
      * @var float
-     * @ORM\Column(name="day14Plan",type="float")
+     * @ORM\Column(name="day12GrossReal",type="float")
      */
-    private $day14Plan = 0;
+    private $day12GrossReal = 0;
     
     /**
-     * Dia 14 (Real)
+     * Dia 13 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day14Real",type="float")
+     * @ORM\Column(name="day13GrossPlan",type="float")
      */
-    private $day14Real = 0;
+    private $day13GrossPlan = 0;
     
     /**
-     * Dia 15 (Plan)
+     * Dia 13 (GrossReal)
      * @var float
-     * @ORM\Column(name="day15Plan",type="float")
+     * @ORM\Column(name="day13GrossReal",type="float")
      */
-    private $day15Plan = 0;
+    private $day13GrossReal = 0;
     
     /**
-     * Dia 15 (Real)
+     * Dia 14 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day15Real",type="float")
+     * @ORM\Column(name="day14GrossPlan",type="float")
      */
-    private $day15Real = 0;
+    private $day14GrossPlan = 0;
     
     /**
-     * Dia 16 (Plan)
+     * Dia 14 (GrossReal)
      * @var float
-     * @ORM\Column(name="day16Plan",type="float")
+     * @ORM\Column(name="day14GrossReal",type="float")
      */
-    private $day16Plan = 0;
+    private $day14GrossReal = 0;
     
     /**
-     * Dia 16 (Real)
+     * Dia 15 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day16Real",type="float")
+     * @ORM\Column(name="day15GrossPlan",type="float")
      */
-    private $day16Real = 0;
+    private $day15GrossPlan = 0;
     
     /**
-     * Dia 17 (Plan)
+     * Dia 15 (GrossReal)
      * @var float
-     * @ORM\Column(name="day17Plan",type="float")
+     * @ORM\Column(name="day15GrossReal",type="float")
      */
-    private $day17Plan = 0;
+    private $day15GrossReal = 0;
     
     /**
-     * Dia 17 (Real)
+     * Dia 16 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day17Real",type="float")
+     * @ORM\Column(name="day16GrossPlan",type="float")
      */
-    private $day17Real = 0;
+    private $day16GrossPlan = 0;
     
     /**
-     * Dia 18 (Plan)
+     * Dia 16 (GrossReal)
      * @var float
-     * @ORM\Column(name="day18Plan",type="float")
+     * @ORM\Column(name="day16GrossReal",type="float")
      */
-    private $day18Plan = 0;
+    private $day16GrossReal = 0;
     
     /**
-     * Dia 18 (Real)
+     * Dia 17 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day18Real",type="float")
+     * @ORM\Column(name="day17GrossPlan",type="float")
      */
-    private $day18Real = 0;
+    private $day17GrossPlan = 0;
     
     /**
-     * Dia 19 (Plan)
+     * Dia 17 (GrossReal)
      * @var float
-     * @ORM\Column(name="day19Plan",type="float")
+     * @ORM\Column(name="day17GrossReal",type="float")
      */
-    private $day19Plan = 0;
+    private $day17GrossReal = 0;
     
     /**
-     * Dia 19 (Real)
+     * Dia 18 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day19Real",type="float")
+     * @ORM\Column(name="day18GrossPlan",type="float")
      */
-    private $day19Real = 0;
+    private $day18GrossPlan = 0;
     
     /**
-     * Dia 20 (Plan)
+     * Dia 18 (GrossReal)
      * @var float
-     * @ORM\Column(name="day20Plan",type="float")
+     * @ORM\Column(name="day18GrossReal",type="float")
      */
-    private $day20Plan = 0;
+    private $day18GrossReal = 0;
     
     /**
-     * Dia 20 (Real)
+     * Dia 19 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day20Real",type="float")
+     * @ORM\Column(name="day19GrossPlan",type="float")
      */
-    private $day20Real = 0;
+    private $day19GrossPlan = 0;
     
     /**
-     * Dia 21 (Plan)
+     * Dia 19 (GrossReal)
      * @var float
-     * @ORM\Column(name="day21Plan",type="float")
+     * @ORM\Column(name="day19GrossReal",type="float")
      */
-    private $day21Plan = 0;
+    private $day19GrossReal = 0;
     
     /**
-     * Dia 21 (Real)
+     * Dia 20 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day21Real",type="float")
+     * @ORM\Column(name="day20GrossPlan",type="float")
      */
-    private $day21Real = 0;
+    private $day20GrossPlan = 0;
     
     /**
-     * Dia 22 (Plan)
+     * Dia 20 (GrossReal)
      * @var float
-     * @ORM\Column(name="day22Plan",type="float")
+     * @ORM\Column(name="day20GrossReal",type="float")
      */
-    private $day22Plan = 0;
+    private $day20GrossReal = 0;
     
     /**
-     * Dia 22 (Real)
+     * Dia 21 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day22Real",type="float")
+     * @ORM\Column(name="day21GrossPlan",type="float")
      */
-    private $day22Real = 0;
+    private $day21GrossPlan = 0;
     
     /**
-     * Dia 23 (Plan)
+     * Dia 21 (GrossReal)
      * @var float
-     * @ORM\Column(name="day23Plan",type="float")
+     * @ORM\Column(name="day21GrossReal",type="float")
      */
-    private $day23Plan = 0;
+    private $day21GrossReal = 0;
     
     /**
-     * Dia 23 (Real)
+     * Dia 22 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day23Real",type="float")
+     * @ORM\Column(name="day22GrossPlan",type="float")
      */
-    private $day23Real = 0;
+    private $day22GrossPlan = 0;
     
     /**
-     * Dia 24 (Plan)
+     * Dia 22 (GrossReal)
      * @var float
-     * @ORM\Column(name="day24Plan",type="float")
+     * @ORM\Column(name="day22GrossReal",type="float")
      */
-    private $day24Plan = 0;
+    private $day22GrossReal = 0;
     
     /**
-     * Dia 24 (Real)
+     * Dia 23 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day24Real",type="float")
+     * @ORM\Column(name="day23GrossPlan",type="float")
      */
-    private $day24Real = 0;
+    private $day23GrossPlan = 0;
     
     /**
-     * Dia 25 (Plan)
+     * Dia 23 (GrossReal)
      * @var float
-     * @ORM\Column(name="day25Plan",type="float")
+     * @ORM\Column(name="day23GrossReal",type="float")
      */
-    private $day25Plan = 0;
+    private $day23GrossReal = 0;
     
     /**
-     * Dia 25 (Real)
+     * Dia 24 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day25Real",type="float")
+     * @ORM\Column(name="day24GrossPlan",type="float")
      */
-    private $day25Real = 0;
+    private $day24GrossPlan = 0;
     
     /**
-     * Dia 26 (Plan)
+     * Dia 24 (GrossReal)
      * @var float
-     * @ORM\Column(name="day26Plan",type="float")
+     * @ORM\Column(name="day24GrossReal",type="float")
      */
-    private $day26Plan = 0;
+    private $day24GrossReal = 0;
     
     /**
-     * Dia 26 (Real)
+     * Dia 25 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day26Real",type="float")
+     * @ORM\Column(name="day25GrossPlan",type="float")
      */
-    private $day26Real = 0;
+    private $day25GrossPlan = 0;
     
     /**
-     * Dia 27 (Plan)
+     * Dia 25 (GrossReal)
      * @var float
-     * @ORM\Column(name="day27Plan",type="float")
+     * @ORM\Column(name="day25GrossReal",type="float")
      */
-    private $day27Plan = 0;
+    private $day25GrossReal = 0;
     
     /**
-     * Dia 27 (Real)
+     * Dia 26 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day27Real",type="float")
+     * @ORM\Column(name="day26GrossPlan",type="float")
      */
-    private $day27Real = 0;
+    private $day26GrossPlan = 0;
     
     /**
-     * Dia 28 (Plan)
+     * Dia 26 (GrossReal)
      * @var float
-     * @ORM\Column(name="day28Plan",type="float")
+     * @ORM\Column(name="day26GrossReal",type="float")
      */
-    private $day28Plan = 0;
+    private $day26GrossReal = 0;
     
     /**
-     * Dia 28 (Real)
+     * Dia 27 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day28Real",type="float")
+     * @ORM\Column(name="day27GrossPlan",type="float")
      */
-    private $day28Real = 0;
+    private $day27GrossPlan = 0;
     
     /**
-     * Dia 29 (Plan)
+     * Dia 27 (GrossReal)
      * @var float
-     * @ORM\Column(name="day29Plan",type="float")
+     * @ORM\Column(name="day27GrossReal",type="float")
      */
-    private $day29Plan = 0;
+    private $day27GrossReal = 0;
     
     /**
-     * Dia 29 (Real)
+     * Dia 28 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day29Real",type="float")
+     * @ORM\Column(name="day28GrossPlan",type="float")
      */
-    private $day29Real = 0;
+    private $day28GrossPlan = 0;
     
     /**
-     * Dia 30 (Plan)
+     * Dia 28 (GrossReal)
      * @var float
-     * @ORM\Column(name="day30Plan",type="float")
+     * @ORM\Column(name="day28GrossReal",type="float")
      */
-    private $day30Plan = 0;
+    private $day28GrossReal = 0;
     
     /**
-     * Dia 30 (Real)
+     * Dia 29 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day30Real",type="float")
+     * @ORM\Column(name="day29GrossPlan",type="float")
      */
-    private $day30Real = 0;
+    private $day29GrossPlan = 0;
     
     /**
-     * Dia 31 (Plan)
+     * Dia 29 (GrossReal)
      * @var float
-     * @ORM\Column(name="day31Plan",type="float")
+     * @ORM\Column(name="day29GrossReal",type="float")
      */
-    private $day31Plan = 0;
+    private $day29GrossReal = 0;
     
     /**
-     * Dia 31 (Real)
+     * Dia 30 (GrossPlan)
      * @var float
-     * @ORM\Column(name="day31Real",type="float")
+     * @ORM\Column(name="day30GrossPlan",type="float")
      */
-    private $day31Real = 0;
+    private $day30GrossPlan = 0;
+    
+    /**
+     * Dia 30 (GrossReal)
+     * @var float
+     * @ORM\Column(name="day30GrossReal",type="float")
+     */
+    private $day30GrossReal = 0;
+    
+    /**
+     * Dia 31 (GrossPlan)
+     * @var float
+     * @ORM\Column(name="day31GrossPlan",type="float")
+     */
+    private $day31GrossPlan = 0;
+    
+    /**
+     * Dia 31 (GrossReal)
+     * @var float
+     * @ORM\Column(name="day31GrossReal",type="float")
+     */
+    private $day31GrossReal = 0;
+    
+    //Neta
+    /**
+     * Dia 1 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day1NetPlan",type="float")
+     */
+    private $day1NetPlan = 0;
+    
+    /**
+     * Dia 1 (NetReal)
+     * @var float
+     * @ORM\Column(name="day1NetReal",type="float")
+     */
+    private $day1NetReal = 0;
+    
+    /**
+     * Dia 2 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day2NetPlan",type="float")
+     */
+    private $day2NetPlan = 0;
+    
+    /**
+     * Dia 2 (NetReal)
+     * @var float
+     * @ORM\Column(name="day2NetReal",type="float")
+     */
+    private $day2NetReal = 0;
+    
+    /**
+     * Dia 3 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day3NetPlan",type="float")
+     */
+    private $day3NetPlan = 0;
+    
+    /**
+     * Dia 3 (NetReal)
+     * @var float
+     * @ORM\Column(name="day3NetReal",type="float")
+     */
+    private $day3NetReal = 0;
+    
+    /**
+     * Dia 4 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day4NetPlan",type="float")
+     */
+    private $day4NetPlan = 0;
+    
+    /**
+     * Dia 4 (NetReal)
+     * @var float
+     * @ORM\Column(name="day4NetReal",type="float")
+     */
+    private $day4NetReal = 0;
+    
+    /**
+     * Dia 5 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day5NetPlan",type="float")
+     */
+    private $day5NetPlan = 0;
+    
+    /**
+     * Dia 5 (NetReal)
+     * @var float
+     * @ORM\Column(name="day5NetReal",type="float")
+     */
+    private $day5NetReal = 0;
+    
+    /**
+     * Dia 6 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day6NetPlan",type="float")
+     */
+    private $day6NetPlan = 0;
+    
+    /**
+     * Dia 6 (NetReal)
+     * @var float
+     * @ORM\Column(name="day6NetReal",type="float")
+     */
+    private $day6NetReal = 0;
+    
+    /**
+     * Dia 7 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day7NetPlan",type="float")
+     */
+    private $day7NetPlan = 0;
+    
+    /**
+     * Dia 7 (NetReal)
+     * @var float
+     * @ORM\Column(name="day7NetReal",type="float")
+     */
+    private $day7NetReal = 0;
+    
+    /**
+     * Dia 8 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day8NetPlan",type="float")
+     */
+    private $day8NetPlan = 0;
+    
+    /**
+     * Dia 8 (NetReal)
+     * @var float
+     * @ORM\Column(name="day8NetReal",type="float")
+     */
+    private $day8NetReal = 0;
+    
+    /**
+     * Dia 9 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day9NetPlan",type="float")
+     */
+    private $day9NetPlan = 0;
+    
+    /**
+     * Dia 9 (NetReal)
+     * @var float
+     * @ORM\Column(name="day9NetReal",type="float")
+     */
+    private $day9NetReal = 0;
+    
+    /**
+     * Dia 10 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day10NetPlan",type="float")
+     */
+    private $day10NetPlan = 0;
+    
+    /**
+     * Dia 10 (NetReal)
+     * @var float
+     * @ORM\Column(name="day10NetReal",type="float")
+     */
+    private $day10NetReal = 0;
+    
+    /**
+     * Dia 11 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day11NetPlan",type="float")
+     */
+    private $day11NetPlan = 0;
+    
+    /**
+     * Dia 11 (NetReal)
+     * @var float
+     * @ORM\Column(name="day11NetReal",type="float")
+     */
+    private $day11NetReal = 0;
+    
+    /**
+     * Dia 12 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day12NetPlan",type="float")
+     */
+    private $day12NetPlan = 0;
+    
+    /**
+     * Dia 12 (NetReal)
+     * @var float
+     * @ORM\Column(name="day12NetReal",type="float")
+     */
+    private $day12NetReal = 0;
+    
+    /**
+     * Dia 13 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day13NetPlan",type="float")
+     */
+    private $day13NetPlan = 0;
+    
+    /**
+     * Dia 13 (NetReal)
+     * @var float
+     * @ORM\Column(name="day13NetReal",type="float")
+     */
+    private $day13NetReal = 0;
+    
+    /**
+     * Dia 14 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day14NetPlan",type="float")
+     */
+    private $day14NetPlan = 0;
+    
+    /**
+     * Dia 14 (NetReal)
+     * @var float
+     * @ORM\Column(name="day14NetReal",type="float")
+     */
+    private $day14NetReal = 0;
+    
+    /**
+     * Dia 15 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day15NetPlan",type="float")
+     */
+    private $day15NetPlan = 0;
+    
+    /**
+     * Dia 15 (NetReal)
+     * @var float
+     * @ORM\Column(name="day15NetReal",type="float")
+     */
+    private $day15NetReal = 0;
+    
+    /**
+     * Dia 16 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day16NetPlan",type="float")
+     */
+    private $day16NetPlan = 0;
+    
+    /**
+     * Dia 16 (NetReal)
+     * @var float
+     * @ORM\Column(name="day16NetReal",type="float")
+     */
+    private $day16NetReal = 0;
+    
+    /**
+     * Dia 17 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day17NetPlan",type="float")
+     */
+    private $day17NetPlan = 0;
+    
+    /**
+     * Dia 17 (NetReal)
+     * @var float
+     * @ORM\Column(name="day17NetReal",type="float")
+     */
+    private $day17NetReal = 0;
+    
+    /**
+     * Dia 18 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day18NetPlan",type="float")
+     */
+    private $day18NetPlan = 0;
+    
+    /**
+     * Dia 18 (NetReal)
+     * @var float
+     * @ORM\Column(name="day18NetReal",type="float")
+     */
+    private $day18NetReal = 0;
+    
+    /**
+     * Dia 19 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day19NetPlan",type="float")
+     */
+    private $day19NetPlan = 0;
+    
+    /**
+     * Dia 19 (NetReal)
+     * @var float
+     * @ORM\Column(name="day19NetReal",type="float")
+     */
+    private $day19NetReal = 0;
+    
+    /**
+     * Dia 20 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day20NetPlan",type="float")
+     */
+    private $day20NetPlan = 0;
+    
+    /**
+     * Dia 20 (NetReal)
+     * @var float
+     * @ORM\Column(name="day20NetReal",type="float")
+     */
+    private $day20NetReal = 0;
+    
+    /**
+     * Dia 21 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day21NetPlan",type="float")
+     */
+    private $day21NetPlan = 0;
+    
+    /**
+     * Dia 21 (NetReal)
+     * @var float
+     * @ORM\Column(name="day21NetReal",type="float")
+     */
+    private $day21NetReal = 0;
+    
+    /**
+     * Dia 22 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day22NetPlan",type="float")
+     */
+    private $day22NetPlan = 0;
+    
+    /**
+     * Dia 22 (NetReal)
+     * @var float
+     * @ORM\Column(name="day22NetReal",type="float")
+     */
+    private $day22NetReal = 0;
+    
+    /**
+     * Dia 23 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day23NetPlan",type="float")
+     */
+    private $day23NetPlan = 0;
+    
+    /**
+     * Dia 23 (NetReal)
+     * @var float
+     * @ORM\Column(name="day23NetReal",type="float")
+     */
+    private $day23NetReal = 0;
+    
+    /**
+     * Dia 24 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day24NetPlan",type="float")
+     */
+    private $day24NetPlan = 0;
+    
+    /**
+     * Dia 24 (NetReal)
+     * @var float
+     * @ORM\Column(name="day24NetReal",type="float")
+     */
+    private $day24NetReal = 0;
+    
+    /**
+     * Dia 25 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day25NetPlan",type="float")
+     */
+    private $day25NetPlan = 0;
+    
+    /**
+     * Dia 25 (NetReal)
+     * @var float
+     * @ORM\Column(name="day25NetReal",type="float")
+     */
+    private $day25NetReal = 0;
+    
+    /**
+     * Dia 26 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day26NetPlan",type="float")
+     */
+    private $day26NetPlan = 0;
+    
+    /**
+     * Dia 26 (NetReal)
+     * @var float
+     * @ORM\Column(name="day26NetReal",type="float")
+     */
+    private $day26NetReal = 0;
+    
+    /**
+     * Dia 27 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day27NetPlan",type="float")
+     */
+    private $day27NetPlan = 0;
+    
+    /**
+     * Dia 27 (NetReal)
+     * @var float
+     * @ORM\Column(name="day27NetReal",type="float")
+     */
+    private $day27NetReal = 0;
+    
+    /**
+     * Dia 28 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day28NetPlan",type="float")
+     */
+    private $day28NetPlan = 0;
+    
+    /**
+     * Dia 28 (NetReal)
+     * @var float
+     * @ORM\Column(name="day28NetReal",type="float")
+     */
+    private $day28NetReal = 0;
+    
+    /**
+     * Dia 29 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day29NetPlan",type="float")
+     */
+    private $day29NetPlan = 0;
+    
+    /**
+     * Dia 29 (NetReal)
+     * @var float
+     * @ORM\Column(name="day29NetReal",type="float")
+     */
+    private $day29NetReal = 0;
+    
+    /**
+     * Dia 30 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day30NetPlan",type="float")
+     */
+    private $day30NetPlan = 0;
+    
+    /**
+     * Dia 30 (NetReal)
+     * @var float
+     * @ORM\Column(name="day30NetReal",type="float")
+     */
+    private $day30NetReal = 0;
+    
+    /**
+     * Dia 31 (NetPlan)
+     * @var float
+     * @ORM\Column(name="day31NetPlan",type="float")
+     */
+    private $day31NetPlan = 0;
+    
+    /**
+     * Dia 31 (NetReal)
+     * @var float
+     * @ORM\Column(name="day31NetReal",type="float")
+     */
+    private $day31NetReal = 0;
     
     /**
      * Get id
@@ -540,1586 +997,6 @@ class ProductDetailDailyMonth extends BaseModel
     }
 
     /**
-     * Set totalPlan
-     *
-     * @param float $totalPlan
-     * @return ProductDetailDailyMonth
-     */
-    public function setTotalPlan($totalPlan)
-    {
-        $this->totalPlan = $totalPlan;
-
-        return $this;
-    }
-
-    /**
-     * Get totalPlan
-     *
-     * @return float 
-     */
-    public function getTotalPlan()
-    {
-        return $this->totalPlan;
-    }
-
-    /**
-     * Set totalReal
-     *
-     * @param float $totalReal
-     * @return ProductDetailDailyMonth
-     */
-    public function setTotalReal($totalReal)
-    {
-        $this->totalReal = $totalReal;
-
-        return $this;
-    }
-
-    /**
-     * Get totalReal
-     *
-     * @return float 
-     */
-    public function getTotalReal()
-    {
-        return $this->totalReal;
-    }
-
-    /**
-     * Set percentage
-     *
-     * @param float $percentage
-     * @return ProductDetailDailyMonth
-     */
-    public function setPercentage($percentage)
-    {
-        $this->percentage = $percentage;
-
-        return $this;
-    }
-
-    /**
-     * Get percentage
-     *
-     * @return float 
-     */
-    public function getPercentage()
-    {
-        return $this->percentage;
-    }
-
-    /**
-     * Set day1Plan
-     *
-     * @param float $day1Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay1Plan($day1Plan)
-    {
-        $this->day1Plan = $day1Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day1Plan
-     *
-     * @return float 
-     */
-    public function getDay1Plan()
-    {
-        return $this->day1Plan;
-    }
-
-    /**
-     * Set day1Real
-     *
-     * @param float $day1Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay1Real($day1Real)
-    {
-        $this->day1Real = $day1Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day1Real
-     *
-     * @return float 
-     */
-    public function getDay1Real()
-    {
-        return $this->day1Real;
-    }
-
-    /**
-     * Set day2Plan
-     *
-     * @param float $day2Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay2Plan($day2Plan)
-    {
-        $this->day2Plan = $day2Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day2Plan
-     *
-     * @return float 
-     */
-    public function getDay2Plan()
-    {
-        return $this->day2Plan;
-    }
-
-    /**
-     * Set day2Real
-     *
-     * @param float $day2Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay2Real($day2Real)
-    {
-        $this->day2Real = $day2Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day2Real
-     *
-     * @return float 
-     */
-    public function getDay2Real()
-    {
-        return $this->day2Real;
-    }
-
-    /**
-     * Set day3Plan
-     *
-     * @param float $day3Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay3Plan($day3Plan)
-    {
-        $this->day3Plan = $day3Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day3Plan
-     *
-     * @return float 
-     */
-    public function getDay3Plan()
-    {
-        return $this->day3Plan;
-    }
-
-    /**
-     * Set day3Real
-     *
-     * @param float $day3Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay3Real($day3Real)
-    {
-        $this->day3Real = $day3Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day3Real
-     *
-     * @return float 
-     */
-    public function getDay3Real()
-    {
-        return $this->day3Real;
-    }
-
-    /**
-     * Set day4Plan
-     *
-     * @param float $day4Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay4Plan($day4Plan)
-    {
-        $this->day4Plan = $day4Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day4Plan
-     *
-     * @return float 
-     */
-    public function getDay4Plan()
-    {
-        return $this->day4Plan;
-    }
-
-    /**
-     * Set day4Real
-     *
-     * @param float $day4Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay4Real($day4Real)
-    {
-        $this->day4Real = $day4Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day4Real
-     *
-     * @return float 
-     */
-    public function getDay4Real()
-    {
-        return $this->day4Real;
-    }
-
-    /**
-     * Set day5Plan
-     *
-     * @param float $day5Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay5Plan($day5Plan)
-    {
-        $this->day5Plan = $day5Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day5Plan
-     *
-     * @return float 
-     */
-    public function getDay5Plan()
-    {
-        return $this->day5Plan;
-    }
-
-    /**
-     * Set day5Real
-     *
-     * @param float $day5Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay5Real($day5Real)
-    {
-        $this->day5Real = $day5Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day5Real
-     *
-     * @return float 
-     */
-    public function getDay5Real()
-    {
-        return $this->day5Real;
-    }
-
-    /**
-     * Set day6Plan
-     *
-     * @param float $day6Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay6Plan($day6Plan)
-    {
-        $this->day6Plan = $day6Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day6Plan
-     *
-     * @return float 
-     */
-    public function getDay6Plan()
-    {
-        return $this->day6Plan;
-    }
-
-    /**
-     * Set day6Real
-     *
-     * @param float $day6Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay6Real($day6Real)
-    {
-        $this->day6Real = $day6Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day6Real
-     *
-     * @return float 
-     */
-    public function getDay6Real()
-    {
-        return $this->day6Real;
-    }
-
-    /**
-     * Set day7Plan
-     *
-     * @param float $day7Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay7Plan($day7Plan)
-    {
-        $this->day7Plan = $day7Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day7Plan
-     *
-     * @return float 
-     */
-    public function getDay7Plan()
-    {
-        return $this->day7Plan;
-    }
-
-    /**
-     * Set day7Real
-     *
-     * @param float $day7Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay7Real($day7Real)
-    {
-        $this->day7Real = $day7Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day7Real
-     *
-     * @return float 
-     */
-    public function getDay7Real()
-    {
-        return $this->day7Real;
-    }
-
-    /**
-     * Set day8Plan
-     *
-     * @param float $day8Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay8Plan($day8Plan)
-    {
-        $this->day8Plan = $day8Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day8Plan
-     *
-     * @return float 
-     */
-    public function getDay8Plan()
-    {
-        return $this->day8Plan;
-    }
-
-    /**
-     * Set day8Real
-     *
-     * @param float $day8Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay8Real($day8Real)
-    {
-        $this->day8Real = $day8Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day8Real
-     *
-     * @return float 
-     */
-    public function getDay8Real()
-    {
-        return $this->day8Real;
-    }
-
-    /**
-     * Set day9Plan
-     *
-     * @param float $day9Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay9Plan($day9Plan)
-    {
-        $this->day9Plan = $day9Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day9Plan
-     *
-     * @return float 
-     */
-    public function getDay9Plan()
-    {
-        return $this->day9Plan;
-    }
-
-    /**
-     * Set day9Real
-     *
-     * @param float $day9Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay9Real($day9Real)
-    {
-        $this->day9Real = $day9Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day9Real
-     *
-     * @return float 
-     */
-    public function getDay9Real()
-    {
-        return $this->day9Real;
-    }
-
-    /**
-     * Set day10Plan
-     *
-     * @param float $day10Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay10Plan($day10Plan)
-    {
-        $this->day10Plan = $day10Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day10Plan
-     *
-     * @return float 
-     */
-    public function getDay10Plan()
-    {
-        return $this->day10Plan;
-    }
-
-    /**
-     * Set day10Real
-     *
-     * @param float $day10Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay10Real($day10Real)
-    {
-        $this->day10Real = $day10Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day10Real
-     *
-     * @return float 
-     */
-    public function getDay10Real()
-    {
-        return $this->day10Real;
-    }
-
-    /**
-     * Set day11Plan
-     *
-     * @param float $day11Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay11Plan($day11Plan)
-    {
-        $this->day11Plan = $day11Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day11Plan
-     *
-     * @return float 
-     */
-    public function getDay11Plan()
-    {
-        return $this->day11Plan;
-    }
-
-    /**
-     * Set day11Real
-     *
-     * @param float $day11Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay11Real($day11Real)
-    {
-        $this->day11Real = $day11Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day11Real
-     *
-     * @return float 
-     */
-    public function getDay11Real()
-    {
-        return $this->day11Real;
-    }
-
-    /**
-     * Set day12Plan
-     *
-     * @param float $day12Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay12Plan($day12Plan)
-    {
-        $this->day12Plan = $day12Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day12Plan
-     *
-     * @return float 
-     */
-    public function getDay12Plan()
-    {
-        return $this->day12Plan;
-    }
-
-    /**
-     * Set day12Real
-     *
-     * @param float $day12Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay12Real($day12Real)
-    {
-        $this->day12Real = $day12Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day12Real
-     *
-     * @return float 
-     */
-    public function getDay12Real()
-    {
-        return $this->day12Real;
-    }
-
-    /**
-     * Set day13Plan
-     *
-     * @param float $day13Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay13Plan($day13Plan)
-    {
-        $this->day13Plan = $day13Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day13Plan
-     *
-     * @return float 
-     */
-    public function getDay13Plan()
-    {
-        return $this->day13Plan;
-    }
-
-    /**
-     * Set day13Real
-     *
-     * @param float $day13Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay13Real($day13Real)
-    {
-        $this->day13Real = $day13Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day13Real
-     *
-     * @return float 
-     */
-    public function getDay13Real()
-    {
-        return $this->day13Real;
-    }
-
-    /**
-     * Set day14Plan
-     *
-     * @param float $day14Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay14Plan($day14Plan)
-    {
-        $this->day14Plan = $day14Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day14Plan
-     *
-     * @return float 
-     */
-    public function getDay14Plan()
-    {
-        return $this->day14Plan;
-    }
-
-    /**
-     * Set day14Real
-     *
-     * @param float $day14Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay14Real($day14Real)
-    {
-        $this->day14Real = $day14Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day14Real
-     *
-     * @return float 
-     */
-    public function getDay14Real()
-    {
-        return $this->day14Real;
-    }
-
-    /**
-     * Set day15Plan
-     *
-     * @param float $day15Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay15Plan($day15Plan)
-    {
-        $this->day15Plan = $day15Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day15Plan
-     *
-     * @return float 
-     */
-    public function getDay15Plan()
-    {
-        return $this->day15Plan;
-    }
-
-    /**
-     * Set day15Real
-     *
-     * @param float $day15Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay15Real($day15Real)
-    {
-        $this->day15Real = $day15Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day15Real
-     *
-     * @return float 
-     */
-    public function getDay15Real()
-    {
-        return $this->day15Real;
-    }
-
-    /**
-     * Set day16Plan
-     *
-     * @param float $day16Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay16Plan($day16Plan)
-    {
-        $this->day16Plan = $day16Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day16Plan
-     *
-     * @return float 
-     */
-    public function getDay16Plan()
-    {
-        return $this->day16Plan;
-    }
-
-    /**
-     * Set day16Real
-     *
-     * @param float $day16Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay16Real($day16Real)
-    {
-        $this->day16Real = $day16Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day16Real
-     *
-     * @return float 
-     */
-    public function getDay16Real()
-    {
-        return $this->day16Real;
-    }
-
-    /**
-     * Set day17Plan
-     *
-     * @param float $day17Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay17Plan($day17Plan)
-    {
-        $this->day17Plan = $day17Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day17Plan
-     *
-     * @return float 
-     */
-    public function getDay17Plan()
-    {
-        return $this->day17Plan;
-    }
-
-    /**
-     * Set day17Real
-     *
-     * @param float $day17Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay17Real($day17Real)
-    {
-        $this->day17Real = $day17Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day17Real
-     *
-     * @return float 
-     */
-    public function getDay17Real()
-    {
-        return $this->day17Real;
-    }
-
-    /**
-     * Set day18Plan
-     *
-     * @param float $day18Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay18Plan($day18Plan)
-    {
-        $this->day18Plan = $day18Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day18Plan
-     *
-     * @return float 
-     */
-    public function getDay18Plan()
-    {
-        return $this->day18Plan;
-    }
-
-    /**
-     * Set day18Real
-     *
-     * @param float $day18Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay18Real($day18Real)
-    {
-        $this->day18Real = $day18Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day18Real
-     *
-     * @return float 
-     */
-    public function getDay18Real()
-    {
-        return $this->day18Real;
-    }
-
-    /**
-     * Set day19Plan
-     *
-     * @param float $day19Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay19Plan($day19Plan)
-    {
-        $this->day19Plan = $day19Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day19Plan
-     *
-     * @return float 
-     */
-    public function getDay19Plan()
-    {
-        return $this->day19Plan;
-    }
-
-    /**
-     * Set day19Real
-     *
-     * @param float $day19Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay19Real($day19Real)
-    {
-        $this->day19Real = $day19Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day19Real
-     *
-     * @return float 
-     */
-    public function getDay19Real()
-    {
-        return $this->day19Real;
-    }
-
-    /**
-     * Set day20Plan
-     *
-     * @param float $day20Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay20Plan($day20Plan)
-    {
-        $this->day20Plan = $day20Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day20Plan
-     *
-     * @return float 
-     */
-    public function getDay20Plan()
-    {
-        return $this->day20Plan;
-    }
-
-    /**
-     * Set day20Real
-     *
-     * @param float $day20Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay20Real($day20Real)
-    {
-        $this->day20Real = $day20Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day20Real
-     *
-     * @return float 
-     */
-    public function getDay20Real()
-    {
-        return $this->day20Real;
-    }
-
-    /**
-     * Set day21Plan
-     *
-     * @param float $day21Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay21Plan($day21Plan)
-    {
-        $this->day21Plan = $day21Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day21Plan
-     *
-     * @return float 
-     */
-    public function getDay21Plan()
-    {
-        return $this->day21Plan;
-    }
-
-    /**
-     * Set day21Real
-     *
-     * @param float $day21Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay21Real($day21Real)
-    {
-        $this->day21Real = $day21Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day21Real
-     *
-     * @return float 
-     */
-    public function getDay21Real()
-    {
-        return $this->day21Real;
-    }
-
-    /**
-     * Set day22Plan
-     *
-     * @param float $day22Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay22Plan($day22Plan)
-    {
-        $this->day22Plan = $day22Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day22Plan
-     *
-     * @return float 
-     */
-    public function getDay22Plan()
-    {
-        return $this->day22Plan;
-    }
-
-    /**
-     * Set day22Real
-     *
-     * @param float $day22Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay22Real($day22Real)
-    {
-        $this->day22Real = $day22Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day22Real
-     *
-     * @return float 
-     */
-    public function getDay22Real()
-    {
-        return $this->day22Real;
-    }
-
-    /**
-     * Set day23Plan
-     *
-     * @param float $day23Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay23Plan($day23Plan)
-    {
-        $this->day23Plan = $day23Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day23Plan
-     *
-     * @return float 
-     */
-    public function getDay23Plan()
-    {
-        return $this->day23Plan;
-    }
-
-    /**
-     * Set day23Real
-     *
-     * @param float $day23Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay23Real($day23Real)
-    {
-        $this->day23Real = $day23Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day23Real
-     *
-     * @return float 
-     */
-    public function getDay23Real()
-    {
-        return $this->day23Real;
-    }
-
-    /**
-     * Set day24Plan
-     *
-     * @param float $day24Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay24Plan($day24Plan)
-    {
-        $this->day24Plan = $day24Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day24Plan
-     *
-     * @return float 
-     */
-    public function getDay24Plan()
-    {
-        return $this->day24Plan;
-    }
-
-    /**
-     * Set day24Real
-     *
-     * @param float $day24Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay24Real($day24Real)
-    {
-        $this->day24Real = $day24Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day24Real
-     *
-     * @return float 
-     */
-    public function getDay24Real()
-    {
-        return $this->day24Real;
-    }
-
-    /**
-     * Set day25Plan
-     *
-     * @param float $day25Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay25Plan($day25Plan)
-    {
-        $this->day25Plan = $day25Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day25Plan
-     *
-     * @return float 
-     */
-    public function getDay25Plan()
-    {
-        return $this->day25Plan;
-    }
-
-    /**
-     * Set day25Real
-     *
-     * @param float $day25Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay25Real($day25Real)
-    {
-        $this->day25Real = $day25Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day25Real
-     *
-     * @return float 
-     */
-    public function getDay25Real()
-    {
-        return $this->day25Real;
-    }
-
-    /**
-     * Set day26Plan
-     *
-     * @param float $day26Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay26Plan($day26Plan)
-    {
-        $this->day26Plan = $day26Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day26Plan
-     *
-     * @return float 
-     */
-    public function getDay26Plan()
-    {
-        return $this->day26Plan;
-    }
-
-    /**
-     * Set day26Real
-     *
-     * @param float $day26Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay26Real($day26Real)
-    {
-        $this->day26Real = $day26Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day26Real
-     *
-     * @return float 
-     */
-    public function getDay26Real()
-    {
-        return $this->day26Real;
-    }
-
-    /**
-     * Set day27Plan
-     *
-     * @param float $day27Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay27Plan($day27Plan)
-    {
-        $this->day27Plan = $day27Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day27Plan
-     *
-     * @return float 
-     */
-    public function getDay27Plan()
-    {
-        return $this->day27Plan;
-    }
-
-    /**
-     * Set day27Real
-     *
-     * @param float $day27Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay27Real($day27Real)
-    {
-        $this->day27Real = $day27Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day27Real
-     *
-     * @return float 
-     */
-    public function getDay27Real()
-    {
-        return $this->day27Real;
-    }
-
-    /**
-     * Set day28Plan
-     *
-     * @param float $day28Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay28Plan($day28Plan)
-    {
-        $this->day28Plan = $day28Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day28Plan
-     *
-     * @return float 
-     */
-    public function getDay28Plan()
-    {
-        return $this->day28Plan;
-    }
-
-    /**
-     * Set day28Real
-     *
-     * @param float $day28Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay28Real($day28Real)
-    {
-        $this->day28Real = $day28Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day28Real
-     *
-     * @return float 
-     */
-    public function getDay28Real()
-    {
-        return $this->day28Real;
-    }
-
-    /**
-     * Set day29Plan
-     *
-     * @param float $day29Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay29Plan($day29Plan)
-    {
-        $this->day29Plan = $day29Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day29Plan
-     *
-     * @return float 
-     */
-    public function getDay29Plan()
-    {
-        return $this->day29Plan;
-    }
-
-    /**
-     * Set day29Real
-     *
-     * @param float $day29Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay29Real($day29Real)
-    {
-        $this->day29Real = $day29Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day29Real
-     *
-     * @return float 
-     */
-    public function getDay29Real()
-    {
-        return $this->day29Real;
-    }
-
-    /**
-     * Set day30Plan
-     *
-     * @param float $day30Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay30Plan($day30Plan)
-    {
-        $this->day30Plan = $day30Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day30Plan
-     *
-     * @return float 
-     */
-    public function getDay30Plan()
-    {
-        return $this->day30Plan;
-    }
-
-    /**
-     * Set day30Real
-     *
-     * @param float $day30Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay30Real($day30Real)
-    {
-        $this->day30Real = $day30Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day30Real
-     *
-     * @return float 
-     */
-    public function getDay30Real()
-    {
-        return $this->day30Real;
-    }
-
-    /**
-     * Set day31Plan
-     *
-     * @param float $day31Plan
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay31Plan($day31Plan)
-    {
-        $this->day31Plan = $day31Plan;
-
-        return $this;
-    }
-
-    /**
-     * Get day31Plan
-     *
-     * @return float 
-     */
-    public function getDay31Plan()
-    {
-        return $this->day31Plan;
-    }
-
-    /**
-     * Set day31Real
-     *
-     * @param float $day31Real
-     * @return ProductDetailDailyMonth
-     */
-    public function setDay31Real($day31Real)
-    {
-        $this->day31Real = $day31Real;
-
-        return $this;
-    }
-
-    /**
-     * Get day31Real
-     *
-     * @return float 
-     */
-    public function getDay31Real()
-    {
-        return $this->day31Real;
-    }
-
-//    /**
-//     * Metodo que se ejecuta antes de actualizar la entidad
-//     * @ORM\PreUpdate()
-//     */
-//    public function preUpdate()
-//    {
-//        $reflection = new \ReflectionClass($this);
-//        $methods = $reflection->getMethods();
-//        
-//        $nameMatchReal = '^getDay\w+Real$';
-//        $nameMatchPlan = '^getDay\w+Plan$';
-//        
-//        $totalReal = $totalPlan = 0.0;
-//        foreach ($methods as $method) {
-//            $methodName = $method->getName();
-//            $class = $method->getDeclaringClass();
-//            if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
-//                continue;
-//            }
-//            $value = 0.0;
-//            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
-//                $value = $this->$methodName();
-//            }
-//            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
-//                $totalReal +=  $value;
-//            }
-//            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
-//                $totalPlan +=  $value;
-//            }
-//        }
-//        $this->setTotalPlan($totalPlan);
-//        $this->setTotalReal($totalReal);
-//        $percentage = 0;
-//        if($totalPlan != 0){
-//            $percentage = ($totalReal * 100) / $totalPlan;
-//        }
-//        if($this->getComponents()->count()  == 0){
-//            $this->setPercentage($percentage);
-//        }
-//    }
-//    
-//    public function updateParentTotals()
-//    {
-//        $components = $this->getComponents();
-//        $quantity = count($components);
-//        $totalPlan = $totalReal = $totalPercentage = 0.0;
-//        $reflection = new \ReflectionClass(new self());
-//        $properties = $reflection->getProperties();
-//
-//        $nameMatchReal = '^day\w+Real$';
-//        $nameMatchPlan = '^day\w+Plan$';
-//        $totalsChilds = array();
-//        
-//        $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
-//        foreach ($components as $component) {
-//            $totalPlan += $component->getTotalPlan();
-//            $totalReal += $component->getTotalReal();
-//            $totalPercentage += $component->getPercentage();
-//            
-//            foreach ($properties as $property) {
-//                $propertyName = $property->getName();
-////                print_r($propertyName);
-//                $class = $property->getDeclaringClass();
-//                if(!strpos($class, 'Pequiven\IndicatorBundle\Entity\Indicator\ValueIndicator\Detail\ProductDetailDailyMonth')){
-//                    continue;
-//                }
-//                if(preg_match('/'.$nameMatchReal.'/i', $propertyName) == false && preg_match('/'.$nameMatchPlan.'/i', $propertyName) == false){
-//                    continue;
-//                }
-//                
-//                if(!isset($totalsChilds[$propertyName])){
-//                    $totalsChilds[$propertyName] = 0.0;
-//                }
-//                $value = (float)$propertyAccessor->getValue($component, $propertyName);
-//                
-//                $propertyTotal = $totalsChilds[$propertyName] + $value;
-//                $totalsChilds[$propertyName] = $propertyTotal;
-//            }
-//        }
-//        foreach ($totalsChilds as $property => $value) {
-//            $propertyAccessor->setValue($this, $property, $value);
-//        }
-//        $this->setPercentage($totalPercentage / $quantity);
-//    }
-
-    /**
      * Set productReport
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport
@@ -2140,6 +1017,3054 @@ class ProductDetailDailyMonth extends BaseModel
     public function getProductReport()
     {
         return $this->productReport;
+    }
+    
+    /**
+     * Set totalGrossPlan
+     *
+     * @param float $totalGrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setTotalGrossPlan($totalGrossPlan)
+    {
+        $this->totalGrossPlan = $totalGrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get totalGrossPlan
+     *
+     * @return float 
+     */
+    public function getTotalGrossPlan()
+    {
+        return $this->totalGrossPlan;
+    }
+
+    /**
+     * Set totalGrossReal
+     *
+     * @param float $totalGrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setTotalGrossReal($totalGrossReal)
+    {
+        $this->totalGrossReal = $totalGrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get totalGrossReal
+     *
+     * @return float 
+     */
+    public function getTotalGrossReal()
+    {
+        return $this->totalGrossReal;
+    }
+
+    /**
+     * Set grossPercentage
+     *
+     * @param float $grossPercentage
+     * @return ProductDetailDailyMonth
+     */
+    public function setGrossPercentage($grossPercentage)
+    {
+        $this->grossPercentage = $grossPercentage;
+
+        return $this;
+    }
+
+    /**
+     * Get grossPercentage
+     *
+     * @return float 
+     */
+    public function getGrossPercentage()
+    {
+        return $this->grossPercentage;
+    }
+
+    /**
+     * Set totalNetPlan
+     *
+     * @param float $totalNetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setTotalNetPlan($totalNetPlan)
+    {
+        $this->totalNetPlan = $totalNetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get totalNetPlan
+     *
+     * @return float 
+     */
+    public function getTotalNetPlan()
+    {
+        return $this->totalNetPlan;
+    }
+
+    /**
+     * Set totalNetReal
+     *
+     * @param float $totalNetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setTotalNetReal($totalNetReal)
+    {
+        $this->totalNetReal = $totalNetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get totalNetReal
+     *
+     * @return float 
+     */
+    public function getTotalNetReal()
+    {
+        return $this->totalNetReal;
+    }
+
+    /**
+     * Set netPercentage
+     *
+     * @param float $netPercentage
+     * @return ProductDetailDailyMonth
+     */
+    public function setNetPercentage($netPercentage)
+    {
+        $this->netPercentage = $netPercentage;
+
+        return $this;
+    }
+
+    /**
+     * Get netPercentage
+     *
+     * @return float 
+     */
+    public function getNetPercentage()
+    {
+        return $this->netPercentage;
+    }
+
+    /**
+     * Set day1GrossPlan
+     *
+     * @param float $day1GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1GrossPlan($day1GrossPlan)
+    {
+        $this->day1GrossPlan = $day1GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day1GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay1GrossPlan()
+    {
+        return $this->day1GrossPlan;
+    }
+
+    /**
+     * Set day1GrossReal
+     *
+     * @param float $day1GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1GrossReal($day1GrossReal)
+    {
+        $this->day1GrossReal = $day1GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day1GrossReal
+     *
+     * @return float 
+     */
+    public function getDay1GrossReal()
+    {
+        return $this->day1GrossReal;
+    }
+
+    /**
+     * Set day2GrossPlan
+     *
+     * @param float $day2GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2GrossPlan($day2GrossPlan)
+    {
+        $this->day2GrossPlan = $day2GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day2GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay2GrossPlan()
+    {
+        return $this->day2GrossPlan;
+    }
+
+    /**
+     * Set day2GrossReal
+     *
+     * @param float $day2GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2GrossReal($day2GrossReal)
+    {
+        $this->day2GrossReal = $day2GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day2GrossReal
+     *
+     * @return float 
+     */
+    public function getDay2GrossReal()
+    {
+        return $this->day2GrossReal;
+    }
+
+    /**
+     * Set day3GrossPlan
+     *
+     * @param float $day3GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3GrossPlan($day3GrossPlan)
+    {
+        $this->day3GrossPlan = $day3GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day3GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay3GrossPlan()
+    {
+        return $this->day3GrossPlan;
+    }
+
+    /**
+     * Set day3GrossReal
+     *
+     * @param float $day3GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3GrossReal($day3GrossReal)
+    {
+        $this->day3GrossReal = $day3GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day3GrossReal
+     *
+     * @return float 
+     */
+    public function getDay3GrossReal()
+    {
+        return $this->day3GrossReal;
+    }
+
+    /**
+     * Set day4GrossPlan
+     *
+     * @param float $day4GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4GrossPlan($day4GrossPlan)
+    {
+        $this->day4GrossPlan = $day4GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day4GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay4GrossPlan()
+    {
+        return $this->day4GrossPlan;
+    }
+
+    /**
+     * Set day4GrossReal
+     *
+     * @param float $day4GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4GrossReal($day4GrossReal)
+    {
+        $this->day4GrossReal = $day4GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day4GrossReal
+     *
+     * @return float 
+     */
+    public function getDay4GrossReal()
+    {
+        return $this->day4GrossReal;
+    }
+
+    /**
+     * Set day5GrossPlan
+     *
+     * @param float $day5GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5GrossPlan($day5GrossPlan)
+    {
+        $this->day5GrossPlan = $day5GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day5GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay5GrossPlan()
+    {
+        return $this->day5GrossPlan;
+    }
+
+    /**
+     * Set day5GrossReal
+     *
+     * @param float $day5GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5GrossReal($day5GrossReal)
+    {
+        $this->day5GrossReal = $day5GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day5GrossReal
+     *
+     * @return float 
+     */
+    public function getDay5GrossReal()
+    {
+        return $this->day5GrossReal;
+    }
+
+    /**
+     * Set day6GrossPlan
+     *
+     * @param float $day6GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6GrossPlan($day6GrossPlan)
+    {
+        $this->day6GrossPlan = $day6GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day6GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay6GrossPlan()
+    {
+        return $this->day6GrossPlan;
+    }
+
+    /**
+     * Set day6GrossReal
+     *
+     * @param float $day6GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6GrossReal($day6GrossReal)
+    {
+        $this->day6GrossReal = $day6GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day6GrossReal
+     *
+     * @return float 
+     */
+    public function getDay6GrossReal()
+    {
+        return $this->day6GrossReal;
+    }
+
+    /**
+     * Set day7GrossPlan
+     *
+     * @param float $day7GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7GrossPlan($day7GrossPlan)
+    {
+        $this->day7GrossPlan = $day7GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day7GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay7GrossPlan()
+    {
+        return $this->day7GrossPlan;
+    }
+
+    /**
+     * Set day7GrossReal
+     *
+     * @param float $day7GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7GrossReal($day7GrossReal)
+    {
+        $this->day7GrossReal = $day7GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day7GrossReal
+     *
+     * @return float 
+     */
+    public function getDay7GrossReal()
+    {
+        return $this->day7GrossReal;
+    }
+
+    /**
+     * Set day8GrossPlan
+     *
+     * @param float $day8GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8GrossPlan($day8GrossPlan)
+    {
+        $this->day8GrossPlan = $day8GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day8GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay8GrossPlan()
+    {
+        return $this->day8GrossPlan;
+    }
+
+    /**
+     * Set day8GrossReal
+     *
+     * @param float $day8GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8GrossReal($day8GrossReal)
+    {
+        $this->day8GrossReal = $day8GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day8GrossReal
+     *
+     * @return float 
+     */
+    public function getDay8GrossReal()
+    {
+        return $this->day8GrossReal;
+    }
+
+    /**
+     * Set day9GrossPlan
+     *
+     * @param float $day9GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9GrossPlan($day9GrossPlan)
+    {
+        $this->day9GrossPlan = $day9GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day9GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay9GrossPlan()
+    {
+        return $this->day9GrossPlan;
+    }
+
+    /**
+     * Set day9GrossReal
+     *
+     * @param float $day9GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9GrossReal($day9GrossReal)
+    {
+        $this->day9GrossReal = $day9GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day9GrossReal
+     *
+     * @return float 
+     */
+    public function getDay9GrossReal()
+    {
+        return $this->day9GrossReal;
+    }
+
+    /**
+     * Set day10GrossPlan
+     *
+     * @param float $day10GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10GrossPlan($day10GrossPlan)
+    {
+        $this->day10GrossPlan = $day10GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day10GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay10GrossPlan()
+    {
+        return $this->day10GrossPlan;
+    }
+
+    /**
+     * Set day10GrossReal
+     *
+     * @param float $day10GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10GrossReal($day10GrossReal)
+    {
+        $this->day10GrossReal = $day10GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day10GrossReal
+     *
+     * @return float 
+     */
+    public function getDay10GrossReal()
+    {
+        return $this->day10GrossReal;
+    }
+
+    /**
+     * Set day11GrossPlan
+     *
+     * @param float $day11GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11GrossPlan($day11GrossPlan)
+    {
+        $this->day11GrossPlan = $day11GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day11GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay11GrossPlan()
+    {
+        return $this->day11GrossPlan;
+    }
+
+    /**
+     * Set day11GrossReal
+     *
+     * @param float $day11GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11GrossReal($day11GrossReal)
+    {
+        $this->day11GrossReal = $day11GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day11GrossReal
+     *
+     * @return float 
+     */
+    public function getDay11GrossReal()
+    {
+        return $this->day11GrossReal;
+    }
+
+    /**
+     * Set day12GrossPlan
+     *
+     * @param float $day12GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12GrossPlan($day12GrossPlan)
+    {
+        $this->day12GrossPlan = $day12GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day12GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay12GrossPlan()
+    {
+        return $this->day12GrossPlan;
+    }
+
+    /**
+     * Set day12GrossReal
+     *
+     * @param float $day12GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12GrossReal($day12GrossReal)
+    {
+        $this->day12GrossReal = $day12GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day12GrossReal
+     *
+     * @return float 
+     */
+    public function getDay12GrossReal()
+    {
+        return $this->day12GrossReal;
+    }
+
+    /**
+     * Set day13GrossPlan
+     *
+     * @param float $day13GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13GrossPlan($day13GrossPlan)
+    {
+        $this->day13GrossPlan = $day13GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day13GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay13GrossPlan()
+    {
+        return $this->day13GrossPlan;
+    }
+
+    /**
+     * Set day13GrossReal
+     *
+     * @param float $day13GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13GrossReal($day13GrossReal)
+    {
+        $this->day13GrossReal = $day13GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day13GrossReal
+     *
+     * @return float 
+     */
+    public function getDay13GrossReal()
+    {
+        return $this->day13GrossReal;
+    }
+
+    /**
+     * Set day14GrossPlan
+     *
+     * @param float $day14GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14GrossPlan($day14GrossPlan)
+    {
+        $this->day14GrossPlan = $day14GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day14GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay14GrossPlan()
+    {
+        return $this->day14GrossPlan;
+    }
+
+    /**
+     * Set day14GrossReal
+     *
+     * @param float $day14GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14GrossReal($day14GrossReal)
+    {
+        $this->day14GrossReal = $day14GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day14GrossReal
+     *
+     * @return float 
+     */
+    public function getDay14GrossReal()
+    {
+        return $this->day14GrossReal;
+    }
+
+    /**
+     * Set day15GrossPlan
+     *
+     * @param float $day15GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15GrossPlan($day15GrossPlan)
+    {
+        $this->day15GrossPlan = $day15GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day15GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay15GrossPlan()
+    {
+        return $this->day15GrossPlan;
+    }
+
+    /**
+     * Set day15GrossReal
+     *
+     * @param float $day15GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15GrossReal($day15GrossReal)
+    {
+        $this->day15GrossReal = $day15GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day15GrossReal
+     *
+     * @return float 
+     */
+    public function getDay15GrossReal()
+    {
+        return $this->day15GrossReal;
+    }
+
+    /**
+     * Set day16GrossPlan
+     *
+     * @param float $day16GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16GrossPlan($day16GrossPlan)
+    {
+        $this->day16GrossPlan = $day16GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day16GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay16GrossPlan()
+    {
+        return $this->day16GrossPlan;
+    }
+
+    /**
+     * Set day16GrossReal
+     *
+     * @param float $day16GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16GrossReal($day16GrossReal)
+    {
+        $this->day16GrossReal = $day16GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day16GrossReal
+     *
+     * @return float 
+     */
+    public function getDay16GrossReal()
+    {
+        return $this->day16GrossReal;
+    }
+
+    /**
+     * Set day17GrossPlan
+     *
+     * @param float $day17GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17GrossPlan($day17GrossPlan)
+    {
+        $this->day17GrossPlan = $day17GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day17GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay17GrossPlan()
+    {
+        return $this->day17GrossPlan;
+    }
+
+    /**
+     * Set day17GrossReal
+     *
+     * @param float $day17GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17GrossReal($day17GrossReal)
+    {
+        $this->day17GrossReal = $day17GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day17GrossReal
+     *
+     * @return float 
+     */
+    public function getDay17GrossReal()
+    {
+        return $this->day17GrossReal;
+    }
+
+    /**
+     * Set day18GrossPlan
+     *
+     * @param float $day18GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18GrossPlan($day18GrossPlan)
+    {
+        $this->day18GrossPlan = $day18GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day18GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay18GrossPlan()
+    {
+        return $this->day18GrossPlan;
+    }
+
+    /**
+     * Set day18GrossReal
+     *
+     * @param float $day18GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18GrossReal($day18GrossReal)
+    {
+        $this->day18GrossReal = $day18GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day18GrossReal
+     *
+     * @return float 
+     */
+    public function getDay18GrossReal()
+    {
+        return $this->day18GrossReal;
+    }
+
+    /**
+     * Set day19GrossPlan
+     *
+     * @param float $day19GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19GrossPlan($day19GrossPlan)
+    {
+        $this->day19GrossPlan = $day19GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day19GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay19GrossPlan()
+    {
+        return $this->day19GrossPlan;
+    }
+
+    /**
+     * Set day19GrossReal
+     *
+     * @param float $day19GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19GrossReal($day19GrossReal)
+    {
+        $this->day19GrossReal = $day19GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day19GrossReal
+     *
+     * @return float 
+     */
+    public function getDay19GrossReal()
+    {
+        return $this->day19GrossReal;
+    }
+
+    /**
+     * Set day20GrossPlan
+     *
+     * @param float $day20GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20GrossPlan($day20GrossPlan)
+    {
+        $this->day20GrossPlan = $day20GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day20GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay20GrossPlan()
+    {
+        return $this->day20GrossPlan;
+    }
+
+    /**
+     * Set day20GrossReal
+     *
+     * @param float $day20GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20GrossReal($day20GrossReal)
+    {
+        $this->day20GrossReal = $day20GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day20GrossReal
+     *
+     * @return float 
+     */
+    public function getDay20GrossReal()
+    {
+        return $this->day20GrossReal;
+    }
+
+    /**
+     * Set day21GrossPlan
+     *
+     * @param float $day21GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21GrossPlan($day21GrossPlan)
+    {
+        $this->day21GrossPlan = $day21GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day21GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay21GrossPlan()
+    {
+        return $this->day21GrossPlan;
+    }
+
+    /**
+     * Set day21GrossReal
+     *
+     * @param float $day21GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21GrossReal($day21GrossReal)
+    {
+        $this->day21GrossReal = $day21GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day21GrossReal
+     *
+     * @return float 
+     */
+    public function getDay21GrossReal()
+    {
+        return $this->day21GrossReal;
+    }
+
+    /**
+     * Set day22GrossPlan
+     *
+     * @param float $day22GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22GrossPlan($day22GrossPlan)
+    {
+        $this->day22GrossPlan = $day22GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day22GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay22GrossPlan()
+    {
+        return $this->day22GrossPlan;
+    }
+
+    /**
+     * Set day22GrossReal
+     *
+     * @param float $day22GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22GrossReal($day22GrossReal)
+    {
+        $this->day22GrossReal = $day22GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day22GrossReal
+     *
+     * @return float 
+     */
+    public function getDay22GrossReal()
+    {
+        return $this->day22GrossReal;
+    }
+
+    /**
+     * Set day23GrossPlan
+     *
+     * @param float $day23GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23GrossPlan($day23GrossPlan)
+    {
+        $this->day23GrossPlan = $day23GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day23GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay23GrossPlan()
+    {
+        return $this->day23GrossPlan;
+    }
+
+    /**
+     * Set day23GrossReal
+     *
+     * @param float $day23GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23GrossReal($day23GrossReal)
+    {
+        $this->day23GrossReal = $day23GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day23GrossReal
+     *
+     * @return float 
+     */
+    public function getDay23GrossReal()
+    {
+        return $this->day23GrossReal;
+    }
+
+    /**
+     * Set day24GrossPlan
+     *
+     * @param float $day24GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24GrossPlan($day24GrossPlan)
+    {
+        $this->day24GrossPlan = $day24GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day24GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay24GrossPlan()
+    {
+        return $this->day24GrossPlan;
+    }
+
+    /**
+     * Set day24GrossReal
+     *
+     * @param float $day24GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24GrossReal($day24GrossReal)
+    {
+        $this->day24GrossReal = $day24GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day24GrossReal
+     *
+     * @return float 
+     */
+    public function getDay24GrossReal()
+    {
+        return $this->day24GrossReal;
+    }
+
+    /**
+     * Set day25GrossPlan
+     *
+     * @param float $day25GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25GrossPlan($day25GrossPlan)
+    {
+        $this->day25GrossPlan = $day25GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day25GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay25GrossPlan()
+    {
+        return $this->day25GrossPlan;
+    }
+
+    /**
+     * Set day25GrossReal
+     *
+     * @param float $day25GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25GrossReal($day25GrossReal)
+    {
+        $this->day25GrossReal = $day25GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day25GrossReal
+     *
+     * @return float 
+     */
+    public function getDay25GrossReal()
+    {
+        return $this->day25GrossReal;
+    }
+
+    /**
+     * Set day26GrossPlan
+     *
+     * @param float $day26GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26GrossPlan($day26GrossPlan)
+    {
+        $this->day26GrossPlan = $day26GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day26GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay26GrossPlan()
+    {
+        return $this->day26GrossPlan;
+    }
+
+    /**
+     * Set day26GrossReal
+     *
+     * @param float $day26GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26GrossReal($day26GrossReal)
+    {
+        $this->day26GrossReal = $day26GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day26GrossReal
+     *
+     * @return float 
+     */
+    public function getDay26GrossReal()
+    {
+        return $this->day26GrossReal;
+    }
+
+    /**
+     * Set day27GrossPlan
+     *
+     * @param float $day27GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27GrossPlan($day27GrossPlan)
+    {
+        $this->day27GrossPlan = $day27GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day27GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay27GrossPlan()
+    {
+        return $this->day27GrossPlan;
+    }
+
+    /**
+     * Set day27GrossReal
+     *
+     * @param float $day27GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27GrossReal($day27GrossReal)
+    {
+        $this->day27GrossReal = $day27GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day27GrossReal
+     *
+     * @return float 
+     */
+    public function getDay27GrossReal()
+    {
+        return $this->day27GrossReal;
+    }
+
+    /**
+     * Set day28GrossPlan
+     *
+     * @param float $day28GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28GrossPlan($day28GrossPlan)
+    {
+        $this->day28GrossPlan = $day28GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day28GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay28GrossPlan()
+    {
+        return $this->day28GrossPlan;
+    }
+
+    /**
+     * Set day28GrossReal
+     *
+     * @param float $day28GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28GrossReal($day28GrossReal)
+    {
+        $this->day28GrossReal = $day28GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day28GrossReal
+     *
+     * @return float 
+     */
+    public function getDay28GrossReal()
+    {
+        return $this->day28GrossReal;
+    }
+
+    /**
+     * Set day29GrossPlan
+     *
+     * @param float $day29GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29GrossPlan($day29GrossPlan)
+    {
+        $this->day29GrossPlan = $day29GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day29GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay29GrossPlan()
+    {
+        return $this->day29GrossPlan;
+    }
+
+    /**
+     * Set day29GrossReal
+     *
+     * @param float $day29GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29GrossReal($day29GrossReal)
+    {
+        $this->day29GrossReal = $day29GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day29GrossReal
+     *
+     * @return float 
+     */
+    public function getDay29GrossReal()
+    {
+        return $this->day29GrossReal;
+    }
+
+    /**
+     * Set day30GrossPlan
+     *
+     * @param float $day30GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30GrossPlan($day30GrossPlan)
+    {
+        $this->day30GrossPlan = $day30GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day30GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay30GrossPlan()
+    {
+        return $this->day30GrossPlan;
+    }
+
+    /**
+     * Set day30GrossReal
+     *
+     * @param float $day30GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30GrossReal($day30GrossReal)
+    {
+        $this->day30GrossReal = $day30GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day30GrossReal
+     *
+     * @return float 
+     */
+    public function getDay30GrossReal()
+    {
+        return $this->day30GrossReal;
+    }
+
+    /**
+     * Set day31GrossPlan
+     *
+     * @param float $day31GrossPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31GrossPlan($day31GrossPlan)
+    {
+        $this->day31GrossPlan = $day31GrossPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day31GrossPlan
+     *
+     * @return float 
+     */
+    public function getDay31GrossPlan()
+    {
+        return $this->day31GrossPlan;
+    }
+
+    /**
+     * Set day31GrossReal
+     *
+     * @param float $day31GrossReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31GrossReal($day31GrossReal)
+    {
+        $this->day31GrossReal = $day31GrossReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day31GrossReal
+     *
+     * @return float 
+     */
+    public function getDay31GrossReal()
+    {
+        return $this->day31GrossReal;
+    }
+
+    /**
+     * Set day1NetPlan
+     *
+     * @param float $day1NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1NetPlan($day1NetPlan)
+    {
+        $this->day1NetPlan = $day1NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day1NetPlan
+     *
+     * @return float 
+     */
+    public function getDay1NetPlan()
+    {
+        return $this->day1NetPlan;
+    }
+
+    /**
+     * Set day1NetReal
+     *
+     * @param float $day1NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1NetReal($day1NetReal)
+    {
+        $this->day1NetReal = $day1NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day1NetReal
+     *
+     * @return float 
+     */
+    public function getDay1NetReal()
+    {
+        return $this->day1NetReal;
+    }
+
+    /**
+     * Set day2NetPlan
+     *
+     * @param float $day2NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2NetPlan($day2NetPlan)
+    {
+        $this->day2NetPlan = $day2NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day2NetPlan
+     *
+     * @return float 
+     */
+    public function getDay2NetPlan()
+    {
+        return $this->day2NetPlan;
+    }
+
+    /**
+     * Set day2NetReal
+     *
+     * @param float $day2NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2NetReal($day2NetReal)
+    {
+        $this->day2NetReal = $day2NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day2NetReal
+     *
+     * @return float 
+     */
+    public function getDay2NetReal()
+    {
+        return $this->day2NetReal;
+    }
+
+    /**
+     * Set day3NetPlan
+     *
+     * @param float $day3NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3NetPlan($day3NetPlan)
+    {
+        $this->day3NetPlan = $day3NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day3NetPlan
+     *
+     * @return float 
+     */
+    public function getDay3NetPlan()
+    {
+        return $this->day3NetPlan;
+    }
+
+    /**
+     * Set day3NetReal
+     *
+     * @param float $day3NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3NetReal($day3NetReal)
+    {
+        $this->day3NetReal = $day3NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day3NetReal
+     *
+     * @return float 
+     */
+    public function getDay3NetReal()
+    {
+        return $this->day3NetReal;
+    }
+
+    /**
+     * Set day4NetPlan
+     *
+     * @param float $day4NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4NetPlan($day4NetPlan)
+    {
+        $this->day4NetPlan = $day4NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day4NetPlan
+     *
+     * @return float 
+     */
+    public function getDay4NetPlan()
+    {
+        return $this->day4NetPlan;
+    }
+
+    /**
+     * Set day4NetReal
+     *
+     * @param float $day4NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4NetReal($day4NetReal)
+    {
+        $this->day4NetReal = $day4NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day4NetReal
+     *
+     * @return float 
+     */
+    public function getDay4NetReal()
+    {
+        return $this->day4NetReal;
+    }
+
+    /**
+     * Set day5NetPlan
+     *
+     * @param float $day5NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5NetPlan($day5NetPlan)
+    {
+        $this->day5NetPlan = $day5NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day5NetPlan
+     *
+     * @return float 
+     */
+    public function getDay5NetPlan()
+    {
+        return $this->day5NetPlan;
+    }
+
+    /**
+     * Set day5NetReal
+     *
+     * @param float $day5NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5NetReal($day5NetReal)
+    {
+        $this->day5NetReal = $day5NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day5NetReal
+     *
+     * @return float 
+     */
+    public function getDay5NetReal()
+    {
+        return $this->day5NetReal;
+    }
+
+    /**
+     * Set day6NetPlan
+     *
+     * @param float $day6NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6NetPlan($day6NetPlan)
+    {
+        $this->day6NetPlan = $day6NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day6NetPlan
+     *
+     * @return float 
+     */
+    public function getDay6NetPlan()
+    {
+        return $this->day6NetPlan;
+    }
+
+    /**
+     * Set day6NetReal
+     *
+     * @param float $day6NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6NetReal($day6NetReal)
+    {
+        $this->day6NetReal = $day6NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day6NetReal
+     *
+     * @return float 
+     */
+    public function getDay6NetReal()
+    {
+        return $this->day6NetReal;
+    }
+
+    /**
+     * Set day7NetPlan
+     *
+     * @param float $day7NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7NetPlan($day7NetPlan)
+    {
+        $this->day7NetPlan = $day7NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day7NetPlan
+     *
+     * @return float 
+     */
+    public function getDay7NetPlan()
+    {
+        return $this->day7NetPlan;
+    }
+
+    /**
+     * Set day7NetReal
+     *
+     * @param float $day7NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7NetReal($day7NetReal)
+    {
+        $this->day7NetReal = $day7NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day7NetReal
+     *
+     * @return float 
+     */
+    public function getDay7NetReal()
+    {
+        return $this->day7NetReal;
+    }
+
+    /**
+     * Set day8NetPlan
+     *
+     * @param float $day8NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8NetPlan($day8NetPlan)
+    {
+        $this->day8NetPlan = $day8NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day8NetPlan
+     *
+     * @return float 
+     */
+    public function getDay8NetPlan()
+    {
+        return $this->day8NetPlan;
+    }
+
+    /**
+     * Set day8NetReal
+     *
+     * @param float $day8NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8NetReal($day8NetReal)
+    {
+        $this->day8NetReal = $day8NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day8NetReal
+     *
+     * @return float 
+     */
+    public function getDay8NetReal()
+    {
+        return $this->day8NetReal;
+    }
+
+    /**
+     * Set day9NetPlan
+     *
+     * @param float $day9NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9NetPlan($day9NetPlan)
+    {
+        $this->day9NetPlan = $day9NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day9NetPlan
+     *
+     * @return float 
+     */
+    public function getDay9NetPlan()
+    {
+        return $this->day9NetPlan;
+    }
+
+    /**
+     * Set day9NetReal
+     *
+     * @param float $day9NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9NetReal($day9NetReal)
+    {
+        $this->day9NetReal = $day9NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day9NetReal
+     *
+     * @return float 
+     */
+    public function getDay9NetReal()
+    {
+        return $this->day9NetReal;
+    }
+
+    /**
+     * Set day10NetPlan
+     *
+     * @param float $day10NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10NetPlan($day10NetPlan)
+    {
+        $this->day10NetPlan = $day10NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day10NetPlan
+     *
+     * @return float 
+     */
+    public function getDay10NetPlan()
+    {
+        return $this->day10NetPlan;
+    }
+
+    /**
+     * Set day10NetReal
+     *
+     * @param float $day10NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10NetReal($day10NetReal)
+    {
+        $this->day10NetReal = $day10NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day10NetReal
+     *
+     * @return float 
+     */
+    public function getDay10NetReal()
+    {
+        return $this->day10NetReal;
+    }
+
+    /**
+     * Set day11NetPlan
+     *
+     * @param float $day11NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11NetPlan($day11NetPlan)
+    {
+        $this->day11NetPlan = $day11NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day11NetPlan
+     *
+     * @return float 
+     */
+    public function getDay11NetPlan()
+    {
+        return $this->day11NetPlan;
+    }
+
+    /**
+     * Set day11NetReal
+     *
+     * @param float $day11NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11NetReal($day11NetReal)
+    {
+        $this->day11NetReal = $day11NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day11NetReal
+     *
+     * @return float 
+     */
+    public function getDay11NetReal()
+    {
+        return $this->day11NetReal;
+    }
+
+    /**
+     * Set day12NetPlan
+     *
+     * @param float $day12NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12NetPlan($day12NetPlan)
+    {
+        $this->day12NetPlan = $day12NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day12NetPlan
+     *
+     * @return float 
+     */
+    public function getDay12NetPlan()
+    {
+        return $this->day12NetPlan;
+    }
+
+    /**
+     * Set day12NetReal
+     *
+     * @param float $day12NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12NetReal($day12NetReal)
+    {
+        $this->day12NetReal = $day12NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day12NetReal
+     *
+     * @return float 
+     */
+    public function getDay12NetReal()
+    {
+        return $this->day12NetReal;
+    }
+
+    /**
+     * Set day13NetPlan
+     *
+     * @param float $day13NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13NetPlan($day13NetPlan)
+    {
+        $this->day13NetPlan = $day13NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day13NetPlan
+     *
+     * @return float 
+     */
+    public function getDay13NetPlan()
+    {
+        return $this->day13NetPlan;
+    }
+
+    /**
+     * Set day13NetReal
+     *
+     * @param float $day13NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13NetReal($day13NetReal)
+    {
+        $this->day13NetReal = $day13NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day13NetReal
+     *
+     * @return float 
+     */
+    public function getDay13NetReal()
+    {
+        return $this->day13NetReal;
+    }
+
+    /**
+     * Set day14NetPlan
+     *
+     * @param float $day14NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14NetPlan($day14NetPlan)
+    {
+        $this->day14NetPlan = $day14NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day14NetPlan
+     *
+     * @return float 
+     */
+    public function getDay14NetPlan()
+    {
+        return $this->day14NetPlan;
+    }
+
+    /**
+     * Set day14NetReal
+     *
+     * @param float $day14NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14NetReal($day14NetReal)
+    {
+        $this->day14NetReal = $day14NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day14NetReal
+     *
+     * @return float 
+     */
+    public function getDay14NetReal()
+    {
+        return $this->day14NetReal;
+    }
+
+    /**
+     * Set day15NetPlan
+     *
+     * @param float $day15NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15NetPlan($day15NetPlan)
+    {
+        $this->day15NetPlan = $day15NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day15NetPlan
+     *
+     * @return float 
+     */
+    public function getDay15NetPlan()
+    {
+        return $this->day15NetPlan;
+    }
+
+    /**
+     * Set day15NetReal
+     *
+     * @param float $day15NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15NetReal($day15NetReal)
+    {
+        $this->day15NetReal = $day15NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day15NetReal
+     *
+     * @return float 
+     */
+    public function getDay15NetReal()
+    {
+        return $this->day15NetReal;
+    }
+
+    /**
+     * Set day16NetPlan
+     *
+     * @param float $day16NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16NetPlan($day16NetPlan)
+    {
+        $this->day16NetPlan = $day16NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day16NetPlan
+     *
+     * @return float 
+     */
+    public function getDay16NetPlan()
+    {
+        return $this->day16NetPlan;
+    }
+
+    /**
+     * Set day16NetReal
+     *
+     * @param float $day16NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16NetReal($day16NetReal)
+    {
+        $this->day16NetReal = $day16NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day16NetReal
+     *
+     * @return float 
+     */
+    public function getDay16NetReal()
+    {
+        return $this->day16NetReal;
+    }
+
+    /**
+     * Set day17NetPlan
+     *
+     * @param float $day17NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17NetPlan($day17NetPlan)
+    {
+        $this->day17NetPlan = $day17NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day17NetPlan
+     *
+     * @return float 
+     */
+    public function getDay17NetPlan()
+    {
+        return $this->day17NetPlan;
+    }
+
+    /**
+     * Set day17NetReal
+     *
+     * @param float $day17NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17NetReal($day17NetReal)
+    {
+        $this->day17NetReal = $day17NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day17NetReal
+     *
+     * @return float 
+     */
+    public function getDay17NetReal()
+    {
+        return $this->day17NetReal;
+    }
+
+    /**
+     * Set day18NetPlan
+     *
+     * @param float $day18NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18NetPlan($day18NetPlan)
+    {
+        $this->day18NetPlan = $day18NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day18NetPlan
+     *
+     * @return float 
+     */
+    public function getDay18NetPlan()
+    {
+        return $this->day18NetPlan;
+    }
+
+    /**
+     * Set day18NetReal
+     *
+     * @param float $day18NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18NetReal($day18NetReal)
+    {
+        $this->day18NetReal = $day18NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day18NetReal
+     *
+     * @return float 
+     */
+    public function getDay18NetReal()
+    {
+        return $this->day18NetReal;
+    }
+
+    /**
+     * Set day19NetPlan
+     *
+     * @param float $day19NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19NetPlan($day19NetPlan)
+    {
+        $this->day19NetPlan = $day19NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day19NetPlan
+     *
+     * @return float 
+     */
+    public function getDay19NetPlan()
+    {
+        return $this->day19NetPlan;
+    }
+
+    /**
+     * Set day19NetReal
+     *
+     * @param float $day19NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19NetReal($day19NetReal)
+    {
+        $this->day19NetReal = $day19NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day19NetReal
+     *
+     * @return float 
+     */
+    public function getDay19NetReal()
+    {
+        return $this->day19NetReal;
+    }
+
+    /**
+     * Set day20NetPlan
+     *
+     * @param float $day20NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20NetPlan($day20NetPlan)
+    {
+        $this->day20NetPlan = $day20NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day20NetPlan
+     *
+     * @return float 
+     */
+    public function getDay20NetPlan()
+    {
+        return $this->day20NetPlan;
+    }
+
+    /**
+     * Set day20NetReal
+     *
+     * @param float $day20NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20NetReal($day20NetReal)
+    {
+        $this->day20NetReal = $day20NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day20NetReal
+     *
+     * @return float 
+     */
+    public function getDay20NetReal()
+    {
+        return $this->day20NetReal;
+    }
+
+    /**
+     * Set day21NetPlan
+     *
+     * @param float $day21NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21NetPlan($day21NetPlan)
+    {
+        $this->day21NetPlan = $day21NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day21NetPlan
+     *
+     * @return float 
+     */
+    public function getDay21NetPlan()
+    {
+        return $this->day21NetPlan;
+    }
+
+    /**
+     * Set day21NetReal
+     *
+     * @param float $day21NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21NetReal($day21NetReal)
+    {
+        $this->day21NetReal = $day21NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day21NetReal
+     *
+     * @return float 
+     */
+    public function getDay21NetReal()
+    {
+        return $this->day21NetReal;
+    }
+
+    /**
+     * Set day22NetPlan
+     *
+     * @param float $day22NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22NetPlan($day22NetPlan)
+    {
+        $this->day22NetPlan = $day22NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day22NetPlan
+     *
+     * @return float 
+     */
+    public function getDay22NetPlan()
+    {
+        return $this->day22NetPlan;
+    }
+
+    /**
+     * Set day22NetReal
+     *
+     * @param float $day22NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22NetReal($day22NetReal)
+    {
+        $this->day22NetReal = $day22NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day22NetReal
+     *
+     * @return float 
+     */
+    public function getDay22NetReal()
+    {
+        return $this->day22NetReal;
+    }
+
+    /**
+     * Set day23NetPlan
+     *
+     * @param float $day23NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23NetPlan($day23NetPlan)
+    {
+        $this->day23NetPlan = $day23NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day23NetPlan
+     *
+     * @return float 
+     */
+    public function getDay23NetPlan()
+    {
+        return $this->day23NetPlan;
+    }
+
+    /**
+     * Set day23NetReal
+     *
+     * @param float $day23NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23NetReal($day23NetReal)
+    {
+        $this->day23NetReal = $day23NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day23NetReal
+     *
+     * @return float 
+     */
+    public function getDay23NetReal()
+    {
+        return $this->day23NetReal;
+    }
+
+    /**
+     * Set day24NetPlan
+     *
+     * @param float $day24NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24NetPlan($day24NetPlan)
+    {
+        $this->day24NetPlan = $day24NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day24NetPlan
+     *
+     * @return float 
+     */
+    public function getDay24NetPlan()
+    {
+        return $this->day24NetPlan;
+    }
+
+    /**
+     * Set day24NetReal
+     *
+     * @param float $day24NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24NetReal($day24NetReal)
+    {
+        $this->day24NetReal = $day24NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day24NetReal
+     *
+     * @return float 
+     */
+    public function getDay24NetReal()
+    {
+        return $this->day24NetReal;
+    }
+
+    /**
+     * Set day25NetPlan
+     *
+     * @param float $day25NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25NetPlan($day25NetPlan)
+    {
+        $this->day25NetPlan = $day25NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day25NetPlan
+     *
+     * @return float 
+     */
+    public function getDay25NetPlan()
+    {
+        return $this->day25NetPlan;
+    }
+
+    /**
+     * Set day25NetReal
+     *
+     * @param float $day25NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25NetReal($day25NetReal)
+    {
+        $this->day25NetReal = $day25NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day25NetReal
+     *
+     * @return float 
+     */
+    public function getDay25NetReal()
+    {
+        return $this->day25NetReal;
+    }
+
+    /**
+     * Set day26NetPlan
+     *
+     * @param float $day26NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26NetPlan($day26NetPlan)
+    {
+        $this->day26NetPlan = $day26NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day26NetPlan
+     *
+     * @return float 
+     */
+    public function getDay26NetPlan()
+    {
+        return $this->day26NetPlan;
+    }
+
+    /**
+     * Set day26NetReal
+     *
+     * @param float $day26NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26NetReal($day26NetReal)
+    {
+        $this->day26NetReal = $day26NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day26NetReal
+     *
+     * @return float 
+     */
+    public function getDay26NetReal()
+    {
+        return $this->day26NetReal;
+    }
+
+    /**
+     * Set day27NetPlan
+     *
+     * @param float $day27NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27NetPlan($day27NetPlan)
+    {
+        $this->day27NetPlan = $day27NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day27NetPlan
+     *
+     * @return float 
+     */
+    public function getDay27NetPlan()
+    {
+        return $this->day27NetPlan;
+    }
+
+    /**
+     * Set day27NetReal
+     *
+     * @param float $day27NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27NetReal($day27NetReal)
+    {
+        $this->day27NetReal = $day27NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day27NetReal
+     *
+     * @return float 
+     */
+    public function getDay27NetReal()
+    {
+        return $this->day27NetReal;
+    }
+
+    /**
+     * Set day28NetPlan
+     *
+     * @param float $day28NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28NetPlan($day28NetPlan)
+    {
+        $this->day28NetPlan = $day28NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day28NetPlan
+     *
+     * @return float 
+     */
+    public function getDay28NetPlan()
+    {
+        return $this->day28NetPlan;
+    }
+
+    /**
+     * Set day28NetReal
+     *
+     * @param float $day28NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28NetReal($day28NetReal)
+    {
+        $this->day28NetReal = $day28NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day28NetReal
+     *
+     * @return float 
+     */
+    public function getDay28NetReal()
+    {
+        return $this->day28NetReal;
+    }
+
+    /**
+     * Set day29NetPlan
+     *
+     * @param float $day29NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29NetPlan($day29NetPlan)
+    {
+        $this->day29NetPlan = $day29NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day29NetPlan
+     *
+     * @return float 
+     */
+    public function getDay29NetPlan()
+    {
+        return $this->day29NetPlan;
+    }
+
+    /**
+     * Set day29NetReal
+     *
+     * @param float $day29NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29NetReal($day29NetReal)
+    {
+        $this->day29NetReal = $day29NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day29NetReal
+     *
+     * @return float 
+     */
+    public function getDay29NetReal()
+    {
+        return $this->day29NetReal;
+    }
+
+    /**
+     * Set day30NetPlan
+     *
+     * @param float $day30NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30NetPlan($day30NetPlan)
+    {
+        $this->day30NetPlan = $day30NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day30NetPlan
+     *
+     * @return float 
+     */
+    public function getDay30NetPlan()
+    {
+        return $this->day30NetPlan;
+    }
+
+    /**
+     * Set day30NetReal
+     *
+     * @param float $day30NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30NetReal($day30NetReal)
+    {
+        $this->day30NetReal = $day30NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day30NetReal
+     *
+     * @return float 
+     */
+    public function getDay30NetReal()
+    {
+        return $this->day30NetReal;
+    }
+
+    /**
+     * Set day31NetPlan
+     *
+     * @param float $day31NetPlan
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31NetPlan($day31NetPlan)
+    {
+        $this->day31NetPlan = $day31NetPlan;
+
+        return $this;
+    }
+
+    /**
+     * Get day31NetPlan
+     *
+     * @return float 
+     */
+    public function getDay31NetPlan()
+    {
+        return $this->day31NetPlan;
+    }
+
+    /**
+     * Set day31NetReal
+     *
+     * @param float $day31NetReal
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31NetReal($day31NetReal)
+    {
+        $this->day31NetReal = $day31NetReal;
+
+        return $this;
+    }
+
+    /**
+     * Get day31NetReal
+     *
+     * @return float 
+     */
+    public function getDay31NetReal()
+    {
+        return $this->day31NetReal;
+    }
+
+    /**
+     * Metodo que se ejecuta antes de actualizar la entidad
+     * @ORM\PreUpdate()
+     * @ORM\PrePersist()
+     */
+    public function preUpdate()
+    {
+        $this->totalizeByType("Gross");
+        $this->totalizeByType("Net");
+    }
+    
+    private function totalizeByType($prefix) 
+    {
+        $reflection = new \ReflectionClass($this);
+        $methods = $reflection->getMethods();
+        
+        $nameMatchReal = '^getDay\w+'.$prefix.'Real$';
+        $nameMatchPlan = '^getDay\w+'.$prefix.'Plan$';
+        
+        $totalReal = $totalPlan = 0.0;
+        foreach ($methods as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth')){
+                continue;
+            }
+            $value = 0.0;
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $value = $this->$methodName();
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $totalReal +=  $value;
+            }
+            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $totalPlan +=  $value;
+            }
+        }
+        
+        $methodTotalPlan = "setTotal".$prefix."Plan";
+        $methodTotalReal = "setTotal".$prefix."Real";
+        $methodPercentage = "set".$prefix."Percentage";
+        
+        $this->$methodTotalPlan($totalPlan);
+        $this->$methodTotalReal($totalReal);
+        $percentage = 0;
+        if($totalPlan != 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $this->$methodPercentage($percentage);
+//        var_dump($methodTotalPlan);
+//        var_dump($methodTotalReal);
+//        var_dump($methodPercentage);
+//        
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
+//        var_dump($percentage);
     }
     
     public function __toString() {

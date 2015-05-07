@@ -248,6 +248,7 @@ sylius_resource:
             templates: PequivenSEIPBundle:DataLoad/Production/ProductPlanning
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductPlanningController
                 
         pequiven.range:
             driver: doctrine/orm
@@ -260,3 +261,4 @@ sylius_resource:
             templates: PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductDetailDailyMonthController

@@ -20,6 +20,15 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  */
 abstract class ProductPlanning extends BaseModel implements ProductPlanningInterface
 {
+    /**
+     * Tipo bruta
+     */
+    const TYPE_GROSS = 0;
+    /**
+     * Tipo neta
+     */
+    const TYPE_NET = 1;
+    
     public function getMonthLabel()
     {
         $month = $this->getMonth();
@@ -29,5 +38,17 @@ abstract class ProductPlanning extends BaseModel implements ProductPlanningInter
             $label = $monthsLabels[$month];
         }
         return $label;
+    }
+    
+    /**
+     * Retorna los tipos de posibles
+     * @return type
+     */
+    public static function getTypeLabels() 
+    {
+        return array(
+            self::TYPE_GROSS => "pequiven_seip.gross",
+            self::TYPE_NET => "pequiven_seip.net",
+        );
     }
 }

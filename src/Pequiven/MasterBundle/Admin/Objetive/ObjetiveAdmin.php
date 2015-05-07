@@ -63,11 +63,10 @@ class ObjetiveAdmin extends Admin
                 ->end()
             ->end()
             ->tab('Details')
-                    ->add('managementSystem',null,array(
-                        'query_builder' => function(\Pequiven\SIGBundle\Repository\ManagementSystemRepository $repository)
-                        {
-                            return $repository->getQueryAllEnabled();
-                        }
+                    ->add('managementSystems','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
                     ))
                     ->add('evalObjetive',null,array(
                         'required' => false,

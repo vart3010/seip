@@ -14,6 +14,9 @@ class ProductReportType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
+            return $repository->getQueryAllEnabled();
+        };
         $builder
             ->add('productionLine',null,array(
                 'label_attr' => array('class' => 'label'),
@@ -21,9 +24,9 @@ class ProductReportType extends AbstractType
             ))
             ->add('product',"tecno_ajax_autocomplete",array(
                 'label_attr' => array('class' => 'label'),
-                //"empty_value" => "",
                 "property" => array("name"),
-                "entity_alias" => "products_alias"
+                "entity_alias" => "products_alias",
+                "callback" => $queryBuilderEnable
             ))
             ->add("typeProduct","choice",array(
                 'label_attr' => array('class' => 'label'),
@@ -31,39 +34,38 @@ class ProductReportType extends AbstractType
                 "attr" => array("class" => "select2 input-large"),
                 "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getTypeProductLabels(),
             ))
-            ->add('productUnit',"choice",array(
+            ->add('productUnit',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),
                 "empty_value" => "",
-                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getProductUnits(),
                 "required" => true,
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add("company",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add("location",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
+                "query_builder" => $queryBuilderEnable,
             ))
-            ->add("rawMaterial",null,array(
+            ->add("rawMaterials",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add('plant',"tecno_ajax_autocomplete",array(
                 'label_attr' => array('class' => 'label'),
                 "property" => array("name"),
                 "entity_alias" => "plants_alias",
+                "callback" => $queryBuilderEnable,
             ))
             ->add('isRawMaterial',null,array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
-                "required" => false,
-            ))
-            ->add('isFinalProduct',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
                 "required" => false,

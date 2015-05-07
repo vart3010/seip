@@ -99,9 +99,6 @@
         </service>
         
         <service id="pequiven.repository.user" class="Pequiven\SEIPBundle\Repository\UserRepository">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\User" />
         </service>
         <service id="pequiven.repository.period" class="Pequiven\SEIPBundle\Repository\PeriodRepository">
@@ -290,11 +287,23 @@
             </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\Chart" />
         </service>
+        <service id="pequiven.repository.unit_measure" class="Pequiven\SEIPBundle\Repository\CEI\UnitMeasureRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure" />
+        </service>
+        <service id="pequiven.repository.plant" class="Pequiven\SEIPBundle\Repository\CEI\PlantRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Plant" />
+        </service>
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
+        </service>
+        <service id="pequiven.repository.day_stop" class="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\DayStop" />
+        </service>
+        <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
+        </service>
+        <service id="pequiven.repository.raw_material" class="Pequiven\SEIPBundle\Repository\CEI\RawMaterialRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\RawMaterial" />
         </service>
     </services>
 </container>

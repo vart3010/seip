@@ -62,4 +62,27 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             self::TYPE_PRODUCT_BYPRODUCT => "pequiven_seip.product_report.type.byproduct",
         );
     }
+    
+    public function getProductPlanningsGross()
+    {
+        return $this->getProductPlanningsByType(Production\ProductPlanning::TYPE_GROSS);
+    }
+    
+    public function getProductPlanningsNet()
+    {
+        return $this->getProductPlanningsByType(Production\ProductPlanning::TYPE_NET);
+    }
+    
+    public function getProductPlanningsByType($type)
+    {
+        $productPlannings = $this->getProductPlannings();
+        $result = array();
+        foreach ($productPlannings as $productPlanning) {
+            if($productPlanning->getType() === $type){
+                $result[$productPlanning->getMonth()] = $productPlanning;
+            }
+        }
+        ksort($result);
+        return $result;
+    }
 }

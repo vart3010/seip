@@ -12,6 +12,7 @@ pequiven:
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
         description_none: Ninguna
+        managementSystem: Sistema de Calidad
         period: Período
         process: Proceso
         management: Gerencia
@@ -48,6 +49,7 @@ pequiven:
         list_template: Lista de plantillas
         template: Plantilla
         list: Lista
+        listSig: Programas de Gestión SIG
         observations: Observaciones al programa
         include_responsible_management: Incluir los responsables de la
         responsible_management: Responsables de la gerencia

@@ -54,4 +54,11 @@ abstract class BaseAdmin extends Admin
             ->add('enabled', null, array('editable' => true))
             ;
     }
+    
+    protected function getQueryAllEnable(){
+        $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
+            return $repository->getQueryAllEnabled();
+        };
+        return $queryBuilderEnable;
+    }
 }

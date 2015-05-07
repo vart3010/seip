@@ -13,9 +13,9 @@
         {{ form_errors(form.totalMonth) }}
     </div>
     <div class="field-block button-height">
-        {{ form_label(form.designCapacity) }}
-        {{ form_widget(form.designCapacity) }}
-        {{ form_errors(form.designCapacity) }}
+        {{ form_label(form.dailyProductionCapacity) }}
+        {{ form_widget(form.dailyProductionCapacity) }}
+        {{ form_errors(form.dailyProductionCapacity) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.daysStops) }}
@@ -43,6 +43,7 @@
 
     jQuery(document).ready(function() {
         var selectMonth = $("#pequiven_seipbundle_dataload_production_productplanning_month");
+        var lastDateEnd = null;
         function addTagForm($collectionHolder, $newLinkLi) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
@@ -66,21 +67,21 @@
             addTagFormDeleteLink($newFormLi);
             var idDateFrom = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateFrom";
             var idDateEnd = "pequiven_seipbundle_dataload_production_productplanning_ranges_"+index+"_dateEnd";
+            
             var monthOfPlanning = selectMonth.val();
-            console.log(monthOfPlanning);
+            //console.log(index);
             var date = new Date();
             if(monthOfPlanning != ""){
                 date.setMonth(monthOfPlanning);
             }
             
-            console.log(date);
-            
             $( "#"+idDateFrom ).datepicker({
               defaultDate: date,
               changeMonth: false,
               numberOfMonths: 1,
+              stepMonths: 0,
               onClose: function( selectedDate ) {
-                $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
+                 $( "#"+idDateEnd ).datepicker( "option", "minDate", selectedDate );
               },
               dateFormat: dateFormat
             });
@@ -88,11 +89,25 @@
               defaultDate: date,
               changeMonth: false,
               numberOfMonths: 1,
+              stepMonths: 0,
               onClose: function( selectedDate ) {
                 $( "#"+idDateFrom ).datepicker( "option", "maxDate", selectedDate );
               },
               dateFormat: dateFormat
             });
+            if(lastDateEnd != null){
+                var formatFrom = "dd-MM-yyyy";
+                var dateString = lastDateEnd.val();
+                var myDate = getDateFromFormat(dateString,formatFrom);
+                var m = new Date(myDate);
+                m.setDate(m.getDate() + 1);
+                if(myDate === 0){
+                    myDate = dateString;
+                }
+                $( "#"+idDateFrom ).datepicker( "option", "minDate", m );
+            }
+
+            lastDateEnd = $( "#"+idDateEnd );
         }
         
         function addTagFormDeleteLink($tagFormLi) {

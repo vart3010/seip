@@ -24,11 +24,11 @@ class ProductReportController extends SEIPController
     public function runPlanningAction(Request $request)
     {
         $resource = $this->findOr404($request);
-        //addProductDetailDailyMonth
         $productPlannings = $resource->getProductPlannings();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
         $countProduct = 0;
+        $productDetailDailyMonthsCache = $resource->getProductDetailDailyMonthsSortByMonth();
         foreach ($productPlannings as $productPlanning) {
             $daysStops = $productPlanning->getDaysStops();
             $daysStopsArray = array();
@@ -37,8 +37,22 @@ class ProductReportController extends SEIPController
             }
             $ranges = $productPlanning->getRanges();
             
-            $productDetailDailyMonth = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth();
-            $productDetailDailyMonth->setMonth($productPlanning->getMonth());
+            if(!isset($productDetailDailyMonthsCache[$productPlanning->getMonth()])){
+                $productDetailDailyMonth = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth();
+                $productDetailDailyMonth->setMonth($productPlanning->getMonth());
+                $productDetailDailyMonth->setProductReport($resource);
+                $productDetailDailyMonthsCache[$productPlanning->getMonth()] = $productDetailDailyMonth;
+            }else{
+                $productDetailDailyMonth = $productDetailDailyMonthsCache[$productPlanning->getMonth()];
+            }
+            
+            $type = $productPlanning->getType();
+            $prefix = "";
+            if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_GROSS){
+                $prefix = "Gross";
+            }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_NET){
+                $prefix = "Net";
+            }
             
             foreach ($ranges as $range) {
                 $dateFrom = $range->getDateFrom();
@@ -54,25 +68,39 @@ class ProductReportController extends SEIPController
                     $value = $originalValue;
                 }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\Range::TYPE_CAPACITY_FACTOR){
                     $productPlanning = $range->getProductPlanning();
-                    $value = ($productPlanning->getDesignCapacity() / 100) * $originalValue;
+                    $value = ($productPlanning->getDailyProductionCapacity() / 100) * $originalValue;
                 }
+                
                 for($day = $dayFrom; $day < $dayEnd; $day++){
                     $dayInt = (int)$day;
+                    $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
                     if(in_array($dayInt,$daysStopsArray)){
+                        $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, 0);
                         continue;
                     }
-                    $propertyPath = sprintf("day%sPlan",$dayInt);
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, $value);
                 }
             }
-            $resource->addProductDetailDailyMonth($productDetailDailyMonth);
-            $this->save($productDetailDailyMonth,false);
             $countProduct++;
         }
         if($countProduct > 0){
+            foreach ($productDetailDailyMonthsCache as $productDetailDailyMonth) {
+                $this->save($productDetailDailyMonth,false);
+            }
             $this->flush();
         }
-        
         return $this->redirectHandler->redirectTo($resource);
+    }
+    
+    public function deleteAction(Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        
+        $url = $this->generateUrl("pequiven_report_template_show",array(
+            "id" => $resource->getReportTemplate()->getId(),
+        ));
+        
+        $this->domainManager->delete($resource);
+        return $this->redirect($url);
     }
 }
