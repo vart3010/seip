@@ -53,6 +53,7 @@ class EntitySubscriber extends BaseEventListerner
         $productReportId = $request->get("productReport");
         $productReport = $this->find("Pequiven\SEIPBundle\Entity\DataLoad\ProductReport", $productReportId);
         $entity->setProductReport($productReport);
+        $entity->setType($request->get("type"));
     }
     
     public function onProductRangePreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)

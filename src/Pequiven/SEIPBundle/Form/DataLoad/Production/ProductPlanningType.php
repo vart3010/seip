@@ -14,20 +14,27 @@ class ProductPlanningType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $entity = $builder->getData();
+        $monthsReady = array();
+        if($entity instanceof \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning){
+            $productReport = $entity->getProductReport();
+            if($productReport){
+                $productPlannings = $productReport->getProductPlanningsByType($entity->getType());
+                foreach ($productPlannings as $productPlanning) {
+                    $month = $productPlanning->getMonth();
+                    $monthsReady[$month] = $month;
+                }
+            }
+        }
+        $monthsDiff = array_diff_key(\Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),$monthsReady);
         $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
             return $repository->getQueryAllEnabled();
         };
         $builder
-            ->add('type',"choice",array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select2 input-large"),
-                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::getTypeLabels(),
-                "empty_value" => "",
-            ))
             ->add('month',"choice",array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "select2 input-large"),
-                "choices" => \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),
+                "choices" => $monthsDiff,
                 "empty_value" => "",
             ))
             ->add('totalMonth',null,array(

@@ -2,9 +2,9 @@
 
 <div class="block">
     <div class="block-title">
-        <h3> {{ 'pequiven_seip.product_planning.product_planning'|trans }}&nbsp;({{ product_report.productPlannings|length }})</h3>
+        <h3> {{ 'pequiven_seip.product_planning.product_planning'|trans }}&nbsp;{{ labelProductPlanning }}&nbsp;({{ productPlannings|length }})</h3>
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path('pequiven_product_planning_create',{productReport: product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a class="button icon-list-add" href="{{ urlProductPlanning }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">
@@ -21,7 +21,7 @@
             {% set colspan = 6 %}
             <tbody>
 
-                {% for productPlanning in product_report.productPlannings %}
+                {% for productPlanning in productPlannings %}
                     <tr>
                         <td>{{ loop.index }} - 
                             {{ generateLink(productPlanning) }}

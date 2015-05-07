@@ -17,7 +17,7 @@
 {% endblock stylesheets %}
 
 {% block body -%}
-    <form method="POST" action="{{ path('pequiven_product_planning_create',{productReport: app.request.get("productReport")})}}">
+    <form method="POST" action="{{ path('pequiven_product_planning_create',{productReport: app.request.get("productReport"),type: app.request.get("type")})}}">
        <br /><br />
        {% include 'PequivenSEIPBundle:DataLoad/Production/ProductPlanning:_form.html.twig' %}
        {{ actions.create() }}

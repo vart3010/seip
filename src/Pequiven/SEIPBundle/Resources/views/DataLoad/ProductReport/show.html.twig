@@ -82,6 +82,16 @@
     </fieldset>
                 
     <br /><br />
+    {% set labelProductPlanning = ("pequiven_seip.gross"|trans) %}
+    {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_GROSS')})) %}
+    {% set productPlannings = product_report.getProductPlanningsGross %}
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
+    <br /><br />
+    
+    {% set labelProductPlanning = ("pequiven_seip.net"|trans) %}
+    {% set urlProductPlanning = (path('pequiven_product_planning_create',{productReport: product_report.id, type: constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\ProductPlanning::TYPE_NET')})) %}
+    {% set productPlannings = product_report.getProductPlanningsNet %}
+    
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/product_detail_daily_months.html.twig' %}
