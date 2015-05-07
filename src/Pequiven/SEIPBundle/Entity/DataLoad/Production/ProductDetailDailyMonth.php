@@ -4018,7 +4018,6 @@ class ProductDetailDailyMonth extends BaseModel
     {
         $this->totalizeByType("Gross");
         $this->totalizeByType("Net");
-//        die;
     }
     
     private function totalizeByType($prefix) 
