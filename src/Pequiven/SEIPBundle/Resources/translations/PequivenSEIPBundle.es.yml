@@ -83,6 +83,9 @@ pequiven_seip:
         gerenciaSecond:  Gerencia de 2da linea
         rol: Rol
         actions: Acciones
+        totalPlan: TP
+        totalReal: TR
+        percentage: "%"
     results:
         results: Resultados
         resultsStrategics: Resultados Estratégicos

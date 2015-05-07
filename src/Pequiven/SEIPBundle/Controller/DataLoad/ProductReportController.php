@@ -24,12 +24,11 @@ class ProductReportController extends SEIPController
     public function runPlanningAction(Request $request)
     {
         $resource = $this->findOr404($request);
-        //addProductDetailDailyMonth
         $productPlannings = $resource->getProductPlannings();
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
         $countProduct = 0;
-        $productDetailDailyMonthsCache = array();
+        $productDetailDailyMonthsCache = $resource->getProductDetailDailyMonthsSortByMonth();
         foreach ($productPlannings as $productPlanning) {
             $daysStops = $productPlanning->getDaysStops();
             $daysStopsArray = array();

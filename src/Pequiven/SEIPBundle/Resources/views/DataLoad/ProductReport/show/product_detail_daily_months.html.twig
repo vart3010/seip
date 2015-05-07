@@ -11,15 +11,20 @@
             <a class="button icon-list-add" href="{{ path("pequiven_product_detail_daily_month_create",{productReport:product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
+    {% set typeProductionGross = "&nbsp;("~("pequiven_seip.gross"|trans)~")" %}
+    {% set typeProductionNet = "&nbsp;("~("pequiven_seip.net"|trans)~")" %}
     <div class="with-padding">
         <table class="simple-table responsive-table tables-extras" id="sorting-example2">
             <thead>
                 <tr>
-                    <th scope="col" width="20%">{{ 'Month'|trans }}</th>
-                    <th scope="col" width="20%" class="hide-on-mobile-portrait">{{ 'pequiven_seip.totalPlan'|trans }}</th>
-                    <th scope="col" width="20%" class="hide-on-tablet">{{ 'pequiven_seip.totalReal'|trans }}</th>
-                    <th scope="col" width="20%" class="hide-on-tablet">{{ 'pequiven_seip.percentage'|trans }}</th>
-                    <th scope="col" width="20%">&nbsp;</th>
+                    <th scope="col" width="10%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionGross|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}{{ typeProductionNet|raw }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
                 </tr>
             </thead>
             {% set colspan = 6 %}
@@ -31,11 +36,12 @@
                         <th scope="row">{{ loop.index }} - 
                             {{ generateLink(productDetailDailyMonth) }}
                         </th>
-                        <td>
-                            {{ productDetailDailyMonth.totalGrossPlan }}
-                        </td>
-                        <td>{{ productDetailDailyMonth.totalGrossReal }}</td>
-                        <td>{{ productDetailDailyMonth.grossPercentage }}&nbsp;%</td>
+                        <td>{{ productDetailDailyMonth.totalGrossPlan|myNumberFormat }}</td>
+                        <td>{{ productDetailDailyMonth.totalGrossReal|myNumberFormat }}</td>
+                        <td>{{ productDetailDailyMonth.grossPercentage|myNumberFormat }}&nbsp;%</td>
+                        <td>{{ productDetailDailyMonth.totalNetPlan|myNumberFormat }}</td>
+                        <td>{{ productDetailDailyMonth.totalNetReal|myNumberFormat }}</td>
+                        <td>{{ productDetailDailyMonth.netPercentage|myNumberFormat }}&nbsp;%</td>
                         <td class="low-padding align-center">
                             <p class="button-height">
                                 <span class="button-group">
