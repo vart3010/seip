@@ -29,6 +29,7 @@ class ProductReportController extends SEIPController
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
         $countProduct = 0;
+        $productDetailDailyMonthsCache = array();
         foreach ($productPlannings as $productPlanning) {
             $daysStops = $productPlanning->getDaysStops();
             $daysStopsArray = array();
@@ -37,8 +38,21 @@ class ProductReportController extends SEIPController
             }
             $ranges = $productPlanning->getRanges();
             
-            $productDetailDailyMonth = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth();
-            $productDetailDailyMonth->setMonth($productPlanning->getMonth());
+            if(!isset($productDetailDailyMonthsCache[$productPlanning->getMonth()])){
+                $productDetailDailyMonth = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth();
+                $productDetailDailyMonth->setMonth($productPlanning->getMonth());
+                $productDetailDailyMonthsCache[$productPlanning->getMonth()] = $productDetailDailyMonth;
+            }else{
+                $productDetailDailyMonth = $productDetailDailyMonthsCache[$productPlanning->getMonth()];
+            }
+            
+            $type = $productPlanning->getType();
+            $prefix = "";
+            if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_GROSS){
+                $prefix = "Gross";
+            }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\Production\ProductPlanning::TYPE_NET){
+                $prefix = "Net";
+            }
             
             foreach ($ranges as $range) {
                 $dateFrom = $range->getDateFrom();
@@ -61,7 +75,7 @@ class ProductReportController extends SEIPController
                     if(in_array($dayInt,$daysStopsArray)){
                         continue;
                     }
-                    $propertyPath = sprintf("day%sPlan",$dayInt);
+                    $propertyPath = sprintf("day%s%sPlan",$dayInt,$prefix);
                     $propertyAccessor->setValue($productDetailDailyMonth, $propertyPath, $value);
                 }
             }

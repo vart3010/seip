@@ -395,6 +395,21 @@ class ProductReport extends BaseModel
         return $this->productDetailDailyMonths;
     }
     
+    /**
+     * Get productDetailDailyMonths
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductDetailDailyMonthsSortByMonth()
+    {
+        $sorted = array();
+        foreach ($this->productDetailDailyMonths as $productDetailDailyMonth) {
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
     function getProductUnit() {
         return $this->productUnit;
     }

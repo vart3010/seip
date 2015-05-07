@@ -4057,7 +4057,7 @@ class ProductDetailDailyMonth extends BaseModel
         if($totalPlan != 0){
             $percentage = ($totalReal * 100) / $totalPlan;
         }
-        $this->$methodTotalReal($percentage);
+        $this->$methodPercentage($percentage);
     }
     
     public function __toString() {

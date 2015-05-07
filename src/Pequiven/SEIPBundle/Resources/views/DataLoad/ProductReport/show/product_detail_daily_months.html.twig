@@ -25,7 +25,7 @@
             {% set colspan = 6 %}
             <tbody>
 
-                {% for productDetailDailyMonth in product_report.productDetailDailyMonths %}
+                {% for productDetailDailyMonth in product_report.getProductDetailDailyMonthsSortByMonth %}
                     {% set tableIdRow = "row-productDetailDailyMonth-"~productDetailDailyMonth.id %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">{{ loop.index }} - 
