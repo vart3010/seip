@@ -25,6 +25,7 @@ class GroupAdmin extends BaseGroupAdmin
         $show
             ->add('name')
             ->add('description')
+            ->add('level')
             ;
     }
     
@@ -32,6 +33,7 @@ class GroupAdmin extends BaseGroupAdmin
         $formMapper
             ->add('name')
             ->add('description')
+            ->add('level')
             ->add('roles', 'sonata_security_roles', array(
                 'expanded' => true,
                 'multiple' => true,
