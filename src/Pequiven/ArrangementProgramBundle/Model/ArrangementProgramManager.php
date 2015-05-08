@@ -239,6 +239,8 @@ class ArrangementProgramManager implements ContainerAwareInterface
                 }elseif($periodService->isAllowNotifyArrangementProgram() === true){
                     $valid = true;
                 }
+            } elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
+                $valid = true;
             }
         } else{
             $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
@@ -253,16 +255,18 @@ class ArrangementProgramManager implements ContainerAwareInterface
                 }elseif($periodService->isAllowNotifyArrangementProgram() === true){
                     $valid = true;
                 }
+            } elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
+                $valid = true;
             }
         }
-        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
-        {
-            $valid = true;
-        }
-        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
-        {
-            $valid = true;
-        }
+//        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
+//        {
+//            $valid = true;
+//        }
+//        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
+//        {
+//            $valid = true;
+//        }
         
         return $valid;
     }
