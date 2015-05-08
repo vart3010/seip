@@ -729,8 +729,9 @@ class ObjetiveTacticController extends baseController
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = explode(',', $options['objetiveStrategics']);
         $totalObjetivesStrategics = count($objetivesStrategics);
+        $period = $this->getPeriodService()->getPeriodActive();
 
-        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1],'period' => $period));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
 
         $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true));
@@ -755,6 +756,7 @@ class ObjetiveTacticController extends baseController
      * @param array $options
      */
     public function setRef($options = array()) {
+        $period = $this->getPeriodService()->getPeriodActive();
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = $options['objetiveStrategics'];
         $totalObjetivesStrategics = count($objetivesStrategics);

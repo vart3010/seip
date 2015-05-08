@@ -1234,6 +1234,7 @@ class ObjetiveOperativeController extends baseController
         $em = $this->getDoctrine()->getManager();
         $objetivesTactics = $options['objetiveTactics'];
         $totalObjetivesTactics = count($objetivesTactics);
+        $period = $this->getPeriodService()->getPeriodActive();
         $totalRef = array();
 
         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));

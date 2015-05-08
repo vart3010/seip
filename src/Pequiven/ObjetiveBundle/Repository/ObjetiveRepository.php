@@ -109,6 +109,8 @@ class ObjetiveRepository extends EntityRepository {
             }
         }
 
+//        $this->applyPeriodCriteria($query);
+        
         return $query->getQuery()->getResult();
     }
 
