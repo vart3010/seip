@@ -263,4 +263,37 @@ class ManagementSystem extends modelManagementSystem
     {
         return $this->objetives;
     }
+    
+    /**
+    * Add indicators
+    *
+    * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+    * @return ManagementSystem
+    */
+    public function addIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators[] = $indicators;
+
+        return $this;
+    }
+
+    /**
+    * Remove indicators
+    *
+    * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicators
+    */
+    public function removeIndicator(\Pequiven\IndicatorBundle\Entity\Indicator $indicators)
+    {
+        $this->indicators->removeElement($indicators);
+    }
+
+    /**
+    * Get indicators
+    *
+    * @return \Doctrine\Common\Collections\Collection 
+    */
+    public function getIndicators()
+    {
+        return $this->indicators;
+    }
 }
