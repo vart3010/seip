@@ -105,7 +105,7 @@ class AddObjetiveParentStrategicFieldListener implements EventSubscriberInterfac
         }
 
         //En caso de que el usuario tenga un rol superior a Gerente de 2da línea
-        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_WORKER_PLANNING'))){
             //En caso de que el formulario sea el de objetivo operativo
             if($this->typeOperative){
                 $formOptions['mapped'] = false;

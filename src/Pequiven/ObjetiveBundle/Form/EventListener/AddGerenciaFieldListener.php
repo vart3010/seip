@@ -106,7 +106,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         } else{
             $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
 
-            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                 $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
                 $gerencia = null;
                 $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');

@@ -58,13 +58,13 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             //Objetivo Táctico al cual impactará el indicador a crear
             $builder->addEventSubscriber(new AddObjetiveParentTacticFieldListener($this->container,array('registerIndicator' => true)));
             
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                 //Localidad(es) donde impactará el indicador a crear
                 $builder->addEventSubscriber(new AddComplejoFieldListener($this->container,array('registerIndicator' => true,'typeOperative' => true)));
                 //Gerencia de 1ra línea donde impactará el indicador a crear
                 $builder->addEventSubscriber(new AddGerenciaFieldListener($this->container,array('registerIndicator' => true)));
             }
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX'))){
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_GENERAL_COMPLEJO','ROLE_GENERAL_COMPLEJO_AUX','ROLE_MANAGER_FIRST','ROLE_MANAGER_FIRST_AUX','ROLE_WORKER_PLANNING'))){
                 //Gerencia de 2da línea dónde impactará el indicador a crear
                 $builder->addEventSubscriber(new AddGerenciaSecondFieldListener($this->container,array('registerIndicator' => true)));
             }
