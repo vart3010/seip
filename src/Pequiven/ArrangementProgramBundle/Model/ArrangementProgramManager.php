@@ -27,6 +27,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
             if(!$configuration){
                 return $valid;
             }
+            
+            if($this->getSecurityConext()->isGranted(array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC','ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE'))){
+                $valid = true;
+            }        
 
             foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
                 if($user === $userToReviser){
