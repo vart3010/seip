@@ -195,4 +195,16 @@ abstract class Objetive implements ObjetiveInterface
         );
         return $labelsStatus;
     }
+    
+    /**
+     * Retorna la etiqueta que corresponde a un estatus del objetivo
+     * @return string
+     */
+    function getLabelStatus()
+    {
+        $labels = $this->getLabelsStatus();
+        if(isset($labels[$this->status])){
+            return $labels[$this->status];
+        }
+    }
 }

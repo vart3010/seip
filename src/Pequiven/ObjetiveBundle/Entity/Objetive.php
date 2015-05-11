@@ -238,7 +238,7 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      * @var integer
      * @ORM\Column(name="status", type="integer")
      */
-    private $status = self::STATUS_DRAFT;
+    protected $status = self::STATUS_DRAFT;
     
     /**
      * @var \Pequiven\SEIPBundle\Entity\Result\Result Description
@@ -766,7 +766,9 @@ class Objetive extends modelObjetive implements ResultItemInterface,PeriodItemIn
      */
     public function addParent(\Pequiven\ObjetiveBundle\Entity\Objetive $parents)
     {
-        $this->parents->add($parents);
+        if(!$this->parents->contains($parents)){
+            $this->parents->add($parents);
+        }
 
         return $this;
     }

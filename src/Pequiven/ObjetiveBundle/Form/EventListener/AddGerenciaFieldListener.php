@@ -72,6 +72,7 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     
     public function preSubmit(FormEvent $event){
         $form = $event->getForm();
+        $data = $form->getData();
         $this->addGerenciaForm($form);
     }
     
