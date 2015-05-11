@@ -161,6 +161,8 @@ class ObjetiveTacticController extends baseController
 
         $em->getConnection()->beginTransaction();
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            var_dump('epale');
+            die();
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
 

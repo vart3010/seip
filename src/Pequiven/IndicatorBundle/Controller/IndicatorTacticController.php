@@ -362,8 +362,10 @@ class IndicatorTacticController extends baseController
 
         $refParentId = $request->request->get('refParentId');
         $indicatorLevelId = IndicatorLevel::LEVEL_TACTICO;
+        
+        $periodActive = $this->getPeriodService()->getPeriodActive();
 
-        $results = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true, 'userCreatedAt' => $user));
+        $results = $this->get("pequiven.repository.indicator")->findBy(array('refParent' => $refParentId, 'indicatorLevel' => $indicatorLevelId, 'tmp' => true, 'userCreatedAt' => $user,'period' => $periodActive));
         $totalResults = count($results);
 
         if (is_array($results) && $totalResults > 0) {
@@ -413,7 +415,7 @@ class IndicatorTacticController extends baseController
 
         $objetiveStrategicId = explode(',', $request->request->get('objetiveStrategicId'));
         $gerenciaFirstId = '';
-        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX'))) {
+        if ($securityContext->isGranted(array('ROLE_DIRECTIVE', 'ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))) {
             $gerenciaFirstId = $request->request->get('gerenciaFirstId');
         } elseif ($securityContext->isGranted(array('ROLE_GENERAL_COMPLEJO', 'ROLE_GENERAL_COMPLEJO_AUX', 'ROLE_MANAGER_FIRST', 'ROLE_MANAGER_FIRST_AUX'))) {
             $gerenciaFirstId = $user->getGerencia()->getId();
