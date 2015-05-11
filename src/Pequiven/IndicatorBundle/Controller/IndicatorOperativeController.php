@@ -114,7 +114,7 @@ class IndicatorOperativeController extends baseController {
                 $this->get('session')->getFlashBag()->add('success', 'error falta gerencia 2da línea');
             }
 
-            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative']));
+            $objetive = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $data['parentOperative'],'period'=>$period));
             $object->setRefParent($objetive->getRef());
             $refIndicator = $data['ref'];
             $object->setPeriod($period);
@@ -145,7 +145,7 @@ class IndicatorOperativeController extends baseController {
             }
 
             //Obtenemos el último indicador guardado y le añadimos el rango de gestión o semáforo
-            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId()));
+            $lastObjectInsert = $this->get("pequiven.repository.indicator")->findOneBy(array('ref' => $refIndicator,'period' => $period->getId(),'refParent' => $objetive->getRef()));
             $this->createArrangementRange($lastObjectInsert, $data);
 
             //Guardamos la relación entre el indicador y el objetivo
