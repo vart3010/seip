@@ -153,7 +153,7 @@ class PeriodService extends ContainerAware
      */
     public function isOpened()
     {
-        $periodActive = $this->getPeriodActive();
+        $periodActive = $this->getPeriodActive(\Pequiven\SEIPBundle\Entity\Period::VIEW_ONLY_PERIOD_ACTIVE);
         if($periodActive === null){
             throw new Exception("No hay periodo activo.");
         }
