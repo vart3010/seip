@@ -43,11 +43,42 @@ class Product extends BaseModel
     private $name;
     
     /**
-     * Tipo (Producto o servicio)
-     * @var integer
-     * @ORM\Column(name="typeOf",type="integer")
+     * Linea de negocio (Linea de producto)
+     * 
+     * @var ProductionLine
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\ProductionLine")
      */
-    private $typeOf = self::TYPE_PRODUCT;
+    private $productionLine;
+    
+    /**
+     * ¿Es materia prima?
+     * @var boolean
+     * @ORM\Column(name="is_raw_material",type="boolean")
+     */
+    private $isRawMaterial = false;
+    
+    /**
+     * Unidad del producto
+     * @var \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\UnitMeasure")
+     */
+    private $productUnit;
+    
+    /**
+     * Materia prima
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\JoinTable(name="products_rawmaterials")
+     */
+    private $rawMaterials;
+    
+    /**
+     * Tipo de producto
+     * @var integer
+     * @ORM\Column(name="type_product",type="integer")
+     */
+    private $typeProduct;
     
     /**
      * Componentes o subproductos
@@ -96,33 +127,6 @@ class Product extends BaseModel
     }
     
     /**
-     * Set typeOf
-     *
-     * @param integer $typeOf
-     * @return Product
-     */
-    public function setTypeOf($typeOf)
-    {
-        $this->typeOf = $typeOf;
-
-        return $this;
-    }
-
-    /**
-     * Get typeOf
-     *
-     * @return integer 
-     */
-    public function getTypeOf()
-    {
-        return $this->typeOf;
-    }
-    
-    public function __toString() 
-    {
-        return $this->getName()?:'-';
-    }
-    /**
      * Add components
      *
      * @param \Pequiven\SEIPBundle\Entity\CEI\Product $components
@@ -153,5 +157,135 @@ class Product extends BaseModel
     public function getComponents()
     {
         return $this->components;
+    }
+    
+    /**
+     * Set isRawMaterial
+     *
+     * @param boolean $isRawMaterial
+     * @return Product
+     */
+    public function setIsRawMaterial($isRawMaterial)
+    {
+        $this->isRawMaterial = $isRawMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get isRawMaterial
+     *
+     * @return boolean 
+     */
+    public function getIsRawMaterial()
+    {
+        return $this->isRawMaterial;
+    }
+
+    /**
+     * Set typeProduct
+     *
+     * @param integer $typeProduct
+     * @return Product
+     */
+    public function setTypeProduct($typeProduct)
+    {
+        $this->typeProduct = $typeProduct;
+
+        return $this;
+    }
+
+    /**
+     * Get typeProduct
+     *
+     * @return integer 
+     */
+    public function getTypeProduct()
+    {
+        return $this->typeProduct;
+    }
+
+    /**
+     * Set productionLine
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\ProductionLine $productionLine
+     * @return Product
+     */
+    public function setProductionLine(\Pequiven\SEIPBundle\Entity\CEI\ProductionLine $productionLine = null)
+    {
+        $this->productionLine = $productionLine;
+
+        return $this;
+    }
+
+    /**
+     * Get productionLine
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\ProductionLine 
+     */
+    public function getProductionLine()
+    {
+        return $this->productionLine;
+    }
+
+    /**
+     * Set productUnit
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $productUnit
+     * @return Product
+     */
+    public function setProductUnit(\Pequiven\SEIPBundle\Entity\CEI\UnitMeasure $productUnit = null)
+    {
+        $this->productUnit = $productUnit;
+
+        return $this;
+    }
+
+    /**
+     * Get productUnit
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure 
+     */
+    public function getProductUnit()
+    {
+        return $this->productUnit;
+    }
+
+    /**
+     * Add rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Productl $rawMaterials
+     * @return Product
+     */
+    public function addRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\Product $rawMaterials)
+    {
+        $this->rawMaterials[] = $rawMaterials;
+
+        return $this;
+    }
+
+    /**
+     * Remove rawMaterials
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $rawMaterials
+     */
+    public function removeRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\Product $rawMaterials)
+    {
+        $this->rawMaterials->removeElement($rawMaterials);
+    }
+
+    /**
+     * Get rawMaterials
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRawMaterials()
+    {
+        return $this->rawMaterials;
+    }
+    
+    public function __toString() 
+    {
+        return $this->getName()?:'-';
     }
 }

@@ -32,6 +32,8 @@ class PlantAdmin extends BaseAdmin
             ->add('designCapacity')
             ->add('unitMeasure')
             ->add('location')
+            ->add('products')
+            ->add('services')
             ;
         parent::configureShowFields($show);
     }
@@ -44,6 +46,34 @@ class PlantAdmin extends BaseAdmin
             ->add('designCapacity')
             ->add('unitMeasure')
             ->add('location')
+            ->add('products',"sonata_type_model_autocomplete",array(
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                "callback" => function (ProductAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->setParameter('enabled',true)
+                    ;
+                }
+            ))
+            ->add('services',"sonata_type_model_autocomplete",array(
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                "callback" => function (ServiceAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->setParameter('enabled',true)
+                    ;
+                }
+            ))
             ;
         parent::configureFormFields($form);
     }

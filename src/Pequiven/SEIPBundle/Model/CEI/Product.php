@@ -20,14 +20,24 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  */
 abstract class Product extends BaseModel
 {
-    const TYPE_PRODUCT = 0;
-    const TYPE_SERVICE = 1;
+    /**
+     * Tipo: Producto final
+     */
+    const TYPE_PRODUCT_FINAL = 0;
+    /**
+     * Tipo: Sub-producto
+     */
+    const TYPE_PRODUCT_BYPRODUCT = 1;
     
-    static function getTypesLabel()
+    /**
+     * Retorna los tipos de productos
+     * @return string
+     */
+    public static function getTypeProductLabels()
     {
         return array(
-            self::TYPE_PRODUCT => 'pequiven_seip.product.type.product',
-            self::TYPE_SERVICE => 'pequiven_seip.product.type.service',
+            self::TYPE_PRODUCT_FINAL => "pequiven_seip.product_report.type.final",
+            self::TYPE_PRODUCT_BYPRODUCT => "pequiven_seip.product_report.type.byproduct",
         );
     }
 }
