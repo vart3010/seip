@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Entity\CEI;
+namespace Pequiven\SEIPBundle\Entity\DataLoad\Production;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\BaseModel;
 
 /**
- * Dia de parada de produccion
+ * Dias de paradas
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(name="seip_cei_day_stop")
+ * @ORM\Table(name="seip_report_product_report_day_stop")
  * @ORM\Entity(repositoryClass="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository")
  */
 class DayStop extends BaseModel
@@ -33,12 +33,19 @@ class DayStop extends BaseModel
     private $id;
     
     /**
-     * Numero del dia en el mes
-     * @var integer
-     * @ORM\Column(name="nro_day",type="integer")
+     * Dia de la parada
+     * @var \DateTime
+     * @ORM\Column(name="day",type="datetime")
      */
-    private $nroDay;
+    private $day;
     
+    /**
+     * Horas de la parada
+     * @var float
+     * @ORM\Column(name="hours",type="float")
+     */
+    private $hours;
+
     /**
      * Get id
      *
@@ -50,34 +57,48 @@ class DayStop extends BaseModel
     }
 
     /**
-     * Set nroDay
+     * Set day
      *
-     * @param integer $nroDay
+     * @param \DateTime $day
      * @return DayStop
      */
-    public function setNroDay($nroDay)
+    public function setDay($day)
     {
-        $this->nroDay = $nroDay;
+        $this->day = $day;
 
         return $this;
     }
 
     /**
-     * Get nroDay
+     * Get day
      *
-     * @return integer 
+     * @return \DateTime 
      */
-    public function getNroDay()
+    public function getDay()
     {
-        return $this->nroDay;
+        return $this->day;
     }
 
-    public function __toString() 
+    /**
+     * Set hours
+     *
+     * @param float $hours
+     * @return DayStop
+     */
+    public function setHours($hours)
     {
-        $_toString = "-";
-        if($this->getNroDay() > 0){
-            $_toString = $this->getNroDay()."";
-        }
-        return $_toString;
+        $this->hours = $hours;
+
+        return $this;
+    }
+
+    /**
+     * Get hours
+     *
+     * @return float 
+     */
+    public function getHours()
+    {
+        return $this->hours;
     }
 }

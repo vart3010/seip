@@ -42,11 +42,17 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Days stops'|trans }}</label>
-                    {% for daysStop in product_planning.daysStops %}
-                        {{ daysStop }}{% if loop.last %}.{% else %},&nbsp;{% endif %}
-                    {% else %}
-                        {{ "pequiven_seip.product_planning.without_stopping_day"|trans }}
-                    {% endfor %}
+                    <ul class="unstyled-list">
+                            {% for daysStop in product_planning.daysStops %}
+                                <li>
+                                    {{ daysStop.day|myFormatDate }}&nbsp;<b><i class="fa fa-clock-o"></i>{{ "pequiven_seip.hours_n"|trans({"%n%":daysStop.hours}) }}.</b>
+                                </li>
+                            {% else %}
+                                <li>
+                                    {{ "pequiven_seip.product_planning.without_stopping_day"|trans }}
+                                </li>
+                            {% endfor %}
+                    </ul>
                 </p>
             </div>
         </div>

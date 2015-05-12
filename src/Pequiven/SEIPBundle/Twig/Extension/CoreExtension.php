@@ -33,6 +33,8 @@ class CoreExtension extends \Twig_Extension
                 return str_pad($input, $padlength, $padstring, $padtype);
             }),
             new \Twig_SimpleFilter('myNumberFormat', array($this,'myNumberFormat')),
+            new \Twig_SimpleFilter('myFormatDateTime', array($this,'myFormatDateTime')),
+            new \Twig_SimpleFilter('myFormatDate', array($this,'myFormatDate')),
             new \Twig_SimpleFilter('render_yes_no', array($this,'renderYesNo'),array('is_safe' => array('html')) ),
         );
     }
@@ -144,6 +146,26 @@ class CoreExtension extends \Twig_Extension
         return $response;
     }
     
+    public function myFormatDateTime($myFormatDate) 
+    {
+        $dateFormated = "";
+        if($myFormatDate instanceof \DateTime)
+        {
+            $dateFormated = $myFormatDate->format($this->getConfiguration()->getGeneralDateFormat());
+        }
+        return $dateFormated;
+    }
+    
+    public function myFormatDate($myFormatDate) 
+    {
+        $dateFormated = "";
+        if($myFormatDate instanceof \DateTime)
+        {
+            $dateFormated = $myFormatDate->format("Y-m-d");
+        }
+        return $dateFormated;
+    }
+    
     /**
      * Returns the name of the extension.
      *
@@ -215,5 +237,14 @@ class CoreExtension extends \Twig_Extension
     protected function getPeriodService()
     {
         return $this->container->get('pequiven_seip.service.period');
+    }
+    
+    /**
+     * 
+     * @return \Pequiven\SEIPBundle\Service\Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->container->get("seip.configuration");
     }
 }

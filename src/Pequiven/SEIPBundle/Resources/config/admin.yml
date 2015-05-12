@@ -481,17 +481,6 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
-    sonata.admin.cei.day_stop:
-        class: Pequiven\MasterBundle\Admin\CEI\DayStopAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Dia de parada" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\DayStop
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
     sonata.admin.cei.unit_measure:
         class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
         tags:

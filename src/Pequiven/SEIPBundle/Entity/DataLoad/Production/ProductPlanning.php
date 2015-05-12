@@ -48,8 +48,8 @@ class ProductPlanning extends BaseModel
 
     /**
      * Dias de paradas
-     * @var \Pequiven\SEIPBundle\Entity\CEI\DayStop
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\DayStop")
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop",cascade={"persist","remove"})
      */
     private $daysStops;
 
@@ -147,39 +147,6 @@ class ProductPlanning extends BaseModel
     }
 
     /**
-     * Add daysStops
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\DayStop $daysStops
-     * @return ProductPlanning
-     */
-    public function addDaysStop(\Pequiven\SEIPBundle\Entity\CEI\DayStop $daysStops)
-    {
-        $this->daysStops[] = $daysStops;
-
-        return $this;
-    }
-
-    /**
-     * Remove daysStops
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\DayStop $daysStops
-     */
-    public function removeDaysStop(\Pequiven\SEIPBundle\Entity\CEI\DayStop $daysStops)
-    {
-        $this->daysStops->removeElement($daysStops);
-    }
-
-    /**
-     * Get daysStops
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDaysStops()
-    {
-        return $this->daysStops;
-    }
-
-    /**
      * Set productReport
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport
@@ -270,6 +237,39 @@ class ProductPlanning extends BaseModel
         return $this->type;
     }
     
+    /**
+     * Add daysStops
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops
+     * @return ProductPlanning
+     */
+    public function addDaysStop(\Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops)
+    {
+        $this->daysStops->add($daysStops);
+
+        return $this;
+    }
+
+    /**
+     * Remove daysStops
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops
+     */
+    public function removeDaysStop(\Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops)
+    {
+        $this->daysStops->removeElement($daysStops);
+    }
+
+    /**
+     * Get daysStops
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDaysStops()
+    {
+        return $this->daysStops;
+    }
+    
     public function __toString() 
     {
         $_toString = "-";
@@ -278,5 +278,4 @@ class ProductPlanning extends BaseModel
         }
         return $_toString;
     }
-    
 }

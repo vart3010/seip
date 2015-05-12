@@ -18,18 +18,22 @@ class ProductPlanningType extends AbstractType
         $monthsReady = array();
         if($entity instanceof \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning){
             $productReport = $entity->getProductReport();
+            $myMonth = null;
+            if($entity->getId() > 0){
+                $myMonth = $entity->getMonth();
+            }
             if($productReport){
                 $productPlannings = $productReport->getProductPlanningsByType($entity->getType());
                 foreach ($productPlannings as $productPlanning) {
                     $month = $productPlanning->getMonth();
+                    if($myMonth !== null && $myMonth === $month){
+                        continue;
+                    }
                     $monthsReady[$month] = $month;
                 }
             }
         }
         $monthsDiff = array_diff_key(\Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),$monthsReady);
-        $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
-            return $repository->getQueryAllEnabled();
-        };
         $builder
             ->add('month',"choice",array(
                 'label_attr' => array('class' => 'label'),
@@ -45,11 +49,12 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))
-            ->add('daysStops',null,array(
+            ->add('daysStops',"collection",array(
+                "type" => new DayStopType(),
                 'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select2 input-large"),
-                "multiple" => true,
-                "query_builder" => $queryBuilderEnable,
+                "allow_add"    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
             ))
             ->add("ranges","collection",array(
                 'label_attr' => array('class' => 'label'),
