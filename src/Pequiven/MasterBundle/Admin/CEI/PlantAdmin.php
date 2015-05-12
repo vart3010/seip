@@ -28,6 +28,7 @@ class PlantAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
             ->add('location')
@@ -39,6 +40,7 @@ class PlantAdmin extends BaseAdmin
     {
         $form
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
             ->add('location')
@@ -50,6 +52,7 @@ class PlantAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
             ->add('location')
@@ -61,6 +64,7 @@ class PlantAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('location')
             ;
