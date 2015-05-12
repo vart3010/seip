@@ -244,6 +244,17 @@
                 $tagFormLi.remove();
             });
         }
+        var applyChange = function(){
+            var type = $(this).find("select").val();
+            var typeValue = $(this).parent().find(".type-value");
+            var typeValue = $(this).parent().parent().find("span.type-value");
+            if(type == "{{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\Production\\Range::TYPE_CAPACITY_FACTOR') }}"){
+                typeValue.html("%");
+            }else{
+                typeValue.html("");
+            }
+        };
+        
+        $(".select-range-type").change(applyChange);
     });
 </script>
-            
