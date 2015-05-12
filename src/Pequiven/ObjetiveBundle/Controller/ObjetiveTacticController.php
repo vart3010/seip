@@ -312,9 +312,10 @@ class ObjetiveTacticController extends baseController
     
     /**
      * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
-     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @param Objetive $objetive
+     * @param type $parents
      * @return boolean
-     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
      */
     public function addObjetiveParents(Objetive $objetive, $parents = array()) {
         
