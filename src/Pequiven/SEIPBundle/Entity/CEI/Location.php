@@ -194,8 +194,14 @@ class Location extends Model
         return $this->region;
     }
     
-    public function __toString()
+    public function __toString() 
     {
-        return $this->getName()?:'-';
+        $_toString = "-";
+        if($this->getAlias() != ""){
+            $_toString = $this->getAlias();
+        }else{
+            $_toString = $this->getName();
+        }
+        return $_toString;
     }
 }
