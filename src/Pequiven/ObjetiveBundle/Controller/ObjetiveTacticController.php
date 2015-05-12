@@ -285,6 +285,7 @@ class ObjetiveTacticController extends baseController
             foreach ($totalRef as $value) {
                 $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
+                    $this->addObjetiveParents($objetive,$data['parents']);
                     $this->createArrangementRange($objetive, $data);
                 }
             }
@@ -307,6 +308,39 @@ class ObjetiveTacticController extends baseController
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
+     * @param \Pequiven\IndicatorBundle\Entity\Indicator $indicator
+     * @return boolean
+     * @throws \Pequiven\IndicatorBundle\Controller\Exception
+     */
+    public function addObjetiveParents(Objetive $objetive, $parents = array()) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('id' => $parents,'period' => $period));
+        
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        $em->getConnection()->beginTransaction();
+        if ($totalObjetivesStrategics > 0) {
+            foreach ($objetivesStrategics as $objetiveStrategic) {
+                $objetiveStrategic->addChildren($objetive);
+                $em->persist($objetiveStrategic);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
     }
 
     /**
