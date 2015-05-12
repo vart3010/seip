@@ -101,4 +101,9 @@ class DayStop extends BaseModel
     {
         return $this->hours;
     }
+    
+    public function getNroDay()
+    {
+        return $this->day->format("d");
+    }
 }
