@@ -71,6 +71,7 @@ class ProductAdmin extends BaseAdmin
                     $qb = $datagrid->getQuery();
                     $alias = $qb->getRootAlias();
                     $qb
+                        ->andWhere($qb->expr()->like($alias.".name",$qb->expr()->literal("%".$value."%")))
                         ->andWhere($alias.'.enabled = :enabled')
                         ->andWhere($alias.'.isRawMaterial = :isRawMaterial')
                         ->setParameter('enabled',true)
@@ -82,7 +83,9 @@ class ProductAdmin extends BaseAdmin
                 'choices' => Product::getTypeProductLabels(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
-            ->add('isRawMaterial')
+            ->add('isRawMaterial',null,array(
+                'required' => false,
+            ))
             ;
         parent::configureFormFields($form);
     }
