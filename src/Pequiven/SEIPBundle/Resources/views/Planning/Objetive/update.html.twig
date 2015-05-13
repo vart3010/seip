@@ -4,9 +4,17 @@
 
 {% trans_default_domain 'PequivenObjetiveBundle' %}
 
+{% set labelHeader = {
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_ESTRATEGICO')):'pequiven_objetive.objetive_strategic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_TACTICO')):'pequiven_objetive.objetive_tactic',
+    (constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO')):'pequiven_objetive.objetive_operative',
+} %}
+
+{% block title %}- {{ (labelHeader[objetive.objetiveLevel.level])|trans }}{% endblock %}
+
 {% block before_body %}
     {{ contentHeader(
-        ('pequiven_objetive.objetives'|trans),
+        ((labelHeader[objetive.objetiveLevel.level])|trans),
         { (generateLinkUrlOnly(objetive)) : (objetive.ref) },
         ('pequiven.update'|trans({},"messages"))
     ) }}
@@ -42,15 +50,17 @@
                     <span class="info-bubble">{{ 'form.info.objetive_description'|trans }}</span>
                 </span>
             </div>
-            <div class="field-block button-height">
-                {{ form_label(form.weight) }}
-                {{ form_widget(form.weight) }}
-                {{ form_errors(form.weight) }}
-                <span class="info-spot">
-                    <span class="icon-info-round"></span>
-                    <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
-                </span>
-            </div>
+{#            {% if objetive.objetiveLevel.level == constant('Pequiven\\ObjetiveBundle\\Model\\ObjetiveLevel::LEVEL_OPERATIVO') %}#}
+                <div class="field-block button-height">
+                    {{ form_label(form.weight) }}
+                    {{ form_widget(form.weight) }}
+                    {{ form_errors(form.weight) }}
+                    <span class="info-spot">
+                        <span class="icon-info-round"></span>
+                        <span class="info-bubble">{{ 'form.info.weight'|trans }}</span>
+                    </span>
+                </div>
+{#            {% endif %}#}
             <div class="field-block button-height">
                 {{ form_label(form.goal) }}
                 {{ form_widget(form.goal) }}
@@ -60,9 +70,9 @@
                     <span class="info-bubble">{{ 'form.info.goal'|trans }}</span>
                 </span>
             </div>
+                {{ actions.update() }}
     </fieldset>
     {{ form_rest(form) }}
-    {{ actions.update() }}
 </form>
     
 {% endblock body %}
