@@ -41,6 +41,13 @@ class Plant extends BaseModel
     private $name;
     
     /**
+     * Alias corto de la planta
+     * @var string
+     * @ORM\Column(name="alias",type="string",length=20)
+     */
+    private $alias;
+    
+    /**
      * Capacidad de diseño
      * 
      * @var float
@@ -155,6 +162,29 @@ class Plant extends BaseModel
     }
 
     /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Plant
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+    
+    /**
      * Get unitMeasure
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure 
@@ -166,6 +196,12 @@ class Plant extends BaseModel
     
     public function __toString() 
     {
-        return $this->getName()?:'-';
+        $_toString = "-";
+        if($this->getAlias() != ""){
+            $_toString = $this->getAlias();
+        }else{
+            $_toString = $this->getName();
+        }
+        return $_toString;
     }
 }

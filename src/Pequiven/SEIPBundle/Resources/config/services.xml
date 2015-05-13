@@ -296,9 +296,6 @@
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
         </service>
-        <service id="pequiven.repository.day_stop" class="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository">
-            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\DayStop" />
-        </service>
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
         </service>

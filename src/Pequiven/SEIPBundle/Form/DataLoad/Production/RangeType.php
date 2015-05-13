@@ -33,12 +33,12 @@ class RangeType extends AbstractType
             ->add('type',"choice",array(
                 "empty_value" => "",
                 'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select input-large"),
+                "attr" => array("class" => "select input-large select-range-type"),
                 "choices" => \Pequiven\SEIPBundle\Entity\DataLoad\Production\Range::getTypeLabels(),
             ))
             ->add('value',null,array(
                 'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "input input-large"),
+                "attr" => array("class" => "input-unstyled input-mini"),
             ))
         ;
     }

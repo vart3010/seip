@@ -15,6 +15,7 @@ pequiven_seip:
     percentage: Porcentaje
     gross: Bruta
     net: Neta
+    hours_n: %n% Horas
     
     #Login
     sign_in: Ingresar
@@ -363,6 +364,9 @@ pequiven_seip:
         9: Octubre
         10: Noviembre
         11: Diciembre
+        
+    day_stop:
+        day_stop: Dia de parada
             
 "Bad credentials": Nombre de usuario o contraseña invalida
 "User account is disabled.": Cuenta de usuario desactivada
@@ -497,3 +501,6 @@ nro: "#"
 "Type": Tipo
 "Value": Valor
 "Raw materials": Materias primas
+"Day": Dia
+"Hours": Horas
+"Ranges": Rangos
