@@ -29,7 +29,7 @@
                     {% set tableIdRow = "row-detailRawMaterialConsumption-"~detailRawMaterialConsumption.id %}
                     <tr id="{{ tableIdRow }}">
                         <th scope="row">{{ loop.index }} - 
-                            {{ detailRawMaterialConsumption }}
+                            {{ detailRawMaterialConsumption|trans }}
                         </th>
                         <td>{{ detailRawMaterialConsumption.totalPlan|myNumberFormat }}</td>
                         <td>{{ detailRawMaterialConsumption.totalReal|myNumberFormat }}</td>

@@ -558,38 +558,6 @@ class DetailRawMaterialConsumption extends BaseModel
     }
     
     /**
-     * Set product
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $product
-     * @return RawMaterial
-     */
-    public function setProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $product)
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Product 
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-    
-    public function __toString() 
-    {
-        $_toString = "-";
-        if($this->getProduct()){
-            $_toString = sprintf("%s",(string)$this->getProduct());
-        }
-        return $_toString;
-    }
-
-    /**
      * Set month
      *
      * @param integer $month
@@ -2184,5 +2152,24 @@ class DetailRawMaterialConsumption extends BaseModel
     public function getRanges()
     {
         return $this->ranges;
+    }
+    
+    public function __toString() {
+        $_toString = "";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
+    
+    public function getMonthLabel()
+    {
+        $month = $this->getMonth();
+        $monthsLabels = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
+        $label = "";
+        if(isset($monthsLabels[$month])){
+            $label = $monthsLabels[$month];
+        }
+        return $label;
     }
 }

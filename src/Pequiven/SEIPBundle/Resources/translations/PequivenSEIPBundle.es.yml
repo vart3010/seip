@@ -344,6 +344,8 @@ pequiven_seip:
             external: Externa
     raw_material_consumption_planning:
         raw_material_consumption_planning: Presupuesto de consumo de materia prima
+        question:
+            delete: Desea eliminar este detalle de consumo de materia prima
     range:
         range: Rango de distribución
         ranges: Rangos de distribución

@@ -31,4 +31,63 @@ class DetailRawMaterialConsumptionController extends SEIPController
         }
         return $entity;
     }
+    
+    public function createAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $resource = $this->createNew();
+        $form = $this->getForm($resource);
+
+        if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+            $resource = $this->domainManager->create($resource);
+
+            return $this->redirectHandler->redirect($this->generateUrl("pequiven_raw_material_consumption_planning_show",array(
+                "id" => $resource->getRawMaterialConsumptionPlanning()->getId(),
+            )));
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('create.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
+    
+    public function updateAction(\Symfony\Component\HttpFoundation\Request $request) 
+    {
+        $resource = $this->findOr404($request);
+        $form = $this->getForm($resource);
+
+        if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
+
+            $this->domainManager->update($resource);
+
+            return $this->redirectHandler->redirect($this->generateUrl("pequiven_raw_material_consumption_planning_show",array(
+                "id" => $resource->getRawMaterialConsumptionPlanning()->getId(),
+            )));
+        }
+
+        if ($this->config->isApiRequest()) {
+            return $this->handleView($this->view($form));
+        }
+
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('update.html'))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'form'                           => $form->createView()
+            ))
+        ;
+
+        return $this->handleView($view);
+    }
 }
