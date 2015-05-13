@@ -29,13 +29,6 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
      */
     const TYPE_PRODUCT_BYPRODUCT = 1;
 
-    const UNIT_TM = "TM";
-    public static function getProductUnits()
-    {
-        return array(
-            self::UNIT_TM => "TM"
-        );
-    }
     /**
      * Retorna la etiqueta del tipo de producto
      * @return string

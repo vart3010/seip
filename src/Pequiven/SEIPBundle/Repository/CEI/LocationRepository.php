@@ -19,6 +19,17 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class LocationRepository extends SeipEntityRepository
 {
+    public function findByCompany($company) 
+    {
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->andWhere("l.company = :company")
+            ->setParameter("company", $company)
+            ;
+        return $qb->getQuery()->getResult();
+        
+    }
+    
     public function findByCodeTypeLocation($codeTypeLocation)
     {
         $qb = $this->getQueryAllEnabled();

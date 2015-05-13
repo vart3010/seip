@@ -5,6 +5,7 @@ imports:
     - { resource: config/sonata.yml }
     - { resource: config/sylius_resource.yml }
     - { resource: @PequivenSEIPBundle/Resources/config/admin.yml }
+    - { resource: @TecnocreacionesVzlaEntityBundle/Resources/config/admin.yml }
 
 framework:
     #esi:             ~

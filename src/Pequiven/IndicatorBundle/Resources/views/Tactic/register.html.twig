@@ -31,7 +31,7 @@
                 {{ form_widget(form.role_name) }}
             </div>
             
-            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX']) }}">
+            <input type="hidden" id="rolDirective" value="{{ is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING']) }}">
             
             <!-- Línea Estratégica -->
             <div id="lineStrategic" class="field-block button-height">
@@ -55,7 +55,7 @@
                 </span>
             </div>
             
-            {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'])) %}
+            {% if (is_granted(['ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'])) %}
                 <fieldset class="fieldset">
                     <legend class="legend">{{ 'form.selectionOfObjetiveTactic'|trans }}</legend>
                     <!-- Localidad -->

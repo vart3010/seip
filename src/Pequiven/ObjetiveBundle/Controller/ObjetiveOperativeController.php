@@ -468,6 +468,7 @@ class ObjetiveOperativeController extends baseController
             foreach($totalRef as $value){
                 $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
+                    $this->addObjetiveParents($objetive,$data['parents']);
                     $this->createArrangementRange($objetive, $data);
                 }
             }
@@ -491,6 +492,40 @@ class ObjetiveOperativeController extends baseController
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
+     * @param Objetive $objetive
+     * @param type $parents
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addObjetiveParents(Objetive $objetive, $parents = array()) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $objetivesTactics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('id' => $parents,'period' => $period));
+        
+        $totalObjetivesTactics = count($objetivesTactics);
+        $em->getConnection()->beginTransaction();
+        if ($totalObjetivesTactics > 0) {
+            foreach ($objetivesTactics as $objetiveTactic) {
+                $objetiveTactic->addChildren($objetive);
+                $em->persist($objetiveTactic);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
     }
     
     /**
@@ -1234,6 +1269,7 @@ class ObjetiveOperativeController extends baseController
         $em = $this->getDoctrine()->getManager();
         $objetivesTactics = $options['objetiveTactics'];
         $totalObjetivesTactics = count($objetivesTactics);
+        $period = $this->getPeriodService()->getPeriodActive();
         $totalRef = array();
 
         $objetiveTactic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesTactics[$totalObjetivesTactics - 1]));

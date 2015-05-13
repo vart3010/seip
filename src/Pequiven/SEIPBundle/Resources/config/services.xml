@@ -246,6 +246,12 @@
         <service id="pequiven.form.production_product_detail_daily_month" class="Pequiven\SEIPBundle\Form\DataLoad\Production\ProductDetailDailyMonthType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_production_productdetaildailymonth" />
         </service>
+        <service id="pequiven.form.raw_material_consumption_planning" class="Pequiven\SEIPBundle\Form\DataLoad\RawMaterial\RawMaterialConsumptionPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_rawmaterial_rawmaterialconsumptionplanning" />
+        </service>
+        <service id="pequiven.form.detail_raw_material_consumption_planning" class="Pequiven\SEIPBundle\Form\DataLoad\RawMaterial\DetailRawMaterialConsumptionType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_detailrawmaterialconsumption" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -296,14 +302,14 @@
         <service id="pequiven.repository.report_template" class="Pequiven\SEIPBundle\Repository\DataLoad\ReportTemplateRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate" />
         </service>
-        <service id="pequiven.repository.day_stop" class="Pequiven\SEIPBundle\Repository\CEI\DayStopRepository">
-            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\DayStop" />
-        </service>
         <service id="pequiven.repository.region" class="Pequiven\SEIPBundle\Repository\CEI\RegionRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Region" />
         </service>
-        <service id="pequiven.repository.raw_material" class="Pequiven\SEIPBundle\Repository\CEI\RawMaterialRepository">
-            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\RawMaterial" />
+        <service id="pequiven.repository.service" class="Pequiven\SEIPBundle\Repository\CEI\ServiceRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Service" />
+        </service>
+        <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
         </service>
     </services>
 </container>

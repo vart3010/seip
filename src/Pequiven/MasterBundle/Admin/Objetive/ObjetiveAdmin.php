@@ -49,7 +49,7 @@ class ObjetiveAdmin extends Admin
                     ->add('gerencia')
                     ->add('gerenciaSecond')
                     ->add('childrens','sonata_type_model_autocomplete',array(
-                        'property' => array('ref','description'),
+                        'property' => array('period','ref'),
                         'multiple' => true,
                         'required' => false,
                     ))
@@ -123,7 +123,7 @@ class ObjetiveAdmin extends Admin
     {
         $toString = '-';
         if($object->getId() > 0){
-            $toString = $object->getRef().' - '.$object->getDescription();
+            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
         }
         return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
     }

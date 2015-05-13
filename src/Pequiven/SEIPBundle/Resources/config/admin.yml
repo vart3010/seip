@@ -338,6 +338,61 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.location:
+        class: Pequiven\MasterBundle\Admin\CEI\LocationAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Localidad" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Location
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.entity:
+        class: Pequiven\MasterBundle\Admin\CEI\EntityAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Entidad" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Entity
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.plant:
+        class: Pequiven\MasterBundle\Admin\CEI\PlantAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Planta" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Plant
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+           
+    sonata.admin.cei.product:
+        class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Producto" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Product
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    
+    sonata.admin.cei.service:
+        class: Pequiven\MasterBundle\Admin\CEI\ServiceAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Servicio" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Service
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+    
     sonata.admin.cei.country:
         class: Pequiven\MasterBundle\Admin\CEI\CountryAdmin
         tags:
@@ -356,39 +411,6 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Currency
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.cei.location:
-        class: Pequiven\MasterBundle\Admin\CEI\LocationAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Sede" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\Location
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.cei.plant:
-        class: Pequiven\MasterBundle\Admin\CEI\PlantAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Planta" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\Plant
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.cei.product:
-        class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Productos y Servicios" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\Product
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
@@ -466,28 +488,6 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Fail
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.cei.raw_material:
-        class: Pequiven\MasterBundle\Admin\CEI\RawMaterialAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Materia Prima" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\RawMaterial
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
-    sonata.admin.cei.day_stop:
-        class: Pequiven\MasterBundle\Admin\CEI\DayStopAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Dia de parada" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\DayStop
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

@@ -19,7 +19,17 @@ Plant: Planta
 "Unit": Unidad
 "Unit Measure List": Lista de unidades
 "Unit Measure": Unidad de medida
-"Location": Sede
+"Location": Localidad
 "Region List": Lista de regiones
-"Location List": Lista de sedes
+"Location List": Lista de localidades
 Dashboard: Inicio
+"Raw Materials": Materia prima(s)
+"Type Product": Tipo de producto
+"Products": Productos
+"Services": Servicios
+"Service Unit": Unidad del servicio
+"Service List": Lista de servicios
+"Company": Empresa
+"Type Location": Tipo de sede
+"State": Estado
+"Entity": Entidad

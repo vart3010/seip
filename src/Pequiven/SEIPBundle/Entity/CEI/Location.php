@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\CEI\Location as Model;
 
 /**
- * Sede (Control estadistico de informacion)
+ * Localidad (Control estadistico de informacion)
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_cei_Location")
@@ -69,6 +69,13 @@ class Location extends Model
      */
     private $region;
     
+    /**
+     * Estado
+     * @var \Tecnocreaciones\Vzla\EntityBundle\Entity\State
+     * @ORM\ManyToOne(targetEntity="Tecnocreaciones\Vzla\EntityBundle\Entity\State")
+     */
+    private $state;
+
     /**
      * Get id
      *
@@ -194,8 +201,37 @@ class Location extends Model
         return $this->region;
     }
     
-    public function __toString()
+    /**
+     * Set state
+     *
+     * @param \Tecnocreaciones\Vzla\EntityBundle\Entity\State $state
+     * @return Location
+     */
+    public function setState(\Tecnocreaciones\Vzla\EntityBundle\Entity\State $state = null)
     {
-        return $this->getName()?:'-';
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return \Tecnocreaciones\Vzla\EntityBundle\Entity\State 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getAlias() != ""){
+            $_toString = $this->getAlias();
+        }else{
+            $_toString = $this->getName();
+        }
+        return $_toString;
     }
 }

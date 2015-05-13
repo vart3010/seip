@@ -28,20 +28,55 @@ class PlantAdmin extends BaseAdmin
         $show
             ->add('id')
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity')
+            ->add('products')
+            ->add('services')
             ;
         parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity',null,array(
+                "query_builder" => $queryAllEnable,
+            ))
+            ->add('products',"sonata_type_model_autocomplete",array(
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                "callback" => function (ProductAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->setParameter('enabled',true)
+                    ;
+                }
+            ))
+            ->add('services',"sonata_type_model_autocomplete",array(
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                "callback" => function (ServiceAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->setParameter('enabled',true)
+                    ;
+                }
+            ))
             ;
         parent::configureFormFields($form);
     }
@@ -50,9 +85,10 @@ class PlantAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
+            ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity')
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -61,8 +97,9 @@ class PlantAdmin extends BaseAdmin
     {
         $list
             ->addIdentifier('name')
+            ->add('alias')
             ->add('designCapacity')
-            ->add('location')
+            ->add('entity')
             ;
         parent::configureListFields($list);
     }

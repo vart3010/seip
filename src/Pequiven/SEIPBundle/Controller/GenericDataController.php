@@ -60,6 +60,45 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function getLocationByAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $company = $request->get("company");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Location");
+        $results = $repository->findByCompany($company);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    public function getPlantByLocationAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $location = $request->get("location");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Plant");
+        $results = $repository->findByLocation($location);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    public function getProductByPlantAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $plant = $request->get("plant");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Product");
+        $results = $repository->findByPlant($plant);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
     /**
      * Manejador de usuario o administrador
      * @return \Pequiven\SEIPBundle\Model\UserManager

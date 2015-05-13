@@ -31,6 +31,7 @@ class LocationAdmin extends BaseAdmin
             ->add('name')
             ->add('alias')
             ->add('typeLocation')
+            ->add('state')
             ;
         parent::configureShowFields($show);
     }
@@ -43,6 +44,7 @@ class LocationAdmin extends BaseAdmin
             ->add('alias')
             ->add('typeLocation')
             ->add('region')
+            ->add('state')
             ;
         parent::configureFormFields($form);
     }
@@ -54,6 +56,7 @@ class LocationAdmin extends BaseAdmin
             ->add('name')
             ->add('alias')
             ->add('typeLocation')
+            ->add('state')
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -65,6 +68,7 @@ class LocationAdmin extends BaseAdmin
             ->add('alias')
             ->add('company')
             ->add('typeLocation')
+            ->add('state')
             ;
         parent::configureListFields($list);
     }

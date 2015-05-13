@@ -1,0 +1,27 @@
+pequiven_detail_raw_material_consumption_create:
+    path: /{rawMaterialConsumption}/create
+    defaults:
+        _controller: pequiven.controller.detail_raw_material_consumption:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_detailrawmaterialconsumption
+    methods: [GET|POST]
+
+pequiven_detail_raw_material_consumption_show:
+    path: /{id}/show
+    defaults:
+        _controller: pequiven.controller.detail_raw_material_consumption:showAction
+    methods: [GET]
+    
+pequiven_detail_raw_material_consumption_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.detail_raw_material_consumption:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_production_detailrawmaterialconsumption
+    methods: [GET|POST]
+    
+pequiven_detail_raw_material_consumption_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.detail_raw_material_consumption:deleteAction
+    methods: [GET|DELETE]

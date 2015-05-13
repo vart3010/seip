@@ -184,6 +184,11 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
         $form
             ->tab("Details")
                 ->with('Details')
+                    ->add('managementSystems','sonata_type_model_autocomplete',array(
+                        'property' => array('description'),
+                        'multiple' => true,
+                        'required' => false,
+                    ))
                     ->add('details','sonata_type_admin',array(
                          'cascade_validation' => true,
                          'delete' => false,
@@ -309,7 +314,7 @@ class IndicatorAdmin extends Admin implements \Symfony\Component\DependencyInjec
     {
         $toString = '-';
         if($object->getId() > 0){
-            $toString = $object->getRef().' - '.$object->getDescription();
+            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
         }
         return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
     }

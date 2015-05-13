@@ -161,6 +161,8 @@ class ObjetiveTacticController extends baseController
 
         $em->getConnection()->beginTransaction();
         if ($request->isMethod('POST') && $form->submit($request)->isValid()) {
+//            var_dump('epale');
+//            die();
             $object = $form->getData();
             $data = $this->container->get('request')->get("pequiven_objetive_tactic_registration");
 
@@ -283,6 +285,7 @@ class ObjetiveTacticController extends baseController
             foreach ($totalRef as $value) {
                 $objetives = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('ref' => $value, 'period' => $period->getId()));
                 foreach($objetives as $objetive){
+                    $this->addObjetiveParents($objetive,$data['parents']);
                     $this->createArrangementRange($objetive, $data);
                 }
             }
@@ -305,6 +308,40 @@ class ObjetiveTacticController extends baseController
             'form' => $form->createView(),
             'role_name' => $role[0]
         );
+    }
+    
+    /**
+     * Función que guarda en la tabla intermedia el(los) objetivo(s) creado(s) junto con el objetivo padre
+     * @param Objetive $objetive
+     * @param type $parents
+     * @return boolean
+     * @throws \Pequiven\ObjetiveBundle\Controller\Exception
+     */
+    public function addObjetiveParents(Objetive $objetive, $parents = array()) {
+        
+        $em = $this->getDoctrine()->getManager();
+        $period = $this->getPeriodService()->getPeriodActive();
+        
+        $objetivesStrategics = $em->getRepository('PequivenObjetiveBundle:Objetive')->findBy(array('id' => $parents,'period' => $period));
+        
+        $totalObjetivesStrategics = count($objetivesStrategics);
+        $em->getConnection()->beginTransaction();
+        if ($totalObjetivesStrategics > 0) {
+            foreach ($objetivesStrategics as $objetiveStrategic) {
+                $objetiveStrategic->addChildren($objetive);
+                $em->persist($objetiveStrategic);
+            }
+        }
+
+        try {
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollback();
+            throw $e;
+        }
+
+        return true;
     }
 
     /**
@@ -729,8 +766,9 @@ class ObjetiveTacticController extends baseController
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = explode(',', $options['objetiveStrategics']);
         $totalObjetivesStrategics = count($objetivesStrategics);
+        $period = $this->getPeriodService()->getPeriodActive();
 
-        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
+        $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1],'period' => $period));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
 
         $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true));
@@ -755,6 +793,7 @@ class ObjetiveTacticController extends baseController
      * @param array $options
      */
     public function setRef($options = array()) {
+        $period = $this->getPeriodService()->getPeriodActive();
         $em = $this->getDoctrine()->getManager();
         $objetivesStrategics = $options['objetiveStrategics'];
         $totalObjetivesStrategics = count($objetivesStrategics);

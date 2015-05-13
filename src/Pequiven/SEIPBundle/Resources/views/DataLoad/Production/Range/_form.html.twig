@@ -19,7 +19,12 @@
     </div>
     <div class="field-block button-height">
         {{ form_label(form.value) }}
-        {{ form_widget(form.value) }}
+        <span class="input">
+            {{ form_widget(form.value) }}
+            <span class="type-value">
+                
+            </span>
+        </span>
         {{ form_errors(form.value) }}
     </div>
 </fieldset>

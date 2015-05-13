@@ -17,7 +17,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Production line'|trans }}</label>
-                    {{ product_report.productionLine }}
+                    {{ product_report.product.productionLine }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -29,7 +29,7 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Product unit'|trans }}</label>
-                    {{ product_report.productUnit }}
+                    {{ product_report.product.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -41,7 +41,7 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Is raw material'|trans }}</label>
-                    {{ product_report.isRawMaterial|render_yes_no }}
+                    {{ product_report.product.isRawMaterial|render_yes_no }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -53,7 +53,7 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Type product'|trans }}</label>
-                    {{ product_report.typeProductLabel | trans }}
+                    {{ product_report.product.typeProductLabel | trans }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -71,7 +71,7 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Raw material'|trans }}</label>
-                    {% for rawMaterial in product_report.rawMaterials %}
+                    {% for rawMaterial in product_report.product.rawMaterials %}
                         {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
                     {% else %}
                         <span class="tag ">{{ "empty.no_raw_material"|trans }}</span>
@@ -95,6 +95,8 @@
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/products_planning.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/product_detail_daily_months.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/raw_materials_consumption.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
         {{ buttons.generic_confirm(path("pequiven_product_report_run_planning",{ id: product_report.id }),"pequiven_seip.buttons.run_planning",{

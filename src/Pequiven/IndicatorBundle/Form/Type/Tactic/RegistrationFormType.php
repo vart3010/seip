@@ -57,7 +57,7 @@ class RegistrationFormType extends AbstractType implements ContainerAwareInterfa
             //Objetivo Estratégico al cual impactará el indicador a crear
             $builder->addEventSubscriber(new AddObjetiveParentStrategicFieldListener($this->container,array('registerIndicator' => true)));
             
-            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+            if($securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
                 //Localidad(es) donde impactará el indicador a crear
                 $builder->addEventSubscriber(new AddComplejoFieldListener($this->container,array('registerIndicator' => true)));
                 //Gerencia donde impactará el indicador a crear

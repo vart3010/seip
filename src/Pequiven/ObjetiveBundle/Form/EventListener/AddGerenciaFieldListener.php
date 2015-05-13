@@ -72,6 +72,8 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
     
     public function preSubmit(FormEvent $event){
         $form = $event->getForm();
+        $data = $event->getData();
+//        $this->addGerenciaForm($form,$data['gerencia']);
         $this->addGerenciaForm($form);
     }
     
@@ -106,8 +108,8 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
         } else{
             $gerencia = $gerencia == null ? $this->user->getGerencia() : $gerencia;
 
-            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
-                $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
+            if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
+                    $formOptions['choices'] = $this->em->getRepository('PequivenMasterBundle:Gerencia')->getGerenciaOptions();
                 $gerencia = null;
                 $formOptions['attr'] = array('class' => 'select2-offscreen populate placeholder','multiple' => 'multiple', 'style' => 'width:300px');
                 $formOptions['multiple'] = true;
@@ -118,14 +120,14 @@ class AddGerenciaFieldListener implements EventSubscriberInterface {
                     $formOptions['attr'] = array('class' => 'select2-offscreen placeholder', 'style' => 'width:300px');
                 }
             } else{
-                $gerenciaId = $this->user->getGerencia()->getId();
-                $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){
-                    $qb = $er->createQueryBuilder('gerencia')
-                             ->where('gerencia.id = :gerenciaId')
-                             ->setParameter('gerenciaId', $gerenciaId)
-                            ;
-                    return $qb;
-                };
+                    $gerenciaId = $this->user->getGerencia()->getId();
+                    $formOptions['query_builder'] = function (EntityRepository $er) use ($gerenciaId){
+                            $qb = $er->createQueryBuilder('gerencia')
+                                     ->where('gerencia.id = :gerenciaId')
+                                     ->setParameter('gerenciaId', $gerenciaId)
+                                    ;
+                            return $qb;
+                        };
                 $formOptions['attr'] = array('class' => 'select red-gradient check-list allow-empty', 'style' => 'width:300px');
              }
 

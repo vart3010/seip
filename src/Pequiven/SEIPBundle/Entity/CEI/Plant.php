@@ -33,12 +33,26 @@ class Plant extends BaseModel
     private $id;
     
     /**
+     * Entidad a la que pertenece
+     * @var Entity
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
+     */
+    protected $entity;
+    
+    /**
      * Nombre
      * 
      * @var String 
      * @ORM\Column(name="name",type="string",nullable=false)
      */
     private $name;
+    
+    /**
+     * Alias corto de la planta
+     * @var string
+     * @ORM\Column(name="alias",type="string",length=20)
+     */
+    private $alias;
     
     /**
      * Capacidad de diseño
@@ -56,11 +70,31 @@ class Plant extends BaseModel
     protected $unitMeasure;
 
     /**
-     * Localizacion o empresa
-     * @var Location
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
+     * Productos que produce la planta
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="plants")
+     * @ORM\JoinTable(name="plants_products")
      */
-    protected $location;
+    private $products;
+    
+    /**
+     * Servicios que consume la planta
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Service
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Service")
+     * @ORM\JoinTable(name="plants_services")
+     */
+    private $services;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
     /**
      * Get id
@@ -93,29 +127,6 @@ class Plant extends BaseModel
     public function getName()
     {
         return $this->name;
-    }
-    
-    /**
-     * Set location
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
-     * @return Plant
-     */
-    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location = null)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
     
     /**
@@ -155,6 +166,29 @@ class Plant extends BaseModel
     }
 
     /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Plant
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+    
+    /**
      * Get unitMeasure
      *
      * @return \Pequiven\SEIPBundle\Entity\CEI\UnitMeasure 
@@ -164,8 +198,103 @@ class Plant extends BaseModel
         return $this->unitMeasure;
     }
     
+    /**
+     * Add products
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     * @return Plant
+     */
+    public function addProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    {
+        $this->products[] = $products;
+
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     */
+    public function removeProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * Add services
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
+     * @return Plant
+     */
+    public function addService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
+    {
+        $this->services[] = $services;
+
+        return $this;
+    }
+
+    /**
+     * Remove services
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
+     */
+    public function removeService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
+    {
+        $this->services->removeElement($services);
+    }
+
+    /**
+     * Get services
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+    
+    /**
+     * Set entity
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Entity $entity
+     * @return Plant
+     */
+    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null)
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get entity
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Entity 
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+    
     public function __toString() 
     {
-        return $this->getName()?:'-';
+        $_toString = "-";
+        if($this->getAlias() != ""){
+            $_toString = $this->getAlias();
+        }else{
+            $_toString = $this->getName();
+        }
+        return $_toString;
     }
 }

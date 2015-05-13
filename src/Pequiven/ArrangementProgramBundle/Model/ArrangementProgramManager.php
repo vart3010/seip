@@ -27,6 +27,10 @@ class ArrangementProgramManager implements ContainerAwareInterface
             if(!$configuration){
                 return $valid;
             }
+            
+            if($this->getSecurityConext()->isGranted(array('ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_TACTIC','ROLE_SEIP_ARRANGEMENT_PROGRAM_CREATE_OPERATIVE'))){
+                $valid = true;
+            }        
 
             foreach ($configuration->getArrangementProgramUserToRevisers() as $userToReviser) {
                 if($user === $userToReviser){
@@ -223,26 +227,46 @@ class ArrangementProgramManager implements ContainerAwareInterface
         $user = $this->getUser();
 
         $periodService = $this->getPeriodService();
-        if (
-            $configuration->getArrangementProgramUsersToNotify()->contains($user) === true 
-                && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
-                && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
-            ) {
-            
-            if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+        if($entity->getCategoryArrangementProgram()->getId() == \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgram::ASSOCIATE_ARRANGEMENT_PROGRAM_PLA){
+            if (
+                $configuration->getArrangementProgramUsersToNotify()->contains($user) === true 
+                    && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
+                    && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+                ) {
+
+                if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+                    $valid = true;
+                }elseif($periodService->isAllowNotifyArrangementProgram() === true){
+                    $valid = true;
+                }
+            } elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
                 $valid = true;
-            }elseif($periodService->isAllowNotifyArrangementProgram() === true){
+            }
+        } else{
+            $gerencia = $this->container->get('pequiven.repository.gerenciafirst')->findOneBy(array('abbreviation' => 'sigco'));
+            $configuration = $gerencia->getConfiguration();
+            if (
+                $configuration->getArrangementProgramSigUsersToNotify()->contains($user) === true 
+                    && $entity->getStatus() == ArrangementProgram::STATUS_APPROVED
+                    && ($details->getLastNotificationInProgressByUser() === null || $entity->getResult() == 0)
+                ) {
+                if($periodService->isAllowNotifyArrangementProgramInClearance() === true){
+                    $valid = true;
+                }elseif($periodService->isAllowNotifyArrangementProgram() === true){
+                    $valid = true;
+                }
+            } elseif($entity->getStatus() == ArrangementProgram::STATUS_DRAFT && $this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN')){
                 $valid = true;
             }
         }
-        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
-        {
-            $valid = true;
-        }
-        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
-        {
-            $valid = true;
-        }
+//        if($this->isGranted('ROLE_SEIP_PLANNING_OPERATION_ARRANGEMENT_PROGRAM_NOTIFY'))
+//        {
+//            $valid = true;
+//        }
+//        if($this->isGranted('ROLE_SEIP_ARRANGEMENT_PROGRAM_CHARGE_PLAN'))
+//        {
+//            $valid = true;
+//        }
         
         return $valid;
     }

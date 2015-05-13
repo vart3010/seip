@@ -254,9 +254,9 @@ class ObjetiveController extends ResourceController
         
         $securityService = $this->getSecurityService();
         $roleByLevel = array(
-            ObjetiveLevel::LEVEL_ESTRATEGICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_STRATEGIC',
-            ObjetiveLevel::LEVEL_TACTICO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_TACTIC',
-            ObjetiveLevel::LEVEL_OPERATIVO => 'ROLE_SEIP_PLANNING_LIST_OBJECTIVE_OPERATIVE',
+            ObjetiveLevel::LEVEL_ESTRATEGICO => array('ROLE_SEIP_OBJECTIVE_APPROVED_STRATEGIC'),
+            ObjetiveLevel::LEVEL_TACTICO => array('ROLE_SEIP_OBJECTIVE_APPROVED_TACTIC'),
+            ObjetiveLevel::LEVEL_OPERATIVO => array('ROLE_SEIP_OBJECTIVE_APPROVED_OPERATIVE'),
         );
         
         $level = $resource->getObjetiveLevel()->getLevel();

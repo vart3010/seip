@@ -32,7 +32,7 @@ class Complejo {
         $this->refName[self::COMPLEJO_CPJAA] = 'CPJAA';
         $this->refName[self::COMPLEJO_PRONAVAY] = 'NAVAY';
         $this->refName[self::COMPLEJO_PROPARAGUANA] = 'PARAGUANA';
-        $this->refName[self::COMPLEJO_ZIV] = 'ZIV';
+        $this->refName[self::COMPLEJO_ZIV] = 'CORP.';
     }
     
     /**

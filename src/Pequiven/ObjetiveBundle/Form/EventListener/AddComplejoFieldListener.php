@@ -73,7 +73,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
         }
         
 //        $this->getTypePersonal(array('ROLE_MANAGER_FIRST_AUX','ROLE_MANAGER_SECOND_AUX'));
-        if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+        if($this->user->getComplejo()->getRef() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
             $objetiveStrategicId = array_key_exists('parent', $object) ? $object['parent'] : null;
         }
         
@@ -104,7 +104,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             'property' => 'description'
         );
 
-        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX'))){
+        if($this->securityContext->isGranted(array('ROLE_DIRECTIVE','ROLE_DIRECTIVE_AUX','ROLE_WORKER_PLANNING'))){
 //            $formOptions['empty_value'] =  'Todo';
             $formOptions['multiple'] = true;
             $formOptions['mapped'] = false;
@@ -140,7 +140,7 @@ class AddComplejoFieldListener implements EventSubscriberInterface {
             $complejo = $complejo == null ? $this->user->getComplejo() : $complejo;
             $complejoId = $this->user->getComplejo()->getId();
             
-            if($this->user->getComplejo()->getComplejoName() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
+            if($this->user->getComplejo()->getRef() === $this->complejoNameArray[Complejo::COMPLEJO_ZIV]){
 //                $formOptions['empty_value'] = 'Todo';
                 //$formOptions['multiple'] = true;
                 //$formOptions['expanded'] = true;
