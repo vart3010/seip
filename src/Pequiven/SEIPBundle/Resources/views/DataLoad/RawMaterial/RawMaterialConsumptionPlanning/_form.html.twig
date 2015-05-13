@@ -1,0 +1,20 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<fieldset class="fieldset fields-list">
+    <legend class="legend">{{ 'pequiven_seip.day_stop.day_stop'|trans }}</legend>
+    <div class="field-block button-height">
+        {{ form_label(form.type) }}
+        {{ form_widget(form.type) }}
+        {{ form_errors(form.type) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.product) }}
+        {{ form_widget(form.product) }}
+        {{ form_errors(form.product) }}
+    </div>
+    <div class="field-block button-height">
+        {{ form_label(form.productReport) }}
+        {{ form_widget(form.productReport) }}
+        {{ form_errors(form.productReport) }}
+    </div>
+</fieldset>

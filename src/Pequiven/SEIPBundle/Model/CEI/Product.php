@@ -40,4 +40,19 @@ abstract class Product extends BaseModel
             self::TYPE_PRODUCT_BYPRODUCT => "pequiven_seip.product_report.type.byproduct",
         );
     }
+    
+    /**
+     * Retorna la etiqueta del tipo de producto
+     * @return string
+     */
+    public function getTypeProductLabel()
+    {
+        $typeProduct = $this->getTypeProduct();
+        $typeProductLabels = $this->getTypeProductLabels();
+        $label = "";
+        if(isset($typeProductLabels[$typeProduct])){
+            $label = $typeProductLabels[$typeProduct];
+        }
+        return $label;
+    }
 }

@@ -73,7 +73,7 @@ class Plant extends BaseModel
      * Productos que produce la planta
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
      *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="plants")
      * @ORM\JoinTable(name="plants_products")
      */
     private $products;

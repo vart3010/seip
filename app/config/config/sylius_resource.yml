@@ -262,3 +262,15 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\ProductDetailDailyMonthController
+        pequiven.raw_material_consumption_planning:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\RawMaterial\RawMaterialConsumptionPlanningController
+        pequiven.detail_raw_material_consumption:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/RawMaterial/DetailRawMaterialConsumption
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\RawMaterial\DetailRawMaterialConsumptionController

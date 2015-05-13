@@ -1,0 +1,58 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.product_report.question.delete"|trans) %}
+
+<div class="block">
+    <div class="block-title">
+        <h3> {{ 'pequiven_seip.report_template.raw_material'|trans }}&nbsp;({{ product_report.rawMaterialConsumptionPlannings|length }})</h3>
+        <div class="button-group absolute-right compact">
+            <a class="button icon-list-add" href="{{ path("pequiven_raw_material_consumption_planning_create",{productReport:product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+        </div>
+    </div>
+    <div class="with-padding">
+        <table class="simple-table responsive-table tables-extras" id="sorting-example2">
+            <thead>
+                <tr>
+                    <th scope="col" width="10%">{{ 'Month'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait with-tooltip" title="{{ 'pequiven_seip.totalPlan'|trans }}">{{ 'pequiven_seip.headers.totalPlan'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.totalReal'|trans }}">{{ 'pequiven_seip.headers.totalReal'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-tablet with-tooltip" title="{{ 'pequiven_seip.percentage'|trans }}">{{ 'pequiven_seip.headers.percentage'|trans }}</th>
+                    <th scope="col" width="10%">&nbsp;</th>
+                </tr>
+            </thead>
+            {% set colspan = 9 %}
+            <tbody>
+
+                {% for rawMaterialConsumptionPlanning in product_report.rawMaterialConsumptionPlannings %}
+                    {% set tableIdRow = "row-rawMaterialConsumptionPlanning-"~rawMaterialConsumptionPlanning.id %}
+                    <tr id="{{ tableIdRow }}">
+                        <th scope="row">{{ loop.index }} - 
+                            {{ generateLink(rawMaterialConsumptionPlanning) }}
+                        </th>
+                        <td>{{ rawMaterialConsumptionPlanning.totalPlan|myNumberFormat }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.totalReal|myNumberFormat }}</td>
+                        <td>{{ rawMaterialConsumptionPlanning.percentage|myNumberFormat }}&nbsp;%</td>
+                        <td class="low-padding align-center">
+                            <p class="button-height">
+                                <span class="button-group">
+                                    <a href="{{ path("pequiven_raw_material_consumption_planning_update",{id: rawMaterialConsumptionPlanning.id}) }}" class="button icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                                    {% set deleteUrl = path("pequiven_raw_material_consumption_planning_delete",{id: rawMaterialConsumptionPlanning.id}) %}
+                                    {{ buttons.delete_mini(deleteUrl,message,tableIdRow) }}
+                                </span>
+                            </p>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr >
+                        <td colspan="{{ colspan }}" class="empty_row">
+                            {{ "empty.no_raw_material"|trans }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>

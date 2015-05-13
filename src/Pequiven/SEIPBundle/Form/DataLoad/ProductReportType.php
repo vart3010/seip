@@ -2,11 +2,12 @@
 
 namespace Pequiven\SEIPBundle\Form\DataLoad;
 
-use Symfony\Component\Form\AbstractType;
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
+use Pequiven\SEIPBundle\Form\SeipAbstractForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ProductReportType extends AbstractType
+class ProductReportType extends SeipAbstractForm
 {
         /**
      * @param FormBuilderInterface $builder
@@ -14,37 +15,12 @@ class ProductReportType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $queryBuilderEnable = function (\Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository $repository){
-            return $repository->getQueryAllEnabled();
-        };
+        $queryBuilderEnable = $this->getQueryBuilderEnabled();
         $builder
-            ->add('productionLine',null,array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select2 input-large"),
-            ))
-            ->add('product',"tecno_ajax_autocomplete",array(
-                'label_attr' => array('class' => 'label'),
-                "property" => array("name"),
-                "entity_alias" => "products_alias",
-                "callback" => $queryBuilderEnable
-            ))
-            ->add("typeProduct","choice",array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                "attr" => array("class" => "select2 input-large"),
-                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ProductReport::getTypeProductLabels(),
-            ))
-            ->add('productUnit',null,array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select2 input-large"),
-                "empty_value" => "",
-                "required" => true,
-                "query_builder" => $queryBuilderEnable,
-            ))
             ->add("company",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
-                "attr" => array("class" => "select2 input-large"),
+                "attr" => array("class" => "select2 input-large select-company"),
                 "query_builder" => $queryBuilderEnable,
             ))
             ->add("location",null,array(
@@ -53,22 +29,23 @@ class ProductReportType extends AbstractType
                 "attr" => array("class" => "select2 input-large"),
                 "query_builder" => $queryBuilderEnable,
             ))
-            ->add("rawMaterials",null,array(
+            ->add('plant',null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
+                //"property" => array("name"),
+                //"entity_alias" => "plants_alias",
+                //"callback" => $queryBuilderEnable,
                 "query_builder" => $queryBuilderEnable,
             ))
-            ->add('plant',"tecno_ajax_autocomplete",array(
+            ->add('product',null,array(
                 'label_attr' => array('class' => 'label'),
-                "property" => array("name"),
-                "entity_alias" => "plants_alias",
-                "callback" => $queryBuilderEnable,
-            ))
-            ->add('isRawMaterial',null,array(
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
-                "required" => false,
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+                //"property" => array("name"),
+                //"entity_alias" => "products_alias",
+                //"callback" => $queryBuilderEnable
+                "query_builder" => $queryBuilderEnable,
             ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),

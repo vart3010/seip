@@ -88,9 +88,16 @@ class Product extends BaseModel
      */
     private $components;
     
+    /**
+     * Plantas a la que pertenece el producto
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="products")
+     */
+    private $plants;
+
     public function __construct() 
     {
         $this->components = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plants = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -282,6 +289,39 @@ class Product extends BaseModel
     public function getRawMaterials()
     {
         return $this->rawMaterials;
+    }
+    
+    /**
+     * Add plants
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plants
+     * @return Product
+     */
+    public function addPlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plants)
+    {
+        $this->plants[] = $plants;
+
+        return $this;
+    }
+
+    /**
+     * Remove plants
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Plant $plants
+     */
+    public function removePlant(\Pequiven\SEIPBundle\Entity\CEI\Plant $plants)
+    {
+        $this->plants->removeElement($plants);
+    }
+
+    /**
+     * Get plants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlants()
+    {
+        return $this->plants;
     }
     
     public function __toString() 

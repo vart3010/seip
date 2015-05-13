@@ -17,3 +17,11 @@ pequiven_data_load_range:
 pequiven_data_load_product_detail_daily_month:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_detail_daily_month.yml"
     prefix:   /product-detail-daily-month
+    
+pequiven_data_load_raw_material_consumption_planning:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/raw_material_consumption_planning.yml"
+    prefix:   /raw-material-consumption-planning
+    
+pequiven_data_load_detail_raw_material_consumption:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/detail_raw_material_consumption.yml"
+    prefix:   /detail-raw-material-consumption

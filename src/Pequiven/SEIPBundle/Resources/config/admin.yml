@@ -470,17 +470,6 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
-    sonata.admin.cei.raw_material:
-        class: Pequiven\MasterBundle\Admin\CEI\RawMaterialAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Materia Prima" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\RawMaterial
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
     sonata.admin.cei.unit_measure:
         class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
         tags:

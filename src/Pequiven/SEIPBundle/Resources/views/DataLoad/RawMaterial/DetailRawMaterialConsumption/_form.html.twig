@@ -1,0 +1,32 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+<h3 class="thin underline">{{ 'pequiven_seip.report_template.details_raw_material'|trans }}</h3>
+<div class="field-block button-height">
+    {{ form_label(form.month) }}
+    {{ form_widget(form.month) }}
+    {{ form_errors(form.month) }}
+</div>
+<div class="field-block button-height">
+    {{ form_label(form.monthBudget) }}
+    {{ form_widget(form.monthBudget) }}
+    {{ form_errors(form.monthBudget) }}
+</div>
+<br/><br/>
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+            <li class="active"><a href="#tab-1">{{ "pequiven_seip.details"|trans }}</a></li>
+            <li><a href="#tab-2">{{ "pequiven_seip.range.range"|trans }}</a></li>
+    </ul>
+
+    <div class="tabs-content">
+        <div id="tab-1" class="with-padding">
+            {% set typeProduction = "" %}
+            {% set prefix = "" %}
+            {% include 'PequivenSEIPBundle:DataLoad/Production/ProductDetailDailyMonth:_sub_form.html.twig' %}
+        </div>
+
+        <div id="tab-2" class="with-padding">
+            rango
+        </div>
+    </div>
+</div>

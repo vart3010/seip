@@ -1,0 +1,21 @@
+Pequiven\SEIPBundle\Entity\CEI\Plant:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        alias:
+            expose: true
+            groups: [api_list]
+        designCapacity:
+            expose: true
+            groups: [api_list]
+        products:
+            expose: true
+            groups: [products]
+        services:
+            expose: true
+            groups: [services]
