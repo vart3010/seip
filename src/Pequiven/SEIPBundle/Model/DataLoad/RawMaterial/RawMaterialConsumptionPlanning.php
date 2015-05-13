@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\CEI;
+namespace Pequiven\SEIPBundle\Model\DataLoad\RawMaterial;
 
 use Pequiven\SEIPBundle\Model\BaseModel;
 
@@ -18,7 +18,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-abstract class RawMaterial extends BaseModel
+abstract class RawMaterialConsumptionPlanning extends BaseModel
 {
     /**
      * Tipo de materia prima interna
@@ -36,5 +36,16 @@ abstract class RawMaterial extends BaseModel
             self::TYPE_INTERNAL => "pequiven_seip.raw_material.type.internal",
             self::TYPE_EXTERNAL => "pequiven_seip.raw_material.type.external",
         );
+    }
+    
+    public function getTypeLabel()
+    {
+        $typeLabels = $this->getTypeLabels();
+        $type = $this->getType();
+        $label = "";
+        if(isset($typeLabels[$type])){
+            $label = $typeLabels[$type];
+        }
+        return $label;
     }
 }

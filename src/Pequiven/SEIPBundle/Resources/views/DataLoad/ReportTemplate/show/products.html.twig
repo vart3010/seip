@@ -27,9 +27,9 @@
                             {{ generateLink(productReport) }}
                         </td>
                         <th scope="row">
-                            {{ productReport.productionLine }}
+                            {{ productReport.product.productionLine }}
                         </th>
-                        <td>{{ productReport.productUnit }}</td>
+                        <td>{{ productReport.product.productUnit }}</td>
                         <td>{{ productReport.plant }}</td>
                         <td class="low-padding align-center">
                             <a href="{{ path("pequiven_product_report_update",{id: productReport.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>

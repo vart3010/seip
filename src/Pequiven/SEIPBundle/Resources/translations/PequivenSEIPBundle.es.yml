@@ -16,6 +16,7 @@ pequiven_seip:
     gross: Bruta
     net: Neta
     hours_n: %n% Horas
+    details: Detalles
     
     #Login
     sign_in: Ingresar
@@ -326,6 +327,8 @@ pequiven_seip:
             inventory: Inventario
             consumption_services: Consumo de servicios
             raw_materials: Consumo de materia prima
+        raw_material: Consumo de Materia prima
+        details_raw_material: Detalle de consumo de materia prima
     product_report:
         product_report: Producto
         type:
@@ -339,12 +342,17 @@ pequiven_seip:
         type:
             internal: Interna
             external: Externa
+    raw_material_consumption_planning:
+        raw_material_consumption_planning: Presupuesto de consumo de materia prima
+        question:
+            delete: Desea eliminar este detalle de consumo de materia prima
     range:
         range: Rango de distribución
         ranges: Rangos de distribución
         type:
             fixed_value: Valor fijo
             capacity_factor: Factor de capacidad
+            percentage_budget: Porcentaje de presupuesto
         question:
             delete: Desea eliminar este rango de distribución
     product_planning:
@@ -468,7 +476,8 @@ empty:
     product_planning: No hay ningún presupuesto de producción.
     range: No hay rango de distribucion.
     product_detail_daily_months: No hay detalles de producción.
-    no_raw_material: Sin materia prima
+    no_raw_material: Sin materia prima.
+    no_details_raw_material: No hay detalles de consumo de materia prima.
     
 chart:
     type:
@@ -504,3 +513,5 @@ nro: "#"
 "Day": Dia
 "Hours": Horas
 "Ranges": Rangos
+"Product report": Reporte de producto
+"Month budget": Presupuesto del mes

@@ -70,6 +70,33 @@ class Plant extends BaseModel
     protected $location;
     
     /**
+     * Productos que produce la planta
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Product
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Product",inversedBy="plants")
+     * @ORM\JoinTable(name="plants_products")
+     */
+    private $products;
+    
+    /**
+     * Servicios que consume la planta
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Service
+     *
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Service")
+     * @ORM\JoinTable(name="plants_services")
+     */
+    private $services;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -192,6 +219,72 @@ class Plant extends BaseModel
     public function getUnitMeasure()
     {
         return $this->unitMeasure;
+    }
+    
+    /**
+     * Add products
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     * @return Plant
+     */
+    public function addProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    {
+        $this->products[] = $products;
+
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Product $products
+     */
+    public function removeProduct(\Pequiven\SEIPBundle\Entity\CEI\Product $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * Add services
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
+     * @return Plant
+     */
+    public function addService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
+    {
+        $this->services[] = $services;
+
+        return $this;
+    }
+
+    /**
+     * Remove services
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Service $services
+     */
+    public function removeService(\Pequiven\SEIPBundle\Entity\CEI\Service $services)
+    {
+        $this->services->removeElement($services);
+    }
+
+    /**
+     * Get services
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServices()
+    {
+        return $this->services;
     }
     
     public function __toString() 

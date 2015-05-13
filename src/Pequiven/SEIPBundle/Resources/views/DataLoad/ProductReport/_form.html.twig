@@ -3,26 +3,6 @@
 <fieldset class="fieldset fields-list">
     <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
     <div class="field-block button-height">
-        {{ form_label(form.productionLine) }}
-        {{ form_widget(form.productionLine) }}
-        {{ form_errors(form.productionLine) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.product) }}
-        {{ form_widget(form.product) }}
-        {{ form_errors(form.product) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.typeProduct) }}
-        {{ form_widget(form.typeProduct) }}
-        {{ form_errors(form.typeProduct) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.productUnit) }}
-        {{ form_widget(form.productUnit) }}
-        {{ form_errors(form.productUnit) }}
-    </div>
-    <div class="field-block button-height">
         {{ form_label(form.company) }}
         {{ form_widget(form.company) }}
         {{ form_errors(form.company) }}
@@ -38,14 +18,9 @@
         {{ form_errors(form.plant) }}
     </div>
     <div class="field-block button-height">
-        {{ form_label(form.rawMaterials) }}
-        {{ form_widget(form.rawMaterials) }}
-        {{ form_errors(form.rawMaterials) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.isRawMaterial) }}
-        {{ form_widget(form.isRawMaterial) }}
-        {{ form_errors(form.isRawMaterial) }}
+        {{ form_label(form.product) }}
+        {{ form_widget(form.product) }}
+        {{ form_errors(form.product) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.enabled) }}
@@ -53,3 +28,74 @@
         {{ form_errors(form.enabled) }}
     </div>
 </fieldset>
+<script>
+    $(document).ready(function(){
+        var selectCompany = $("#pequiven_seipbundle_dataload_productreport_company");
+        var selectLocation = $("#pequiven_seipbundle_dataload_productreport_location");
+        var selectPlant = $("#pequiven_seipbundle_dataload_productreport_plant");
+        var selectProduct = $("#pequiven_seipbundle_dataload_productreport_product");
+        
+        var urlGeyLocation = "{{ path("pequiven_seip_location_by_company") }}";
+        var urlGetPlant = "{{ path("pequiven_seip_plant_by_location") }}";
+        var urlGetProduct = "{{ path("pequiven_seip_product_by_plant") }}";
+        
+        var setDataSelect2 = function(select,data,callData){
+            //var myData = [];
+            select.empty();
+            select.select2('disable');
+            $.each(data,function(index,value){
+                var response = {
+                    id: value.id,
+                    text: value.name
+                };
+                //myData.push(response);
+                select.append('<option value="' + response.id + '">' + response.text + '</option>');
+            });
+            if(data.length > 0){
+                select.select2('enable');
+            }else{
+                select.select2('disable');
+            }
+        };
+        
+        selectCompany.on("change",function(){
+            $.ajax({
+                url: urlGeyLocation,
+                data: { company: selectCompany.val() },
+                success: function(data){
+                    setDataSelect2(selectLocation,data);
+                },
+            });
+        });
+        
+        selectLocation.on("change",function(){
+            $.ajax({
+                url: urlGetPlant,
+                data: { location: selectLocation.val() },
+                success: function(data){
+                    setDataSelect2(selectPlant,data);
+                },
+            });
+        });
+        
+        selectPlant.on("change",function(){
+            
+            $.ajax({
+                url: urlGetProduct,
+                data: { plant: selectPlant.val() },
+                success: function(data){
+                    setDataSelect2(selectProduct,data);
+                },
+            });
+        });
+        
+        selectLocation.empty();
+        selectLocation.select2('disable');
+        
+        selectPlant.empty();
+        selectPlant.select2('disable');
+        
+        selectProduct.empty();
+        selectProduct.select2('disable');
+    });
+</script>

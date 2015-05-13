@@ -98,17 +98,18 @@ class ProductReport extends BaseModel
     private $location;
     
     /**
-     * Materia prima
-     * @var \Pequiven\SEIPBundle\Entity\CEI\RawMaterial
+     * Presupuesto de Materias prima
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning
      *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\RawMaterial")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning",mappedBy="productReport")
      */
-    private $rawMaterials;
+    private $rawMaterialConsumptionPlannings;
     
     /**
      * Tipo de producto
+     * @deprecated since version number
      * @var integer
-     * @ORM\Column(name="type_product",type="integer")
+     * @ORM\Column(name="type_product",type="integer",nullable=true)
      */
     private $typeProduct;
     
@@ -129,6 +130,7 @@ class ProductReport extends BaseModel
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -420,44 +422,43 @@ class ProductReport extends BaseModel
     }
         
     /**
-     * Add rawMaterials
+     * Add rawMaterialConsumptionPlannings
      *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $rawMaterialConsumptionPlannings
      * @return ProductReport
      */
-    public function addRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    public function addRawMaterialConsumptionPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $rawMaterialConsumptionPlannings)
     {
-        $this->rawMaterials[] = $rawMaterials;
+        $this->rawMaterialConsumptionPlannings[] = $rawMaterialConsumptionPlannings;
 
         return $this;
     }
 
     /**
-     * Remove rawMaterials
+     * Remove rawMaterialConsumptionPlannings
      *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $rawMaterialConsumptionPlannings
      */
-    public function removeRawMaterial(\Pequiven\SEIPBundle\Entity\CEI\RawMaterial $rawMaterials)
+    public function removeRawMaterialConsumptionPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\RawMaterialConsumptionPlanning $rawMaterialConsumptionPlannings)
     {
-        $this->rawMaterials->removeElement($rawMaterials);
+        $this->rawMaterialConsumptionPlannings->removeElement($rawMaterialConsumptionPlannings);
     }
 
     /**
-     * Get rawMaterials
+     * Get rawMaterialConsumptionPlannings
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRawMaterials()
+    public function getRawMaterialConsumptionPlannings()
     {
-        return $this->rawMaterials;
+        return $this->rawMaterialConsumptionPlannings;
     }
     
     public function __toString() {
         $_toString = "-";
         if($this->getProduct()){
-            $_toString = (string)$this->getProduct();
+            $_toString = sprintf("%s (%s)",(string) $this->getReportTemplate(),(string)$this->getProduct());
         }
         return $_toString;
     }
-    
 }

@@ -385,7 +385,7 @@ services:
     sonata.admin.cei.product:
         class: Pequiven\MasterBundle\Admin\CEI\ProductAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Productos y Servicios" }
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Producto" }
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Product
@@ -470,17 +470,6 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
-    sonata.admin.cei.raw_material:
-        class: Pequiven\MasterBundle\Admin\CEI\RawMaterialAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Materia Prima" }
-        arguments:
-            - ~
-            - Pequiven\SEIPBundle\Entity\CEI\RawMaterial
-            - ~
-        calls:
-            - [ setTranslationDomain, [SonataAdminBundle]]
-            
     sonata.admin.cei.unit_measure:
         class: Pequiven\MasterBundle\Admin\CEI\UnitMeasureAdmin
         tags:
@@ -499,6 +488,17 @@ services:
         arguments:
             - ~
             - Pequiven\SEIPBundle\Entity\CEI\Region
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
+    sonata.admin.cei.service:
+        class: Pequiven\MasterBundle\Admin\CEI\ServiceAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Servicio" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\Service
             - ~
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]

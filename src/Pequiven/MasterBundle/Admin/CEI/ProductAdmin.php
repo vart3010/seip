@@ -31,8 +31,8 @@ class ProductAdmin extends BaseAdmin
             ->add('id')
             ->add('name')
             ->add('components')
-            ->add('typeOf','choice',array(
-                'choices' => Product::getTypesLabel(),
+            ->add('typeProduct','choice',array(
+                'choices' => Product::getTypeProductLabels(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
             ;
@@ -60,9 +60,31 @@ class ProductAdmin extends BaseAdmin
                         ;
                 },
             ))
-            ->add('typeOf','choice',array(
-                'choices' => Product::getTypesLabel(),
+            ->add('productionLine')
+            ->add('productUnit')
+            ->add('rawMaterials',"sonata_type_model_autocomplete",array(
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                "callback" => function (ProductAdmin $admin, $property, $value){
+                    $datagrid = $admin->getDatagrid();
+                    $qb = $datagrid->getQuery();
+                    $alias = $qb->getRootAlias();
+                    $qb
+                        ->andWhere($qb->expr()->like($alias.".name",$qb->expr()->literal("%".$value."%")))
+                        ->andWhere($alias.'.enabled = :enabled')
+                        ->andWhere($alias.'.isRawMaterial = :isRawMaterial')
+                        ->setParameter('enabled',true)
+                        ->setParameter('isRawMaterial',true)
+                    ;
+                }
+            ))
+            ->add('typeProduct','choice',array(
+                'choices' => Product::getTypeProductLabels(),
                 'translation_domain' => 'PequivenSEIPBundle'
+            ))
+            ->add('isRawMaterial',null,array(
+                'required' => false,
             ))
             ;
         parent::configureFormFields($form);
@@ -72,8 +94,8 @@ class ProductAdmin extends BaseAdmin
     {
         $filter
             ->add('name')
-            ->add('typeOf',null,array(),'choice',array(
-                'choices' => Product::getTypesLabel(),
+            ->add('typeProduct',null,array(),'choice',array(
+                'choices' => Product::getTypeProductLabels(),
                 'translation_domain' => 'PequivenSEIPBundle'
             ))
             ;

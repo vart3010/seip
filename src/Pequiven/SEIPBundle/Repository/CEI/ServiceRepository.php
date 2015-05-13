@@ -14,10 +14,11 @@ namespace Pequiven\SEIPBundle\Repository\CEI;
 use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
 /**
- * Repositorio de materia prima
+ * Repositorio de servicio
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class RawMaterialRepository extends SeipEntityRepository
+class ServiceRepository extends SeipEntityRepository
 {
+    
 }

@@ -1,0 +1,21 @@
+Pequiven\SEIPBundle\Entity\CEI\Location:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [id]
+        name:
+            expose: true
+            groups: [api_list]
+        alias:
+            expose: true
+            groups: [api_list]
+        region:
+            expose: true
+            groups: [api_list]
+        typeLocation:
+            expose: true
+            groups: [typeLocation]
+        company:
+            expose: true
+            groups: [company]
