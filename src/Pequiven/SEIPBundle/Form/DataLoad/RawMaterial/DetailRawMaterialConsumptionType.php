@@ -90,6 +90,14 @@ class DetailRawMaterialConsumptionType extends AbstractType
             ->add('day30Real',null,$paramateretsDays)
             ->add('day31Plan',null,$paramateretsDays)
             ->add('day31Real',null,$paramateretsDays)
+                
+            ->add('ranges',"collection",array(
+                'label_attr' => array('class' => 'label'),
+                "type" => new RangeType(),
+                "allow_add"    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ))
         ;
     }
     

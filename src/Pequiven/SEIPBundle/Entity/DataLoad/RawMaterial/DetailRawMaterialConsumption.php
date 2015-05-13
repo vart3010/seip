@@ -50,7 +50,7 @@ class DetailRawMaterialConsumption extends BaseModel
     /**
      * Rangos de distribucion
      * @var Range
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\Range",mappedBy="detailRawMaterialConsumption")
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\Range",mappedBy="detailRawMaterialConsumption",cascade={"persist","remove"})
      */
     private $ranges;
     
@@ -2129,7 +2129,8 @@ class DetailRawMaterialConsumption extends BaseModel
      */
     public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\Range $ranges)
     {
-        $this->ranges[] = $ranges;
+        $ranges->setDetailRawMaterialConsumption($this);
+        $this->ranges->add($ranges);
 
         return $this;
     }

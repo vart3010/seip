@@ -352,6 +352,7 @@ pequiven_seip:
         type:
             fixed_value: Valor fijo
             capacity_factor: Factor de capacidad
+            percentage_budget: Porcentaje de presupuesto
         question:
             delete: Desea eliminar este rango de distribución
     product_planning:

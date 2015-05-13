@@ -12,7 +12,7 @@
 namespace Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial;
 
 use Doctrine\ORM\Mapping as ORM;
-use Pequiven\SEIPBundle\Model\DataLoad\Production\Range as BaseModel;
+use Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range as BaseModel;
 
 /**
  * Rango de distribucion
@@ -34,7 +34,7 @@ class Range extends BaseModel
     
     /**
      * Planificacion de producto
-     * @var RawMaterialConsumption
+     * @var DetailRawMaterialConsumption
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption",inversedBy="ranges")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -82,7 +82,7 @@ class Range extends BaseModel
         return $this->type;
     }
     
-    /**
+   /**
      * Set dateFrom
      *
      * @param \DateTime $dateFrom
@@ -142,29 +142,6 @@ class Range extends BaseModel
     }
 
     /**
-     * Set productPlanning
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlanning
-     * @return Range
-     */
-    public function setProductPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning $productPlanning)
-    {
-        $this->productPlanning = $productPlanning;
-
-        return $this;
-    }
-
-    /**
-     * Get productPlanning
-     *
-     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductPlanning 
-     */
-    public function getProductPlanning()
-    {
-        return $this->productPlanning;
-    }
-
-    /**
      * Set value
      *
      * @param float $value
@@ -186,8 +163,31 @@ class Range extends BaseModel
     {
         return $this->value;
     }
+
+    /**
+     * Set detailRawMaterialConsumption
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $detailRawMaterialConsumption
+     * @return Range
+     */
+    public function setDetailRawMaterialConsumption(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $detailRawMaterialConsumption)
+    {
+        $this->detailRawMaterialConsumption = $detailRawMaterialConsumption;
+
+        return $this;
+    }
+
+    /**
+     * Get detailRawMaterialConsumption
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption 
+     */
+    public function getDetailRawMaterialConsumption()
+    {
+        return $this->detailRawMaterialConsumption;
+    }
     
-    public function __toString() {
+     public function __toString() {
         $_toString = "-";
         
         if($this->getId() > 0){

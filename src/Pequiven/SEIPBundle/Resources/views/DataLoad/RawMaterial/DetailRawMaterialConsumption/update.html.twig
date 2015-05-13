@@ -17,6 +17,8 @@
        <br /><br />
        {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/DetailRawMaterialConsumption:_form.html.twig' %}
        {{ actions.update() }}
-       {{ form_rest(form) }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
    </form>
 {% endblock %}
