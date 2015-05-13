@@ -308,5 +308,8 @@
         <service id="pequiven.repository.service" class="Pequiven\SEIPBundle\Repository\CEI\ServiceRepository">
             <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Service" />
         </service>
+        <service id="pequiven.repository.entity" class="Pequiven\SEIPBundle\Repository\CEI\EntityRepository">
+            <tag name="app.repository" class="Pequiven\SEIPBundle\Entity\CEI\Entity" />
+        </service>
     </services>
 </container>

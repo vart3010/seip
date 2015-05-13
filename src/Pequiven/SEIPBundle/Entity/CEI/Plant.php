@@ -33,6 +33,13 @@ class Plant extends BaseModel
     private $id;
     
     /**
+     * Entidad a la que pertenece
+     * @var Entity
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
+     */
+    protected $entity;
+    
+    /**
      * Nombre
      * 
      * @var String 
@@ -62,13 +69,6 @@ class Plant extends BaseModel
      */
     protected $unitMeasure;
 
-    /**
-     * Localizacion o empresa
-     * @var Location
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
-     */
-    protected $location;
-    
     /**
      * Productos que produce la planta
      * @var \Pequiven\SEIPBundle\Entity\CEI\Product
@@ -127,29 +127,6 @@ class Plant extends BaseModel
     public function getName()
     {
         return $this->name;
-    }
-    
-    /**
-     * Set location
-     *
-     * @param \Pequiven\SEIPBundle\Entity\CEI\Location $location
-     * @return Plant
-     */
-    public function setLocation(\Pequiven\SEIPBundle\Entity\CEI\Location $location = null)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return \Pequiven\SEIPBundle\Entity\CEI\Location 
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
     
     /**
@@ -285,6 +262,29 @@ class Plant extends BaseModel
     public function getServices()
     {
         return $this->services;
+    }
+    
+    /**
+     * Set entity
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Entity $entity
+     * @return Plant
+     */
+    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null)
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get entity
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Entity 
+     */
+    public function getEntity()
+    {
+        return $this->entity;
     }
     
     public function __toString() 

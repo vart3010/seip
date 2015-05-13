@@ -27,6 +27,8 @@
 	"tecnocreaciones/ajax-fos-user-bundle": "1.*@dev",
 	"tecnocreaciones/install-bundle": "dev-master",
         "tecnocreaciones/tools-bundle": "dev-master",
+        "tecnocreaciones/vzla-entity-bundle": "dev-master",
+        "tecnocreaciones/vzla-fixtures-bundle": "dev-master",
         
         "friendsofsymfony/rest-bundle":"@stable",
         "friendsofsymfony/user-bundle": "v1.3.3",

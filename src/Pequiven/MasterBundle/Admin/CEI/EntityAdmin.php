@@ -17,34 +17,31 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Pequiven\MasterBundle\Admin\BaseAdmin;
 
 /**
- * Administrador de sede
+ * Administrador de entidades
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-class LocationAdmin extends BaseAdmin
+class EntityAdmin extends BaseAdmin
 {
-    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show) 
-    {
+    protected function configureShowFields(\Sonata\AdminBundle\Show\ShowMapper $show){
         $show
-            ->add('id')
-            ->add('company')
-            ->add('name')
-            ->add('alias')
-            ->add('typeLocation')
-            ->add('state')
+            ->add("id")
+            ->add("location")
+            ->add("name")
+            ->add("alias")
             ;
         parent::configureShowFields($show);
     }
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
-            ->add('company')
-            ->add('name')
-            ->add('alias')
-            ->add('typeLocation')
-            ->add('region')
-            ->add('state')
+            ->add("location",null,array(
+                "query_builder" => $queryAllEnable,
+            ))
+            ->add("name")
+            ->add("alias")
             ;
         parent::configureFormFields($form);
     }
@@ -52,23 +49,18 @@ class LocationAdmin extends BaseAdmin
     protected function configureDatagridFilters(DatagridMapper $filter) 
     {
         $filter
-            ->add('company')
-            ->add('name')
-            ->add('alias')
-            ->add('typeLocation')
-            ->add('state')
+            ->add("location")
+            ->add("name")
+            ->add("alias")
             ;
         parent::configureDatagridFilters($filter);
     }
-    
     protected function configureListFields(ListMapper $list) 
     {
         $list
-            ->addIdentifier('name')
-            ->add('alias')
-            ->add('company')
-            ->add('typeLocation')
-            ->add('state')
+            ->addIdentifier("name")
+            ->add("location")
+            ->add("alias")
             ;
         parent::configureListFields($list);
     }

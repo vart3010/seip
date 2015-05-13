@@ -31,7 +31,7 @@ class PlantAdmin extends BaseAdmin
             ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity')
             ->add('products')
             ->add('services')
             ;
@@ -40,12 +40,15 @@ class PlantAdmin extends BaseAdmin
     
     protected function configureFormFields(FormMapper $form) 
     {
+        $queryAllEnable = $this->getQueryAllEnable();
         $form
             ->add('name')
             ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity',null,array(
+                "query_builder" => $queryAllEnable,
+            ))
             ->add('products',"sonata_type_model_autocomplete",array(
                 'property' => 'name',
                 'multiple' => true,
@@ -85,7 +88,7 @@ class PlantAdmin extends BaseAdmin
             ->add('alias')
             ->add('designCapacity')
             ->add('unitMeasure')
-            ->add('location')
+            ->add('entity')
             ;
         parent::configureDatagridFilters($filter);
     }
@@ -96,7 +99,7 @@ class PlantAdmin extends BaseAdmin
             ->addIdentifier('name')
             ->add('alias')
             ->add('designCapacity')
-            ->add('location')
+            ->add('entity')
             ;
         parent::configureListFields($list);
     }
