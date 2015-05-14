@@ -108,6 +108,10 @@ class ObjetiveRepository extends EntityRepository {
                 }
             }
         }
+        
+        if(isset($options['viewAll'])){
+            $query->andWhere('o.deletedAt IS NULL or o.deletedAt IS NOT NULL');
+        }
 
 //        $this->applyPeriodCriteria($query);
         
