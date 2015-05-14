@@ -24,6 +24,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('id')
             ->add('valueOfTag')
             ->add('indicator')
+            ->add('period')
             ->add('unitResult')
             ->add('createdAt')
             ->add('createdBy')
@@ -78,6 +79,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
          $list
             ->addIdentifier('id')
             ->add('description')
+            ->add('period')
             ->add('valueOfTag')
             ->add('textOfTag')
             ->add('indicator')
