@@ -73,12 +73,25 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function getPlantByLocationAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function getEntityByLocationAction(\Symfony\Component\HttpFoundation\Request $request)
     {
         $location = $request->get("location");
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Plant");
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Entity");
         $results = $repository->findByLocation($location);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+    
+    public function getPlantByEntityAction(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $entity = $request->get("entity");
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository("Pequiven\SEIPBundle\Entity\CEI\Plant");
+        $results = $repository->findByEntity($entity);
         
         $view = $this->view();
         $view->setData($results);

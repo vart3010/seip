@@ -49,14 +49,6 @@ class ProductReport extends BaseModel
     private $productionLine;
 
     /**
-     * Planta que hace el producto
-     * 
-     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
-     */
-    private $plant;
-    
-    /**
      * ¿Es materia prima?
      * @var boolean
      * @ORM\Column(name="is_raw_material",type="boolean")
@@ -96,6 +88,22 @@ class ProductReport extends BaseModel
      * @ORM\JoinColumn(nullable=false)
      */
     private $location;
+    
+    /**
+     * Entidad donde esta el producto
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Entity
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Entity")
+     */
+    private $entity;
+    
+    /**
+     * Planta que hace el producto
+     * 
+     * @var \Pequiven\SEIPBundle\Entity\CEI\Plant
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant")
+     */
+    private $plant;
     
     /**
      * Presupuesto de Materias prima
@@ -454,7 +462,31 @@ class ProductReport extends BaseModel
         return $this->rawMaterialConsumptionPlannings;
     }
     
-    public function __toString() {
+    /**
+     * Set entity
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\Entity $entity
+     * @return ProductReport
+     */
+    public function setEntity(\Pequiven\SEIPBundle\Entity\CEI\Entity $entity = null)
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Get entity
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\Entity 
+     */
+    public function getEntity()
+    {
+        return $this->entity;
+    }
+    
+    public function __toString() 
+    {
         $_toString = "-";
         if($this->getProduct()){
             $_toString = sprintf("%s (%s)",(string) $this->getReportTemplate(),(string)$this->getProduct());

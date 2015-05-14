@@ -56,6 +56,10 @@ pequiven:
         create: El detalle de produccion se agrego de correctamente.
         update: El detalle de produccion se actualizo correctamente.
         delete: El detalle de produccion se elimino correctamente.
+    raw_material_consumption_planning:
+        create: La materia prima se agrego de correctamente.
+        update: La materia prima se actualizo correctamente.
+        delete: La materia prima se elimino correctamente.
     detail_raw_material_consumption:
         create: El detalle de consumo de materia prima se agrego de correctamente.
         update: El detalle de consumo de materia prima se actualizo correctamente.

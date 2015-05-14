@@ -47,13 +47,6 @@ class ReportTemplate extends BaseModel
     private $name;
     
     /**
-     * Tipo de reporte
-     * @var integer
-     * @ORM\Column(name="type_report",type="integer")
-     */
-    private $typeReport;
-
-    /**
      * Productos del reporte
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate",cascade={"remove"})
@@ -79,7 +72,7 @@ class ReportTemplate extends BaseModel
     private $company;
     
     /**
-     * Localizacion (complejo).
+     * Localidad.
      * @var \Pequiven\SEIPBundle\Entity\CEI\Location
      *
      * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Location")
@@ -135,29 +128,6 @@ class ReportTemplate extends BaseModel
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set typeReport
-     *
-     * @param integer $typeReport
-     * @return ReportTemplate
-     */
-    public function setTypeReport($typeReport)
-    {
-        $this->typeReport = $typeReport;
-
-        return $this;
-    }
-
-    /**
-     * Get typeReport
-     *
-     * @return integer 
-     */
-    public function getTypeReport()
-    {
-        return $this->typeReport;
     }
 
     /**

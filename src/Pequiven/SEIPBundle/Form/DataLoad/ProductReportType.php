@@ -29,6 +29,12 @@ class ProductReportType extends SeipAbstractForm
                 "attr" => array("class" => "select2 input-large"),
                 "query_builder" => $queryBuilderEnable,
             ))
+            ->add("entity",null,array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+                "query_builder" => $queryBuilderEnable,
+            ))
             ->add('plant',null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",

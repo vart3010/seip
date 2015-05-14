@@ -497,7 +497,7 @@ nro: "#"
 "Plant": Planta
 "Enabled": ¿Activo?
 "Company": Empresa
-"Location": Complejo
+"Location": Localidad
 "Type product": Tipo De Producto
 "Raw material": Materia Prima
 "Month":  Mes
@@ -515,3 +515,4 @@ nro: "#"
 "Ranges": Rangos
 "Product report": Reporte de producto
 "Month budget": Presupuesto del mes
+"Entity": Entidad

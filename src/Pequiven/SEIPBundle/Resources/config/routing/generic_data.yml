@@ -40,10 +40,19 @@ pequiven_seip_location_by_company:
         _format: "json|xml"
     methods: [GET]
         
-pequiven_seip_plant_by_location:
-    path: /plant-by-location.{_format}
+pequiven_seip_entity_by_location:
+    path: /entity-by-location.{_format}
     defaults: 
-        _controller: pequiven_seip.controller.generic_data:getPlantByLocationAction
+        _controller: pequiven_seip.controller.generic_data:getEntityByLocationAction
+        _format: json
+    requirements:
+        _format: "json|xml"
+    methods: [GET]
+        
+pequiven_seip_plant_by_entity:
+    path: /plant-by-entity.{_format}
+    defaults: 
+        _controller: pequiven_seip.controller.generic_data:getPlantByEntityAction
         _format: json
     requirements:
         _format: "json|xml"

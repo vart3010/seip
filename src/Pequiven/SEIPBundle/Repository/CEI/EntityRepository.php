@@ -20,6 +20,17 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class EntityRepository extends SeipEntityRepository
 {
+    public function findByLocation($location) 
+    {
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->andWhere("e.location = :location")
+            ->setParameter("location", $location)
+            ;
+        return $qb->getQuery()->getResult();
+        
+    }
+    
     protected function getAlias() {
         return "e";
     }

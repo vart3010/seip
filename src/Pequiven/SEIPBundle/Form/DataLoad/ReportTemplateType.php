@@ -24,13 +24,6 @@ class ReportTemplateType extends AbstractType
                     'class' => "input input-xlarge"
                 ),
             ))
-            ->add('typeReport',"choice",array(
-                "empty_value" => "",
-                'label_attr' => array('class' => 'label'),
-                "attr" => array("class" => "select2 input-large"),
-                "choices" => \Pequiven\SEIPBundle\Model\DataLoad\ReportTemplate::getTypeReports(),
-                "translation_domain" => "PequivenSEIPBundle"
-            ))
             ->add("company",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
@@ -41,7 +34,7 @@ class ReportTemplateType extends AbstractType
                     return $repository->getQueryAllEnabled();
                 }
             ))
-            ->add("region",null,array(
+            ->add("location",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 'attr' => array(
@@ -51,7 +44,7 @@ class ReportTemplateType extends AbstractType
                     return $repository->getQueryAllEnabled();
                 }
             ))
-            ->add("location",null,array(
+            ->add("region",null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 'attr' => array(

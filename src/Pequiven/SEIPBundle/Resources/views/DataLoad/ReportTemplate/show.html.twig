@@ -12,7 +12,7 @@
 
 {% block body %}
     <fieldset class="fieldset">
-        <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}&nbsp;<b>{{ report_template.getTypeReportLabel|trans }}</b></legend>
+        <legend class="legend">{{ 'pequiven_seip.report_template.report_template'|trans }}</legend>
         <div class="columns">
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
@@ -30,12 +30,6 @@
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.name'|trans }}</label>
                     {{ report_template.name }}
-                </p>
-            </div>
-            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                <p class="inline-label">
-                    <label class="label">{{ 'pequiven_seip.type_report'|trans }}</label>
-                    {{ report_template.getTypeReportLabel|trans }}
                 </p>
             </div>
             <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">

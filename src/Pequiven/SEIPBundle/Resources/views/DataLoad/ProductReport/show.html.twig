@@ -70,6 +70,12 @@
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ product_report.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
                     <label class="label">{{ 'Raw material'|trans }}</label>
                     {% for rawMaterial in product_report.product.rawMaterials %}
                         {{ rawMaterial }}{% if loop.last %}.{% else %},{% endif %}
