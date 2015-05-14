@@ -136,10 +136,12 @@ class Entity extends BaseModel
     public function __toString() 
     {
         $_toString = "-";
-        if($this->getAlias() != ""){
-            $_toString = $this->getAlias();
-        }else{
-            $_toString = $this->getName();
+        if($this->getId() > 0){
+            if($this->getAlias() != ""){
+                $_toString = $this->getAlias();
+            }else{
+                $_toString = $this->getName();
+            }
         }
         return $_toString;
     }
