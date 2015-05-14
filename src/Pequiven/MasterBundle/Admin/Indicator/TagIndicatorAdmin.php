@@ -70,6 +70,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
         $filter
             ->add('indicator')
             ->add('description')
+            ->add('period')
             ;
     }
     
@@ -86,6 +87,15 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
     protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection) 
     {
 //        $collection->remove('create');
+    }
+    
+    public function toString($object) 
+    {
+        $toString = '-';
+        if($object->getId() > 0){
+            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
+        }
+        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
     }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) 
