@@ -298,6 +298,17 @@ class PlantReport extends ModelBaseMaster
         $this->setLocation($reportTemplate->getLocation());
     }
     
+    public function getPlantStopPlanningSortByMonth()
+    {
+        $plantStopPlannings = $this->getPlantStopPlannings();
+        $sorted = array();
+        foreach ($plantStopPlannings as $plantStopPlanning){
+            $sorted[$plantStopPlanning->getMonth()] = $plantStopPlanning;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
     public function __toString() 
     {
         $_toString = "-";

@@ -37,15 +37,20 @@ class ProductReportController extends SEIPController
     {
         $resource = $this->findOr404($request);
         $productPlannings = $resource->getProductPlannings();
+        $plantStopPlanningsByMonths = $resource->getPlantReport()->getPlantStopPlanningSortByMonth();
+        
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
         $countProduct = 0;
         $productDetailDailyMonthsCache = $resource->getProductDetailDailyMonthsSortByMonth();
         foreach ($productPlannings as $productPlanning) {
-            $daysStops = $productPlanning->getDaysStops();
             $daysStopsArray = array();
-            foreach ($daysStops as $daysStop) {
-                $daysStopsArray[] = $daysStop->getNroDay();
+            $month = $productPlanning->getMonth();
+            if(isset($plantStopPlanningsByMonths[$month])){
+                $daysStops = $plantStopPlanningsByMonths[$month];
+                foreach ($daysStops as $daysStop) {
+                    $daysStopsArray[] = $daysStop->getNroDay();
+                }
             }
             $ranges = $productPlanning->getRanges();
             

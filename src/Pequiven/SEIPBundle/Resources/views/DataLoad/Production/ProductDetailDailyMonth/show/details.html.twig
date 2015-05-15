@@ -7,13 +7,13 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.plan_n'|trans({"%n%":i}) }}</label>
-                    {{ attribute(product_detail_daily_month,planN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
+                    {{ attribute(product_detail_daily_month,planN)|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.real_n'|trans({"%n%":i}) }}</label>
-                    {{ attribute(product_detail_daily_month,realN)|myNumberFormat }}&nbsp;{{ productReport.productUnit }}
+                    {{ attribute(product_detail_daily_month,realN)|myNumberFormat }}&nbsp;{{ productReport.product.productUnit }}
                 </p>
             </div>
         </div>
