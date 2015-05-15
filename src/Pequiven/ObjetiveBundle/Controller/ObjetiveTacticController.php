@@ -771,7 +771,9 @@ class ObjetiveTacticController extends baseController
         $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1],'period' => $period));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
 
-        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true));
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true,'viewAll' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
 
         if (is_array($results) && $total > 0) {
@@ -801,8 +803,10 @@ class ObjetiveTacticController extends baseController
 
         $objetiveStrategic = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetivesStrategics[$totalObjetivesStrategics - 1]));
         $refObjetiveStrategic = $objetiveStrategic->getRef();
-
-        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true));
+        
+        $em->getFilters()->disable('softdeleteable');
+        $results = $this->get('pequiven.repository.objetivetactic')->getByParent($objetivesStrategics[$totalObjetivesStrategics - 1], array('searchByRef' => true, 'setRef' => true, 'viewALL' => true));
+        $em->getFilters()->enable('softdeleteable');
         $total = count($results);
 
         for ($i = 0; $i < $options['totalGerencias']; $i++) {

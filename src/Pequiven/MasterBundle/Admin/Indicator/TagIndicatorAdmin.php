@@ -24,6 +24,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
             ->add('id')
             ->add('valueOfTag')
             ->add('indicator')
+            ->add('period')
             ->add('unitResult')
             ->add('createdAt')
             ->add('createdBy')
@@ -70,6 +71,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
         $filter
             ->add('indicator')
             ->add('description')
+            ->add('period')
             ;
     }
     
@@ -77,6 +79,7 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
          $list
             ->addIdentifier('id')
             ->add('description')
+            ->add('period')
             ->add('valueOfTag')
             ->add('textOfTag')
             ->add('indicator')
@@ -87,6 +90,15 @@ class TagIndicatorAdmin extends Admin implements \Symfony\Component\DependencyIn
     {
 //        $collection->remove('create');
     }
+    
+//    public function toString($object) 
+//    {
+//        $toString = '-';
+//        if($object->getId() > 0){
+//            $toString = $object->getPeriod()->getDescription().' - '.$object->getRef().' - '.$object->getDescription();
+//        }
+//        return \Pequiven\SEIPBundle\Service\ToolService::truncate($toString,array('limit' => 50));
+//    }
     
     public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) 
     {
