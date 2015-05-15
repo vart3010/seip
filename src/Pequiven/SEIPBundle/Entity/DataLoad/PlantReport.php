@@ -88,6 +88,13 @@ class PlantReport extends ModelBaseMaster
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",mappedBy="plantReport")
      */
     private $plantStopPlannings;
+    
+    /**
+     * Planificacion de consumo de servicios
+     * @var Plant\PlantStopPlanning
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport")
+     */
+    private $consumerPlanningServices;
 
     /**
      * Constructor
@@ -96,6 +103,7 @@ class PlantReport extends ModelBaseMaster
     {
         $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
         $this->plantStopPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->consumerPlanningServices = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
