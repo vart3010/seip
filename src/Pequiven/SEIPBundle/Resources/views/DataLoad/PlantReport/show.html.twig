@@ -44,12 +44,24 @@
                     {{ plant_report.entity }}
                 </p>
             </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Services'|trans }}</label>
+                    {% for service in plant_report.plant.services %}
+                        {{ service }}{% if loop.last %}.{% else %},{% endif %}
+                    {% else %}
+                        <span class="tag ">{{ "empty.no_service"|trans }}</span>
+                    {% endfor %}
+                </p>
+            </div>
         </div>
     </fieldset>
                 
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
     <br /><br />
     <p class="button-height align-right">
         &nbsp;

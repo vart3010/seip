@@ -487,6 +487,8 @@ empty:
     no_details_raw_material: No hay detalles de consumo de materia prima.
     plant_reports: No hay plantas agregadas.
     plant_stop_planning: No hay planificación de paradas.
+    no_service: Sin servicios.
+    consumer_planning_services: No hay servicios.
     
 chart:
     type:
@@ -528,3 +530,5 @@ nro: "#"
 "Report template": Plantilla del complejo
 "Plant report": Reporte de planta
 "Day stops": Dias de parada
+"Services": Servicios
+"Service": Servicio

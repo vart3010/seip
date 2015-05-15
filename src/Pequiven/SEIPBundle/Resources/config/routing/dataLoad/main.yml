@@ -33,3 +33,7 @@ pequiven_data_load_detail_raw_material_consumption:
 pequiven_data_load_plant_stop_planning:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/plant_stop_planning.yml"
     prefix:   /plant-stop-planning
+    
+pequiven_data_load_consumer_planning_service:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/consumer_planning_service.yml"
+    prefix:   /consumer-planning-service

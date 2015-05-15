@@ -286,3 +286,9 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Plant\PlantStopPlanningController
+        pequiven.consumer_planning_service:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Service/ConsumerPlanningService
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\ConsumerPlanningServiceController

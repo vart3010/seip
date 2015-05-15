@@ -49,7 +49,7 @@ class ConsumerPlanningService extends BaseModel
     private $service;
 
     /**
-     *
+     * Detalles
      * @var DetailConsumerPlanningService
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService",mappedBy="consumerPlanningService")
      */
