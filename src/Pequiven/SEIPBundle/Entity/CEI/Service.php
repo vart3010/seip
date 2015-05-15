@@ -48,6 +48,17 @@ class Service extends BaseModel
     private $serviceUnit;
     
     /**
+     * Plantas
+     * @var Plant
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Plant",mappedBy="services")
+     */
+    private $plants;
+
+    public function __construct() {
+        $this->plants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return integer 

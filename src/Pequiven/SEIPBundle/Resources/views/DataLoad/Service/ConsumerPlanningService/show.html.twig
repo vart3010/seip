@@ -1,0 +1,44 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.consumer_planning_service.consumer_planning_service"|trans )
+    ) }}
+{% endblock %}
+
+{% block body %}
+    {% set plantReport = consumer_planning_service.plantReport %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.consumer_planning_service.consumer_planning_service'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.product_report.product_report'|trans }}</label>
+                    {{ generateLink(plantReport) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Service'|trans }}</label>
+                    {{ consumer_planning_service.service }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad/Service/ConsumerPlanningService:show/detail_raw_material_consumptions.html.twig' %}
+    {#
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad/Service/ConsumerPlanningService:show/detail_tabs_raw_material_consumptions.html.twig' %}#}
+    <br /><br />
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_consumer_planning_service_update', { 'id': consumer_planning_service.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_consumer_planning_service_delete', { 'id': consumer_planning_service.id })) }}
+    </p>
+{% endblock %}

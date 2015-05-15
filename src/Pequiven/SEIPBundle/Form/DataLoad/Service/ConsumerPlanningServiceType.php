@@ -14,10 +14,31 @@ class ConsumerPlanningServiceType extends SeipAbstractForm
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $entity = new \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService();
+        $entity = $builder->getData();
+        $plant = $entity->getPlantReport()->getPlant();
+        
+        $parametersPreSet = array(
+            'label_attr' => array('class' => 'label'),
+            "empty_value" => "",
+            "attr" => array("class" => "select2 input-large"),
+            "disabled" => true,
+        );
         $builder
-            ->add('plantReport')
-            ->add('service')
-            ->add('enabled')
+            ->add('plantReport',null,$parametersPreSet)
+            ->add('service',null,array(
+                'label_attr' => array('class' => 'label'),
+                "empty_value" => "",
+                "attr" => array("class" => "select2 input-large"),
+                "query_builder" => function (\Pequiven\SEIPBundle\Repository\CEI\ServiceRepository $repository) use ($plant){
+                    return $repository->findQueryByPlant($plant);
+                },
+            ))
+            ->add('enabled',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),
+                "required" => false,
+            ))
         ;
     }
     

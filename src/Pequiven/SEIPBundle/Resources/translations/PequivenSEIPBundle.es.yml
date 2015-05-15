@@ -365,6 +365,8 @@ pequiven_seip:
     plant_report:
         plant_report: Reporte de planta
         plant_stop_planning: Planificacion de parada
+    consumer_planning_service:
+        consumer_planning_service: Consumo de servicios
 
     month:
         0: Enero
@@ -489,7 +491,8 @@ empty:
     plant_stop_planning: No hay planificación de paradas.
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
-    
+    no_details_service: No hay detalles del consumo de servicios.
+        
 chart:
     type:
         indicatorsAssociatedDoughnut: Indicadores Asociados con resultados (Dona).

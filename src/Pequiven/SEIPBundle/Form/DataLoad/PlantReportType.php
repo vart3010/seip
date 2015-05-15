@@ -14,7 +14,6 @@ class PlantReportType extends SeipAbstractForm
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $queryBuilderEnable = $this->getQueryBuilderEnabled();
         //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
         $entity = $builder->getData();
         
