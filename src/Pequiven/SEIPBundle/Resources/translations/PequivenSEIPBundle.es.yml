@@ -17,6 +17,7 @@ pequiven_seip:
     net: Neta
     hours_n: %n% Horas
     details: Detalles
+    plants: Plantas
     
     #Login
     sign_in: Ingresar
@@ -358,6 +359,8 @@ pequiven_seip:
     product_planning:
         product_planning: Presupuesto de producción
         without_stopping_day: Sin días de parada.
+    plant_report:
+        plant_report: Reporte de planta
 
     month:
         0: Enero
@@ -478,6 +481,7 @@ empty:
     product_detail_daily_months: No hay detalles de producción.
     no_raw_material: Sin materia prima.
     no_details_raw_material: No hay detalles de consumo de materia prima.
+    plant_reports: No hay plantas agregadas.
     
 chart:
     type:
@@ -516,3 +520,5 @@ nro: "#"
 "Product report": Reporte de producto
 "Month budget": Presupuesto del mes
 "Entity": Entidad
+"Report template": Plantilla del complejo
+"Plant report": Reporte de planta

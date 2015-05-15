@@ -21,7 +21,6 @@ class EntitySubscriber extends BaseEventListerner
     public static function getSubscribedEvents() {
         return array(
             SeipEvents::REPORT_TEMPLATE_PRE_CREATE => "onReportTemplatePreCreate",
-            SeipEvents::PRODUCT_REPORT_PRE_CREATE => "onProductReportPreCreate",
             SeipEvents::PRODUCT_PLANNING_PRE_CREATE => "onProductPlanningPreCreate",
             SeipEvents::PRODUCT_RANGE_CREATE => "onProductRangePreCreate",
             SeipEvents::PRODUCT_PRODUCT_DETAIL_DAILY_MONTH_PRE_CREATE => "onDetailDailyMonthPreCreate",
@@ -35,15 +34,6 @@ class EntitySubscriber extends BaseEventListerner
         $entity->setPeriod($this->getPeriodService()->getPeriodActive(true));
         $entity->setRef($this->getSequenceGenerator()->getNextRefReportTemplate($entity));
         
-    }
-    
-    public function onProductReportPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)
-    {
-        $entity = $event->getSubject();
-        $request = $this->getRequest();
-        $reportTemplateId = $request->get("reportTemplate");
-        $reportTemplate = $this->find("Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate", $reportTemplateId);
-        $entity->setReportTemplate($reportTemplate);
     }
     
     public function onProductPlanningPreCreate(\Sylius\Bundle\ResourceBundle\Event\ResourceEvent $event)

@@ -47,13 +47,6 @@ class ReportTemplate extends BaseModel
     private $name;
     
     /**
-     * Productos del reporte
-     * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
-     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",mappedBy="reportTemplate",cascade={"remove"})
-     */
-    private $productsReport;
-    
-    /**
      * Periodo.
      * @var \Pequiven\SEIPBundle\Entity\Period
      *
@@ -90,11 +83,18 @@ class ReportTemplate extends BaseModel
     private $region;
     
     /**
+     * Plantillas de plantas
+     * @var \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\PlantReport",mappedBy="reportTemplate")
+     */
+    private $plantReports;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->productsReport = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->plantReports = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -128,39 +128,6 @@ class ReportTemplate extends BaseModel
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Add productsReport
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport
-     * @return ReportTemplate
-     */
-    public function addProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport)
-    {
-        $this->productsReport->add($productsReport);
-
-        return $this;
-    }
-
-    /**
-     * Remove productsReport
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport
-     */
-    public function removeProductsReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productsReport)
-    {
-        $this->productsReport->removeElement($productsReport);
-    }
-
-    /**
-     * Get productsReport
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProductsReport()
-    {
-        return $this->productsReport;
     }
 
     /**
@@ -276,6 +243,39 @@ class ReportTemplate extends BaseModel
     public function getRegion()
     {
         return $this->region;
+    }
+    
+    /**
+     * Add plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     * @return ReportTemplate
+     */
+    public function addPlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports[] = $plantReports;
+
+        return $this;
+    }
+
+    /**
+     * Remove plantReports
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports
+     */
+    public function removePlantReport(\Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReports)
+    {
+        $this->plantReports->removeElement($plantReports);
+    }
+
+    /**
+     * Get plantReports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlantReports()
+    {
+        return $this->plantReports;
     }
     
     public function __toString() 

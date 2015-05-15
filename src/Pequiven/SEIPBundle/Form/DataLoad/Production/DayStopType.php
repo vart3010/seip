@@ -34,7 +34,7 @@ class DayStopType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop'
+            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Plant\DayStop'
         ));
     }
 

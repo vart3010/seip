@@ -6,16 +6,17 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.product_report.product_report"|trans ),
-        ( 'pequiven.add'|trans({},'messages') )
+        ("pequiven_seip.plant_report.plant_report"|trans ),
+        ( 'pequiven.update'|trans({},'messages') )
     ) }}
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_product_report_create",{plantReport:app.request.get("plantReport") }) }}">
+    <form method="POST" action="{{ path("pequiven_plant_report_update",{id:plant_report.id}) }}">
+        <input type="hidden" name="_metod" value="PUT" />
        <br /><br />
-       {% include 'PequivenSEIPBundle:DataLoad/ProductReport:_form.html.twig' %}
-       {{ actions.create() }}
+       {% include 'PequivenSEIPBundle:DataLoad/PlantReport:_form.html.twig' %}
+       {{ actions.update() }}
        {{ form_rest(form) }}
    </form>
 {% endblock %}

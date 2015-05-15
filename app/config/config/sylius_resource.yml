@@ -274,3 +274,9 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\RawMaterial\DetailRawMaterialConsumptionController
+        pequiven.plant_report:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/PlantReport
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\PlantReportController

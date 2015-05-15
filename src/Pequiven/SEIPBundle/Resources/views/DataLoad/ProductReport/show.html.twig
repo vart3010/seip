@@ -11,7 +11,7 @@
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'pequiven_seip.report_template.report_template'|trans }}</label>
-                    {{ generateLink(product_report.reportTemplate) }}
+                    {{ generateLink(product_report.plantReport) }}
                 </p>
             </div>
             <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -30,12 +30,6 @@
                 <p class="inline-label">
                     <label class="label">{{ 'Product unit'|trans }}</label>
                     {{ product_report.product.productUnit }}
-                </p>
-            </div>
-            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
-                <p class="inline-label">
-                    <label class="label">{{ 'Plant'|trans }}</label>
-                    {{ product_report.plant }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
@@ -59,19 +53,19 @@
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Company'|trans }}</label>
-                    {{ product_report.company }}
+                    {{ product_report.plantReport.company }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Location'|trans }}</label>
-                    {{ product_report.location }}
+                    {{ product_report.plantReport.location }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
                 <p class="inline-label">
                     <label class="label">{{ 'Entity'|trans }}</label>
-                    {{ product_report.entity }}
+                    {{ product_report.plantReport.entity }}
                 </p>
             </div>
             <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">

@@ -49,13 +49,6 @@ class ProductPlanningType extends AbstractType
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-large"),
             ))
-            ->add('daysStops',"collection",array(
-                "type" => new DayStopType(),
-                'label_attr' => array('class' => 'label'),
-                "allow_add"    => true,
-                'by_reference' => false,
-                'allow_delete' => true,
-            ))
             ->add("ranges","collection",array(
                 'label_attr' => array('class' => 'label'),
                 "type" => new RangeType(),

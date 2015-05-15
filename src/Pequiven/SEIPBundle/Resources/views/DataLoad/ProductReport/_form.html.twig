@@ -3,24 +3,9 @@
 <fieldset class="fieldset fields-list">
     <legend class="legend">{{ 'pequiven_seip.product_report.product_report'|trans }}</legend>
     <div class="field-block button-height">
-        {{ form_label(form.company) }}
-        {{ form_widget(form.company) }}
-        {{ form_errors(form.company) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.location) }}
-        {{ form_widget(form.location) }}
-        {{ form_errors(form.location) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.entity) }}
-        {{ form_widget(form.entity) }}
-        {{ form_errors(form.entity) }}
-    </div>
-    <div class="field-block button-height">
-        {{ form_label(form.plant) }}
-        {{ form_widget(form.plant) }}
-        {{ form_errors(form.plant) }}
+        {{ form_label(form.plantReport) }}
+        {{ form_widget(form.plantReport) }}
+        {{ form_errors(form.plantReport) }}
     </div>
     <div class="field-block button-height">
         {{ form_label(form.product) }}
@@ -70,8 +55,5 @@
         
         selectEntity.empty();
         selectEntity.select2('disable');
-        
-        selectProduct.empty();
-        selectProduct.select2('disable');
     });
 </script>

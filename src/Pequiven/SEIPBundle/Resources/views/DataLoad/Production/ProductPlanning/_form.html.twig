@@ -18,15 +18,6 @@
         {{ form_errors(form.dailyProductionCapacity) }}
     </div>
     <div class="field-block button-height">
-        {{ form_label(form.daysStops) }}
-        <ul class="daysStops unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: form.daysStops.vars.prototype} %}{% endfilter %}">
-            {# iterate over each existing tag and render its only field: name #}
-            {% for daysStop in form.daysStops %}
-                <li>{% include 'PequivenSEIPBundle:DataLoad/Production/DayStop:_form.html.twig' with {form: daysStop} %}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="field-block button-height">
         {{ form_label(form.ranges) }}
         <ul class="ranges unstyled-list padding-left-40" data-prototype="{% filter escape %}{% include 'PequivenSEIPBundle:DataLoad/Production/Range:_form.html.twig' with {form: form.ranges.vars.prototype} %}{% endfilter %}">
             {% for range in form.ranges %}
@@ -43,10 +34,6 @@
     // setup an "Añadir rango de distribucion" link
     var $addTagLinkRange = $('<a href="#" class="add_tag_link">Añadir rango de distribucion</a>');
     var $newLinkLiRange = $('<li></li>').append($addTagLinkRange);
-    
-    // setup an "Añadir dia de parada" link
-    var $addDayStopLink = $('<a href="#" class="add_day_stop_link">Añadir dia de parada</a>');
-    var $newLinkLiDayStop = $('<li></li>').append($addDayStopLink);
     
     var dateFormat = "dd-mm-yy";
 
@@ -170,81 +157,6 @@
           dateFormat: dateFormat
         });
         
-        
-        //Dias de paradas
-        // Get the ul that holds the collection of tags
-        $collectionHolderDaysStops = $('ul.daysStops');
-        
-        // add a delete link to all of the existing tag form li elements
-        $collectionHolderDaysStops.find('li').each(function() {
-            addDayStopFormDeleteLink($(this));
-        });
-
-        // add the "add a tag" anchor and li to the tags ul
-        $collectionHolderDaysStops.append($newLinkLiDayStop);
-
-        // count the current form inputs we have (e.g. 2), use that as the new
-        // index when inserting a new item (e.g. 2)
-        $collectionHolderDaysStops.data('index', $collectionHolderDaysStops.find(':input').length);
-
-        $newLinkLiDayStop.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
-
-            // add a new tag form (see next code block)
-            addDayStopForm($collectionHolderDaysStops, $newLinkLiDayStop);
-        });
-        
-        function addDayStopForm($collectionHolder, $newLinkLi) {
-            // Get the data-prototype explained earlier
-            var prototype = $collectionHolder.data('prototype');
-
-            // get the new index
-            var index = $collectionHolder.data('index');
-
-            // Replace '__name__' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            var newForm = prototype.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<li></li>').append(newForm);
-            $newLinkLi.before($newFormLi);
-            
-            // add a delete link to the new form
-            addDayStopFormDeleteLink($newFormLi);
-            
-            var idDayDate = "pequiven_seipbundle_dataload_production_productplanning_daysStops_"+index+"_day";
-            
-            var monthOfPlanning = selectMonth.val();
-            var date = new Date();
-            if(monthOfPlanning != ""){
-                date.setMonth(monthOfPlanning);
-            }
-            
-            $( "#"+idDayDate ).datepicker({
-              defaultDate: date,
-              changeMonth: false,
-              numberOfMonths: 1,
-              stepMonths: 0,
-              dateFormat: dateFormat
-            });
-        }
-        
-        function addDayStopFormDeleteLink($tagFormLi) {
-            var $removeFormA = $('<a href="#">Eliminar este dia</a>');
-            $tagFormLi.append($removeFormA);
-
-            $removeFormA.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $tagFormLi.remove();
-            });
-        }
         var applyChange = function(){
             var type = $(this).find("select").val();
             var typeValue = $(this).parent().find(".type-value");

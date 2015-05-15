@@ -1,5 +1,5 @@
 pequiven_product_report_create:
-    path: /{reportTemplate}/create
+    path: /{plantReport}/create
     defaults:
         _controller: pequiven.controller.product_report:createAction
         _sylius:

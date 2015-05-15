@@ -15,33 +15,19 @@ class ProductReportType extends SeipAbstractForm
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $entity = new \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport();
+        $entity = $builder->getData();
+        
+        $plantReport = $entity->getPlantReport();
+        $plant = $plantReport->getPlant();
+        
         $queryBuilderEnable = $this->getQueryBuilderEnabled();
         $builder
-            ->add("company",null,array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                "attr" => array("class" => "select2 input-large select-company"),
-                "query_builder" => $queryBuilderEnable,
-            ))
-            ->add("location",null,array(
+            ->add('plantReport',null,array(
                 'label_attr' => array('class' => 'label'),
                 "empty_value" => "",
                 "attr" => array("class" => "select2 input-large"),
-                "query_builder" => $queryBuilderEnable,
-            ))
-            ->add("entity",null,array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                "attr" => array("class" => "select2 input-large"),
-                "query_builder" => $queryBuilderEnable,
-            ))
-            ->add('plant',null,array(
-                'label_attr' => array('class' => 'label'),
-                "empty_value" => "",
-                "attr" => array("class" => "select2 input-large"),
-                //"property" => array("name"),
-                //"entity_alias" => "plants_alias",
-                //"callback" => $queryBuilderEnable,
+                "disabled" => true,
                 "query_builder" => $queryBuilderEnable,
             ))
             ->add('product',null,array(
@@ -51,7 +37,9 @@ class ProductReportType extends SeipAbstractForm
                 //"property" => array("name"),
                 //"entity_alias" => "products_alias",
                 //"callback" => $queryBuilderEnable
-                "query_builder" => $queryBuilderEnable,
+                "query_builder" => function(\Pequiven\SEIPBundle\Repository\CEI\ProductRepository $repository) use ($plant){
+                    return $repository->findQueryByPlant($plant);
+                },
             ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),

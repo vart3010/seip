@@ -9,13 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Model\DataLoad;
+namespace Pequiven\SEIPBundle\Repository\DataLoad;
+
+use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
 
 /**
- * Interfaz de producto de reporte
+ * Repositorio de reporte de planta
+ *
  * @author Carlos Mendoza <inhack20@gmail.com>
  */
-interface ProductReportInterface 
+class PlantReportRepository extends SeipEntityRepository 
 {
-    public function getProductPlannings();
+    
 }

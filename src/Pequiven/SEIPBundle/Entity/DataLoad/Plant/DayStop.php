@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Entity\DataLoad\Production;
+namespace Pequiven\SEIPBundle\Entity\DataLoad\Plant;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\BaseModel;
@@ -45,6 +45,14 @@ class DayStop extends BaseModel
      * @ORM\Column(name="hours",type="float")
      */
     private $hours;
+    
+    /**
+     * Planificacion de parada de planta
+     * @var PlantStopPlanning
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning",inversedBy="dayStops")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $plantStopPlanning;
 
     /**
      * Get id
@@ -100,6 +108,29 @@ class DayStop extends BaseModel
     public function getHours()
     {
         return $this->hours;
+    }
+    
+    /**
+     * Set plantStopPlanning
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning
+     * @return DayStop
+     */
+    public function setPlantStopPlanning(\Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning $plantStopPlanning)
+    {
+        $this->plantStopPlanning = $plantStopPlanning;
+
+        return $this;
+    }
+
+    /**
+     * Get plantStopPlanning
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning 
+     */
+    public function getPlantStopPlanning()
+    {
+        return $this->plantStopPlanning;
     }
     
     public function getNroDay()
