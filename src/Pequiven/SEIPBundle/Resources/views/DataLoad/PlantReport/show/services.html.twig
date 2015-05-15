@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th scope="col" width="35%">{{ 'Service'|trans }}</th>
-                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ 'Production line'|trans }}</th>
+                    <th scope="col" width="10%" class="hide-on-mobile-portrait">{{ ''|trans }}</th>
                     <th scope="col" width="10%" class="hide-on-tablet">{{ 'Product unit'|trans }}</th>
                     <th scope="col" width="10%">&nbsp;</th>
                 </tr>
@@ -26,9 +26,9 @@
                             {{ generateLink(consumerPlanningService) }}
                         </td>
                         <th scope="row">
-                            {{ consumerPlanningService.product.productionLine }}
+                            
                         </th>
-                        <td>{{ consumerPlanningService.product.productUnit }}</td>
+                        <td>{{ consumerPlanningService.service.serviceUnit }}</td>
                         <td class="low-padding align-center">
                             <a href="{{ path("pequiven_consumer_planning_service_update",{id: consumerPlanningService.id}) }}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                         </td>

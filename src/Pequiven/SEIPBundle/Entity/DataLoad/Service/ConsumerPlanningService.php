@@ -152,4 +152,12 @@ class ConsumerPlanningService extends BaseModel
     {
         return $this->detailConsumerPlanningServices;
     }
+    
+    public function __toString() {
+        $_toString = "-";
+        if($this->getService()){
+            $_toString = (string)$this->getService();
+        }
+        return $_toString;
+    }
 }
