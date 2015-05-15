@@ -1,0 +1,23 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.plant_report.plant_stop_planning"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_plant_stop_planning_create",{plantReport:app.request.get("plantReport") }) }}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Plant/PlantStopPlanning:_form.html.twig' %}
+       {{ actions.create() }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
+   </form>
+{% endblock %}

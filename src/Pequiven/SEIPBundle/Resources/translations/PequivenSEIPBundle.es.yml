@@ -10,6 +10,9 @@ pequiven_seip:
     ref: Referencia
     totalPlan: Total planificado
     totalReal: Total real
+    totalStops: Total dias de paradas
+    totalHours: Total de horas
+    days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
     percentage: Porcentaje
@@ -361,6 +364,7 @@ pequiven_seip:
         without_stopping_day: Sin días de parada.
     plant_report:
         plant_report: Reporte de planta
+        plant_stop_planning: Planificacion de parada
 
     month:
         0: Enero
@@ -482,6 +486,7 @@ empty:
     no_raw_material: Sin materia prima.
     no_details_raw_material: No hay detalles de consumo de materia prima.
     plant_reports: No hay plantas agregadas.
+    plant_stop_planning: No hay planificación de paradas.
     
 chart:
     type:
@@ -504,7 +509,7 @@ nro: "#"
 "Location": Localidad
 "Type product": Tipo De Producto
 "Raw material": Materia Prima
-"Month":  Mes
+"Month": Mes
 "Total month": Presupuesto De Producción Del Mes
 "Design capacity": Capacidad De Diseño
 "Daily production capacity": Capacidad De Producción Diaria
@@ -522,3 +527,4 @@ nro: "#"
 "Entity": Entidad
 "Report template": Plantilla del complejo
 "Plant report": Reporte de planta
+"Day stops": Dias de parada

@@ -19,6 +19,7 @@ use Pequiven\MasterBundle\Model\Base\ModelBaseMaster;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_plant_stop_planning")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class PlantStopPlanning extends ModelBaseMaster
 {
@@ -209,5 +210,43 @@ class PlantStopPlanning extends ModelBaseMaster
     public function getPlantReport()
     {
         return $this->plantReport;
+    }
+    
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function calculateTotals()
+    {
+        $totalHours = 0.0;
+        
+        $dayStops = $this->getDayStops();
+        $totalStops = $dayStops->count();
+        
+        foreach ($dayStops as $dayStop) {
+            $totalHours += $dayStop->getHours();
+        }
+        
+        $this->totalHours = $totalHours;
+        $this->totalStops = $totalStops;
+    }
+    
+    public function getMonthLabel()
+    {
+        $month = $this->getMonth();
+        $monthsLabels = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
+        $label = "";
+        if(isset($monthsLabels[$month])){
+            $label = $monthsLabels[$month];
+        }
+        return $label;
+    }
+    
+    public function __toString() {
+        $_toString = "";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
     }
 }

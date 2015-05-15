@@ -64,3 +64,7 @@ pequiven:
         create: El detalle de consumo de materia prima se agrego de correctamente.
         update: El detalle de consumo de materia prima se actualizo correctamente.
         delete: El detalle de consumo de materia prima se elimino correctamente.
+    plant_stop_planning:
+        create: La planificación de parada se agrego de correctamente.
+        update: La planificación de parada se actualizo correctamente.
+        delete: La planificación de parada se elimino correctamente.

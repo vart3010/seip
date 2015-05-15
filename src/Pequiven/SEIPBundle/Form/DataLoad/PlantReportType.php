@@ -15,7 +15,7 @@ class PlantReportType extends SeipAbstractForm
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $queryBuilderEnable = $this->getQueryBuilderEnabled();
-        $entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
+        //$entity = new \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport();
         $entity = $builder->getData();
         
         $location = $entity->getReportTemplate()->getLocation();
@@ -46,13 +46,6 @@ class PlantReportType extends SeipAbstractForm
                 },
             ))
             ->add('plant',null,$parametersToSet)
-//            ->add('daysStops',"collection",array(
-//                "type" => new Production\DayStopType(),
-//                'label_attr' => array('class' => 'label'),
-//                "allow_add"    => true,
-//                'by_reference' => false,
-//                'allow_delete' => true,
-//            ))
             ->add('enabled',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "switch medium mid-margin-right","data-text-on"=>"Si","data-text-off"=>"No"),

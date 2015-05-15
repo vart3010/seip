@@ -280,3 +280,9 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\PlantReport
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\PlantReportController
+        pequiven.plant_stop_planning:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Plant/PlantStopPlanning
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Plant\PlantStopPlanning
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Plant\PlantStopPlanningController
