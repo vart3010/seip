@@ -58,7 +58,6 @@ abstract  class ModelBase
     }
 
     /**
-     * @ORM\PrePersist()
      * @param \DateTime $createdAt
      * @return \Pequiven\SEIPBundle\Model\BaseModel
      */
@@ -67,7 +66,6 @@ abstract  class ModelBase
     }
 
     /**
-     * @ORM\PreUpdate()
      * @param \DateTime $updatedAt
      * @return \Pequiven\SEIPBundle\Model\BaseModel
      */

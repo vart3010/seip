@@ -1,0 +1,73 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body %}
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.report_template.report_template'|trans }}</label>
+                    {{ generateLink(plant_report.reportTemplate) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Plant'|trans }}</label>
+                    {{ plant_report.plant }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ plant_report.enabled|render_yes_no }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Company'|trans }}</label>
+                    {{ plant_report.company }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Location'|trans }}</label>
+                    {{ plant_report.location }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Entity'|trans }}</label>
+                    {{ plant_report.entity }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Services'|trans }}</label>
+                    {% for service in plant_report.plant.services %}
+                        {{ service }}{% if loop.last %}.{% else %},{% endif %}
+                    {% else %}
+                        <span class="tag ">{{ "empty.no_service"|trans }}</span>
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/plantStopPlannings.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/products.html.twig' %}
+    <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:PlantReport/show/services.html.twig' %}
+    <br /><br />
+    <p class="button-height align-right">
+        &nbsp;
+        {{ buttons.generic(path('pequiven_plant_report_update', { 'id': plant_report.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_plant_report_delete', { 'id': plant_report.id })) }}
+    </p>
+                    
+{% endblock %}

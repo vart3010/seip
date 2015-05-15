@@ -82,7 +82,7 @@ class Plant extends BaseModel
      * Servicios que consume la planta
      * @var \Pequiven\SEIPBundle\Entity\CEI\Service
      *
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Service")
+     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\CEI\Service",inversedBy="plants")
      * @ORM\JoinTable(name="plants_services")
      */
     private $services;

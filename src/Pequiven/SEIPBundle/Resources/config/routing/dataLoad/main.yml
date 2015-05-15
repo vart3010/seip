@@ -6,6 +6,10 @@ pequiven_product_report:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_report.yml"
     prefix:   /product-report
     
+pequiven_plant_report:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/plant_report.yml"
+    prefix:   /plant-report
+    
 pequiven_data_load_product_planning:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/product_planning.yml"
     prefix:   /product-planning
@@ -25,3 +29,11 @@ pequiven_data_load_raw_material_consumption_planning:
 pequiven_data_load_detail_raw_material_consumption:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/detail_raw_material_consumption.yml"
     prefix:   /detail-raw-material-consumption
+    
+pequiven_data_load_plant_stop_planning:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/plant_stop_planning.yml"
+    prefix:   /plant-stop-planning
+    
+pequiven_data_load_consumer_planning_service:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/consumer_planning_service.yml"
+    prefix:   /consumer-planning-service

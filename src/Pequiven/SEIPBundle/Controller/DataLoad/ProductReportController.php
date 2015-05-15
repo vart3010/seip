@@ -21,19 +21,36 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ProductReportController extends SEIPController
 {
+    public function createNew() {
+        $entity = parent::createNew();
+        $request = $this->getRequest();
+        $plantReportId = $request->get("plantReport");
+        if($plantReportId > 0){
+            $em = $this->getDoctrine()->getManager();
+            $plantReport = $em->find("Pequiven\SEIPBundle\Entity\DataLoad\PlantReport", $plantReportId);
+            $entity->setPlantReport($plantReport);
+        }
+        return $entity;
+    }
+    
     public function runPlanningAction(Request $request)
     {
         $resource = $this->findOr404($request);
         $productPlannings = $resource->getProductPlannings();
+        $plantStopPlanningsByMonths = $resource->getPlantReport()->getPlantStopPlanningSortByMonth();
+        
         $propertyAccessor = \Symfony\Component\PropertyAccess\PropertyAccess::createPropertyAccessor();
         
         $countProduct = 0;
         $productDetailDailyMonthsCache = $resource->getProductDetailDailyMonthsSortByMonth();
         foreach ($productPlannings as $productPlanning) {
-            $daysStops = $productPlanning->getDaysStops();
             $daysStopsArray = array();
-            foreach ($daysStops as $daysStop) {
-                $daysStopsArray[] = $daysStop->getNroDay();
+            $month = $productPlanning->getMonth();
+            if(isset($plantStopPlanningsByMonths[$month])){
+                $daysStops = $plantStopPlanningsByMonths[$month];
+                foreach ($daysStops as $daysStop) {
+                    $daysStopsArray[] = $daysStop->getNroDay();
+                }
             }
             $ranges = $productPlanning->getRanges();
             

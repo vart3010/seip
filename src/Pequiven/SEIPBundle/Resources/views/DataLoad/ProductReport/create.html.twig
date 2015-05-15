@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block body -%}
-    <form method="POST" action="{{ path("pequiven_product_report_create",{reportTemplate:app.request.get("reportTemplate") }) }}">
+    <form method="POST" action="{{ path("pequiven_product_report_create",{plantReport:app.request.get("plantReport") }) }}">
        <br /><br />
        {% include 'PequivenSEIPBundle:DataLoad/ProductReport:_form.html.twig' %}
        {{ actions.create() }}

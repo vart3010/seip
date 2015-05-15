@@ -252,6 +252,15 @@
         <service id="pequiven.form.detail_raw_material_consumption_planning" class="Pequiven\SEIPBundle\Form\DataLoad\RawMaterial\DetailRawMaterialConsumptionType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_production_detailrawmaterialconsumption" />
         </service>
+        <service id="pequiven.form.plant_report" class="Pequiven\SEIPBundle\Form\DataLoad\PlantReportType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_plantreport" />
+        </service>
+        <service id="pequiven.form.plant_stop_planning" class="Pequiven\SEIPBundle\Form\DataLoad\Plant\PlantStopPlanningType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_plant_plantstopplanning" />
+        </service>
+        <service id="pequiven.form.consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\ConsumerPlanningServiceType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_service_consumerplanningservice" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

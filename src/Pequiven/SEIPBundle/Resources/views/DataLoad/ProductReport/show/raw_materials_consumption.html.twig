@@ -7,8 +7,9 @@
 <div class="block">
     <div class="block-title">
         <h3> {{ 'pequiven_seip.report_template.raw_material'|trans }}&nbsp;({{ product_report.rawMaterialConsumptionPlannings|length }})</h3>
+        {% set hasRawMaterials = (product_report.product.rawMaterials|length > 0 ? true : false) %}
         <div class="button-group absolute-right compact">
-            <a class="button icon-list-add" href="{{ path("pequiven_raw_material_consumption_planning_create",{productReport:product_report.id}) }}">{{ 'pequiven.add'|trans({},'messages') }}</a>
+            <a class="button icon-list-add {% if hasRawMaterials == false %}disabled{% endif %}" href="{% if hasRawMaterials == true %}{{ path("pequiven_raw_material_consumption_planning_create",{productReport:product_report.id}) }}{% else %}#{% endif %}">{{ 'pequiven.add'|trans({},'messages') }}</a>
         </div>
     </div>
     <div class="with-padding">

@@ -46,12 +46,4 @@ abstract class ReportTemplate extends BaseModel implements ReportTemplateInterfa
             self::TYPE_REPORT_RAW_MATERIALS => "pequiven_seip.report_template.type.raw_materials",
         );
     }
-    
-    public function getTypeReportLabel()
-    {
-        $typeReports = $this->getTypeReports();
-        if(isset($typeReports[$this->getTypeReport()])){
-            return $typeReports[$this->getTypeReport()];
-        }
-    }
 }

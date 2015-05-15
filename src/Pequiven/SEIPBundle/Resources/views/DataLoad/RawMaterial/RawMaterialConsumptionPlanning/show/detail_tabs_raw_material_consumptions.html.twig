@@ -1,0 +1,25 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% set message = ("pequiven_seip.raw_material_consumption_planning.question.delete"|trans) %}
+
+<h3 class="thin underline">{{ 'pequiven_seip.report_template.details_raw_material'|trans }}</h3>
+
+{% set detailRawMaterialConsumptions = raw_material_consumption_planning.detailRawMaterialConsumptions %}
+{% set product = raw_material_consumption_planning.product %}
+<div class="standard-tabs margin-bottom" id="add-tabs">
+    <ul class="tabs">
+        {% for detail in detailRawMaterialConsumptions %}
+            <li class="{{ loop.first ? "active" : "" }}"><a href="#tab-{{ loop.index }}">{{ detail.getMonthLabel|trans }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div class="tabs-content">
+        {% for detail in detailRawMaterialConsumptions %}
+            <div id="tab-{{ loop.index }}" class="with-padding">
+                {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/details.html.twig' %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

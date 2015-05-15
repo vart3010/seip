@@ -20,5 +20,18 @@ use Pequiven\SEIPBundle\Doctrine\ORM\SeipEntityRepository;
  */
 class ServiceRepository extends SeipEntityRepository
 {
+    public function findQueryByPlant($plant) 
+    {
+        $qb = $this->getQueryAllEnabled();
+        $qb
+            ->innerJoin("s.plants","s_p")
+            ->andWhere("s_p.id = :plant")
+            ->setParameter("plant", $plant)
+            ;
+        return $qb;
+    }
     
+    protected function getAlias() {
+        return "s";
+    }
 }

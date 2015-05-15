@@ -34,8 +34,7 @@ class ProductRepository extends SeipEntityRepository
             ;
         return $qb;
     }
-    
-    public function findByPlant($plant) 
+    public function findQueryByPlant($plant) 
     {
         $qb = $this->getQueryAllEnabled();
         $qb
@@ -43,7 +42,12 @@ class ProductRepository extends SeipEntityRepository
             ->andWhere("p_p.id = :plant")
             ->setParameter("plant", $plant)
             ;
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+    
+    public function findByPlant($plant) 
+    {
+        return $this->findQueryByPlant($plant)->getQuery()->getResult();
         
     }
     

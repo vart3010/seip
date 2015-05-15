@@ -1,0 +1,54 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayoutShow.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
+{% block body %}
+    
+    <fieldset class="fieldset">
+        <legend class="legend">{{ 'pequiven_seip.plant_report.plant_stop_planning'|trans }}</legend>
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.plant_report.plant_report'|trans }}</label>
+                    {{ generateLink(plant_stop_planning.plantReport) }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Month'|trans }}</label>
+                    {{ plant_stop_planning.getMonthLabel|trans }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.totalStops'|trans }}</label>
+                    {{ plant_stop_planning.totalStops }}&nbsp;{{ "pequiven_seip.days"|trans }}
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.totalHours'|trans }}</label>
+                    {{ plant_stop_planning.totalHours }}&nbsp;h
+                </p>
+            </div>
+            <div class="new-row new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'Enabled'|trans }}</label>
+                    {{ plant_stop_planning.enabled|render_yes_no }}
+                </p>
+            </div>
+        </div>
+    </fieldset>
+                
+    {% include 'PequivenSEIPBundle:DataLoad:Plant/PlantStopPlanning/show/dayStops.html.twig' %}
+    <br /><br />
+    <p class="button-height align-right">
+        &nbsp;
+        {{ buttons.generic(path('pequiven_plant_stop_planning_update', { 'id': plant_stop_planning.id }),('pequiven.edit'|trans({},'messages'))) }}
+        &nbsp;
+        {{ buttons.delete(path('pequiven_plant_stop_planning_delete', { 'id': plant_stop_planning.id })) }}
+    </p>
+                    
+{% endblock %}

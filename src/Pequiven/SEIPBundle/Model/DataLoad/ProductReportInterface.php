@@ -17,7 +17,5 @@ namespace Pequiven\SEIPBundle\Model\DataLoad;
  */
 interface ProductReportInterface 
 {
-    public function getTypeProduct();
-    
     public function getProductPlannings();
 }

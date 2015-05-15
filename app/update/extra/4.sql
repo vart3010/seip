@@ -2787,6 +2787,16 @@ ALTER TABLE `tecno_vzla_state`
   ADD CONSTRAINT `FK_8F4A38D1F92F3E70` FOREIGN KEY (`country_id`) REFERENCES `tecno_vzla_country` (`id`),
   ADD CONSTRAINT `FK_8F4A38D198260155` FOREIGN KEY (`region_id`) REFERENCES `tecno_vzla_region` (`id`);
 
+
+-- Servicios
+INSERT INTO `seip_cei_service` (`id`, `name`, `enabled`, `createdAt`, `updatedAt`, `deletedAt`, `serviceUnit_id`) VALUES
+(1, 'Agua', 1, '2015-05-14 10:07:29', '2015-05-14 10:07:29', NULL, 1),
+(2, 'Electricidad', 1, '2015-05-14 10:07:43', '2015-05-14 10:07:43', NULL, 1),
+(3, 'Vapor', 1, '2015-05-14 10:07:54', '2015-05-14 10:07:54', NULL, 1),
+(4, 'Aire', 1, '2015-05-14 10:08:05', '2015-05-14 10:08:05', NULL, 1),
+(5, 'Nitrogeno', 1, '2015-05-14 10:08:22', '2015-05-14 10:08:22', NULL, 1),
+(6, 'Gas', 1, '2015-05-14 10:08:29', '2015-05-14 10:08:29', NULL, 1);
+
 COMMIT;
 
 UPDATE `seip_cei_Plant` SET `entity_id`=NULL WHERE 1;

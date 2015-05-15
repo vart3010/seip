@@ -17,5 +17,4 @@ namespace Pequiven\SEIPBundle\Model\DataLoad;
  */
 interface ReportTemplateInterface 
 {
-    public function getTypeReport();
 }

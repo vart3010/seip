@@ -47,13 +47,6 @@ class ProductPlanning extends BaseModel
     private $type;
 
     /**
-     * Dias de paradas
-     * @var \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop
-     * @ORM\ManyToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop",cascade={"persist","remove"})
-     */
-    private $daysStops;
-
-    /**
      * Total a planificar en el mes
      * @var float
      * @ORM\Column(name="total_month",type="float")
@@ -86,7 +79,6 @@ class ProductPlanning extends BaseModel
      */
     public function __construct()
     {
-        $this->daysStops = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -235,39 +227,6 @@ class ProductPlanning extends BaseModel
     public function getType()
     {
         return $this->type;
-    }
-    
-    /**
-     * Add daysStops
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops
-     * @return ProductPlanning
-     */
-    public function addDaysStop(\Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops)
-    {
-        $this->daysStops->add($daysStops);
-
-        return $this;
-    }
-
-    /**
-     * Remove daysStops
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops
-     */
-    public function removeDaysStop(\Pequiven\SEIPBundle\Entity\DataLoad\Production\DayStop $daysStops)
-    {
-        $this->daysStops->removeElement($daysStops);
-    }
-
-    /**
-     * Get daysStops
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getDaysStops()
-    {
-        return $this->daysStops;
     }
     
     public function __toString() 

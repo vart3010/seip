@@ -1,0 +1,20 @@
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% for i in 1..31 %}
+    {% set planN = "day"~ i ~ "Plan" %}
+    {% set realN = "day" ~ i ~ "Real" %}
+        <div class="columns">
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.plan_n'|trans({"%n%":i}) }}</label>
+                    {{ attribute(detail,planN)|myNumberFormat }}&nbsp;{{ product.productUnit }}
+                </p>
+            </div>
+            <div class="new-row-mobile six-columns six-columns-tablet twelve-columns-mobile">
+                <p class="inline-label">
+                    <label class="label">{{ 'pequiven_seip.real_n'|trans({"%n%":i}) }}</label>
+                    {{ attribute(detail,realN)|myNumberFormat }}&nbsp;{{ product.productUnit }}
+                </p>
+            </div>
+        </div>
+{% endfor %}
