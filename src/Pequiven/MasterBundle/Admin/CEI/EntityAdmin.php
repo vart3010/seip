@@ -29,6 +29,8 @@ class EntityAdmin extends BaseAdmin
             ->add("location")
             ->add("name")
             ->add("alias")
+            ->add("typeLocation")
+            ->add('state')
             ;
         parent::configureShowFields($show);
     }
@@ -42,6 +44,8 @@ class EntityAdmin extends BaseAdmin
             ))
             ->add("name")
             ->add("alias")
+            ->add("typeLocation")
+            ->add('state')
             ;
         parent::configureFormFields($form);
     }
@@ -52,6 +56,8 @@ class EntityAdmin extends BaseAdmin
             ->add("location")
             ->add("name")
             ->add("alias")
+            ->add("typeLocation")
+            ->add('state')
             ;
         parent::configureDatagridFilters($filter);
     }

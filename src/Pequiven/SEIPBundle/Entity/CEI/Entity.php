@@ -53,6 +53,21 @@ class Entity extends BaseModel
      * @ORM\Column(name="alias",type="string",length=20)
      */
     private $alias;
+    
+    /**
+     * Tipo de sede
+     * @var \Pequiven\SEIPBundle\Entity\CEI\TypeLocation
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\TypeLocation")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $typeLocation;
+    
+    /**
+     * Estado
+     * @var \Tecnocreaciones\Vzla\EntityBundle\Entity\State
+     * @ORM\ManyToOne(targetEntity="Tecnocreaciones\Vzla\EntityBundle\Entity\State")
+     */
+    private $state;
 
     /**
      * Get id
@@ -131,6 +146,52 @@ class Entity extends BaseModel
     public function getLocation()
     {
         return $this->location;
+    }
+    
+    /**
+     * Set typeLocation
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\TypeLocation $typeLocation
+     * @return Entity
+     */
+    public function setTypeLocation(\Pequiven\SEIPBundle\Entity\CEI\TypeLocation $typeLocation = null)
+    {
+        $this->typeLocation = $typeLocation;
+
+        return $this;
+    }
+
+    /**
+     * Get typeLocation
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\TypeLocation 
+     */
+    public function getTypeLocation()
+    {
+        return $this->typeLocation;
+    }
+
+    /**
+     * Set state
+     *
+     * @param \Tecnocreaciones\Vzla\EntityBundle\Entity\State $state
+     * @return Entity
+     */
+    public function setState(\Tecnocreaciones\Vzla\EntityBundle\Entity\State $state = null)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return \Tecnocreaciones\Vzla\EntityBundle\Entity\State 
+     */
+    public function getState()
+    {
+        return $this->state;
     }
     
     public function __toString() 
