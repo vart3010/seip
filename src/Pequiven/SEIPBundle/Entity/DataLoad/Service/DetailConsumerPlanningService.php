@@ -46,4 +46,78 @@ class DetailConsumerPlanningService extends Detail
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\Range",mappedBy="detailConsumerPlanningService",cascade={"persist","remove"})
      */
     protected $ranges;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->ranges = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set consumerPlanningService
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningService
+     * @return DetailConsumerPlanningService
+     */
+    public function setConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningService)
+    {
+        $this->consumerPlanningService = $consumerPlanningService;
+
+        return $this;
+    }
+
+    /**
+     * Get consumerPlanningService
+     *
+     * @return \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService 
+     */
+    public function getConsumerPlanningService()
+    {
+        return $this->consumerPlanningService;
+    }
+
+    /**
+     * Add ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\Range $ranges
+     * @return DetailConsumerPlanningService
+     */
+    public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Service\Range $ranges)
+    {
+        $this->ranges[] = $ranges;
+
+        return $this;
+    }
+
+    /**
+     * Remove ranges
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\Range $ranges
+     */
+    public function removeRange(\Pequiven\SEIPBundle\Entity\DataLoad\Service\Range $ranges)
+    {
+        $this->ranges->removeElement($ranges);
+    }
+
+    /**
+     * Get ranges
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRanges()
+    {
+        return $this->ranges;
+    }
 }

@@ -91,7 +91,7 @@ class PlantReport extends ModelBaseMaster
     
     /**
      * Planificacion de consumo de servicios
-     * @var Plant\PlantStopPlanning
+     * @var Service\ConsumerPlanningService
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService",mappedBy="plantReport")
      */
     private $consumerPlanningServices;
@@ -299,6 +299,48 @@ class PlantReport extends ModelBaseMaster
         return $this->plantStopPlannings;
     }
     
+    /**
+     * Add consumerPlanningServices
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices
+     * @return PlantReport
+     */
+    public function addConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices)
+    {
+        $this->consumerPlanningServices[] = $consumerPlanningServices;
+
+        return $this;
+    }
+
+    /**
+     * Remove consumerPlanningServices
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices
+     */
+    public function removeConsumerPlanningService(\Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService $consumerPlanningServices)
+    {
+        $this->consumerPlanningServices->removeElement($consumerPlanningServices);
+    }
+
+    /**
+     * Get consumerPlanningServices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConsumerPlanningServices()
+    {
+        return $this->consumerPlanningServices;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getPlant()){
+            $_toString = (string)$this->getPlant();
+        }
+        return $_toString;
+    }
+    
     public function init(\Pequiven\SEIPBundle\Entity\DataLoad\ReportTemplate $reportTemplate)
     {
         $this->setReportTemplate($reportTemplate);
@@ -315,14 +357,5 @@ class PlantReport extends ModelBaseMaster
         }
         ksort($sorted);
         return $sorted;
-    }
-    
-    public function __toString() 
-    {
-        $_toString = "-";
-        if($this->getPlant()){
-            $_toString = (string)$this->getPlant();
-        }
-        return $_toString;
     }
 }
