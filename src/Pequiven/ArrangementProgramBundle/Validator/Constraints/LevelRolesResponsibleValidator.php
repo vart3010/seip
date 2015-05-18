@@ -56,7 +56,7 @@ class LevelRolesResponsibleValidator extends ConstraintValidator implements Cont
                     foreach ($goals as $goal) {
                         foreach ($goal->getResponsibles() as $goalResponsible) {
                             foreach ($goalResponsible->getGroups() as $groupResponsibleGoal) {
-                                if($groupResponsibleGoal->getLevel() == 7000 || $groupResponsibleGoal->getLevel() == 8000){
+                                if($groupResponsibleGoal->getLevel() == 7000 || $groupResponsibleGoal->getLevel() == 8000 || $groupResponsibleGoal->getTypeRol() == \Pequiven\MasterBundle\Entity\Rol::TYPE_ROL_SPECIAL){
                                     continue;
                                 }
                                 if($groupResponsibleGoal->getLevel() > $group->getLevel()){
