@@ -68,13 +68,15 @@ class ArrangementProgramTemplateController extends SEIPController
     public function createAction(\Symfony\Component\HttpFoundation\Request $request) {
         
         $type = $request->get("type");
+        $associate = $request->get("associate");
         $entity = new \Pequiven\ArrangementProgramBundle\Entity\ArrangementProgramTemplate();
         $user = $this->getUser();
         $entity
                 ->setType($type)
                 ->setCreatedBy($user);
-        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
-        $form = $this->createCreateForm($entity,array('type' => $type));
+//        $entity->setCategoryArrangementProgram($this->getSeipConfiguration()->getArrangementProgramAssociatedTo());
+        $entity->setCategoryArrangementProgram($this->get('pequiven.repository.category_arrangement_program')->find($associate));
+        $form = $this->createCreateForm($entity,array('type' => $type, 'associate' => $associate));
         if($request->isMethod('GET')){
             $form->remove('timeline');
         }

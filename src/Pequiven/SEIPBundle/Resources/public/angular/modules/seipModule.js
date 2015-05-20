@@ -673,6 +673,7 @@ angular.module('seipModule.controllers', [])
             $scope.createProgramFrom = function(arrangementProgramTemplate){
                 var url = Routing.generate('pequiven_arrangementprogram_create',{
                     type: arrangementProgramTemplate.type,
+                    associate: 2,
                     templateSource: arrangementProgramTemplate.id
                 });
                 document.location = url;
