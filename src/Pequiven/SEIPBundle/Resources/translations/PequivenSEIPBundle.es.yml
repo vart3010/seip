@@ -8,6 +8,7 @@ pequiven_seip:
     add: Añadir
     products: Productos
     ref: Referencia
+    total: Total
     totalPlan: Total planificado
     totalReal: Total real
     totalStops: Total dias de paradas
@@ -15,6 +16,7 @@ pequiven_seip:
     days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
+    day_n: "Dia %n%:"
     percentage: Porcentaje
     gross: Bruta
     net: Neta
@@ -335,6 +337,9 @@ pequiven_seip:
         details_raw_material: Detalle de consumo de materia prima
     product_report:
         product_report: Producto
+        inventory:
+            inventory: Inventario
+            inventorys: Inventario
         type:
             final: Producto final
             byproduct: Sub-Producto
@@ -492,6 +497,7 @@ empty:
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
     no_details_service: No hay detalles del consumo de servicios.
+    inventorys: No hay detalles de inventario.
         
 chart:
     type:

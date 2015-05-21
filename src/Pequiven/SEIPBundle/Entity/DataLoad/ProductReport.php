@@ -70,11 +70,19 @@ class ProductReport extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\ProductDetailDailyMonth",mappedBy="productReport",cascade={"remove"})
      */
     protected $productDetailDailyMonths;
+    
+    /**
+     * Inventarios
+     * @var Inventory\Inventory
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport")
+     */
+    private $inventorys;
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inventorys = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -250,6 +258,40 @@ class ProductReport extends BaseModel
     public function getRawMaterialConsumptionPlannings()
     {
         return $this->rawMaterialConsumptionPlannings;
+    }
+    
+    /**
+     * Add inventorys
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory $inventorys
+     * @return ProductReport
+     */
+    public function addInventory(\Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory $inventorys)
+    {
+        $inventorys->setProductReport($this);
+        $this->inventorys->add($inventorys);
+
+        return $this;
+    }
+
+    /**
+     * Remove inventorys
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory $inventorys
+     */
+    public function removeInventory(\Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory $inventorys)
+    {
+        $this->inventorys->removeElement($inventorys);
+    }
+
+    /**
+     * Get inventorys
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInventorys()
+    {
+        return $this->inventorys;
     }
     
     public function __toString() 

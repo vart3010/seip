@@ -98,6 +98,8 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/raw_materials_consumption.html.twig' %}
     <br /><br />
+    {% include 'PequivenSEIPBundle:DataLoad:ProductReport/show/inventorys.html.twig' %}
+    <br /><br />
     <p class="button-height align-right">
         {{ buttons.generic_confirm(path("pequiven_product_report_run_planning",{ id: product_report.id }),"pequiven_seip.buttons.run_planning",{
             content: ("pequiven_seip.question.want_create_production_details_from_planning"|trans),
