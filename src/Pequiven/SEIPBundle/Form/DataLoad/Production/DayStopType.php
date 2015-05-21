@@ -26,6 +26,7 @@ class DayStopType extends AbstractType
                 "attr" => array("class" => "select input-large"),
             ))
             ->add("otherTime",null,array(
+                "attr" => array("class" => "other-time"),
                 "required" => false,
             ))
             ->add('hours',null,array(
