@@ -19,7 +19,7 @@
             {% set colspan = 6 %}
             <tbody>
 
-                {% for inventory in product_report.inventorys %}
+                {% for inventory in product_report.getInventorySortByMonth %}
                     <tr>
                         <td>{{ loop.index }} - 
                             {{ inventory|trans }}

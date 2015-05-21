@@ -189,21 +189,6 @@ class ProductReport extends BaseModel
     }
     
     /**
-     * Get productDetailDailyMonths
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProductDetailDailyMonthsSortByMonth()
-    {
-        $sorted = array();
-        foreach ($this->productDetailDailyMonths as $productDetailDailyMonth) {
-            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
-        }
-        ksort($sorted);
-        return $sorted;
-    }
-        
-    /**
      * Set plantReport
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\PlantReport $plantReport
@@ -292,6 +277,36 @@ class ProductReport extends BaseModel
     public function getInventorys()
     {
         return $this->inventorys;
+    }
+    
+    /**
+     * Get productDetailDailyMonths
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProductDetailDailyMonthsSortByMonth()
+    {
+        $sorted = array();
+        foreach ($this->productDetailDailyMonths as $productDetailDailyMonth) {
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
+    /**
+     * Get Inventories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInventorySortByMonth()
+    {
+        $sorted = array();
+        foreach ($this->inventorys as $productDetailDailyMonth) {
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
     }
     
     public function __toString() 

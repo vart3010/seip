@@ -106,6 +106,19 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
+        $months = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
+        $inventorys = $resource->getInventorySortByMonth();
+        foreach ($months as $month => $label) {
+            if(!isset($inventorys[$month])){
+                $inventory = new \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory();
+                $inventory->setMonth($month);
+                $resource->addInventory($inventory);
+                
+                $this->save($inventory,false);
+            }
+        }
+        $this->flush();
+        
         return $this->redirectHandler->redirectTo($resource);
     }
     
