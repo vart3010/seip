@@ -81,6 +81,8 @@
             addDayStopFormDeleteLink($newFormLi);
             
             var idDayDate = "pequiven_seipbundle_dataload_plant_plantstopplanning_dayStops_"+index+"_day";
+            var idOtherTime = "pequiven_seipbundle_dataload_plant_plantstopplanning_dayStops_"+index+"_otherTime";
+            var otherTime = $("#"+idOtherTime);
             
             var monthOfPlanning = selectMonth.val();
             var date = new Date();
@@ -94,6 +96,26 @@
               numberOfMonths: 1,
               stepMonths: 0,
               dateFormat: dateFormat
+            });
+            otherTime.on("click",function(e){
+                var otherTimeCheck = $(this);
+                var rootParent = otherTimeCheck.parent();
+                var divs = rootParent.find('p');
+                var divSelect = $(divs[0]);
+                var divInput = $(divs[1]);
+                if(otherTimeCheck.is(':checked')){
+                    divSelect.addClass('hidden');
+                    divSelect.removeClass('inline-div');
+                    
+                    divInput.removeClass('hidden');
+                    divInput.addClass('inline-div');
+                }else{
+                    divInput.removeClass('inline-div');
+                    divInput.addClass('hidden');
+                    
+                    divSelect.removeClass('hidden');
+                    divSelect.addClass('inline-div');
+                }
             });
         }
         

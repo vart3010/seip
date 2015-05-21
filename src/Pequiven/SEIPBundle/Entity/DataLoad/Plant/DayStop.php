@@ -20,6 +20,7 @@ use Pequiven\SEIPBundle\Model\BaseModel;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_report_day_stop")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class DayStop extends BaseModel
 {
@@ -44,7 +45,21 @@ class DayStop extends BaseModel
      * @var float
      * @ORM\Column(name="hours",type="float")
      */
-    private $hours;
+    private $hours = 0;
+    
+    /**
+     * Hora de parada
+     * @var \Pequiven\SEIPBundle\Entity\CEI\StopTime
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\CEI\StopTime")
+     */
+    private $stopTime;
+    
+    /**
+     * Otro tiempo de parada
+     * @var boolean
+     * @ORM\Column(name="other_time",type="boolean")
+     */
+    private $otherTime = false;
     
     /**
      * Planificacion de parada de planta
@@ -133,8 +148,67 @@ class DayStop extends BaseModel
         return $this->plantStopPlanning;
     }
     
+    /**
+     * Set otherTime
+     *
+     * @param boolean $otherTime
+     * @return DayStop
+     */
+    public function setOtherTime($otherTime)
+    {
+        $this->otherTime = $otherTime;
+
+        return $this;
+    }
+
+    /**
+     * Get otherTime
+     *
+     * @return boolean 
+     */
+    public function getOtherTime()
+    {
+        return $this->otherTime;
+    }
+
+    /**
+     * Set stopTime
+     *
+     * @param \Pequiven\SEIPBundle\Entity\CEI\StopTime $stopTime
+     * @return DayStop
+     */
+    public function setStopTime(\Pequiven\SEIPBundle\Entity\CEI\StopTime $stopTime = null)
+    {
+        $this->stopTime = $stopTime;
+
+        return $this;
+    }
+
+    /**
+     * Get stopTime
+     *
+     * @return \Pequiven\SEIPBundle\Entity\CEI\StopTime 
+     */
+    public function getStopTime()
+    {
+        return $this->stopTime;
+    }
+    
     public function getNroDay()
     {
         return $this->day->format("d");
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function calculateDays()
+    {
+        $hours = $this->hours;
+        if($this->otherTime === false && $this->stopTime !== null){
+            $hours = $this->stopTime->getHours();
+        }
+        $this->hours = $hours;
     }
 }

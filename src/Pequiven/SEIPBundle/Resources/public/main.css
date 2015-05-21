@@ -76,3 +76,6 @@ select.xxlarge {
 .padding-left-40 {
     padding-left: 40px;
 }
+.inline-div {
+    display: inline-block;
+}

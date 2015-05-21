@@ -21,9 +21,17 @@ class DayStopType extends AbstractType
                 "widget" => "single_text",
                 'format' => 'dd-MM-yyyy',
             ))
+            ->add('stopTime',null,array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "select input-large"),
+            ))
+            ->add("otherTime",null,array(
+                "required" => false,
+            ))
             ->add('hours',null,array(
                 'label_attr' => array('class' => 'label'),
                 "attr" => array("class" => "input input-mini"),
+                "required" => false,
             ))
         ;
     }
