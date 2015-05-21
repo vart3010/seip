@@ -1823,6 +1823,14 @@ angular.module('seipModule.controllers', [])
 
         })
         .controller('TableObjetiveController', function($scope, ngTableParams, $http, sfTranslator, notifyService) {
+            $scope.data = {
+                objetiveStatusLabels: null
+            };
+            
+            $scope.model = {
+                objetiveStatus: null
+            };
+            
             $scope.gerenciaSecond = null;
             $scope.gerenciaFirst = null;
             var gerencia = 0;
@@ -1844,6 +1852,13 @@ angular.module('seipModule.controllers', [])
                     $scope.tableParams.$params.filter['gerenciaSecond'] = $scope.gerenciaSecond;
                 } else {
                     $scope.tableParams.$params.filter['gerenciaSecond'] = null;
+                }
+            });
+            $scope.$watch("model.objetiveStatus", function(newParams, oldParams) {
+                if ($scope.model.objetiveStatus != null && $scope.model.objetiveStatus.id != undefined) {
+                    $scope.tableParams.$params.filter['status'] = $scope.model.objetiveStatus.id;
+                } else {
+                    $scope.tableParams.$params.filter['status'] = null;
                 }
             });
         })

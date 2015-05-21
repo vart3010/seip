@@ -144,6 +144,8 @@ class ObjetiveRepository extends EntityRepository {
     function createPaginatorByLevel(array $criteria = null, array $orderBy = null) {
         $queryBuilder = $this->getQueryBuilder();
 
+        $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
+        
         if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
@@ -166,6 +168,10 @@ class ObjetiveRepository extends EntityRepository {
             } else {
                 unset($criteria['gerenciaSecond']);
             }
+        }
+        
+        if (($status = $criteria->remove('status')) != null) {
+            $queryBuilder->andWhere('o.status = ' . (int) $status);
         }
 
         $queryBuilder->groupBy('o.ref');
