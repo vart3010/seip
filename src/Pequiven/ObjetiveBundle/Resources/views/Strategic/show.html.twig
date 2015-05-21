@@ -40,6 +40,12 @@
             {% endif %}
             <small class="tag {{ className }}">{{ entity.getLabelStatus | trans({},'PequivenObjetiveBundle') }}</small>
        </p>
+       
+       <!-- Período del Objetivo Estratégico -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.period'|trans({},'PequivenSEIPBundle') }}</label>
+            {{ entity.period }}
+        </p>
         
         <!-- ¿Evaluación por Objetivo Táctico? -->
         <p class="inline-label">

@@ -52,6 +52,12 @@
             {{ entity.goal|number_format(2,',','.') }}%
         </p>
         
+        <!-- Período del Objetivo Operativo -->
+        <p class="inline-label">
+            <label class="label">{{ 'pequiven_seip.period'|trans({},'PequivenSEIPBundle') }}</label>
+            {{ entity.period }}
+        </p>
+        
         <!-- Gerencia 2da Línea a la cual impacta el Objetivo Operativo -->
         <p class="inline-label">
             <label class="label">{{ 'pequiven_objetive.gerenciaSecond'|trans }}</label>
