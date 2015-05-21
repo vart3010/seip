@@ -68,3 +68,7 @@ pequiven:
         create: La planificación de parada se agrego de correctamente.
         update: La planificación de parada se actualizo correctamente.
         delete: La planificación de parada se elimino correctamente.
+    plant_report:
+        create: El reporte de la planta se creo correctamente.
+        update: El reporte de la planta se actualizo correctamente.
+        delete: El reporte de la planta se elimino correctamente.
