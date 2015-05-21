@@ -146,7 +146,7 @@ class GerenciaController extends baseController {
         $user = $this->getUser();
         $securityContext = $this->container->get('security.context');
         
-        if($user->getGerenciaSecond()->getId() == 50){
+        if($this->getSecurityService()->checkSecurity(array('ROLE_SEIP_PLANNING_VIEW_GERENCIA'))){
             $view = $this
                 ->view()
                 ->setTemplate($this->config->getTemplate('show.html'))
