@@ -350,6 +350,8 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                 $visualize->addChild($subchild);
             }//Fin sub Ver - menu objetivos
             
+            
+            
             if($this->isGranted('ROLE_SEIP_PLANNING_LIST_INDICATOR_*')){
                 $subchild = $this->factory->createItem('planning.visualize.indicators',
                         $this->getSubLevelOptions(array(
@@ -413,6 +415,28 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                     ->setLabel($this->translate(sprintf('app.backend.menu.%s.planning.results.main', $section)));
                 }
             }
+            
+            if($this->isGranted('ROLE_SEIP_PLANNING_LIST_USER')){
+                $subchild = $this->factory->createItem('planning.visualize.users',
+                            $this->getSubLevelOptions(array(
+                            'uri' => null,
+                            'labelAttributes' => array('icon' => 'fa fa-cubes',),
+                            ))
+                        )
+                        ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.main', $section)));
+                
+                $subchild->addChild('planning.visualize.users.real', array(
+                            'route' => 'pequiven_user_list',
+                        ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.real', $section)));
+                
+                $subchild->addChild('planning.visualize.users.aux', array(
+                            'route' => 'pequiven_user_aux_list',
+                        ))
+                ->setLabel($this->translate(sprintf('app.backend.menu.%s.users.aux', $section)));
+
+                $visualize->addChild($subchild);
+            }//Fin sub Ver - menu objetivos
             $child->addChild($visualize);
         }
                 
