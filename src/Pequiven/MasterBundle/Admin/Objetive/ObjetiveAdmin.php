@@ -89,6 +89,9 @@ class ObjetiveAdmin extends Admin
                     ->add('enabled',null,array(
                         'required' => false,
                     ))
+                    ->add('status',null,array(
+                        'required' => false,
+                    ))
                 ->end()
             ->end()
         ;
@@ -102,6 +105,7 @@ class ObjetiveAdmin extends Admin
             ->add('requiredToImport')
             ->add('period')
             ->add('enabled')
+            ->add('status')
             ;
     }
     
@@ -110,7 +114,7 @@ class ObjetiveAdmin extends Admin
             ->addIdentifier('ref')
             ->add('description')
             ->add('weight')
-            ->add('enabled')
+            ->add('status')
             ;
     }
     
