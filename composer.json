@@ -43,7 +43,7 @@
         
         "sylius/resource-bundle": "0.10.0",
         
-        "phpoffice/phpexcel": "1.8.0",
+        "phpoffice/phpexcel": "1.8.1",
         
         "tecnocreaciones/extjs-bundle": "dev-master",
         
@@ -55,7 +55,7 @@
         "sonata-project/block-bundle": "~2.2@dev",
         "sonata-project/user-bundle": "~2.2@dev",
         
-        "tecnick.com/tcpdf": "6.0.097",
+        "tecnick.com/tcpdf": "6.2.8",
         
         "simplethings/entity-audit-bundle": "0.*@dev",
         "genemu/form-bundle": "2.2.*@dev",
