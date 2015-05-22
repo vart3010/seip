@@ -504,6 +504,7 @@ empty:
     no_details_service: No hay detalles del consumo de servicios.
     inventorys: No hay detalles de inventario.
     unrealized_productions: No hay detalles de producción no realizada.
+    day_stops: No hay detalles de paradas.
         
 chart:
     type:
