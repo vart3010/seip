@@ -20,6 +20,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\RawMaterialConsumptionPlannin
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_raw_material_consumption_planning")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class RawMaterialConsumptionPlanning extends BaseModel
 {
@@ -228,7 +229,9 @@ class RawMaterialConsumptionPlanning extends BaseModel
      */
     public function addDetailRawMaterialConsumption(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $detailRawMaterialConsumptions)
     {
-        $this->detailRawMaterialConsumptions[] = $detailRawMaterialConsumptions;
+        $detailRawMaterialConsumptions->setRawMaterialConsumptionPlanning($this);
+        
+        $this->detailRawMaterialConsumptions->add($detailRawMaterialConsumptions);
 
         return $this;
     }
@@ -282,5 +285,28 @@ class RawMaterialConsumptionPlanning extends BaseModel
             $_toString = (string)$this->getProduct();
         }
         return $_toString;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function calculate()
+    {
+        $detailRawMaterialConsumptions = $this->getDetailRawMaterialConsumptions();
+        $totalPlan = $totalReal = 0.0;
+        foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) {
+            $totalPlan += $detailRawMaterialConsumption->getTotalPlan();
+            $totalReal += $detailRawMaterialConsumption->getTotalReal();
+        }
+        $percentage = ($totalReal * 100) / $totalPlan;
+        
+        $this->setTotalPlan($totalPlan);
+        $this->setTotalReal($totalReal);
+        $this->setPercentage($percentage);
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
+//        var_dump($percentage);
+//        die;
     }
 }
