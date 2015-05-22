@@ -176,3 +176,5 @@ app:
                         production: Producción
                         sales: Ventas
                         finance: Finanzas
+                        notification: Notificación
+                            

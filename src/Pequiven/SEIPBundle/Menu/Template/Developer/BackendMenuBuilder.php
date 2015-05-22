@@ -699,6 +699,11 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
                         $menuIndicators->addChild($thirdchild);
                 }
         
+            //Menu de carga de notificaciones
+            if($this->isGranted('ROLE_SEIP_DATA_LOAD_*')){
+                $this->addDataLoadNotification($menuIndicators, $section);
+            }
+        
         $menu->addChild($menuIndicators);
     }
     
@@ -899,7 +904,6 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
         
         $listAdd = $this->factory->createItem('indicators.data_load.reports.sales',
                     $this->getSubLevelOptions(array(
-                        "route" => "pequiven_report_template_create",
                     ))
                 )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.sales', $section)));
         $child->addChild($listAdd);
@@ -975,6 +979,37 @@ class BackendMenuBuilder extends MenuBuilder implements \Symfony\Component\Depen
 //                 
 //         $child->addChild($processProduction);
                  
+        $menu->addChild($child);
+    }
+    
+    private function addDataLoadNotification(ItemInterface $menu, $section)
+    {
+        $child = $this->factory->createItem('data_load.notification',
+                    $this->getSubLevelOptions(array(
+                        'uri' => null,
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.notification', $section)));
+        
+             $list = $this->factory->createItem('indicators.data_load.notification.production',
+                    $this->getSubLevelOptions(array(
+                        "route" => "pequiven_report_template_index",
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.production', $section)));
+        
+        $child->addChild($list);
+        
+        $listAdd = $this->factory->createItem('indicators.data_load.notification.sales',
+                    $this->getSubLevelOptions(array(
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.sales', $section)));
+        $child->addChild($listAdd);
+        
+        $listAdd = $this->factory->createItem('indicators.data_load.notification.finance',
+                    $this->getSubLevelOptions(array(
+                    ))
+                )->setLabel($this->translate(sprintf('app.backend.menu.%s.data_load.finance', $section)));
+        $child->addChild($listAdd);
+        
         $menu->addChild($child);
     }
 
