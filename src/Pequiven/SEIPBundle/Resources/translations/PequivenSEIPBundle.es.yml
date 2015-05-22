@@ -374,6 +374,7 @@ pequiven_seip:
         plant_stop_planning: Planificacion de parada
     consumer_planning_service:
         consumer_planning_service: Consumo de servicios
+        details_consumer_planning_service: Detalle de consumo de servicios
 
     month:
         0: Enero

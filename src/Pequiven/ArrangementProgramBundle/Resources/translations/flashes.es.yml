@@ -80,3 +80,7 @@ pequiven:
         create: La producción no realizada se agrego correctamente.
         update: La producción no realizada se actualizo correctamente.
         delete: La producción no realizada se elimino correctamente.
+    detail_consumer_planning_service:
+        create: El detalle de consumo de servicio se agrego correctamente.
+        update: El detalle de consumo de servicio se actualizo correctamente.
+        delete: El detalle de consumo de servicio se elimino correctamente.

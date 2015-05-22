@@ -2113,4 +2113,12 @@ abstract class Detail extends BaseModel
 //        var_dump($percentage);
 //        die;
     }
+    
+    public function __toString() {
+        $_toString = "";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
 }

@@ -267,6 +267,9 @@
         <service id="pequiven.form.unrealized_production" class="Pequiven\SEIPBundle\Form\DataLoad\Production\UnrealizedProductionType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_production_unrealizedproduction" />
         </service>
+        <service id="pequiven.form.detail_consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\DetailConsumerPlanningServiceType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_service_detailconsumerplanningservice" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

@@ -165,29 +165,6 @@ class Range extends BaseModel
     }
 
     /**
-     * Set detailRawMaterialConsumption
-     *
-     * @param \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $detailRawMaterialConsumption
-     * @return Range
-     */
-    public function setDetailRawMaterialConsumption(\Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption $detailRawMaterialConsumption)
-    {
-        $this->detailRawMaterialConsumption = $detailRawMaterialConsumption;
-
-        return $this;
-    }
-
-    /**
-     * Get detailRawMaterialConsumption
-     *
-     * @return \Pequiven\SEIPBundle\Entity\DataLoad\RawMaterial\DetailRawMaterialConsumption 
-     */
-    public function getDetailRawMaterialConsumption()
-    {
-        return $this->detailRawMaterialConsumption;
-    }
-    
-    /**
      * Set detailConsumerPlanningService
      *
      * @param \Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService $detailConsumerPlanningService
