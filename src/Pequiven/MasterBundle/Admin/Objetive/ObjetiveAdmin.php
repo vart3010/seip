@@ -35,6 +35,10 @@ class ObjetiveAdmin extends Admin
             ->add('evalWeightedAverage')
             ->add('requiredToImport')
             ->add('enabled')
+            ->add('status','choice',array(
+                'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                'translation_domain' => 'PequivenObjetiveBundle'
+            ))
              ;
     }
     
@@ -89,6 +93,10 @@ class ObjetiveAdmin extends Admin
                     ->add('enabled',null,array(
                         'required' => false,
                     ))
+                    ->add('status','choice',array(
+                        'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                        'translation_domain' => 'PequivenObjetiveBundle'
+                    ))
                 ->end()
             ->end()
         ;
@@ -102,6 +110,10 @@ class ObjetiveAdmin extends Admin
             ->add('requiredToImport')
             ->add('period')
             ->add('enabled')
+            ->add('status',null,array(),'choice',array(
+                'choices' => \Pequiven\ObjetiveBundle\Entity\Objetive::getLabelsStatus(),
+                'translation_domain' => 'PequivenObjetiveBundle'
+            ))
             ;
     }
     
@@ -110,7 +122,7 @@ class ObjetiveAdmin extends Admin
             ->addIdentifier('ref')
             ->add('description')
             ->add('weight')
-            ->add('enabled')
+            ->add('status')
             ;
     }
     
