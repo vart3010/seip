@@ -29,6 +29,28 @@
 <script type="text/javascript">
     var dateFormat = "dd-mm-yy";
     $(document).ready(function(){
+        
+        var callBackStopTime = function(){
+                var otherTimeCheck = $(this);
+                var rootParent = otherTimeCheck.parent();
+                var divs = rootParent.find('p');
+                var divSelect = $(divs[0]);
+                var divInput = $(divs[1]);
+                if(otherTimeCheck.is(':checked')){
+                    divSelect.addClass('hidden');
+                    divSelect.removeClass('inline-div');
+                    
+                    divInput.removeClass('hidden');
+                    divInput.addClass('inline-div');
+                }else{
+                    divInput.removeClass('inline-div');
+                    divInput.addClass('hidden');
+                    
+                    divSelect.removeClass('hidden');
+                    divSelect.addClass('inline-div');
+                }
+            };
+            
         var selectMonth = $("#pequiven_seipbundle_dataload_plant_plantstopplanning_month");
         
         //Dias de paradas
@@ -81,6 +103,8 @@
             addDayStopFormDeleteLink($newFormLi);
             
             var idDayDate = "pequiven_seipbundle_dataload_plant_plantstopplanning_dayStops_"+index+"_day";
+            var idOtherTime = "pequiven_seipbundle_dataload_plant_plantstopplanning_dayStops_"+index+"_otherTime";
+            var otherTime = $("#"+idOtherTime);
             
             var monthOfPlanning = selectMonth.val();
             var date = new Date();
@@ -95,6 +119,7 @@
               stepMonths: 0,
               dateFormat: dateFormat
             });
+            otherTime.on("click",callBackStopTime);
         }
         
         function addDayStopFormDeleteLink($tagFormLi) {
@@ -110,5 +135,8 @@
             });
         }
         
+        $('.other-time').each(callBackStopTime);
+        
+        $('.other-time').on('click',callBackStopTime);
     });
 </script>

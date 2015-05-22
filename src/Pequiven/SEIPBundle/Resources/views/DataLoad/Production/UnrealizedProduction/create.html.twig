@@ -1,0 +1,23 @@
+{% extends 'PequivenSEIPBundle:Template:Developer/Common/formLayout.html.twig' %}
+
+{% trans_default_domain 'PequivenSEIPBundle' %}
+
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
+
+{% block before_body %}
+    {{ contentHeader(
+        ("pequiven_seip.product_report.unrealized_production.unrealized_production"|trans ),
+        ( 'pequiven.add'|trans({},'messages') )
+    ) }}
+{% endblock %}
+
+{% block body -%}
+    <form method="POST" action="{{ path("pequiven_unrealized_production_create",{productReport:app.request.get("productReport") }) }}">
+       <br /><br />
+       {% include 'PequivenSEIPBundle:DataLoad/Production/UnrealizedProduction:_form.html.twig' %}
+       {{ actions.create() }}
+       <div class="hidden">
+           {{ form_rest(form) }}
+       </div>
+   </form>
+{% endblock %}

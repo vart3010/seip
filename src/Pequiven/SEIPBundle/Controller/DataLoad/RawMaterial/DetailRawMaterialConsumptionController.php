@@ -69,7 +69,9 @@ class DetailRawMaterialConsumptionController extends SEIPController
         if (($request->isMethod('PUT') || $request->isMethod('POST')) && $form->submit($request)->isValid()) {
 
             $this->domainManager->update($resource);
-
+            $rawMaterialConsumptionPlanning = $resource->getRawMaterialConsumptionPlanning();
+            $rawMaterialConsumptionPlanning->calculate();
+            $this->save($rawMaterialConsumptionPlanning,true);
             return $this->redirectHandler->redirect($this->generateUrl("pequiven_raw_material_consumption_planning_show",array(
                 "id" => $resource->getRawMaterialConsumptionPlanning()->getId(),
             )));

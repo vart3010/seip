@@ -34,3 +34,9 @@ pequiven_plant_report_delete:
     defaults:
         _controller: pequiven.controller.plant_report:deleteAction
     methods: [GET|DELETE]
+    
+pequiven_plant_report_run:
+    path: /{id}/run
+    defaults:
+        _controller: pequiven.controller.plant_report:runAction
+    methods: [GET]

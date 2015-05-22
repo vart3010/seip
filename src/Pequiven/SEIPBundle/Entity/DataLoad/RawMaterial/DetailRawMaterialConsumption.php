@@ -20,6 +20,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\Detail;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_product_raw_material_consumption")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class DetailRawMaterialConsumption extends Detail
 {
@@ -128,5 +129,14 @@ class DetailRawMaterialConsumption extends Detail
             $_toString = $this->getMonthLabel();
         }
         return $_toString;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function totalize()
+    {
+        parent::totalize();
     }
 }

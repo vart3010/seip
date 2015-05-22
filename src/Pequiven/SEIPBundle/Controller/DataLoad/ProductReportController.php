@@ -106,6 +106,79 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
+        
+        $months = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
+        //Completar los inventarios
+        $inventorys = $resource->getInventorySortByMonth();
+        $unrealizedProductions = $resource->getUnrealizedProductionsSortByMonth();
+        foreach ($months as $month => $label) {
+            if(!isset($inventorys[$month])){
+                $inventory = new \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory();
+                $inventory->setMonth($month);
+                $resource->addInventory($inventory);
+                
+                $this->save($inventory,false);
+            }
+            if(!isset($unrealizedProductions[$month])){
+                $unrealizedProduction = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction();
+                $unrealizedProduction->setMonth($month);
+                
+                $resource->addUnrealizedProduction($unrealizedProduction);
+                $this->save($unrealizedProduction,false);
+            }
+        }
+        
+        //Consumo de materia prima por productos
+        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
+        foreach ($rawMaterialConsumptionPlannings as $rawMaterialConsumptionPlanning) {
+            $detailRawMaterialConsumptions = $rawMaterialConsumptionPlanning->getDetailRawMaterialConsumptions();
+            foreach ($detailRawMaterialConsumptions as $detailRawMaterialConsumption) 
+            {
+                $daysStopsArray = array();
+                $month = $detailRawMaterialConsumption->getMonth();
+                if(isset($plantStopPlanningsByMonths[$month])){
+                    $daysStops = $plantStopPlanningsByMonths[$month];
+                    foreach ($daysStops as $daysStop) {
+                        $daysStopsArray[] = $daysStop->getNroDay();
+                    }
+                }
+                $ranges = $detailRawMaterialConsumption->getRanges();
+                
+                foreach ($ranges as $range) {
+                    $monthBudget = $detailRawMaterialConsumption->getMonthBudget();
+                    $dateFrom = $range->getDateFrom();
+                    $dateEnd = $range->getDateEnd();
+
+                    $dayFrom = $dateFrom->format("d");
+                    $dayEnd = $dateEnd->format("d");
+                    $type = $range->getType();
+                    $originalValue = $range->getValue();
+                    $value = 0;
+
+                    if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_FIXED_VALUE){
+                        $value = $originalValue;
+                    }else if($type === \Pequiven\SEIPBundle\Model\DataLoad\RawMaterial\Range::TYPE_PERCENTAGE_BUDGET){
+                        $value = ($monthBudget / 100) * $originalValue;
+                    }
+
+                    for($day = $dayFrom; $day < $dayEnd; $day++){
+                        $dayInt = (int)$day;
+                        $propertyPath = sprintf("day%sPlan",$dayInt);
+                        if(in_array($dayInt,$daysStopsArray)){
+                            $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, 0);
+                            continue;
+                        }
+                        $propertyAccessor->setValue($detailRawMaterialConsumption, $propertyPath, $value);
+                        $this->save($detailRawMaterialConsumption);
+                    }
+                }
+            }
+            $rawMaterialConsumptionPlanning->calculate();
+            $this->save($rawMaterialConsumptionPlanning);
+        }
+        
+        $this->flush();
+        
         return $this->redirectHandler->redirectTo($resource);
     }
     

@@ -68,3 +68,19 @@ pequiven:
         create: La planificación de parada se agrego de correctamente.
         update: La planificación de parada se actualizo correctamente.
         delete: La planificación de parada se elimino correctamente.
+    plant_report:
+        create: El reporte de la planta se creo correctamente.
+        update: El reporte de la planta se actualizo correctamente.
+        delete: El reporte de la planta se elimino correctamente.
+    inventory:
+        create: El inventario de agrego correctamente.
+        update: El inventario de actualizo correctamente.
+        delete: El inventario de elimino correctamente.
+    unrealized_production:
+        create: La producción no realizada se agrego correctamente.
+        update: La producción no realizada se actualizo correctamente.
+        delete: La producción no realizada se elimino correctamente.
+    detail_consumer_planning_service:
+        create: El detalle de consumo de servicio se agrego correctamente.
+        update: El detalle de consumo de servicio se actualizo correctamente.
+        delete: El detalle de consumo de servicio se elimino correctamente.

@@ -8,6 +8,7 @@ pequiven_seip:
     add: Añadir
     products: Productos
     ref: Referencia
+    total: Total
     totalPlan: Total planificado
     totalReal: Total real
     totalStops: Total dias de paradas
@@ -15,6 +16,7 @@ pequiven_seip:
     days: Dias
     plan_n: "Plan Dia %n%:"
     real_n: "Real Dia %n%:"
+    day_n: "Dia %n%:"
     percentage: Porcentaje
     gross: Bruta
     net: Neta
@@ -147,8 +149,10 @@ pequiven_seip:
         export_result: Exportar Resultados
         refresh: Refrescar
         run_planning: Ejecutar planificación
+        run_plant: Ejecutar planificación de planta
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
+        want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
     edit: Editar
     save: Guardar
     cancel: Cancelar
@@ -325,7 +329,7 @@ pequiven_seip:
             internal: Interna
             external: Externa
     report_template:
-        report_template: Plantilla de reporte
+        report_template: Planificación de producción
         type:
             production: Producción
             inventory: Inventario
@@ -335,11 +339,16 @@ pequiven_seip:
         details_raw_material: Detalle de consumo de materia prima
     product_report:
         product_report: Producto
+        inventory:
+            inventory: Inventario
+            inventorys: Inventario
         type:
             final: Producto final
             byproduct: Sub-Producto
         product_detail_daily_months: Detalles de producción
         product_detail_daily_month: Detalle de producción
+        unrealized_production:
+            unrealized_production: Producción No Realizada
         question:
             delete: Desea eliminar este detalle de producción
     raw_material:
@@ -367,6 +376,7 @@ pequiven_seip:
         plant_stop_planning: Planificacion de parada
     consumer_planning_service:
         consumer_planning_service: Consumo de servicios
+        details_consumer_planning_service: Detalle de consumo de servicios
 
     month:
         0: Enero
@@ -492,6 +502,9 @@ empty:
     no_service: Sin servicios.
     consumer_planning_services: No hay servicios.
     no_details_service: No hay detalles del consumo de servicios.
+    inventorys: No hay detalles de inventario.
+    unrealized_productions: No hay detalles de producción no realizada.
+    day_stops: No hay detalles de paradas.
         
 chart:
     type:
@@ -535,3 +548,5 @@ nro: "#"
 "Day stops": Dias de parada
 "Services": Servicios
 "Service": Servicio
+'Stop time': Tiempo de parada
+'Other time': Otro

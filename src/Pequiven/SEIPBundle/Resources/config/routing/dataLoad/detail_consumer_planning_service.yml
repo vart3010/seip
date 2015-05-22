@@ -1,0 +1,21 @@
+pequiven_detail_consumer_planning_service_create:
+    path: /{consumerPlanningService}/create
+    defaults:
+        _controller: pequiven.controller.detail_consumer_planning_service:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_service_detailconsumerplanningservice
+    methods: [GET|POST]
+
+pequiven_detail_consumer_planning_service_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.detail_consumer_planning_service:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_service_detailconsumerplanningservice
+    methods: [GET|POST]
+    
+pequiven_detail_consumer_planning_service_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.detail_consumer_planning_service:deleteAction
+    methods: [GET|DELETE]

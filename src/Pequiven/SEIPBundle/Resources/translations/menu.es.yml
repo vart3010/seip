@@ -176,6 +176,9 @@ app:
                         planning: Planificación
                         statistics: Estadística
                     data_load:
-                        main: Reportes
-                        list: Lista
-                        add: Agregar
+                        main: Planificación
+                        production: Producción
+                        sales: Ventas
+                        finance: Finanzas
+                        notification: Notificación
+                            

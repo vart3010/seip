@@ -39,6 +39,10 @@
     <br /><br />
     {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_raw_material_consumptions.html.twig' %}
     <br /><br />
+    
+    {% set details = raw_material_consumption_planning.detailRawMaterialConsumptions %}
+    {% set product = raw_material_consumption_planning.product %}
+    {% set title_top = ('pequiven_seip.report_template.details_raw_material'|trans) %}
     {% include 'PequivenSEIPBundle:DataLoad/RawMaterial/RawMaterialConsumptionPlanning:show/detail_tabs_raw_material_consumptions.html.twig' %}
     <br /><br />
     <p class="button-height align-right">

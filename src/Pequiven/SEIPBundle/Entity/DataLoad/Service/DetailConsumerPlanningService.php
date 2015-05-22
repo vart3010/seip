@@ -20,6 +20,7 @@ use Pequiven\SEIPBundle\Model\DataLoad\Detail;
  * @author Carlos Mendoza <inhack20@gmail.com>
  * @ORM\Table(name="seip_report_plant_service_detail_consumer")
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  */
 class DetailConsumerPlanningService extends Detail
 {
@@ -96,7 +97,8 @@ class DetailConsumerPlanningService extends Detail
      */
     public function addRange(\Pequiven\SEIPBundle\Entity\DataLoad\Service\Range $ranges)
     {
-        $this->ranges[] = $ranges;
+        $ranges->setDetailConsumerPlanningService($this);
+        $this->ranges->add($ranges);
 
         return $this;
     }
@@ -119,5 +121,14 @@ class DetailConsumerPlanningService extends Detail
     public function getRanges()
     {
         return $this->ranges;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function totalize()
+    {
+        parent::totalize();
     }
 }
