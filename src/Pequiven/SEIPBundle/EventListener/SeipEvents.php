@@ -139,4 +139,28 @@ final class SeipEvents
      * @var string
      */
     const PRODUCT_PRODUCT_DETAIL_DAILY_MONTH_PRE_CREATE = 'pequiven.product_detail_daily_month.pre_create';
+    
+    /**
+     * El pequiven.plant_stop_planning.pre_create este evento es lanzado antes de crear una planificacion de parada
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PLANT_STOP_PLANNING_PRE_CREATE = 'pequiven.plant_stop_planning.pre_create';
+    
+    /**
+     * El pequiven.plant_stop_planning.pre_update este evento es lanzado antes de actualizar una planificacion de parada
+     * en el sistema.
+     *
+    
+     *  * The event listener receives an
+     * Sylius\Bundle\ResourceBundle\Event\ResourceEvent instance.
+     *
+     * @var string
+     */
+    const PLANT_STOP_PLANNING_PRE_UPDATE = 'pequiven.plant_stop_planning.pre_update';
 }

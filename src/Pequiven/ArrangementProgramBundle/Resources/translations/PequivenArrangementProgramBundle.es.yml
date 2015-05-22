@@ -12,6 +12,7 @@ pequiven:
         arrangement_program: Programa de Gestión
         arrangement_programs: Programas de Gestión
         description_none: Ninguna
+        description: Descripción
         managementSystem: Sistema de Calidad
         period: Período
         process: Proceso
@@ -130,6 +131,7 @@ pequiven:
         goal:
             name: Meta
             responsible: Responsable(s) de la Meta
+        description: Descripción
     goals:
         goal: Meta
         goals: Meta(s)

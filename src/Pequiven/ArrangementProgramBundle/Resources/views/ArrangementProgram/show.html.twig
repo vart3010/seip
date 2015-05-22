@@ -125,6 +125,12 @@
                     </p>
                 </div>
             {% endif %}
+            <div class="new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                 <p class="inline-label">
+                   <label class="label">{{ 'pequiven.arrangement_program.description'|trans }}</label>
+                   {{ entity.description != '' ? entity.description :('pequiven.arrangement_program.description_none'|trans) }}
+                </p>
+            </div>
               
         </div>
         {% set summary = entity.summary() %}

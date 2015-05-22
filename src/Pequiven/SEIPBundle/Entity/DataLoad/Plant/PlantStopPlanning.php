@@ -216,7 +216,7 @@ class PlantStopPlanning extends ModelBaseMaster
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */
-    public function calculateTotals()
+    public function calculate()
     {
         $totalHours = 0.0;
         

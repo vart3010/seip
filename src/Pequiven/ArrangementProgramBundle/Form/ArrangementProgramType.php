@@ -45,6 +45,13 @@ class ArrangementProgramType extends AbstractType implements \Symfony\Component\
             ->add('timeline',new TimelineType(),array(
                 'cascade_validation' => true,
             ))
+            ->add('description',null,array(
+                'label' => 'pequiven.form.description',
+                'label_attr' => array('class' => 'label'),
+                'attr' => array(
+                    'class' => "input input-xlarge validate[required]"
+                ),
+            ))
         ;
         
             $formModifier = function (FormEvent $event, \Pequiven\ObjetiveBundle\Model\Objetive $tacticalObjective = null, \Pequiven\MasterBundle\Entity\ArrangementProgram\CategoryArrangementProgram $categoryArrangementProgram = null, $typeArrangementProgram = 0) {
