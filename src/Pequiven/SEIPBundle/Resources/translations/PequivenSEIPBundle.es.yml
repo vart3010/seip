@@ -327,7 +327,7 @@ pequiven_seip:
             internal: Interna
             external: Externa
     report_template:
-        report_template: Plantilla de reporte
+        report_template: Planificación de producción
         type:
             production: Producción
             inventory: Inventario

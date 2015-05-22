@@ -2,6 +2,8 @@
 
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+
 {% block before_body %}
     {{ contentHeader(
         ("pequiven_seip.report_template.report_template"|trans ),
@@ -23,12 +25,6 @@
                     <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
                         {$ result.period.name $}
                     </td>
-                    <td data-title="'{{ 'Type report'|trans }}'">
-                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_PRODUCTION') }}">{{ "pequiven_seip.report_template.type.production"|trans }}</span>
-                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_INVENTORY') }}">{{ "pequiven_seip.report_template.type.inventory"|trans }}</span>
-                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_CONSUMPTION_SERVICES') }}">{{ "pequiven_seip.report_template.type.consumption_services"|trans }}</span>
-                        <span ng-if="result.typeReport == {{ constant('Pequiven\\SEIPBundle\\Model\\DataLoad\\ReportTemplate::TYPE_REPORT_RAW_MATERIALS') }}">{{ "pequiven_seip.report_template.type.raw_materials"|trans }}</span>
-                    </td>
                     <td class="low-padding align-center">
                         <a href="{$ result._links.self.update $}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
                     </td>
@@ -36,4 +32,8 @@
             </table>
         </div>
     </div>
+    <br/><br/>
+    <p class="button-height align-right">
+        {{ buttons.generic(path('pequiven_report_template_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
+    </p>
 {% endblock %}
