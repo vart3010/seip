@@ -75,7 +75,7 @@
                     <tbody>
                         <tr ng-repeat="result in $data" data="{$ result|json $}">
                             <td data-title="'{{ (labelHeader[level])|trans }}'" sortable="'ref'" filter="{'description' : 'text'}">
-                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}</a>
+                                <a href="{$ result._links.self.href $}">{$ result.ref+result.description $}{%if (level == 3) %} ({$ result.gerenciaSecond.description $}) {% endif %}</a>
                             </td>
                         </tr>
                     </tbody>
