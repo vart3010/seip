@@ -237,4 +237,9 @@ class ProductPlanning extends BaseModel
         }
         return $_toString;
     }
+    
+    public function isValidCapacity()
+    {
+        return !($this->dailyProductionCapacity > $this->totalMonth);
+    }
 }

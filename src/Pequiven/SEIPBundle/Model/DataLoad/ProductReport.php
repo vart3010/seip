@@ -55,12 +55,19 @@ abstract class ProductReport extends BaseModel implements ProductReportInterface
             self::TYPE_PRODUCT_BYPRODUCT => "pequiven_seip.product_report.type.byproduct",
         );
     }
-    
+    /**
+     * Devuelve la planificacion de la produccion bruta
+     * @return type
+     */
     public function getProductPlanningsGross()
     {
         return $this->getProductPlanningsByType(Production\ProductPlanning::TYPE_GROSS);
     }
     
+    /**
+     * Devuelve la planificacion de la produccion neta
+     * @return type
+     */
     public function getProductPlanningsNet()
     {
         return $this->getProductPlanningsByType(Production\ProductPlanning::TYPE_NET);
