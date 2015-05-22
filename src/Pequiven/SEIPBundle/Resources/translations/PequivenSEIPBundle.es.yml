@@ -345,6 +345,8 @@ pequiven_seip:
             byproduct: Sub-Producto
         product_detail_daily_months: Detalles de producción
         product_detail_daily_month: Detalle de producción
+        unrealized_production:
+            unrealized_production: Producción No Realizada
         question:
             delete: Desea eliminar este detalle de producción
     raw_material:
@@ -498,6 +500,7 @@ empty:
     consumer_planning_services: No hay servicios.
     no_details_service: No hay detalles del consumo de servicios.
     inventorys: No hay detalles de inventario.
+    unrealized_productions: No hay detalles de producción no realizada.
         
 chart:
     type:

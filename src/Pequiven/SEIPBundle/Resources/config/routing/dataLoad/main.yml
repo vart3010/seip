@@ -41,3 +41,7 @@ pequiven_data_load_consumer_planning_service:
 pequiven_data_load_inventory:
     resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/inventory.yml"
     prefix:   /inventory
+    
+pequiven_data_load_unrealized_production:
+    resource: "@PequivenSEIPBundle/Resources/config/routing/dataLoad/unrealized_production.yml"
+    prefix:   /unrealized-production

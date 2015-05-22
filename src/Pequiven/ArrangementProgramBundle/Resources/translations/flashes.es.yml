@@ -76,3 +76,7 @@ pequiven:
         create: El inventario de agrego correctamente.
         update: El inventario de actualizo correctamente.
         delete: El inventario de elimino correctamente.
+    unrealized_production:
+        create: La producción no realizada se agrego correctamente.
+        update: La producción no realizada se actualizo correctamente.
+        delete: La producción no realizada se elimino correctamente.

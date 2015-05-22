@@ -106,8 +106,11 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
+        
         $months = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
+        //Completar los inventarios
         $inventorys = $resource->getInventorySortByMonth();
+        $unrealizedProductions = $resource->getUnrealizedProductionsSortByMonth();
         foreach ($months as $month => $label) {
             if(!isset($inventorys[$month])){
                 $inventory = new \Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory();
@@ -115,6 +118,13 @@ class ProductReportController extends SEIPController
                 $resource->addInventory($inventory);
                 
                 $this->save($inventory,false);
+            }
+            if(!isset($unrealizedProductions[$month])){
+                $unrealizedProduction = new \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction();
+                $unrealizedProduction->setMonth($month);
+                
+                $resource->addUnrealizedProduction($unrealizedProduction);
+                $this->save($unrealizedProduction,false);
             }
         }
         $this->flush();

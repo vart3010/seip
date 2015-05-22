@@ -77,12 +77,20 @@ class ProductReport extends BaseModel
      * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory",mappedBy="productReport")
      */
     private $inventorys;
+    
+    /**
+     * Produccion no realizada
+     * @var Production\UnrealizedProduction
+     * @ORM\OneToMany(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction",mappedBy="productReport")
+     */
+    private $unrealizedProductions;
 
     public function __construct() {
         $this->productPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->productDetailDailyMonths = new \Doctrine\Common\Collections\ArrayCollection();
         $this->rawMaterialConsumptionPlannings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->inventorys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->unrealizedProductions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -280,6 +288,40 @@ class ProductReport extends BaseModel
     }
     
     /**
+     * Add unrealizedProductions
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction $unrealizedProductions
+     * @return ProductReport
+     */
+    public function addUnrealizedProduction(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction $unrealizedProductions)
+    {
+        $unrealizedProductions->setProductReport($this);
+        $this->unrealizedProductions->add($unrealizedProductions);
+
+        return $this;
+    }
+
+    /**
+     * Remove unrealizedProductions
+     *
+     * @param \Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction $unrealizedProductions
+     */
+    public function removeUnrealizedProduction(\Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction $unrealizedProductions)
+    {
+        $this->unrealizedProductions->removeElement($unrealizedProductions);
+    }
+
+    /**
+     * Get unrealizedProductions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUnrealizedProductions()
+    {
+        return $this->unrealizedProductions;
+    }
+    
+    /**
      * Get productDetailDailyMonths
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -303,6 +345,21 @@ class ProductReport extends BaseModel
     {
         $sorted = array();
         foreach ($this->inventorys as $productDetailDailyMonth) {
+            $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
+        }
+        ksort($sorted);
+        return $sorted;
+    }
+    
+    /**
+     * Get unrealizedProductions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUnrealizedProductionsSortByMonth()
+    {
+        $sorted = array();
+        foreach ($this->unrealizedProductions as $productDetailDailyMonth) {
             $sorted[$productDetailDailyMonth->getMonth()] = $productDetailDailyMonth;
         }
         ksort($sorted);

@@ -298,3 +298,9 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Inventory\InventoryController
+        pequiven.unrealized_production:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/UnrealizedProduction
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\UnrealizedProductionController

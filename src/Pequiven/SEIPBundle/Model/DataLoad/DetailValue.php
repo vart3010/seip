@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Detalles en un solo valor los 31 dias
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
+ * @ORM\MappedSuperclass()
  */
 abstract class DetailValue extends BaseModel
 {
@@ -1011,6 +1012,24 @@ abstract class DetailValue extends BaseModel
         return $this->day31;
     }
 
+    function getProductReport() {
+        return $this->productReport;
+    }
+
+    function setProductReport(\Pequiven\SEIPBundle\Entity\DataLoad\ProductReport $productReport) {
+        $this->productReport = $productReport;
+        return $this;
+    }
+    
+    public function __toString() 
+    {
+        $_toString = "-";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
+    
     public function getMonthLabel()
     {
         $month = $this->getMonth();

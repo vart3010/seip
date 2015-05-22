@@ -9,20 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Pequiven\SEIPBundle\Entity\DataLoad\Inventory;
+namespace Pequiven\SEIPBundle\Entity\DataLoad\Production;
 
 use Doctrine\ORM\Mapping as ORM;
 use Pequiven\SEIPBundle\Model\DataLoad\DetailValue;
 
 /**
- * Inventario
+ * Produccion no realizada (PNR)
  *
  * @author Carlos Mendoza <inhack20@gmail.com>
- * @ORM\Table(name="seip_report_product_inventory")
+ * @ORM\Table(name="seip_report_product_unrealized_production")
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks()
  */
-class Inventory extends DetailValue
+class UnrealizedProduction extends DetailValue
 {
     /**
      * @var integer
@@ -36,11 +36,11 @@ class Inventory extends DetailValue
     /**
      * Reporte de planta
      * @var \Pequiven\SEIPBundle\Entity\DataLoad\ProductReport
-     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="inventorys")
+     * @ORM\ManyToOne(targetEntity="Pequiven\SEIPBundle\Entity\DataLoad\ProductReport",inversedBy="unrealizedProductions")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $productReport;
-    
+
     /**
      * Get id
      *
