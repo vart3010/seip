@@ -1,0 +1,21 @@
+pequiven_inventory_create:
+    path: /{productReport}/create
+    defaults:
+        _controller: pequiven.controller.inventory:createAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_inventory_inventory
+    methods: [GET|POST]
+    
+pequiven_inventory_update:
+    path: /{id}/update
+    defaults:
+        _controller: pequiven.controller.inventory:updateAction
+        _sylius:
+            form: pequiven_seipbundle_dataload_inventory_inventory
+    methods: [GET|POST|PUT]
+    
+pequiven_inventory_delete:
+    path: /{id}/delete
+    defaults:
+        _controller: pequiven.controller.inventory:deleteAction
+    methods: [GET|DELETE]

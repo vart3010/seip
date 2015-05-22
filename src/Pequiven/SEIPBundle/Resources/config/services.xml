@@ -261,6 +261,15 @@
         <service id="pequiven.form.consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\ConsumerPlanningServiceType">
             <tag name="form.type" alias="pequiven_seipbundle_dataload_service_consumerplanningservice" />
         </service>
+        <service id="pequiven.form.inventory" class="Pequiven\SEIPBundle\Form\DataLoad\Inventory\InventoryType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_inventory_inventory" />
+        </service>
+        <service id="pequiven.form.unrealized_production" class="Pequiven\SEIPBundle\Form\DataLoad\Production\UnrealizedProductionType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_production_unrealizedproduction" />
+        </service>
+        <service id="pequiven.form.detail_consumer_planning_service" class="Pequiven\SEIPBundle\Form\DataLoad\Service\DetailConsumerPlanningServiceType">
+            <tag name="form.type" alias="pequiven_seipbundle_dataload_service_detailconsumerplanningservice" />
+        </service>
         <service id="pequiven_seip.service.period" class="Pequiven\SEIPBundle\Service\PeriodService">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

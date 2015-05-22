@@ -292,3 +292,21 @@ sylius_resource:
             classes:
                 model: Pequiven\SEIPBundle\Entity\DataLoad\Service\ConsumerPlanningService
                 controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\ConsumerPlanningServiceController
+        pequiven.inventory:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Inventory/Inventory
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Inventory\Inventory
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Inventory\InventoryController
+        pequiven.unrealized_production:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Production/UnrealizedProduction
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Production\UnrealizedProduction
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Production\UnrealizedProductionController
+        pequiven.detail_consumer_planning_service:
+            driver: doctrine/orm
+            templates: PequivenSEIPBundle:DataLoad/Service/DetailConsumerPlanningService
+            classes:
+                model: Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService
+                controller: Pequiven\SEIPBundle\Controller\DataLoad\Service\DetailConsumerPlanningServiceController

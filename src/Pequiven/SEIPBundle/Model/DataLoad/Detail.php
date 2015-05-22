@@ -2065,4 +2065,60 @@ abstract class Detail extends BaseModel
         }
         return $label;
     }
+    
+    public function totalize() 
+    {
+        $reflection = new \ReflectionClass($this);
+        $methods = $reflection->getMethods();
+        
+        $nameMatchReal = '^getDay\w+Real$';
+        $nameMatchPlan = '^getDay\w+Plan$';
+        
+        $totalReal = $totalPlan = 0.0;
+        foreach ($methods as $method) {
+            $methodName = $method->getName();
+            $class = $method->getDeclaringClass();
+            if(!strpos($class, 'Pequiven\SEIPBundle\Model\DataLoad\Detail')){
+                continue;
+            }
+            $value = 0.0;
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName) || preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $value = $this->$methodName();
+            }
+            if(preg_match('/'.$nameMatchReal.'/i', $methodName)){
+                $totalReal +=  $value;
+            }
+            if(preg_match('/'.$nameMatchPlan.'/i', $methodName)){
+                $totalPlan +=  $value;
+            }
+        }
+        
+        $methodTotalPlan = "setTotalPlan";
+        $methodTotalReal = "setTotalReal";
+        $methodPercentage = "setPercentage";
+        
+        $this->$methodTotalPlan($totalPlan);
+        $this->$methodTotalReal($totalReal);
+        $percentage = 0;
+        if($totalPlan != 0){
+            $percentage = ($totalReal * 100) / $totalPlan;
+        }
+        $this->$methodPercentage($percentage);
+//        var_dump($methodTotalPlan);
+//        var_dump($methodTotalReal);
+//        var_dump($methodPercentage);
+//        
+//        var_dump($totalPlan);
+//        var_dump($totalReal);
+//        var_dump($percentage);
+//        die;
+    }
+    
+    public function __toString() {
+        $_toString = "";
+        if($this->getId() > 0){
+            $_toString = $this->getMonthLabel();
+        }
+        return $_toString;
+    }
 }

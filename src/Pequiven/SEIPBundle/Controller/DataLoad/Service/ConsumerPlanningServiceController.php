@@ -12,7 +12,6 @@
 namespace Pequiven\SEIPBundle\Controller\DataLoad\Service;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador de consumo de servicios

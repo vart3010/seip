@@ -514,6 +514,17 @@ services:
         calls:
             - [ setTranslationDomain, [SonataAdminBundle]]
             
+    sonata.admin.cei.stop_time:
+        class: Pequiven\MasterBundle\Admin\CEI\StopTimeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Control Estadistico e Información" ,label: "Hora de parada" }
+        arguments:
+            - ~
+            - Pequiven\SEIPBundle\Entity\CEI\StopTime
+            - ~
+        calls:
+            - [ setTranslationDomain, [SonataAdminBundle]]
+            
     sonata.admin.configuration:
         class: Tecnocreaciones\Bundle\ToolsBundle\Admin\Configuration\ConfigurationAdmin
         tags:

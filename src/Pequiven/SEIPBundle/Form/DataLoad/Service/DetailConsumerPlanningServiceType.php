@@ -14,79 +14,90 @@ class DetailConsumerPlanningServiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $paramateretsDays = array(
+            'label_attr' => array('class' => 'label'),
+            "attr" => array("class" => "input input-large"),
+        );
+        
         $builder
-            ->add('monthBudget')
-            ->add('month')
-            ->add('totalPlan')
-            ->add('totalReal')
-            ->add('percentage')
-            ->add('day1Plan')
-            ->add('day1Real')
-            ->add('day2Plan')
-            ->add('day2Real')
-            ->add('day3Plan')
-            ->add('day3Real')
-            ->add('day4Plan')
-            ->add('day4Real')
-            ->add('day5Plan')
-            ->add('day5Real')
-            ->add('day6Plan')
-            ->add('day6Real')
-            ->add('day7Plan')
-            ->add('day7Real')
-            ->add('day8Plan')
-            ->add('day8Real')
-            ->add('day9Plan')
-            ->add('day9Real')
-            ->add('day10Plan')
-            ->add('day10Real')
-            ->add('day11Plan')
-            ->add('day11Real')
-            ->add('day12Plan')
-            ->add('day12Real')
-            ->add('day13Plan')
-            ->add('day13Real')
-            ->add('day14Plan')
-            ->add('day14Real')
-            ->add('day15Plan')
-            ->add('day15Real')
-            ->add('day16Plan')
-            ->add('day16Real')
-            ->add('day17Plan')
-            ->add('day17Real')
-            ->add('day18Plan')
-            ->add('day18Real')
-            ->add('day19Plan')
-            ->add('day19Real')
-            ->add('day20Plan')
-            ->add('day20Real')
-            ->add('day21Plan')
-            ->add('day21Real')
-            ->add('day22Plan')
-            ->add('day22Real')
-            ->add('day23Plan')
-            ->add('day23Real')
-            ->add('day24Plan')
-            ->add('day24Real')
-            ->add('day25Plan')
-            ->add('day25Real')
-            ->add('day26Plan')
-            ->add('day26Real')
-            ->add('day27Plan')
-            ->add('day27Real')
-            ->add('day28Plan')
-            ->add('day28Real')
-            ->add('day29Plan')
-            ->add('day29Real')
-            ->add('day30Plan')
-            ->add('day30Real')
-            ->add('day31Plan')
-            ->add('day31Real')
-            ->add('enabled')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('deletedAt')
-            ->add('consumerPlanningService')
+            ->add('monthBudget',null,$paramateretsDays)
+            ->add('month',"choice",array(
+                'label_attr' => array('class' => 'label'),
+                "attr" => array("class" => "select2 input-large"),
+                "choices" => \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels(),
+                "empty_value" => "",
+            ))
+            
+            ->add('day1Plan',null,$paramateretsDays)
+            ->add('day1Real',null,$paramateretsDays)
+            ->add('day2Plan',null,$paramateretsDays)
+            ->add('day2Real',null,$paramateretsDays)
+            ->add('day3Plan',null,$paramateretsDays)
+            ->add('day3Real',null,$paramateretsDays)
+            ->add('day4Plan',null,$paramateretsDays)
+            ->add('day4Real',null,$paramateretsDays)
+            ->add('day5Plan',null,$paramateretsDays)
+            ->add('day5Real',null,$paramateretsDays)
+            ->add('day6Plan',null,$paramateretsDays)
+            ->add('day6Real',null,$paramateretsDays)
+            ->add('day7Plan',null,$paramateretsDays)
+            ->add('day7Real',null,$paramateretsDays)
+            ->add('day8Plan',null,$paramateretsDays)
+            ->add('day8Real',null,$paramateretsDays)
+            ->add('day9Plan',null,$paramateretsDays)
+            ->add('day9Real',null,$paramateretsDays)
+            ->add('day10Plan',null,$paramateretsDays)
+            ->add('day10Real',null,$paramateretsDays)
+            ->add('day11Plan',null,$paramateretsDays)
+            ->add('day11Real',null,$paramateretsDays)
+            ->add('day12Plan',null,$paramateretsDays)
+            ->add('day12Real',null,$paramateretsDays)
+            ->add('day13Plan',null,$paramateretsDays)
+            ->add('day13Real',null,$paramateretsDays)
+            ->add('day14Plan',null,$paramateretsDays)
+            ->add('day14Real',null,$paramateretsDays)
+            ->add('day15Plan',null,$paramateretsDays)
+            ->add('day15Real',null,$paramateretsDays)
+            ->add('day16Plan',null,$paramateretsDays)
+            ->add('day16Real',null,$paramateretsDays)
+            ->add('day17Plan',null,$paramateretsDays)
+            ->add('day17Real',null,$paramateretsDays)
+            ->add('day18Plan',null,$paramateretsDays)
+            ->add('day18Real',null,$paramateretsDays)
+            ->add('day19Plan',null,$paramateretsDays)
+            ->add('day19Real',null,$paramateretsDays)
+            ->add('day20Plan',null,$paramateretsDays)
+            ->add('day20Real',null,$paramateretsDays)
+            ->add('day21Plan',null,$paramateretsDays)
+            ->add('day21Real',null,$paramateretsDays)
+            ->add('day22Plan',null,$paramateretsDays)
+            ->add('day22Real',null,$paramateretsDays)
+            ->add('day23Plan',null,$paramateretsDays)
+            ->add('day23Real',null,$paramateretsDays)
+            ->add('day24Plan',null,$paramateretsDays)
+            ->add('day24Real',null,$paramateretsDays)
+            ->add('day25Plan',null,$paramateretsDays)
+            ->add('day25Real',null,$paramateretsDays)
+            ->add('day26Plan',null,$paramateretsDays)
+            ->add('day26Real',null,$paramateretsDays)
+            ->add('day27Plan',null,$paramateretsDays)
+            ->add('day27Real',null,$paramateretsDays)
+            ->add('day28Plan',null,$paramateretsDays)
+            ->add('day28Real',null,$paramateretsDays)
+            ->add('day29Plan',null,$paramateretsDays)
+            ->add('day29Real',null,$paramateretsDays)
+            ->add('day30Plan',null,$paramateretsDays)
+            ->add('day30Real',null,$paramateretsDays)
+            ->add('day31Plan',null,$paramateretsDays)
+            ->add('day31Real',null,$paramateretsDays)
+                
+            ->add('ranges',"collection",array(
+                'label_attr' => array('class' => 'label'),
+                "type" => new RangeType(),
+                "allow_add"    => true,
+                'by_reference' => false,
+                'allow_delete' => true,
+            ))
         ;
     }
     
@@ -96,7 +107,8 @@ class DetailConsumerPlanningServiceType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService'
+            'data_class' => 'Pequiven\SEIPBundle\Entity\DataLoad\Service\DetailConsumerPlanningService',
+            "translation_domain" => "PequivenSEIPBundle",
         ));
     }
 
