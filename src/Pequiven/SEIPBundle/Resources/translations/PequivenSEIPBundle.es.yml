@@ -149,8 +149,10 @@ pequiven_seip:
         export_result: Exportar Resultados
         refresh: Refrescar
         run_planning: Ejecutar planificación
+        run_plant: Ejecutar planificación de planta
     question:
         want_create_production_details_from_planning: ¿Desea crear los detalles de producción a partir del presupuesto de producción?
+        want_create_plant_from_planning: ¿Desea crear los detalles de servicios de la planta?
     edit: Editar
     save: Guardar
     cancel: Cancelar
