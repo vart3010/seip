@@ -106,6 +106,8 @@ class ProductReportController extends SEIPController
             }
             $this->flush();
         }
+        //Consumo de materia prima por productos
+        $rawMaterialConsumptionPlannings = $resource->getRawMaterialConsumptionPlannings();
         
         $months = \Pequiven\SEIPBundle\Service\ToolService::getMonthsLabels();
         //Completar los inventarios

@@ -57,26 +57,6 @@ class UnrealizedProduction extends DetailValue
      */
     public function calculate()
     {
-        $reflection = new \ReflectionClass($this);
-        $methods = $reflection->getMethods();
-        
-        $nameMatch = '^getDay\w+$';
-        
-        $total = $totalPlan = 0.0;
-        foreach ($methods as $method) {
-            $methodName = $method->getName();
-            $class = $method->getDeclaringClass();
-            if(!strpos($class, 'Pequiven\SEIPBundle\Model\DataLoad\DetailValue')){
-                continue;
-            }
-            if(preg_match('/'.$nameMatch.'/i', $methodName)){
-                $value = $this->$methodName();
-                $total +=  $value;
-            }
-        }
-        
-        $methodTotalPlan = "setTotal";
-        
-        $this->$methodTotalPlan($total);
+        parent::calculate();
     }
 }
