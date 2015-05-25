@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             
             
-            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
+//            new Lunetics\LocaleBundle\LuneticsLocaleBundle(),//Manejador pagina multi-lenguaje
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),//Contructor del menu
             
             new FOS\UserBundle\FOSUserBundle(),//Manejador de usuario

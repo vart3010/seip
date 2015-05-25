@@ -12,11 +12,9 @@ class DefaultController extends Controller {
 
     /** Página Principal del Sistema
      * @Route("/")
-     * @Template()
      */
     public function indexAction() {
-        return array(
-        );
+        return $this->render('PequivenSEIPBundle:Default:index.html.twig');
     }
     
     /**
