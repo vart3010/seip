@@ -224,6 +224,7 @@ class PlantStopPlanning extends ModelBaseMaster
         $totalStops = $dayStops->count();
         
         foreach ($dayStops as $dayStop) {
+            $dayStop->calculate();
             $totalHours += $dayStop->getHours();
         }
         

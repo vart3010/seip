@@ -203,7 +203,7 @@ class DayStop extends BaseModel
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function calculateDays()
+    public function calculate()
     {
         $hours = $this->hours;
         if($this->otherTime === false && $this->stopTime !== null){
