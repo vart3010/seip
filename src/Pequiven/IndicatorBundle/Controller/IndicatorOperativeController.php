@@ -462,6 +462,7 @@ class IndicatorOperativeController extends baseController {
         $objetiveOperativeId = $request->request->get('objetiveOperativeId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveOperativeId))->getRef();
         $options['type'] = 'OPERATIVE';
+        $options['idObjetive'] = $objetiveOperativeId;
         $ref = $this->setNewRef($options);
 
         $data[] = array('ref' => $ref);
@@ -497,7 +498,8 @@ class IndicatorOperativeController extends baseController {
     public function setNewRef($options = array()) {
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->disable('softdeleteable');
-        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+//        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $results = $this->get('pequiven.repository.indicatortactic')->getByParent($options);
         $em->getFilters()->enable('softdeleteable');
         $refIndicator = 'IO-' . $options['refParent'];
         $total = count($results);

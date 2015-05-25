@@ -457,6 +457,7 @@ class IndicatorTacticController extends baseController
         $objetiveTacticId = $request->request->get('objetiveTacticId');
         $options['refParent'] = $em->getRepository('PequivenObjetiveBundle:Objetive')->findOneBy(array('id' => $objetiveTacticId))->getRef();
         $options['type'] = 'TACTIC';
+        $options['idObjetive'] = $objetiveTacticId;
         $ref = $this->setNewRef($options);
 
         $data[] = array('ref' => $ref);
@@ -492,7 +493,8 @@ class IndicatorTacticController extends baseController
     public function setNewRef($options = array()) {
         $em = $this->getDoctrine()->getManager();
         $em->getFilters()->disable('softdeleteable');
-        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+//        $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $results = $this->get('pequiven.repository.indicatortactic')->getByParent($options);
         $em->getFilters()->enable('softdeleteable');
         $refIndicator = 'IT-' . $options['refParent'];
         $total = count($results);
