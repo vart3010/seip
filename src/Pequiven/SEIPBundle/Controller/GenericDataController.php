@@ -3,6 +3,8 @@
 namespace Pequiven\SEIPBundle\Controller;
 
 use Pequiven\SEIPBundle\Controller\SEIPController;
+use Pequiven\SEIPBundle\Model\UserManager;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Controlador de data generica en el SEIP
@@ -16,7 +18,7 @@ class GenericDataController extends SEIPController
      * Retorna las localidades activas dependiendo del criterio o del usuario
      * @param type $param
      */
-    function getComplejosAction(\Symfony\Component\HttpFoundation\Request $request) {
+    function getComplejosAction(Request $request) {
         
         $user = $this->getUser();
         $criteria = $request->get('filter',$this->config->getCriteria());
@@ -33,7 +35,7 @@ class GenericDataController extends SEIPController
      * 
      * @param type $param
      */
-    function getFirstLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
+    function getFirstLineManagementAction(Request $request) {
         
         $user = $this->getUser();
         $criteria = $request->get('filter',$this->config->getCriteria());
@@ -49,7 +51,7 @@ class GenericDataController extends SEIPController
      * Retorna las gerencias de segunda línea dependiendo del criterio o del usuario
      * @param type $param
      */
-    function getSecondLineManagementAction(\Symfony\Component\HttpFoundation\Request $request) {
+    function getSecondLineManagementAction(Request $request) {
         $criteria = $request->get('filter',$this->config->getCriteria());
         $user = $this->getUser();
         $repository = $this->get('pequiven.repository.gerenciasecond');
@@ -60,7 +62,7 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function getLocationByAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function getLocationByAction(Request $request)
     {
         $company = $request->get("company");
         $em = $this->getDoctrine()->getManager();
@@ -73,7 +75,7 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function getEntityByLocationAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function getEntityByLocationAction(Request $request)
     {
         $location = $request->get("location");
         $em = $this->getDoctrine()->getManager();
@@ -86,7 +88,7 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function getPlantByEntityAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function getPlantByEntityAction(Request $request)
     {
         $entity = $request->get("entity");
         $em = $this->getDoctrine()->getManager();
@@ -99,7 +101,7 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
-    public function getProductByPlantAction(\Symfony\Component\HttpFoundation\Request $request)
+    public function getProductByPlantAction(Request $request)
     {
         $plant = $request->get("plant");
         $em = $this->getDoctrine()->getManager();
@@ -112,9 +114,65 @@ class GenericDataController extends SEIPController
         return $this->handleView($view);
     }
     
+    public function searchServiceAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Service", $request);
+    }
+    
+    public function searchProductAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Product", $request);
+    }
+    
+    public function searchEntityAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Entity", $request);
+    }
+    
+    public function searchPlantAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Plant", $request);
+    }
+    
+    public function searchRegionAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Region", $request);
+    }
+    
+    public function searchLocationAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Location", $request);
+    }
+    
+    public function searchCompanyAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\CEI\Company", $request);
+    }
+    
+    public function searchPeriodAction(Request $request) 
+    {
+        return $this->getResponseSearch("Pequiven\SEIPBundle\Entity\Period", $request);
+    }
+    
+    private function getResponseSearch($entity,Request $request) 
+    {
+        $q = $request->get("q");
+        $criteria = array(
+            'name'  => $q,
+        );
+        $em = $this->getDoctrine()->getManager();
+        $results = $em->getRepository($entity)->findSearch($criteria);
+        
+        $view = $this->view();
+        $view->setData($results);
+        $view->getSerializationContext()->setGroups(array('id','api_list'));
+        return $this->handleView($view);
+    }
+
+
     /**
      * Manejador de usuario o administrador
-     * @return \Pequiven\SEIPBundle\Model\UserManager
+     * @return UserManager
      */
     private function getUserManager() 
     {
