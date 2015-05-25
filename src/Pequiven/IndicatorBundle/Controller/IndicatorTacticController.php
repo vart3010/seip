@@ -490,8 +490,10 @@ class IndicatorTacticController extends baseController
      * @param type $options
      */
     public function setNewRef($options = array()) {
-
+        $em = $this->getDoctrine()->getManager();
+        $em->getFilters()->disable('softdeleteable');
         $results = $this->get('pequiven.repository.indicatortactic')->getByOptionRefParent($options);
+        $em->getFilters()->enable('softdeleteable');
         $refIndicator = 'IT-' . $options['refParent'];
         $total = count($results);
         if (is_array($results) && $total > 0) {
