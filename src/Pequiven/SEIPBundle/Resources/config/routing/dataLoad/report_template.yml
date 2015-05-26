@@ -46,3 +46,5 @@ pequiven_report_template_load:
     defaults:
         _controller: pequiven.controller.report_template:loadAction
     methods: [GET]
+    options:
+        expose: true

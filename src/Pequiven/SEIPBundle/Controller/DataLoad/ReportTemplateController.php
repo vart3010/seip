@@ -93,11 +93,24 @@ class ReportTemplateController extends SEIPController
     
     public function loadAction(Request $request) 
     {
+        $resource = $this->findOr404($request);
+        $dateString = $request->get('dateNotification',null);
+        $dateNotification = null;
+        if($dateString !== null){
+            $dateNotification = \DateTime::createFromFormat('d/m/Y', $dateString);
+        }
+        if($dateNotification === null){
+            $dateNotification = new \DateTime();
+        }
+//        var_dump($dateNotification);die;
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('load.html'))
             ->setTemplateVar($this->config->getResourceName())
-            ->setData($this->findOr404($request))
+            ->setData(array(
+                $this->config->getResourceName() => $resource,
+                'dateNotification' => $dateNotification
+            ))
         ;
 
         return $this->handleView($view);

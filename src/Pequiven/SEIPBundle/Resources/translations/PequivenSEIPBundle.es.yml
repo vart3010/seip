@@ -24,6 +24,7 @@ pequiven_seip:
     details: Detalles
     plants: Plantas
     inventory: Inventario
+    date_of_notification: Fecha de notificación
     
     #Login
     sign_in: Ingresar
