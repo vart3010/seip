@@ -964,6 +964,223 @@ class ProductDetailDailyMonth extends BaseModel
     private $day31NetReal = 0;
     
     /**
+     * Dia 1 (Observacion)
+     * @var float
+     * @ORM\Column(name="day1_observation",type="text",nullable=true)
+     */
+    private $day1Observation;
+    
+    /**
+     * Dia 2 (Observacion)
+     * @var float
+     * @ORM\Column(name="day2_observation",type="text",nullable=true)
+     */
+    private $day2Observation;
+    
+    /**
+     * Dia 3 (Observacion)
+     * @var float
+     * @ORM\Column(name="day3_observation",type="text",nullable=true)
+     */
+    private $day3Observation;
+    
+    /**
+     * Dia 4 (Observacion)
+     * @var float
+     * @ORM\Column(name="day4_observation",type="text",nullable=true)
+     */
+    private $day4Observation;
+    
+    /**
+     * Dia 5 (Observacion)
+     * @var float
+     * @ORM\Column(name="day5_observation",type="text",nullable=true)
+     */
+    private $day5Observation;
+    
+    /**
+     * Dia 6 (Observacion)
+     * @var float
+     * @ORM\Column(name="day6_observation",type="text",nullable=true)
+     */
+    private $day6Observation;
+    
+    /**
+     * Dia 7 (Observacion)
+     * @var float
+     * @ORM\Column(name="day7_observation",type="text",nullable=true)
+     */
+    private $day7Observation;
+    
+    /**
+     * Dia 8 (Observacion)
+     * @var float
+     * @ORM\Column(name="day8_observation",type="text",nullable=true)
+     */
+    private $day8Observation;
+    
+    /**
+     * Dia 9 (Observacion)
+     * @var float
+     * @ORM\Column(name="day9_observation",type="text",nullable=true)
+     */
+    private $day9Observation;
+    
+    /**
+     * Dia 10 (Observacion)
+     * @var float
+     * @ORM\Column(name="day10_observation",type="text",nullable=true)
+     */
+    private $day10Observation;
+    
+    /**
+     * Dia 11 (Observacion)
+     * @var float
+     * @ORM\Column(name="day11_observation",type="text",nullable=true)
+     */
+    private $day11Observation;
+    
+    /**
+     * Dia 12 (Observacion)
+     * @var float
+     * @ORM\Column(name="day12_observation",type="text",nullable=true)
+     */
+    private $day12Observation;
+    
+    /**
+     * Dia 13 (Observacion)
+     * @var string
+     * @ORM\Column(name="day13_observation",type="text",nullable=true)
+     */
+    private $day13Observation;
+    
+    /**
+     * Dia 14 (Observacion)
+     * @var string
+     * @ORM\Column(name="day14_observation",type="text",nullable=true)
+     */
+    private $day14Observation;
+    
+    /**
+     * Dia 15 (Observacion)
+     * @var string
+     * @ORM\Column(name="day15_observation",type="text",nullable=true)
+     */
+    private $day15Observation;
+    
+    /**
+     * Dia 16 (Observacion)
+     * @var string
+     * @ORM\Column(name="day16_observation",type="text",nullable=true)
+     */
+    private $day16Observation;
+    
+    /**
+     * Dia 17 (Observacion)
+     * @var string
+     * @ORM\Column(name="day17_observation",type="text",nullable=true)
+     */
+    private $day17Observation;
+    
+    /**
+     * Dia 18 (Observacion)
+     * @var string
+     * @ORM\Column(name="day18_observation",type="text",nullable=true)
+     */
+    private $day18Observation;
+    
+    /**
+     * Dia 19 (Observacion)
+     * @var string
+     * @ORM\Column(name="day19_observation",type="text",nullable=true)
+     */
+    private $day19Observation;
+    
+    /**
+     * Dia 20 (Observacion)
+     * @var string
+     * @ORM\Column(name="day20_observation",type="text",nullable=true)
+     */
+    private $day20Observation;
+    
+    /**
+     * Dia 21 (Observacion)
+     * @var string
+     * @ORM\Column(name="day21_observation",type="text",nullable=true)
+     */
+    private $day21Observation;
+    
+    /**
+     * Dia 22 (Observacion)
+     * @var string
+     * @ORM\Column(name="day22_observation",type="text",nullable=true)
+     */
+    private $day22Observation;
+    
+    /**
+     * Dia 23 (Observacion)
+     * @var string
+     * @ORM\Column(name="day23_observation",type="text",nullable=true)
+     */
+    private $day23Observation;
+    
+    /**
+     * Dia 24 (Observacion)
+     * @var string
+     * @ORM\Column(name="day24_observation",type="text",nullable=true)
+     */
+    private $day24Observation;
+    
+    /**
+     * Dia 25 (Observacion)
+     * @var string
+     * @ORM\Column(name="day25_observation",type="text",nullable=true)
+     */
+    private $day25Observation;
+    
+    /**
+     * Dia 26 (Observacion)
+     * @var string
+     * @ORM\Column(name="day26_observation",type="text",nullable=true)
+     */
+    private $day26Observation;
+    
+    /**
+     * Dia 27 (Observacion)
+     * @var string
+     * @ORM\Column(name="day27_observation",type="text",nullable=true)
+     */
+    private $day27Observation;
+    
+    /**
+     * Dia 28 (Observacion)
+     * @var string
+     * @ORM\Column(name="day28_observation",type="text",nullable=true)
+     */
+    private $day28Observation;
+    
+    /**
+     * Dia 29 (Observacion)
+     * @var string
+     * @ORM\Column(name="day29_observation",type="text",nullable=true)
+     */
+    private $day29Observation;
+    
+    /**
+     * Dia 30 (Observacion)
+     * @var string
+     * @ORM\Column(name="day30_observation",type="text",nullable=true)
+     */
+    private $day30Observation;
+    
+    /**
+     * Dia 31 (Observacion)
+     * @var string
+     * @ORM\Column(name="day31_observation",type="text",nullable=true)
+     */
+    private $day31Observation;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -4007,6 +4224,719 @@ class ProductDetailDailyMonth extends BaseModel
     public function getDay31NetReal()
     {
         return $this->day31NetReal;
+    }
+
+    /**
+     * Set day1Observation
+     *
+     * @param string $day1Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay1Observation($day1Observation)
+    {
+        $this->day1Observation = $day1Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day1Observation
+     *
+     * @return string 
+     */
+    public function getDay1Observation()
+    {
+        return $this->day1Observation;
+    }
+
+    /**
+     * Set day2Observation
+     *
+     * @param string $day2Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay2Observation($day2Observation)
+    {
+        $this->day2Observation = $day2Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day2Observation
+     *
+     * @return string 
+     */
+    public function getDay2Observation()
+    {
+        return $this->day2Observation;
+    }
+
+    /**
+     * Set day3Observation
+     *
+     * @param string $day3Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay3Observation($day3Observation)
+    {
+        $this->day3Observation = $day3Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day3Observation
+     *
+     * @return string 
+     */
+    public function getDay3Observation()
+    {
+        return $this->day3Observation;
+    }
+
+    /**
+     * Set day4Observation
+     *
+     * @param string $day4Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay4Observation($day4Observation)
+    {
+        $this->day4Observation = $day4Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day4Observation
+     *
+     * @return string 
+     */
+    public function getDay4Observation()
+    {
+        return $this->day4Observation;
+    }
+
+    /**
+     * Set day5Observation
+     *
+     * @param string $day5Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay5Observation($day5Observation)
+    {
+        $this->day5Observation = $day5Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day5Observation
+     *
+     * @return string 
+     */
+    public function getDay5Observation()
+    {
+        return $this->day5Observation;
+    }
+
+    /**
+     * Set day6Observation
+     *
+     * @param string $day6Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay6Observation($day6Observation)
+    {
+        $this->day6Observation = $day6Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day6Observation
+     *
+     * @return string 
+     */
+    public function getDay6Observation()
+    {
+        return $this->day6Observation;
+    }
+
+    /**
+     * Set day7Observation
+     *
+     * @param string $day7Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay7Observation($day7Observation)
+    {
+        $this->day7Observation = $day7Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day7Observation
+     *
+     * @return string 
+     */
+    public function getDay7Observation()
+    {
+        return $this->day7Observation;
+    }
+
+    /**
+     * Set day8Observation
+     *
+     * @param string $day8Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay8Observation($day8Observation)
+    {
+        $this->day8Observation = $day8Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day8Observation
+     *
+     * @return string 
+     */
+    public function getDay8Observation()
+    {
+        return $this->day8Observation;
+    }
+
+    /**
+     * Set day9Observation
+     *
+     * @param string $day9Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay9Observation($day9Observation)
+    {
+        $this->day9Observation = $day9Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day9Observation
+     *
+     * @return string 
+     */
+    public function getDay9Observation()
+    {
+        return $this->day9Observation;
+    }
+
+    /**
+     * Set day10Observation
+     *
+     * @param string $day10Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay10Observation($day10Observation)
+    {
+        $this->day10Observation = $day10Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day10Observation
+     *
+     * @return string 
+     */
+    public function getDay10Observation()
+    {
+        return $this->day10Observation;
+    }
+
+    /**
+     * Set day11Observation
+     *
+     * @param string $day11Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay11Observation($day11Observation)
+    {
+        $this->day11Observation = $day11Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day11Observation
+     *
+     * @return string 
+     */
+    public function getDay11Observation()
+    {
+        return $this->day11Observation;
+    }
+
+    /**
+     * Set day12Observation
+     *
+     * @param string $day12Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay12Observation($day12Observation)
+    {
+        $this->day12Observation = $day12Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day12Observation
+     *
+     * @return string 
+     */
+    public function getDay12Observation()
+    {
+        return $this->day12Observation;
+    }
+
+    /**
+     * Set day13Observation
+     *
+     * @param string $day13Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay13Observation($day13Observation)
+    {
+        $this->day13Observation = $day13Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day13Observation
+     *
+     * @return string 
+     */
+    public function getDay13Observation()
+    {
+        return $this->day13Observation;
+    }
+
+    /**
+     * Set day14Observation
+     *
+     * @param string $day14Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay14Observation($day14Observation)
+    {
+        $this->day14Observation = $day14Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day14Observation
+     *
+     * @return string 
+     */
+    public function getDay14Observation()
+    {
+        return $this->day14Observation;
+    }
+
+    /**
+     * Set day15Observation
+     *
+     * @param string $day15Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay15Observation($day15Observation)
+    {
+        $this->day15Observation = $day15Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day15Observation
+     *
+     * @return string 
+     */
+    public function getDay15Observation()
+    {
+        return $this->day15Observation;
+    }
+
+    /**
+     * Set day16Observation
+     *
+     * @param string $day16Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay16Observation($day16Observation)
+    {
+        $this->day16Observation = $day16Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day16Observation
+     *
+     * @return string 
+     */
+    public function getDay16Observation()
+    {
+        return $this->day16Observation;
+    }
+
+    /**
+     * Set day17Observation
+     *
+     * @param string $day17Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay17Observation($day17Observation)
+    {
+        $this->day17Observation = $day17Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day17Observation
+     *
+     * @return string 
+     */
+    public function getDay17Observation()
+    {
+        return $this->day17Observation;
+    }
+
+    /**
+     * Set day18Observation
+     *
+     * @param string $day18Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay18Observation($day18Observation)
+    {
+        $this->day18Observation = $day18Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day18Observation
+     *
+     * @return string 
+     */
+    public function getDay18Observation()
+    {
+        return $this->day18Observation;
+    }
+
+    /**
+     * Set day19Observation
+     *
+     * @param string $day19Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay19Observation($day19Observation)
+    {
+        $this->day19Observation = $day19Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day19Observation
+     *
+     * @return string 
+     */
+    public function getDay19Observation()
+    {
+        return $this->day19Observation;
+    }
+
+    /**
+     * Set day20Observation
+     *
+     * @param string $day20Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay20Observation($day20Observation)
+    {
+        $this->day20Observation = $day20Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day20Observation
+     *
+     * @return string 
+     */
+    public function getDay20Observation()
+    {
+        return $this->day20Observation;
+    }
+
+    /**
+     * Set day21Observation
+     *
+     * @param string $day21Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay21Observation($day21Observation)
+    {
+        $this->day21Observation = $day21Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day21Observation
+     *
+     * @return string 
+     */
+    public function getDay21Observation()
+    {
+        return $this->day21Observation;
+    }
+
+    /**
+     * Set day22Observation
+     *
+     * @param string $day22Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay22Observation($day22Observation)
+    {
+        $this->day22Observation = $day22Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day22Observation
+     *
+     * @return string 
+     */
+    public function getDay22Observation()
+    {
+        return $this->day22Observation;
+    }
+
+    /**
+     * Set day23Observation
+     *
+     * @param string $day23Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay23Observation($day23Observation)
+    {
+        $this->day23Observation = $day23Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day23Observation
+     *
+     * @return string 
+     */
+    public function getDay23Observation()
+    {
+        return $this->day23Observation;
+    }
+
+    /**
+     * Set day24Observation
+     *
+     * @param string $day24Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay24Observation($day24Observation)
+    {
+        $this->day24Observation = $day24Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day24Observation
+     *
+     * @return string 
+     */
+    public function getDay24Observation()
+    {
+        return $this->day24Observation;
+    }
+
+    /**
+     * Set day25Observation
+     *
+     * @param string $day25Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay25Observation($day25Observation)
+    {
+        $this->day25Observation = $day25Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day25Observation
+     *
+     * @return string 
+     */
+    public function getDay25Observation()
+    {
+        return $this->day25Observation;
+    }
+
+    /**
+     * Set day26Observation
+     *
+     * @param string $day26Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay26Observation($day26Observation)
+    {
+        $this->day26Observation = $day26Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day26Observation
+     *
+     * @return string 
+     */
+    public function getDay26Observation()
+    {
+        return $this->day26Observation;
+    }
+
+    /**
+     * Set day27Observation
+     *
+     * @param string $day27Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay27Observation($day27Observation)
+    {
+        $this->day27Observation = $day27Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day27Observation
+     *
+     * @return string 
+     */
+    public function getDay27Observation()
+    {
+        return $this->day27Observation;
+    }
+
+    /**
+     * Set day28Observation
+     *
+     * @param string $day28Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay28Observation($day28Observation)
+    {
+        $this->day28Observation = $day28Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day28Observation
+     *
+     * @return string 
+     */
+    public function getDay28Observation()
+    {
+        return $this->day28Observation;
+    }
+
+    /**
+     * Set day29Observation
+     *
+     * @param string $day29Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay29Observation($day29Observation)
+    {
+        $this->day29Observation = $day29Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day29Observation
+     *
+     * @return string 
+     */
+    public function getDay29Observation()
+    {
+        return $this->day29Observation;
+    }
+
+    /**
+     * Set day30Observation
+     *
+     * @param string $day30Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay30Observation($day30Observation)
+    {
+        $this->day30Observation = $day30Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day30Observation
+     *
+     * @return string 
+     */
+    public function getDay30Observation()
+    {
+        return $this->day30Observation;
+    }
+
+    /**
+     * Set day31Observation
+     *
+     * @param string $day31Observation
+     * @return ProductDetailDailyMonth
+     */
+    public function setDay31Observation($day31Observation)
+    {
+        $this->day31Observation = $day31Observation;
+
+        return $this;
+    }
+
+    /**
+     * Get day31Observation
+     *
+     * @return string 
+     */
+    public function getDay31Observation()
+    {
+        return $this->day31Observation;
     }
 
     /**
