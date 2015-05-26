@@ -1001,7 +1001,6 @@ angular.module('seipModule.controllers', [])
                 var myData = getDefaultSelect(data);
                 var select = $("#"+id).select2(myData)
                      .on('change',function(){
-                         console.log("uno");
                          
                         var me = $(this);
                         var value = me.val();
@@ -1012,7 +1011,6 @@ angular.module('seipModule.controllers', [])
                         }else{
                             
                         }
-                        console.log(value);
                         if(value != ''){
                             $scope.tableParams.$params.filter[name] = value;
                         }else{
@@ -1191,7 +1189,6 @@ angular.module('seipModule.controllers', [])
                 
                 if(gerencia != undefined){
                     parameters.filter['gerencia'] = gerencia;
-                    console.log(gerencia);
                 } else{
                     if($scope.model.complejo != null && $scope.model.complejo.id != undefined){
                         parameters.filter['complejo'] = $scope.model.complejo.id;
@@ -1651,7 +1648,6 @@ angular.module('seipModule.controllers', [])
                 return url;
             };
             $scope.openPopUp = function(url){
-                console.log(url);
                 var horizontalPadding = 10;
                 var verticalPadding = 10;
                 var width = 1200;
