@@ -146,29 +146,64 @@ class ObjetiveRepository extends EntityRepository {
 
         $criteria = new \Doctrine\Common\Collections\ArrayCollection($criteria);
         
+        if(($description = $criteria->remove('description')) != null){
+            $queryBuilder
+                    ->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")))
+                ;
+        }
+        
         if (isset($criteria['description'])) {
             $description = $criteria['description'];
             unset($criteria['description']);
             $queryBuilder->andWhere($queryBuilder->expr()->orX($queryBuilder->expr()->like('o.description', "'%" . $description . "%'"), $queryBuilder->expr()->like('o.ref', "'%" . $description . "%'")));
         }
-        if (isset($criteria['objetiveLevel'])) {
-            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+//        if (isset($criteria['objetiveLevel'])) {
+//            $queryBuilder->andWhere("o.objetiveLevel = " . $criteria['objetiveLevel']);
+//        }
+        
+        if(($objetiveLevel = $criteria->remove('objetiveLevel')) != null){
+            $queryBuilder
+                    ->andWhere('o.objetiveLevel = :objetiveLevel')
+                    ->setParameter('objetiveLevel', $objetiveLevel)
+                ;
         }
-        if (isset($criteria['gerenciaFirst'])) {
-            if ((int) $criteria['gerenciaFirst'] == 0) {
-                
-            } else {
-                $queryBuilder->andWhere('o.gerencia = ' . (int) $criteria['gerenciaFirst']);
-            }
+        
+        if(($complejo = $criteria->remove('complejo')) != null){
+            $queryBuilder
+                    ->andWhere('o.complejo = :complejo')
+                    ->setParameter('complejo', $complejo)
+                ;
         }
+        
+        if(($gerenciaFirst = $criteria->remove('firstLineManagement')) != null){
+            $queryBuilder
+                    ->andWhere('o.gerencia = :gerenciaFirst')
+                    ->setParameter('gerenciaFirst', $gerenciaFirst)
+                ;
+        }
+        
+        if(($gerenciaSecond = $criteria->remove('secondLineManagement')) != null){
+            $queryBuilder
+                    ->andWhere('o.gerenciaSecond = :gerenciaSecond')
+                    ->setParameter('gerenciaSecond', $gerenciaSecond)
+                ;
+        }
+        
+//        if (isset($criteria['gerenciaFirst'])) {
+//            if ((int) $criteria['gerenciaFirst'] == 0) {
+//                
+//            } else {
+//                $queryBuilder->andWhere('o.gerencia = ' . (int) $criteria['gerenciaFirst']);
+//            }
+//        }
 
-        if (isset($criteria['gerenciaSecond'])) {
-            if ((int) $criteria['gerenciaSecond'] > 0) {
-                $queryBuilder->andWhere("o.gerenciaSecond = " . (int) $criteria['gerenciaSecond']);
-            } else {
-                unset($criteria['gerenciaSecond']);
-            }
-        }
+//        if (isset($criteria['gerenciaSecond'])) {
+//            if ((int) $criteria['gerenciaSecond'] > 0) {
+//                $queryBuilder->andWhere("o.gerenciaSecond = " . (int) $criteria['gerenciaSecond']);
+//            } else {
+//                unset($criteria['gerenciaSecond']);
+//            }
+//        }
         
         if (($status = $criteria->remove('status')) != null) {
             $queryBuilder->andWhere('o.status = ' . (int) $status);
