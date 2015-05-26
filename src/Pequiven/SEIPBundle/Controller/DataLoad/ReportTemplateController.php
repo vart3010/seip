@@ -55,4 +55,51 @@ class ReportTemplateController extends SEIPController
         }
         return $this->handleView($view);
     }
+    
+    public function listAction(Request $request) 
+    {
+        $criteria = $request->get('filter',$this->config->getCriteria());
+        $sorting = $request->get('sorting',$this->config->getSorting());
+        $repository = $this->getRepository();
+
+            $resources = $this->resourceResolver->getResource(
+                $repository,
+                'createPaginator',
+                array($criteria, $sorting)
+            );
+            $maxPerPage = $this->config->getPaginationMaxPerPage();
+            if(($limit = $request->query->get('limit')) && $limit > 0){
+                if($limit > 100){
+                    $limit = 100;
+                }
+                $maxPerPage = $limit;
+            }
+            $resources->setCurrentPage($request->get('page', 1), true, true);
+            $resources->setMaxPerPage($maxPerPage);
+        
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('list.html'))
+            ->setTemplateVar($this->config->getPluralResourceName())
+        ;
+        if($request->get('_format') == 'html'){
+            $view->setData($resources);
+        }else{
+            $formatData = $request->get('_formatData','default');
+            $view->setData($resources->toArray($this->config->getRedirectRoute('list'),array(),$formatData));
+        }
+        return $this->handleView($view);
+    }
+    
+    public function loadAction(Request $request) 
+    {
+        $view = $this
+            ->view()
+            ->setTemplate($this->config->getTemplate('load.html'))
+            ->setTemplateVar($this->config->getResourceName())
+            ->setData($this->findOr404($request))
+        ;
+
+        return $this->handleView($view);
+    }
 }
