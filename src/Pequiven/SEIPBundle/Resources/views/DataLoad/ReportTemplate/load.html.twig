@@ -92,7 +92,7 @@
                                                             0
                                                         </th>
                                                         <td class=""><input type="text" class="input input-mini"></td>
-                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                        <td class="">0</td>
                                                         <td class=""><small class="tag red-bg">0</small><small class="tag green-bg">0</small></td>
                                                     </tr>
                                                 </tbody>
@@ -102,11 +102,12 @@
                                             <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
                                                 <thead>
                                                     <tr>
-                                                        <th class="header text-center silver-gradient" colspan="2">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
+                                                        <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
                                                     </tr>
                                                     <tr>
                                                         <th scope="col" style="width: 7%">Plan</th>
                                                         <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                        <th scope="col" style="width: 7%" class=" header">%</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -115,6 +116,7 @@
                                                             0
                                                         </th>
                                                         <td class=""><input type="text" class="input input-mini"></td>
+                                                        <td class="">0</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -151,25 +153,29 @@
                                             <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
                                                 <thead>
                                                     <tr>
-                                                        <th class="header text-center silver-gradient" colspan="2">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
+                                                        <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
                                                     </tr>
                                                     <tr>
+                                                        <th scope="col" style="width: 7%">{{ "Product"|trans }}</th>
                                                         <th scope="col" style="width: 7%">Plan</th>
                                                         <th scope="col" style="width: 7%" class=" header">Real</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <th scope="row">
-                                                            0
-                                                        </th>
-                                                        <td class=""><input type="text" class="input input-mini"></td>
-                                                    </tr>
+                                                    {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
+                                                        <tr>
+                                                            <th scope="row">
+                                                                {{ rawMaterialConsumptionPlanning }}
+                                                            </th>
+                                                            <td >0</td>
+                                                            <td class=""><input type="text" class="input input-mini"></td>
+                                                        </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="seven-columns twelve-columns-mobile">
-                                            <textarea cols="40" rows="10">
+                                            <textarea cols="40" rows="10" placeholder="Observaciones...">
                                                 
                                             </textarea>
                                         </div>
