@@ -331,6 +331,9 @@ pequiven_seip:
             external: Externa
     report_template:
         report_template: Planificación de producción
+        load:
+            notification: Notificacion
+            production: Producción
         type:
             production: Producción
             inventory: Inventario

@@ -6,7 +6,8 @@
 
 {% block before_body %}
     {{ contentHeader(
-        ("pequiven_seip.report_template.report_template"|trans )
+        ("pequiven_seip.report_template.load.notification"|trans ),
+        ("pequiven_seip.report_template.load.production"|trans )
     ) }}
 {% endblock %}
 
@@ -53,12 +54,12 @@
         </div>
     </fieldset>
                     
-    {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}
+    {#{% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}#}
     
     <br /><br />
-    <p class="button-height align-right">
+    {#<p class="button-height align-right">
         {{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
         &nbsp;
         {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}
-    </p>
+    </p>#}
 {% endblock %}
