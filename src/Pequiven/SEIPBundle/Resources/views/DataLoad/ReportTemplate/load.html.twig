@@ -170,6 +170,12 @@
                                                             <td >0</td>
                                                             <td class=""><input type="text" class="input input-mini"></td>
                                                         </tr>
+                                                    {% else %}
+                                                        <tr>
+                                                            <td colspan="3" class="empty_row">
+                                                                {{ "empty.no_raw_material"|trans }}
+                                                            </td>
+                                                        </tr>
                                                     {% endfor %}
                                                 </tbody>
                                             </table>
