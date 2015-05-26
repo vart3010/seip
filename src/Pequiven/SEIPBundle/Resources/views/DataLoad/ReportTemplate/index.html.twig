@@ -13,91 +13,98 @@
 
 {% block body %}
     <div ng-controller="TableFormatController">
-        
-        <details class="details margin-bottom" open="">
-            <summary role="button" aria-expanded="true">
-                {{ 'pequiven.filters'|trans({},'messages') }}
+        <div ng-controller="ReportTemplateIndexActionController">
+            <details class="details margin-bottom" open="">
+                <summary role="button" aria-expanded="true">
+                    {{ 'pequiven.filters'|trans({},'messages') }}
 
-            </summary>
-                <div class="with-padding">
-                    <div class="columns">
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'pequiven_seip.filters.period'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-period" style="width:250px" />
+                </summary>
+                    <div class="with-padding">
+                        <div class="columns">
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'pequiven_seip.filters.period'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-period" name="period" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Company'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-company" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Company'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-company" name="company" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Location'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-location" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Location'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-location" name="location" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Region'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-region" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Region'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-region" name="region" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Plant'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-plant" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Plant'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-plant" name="plant" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Entity'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-entity" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Entity'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-entity" name="entity" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Product'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-product" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Product'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-product" name="product" style="width:250px" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
-                            <label class="bold">{{ 'Service'|trans({},'PequivenSEIPBundle') }}</label>
-                            <br/>
-                            <div class="with-mid-padding" >
-                                <input type="hidden" class="bigdrop" id="select-service" style="width:250px" />
+                            <div class="new-row new-row-tablet new-row-mobile six-columns twelve-columns-tablet">
+                                <label class="bold">{{ 'Service'|trans({},'PequivenSEIPBundle') }}</label>
+                                <br/>
+                                <div class="with-mid-padding" >
+                                    <input type="hidden" class="bigdrop" id="select-service" name="service" style="width:250px" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-        </details>
-        
-        <div loading-container="tableParams.settings().$loading">
-            <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_report_template_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
-                <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
-                    <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rt.ref': 'text' }">
-                        <a href="{$ result._links.self.show $}">{$ result.ref $}</a>
-                    </td>
-                    <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rt.name': 'text' }">
-                        {$ result.name $}
-                    </td>
-                    <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
-                        {$ result.period.name $}
-                    </td>
-                    <td class="low-padding align-center">
-                        <a href="{$ result._links.self.update $}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
-                    </td>
-                </tr>
-            </table>
+            </details>
+
+            <div loading-container="tableParams.settings().$loading">
+                <table ng-table="tableParams" show-filter="true" template-pagination="custom/pager"  template-header="custom/header" api-data-url="{{ path('pequiven_report_template_index',{_format:'json' }) }}" export-csv="csv" class="table table-responsive">
+                    <tr ng-repeat="result in $data | filter:tableParams.search" data="{$ result|json $}">
+                        <td data-title="'{{ 'pequiven.ref'|trans({},'messages') }}'" sortable="'ref'" filter="{ 'rt.ref': 'text' }">
+                            <a href="{$ result._links.self.show $}">{$ result.ref $}</a>
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.name'|trans }}'" sortable="'period'" filter="{ 'rt.name': 'text' }">
+                            {$ result.name $}
+                        </td>
+                        <td data-title="'{{ 'Location'|trans }}'">
+                            {$ result.location.name $}
+                        </td>
+                        <td data-title="'{{ 'Region'|trans }}'">
+                            {$ result.region.name $}
+                        </td>
+                        <td data-title="'{{ 'pequiven_seip.period'|trans }}'">
+                            {$ result.period.name $}
+                        </td>
+                        <td class="low-padding align-center">
+                            <a href="{$ result._links.self.update $}" class="button compact icon-pencil">{{ "pequiven_seip.actions.edit"|trans }}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
     <br/><br/>
@@ -105,90 +112,3 @@
         {{ buttons.generic(path('pequiven_report_template_create'),('pequiven.add'|trans({},'messages')),'icon-tick' ) }}
     </p>
 {% endblock %}
-
-{% block javascript %}
-    {{ parent() }}
-<script type="text/javascript">
-    $(document).ready(function(){
-        var format = function(data)
-        {
-            var text = data.name;
-            if(text == undefined && data.description != undefined){
-               text = data.description; 
-            }
-            return text;
-        };
-        
-        var urlSearchService = Routing.generate('pequiven_seip_search_service');
-        var urlSearchProduct = Routing.generate('pequiven_seip_search_product');
-        var urlSearchEntity = Routing.generate('pequiven_seip_search_entity');
-        var urlSearchPlant = Routing.generate('pequiven_seip_search_plant');
-        var urlSearchRegion = Routing.generate('pequiven_seip_search_region');
-        var urlSearchLocation = Routing.generate('pequiven_seip_search_location');
-        var urlSearchCompany = Routing.generate('pequiven_seip_search_company');
-        var urlSearchPeriod = Routing.generate('pequiven_seip_search_period');
-        
-        function getDefaultSelect(data){
-            var dataDefault = {
-                minimumInputLength: 2,
-                multiple: false,
-                ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-                    url: data.url,
-                    dataType: 'json',
-                    quietMillis: 250,
-                    data: function (term, page) {
-                        return {
-                            q: term, // search term
-                        };
-                    },
-                    results: function (data, page) { // parse the results into the format expected by Select2.
-                        // since we are using custom formatting functions we do not need to alter the remote JSON data
-                        return { results: data };
-                    },
-                    cache: true
-                },
-                initSelection: function(element, callback) {
-                    // the input tag has a value attribute preloaded that points to a preselected repository's id
-                    // this function resolves that id attribute to an object that select2 can render
-                    // using its formatResult renderer - that way the repository name is shown preselected
-                },
-                formatResult: format, // omitted for brevity, see the source of this page
-                formatSelection: format,  // omitted for brevity, see the source of this page
-                dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-                escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
-            };
-            
-            var result = $.extend(dataDefault,data);
-            return result;
-        }
-        
-        $("#select-service").select2(getDefaultSelect({
-            url: urlSearchService,
-            multiple: true
-        }));
-        $("#select-product").select2(getDefaultSelect({
-            url: urlSearchProduct,
-            multiple: true
-        }));
-        $("#select-entity").select2(getDefaultSelect({
-            url: urlSearchEntity
-        }));
-        $("#select-plant").select2(getDefaultSelect({
-            url: urlSearchPlant
-        }));
-        $("#select-region").select2(getDefaultSelect({
-            url: urlSearchRegion
-        }));
-        $("#select-location").select2(getDefaultSelect({
-            url: urlSearchLocation
-        }));
-        $("#select-company").select2(getDefaultSelect({
-            url: urlSearchCompany
-        }));
-        $("#select-period").select2(getDefaultSelect({
-            url: urlSearchPeriod
-        }));
-        
-    });
-</script>
-{% endblock javascript %}

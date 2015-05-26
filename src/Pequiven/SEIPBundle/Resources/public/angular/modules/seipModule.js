@@ -882,7 +882,7 @@ angular.module('seipModule.controllers', [])
                 var selectStatus = angular.element('#selectStatus');
                 selectStatus.select2("val",status);
                 $scope.resetViewNotified();
-            }
+            };
 
             
             $scope.$watch("model.complejo", function(newParams, oldParams) {
@@ -986,6 +986,121 @@ angular.module('seipModule.controllers', [])
                     setEnableSelect('firstLineManagement',true);
                 }
             });
+        })
+        .controller('ReportTemplateIndexActionController',function($scope){
+            var format = function(data)
+            {
+                var text = data.name;
+                if(text == undefined && data.description != undefined){
+                   text = data.description; 
+                }
+                return text;
+            };
+            var buldSelect2 = function(id,data)
+            {
+                var myData = getDefaultSelect(data);
+                var select = $("#"+id).select2(myData)
+                     .on('change',function(){
+                         console.log("uno");
+                         
+                        var me = $(this);
+                        var value = me.val();
+                        var multiple = me.attr('multiple');
+                        var name = me.attr('name');
+                        if(multiple != undefined && value != ""){
+                            value = angular.toJson(value.split(','));
+                        }else{
+                            
+                        }
+                        console.log(value);
+                        if(value != ''){
+                            $scope.tableParams.$params.filter[name] = value;
+                        }else{
+                            $scope.tableParams.$params.filter[name] = null;
+                        }
+                        $scope.tableParams.reload();
+                     })
+                 ;
+                 select.attr('multiple',myData.multiple);
+                 return select;
+                 
+            };
+
+            var urlSearchService = Routing.generate('pequiven_seip_search_service');
+            var urlSearchProduct = Routing.generate('pequiven_seip_search_product');
+            var urlSearchEntity = Routing.generate('pequiven_seip_search_entity');
+            var urlSearchPlant = Routing.generate('pequiven_seip_search_plant');
+            var urlSearchRegion = Routing.generate('pequiven_seip_search_region');
+            var urlSearchLocation = Routing.generate('pequiven_seip_search_location');
+            var urlSearchCompany = Routing.generate('pequiven_seip_search_company');
+            var urlSearchPeriod = Routing.generate('pequiven_seip_search_period');
+
+            function getDefaultSelect(data){
+                var dataDefault = {
+                    placeholder: ' ',
+                    allowClear: true,
+                    minimumInputLength: 2,
+                    multiple: false,
+                    ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                        url: data.url,
+                        dataType: 'json',
+                        quietMillis: 250,
+                        data: function (term, page) {
+                            return {
+                                q: term, // search term
+                            };
+                        },
+                        results: function (data, page) { // parse the results into the format expected by Select2.
+                            // since we are using custom formatting functions we do not need to alter the remote JSON data
+                            return { results: data };
+                        },
+                        cache: true
+                    },
+                    initSelection: function(element, callback) {
+                        // the input tag has a value attribute preloaded that points to a preselected repository's id
+                        // this function resolves that id attribute to an object that select2 can render
+                        // using its formatResult renderer - that way the repository name is shown preselected
+                    },
+                    formatResult: format, // omitted for brevity, see the source of this page
+                    formatSelection: format,  // omitted for brevity, see the source of this page
+                    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+                };
+
+                var result = $.extend(dataDefault,data);
+                return result;
+            }
+            buldSelect2('select-service',{
+                url: urlSearchService,
+                multiple: true
+            });
+
+            buldSelect2('select-product',{
+                url: urlSearchProduct,
+                multiple: true
+            });
+
+            buldSelect2('select-entity',{
+                url: urlSearchEntity
+            });
+
+            buldSelect2('select-plant',{
+                url: urlSearchPlant
+            });
+            buldSelect2('select-region',{
+                url: urlSearchRegion
+            });
+            buldSelect2('select-location',{
+                url: urlSearchLocation
+            });
+
+            buldSelect2('select-company',{
+                url: urlSearchCompany
+            });
+
+            buldSelect2('select-period',{
+                url: urlSearchPeriod
+            });
+
         })
         .controller('ReportArrangementProgramAllController', function($scope, $http) {
             $scope.data = {
