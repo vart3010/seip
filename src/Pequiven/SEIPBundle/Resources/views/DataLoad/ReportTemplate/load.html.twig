@@ -56,6 +56,25 @@
                     
     {#{% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}#}
     
+    <div class="nine-columns twelve-columns-mobile">
+            
+            {% for plantReport in report_template.plantReports %}
+        
+                <h3 class="thin underline">{{ plantReport }}</h3>
+                {% for productReport in plantReport.productsReport %}
+                    <details class="details margin-bottom" open>
+                            <summary>{{ productReport }}</summary>
+                            <div class="with-padding">
+                                    <p>Details look pretty much like blocks, but they may be closed or opened simply by clicking on the title.</p>
+                                    <p>They use the HTML5 <span class="tag">&lt;details&gt;</span> element, with polyfill support for older browsers.</p>
+                            </div>
+                    </details>
+                {% endfor  %}
+            {% endfor %}
+            
+            {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
+    </div>
+    
     <br /><br />
     {#<p class="button-height align-right">
         {{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
