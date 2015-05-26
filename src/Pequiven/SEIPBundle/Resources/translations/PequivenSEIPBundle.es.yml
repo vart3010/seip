@@ -23,6 +23,7 @@ pequiven_seip:
     hours_n: %n% Horas
     details: Detalles
     plants: Plantas
+    inventory: Inventario
     
     #Login
     sign_in: Ingresar

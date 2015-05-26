@@ -56,24 +56,133 @@
                     
     {#{% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}#}
     
-    <div class="nine-columns twelve-columns-mobile">
+    
             
             {% for plantReport in report_template.plantReports %}
         
-                <h3 class="thin underline">{{ plantReport }}</h3>
-                {% for productReport in plantReport.productsReport %}
-                    <details class="details margin-bottom" open>
-                            <summary>{{ productReport }}</summary>
-                            <div class="with-padding">
-                                    <p>Details look pretty much like blocks, but they may be closed or opened simply by clicking on the title.</p>
-                                    <p>They use the HTML5 <span class="tag">&lt;details&gt;</span> element, with polyfill support for older browsers.</p>
-                            </div>
-                    </details>
-                {% endfor  %}
+                <details class="details margin-bottom" open>
+                    <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport }}</strong></summary>
+                    <dl class="accordion same-height">
+                        {% for productReport in plantReport.productsReport %}
+                            <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport }}</strong></dt>
+                            <dd>
+                                <div class="with-padding">
+                                    <div class="columns">
+                                        <div class="twelve-columns twelve-columns-mobile">
+                                            <h3 class="thin underline text-center">Producción e Inventario</h3>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="five-columns twelve-columns-mobile">
+                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header text-center white-gradient" colspan="4">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.gross"|trans }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="col" style="width: 7%" class="header">Plan</th>
+                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                        <th scope="col" style="width: 7%" class=" header">%</th>
+                                                        <th scope="col" width="15%" class=" header">PNR</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            0
+                                                        </th>
+                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                        <td class=""><small class="tag red-bg">0</small><small class="tag green-bg">0</small></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="four-columns twelve-columns-mobile">
+                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header text-center silver-gradient" colspan="2">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="col" style="width: 7%">Plan</th>
+                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            0
+                                                        </th>
+                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="three-columns twelve-columns-mobile">
+                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header text-center grey-gradient" colspan="2" >{{ "pequiven_seip.inventory"|trans }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="col" style="width: 7%">Plan</th>
+                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            0
+                                                        </th>
+                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="twelve-columns twelve-columns-mobile">
+                                            <h3 class="thin underline text-center">Consumo y Observaciones</h3>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="five-columns twelve-columns-mobile">
+                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="header text-center silver-gradient" colspan="2">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="col" style="width: 7%">Plan</th>
+                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            0
+                                                        </th>
+                                                        <td class=""><input type="text" class="input input-mini"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="seven-columns twelve-columns-mobile">
+                                            <textarea cols="40" rows="10">
+                                                
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </dd>
+                        {% endfor  %}
+                    </dl>
+                </details>
+                
             {% endfor %}
             
             {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
-    </div>
     
     <br /><br />
     {#<p class="button-height align-right">
