@@ -27,6 +27,9 @@ class ProductReportType extends BaseNotification
             ->add('rawMaterialConsumptionPlannings','collection',[
                 'type' => new RawMaterialConsumptionPlanningType($this->dateNotification, $this->reportTemplate)
             ])
+            ->add('unrealizedProductions','collection',[
+                'type' => new UnrealizedProductionType($this->dateNotification, $this->reportTemplate)
+            ])
         ;
     }
     

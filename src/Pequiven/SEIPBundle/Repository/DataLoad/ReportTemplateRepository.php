@@ -38,6 +38,7 @@ class ReportTemplateRepository extends SeipEntityRepository
         $qb
             ->addSelect('rt_pr')
             ->addSelect('rt_pr_pr')
+            ->addSelect('rt_pr_pr_up')
             ->addSelect('rt_pr_cps')
             ->addSelect('rt_pr_cps_dcps')
             ->addSelect('rt_pr_pr_rcp')
@@ -47,6 +48,7 @@ class ReportTemplateRepository extends SeipEntityRepository
                 
             ->innerJoin('rt.plantReports','rt_pr')
             ->innerJoin('rt_pr.productsReport','rt_pr_pr')
+            ->innerJoin('rt_pr_pr.unrealizedProductions','rt_pr_pr_up',Join::WITH,'rt_pr_pr_up.month = :month')
                 
             ->leftJoin('rt_pr.consumerPlanningServices','rt_pr_cps')
             ->leftJoin('rt_pr_cps.detailConsumerPlanningServices','rt_pr_cps_dcps',Join::WITH,'rt_pr_cps_dcps.month = :month')

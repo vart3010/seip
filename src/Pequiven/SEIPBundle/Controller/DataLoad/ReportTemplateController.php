@@ -108,6 +108,13 @@ class ReportTemplateController extends SEIPController
         }
         
         $form = $this->createForm(new \Pequiven\SEIPBundle\Form\DataLoad\Notification\ReportTemplateType($dateNotification,$resource),$resource);
+        
+        if($request->isMethod('PUT') && $form->submit($request,false)->isValid()){
+//            var_dump("todo bello");
+//            die;
+            
+        }
+        
         $view = $this
             ->view()
             ->setTemplate($this->config->getTemplate('load.html'))

@@ -3,6 +3,7 @@
 {% trans_default_domain 'PequivenSEIPBundle' %}
 
 {% import 'PequivenSEIPBundle:Template:Developer/Macros/buttons.html.twig' as buttons %}
+{% import 'PequivenSEIPBundle:Template:Developer/Macros/actions.html.twig' as actions %}
 
 {% block before_body %}
     {{ contentHeader(
@@ -56,179 +57,187 @@
                     
     {#{% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/plants.html.twig' %}#}
     
-   <div class="with-padding">
-        <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
-            <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
-            <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
-            <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
-        </p>
-    </div>
-    {% set day = dateNotification|date('d')|round %}
-    {{ day }}
-    {% set grossPlan = 'day' ~ day ~ 'GrossPlan' %}
-    {% set grossReal = 'day' ~ day ~ 'GrossReal' %}
-    
-    {% set netPlan = 'day' ~ day ~ 'NetPlan' %}
-    {% set netReal = 'day' ~ day ~ 'NetReal' %}
-    
-    {% set observation = 'day' ~ day ~ 'Observation' %}
-    {% set dayN = 'day' ~ day %}
-    {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
-    {% set dayNReal = 'day' ~ day ~ 'Real' %}
-    
-    
-            {% for plantReport in form.plantReports %}
+    <form action="{{ path('pequiven_report_template_load',{id: report_template.id}) }}" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        {{ form_errors(form) }}
         
-                <details class="details margin-bottom" open>
-                    <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong></summary>
-                    <dl class="accordion same-height">
-                        {% for productReport in plantReport.productsReport %}
-                            <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}</strong></dt>
-                            <dd>
-                                <div class="with-padding">
-                                    <div class="columns">
-                                        <div class="twelve-columns twelve-columns-mobile">
-                                            <h3 class="thin underline text-center">Producción e Inventario</h3>
-                                        </div>
-                                    </div>
-                                    <div class="columns">
-                                        <div class="five-columns twelve-columns-mobile">
-                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="header text-center white-gradient" colspan="4">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.gross"|trans }}</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col" style="width: 7%" class="header">Plan</th>
-                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
-                                                        <th scope="col" style="width: 7%" class=" header">%</th>
-                                                        <th scope="col" width="15%" class=" header">PNR</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
-                                                        <tr>
-                                                            <th scope="row">
-                                                                {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
-                                                            </th>
-                                                            <td>{{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}</td>
-                                                            <td>TODO</td>
-                                                            <td><small class="tag red-bg">0</small><small class="tag green-bg">0</small></td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="four-columns twelve-columns-mobile">
-                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col" style="width: 7%">Plan</th>
-                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
-                                                        <th scope="col" style="width: 7%" class=" header">%</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
-                                                        <tr>
-                                                            <th scope="row">
-                                                                {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
-                                                            </th>
-                                                            <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
-                                                            <td class="">0</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="three-columns twelve-columns-mobile">
-                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="header text-center grey-gradient" >{{ "pequiven_seip.inventory"|trans }}</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for inventory in productReport.inventorys %}
-                                                        <tr>
-                                                            <th scope="row">
-                                                                {{ form_widget(attribute(inventory,dayN)) }}
-                                                            </th>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="columns">
-                                        <div class="twelve-columns twelve-columns-mobile">
-                                            <h3 class="thin underline text-center">Consumo y Observaciones</h3>
-                                        </div>
-                                    </div>
-                                    <div class="columns">
-                                        <div class="five-columns twelve-columns-mobile">
-                                            <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col" style="width: 7%">{{ "Product"|trans }}</th>
-                                                        <th scope="col" style="width: 7%">Plan</th>
-                                                        <th scope="col" style="width: 7%" class=" header">Real</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
-                                                        {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
-                                                            <tr>
-                                                                <th scope="row">
-                                                                    {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.type }})
-                                                                </th>
-                                                                <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
-                                                                <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        <tr>
-                                                            <td colspan="3" class="empty_row">
-                                                                {{ "empty.no_raw_material"|trans }}
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="seven-columns twelve-columns-mobile">
-                                            {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
-                                                {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </dd>
-                        {% endfor  %}
-                    </dl>
-                </details>
-                
-            {% endfor %}
-            
-            {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
-    
-    <br /><br />
-     
-    {#<p class="button-height align-right">
-        {{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
-        &nbsp;
-        {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}
-    </p>#}
-    {{ form_rest(form) }}
+        <div class="with-padding">
+             <p class="inline-label"><label class="label">{{ "pequiven_seip.date_of_notification"|trans }}</label>
+                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("-1 day")|date('d/m/Y'))}) }}" ><i class="fa fa-chevron-left fa-2x"></i></a>&nbsp;
+                 <input type="text" id="dateNotification" name="dateNotification" class="input" value="{{ dateNotification|date('d/m/Y') }}" />&nbsp;
+                 <a href="{{ path("pequiven_report_template_load",{id:report_template.id, dateNotification: (dateNotification|date_modify("+1 day")|date('d/m/Y'))}) }}" class="navigate-date"><i class="fa fa-chevron-right fa-2x"></i></a>
+             </p>
+         </div>
+         {% set day = dateNotification|date('d')|round %}
+         {{ day }}
+         {% set grossPlan = 'day' ~ day ~ 'GrossPlan' %}
+         {% set grossReal = 'day' ~ day ~ 'GrossReal' %}
+
+         {% set netPlan = 'day' ~ day ~ 'NetPlan' %}
+         {% set netReal = 'day' ~ day ~ 'NetReal' %}
+
+         {% set observation = 'day' ~ day ~ 'Observation' %}
+         {% set dayN = 'day' ~ day %}
+         {% set dayNPlan = 'day' ~ day ~ 'Plan' %}
+         {% set dayNReal = 'day' ~ day ~ 'Real' %}
+
+         {% for plantReport in form.plantReports %}
+
+             <details class="details margin-bottom" open>
+                 <summary><strong class="font-20">{{ "Plant"|trans }}&nbsp;-&nbsp;{{ plantReport.vars.data }}</strong></summary>
+                 <dl class="accordion same-height">
+                     {% for productReport in plantReport.productsReport %}
+                         <dt><i class="fa fa-cog"></i>&nbsp;<strong>{{ "Product"|trans }}&nbsp;-&nbsp;{{ productReport.vars.data }}</strong></dt>
+                         <dd>
+                             <div class="with-padding">
+                                 <div class="columns">
+                                     <div class="twelve-columns twelve-columns-mobile">
+                                         <h3 class="thin underline text-center">Producción e Inventario</h3>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="five-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center white-gradient" colspan="4">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.gross"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%" class="header">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
+                                                     <th scope="col" width="15%" class=" header">PNR</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                     <tr>
+                                                         <th scope="row">
+                                                             {{ attribute(productDetailDailyMonth.vars.data,grossPlan) }}
+                                                         </th>
+                                                         <td>{{ form_widget(attribute(productDetailDailyMonth,grossReal)) }}</td>
+                                                         <td>TODO</td>
+                                                         <td>
+                                                             {% for unrealizedProduction in productReport.unrealizedProductions %}
+                                                                 {{ form_widget(attribute(unrealizedProduction,dayN)) }}
+                                                             {% endfor %}
+                                                         </td>
+                                                     </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="four-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.load.production"|trans }}&nbsp;{{ "pequiven_seip.net"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                     <th scope="col" style="width: 7%" class=" header">%</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                                     <tr>
+                                                         <th scope="row">
+                                                             {{ attribute(productDetailDailyMonth.vars.data,netPlan) }}
+                                                         </th>
+                                                         <td>{{ form_widget(attribute(productDetailDailyMonth,netReal)) }}</td>
+                                                         <td class="">0</td>
+                                                     </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="three-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center grey-gradient" >{{ "pequiven_seip.inventory"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for inventory in productReport.inventorys %}
+                                                     <tr>
+                                                         <th scope="row">
+                                                             {{ form_widget(attribute(inventory,dayN)) }}
+                                                         </th>
+                                                     </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="twelve-columns twelve-columns-mobile">
+                                         <h3 class="thin underline text-center">Consumo y Observaciones</h3>
+                                     </div>
+                                 </div>
+                                 <div class="columns">
+                                     <div class="five-columns twelve-columns-mobile">
+                                         <table class="simple-table responsive-table responsive-table-on" id="sorting-example2">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="header text-center silver-gradient" colspan="3">{{ "pequiven_seip.report_template.raw_material"|trans }}</th>
+                                                 </tr>
+                                                 <tr>
+                                                     <th scope="col" style="width: 7%">{{ "Product"|trans }}</th>
+                                                     <th scope="col" style="width: 7%">Plan</th>
+                                                     <th scope="col" style="width: 7%" class=" header">Real</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                 {% for rawMaterialConsumptionPlanning in productReport.rawMaterialConsumptionPlannings %}
+                                                     {% for detailRawMaterialConsumption in rawMaterialConsumptionPlanning.detailRawMaterialConsumptions %}
+                                                         <tr>
+                                                             <th scope="row">
+                                                                 {{ rawMaterialConsumptionPlanning.vars.data }}&nbsp;({{ rawMaterialConsumptionPlanning.vars.data.type }})
+                                                             </th>
+                                                             <td>{{ attribute(detailRawMaterialConsumption.vars.data,dayNPlan) }}</td>
+                                                             <td>{{ form_widget(attribute(detailRawMaterialConsumption,dayNReal)) }}</td>
+                                                         </tr>
+                                                     {% endfor %}
+                                                 {% else %}
+                                                     <tr>
+                                                         <td colspan="3" class="empty_row">
+                                                             {{ "empty.no_raw_material"|trans }}
+                                                         </td>
+                                                     </tr>
+                                                 {% endfor %}
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                     <div class="seven-columns twelve-columns-mobile">
+                                         {% for productDetailDailyMonth in productReport.productDetailDailyMonths %}
+                                             {{ form_widget(attribute(productDetailDailyMonth,observation)) }}
+                                         {% endfor %}
+                                     </div>
+                                 </div>
+                             </div>
+                         </dd>
+                     {% endfor  %}
+                 </dl>
+             </details>
+
+         {% endfor %}
+
+         {% include 'PequivenSEIPBundle:DataLoad:ReportTemplate/show/services.html.twig' %}
+         <br /><br />
+
+         {{ actions.update() }}
+{#         <p class="button-height align-right">#}
+             {#{{ buttons.generic(path('pequiven_report_template_update', { 'id': report_template.id }),('pequiven.edit'|trans({},'messages'))) }}
+             &nbsp;
+             {{ buttons.delete(path('pequiven_report_template_delete', { 'id': report_template.id })) }}#}
+{#         </p>#}
+         {{ form_rest(form) }}
+    </form>
 {% endblock %}
 
 {% block javascript %}

@@ -45,6 +45,6 @@ pequiven_report_template_load:
     path: /{id}/load
     defaults:
         _controller: pequiven.controller.report_template:loadAction
-    methods: [GET]
+    methods: [GET|POST|PUT]
     options:
         expose: true
