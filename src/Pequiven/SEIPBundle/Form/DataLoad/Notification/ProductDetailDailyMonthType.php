@@ -31,6 +31,8 @@ class ProductDetailDailyMonthType extends BaseNotification
             ->add(sprintf('day%sNetPlan',$day),null,$paramateretsDaysDisabled)
             ->add(sprintf('day%sNetReal',$day),null,$paramateretsDays)
             
+            //Observacion del dia
+            ->add(sprintf('day%sObservation',$day),null,$paramateretsDays)
         ;
     }
     
@@ -50,6 +52,6 @@ class ProductDetailDailyMonthType extends BaseNotification
      */
     public function getName()
     {
-        return 'pequiven_seipbundle_dataload_production_productdetaildailymonth';
+        return 'productdetaildailymonth';
     }
 }

@@ -35,15 +35,20 @@ class ReportTemplateRepository extends SeipEntityRepository
             ->addSelect('rt_pr')
             ->addSelect('rt_pr_pr')
             ->addSelect('rt_pr_cps')
+            ->addSelect('rt_pr_cps_dcps')
             ->addSelect('rt_pr_pr_rcp')
             ->addSelect('rt_pr_pr_pddm')
             ->addSelect('rt_pr_pr_i')
                 
             ->innerJoin('rt.plantReports','rt_pr')
             ->innerJoin('rt_pr.productsReport','rt_pr_pr')
-            ->innerJoin('rt_pr.consumerPlanningServices','rt_pr_cps')
+                
+            ->leftJoin('rt_pr.consumerPlanningServices','rt_pr_cps')
+            ->leftJoin('rt_pr_cps.detailConsumerPlanningServices','rt_pr_cps_dcps',Join::WITH,'rt_pr_cps_dcps.month = :month')
                 
             ->leftJoin('rt_pr_pr.rawMaterialConsumptionPlannings','rt_pr_pr_rcp')
+            ->leftJoin('rt_pr_pr_rcp.detailRawMaterialConsumptions','rt_pr_pr_rcp_drmc',Join::WITH,'rt_pr_pr_rcp_drmc.month = :month')
+                
             ->leftJoin('rt_pr_pr.productDetailDailyMonths','rt_pr_pr_pddm',Join::WITH,'rt_pr_pr_pddm.month = :month')
                 
             ->leftJoin('rt_pr_pr.inventorys','rt_pr_pr_i', Join::WITH,'rt_pr_pr_i.month = :month')

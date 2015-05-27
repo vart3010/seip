@@ -24,7 +24,9 @@ class ProductReportType extends BaseNotification
             ->add('inventorys','collection',array(
                 'type' => new InventoryType($this->dateNotification, $this->reportTemplate)
             ))
-            ->add('rawMaterialConsumptionPlannings')
+            ->add('rawMaterialConsumptionPlannings','collection',[
+                'type' => new RawMaterialConsumptionPlanningType($this->dateNotification, $this->reportTemplate)
+            ])
         ;
     }
     
