@@ -15,10 +15,7 @@ class InventoryType extends BaseNotification
     {
         $day = $this->getDayNotification();
         
-        $paramateretsDays = array(
-            'label_attr' => array('class' => 'label'),
-            "attr" => array("class" => "input input-mini"),
-        );
+        $paramateretsDays = $this->getParametersStandard();
         
         $builder
             ->add(sprintf('day%s',$day),null,$paramateretsDays)

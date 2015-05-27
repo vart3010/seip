@@ -16,10 +16,7 @@ class ProductDetailDailyMonthType extends BaseNotification
     {
         $day = $this->getDayNotification();
         
-        $paramateretsDays = array(
-            'label_attr' => array('class' => 'label'),
-            "attr" => array("class" => "input input-mini"),
-        );
+        $paramateretsDays = $this->getParametersStandard();
         $paramateretsDaysDisabled = $this->getParametersDisabled();
         
         $builder
@@ -32,7 +29,13 @@ class ProductDetailDailyMonthType extends BaseNotification
             ->add(sprintf('day%sNetReal',$day),null,$paramateretsDays)
             
             //Observacion del dia
-            ->add(sprintf('day%sObservation',$day),null,$paramateretsDays)
+            ->add(sprintf('day%sObservation',$day),null,[
+                'attr' => [
+                    'cols' => '40',
+                    'rows' => '10',
+                    'placeholder' => 'Observaciones...'
+                ]
+            ])
         ;
     }
     

@@ -54,4 +54,12 @@ abstract class BaseNotification extends SeipAbstractForm
             "disabled" => true,
         );
     }
+    
+    protected function getParametersStandard()
+    {
+        return array(
+            'label_attr' => array('class' => 'label'),
+            "attr" => array("class" => "input input-mini"),
+        );
+    }
 }

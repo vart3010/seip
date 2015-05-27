@@ -15,10 +15,7 @@ class DetailRawMaterialConsumptionType extends BaseNotification
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $day = $this->getDayNotification();
-        $paramateretsDays = array(
-            'label_attr' => array('class' => 'label'),
-            "attr" => array("class" => "input input-large"),
-        );
+        $paramateretsDays = $this->getParametersStandard();
         $parametersDisabled = $this->getParametersDisabled();
         
         $builder
