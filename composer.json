@@ -61,7 +61,7 @@
         "genemu/form-bundle": "2.2.*@dev",
         "shtumi/useful-bundle": "dev-master",
         "phpunit/phpunit": "4.8.*@dev",
-        "coresphere/console-bundle": "dev-master"
+        "tecnocreaciones/console-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

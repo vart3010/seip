@@ -122,3 +122,7 @@ fos_oauth_server_authorize:
 TecnocreacionesToolsBundleExtraFormTypes:
     resource: "@TecnocreacionesToolsBundle/Resources/config/routing/extra_form_types.xml"
     prefix: /extra-form-types
+    
+_console:
+    resource: "@CoreSphereConsoleBundle/Resources/config/routing.yml"
+    prefix: /admin/_console
